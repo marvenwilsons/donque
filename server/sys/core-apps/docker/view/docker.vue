@@ -1,5 +1,11 @@
 <template>
-    <div>
+    <main class="borderred fullheight-percent">
         hello from docker
-    </div>
+    </main>
 </template>
+
+<style scoped>
+main{
+    min-width: 200px;
+}
+</style>
