@@ -146,10 +146,10 @@ img{
     display: block;
 }
 
- /* My Own Style ( Tana framework 0.2 )
+ /* My Own Style ( dq framework 0.2 )
      ============================================================================*/
      :root{
-        --fontSize: 18px;
+        --fontSize: 16px;
         --ln: 1.5rem
       }
       html {

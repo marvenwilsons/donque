@@ -1,4 +1,5 @@
 const pkg = require('./package')
+const bodyParser = require('body-parser')
 
 module.exports = {
   mode: 'universal',
@@ -59,5 +60,9 @@ module.exports = {
     extend(config, ctx) {
       
     }
-  }
+  },
+  serverMiddleware: [
+    bodyParser.json(),
+    '~/server/sys/core-apps/shell/server/cli.js'
+  ]
 }
