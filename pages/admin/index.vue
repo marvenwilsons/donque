@@ -8,9 +8,7 @@
                 <div>
                     <docker></docker>
                 </div>
-                <div class="f1">
-                    <main-window></main-window>
-                </div>
+                 <main-window class="f1"></main-window>
                 <div class="relative">
                     <div class="absolute">
                         notify

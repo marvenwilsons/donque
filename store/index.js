@@ -7,7 +7,8 @@ const createStore = () => {
                 arr: [],
                 arrLen: 0,
                 currentIndex: 0,
-                currentPosition: 0
+                currentPosition: 0,
+                paneTitle: undefined
             }
         },
         mutations: {
@@ -41,6 +42,9 @@ const createStore = () => {
                     state.comp.arrLen = currentLength
                 }
 
+            },
+            assign_pane_title(state, payload){
+                state.comp.paneTitle = payload
             }
         }
     })
