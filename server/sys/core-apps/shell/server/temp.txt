@@ -8,13 +8,19 @@ db.hasACommand = (cmd) => {
     return classes.indexOf(cmd) != -1
 }
 db.exec = (c, output) => {
-
-    if (cmd[c.class][c.command] == undefined) {
-        output(`${c.command}:  command not found`)
+    if (c.command == "use") {
+        if (cmd[c.args.replace('use', '').trim()] != undefined){
+            output(`use ${c.args.replace('use', '').trim()}`)
+        }else{
+            output(`${c.args}: command not found`)
+        }
     } else {
-        output(cmd[c.class][c.command](c.args))
+        if (cmd[c.class][c.command] == undefined) {
+            output(`${c.command}:  command not found`)
+        } else {
+            output(cmd[c.class][c.command](c.args))
+        }
     }
-
 }
 
 cli.set = (input, output) => {
@@ -38,10 +44,18 @@ cli.set = (input, output) => {
 
             db.exec(iObject, (o) => {
                 if (typeof o == 'string') {
-                    output({
-                        class: input[1],
-                        body: o
-                    })
+                    if(o.split(" ").indexOf('use') != -1){
+                        o.split(" ")[1]
+                        output({
+                            class: o.split(" ")[1].trim(),
+                            body: o
+                        })
+                    }else{
+                        output({
+                            class: input[1],
+                            body: o
+                        })
+                    }
                 } else {
                     output({
                         class: input[1],

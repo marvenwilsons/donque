@@ -37,7 +37,8 @@ export default {
       current_class: "fs",
       class_trace: [],
       before_Err_class: undefined,
-      command_history: []
+      command_history: [],
+      token: "iasdgjkfgui23498629834"
     };
   },
   methods: {
@@ -56,7 +57,8 @@ export default {
           this.command_history.push(this.user_input);
           this.$axios
             .$post("/dq/dqcli", {
-              data: `use ${this.current_class} ${this.user_input}`
+              data: `use ${this.current_class} ${this.user_input}`,
+              token: this.token
             })
             .then(res => {
               if (res.response.class == undefined) {
@@ -65,7 +67,6 @@ export default {
               this.current_output_stack.push(res.response.body);
               this.current_class = res.response.class;
               this.class_trace.push(res.response.class);
-
               this.input_visible = true;
             });
           this.user_input = "";
@@ -84,7 +85,8 @@ export default {
     this.$store.commit("assign_pane_title", "@marven yeah!");
 
     // init call
-    this.$axios.$post("/dq/dqcli", { data: "use fs _clear" }).then(res => {
+    // important: get the token from the local storage that is saved during login and trace that token to db, get user group and user associated with that token
+    this.$axios.$post("/dq/dqcli", { data: "use fs _clear", token: this.token }).then(res => {
       this.current_class = res.response.class;
       this.class_trace.push(res.response.class);
     });
