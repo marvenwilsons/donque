@@ -8,13 +8,14 @@ const command_parser = (command) => {
 
     // response container
     let parsed = {}
-
+    
     parsed.class = command[0]
     parsed.command = command[1]
     parsed.arguments_array = command.slice(2)
     parsed.arguments_string = command.slice(2).join(" ")
     parsed.switched = false
-    parsed.token = token   
+    parsed.err = undefined
+    parsed.token = token 
 
     command = Object.keys(parsed).length == 0 ? undefined : parsed
 

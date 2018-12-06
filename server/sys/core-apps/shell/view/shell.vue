@@ -1,5 +1,6 @@
 <template>
   <div class="borderred fl shellbody shell-textcolor-user">
+    <!-- terminal output trace -->
     <div class v-if="current_stack.length != 0" v-for="(stack,index) in current_stack" :key="index">
       <div class="flex">
         <div
@@ -14,6 +15,9 @@
         :key="output_index"
       >{{current_output_stack[index]}}</div>
     </div>
+    <!-- end terminal output trace -->
+
+    <!-- terminal input -->
     <div class="flex relative">
       <div v-if="!input_visible" id="inp_mask" class="absolute"></div>
       <div
@@ -21,9 +25,15 @@
       >{{user_group}}@{{current_user}}({{class_trace[current_index]}}):~$</div>
       <input id="shell-input" @keyup.enter="submit" v-model="user_input" type="text">
     </div>
+    <!-- end terminal input -->
   </div>
 </template>
 <script>
+import arrayList from '../server/ui library/arrayList.vue'
+import prompt from '../server/ui library/prompt.vue'
+import selection from '../server/ui library/selection.vue'
+import tableObject from '../server/ui library/tableObject.vue'
+
 export default {
   data() {
     return {
@@ -42,6 +52,10 @@ export default {
     };
   },
   methods: {
+    response_handler(res) {
+      console.log('hey!')
+      console.log(res)
+    },
     submit() {
       if (this.user_input == "clear") {
         this.current_stack = [];
@@ -61,13 +75,16 @@ export default {
               token: this.token
             })
             .then(res => {
-              if (res.response.class == undefined) {
-                  console.log("ERROR class is missing in response object")
-              }
-              this.current_output_stack.push(res.response.body);
-              this.current_class = res.response.class;
-              this.class_trace.push(res.response.class);
-              this.input_visible = true;
+              // if (res.response.class == undefined) {
+              //     console.log("ERROR class is missing in response object")
+              // }
+
+              // this.current_output_stack.push(res.response.body);
+              // this.current_class = res.response.class;
+              // this.class_trace.push(res.response.class);
+              // this.input_visible = true;
+
+              this.response_handler(res)
             });
           this.user_input = "";
           document.getElementById("shell-input").focus();
@@ -86,10 +103,17 @@ export default {
 
     // init call
     // important: get the token from the local storage that is saved during login and trace that token to db, get user group and user associated with that token
-    this.$axios.$post("/dq/dqcli", { data: "use fs _clear", token: this.token }).then(res => {
+    this.$axios.$post("/dq/dqcli", { data: "use fs _clear", token: this.token })
+    .then(res => {
+      console.log('init data')
+      console.log(res.response)
       this.current_class = res.response.class;
       this.class_trace.push(res.response.class);
-    });
+    })
+    .catch((e) => {
+      console.log(e)
+      this.current_output_stack.push(e)
+    })
   }
 };
 </script>

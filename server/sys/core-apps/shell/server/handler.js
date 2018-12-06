@@ -13,21 +13,25 @@ const cli_handler = (command,response) =>{
     // parse user input
     const parsed_user_input = command_parser(command)
 
+    // call database and get the user permissions
+    // WARNING! database is not initialized
+    const user_permission = {
+        allowed_action: 'r',
+        exeptions: ['mysql','collections']
+    }
+
     // command accessor
-    const users_command = command_accessor(parsed_user_input)
-    console.log(users_command)
+    const users_command = command_accessor(parsed_user_input,user_permission)
 
     // response formater
-    // const final_response = response_formater(users_command)
+    const final_response = response_formater(users_command)
 
     // return response to user
-    // response(final_response)
+    response(final_response)
 }
 
 router.post('/dqcli',(req,res) => {
-    // cli_handler(req,(cli_response) => res.status(200).json({response: cli_response}))
-    cli_handler(req, undefined)
-    res.status(200).json({ response: {class: 'fs', body:'test'} })
+    cli_handler(req,(cli_response) => res.status(200).json({response: cli_response}))
 })
 
 
