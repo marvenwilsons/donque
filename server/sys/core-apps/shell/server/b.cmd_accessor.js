@@ -6,7 +6,7 @@ const command_accessor = (parsed_command,permission) => {
     const user_group = 'owner'
 
     const get_init_data = (token) => {
-        return 'test data'
+        return ""
     }
     const cmd_notfound = () => {
         parsed_command.class = parsed_command.class

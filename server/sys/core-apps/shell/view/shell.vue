@@ -2,37 +2,42 @@
   <div class="borderred fl shellbody shell-textcolor-user">
     <!-- terminal output trace -->
     <div class v-if="current_stack.length != 0" v-for="(stack,index) in current_stack" :key="index">
+      <!-- indicator -->
       <div class="flex">
         <div
           class="shell-textcolor-currentuser"
-        >{{user_group}}@{{current_user}}({{current_class != 'fs' ? class_trace[index] : 'fs'}}):~$</div>
-        <span id="shell-trace">{{current_stack[index]}}</span>
+        >{{user_group}}@{{current_user}}({{ current_stack[index > 0 ? index - 1 : index].class }}):~$</div>
+        <span
+          id="shell-trace"
+        >{{current_stack[index].command}} {{current_stack[index].arguments_string}}</span>
       </div>
-      <div
-        id="cli-output"
-        v-if="current_output_stack.length != 0 && output_index == index"
-        v-for="(output, output_index) in current_output_stack"
-        :key="output_index"
-      >{{current_output_stack[index]}}</div>
+      <!-- end indicator -->
+      <!-- cli output -->
+      <div id="cli-output">{{ current_stack[index].body }}</div>
+      <!-- end cli output -->
     </div>
     <!-- end terminal output trace -->
-
     <!-- terminal input -->
     <div class="flex relative">
       <div v-if="!input_visible" id="inp_mask" class="absolute"></div>
-      <div
-        class="shell-textcolor-currentuser"
-      >{{user_group}}@{{current_user}}({{class_trace[current_index]}}):~$</div>
-      <input id="shell-input" @keyup.enter="submit" v-model="user_input" type="text">
+      <div class="shell-textcolor-currentuser">{{user_group}}@{{current_user}}({{current_class}}):~$</div>
+      <input
+        @keyup.up="getcmdhistory('up')"
+        @keyup.down="getcmdhistory('down')"
+        id="shell-input"
+        @keyup.enter="submit"
+        v-model="user_input"
+        type="text"
+      >
     </div>
     <!-- end terminal input -->
   </div>
 </template>
 <script>
-import arrayList from '../server/ui library/arrayList.vue'
-import prompt from '../server/ui library/prompt.vue'
-import selection from '../server/ui library/selection.vue'
-import tableObject from '../server/ui library/tableObject.vue'
+import arrayList from "../server/ui library/arrayList.vue";
+import prompt from "../server/ui library/prompt.vue";
+import selection from "../server/ui library/selection.vue";
+import tableObject from "../server/ui library/tableObject.vue";
 
 export default {
   data() {
@@ -45,52 +50,76 @@ export default {
       input_visible: false,
       current_index: 0,
       current_class: "fs",
-      class_trace: [],
-      before_Err_class: undefined,
       command_history: [],
+      command_history_count: -1,
       token: "iasdgjkfgui23498629834"
     };
   },
   methods: {
+    getcmdhistory(mode) {
+    if(mode == 'up'){
+      this.command_history_count++
+      if(this.command_history_count == this.current_stack.length){
+        this.command_history_count = 0        
+      }
+    }
+
+    if(mode == 'down'){
+      this.command_history_count--
+      if(this.command_history_count == -1){
+        this.command_history_count = this.current_stack.length - 1
+      }
+    }
+      this.user_input = this.current_stack[this.command_history_count].command
+
+      
+    },
     response_handler(res) {
-      console.log('hey!')
-      console.log(res)
+      // this.current_stack.push(res.response);
+      this.current_class = res.response.class;
+      this.current_stack.splice(this.current_index - 1, 1, res.response);
+      this.input_visible = true;
     },
     submit() {
-      if (this.user_input == "clear") {
+      this.current_index++;
+      if (`${this.user_input}`.trim() == "clear") {
+        this.current_index = 0;
         this.current_stack = [];
-        this.current_output_stack = [];
         this.user_input = "";
       } else {
-        if (this.user_input == "" || this.user_input == " ") {
-          this.current_stack.push(" ");
-          this.current_output_stack.push(" ");
+        if (this.user_input == "".trim() || this.user_input == undefined) {
+          this.current_stack.push({
+            body: "",
+            class: this.current_class
+          });
         } else {
           this.input_visible = false;
-          this.current_stack.push(this.user_input);
-          this.command_history.push(this.user_input);
+
+          this.current_stack.push({
+            arguments_array: null,
+            command: this.user_input,
+            body: "waiting..",
+            class: this.current_class,
+            uitype: null
+          });
+
           this.$axios
             .$post("/dq/dqcli", {
               data: `use ${this.current_class} ${this.user_input}`,
               token: this.token
             })
             .then(res => {
-              // if (res.response.class == undefined) {
-              //     console.log("ERROR class is missing in response object")
-              // }
-
-              // this.current_output_stack.push(res.response.body);
-              // this.current_class = res.response.class;
-              // this.class_trace.push(res.response.class);
-              // this.input_visible = true;
-
-              this.response_handler(res)
+              setTimeout(() => {
+                this.response_handler(res);
+              }, 10);
+            })
+            .catch(e => {
+              alert(e);
             });
           this.user_input = "";
           document.getElementById("shell-input").focus();
         }
       }
-      this.current_index++;
     }
   },
   mounted() {
@@ -103,17 +132,17 @@ export default {
 
     // init call
     // important: get the token from the local storage that is saved during login and trace that token to db, get user group and user associated with that token
-    this.$axios.$post("/dq/dqcli", { data: "use fs _clear", token: this.token })
-    .then(res => {
-      console.log('init data')
-      console.log(res.response)
-      this.current_class = res.response.class;
-      this.class_trace.push(res.response.class);
-    })
-    .catch((e) => {
-      console.log(e)
-      this.current_output_stack.push(e)
-    })
+    this.$axios
+      .$post("/dq/dqcli", { data: "use fs _clear", token: this.token })
+      .then(res => {
+        if (res.response.body != "") {
+          this.current_stack.push(res.response);
+        }
+      })
+      .catch(e => {
+        console.log(e);
+        this.current_output_stack.push(e);
+      });
   }
 };
 </script>
