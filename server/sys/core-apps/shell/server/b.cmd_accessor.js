@@ -61,7 +61,11 @@ const command_accessor = (parsed_command,permission) => {
                 [permission.allowed_action][parsed_command.command]
 
                 if (user_issued_command) {
-                    const command_res = user_issued_command()
+                    const command_res = user_issued_command({
+                        command: parsed_command.command,
+                        data: parsed_command.arguments_string.trim() == '' ? undefined : parsed_command.arguments_string,
+                        dataArr: parsed_command.arguments_array
+                    })
                     parsed_command.class = parsed_command.class
                     parsed_command.switched = false
                     parsed_command.body = command_res.data
@@ -107,10 +111,15 @@ const command_accessor = (parsed_command,permission) => {
                 }
 
                 if(typeof t == 'function'){
+                    let exec = t({
+                        command: parsed_command.command,
+                        data: parsed_command.arguments_string.trim() == '' ? undefined : parsed_command.arguments_string,
+                        dataArr: parsed_command.arguments_array
+                    })
                     parsed_command.class = parsed_command.class
                     parsed_command.switched = false
-                    parsed_command.body = t().data
-                    parsed_command.uitype = t().ui
+                    parsed_command.body = exec.data
+                    parsed_command.uitype = exec.ui
                     parsed_command.err = false
                 }
 

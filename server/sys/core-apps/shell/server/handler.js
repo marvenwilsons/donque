@@ -16,7 +16,7 @@ const cli_handler = (command,response) =>{
     // call database and get the user permissions
     // WARNING! database is not initialized
     const user_permission = {
-        allowed_action: 'r',
+        allowed_action: 'rw',
         exeptions: ['mysql','collections']
     }
 

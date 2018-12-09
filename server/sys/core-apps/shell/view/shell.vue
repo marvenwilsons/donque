@@ -13,7 +13,15 @@
       </div>
       <!-- end indicator -->
       <!-- cli output -->
-      <div id="cli-output">{{ current_stack[index].body }}</div>
+      <div
+        class="terminal-output-err-indicator-wrapper"
+        v-if="current_stack[index].uitype != null"
+        id="cli-output"
+        :is="current_stack[index].uitype"
+        :val="current_stack[index].body"
+        :selfClass="current_stack[index].class"
+      ></div>
+      <div id="cli-output" v-if="current_stack[index].uitype == null">{{current_stack[index].body}}</div>
       <!-- end cli output -->
     </div>
     <!-- end terminal output trace -->
@@ -38,6 +46,7 @@ import arrayList from "../server/ui library/arrayList.vue";
 import prompt from "../server/ui library/prompt.vue";
 import selection from "../server/ui library/selection.vue";
 import tableObject from "../server/ui library/tableObject.vue";
+import err from "../server/ui library/err.vue";
 
 export default {
   data() {
@@ -57,22 +66,24 @@ export default {
   },
   methods: {
     getcmdhistory(mode) {
-    if(mode == 'up'){
-      this.command_history_count++
-      if(this.command_history_count == this.current_stack.length){
-        this.command_history_count = 0        
-      }
-    }
+      if (this.current_stack.length != 0) {
+        let farr = this.current_stack.filter(el => el.body);
 
-    if(mode == 'down'){
-      this.command_history_count--
-      if(this.command_history_count == -1){
-        this.command_history_count = this.current_stack.length - 1
-      }
-    }
-      this.user_input = this.current_stack[this.command_history_count].command
+        if (mode == "up") {
+          this.command_history_count++;
+          if (this.command_history_count == farr.length) {
+            this.command_history_count = 0;
+          }
+        }
 
-      
+        if (mode == "down") {
+          this.command_history_count--;
+          if (this.command_history_count == -1) {
+            this.command_history_count = farr.length - 1;
+          }
+        }
+        this.user_input = farr[this.command_history_count].command;
+      }
     },
     response_handler(res) {
       // this.current_stack.push(res.response);
@@ -106,21 +117,35 @@ export default {
           this.$axios
             .$post("/dq/dqcli", {
               data: `use ${this.current_class} ${this.user_input}`,
+              nested_mode: false,
               token: this.token
             })
             .then(res => {
               setTimeout(() => {
                 this.response_handler(res);
-              }, 10);
+              }, 20);
             })
             .catch(e => {
-              alert(e);
+              this.current_stack.push({
+                arguments_array: null,
+                command: this.user_input,
+                body: e,
+                class: this.current_class,
+                uitype: 'err'
+              });
             });
           this.user_input = "";
           document.getElementById("shell-input").focus();
         }
       }
     }
+  },
+  components: {
+    arrayList,
+    prompt,
+    selection,
+    tableObject,
+    err
   },
   mounted() {
     // focus input
