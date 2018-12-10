@@ -1,7 +1,7 @@
 <template>
-  <main >
+  <main class="flex flexcol">
     <!-- <heading /> -->
-    <main>
+    <main id="admin-p" class="flex"> 
       <nuxt/>
     </main>
     <!-- <footing /> -->
@@ -15,5 +15,15 @@
 #__layout > main{
   min-height: 100vh;
   position: relative;
+  /* border: 5px solid blue; */
+  /* flex: 1; */
+}
+#admin-p{
+  flex: 1;
+}
+#__layout > main > main{
+  height: 100%;
+  position: relative;
+  /* border: 5px solid red; */
 }
 </style>

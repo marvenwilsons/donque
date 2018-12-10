@@ -1,5 +1,5 @@
 <template>
-  <div class="borderred fl shellbody shell-textcolor-user">
+  <div class="flex f1 flexcol shellbody shell-textcolor-user">
     <!-- terminal output trace -->
     <div class v-if="current_stack.length != 0" v-for="(stack,index) in current_stack" :key="index">
       <!-- indicator -->
@@ -178,8 +178,12 @@ export default {
 </script>
 
 <style>
+@import url('@/server/sys/admin assets/css/normalize.css');
+@import url('@/server/sys/admin assets/css/tana 0.2.css');
+
 .shellbody {
   background-color: #232729;
+  min-height: inherit;
 }
 .shell-textcolor-user {
   color: white;
@@ -208,9 +212,6 @@ export default {
 }
 #cli-output {
   margin-left: 5px;
-}
-.fl {
-  height: 97%;
 }
 #inp_mask {
   background-color: wheat;

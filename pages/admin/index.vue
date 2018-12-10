@@ -1,10 +1,10 @@
 <template>
-    <div class="relative  fullheight-VH fullwidth " >
-        <div class="fullheight-percent">
+    <div class="flex f1 relative parent-wrapper fullwidth " >
+        <div class="flex flexcol f1">
             <div class="">
                 top
             </div>
-            <div class="p flex fullheight borderred">
+            <div class="p flex f1">
                 <div>
                     <docker></docker>
                 </div>
@@ -39,12 +39,22 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
+@import url('@/server/sys/admin assets/css/normalize.css');
+@import url('@/server/sys/admin assets/css/tana 0.2.css');
+
 .fullheight{
-    min-height: 97.2%;
+    min-height: inherit;
+}
+.parent-wrapper{
+    /* border: 5px solid green; */
+    min-height: inherit;
+}
+.parent-wrapper > *{
+    min-height: inherit;
 }
 .fl{
-    height: 100%;
+    min-height: inherit;
 }
 .wrap{
     flex-wrap: wrap;
