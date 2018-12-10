@@ -26,7 +26,7 @@
     </div>
     <!-- end terminal output trace -->
     <!-- terminal input -->
-    <div class="flex relative">
+    <div  class="flex relative">
       <div v-if="!input_visible" id="inp_mask" class="absolute"></div>
       <div class="shell-textcolor-currentuser">{{user_group}}@{{current_user}}({{current_class}}):~$</div>
       <input
@@ -47,7 +47,7 @@ import prompt from "../server/ui library/prompt.vue";
 import selection from "../server/ui library/selection.vue";
 import tableObject from "../server/ui library/tableObject.vue";
 import err from "../server/ui library/err.vue";
-import normal from '../server/ui library/normal.vue'
+import normal from "../server/ui library/normal.vue";
 
 export default {
   data() {
@@ -132,7 +132,7 @@ export default {
                 command: this.user_input,
                 body: e,
                 class: this.current_class,
-                uitype: 'err'
+                uitype: "err"
               });
             });
           this.user_input = "";
@@ -140,7 +140,7 @@ export default {
         }
       }
     },
-    fucosOn(){
+    fucosOn() {
       document.getElementById("shell-input").focus();
     }
   },
@@ -154,11 +154,14 @@ export default {
   },
   mounted() {
     // focus input
-    this.fucosOn()
+    this.fucosOn();
 
+    // user can type
     this.input_visible = true;
-    // assign pane title
+    
+    // set pane attr
     this.$store.commit("assign_pane_title", "@marven yeah!");
+    this.$store.commit("pane_is_closable",false)
 
     // init call
     // important: get the token from the local storage that is saved during login and trace that token to db, get user group and user associated with that token
@@ -178,11 +181,16 @@ export default {
 </script>
 
 <style>
-@import url('@/server/sys/admin assets/css/normalize.css');
-@import url('@/server/sys/admin assets/css/tana 0.2.css');
+@import url("@/server/sys/admin assets/css/normalize.css");
+@import url("@/server/sys/admin assets/css/tana 0.2.css");
+
+:root {
+  --bgColor:#414446;
+  --ln: 1.5rem;
+}
 
 .shellbody {
-  background-color: #232729;
+  background-color: var(--bgColor);
   min-height: inherit;
 }
 .shell-textcolor-user {
@@ -217,7 +225,7 @@ export default {
   background-color: wheat;
   width: 100%;
   height: 100%;
-  background-color: #232729;
+  background-color: var(--bgColor);
 }
 </style>:
 

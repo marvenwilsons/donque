@@ -8,7 +8,8 @@ const createStore = () => {
                 arrLen: 0,
                 currentIndex: 0,
                 currentPosition: 0,
-                paneTitle: undefined
+                paneTitle: undefined,
+                paneWidth: []
             }
         },
         mutations: {
@@ -45,6 +46,9 @@ const createStore = () => {
             },
             assign_pane_title(state, payload){
                 state.comp.paneTitle = payload
+            },
+            pane_is_closable(state,payload){
+
             }
         }
     })
