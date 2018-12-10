@@ -1,5 +1,5 @@
 <template>
-    <div class="flex f1 relative parent-wrapper fullwidth " >
+    <div id="dq-center-wrapper" class="flex f1 relative parent-wrapper fullwidth " >
         <div class="flex flexcol f1">
             <div id="dq-head" class="">
                 <dqhead></dqhead>
@@ -20,8 +20,8 @@
 </template>
 <script>
 // parent
-import main_window from '@/server/sys/core-apps/main-window/view/main-window.vue'
-import docker      from '@/server/sys/core-apps/docker/view/docker.vue'
+import main_window from '@/server/sys/core-apps/pane-system/main-window/main-window.vue'
+import docker      from '@/server/sys/core-apps/pane-system/docker/docker.vue'
 import notify      from '@/server/sys/core-apps/notify/view/notify.vue'
 import dqhead      from '@/server/sys/core-apps/dq-head/view/dq-head.vue'
 
@@ -70,5 +70,10 @@ export default {
 }
 .p{
     overflow-x: hidden;
+}
+#dq-center-wrapper{
+    /* border: 5px solid red; */
+    width: 100vw;
+    overflow: hidden;
 }
 </style>

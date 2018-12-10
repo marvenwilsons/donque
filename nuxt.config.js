@@ -63,6 +63,6 @@ module.exports = {
   },
   serverMiddleware: [
     bodyParser.json(),
-    '~/server/sys/core-apps/shell/server/handler.js'
+    '~/server/sys/core-apps/i0-shell/server/handler.js'
   ]
 }

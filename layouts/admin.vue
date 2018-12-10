@@ -11,11 +11,17 @@
 <style>
 @import url('@/server/sys/admin assets/css/normalize.css');
 @import url('@/server/sys/admin assets/css/tana 0.2.css');
-
+#__layout{
+  min-width: 100vw;
+  max-width: 100vw;
+}
 #__layout > main{
   min-height: 100vh;
   position: relative;
   /* border: 5px solid blue; */
+  min-width: inherit;
+  overflow: hidden;
+
   /* flex: 1; */
 }
 #admin-p{

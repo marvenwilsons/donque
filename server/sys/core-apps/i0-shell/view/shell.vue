@@ -192,6 +192,7 @@ export default {
 .shellbody {
   background-color: var(--bgColor);
   min-height: inherit;
+  min-width: 1000px;
 }
 .shell-textcolor-user {
   color: white;
@@ -201,7 +202,7 @@ export default {
 }
 .shell-textcolor-currentuser {
   color: #5be616;
-  font-weight: bold;
+  /* font-weight: bold; */
   padding-left: 5px;
   padding-right: 10px;
   font-family: monospace;

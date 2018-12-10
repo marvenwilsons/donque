@@ -17,11 +17,12 @@ const createStore = () => {
                 state.comp.arr.splice(payload, 1)
             },
             addComponent(state, payload) {
+                console.log(payload)
                 // pushing new item to array
-                state.comp.arr.push(payload.comp)
+                state.comp.arr.push(payload.component)
 
                 // current position click
-                state.comp.currentPosition = payload.pos
+                state.comp.currentPosition = payload.position
 
                 // array lenth
                 var len = state.comp.arr.length
@@ -36,7 +37,7 @@ const createStore = () => {
 
                 // I wish I can explain this easy on comment lol
                 if (state.comp.arrLen != state.comp.currentPosition + 1) {
-                    state.comp.arr.splice(state.comp.currentPosition, state.comp.arrLen, payload.comp)
+                    state.comp.arr.splice(state.comp.currentPosition, state.comp.arrLen, payload.component)
                     state.comp.arr.splice(state.comp.currentIndex, 1)
 
                     var currentLength = state.comp.arr.splice(state.comp.currentIndex, 1).length + state.comp.arrLen - 1
