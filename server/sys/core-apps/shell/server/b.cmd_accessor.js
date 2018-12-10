@@ -93,6 +93,13 @@ const command_accessor = (parsed_command,permission) => {
                     }
                 }
             }else{
+                if (registry[parsed_command.class][parsed_command.class] == undefined){
+                    parsed_command.class = parsed_command.class
+                    parsed_command.switched = false
+                    parsed_command.body = `FATAL ERROR: this is not suppose to happen, the library is not properly registered`
+                    parsed_command.uitype = 'err'
+                    parsed_command.err = true
+                }
                 const get_command = (p) => {
                     return registry
                     [parsed_command.class][parsed_command.class]

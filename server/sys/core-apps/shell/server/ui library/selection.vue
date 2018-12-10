@@ -1,7 +1,6 @@
 <template>
   <div>
-    <div>Select an option</div>
-    <!-- <div  >&#8674;</div> -->
+    <div v-if="!response_data">Select an option</div>
     <div class="flex">
       <select
         @keyup.enter="selection"
@@ -9,48 +8,73 @@
         name
         id="cli-select"
         :size="val.length"
+        v-if="!response_data"
       >
         <option v-for="(items,key) in val" :key="key">
-          <div :id="items.replace(' ','-')">{{items}}</div>
+          <div :selected="key == 0 && 'selected'" :id="items.replace(' ','-')">{{items}}</div>
         </option>
       </select>
+    </div>
+
+    <div v-if="response_data">
+      <div :is="response_data.uitype" :val="response_data.body" ></div>
     </div>
   </div>
 </template>
 
 <script>
 import arrayList from "./arrayList.vue";
+import current_status from "./current_status.vue"
 import prompt from "./prompt.vue";
 import selection from "./selection.vue";
 import tableObject from "./tableObject.vue";
 import err from "./err.vue";
+import progress from "./progress.vue"
+import stacks from "./stacks.vue"
+import normal from "./normal.vue"
 
 export default {
-  props: ["val","selfClass"],
+  props: ["val", "selfClass"],
   data() {
     return {
       default_selected: 0,
       selected: undefined,
-      current_selected: undefined
+      current_selected: undefined,
+      response_data: undefined
     };
+  },
+  components: {
+    arrayList,
+    prompt,
+    selection,
+    tableObject,
+    err,
+    normal
   },
   methods: {
     selection() {
-      this.current_selected = this.selected.replace(/[^a-zA-Z0-9]/g, " ");
-      let sel_Val = `${this.current_selected.trim().replace(" ", "-")}`;
-      console.log(this.val)
-      this.$axios.$post("/dq/dqcli", {
-        data: `use ${this.selfClass} selectColor ${sel_Val}`,
-        nested_mode: false,
-        token: this.token
-      }).then((res) => {
-        console.log(res)
-      })
+      this.current_selected = this.selected
+      let sel_Val = `${this.current_selected.trim().replace(" ", "-")}`
+
+      this.$axios
+        .$post("/dq/dqcli", {
+          data: `use ${this.selfClass} selectColor ${sel_Val}`,
+          nested_mode: false,
+          token: this.token
+        })
+        .then(res => {
+          this.response_data = res.response;
+          this.$parent._data.input_visible = true
+        })
+        .catch(e => {
+          this.response_data = e;
+          this.$parent._data.input_visible = true
+        })
+        this.$parent.fucosOn()
     }
   },
   mounted() {
-    console.log(this.selfClass)
-    console.log(this.$parent.user_input)
+    this.selected = this.val[0]
     document.getElementById("cli-select").focus();
     this.$parent._data.input_visible = false;
   }

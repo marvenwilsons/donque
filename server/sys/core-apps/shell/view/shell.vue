@@ -47,6 +47,7 @@ import prompt from "../server/ui library/prompt.vue";
 import selection from "../server/ui library/selection.vue";
 import tableObject from "../server/ui library/tableObject.vue";
 import err from "../server/ui library/err.vue";
+import normal from '../server/ui library/normal.vue'
 
 export default {
   data() {
@@ -138,6 +139,9 @@ export default {
           document.getElementById("shell-input").focus();
         }
       }
+    },
+    fucosOn(){
+      document.getElementById("shell-input").focus();
     }
   },
   components: {
@@ -145,11 +149,12 @@ export default {
     prompt,
     selection,
     tableObject,
-    err
+    err,
+    normal
   },
   mounted() {
     // focus input
-    document.getElementById("shell-input").focus();
+    this.fucosOn()
 
     this.input_visible = true;
     // assign pane title
