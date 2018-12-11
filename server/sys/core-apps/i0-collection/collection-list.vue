@@ -1,6 +1,6 @@
 <template>
     <div>
-
+        collection list
     </div>
 </template>
 

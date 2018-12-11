@@ -1,79 +1,62 @@
 <template>
-    <div id="dq-center-wrapper" class="flex f1 relative parent-wrapper fullwidth " >
-        <div class="flex flexcol f1">
-            <div id="dq-head" class="">
-                <dqhead></dqhead>
-            </div>
-            <div class="p flex f1">
-                <div>
-                    <docker></docker>
-                </div>
-                 <main-window class="f1"></main-window>
-                <div class="relative">
-                    <div class="absolute">
-                        notify
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+  <section role="admin-page" id="dq-parent-wrapper" class="flex">
+    <header><dqhead/></header>
+    <section id="dq-content-wrapper" class="flex">
+      <nav><docker/></nav>
+      <main class="flex" ><main-window/></main>
+      <aside></aside>
+    </section>
+  </section>
 </template>
 <script>
 // parent
-import main_window from '@/server/sys/core-apps/pane-system/main-window/main-window.vue'
-import docker      from '@/server/sys/core-apps/pane-system/docker/docker.vue'
-import notify      from '@/server/sys/core-apps/notify/view/notify.vue'
-import dqhead      from '@/server/sys/core-apps/dq-head/view/dq-head.vue'
+import main_window from "@/server/sys/core-apps/pane-system/main-window/main-window.vue";
+import docker from "@/server/sys/core-apps/pane-system/docker/docker.vue";
+import notify from "@/server/sys/core-apps/notify/view/notify.vue";
+import dqhead from "@/server/sys/core-apps/dq-head/view/dq-head.vue";
 
 export default {
-    data(){
-        return{
-
-        }
-    },
-    components: {
-        mainWindow: main_window,
-        docker,
-        notify,
-        dqhead
-    },
-    layout: 'admin'
-}
+  data() {
+    return {};
+  },
+  components: {
+    mainWindow: main_window,
+    docker,
+    notify,
+    dqhead,
+    main_window
+  },
+  layout: "admin"
+};
 </script>
 
 <style>
-@import url('@/server/sys/admin assets/css/normalize.css');
-@import url('@/server/sys/admin assets/css/tana 0.2.css');
+@import url("@/server/sys/admin assets/css/normalize.css");
+@import url("@/server/sys/admin assets/css/tana 0.2.css");
 
-#dq-head{
-    /* border: 1px solid red; */
-    background-color: #eeeeee;
+#dq-parent-wrapper {
+  flex-wrap: wrap;
+  flex: 1;
+  align-items: stretch;
+  flex-flow: column wrap;
 }
-.fullheight{
-    min-height: inherit;
+#dq-content-wrapper {
+  flex: 1;
 }
-.parent-wrapper{
-    /* border: 5px solid green; */
-    min-height: inherit;
+header {
+  /* border: 1px solid red; */
+  /* background-color: #eeeeee;*/
+  background-color: var(--dark-2);
 }
-.parent-wrapper > *{
-    min-height: inherit;
+main {
+  /* border: 5px solid brown; */
+  flex: 7;
 }
-.fl{
-    min-height: inherit;
+nav {
+  /* border: 4px solid green; */
+  flex: 1;
 }
-.wrap{
-    flex-wrap: wrap;
-}
-.f1{
-    flex: 1;
-}
-.p{
-    overflow-x: hidden;
-}
-#dq-center-wrapper{
-    /* border: 5px solid red; */
-    width: 100vw;
-    overflow: hidden;
+aside {
+  /* border: 1px solid hotpink; */
 }
 </style>

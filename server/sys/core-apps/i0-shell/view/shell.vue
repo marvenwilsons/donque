@@ -26,7 +26,7 @@
     </div>
     <!-- end terminal output trace -->
     <!-- terminal input -->
-    <div  class="flex relative">
+    <div class="flex relative">
       <div v-if="!input_visible" id="inp_mask" class="absolute"></div>
       <div class="shell-textcolor-currentuser">{{user_group}}@{{current_user}}({{current_class}}):~$</div>
       <input
@@ -153,6 +153,14 @@ export default {
     normal
   },
   mounted() {
+    this.$store.state.comp.paneWidth = []
+    this.$store.state.comp.paneWidth.push({
+      'max-width':'1000px'
+    })
+    this.$store.state.comp.paneHeadColor = []
+    this.$store.state.comp.paneHeadColor.push({
+      'background-color':'#63ff63'
+    })
     // focus input
     this.fucosOn();
 
@@ -191,8 +199,8 @@ export default {
 
 .shellbody {
   background-color: var(--bgColor);
-  min-height: inherit;
   min-width: 1000px;
+  flex:1;
 }
 .shell-textcolor-user {
   color: white;

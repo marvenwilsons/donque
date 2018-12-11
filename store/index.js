@@ -9,15 +9,17 @@ const createStore = () => {
                 currentIndex: 0,
                 currentPosition: 0,
                 paneTitle: undefined,
-                paneWidth: []
+                paneWidth: [],
+                paneHeadColor:[]
             }
         },
         mutations: {
             close_pane(state, payload) {
+                state.comp.paneWidth.splice(payload,1)
                 state.comp.arr.splice(payload, 1)
             },
             addComponent(state, payload) {
-                console.log(payload)
+                // console.log(payload)
                 // pushing new item to array
                 state.comp.arr.push(payload.component)
 
@@ -35,15 +37,17 @@ const createStore = () => {
                     state.comp.currentIndex = len - 1
                 }
 
-                // I wish I can explain this easy on comment lol
+                // fires when switch to another pane
                 if (state.comp.arrLen != state.comp.currentPosition + 1) {
+                    // remove item in arr position and replace it with new component 
                     state.comp.arr.splice(state.comp.currentPosition, state.comp.arrLen, payload.component)
+
                     state.comp.arr.splice(state.comp.currentIndex, 1)
 
                     var currentLength = state.comp.arr.splice(state.comp.currentIndex, 1).length + state.comp.arrLen - 1
                     state.comp.arrLen = currentLength
-                }
 
+                }
             },
             assign_pane_title(state, payload){
                 state.comp.paneTitle = payload
