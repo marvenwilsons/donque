@@ -12,7 +12,6 @@
         class="flex spacebetween"
         :style="normalizeStyle($store.state.comp.arr[index].headColor,null)"
       >
-        <!-- {{index}} - {{$store.state.comp.arr[index].headColor}} - {{$store.state.comp.arr[index]}} -->
         <div
           style="color:white"
         >{{ $store.state.comp.arr[index].headName.charAt(0).toUpperCase() + $store.state.comp.arr[index].headName.slice(1)}}</div>
@@ -32,9 +31,11 @@
 // shell
 import shell from "@/server/sys/core-apps/i0-shell/view/shell.vue";
 
-// pagesboxboxbox
+// pages
 import pages from "@/server/sys/core-apps/i0-pages/view/page_list.vue";
 import pagesDetails from "@/server/sys/core-apps/i0-pages/view/page-detail.vue";
+
+//
 import collections from "@/server/sys/core-apps/i0-collection/collections.vue";
 import components from "@/server/sys/core-apps/i0-components/components.vue";
 import database from "@/server/sys/core-apps/i0-database/database.vue";
@@ -114,6 +115,5 @@ export default {
 }
 #pane_head {
   padding: calc(var(--fontSize) * 0.25);
-  /* background-color: #4CC49D;; */
 }
 </style>

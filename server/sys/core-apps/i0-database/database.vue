@@ -1,6 +1,10 @@
 <template>
     <div>
-        database
+        <ul>
+            <li>Mongo / Unstructured</li>
+            <li>SQL / Structured</li>
+            <li>JSON</li>
+        </ul>
     </div>
 </template>
 

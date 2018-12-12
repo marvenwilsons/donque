@@ -10,7 +10,13 @@ const createStore = () => {
                 currentPosition: 0,
                 paneTitle: undefined,
                 paneWidth: [],
-                paneHeadColor:[]
+                paneHeadColor: []
+            },
+            modal: {
+                visibility:false,
+                head:undefined,
+                body:undefined,
+                closable: false
             }
         },
         mutations: {
@@ -51,9 +57,6 @@ const createStore = () => {
             },
             assign_pane_title(state, payload){
                 state.comp.paneTitle = payload
-            },
-            pane_is_closable(state,payload){
-
             }
         }
     })

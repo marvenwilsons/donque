@@ -1,5 +1,11 @@
 <template>
-  <div>app</div>
+  <div>
+    view live site
+    settings,
+    users,
+    documentation,
+    dq appearance
+  </div>
 </template>
 
 <script>

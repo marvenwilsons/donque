@@ -6,7 +6,7 @@
 
       <!-- create new page  -->
       <div id="dq-create-new-page" class="flex">
-        <small class="dq-button-1">
+        <small @click="createNewPage" class="dq-button-1">
           <strong>Create new page</strong> &#10010;
         </small>
       </div>
@@ -51,6 +51,8 @@
 <script>
 import sender from "@/server/sys/core-apps/pane-system/module/component-sender.vue";
 import search from "./search.vue";
+import createPageModal from "./modal-create-page.vue"
+
 export default {
   data() {
     return {
@@ -72,11 +74,17 @@ export default {
     },
     active(i){
       this.activeLink = i
+    },
+    createNewPage(){
+      this.$store.state.modal.visibility = true
+      this.$store.state.modal.head = 'Create new page'
+      this.$store.state.modal.body = createPageModal
     }
   },
   components: {
     sender,
-    search
+    search,
+    createPageModal
   },
   mounted() {
     // this.$axios.get("/dq?command=pageList");

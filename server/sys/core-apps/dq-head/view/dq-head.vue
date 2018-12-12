@@ -1,7 +1,7 @@
 <template>
     <div id="dqhead-wrapper" class="flex">
         <div>
-            <div class="dqhead-items" >dq-studio</div>
+            <div class="dqhead-items" > <strong>dq-studio</strong> </div>
         </div>
         <div class="flex">
             <div class="dqhead-items">Marven Wilson Donque</div>
@@ -26,6 +26,7 @@ export default {
     padding-top: calc(var(--fontSize)*0.50);
     padding-bottom: calc(var(--fontSize)*0.50);
     padding-left: calc(var(--fontSize)*0.25);
+    color: white;
 }
 </style>
 

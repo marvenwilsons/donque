@@ -1,5 +1,5 @@
 <template>
-  <section role="admin-page" id="dq-parent-wrapper" class="flex">
+  <section role="admin-page" id="dq-parent-wrapper" :class="[$store.state.modal.visibility && 'blur', 'flex ','relative']">
     <header><dqhead/></header>
     <section id="dq-content-wrapper" class="flex">
       <nav><docker/></nav>
@@ -40,6 +40,9 @@ export default {
   align-items: stretch;
   flex-flow: column wrap;
 }
+.blur{
+  filter: blur(10px)
+}
 #dq-content-wrapper {
   flex: 1;
 }
@@ -60,7 +63,8 @@ nav {
   /* border: 4px solid green; */
   flex: 1;
 }
-aside {
+/* aside { */
   /* border: 1px solid hotpink; */
-}
+/* } */
+
 </style>
