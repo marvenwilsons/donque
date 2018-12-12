@@ -13,8 +13,15 @@
         :style="normalizeStyle($store.state.comp.arr[index].headColor,null)"
       >
         <!-- {{index}} - {{$store.state.comp.arr[index].headColor}} - {{$store.state.comp.arr[index]}} -->
-        <div style="color:white" >{{ $store.state.comp.arr[index].headName.charAt(0).toUpperCase() + $store.state.comp.arr[index].headName.slice(1)}}</div>
-        <div style="color:white" v-if="$store.state.comp.arr[index].closable" @click="close_pane(index)" class="pointer">&#10006;</div>
+        <div
+          style="color:white"
+        >{{ $store.state.comp.arr[index].headName.charAt(0).toUpperCase() + $store.state.comp.arr[index].headName.slice(1)}}</div>
+        <div
+          style="color:white"
+          v-if="$store.state.comp.arr[index].closable"
+          @click="close_pane(index)"
+          class="pointer"
+        >&#10006;</div>
       </span>
       <div class="flex" v-bind:index="index" :is="ComponentsArray[index].name"></div>
     </div>
@@ -28,8 +35,13 @@ import shell from "@/server/sys/core-apps/i0-shell/view/shell.vue";
 // pagesboxboxbox
 import pages from "@/server/sys/core-apps/i0-pages/view/page_list.vue";
 import pagesDetails from "@/server/sys/core-apps/i0-pages/view/page-detail.vue";
-import collections from "@/server/sys/core-apps/i0-collection/collection-list.vue";
-
+import collections from "@/server/sys/core-apps/i0-collection/collections.vue";
+import components from "@/server/sys/core-apps/i0-components/components.vue";
+import database from "@/server/sys/core-apps/i0-database/database.vue";
+import files from "@/server/sys/core-apps/i0-files/files.vue";
+import marketplace from "@/server/sys/core-apps/i0-marketplace/marketplace.vue";
+import plugins from "@/server/sys/core-apps/i0-plugins/plugins.vue";
+import app from "@/server/sys/core-apps/i0-app/app.vue";
 
 export default {
   data() {
@@ -43,21 +55,21 @@ export default {
       this.$store.commit("close_pane", index);
     },
     normalizeStyle(color, width) {
-      if(color != null){
+      if (color != null) {
         return {
-          'background-color':color
-        }
+          "background-color": color
+        };
       }
 
-      if(width != null){
-        if(width == '100%'){
+      if (width != null) {
+        if (width == "100%") {
           return {
-            flex:1
-          }
-        }else{
+            flex: 1
+          };
+        } else {
           return {
-            'max-width': width
-          }
+            "max-width": width
+          };
         }
       }
     }
@@ -69,7 +81,13 @@ export default {
     pages,
     pagesDetails,
 
-    collections
+    collections,
+    components,
+    database,
+    files,
+    marketplace,
+    plugins,
+    app
   },
   mouted() {}
 };
@@ -83,7 +101,7 @@ export default {
   /* border: 5px solid teal; */
   flex: 1;
 }
-#dynamic-pane > *{
+#dynamic-pane > * {
   overflow: hidden;
 }
 .box-shad {
@@ -92,6 +110,7 @@ export default {
   flex: 1;
   background-color: white;
   overflow: hidden;
+  transition: 0.2s;
 }
 #pane_head {
   padding: calc(var(--fontSize) * 0.25);

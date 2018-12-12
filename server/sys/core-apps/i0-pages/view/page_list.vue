@@ -108,6 +108,7 @@ export default {
 .dq-list-sender:hover {
   background-color: var(--hover-blue);
   color: white;
+  transition: 0.2s;
 }
 .dq-list-methods-wrapper {
   justify-content: space-around;
@@ -145,6 +146,9 @@ export default {
   padding-left: var(--size-1-half);
   padding-right: var(--size-1-half);
   box-shadow: 0px 0px 0px 2px var(--blue-3);
+}
+.dq-button-1:hover{
+  color: var(--blue-2);
 }
 </style>
 

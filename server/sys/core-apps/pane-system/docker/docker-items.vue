@@ -2,86 +2,141 @@
   <div>
     <ul id="dq-nav-ul">
       <!-- pages -->
-      <sender
-        :component="{
+      <span @click="activate(0)">
+        <sender
+          :class="[isActive == 0 && 'active']"
+          :component="{
         name:'pages',
         headColor:'#0086c0',
         headWidth: '300px',
-        headName: 'Page',
+        headName: 'Pages',
         closable: true}"
-        :position="0"
-      >pages</sender>
+          :position="0"
+        >pages</sender>
+      </span>
+
+      <!-- pages -->
+      <span @click="activate(8)">
+        <sender
+          :class="[isActive == 8 && 'active']"
+          :component="{
+        name:'app',
+        headColor:'#0086c0',
+        headWidth: '300px',
+        headName: 'Application and settings',
+        closable: true}"
+          :position="0"
+        >app</sender>
+      </span>
 
       <!-- Collections -->
-      <sender :component="{
-        name:'collection',
-        headColor:'orange',
+      <span @click="activate(1)">
+        <sender
+          :class="[isActive == 1 && 'active']"
+          :component="{
+        id:'collections',
+        name:'collections',
+        headColor:'#0086c0',
         headWidth:'300px',
         headName:'Collections',
         closable:true
-      }" :position="0">
-      collection</sender>
+      }"
+          :position="0"
+        >collections</sender>
+      </span>
 
       <!-- Components -->
-      <sender :component="{
+      <span @click="activate(2)">
+        <sender
+          :class="[isActive == 2 && 'active']"
+          :component="{
+        id:'components',
         name:'components',
-        headColor:'pink',
+        headColor:'#0086c0',
         headName:'Components',
         closable:false
-      }" :position="0">
-      components</sender>
+      }"
+          :position="0"
+        >components</sender>
+      </span>
 
       <!-- Database -->
-      <sender :component="{
+      <span @click="activate(3)">
+        <sender
+          :class="[isActive == 3 && 'active']"
+          :component="{
+        id:'database',
         name:'database',
-        headColor:'orange',
+        headColor:'#0086c0',
         headName:'databases',
         headWidth:'300px',
         closable:true
-      }" :position="0">
-      database</sender>
+      }"
+          :position="0"
+        >database</sender>
+      </span>
 
       <!-- Files -->
-      <sender :component="{
+      <span @click="activate(4)">
+        <sender
+          :class="[isActive == 4 && 'active']"
+          :component="{
+        id:'files',
         name:'files',
-        headColor:'green',
+        headColor:'#0086c0',
         headName:'files',
         headWidth:'100%',
         closable: true
-      }" :position="0">
-      files</sender>
+      }"
+          :position="0"
+        >files</sender>
+      </span>
 
       <!-- Plugins -->
-      <sender :component="{
+      <span @click="activate(5)">
+        <sender
+          :class="[isActive == 5 && 'active']"
+          :component="{
+        id:'plugins',
         name:'plugins',
-        headColor:'orange',
+        headColor:'#0086c0',
         headName:'plugins',
         headWidth:'100%',
         closable:false
-      }" :position="0">
-      plugins</sender>
+      }"
+          :position="0"
+        >plugins</sender>
+      </span>
 
       <!-- MarketPlace -->
-      <sender :component="{
+      <span @click="activate(6)">
+        <sender
+          :class="[isActive == 6 && 'active']"
+          :component="{
+        id:'marketplace',
         name:'marketplace',
-        headColor:'orange',
+        headColor:'#0086c0',
         headName:'marketplace',
         headWidth:'100%',
         closable:false
-      }" :position="0"
-      >marketplace</sender>
+      }"
+          :position="0"
+        >marketplace</sender>
+      </span>
 
       <!-- Shell -->
-      <sender
-        :component="{
+      <span @click="activate(7)">
+        <sender
+          :class="[isActive == 7 && 'active']"
+          :component="{
           name:'shell',
-          'headColor':'#63ff63', 
+          'headColor':'#0086c0', 
           headWidth:'1000px', 
           headName:'Shell - employee@marven', 
           closable: false }"
-        :position="0"
-      >Shell</sender>
-      
+          :position="0"
+        >Shell</sender>
+      </span>
     </ul>
   </div>
 </template>
@@ -90,6 +145,19 @@
 import sender from "../module/component-sender.vue";
 
 export default {
+  data() {
+    return {
+      isActive: undefined
+    };
+  },
+  methods: {
+    activate(p) {
+      let parent = document.getElementById("dq-nav-ul");
+      let btns = parent.getElementsByClassName("light-text");
+      // btns[p].className += " active";
+      this.isActive = p;
+    }
+  },
   components: {
     sender
   }
@@ -97,12 +165,22 @@ export default {
 </script>
 
 <style>
-#dq-nav-ul > li {
+#dq-nav-ul > span > li {
   padding-left: calc(var(--fontSize) * 1.25);
-  padding-bottom: calc(var(--fontSize) * 0.50);
-  padding-top: calc(var(--fontSize) * 0.50);
+  padding-bottom: calc(var(--fontSize) * 0.5);
+  padding-top: calc(var(--fontSize) * 0.5);
+  color: var(--blue-text);
+  font-weight: 600;
 }
-#dq-nav-ul > li:hover{
-  background-color: var(--hover-blue)
+#dq-nav-ul > span > li:hover {
+  background-color: var(--hover-blue);
+  color: white;
+  transition: 0.2s;
+}
+#dq-nav-ul > span > .active {
+  color: white;
+}
+#dq-nav-ul > span {
+  flex: 1;
 }
 </style>
