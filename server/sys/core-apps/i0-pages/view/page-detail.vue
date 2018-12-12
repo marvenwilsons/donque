@@ -27,6 +27,6 @@ hgroup {
 }
 #i0-page-details{
   flex: 1;
-  background-color:var(--dark-1);
+  background-color: white;
 }
 </style>

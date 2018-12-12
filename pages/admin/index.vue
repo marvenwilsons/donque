@@ -3,7 +3,7 @@
     <header><dqhead/></header>
     <section id="dq-content-wrapper" class="flex">
       <nav><docker/></nav>
-      <main class="flex" ><main-window/></main>
+      <main id="dq-work-room" class="flex" ><main-window/></main>
       <aside></aside>
     </section>
   </section>
@@ -43,16 +43,20 @@ export default {
 #dq-content-wrapper {
   flex: 1;
 }
+#dq-work-room{
+  background-color: var(--blue-3);
+}
 header {
   /* border: 1px solid red; */
-  /* background-color: #eeeeee;*/
-  background-color: var(--dark-2);
+  background-color: var(--blue-1);
+  /* background-color: var(--dark-2); */
 }
 main {
   /* border: 5px solid brown; */
-  flex: 7;
+  flex: 9;
 }
 nav {
+  background-color: var(--blue-3);
   /* border: 4px solid green; */
   flex: 1;
 }

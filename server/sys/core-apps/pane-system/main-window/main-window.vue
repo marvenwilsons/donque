@@ -2,8 +2,7 @@
   <div id="dynamic-pane" class="flex">
     <div
       :style="normalizeStyle(null,$store.state.comp.arr[index].headWidth)"
-      id="box-shad"
-      class="flex flexcol"
+      class="flex flexcol box-shad"
       v-for="(item, index) in ComponentsArray"
       :key="index"
     >
@@ -14,8 +13,8 @@
         :style="normalizeStyle($store.state.comp.arr[index].headColor,null)"
       >
         <!-- {{index}} - {{$store.state.comp.arr[index].headColor}} - {{$store.state.comp.arr[index]}} -->
-        <div>{{ $store.state.comp.arr[index].headName.charAt(0).toUpperCase() + $store.state.comp.arr[index].headName.slice(1) }}</div>
-        <div v-if="$store.state.comp.arr[index].closable" @click="close_pane(index)" class="pointer">&#10006;</div>
+        <div style="color:white" >{{ $store.state.comp.arr[index].headName.charAt(0).toUpperCase() + $store.state.comp.arr[index].headName.slice(1)}}</div>
+        <div style="color:white" v-if="$store.state.comp.arr[index].closable" @click="close_pane(index)" class="pointer">&#10006;</div>
       </span>
       <div class="flex" v-bind:index="index" :is="ComponentsArray[index].name"></div>
     </div>
@@ -84,10 +83,15 @@ export default {
   /* border: 5px solid teal; */
   flex: 1;
 }
-#box-shad {
+#dynamic-pane > *{
+  overflow: hidden;
+}
+.box-shad {
   box-shadow: 0px 2px 5px 1px rgba(128, 128, 128, 0.328);
   border: 1px solid rgba(128, 128, 128, 0.233);
   flex: 1;
+  background-color: white;
+  overflow: hidden;
 }
 #pane_head {
   padding: calc(var(--fontSize) * 0.25);

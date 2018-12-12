@@ -5,12 +5,12 @@
       <sender
         :component="{
         name:'pages',
-        headColor:'#ff63ff',
+        headColor:'#0086c0',
         headWidth: '300px',
         headName: 'Page',
         closable: true}"
         :position="0"
-      >&#128441; pages</sender>
+      >pages</sender>
 
       <!-- Collections -->
       <sender :component="{
@@ -19,7 +19,8 @@
         headWidth:'300px',
         headName:'Collections',
         closable:true
-      }" :position="0">&#128297; collection</sender>
+      }" :position="0">
+      collection</sender>
 
       <!-- Components -->
       <sender :component="{
@@ -27,7 +28,8 @@
         headColor:'pink',
         headName:'Components',
         closable:false
-      }" :position="0">components</sender>
+      }" :position="0">
+      components</sender>
 
       <!-- Database -->
       <sender :component="{
@@ -36,7 +38,8 @@
         headName:'databases',
         headWidth:'300px',
         closable:true
-      }" :position="0">&#10066; database</sender>
+      }" :position="0">
+      database</sender>
 
       <!-- Files -->
       <sender :component="{
@@ -45,7 +48,8 @@
         headName:'files',
         headWidth:'100%',
         closable: true
-      }" :position="0">files</sender>
+      }" :position="0">
+      files</sender>
 
       <!-- Plugins -->
       <sender :component="{
@@ -54,7 +58,8 @@
         headName:'plugins',
         headWidth:'100%',
         closable:false
-      }" :position="0">plugins</sender>
+      }" :position="0">
+      plugins</sender>
 
       <!-- MarketPlace -->
       <sender :component="{
@@ -63,7 +68,8 @@
         headName:'marketplace',
         headWidth:'100%',
         closable:false
-      }" :position="0">marketplace</sender>
+      }" :position="0"
+      >marketplace</sender>
 
       <!-- Shell -->
       <sender
@@ -74,7 +80,8 @@
           headName:'Shell - employee@marven', 
           closable: false }"
         :position="0"
-      >&#8984; Shell</sender>
+      >Shell</sender>
+      
     </ul>
   </div>
 </template>
@@ -92,5 +99,10 @@ export default {
 <style>
 #dq-nav-ul > li {
   padding-left: calc(var(--fontSize) * 1.25);
+  padding-bottom: calc(var(--fontSize) * 0.50);
+  padding-top: calc(var(--fontSize) * 0.50);
+}
+#dq-nav-ul > li:hover{
+  background-color: var(--hover-blue)
 }
 </style>
