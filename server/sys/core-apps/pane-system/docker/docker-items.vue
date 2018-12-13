@@ -131,7 +131,7 @@
           :component="{
           name:'shell',
           'headColor':'#0086c0', 
-          headWidth:'1000px', 
+          headWidth:'1250px', 
           headName:'Shell - employee@marven', 
           closable: false }"
           :position="0"

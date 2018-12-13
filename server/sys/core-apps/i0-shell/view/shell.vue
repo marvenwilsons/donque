@@ -1,44 +1,60 @@
 <template>
-  <div class="flex f1 flexcol shellbody shell-textcolor-user">
-    <!-- terminal output trace -->
-    <div class v-if="current_stack.length != 0" v-for="(stack,index) in current_stack" :key="index">
-      <!-- indicator -->
-      <div class="flex">
+  <div
+    id="dq-shellHolder"
+    class="flex f1 flexcol shellbody relative shell-textcolor-user"
+  >
+    <!-- <button @click="scrollDown">down</button> -->
+    <span id="dq-shell" class="absolute">
+      <!-- terminal output trace -->
+      <div
+        class
+        v-if="current_stack.length != 0"
+        v-for="(stack,index) in current_stack"
+        :key="index"
+      >
+        <!-- indicator -->
+        <div class="flex">
+          <div
+            class="shell-textcolor-currentuser"
+          >{{user_group}}@{{current_user}}({{ current_stack[index > 0 ? index - 1 : index].class }}):~$</div>
+          <span
+            id="shell-trace"
+          >{{current_stack[index].command}} {{current_stack[index].arguments_string}}</span>
+        </div>
+        <!-- end indicator -->
+        <!-- cli output -->
+        <div
+          class="terminal-output-err-indicator-wrapper"
+          v-if="current_stack[index].uitype != null"
+          id="cli-output"
+          :is="current_stack[index].uitype"
+          :val="current_stack[index].body"
+          :selfClass="current_stack[index].class"
+        ></div>
+        <div
+          id="cli-output"
+          v-if="current_stack[index].uitype == null"
+        >{{current_stack[index].body}}</div>
+        <!-- end cli output -->
+      </div>
+      <!-- end terminal output trace -->
+      <!-- terminal input -->
+      <div class="flex relative">
+        <div v-if="!input_visible" id="inp_mask" class="absolute"></div>
         <div
           class="shell-textcolor-currentuser"
-        >{{user_group}}@{{current_user}}({{ current_stack[index > 0 ? index - 1 : index].class }}):~$</div>
-        <span
-          id="shell-trace"
-        >{{current_stack[index].command}} {{current_stack[index].arguments_string}}</span>
+        >{{user_group}}@{{current_user}}({{current_class}}):~$</div>
+        <input
+          @keyup.up="getcmdhistory('up')"
+          @keyup.down="getcmdhistory('down')"
+          id="shell-input"
+          @keyup.enter="submit"
+          v-model="user_input"
+          type="text"
+        >
       </div>
-      <!-- end indicator -->
-      <!-- cli output -->
-      <div
-        class="terminal-output-err-indicator-wrapper"
-        v-if="current_stack[index].uitype != null"
-        id="cli-output"
-        :is="current_stack[index].uitype"
-        :val="current_stack[index].body"
-        :selfClass="current_stack[index].class"
-      ></div>
-      <div id="cli-output" v-if="current_stack[index].uitype == null">{{current_stack[index].body}}</div>
-      <!-- end cli output -->
-    </div>
-    <!-- end terminal output trace -->
-    <!-- terminal input -->
-    <div class="flex relative">
-      <div v-if="!input_visible" id="inp_mask" class="absolute"></div>
-      <div class="shell-textcolor-currentuser">{{user_group}}@{{current_user}}({{current_class}}):~$</div>
-      <input
-        @keyup.up="getcmdhistory('up')"
-        @keyup.down="getcmdhistory('down')"
-        id="shell-input"
-        @keyup.enter="submit"
-        v-model="user_input"
-        type="text"
-      >
-    </div>
-    <!-- end terminal input -->
+      <!-- end terminal input -->
+    </span>
   </div>
 </template>
 <script>
@@ -62,11 +78,22 @@ export default {
       current_class: "fs",
       command_history: [],
       command_history_count: -1,
-      token: "iasdgjkfgui23498629834"
+      token: "iasdgjkfgui23498629834",
+      shell: undefined
     };
   },
   methods: {
+    scrollDown() {
+      let shellbody = document.getElementById("dq-shell");
+      let shellHolder = document.getElementById("dq-shellHolder");
+
+      setTimeout(() => {
+        console.log("hey");
+        shellHolder.scrollTop = shellbody.scrollHeight + 1;
+      }, 5);
+    },
     getcmdhistory(mode) {
+      this.scrollDown();
       if (this.current_stack.length != 0) {
         let farr = this.current_stack.filter(el => el.body);
 
@@ -91,8 +118,12 @@ export default {
       this.current_class = res.response.class;
       this.current_stack.splice(this.current_index - 1, 1, res.response);
       this.input_visible = true;
+      this.scrollDown();
+
     },
     submit() {
+      this.scrollDown();
+
       this.current_index++;
       if (`${this.user_input}`.trim() == "clear") {
         this.current_index = 0;
@@ -139,6 +170,8 @@ export default {
           document.getElementById("shell-input").focus();
         }
       }
+
+      // scroll bottom
     },
     fucosOn() {
       document.getElementById("shell-input").focus();
@@ -153,23 +186,22 @@ export default {
     normal
   },
   mounted() {
-    this.$store.state.comp.paneWidth = []
+    this.$store.state.comp.paneWidth = [];
     this.$store.state.comp.paneWidth.push({
-      'max-width':'1000px'
-    })
-    this.$store.state.comp.paneHeadColor = []
+      "max-width": "1000px"
+    });
+    this.$store.state.comp.paneHeadColor = [];
     this.$store.state.comp.paneHeadColor.push({
-      'background-color':'#63ff63'
-    })
+      "background-color": "#63ff63"
+    });
     // focus input
     this.fucosOn();
 
     // user can type
     this.input_visible = true;
-    
+
     // set pane attr
     this.$store.commit("assign_pane_title", "@marven yeah!");
-    this.$store.commit("pane_is_closable",false)
 
     // init call
     // important: get the token from the local storage that is saved during login and trace that token to db, get user group and user associated with that token
@@ -193,14 +225,15 @@ export default {
 @import url("@/server/sys/admin assets/css/tana 0.2.css");
 
 :root {
-  --bgColor:#414446;
+  --bgColor: #414446;
   --ln: 1.5rem;
 }
 
 .shellbody {
   background-color: var(--bgColor);
   min-width: 1000px;
-  flex:1;
+  flex: 1;
+  overflow-y: auto;
 }
 .shell-textcolor-user {
   color: white;
@@ -221,7 +254,6 @@ export default {
   color: white;
   width: 100%;
   font-family: monospace;
-  caret-shape: underscore;
 }
 #shell-input:focus {
   border-style: none;

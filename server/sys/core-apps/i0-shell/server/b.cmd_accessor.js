@@ -93,6 +93,7 @@ const command_accessor = (parsed_command,permission) => {
                     }
                 }
             }else{
+                // console.log(registry[parsed_command.class][parsed_command.class] )
                 if (registry[parsed_command.class][parsed_command.class] == undefined){
                     parsed_command.class = parsed_command.class
                     parsed_command.switched = false

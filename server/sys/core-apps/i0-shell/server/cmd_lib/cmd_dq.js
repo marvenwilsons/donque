@@ -13,9 +13,55 @@ donqueCoreCommands.dq = {
 
     },
     w: {
+        // user
+        createNewUser(i) {
+            console.log('hey')
+        },
+        deleteUser(i) {
 
+        },
+        updateUser(i) {
+
+        },
+        assignUserPermissions(i) {
+
+        },
+        // collection
+        createNewCollection(i){
+
+        },
+        deleteCollection(i){
+
+        },
+        updateCollection(i){
+
+        },
+        // page
+        createNewPage(){
+
+        },
+        deletePage(){
+
+        },
+        updatePage(){
+
+        }
     },
     r: {
+        // user
+        getUser(i){
+
+        },
+        // collection
+        getCollections(i){
+
+        },
+        // page
+        getPages(i){
+
+        },
+
+        //
         listAll(i) {
             return {
                 ui: 'arrayList',

@@ -1,3 +1,5 @@
+const dqfs = require('../../../core-commands/dq-for-fs')
+
 const fileSystem = {}
 
 fileSystem.fs = {
@@ -26,9 +28,11 @@ fileSystem.fs = {
     },
     r: {
         ls(i) {
+            console.log('listing...')
+            console.log(dqfs.ls(__dirname))
             return{
                 ui:'arrayList',
-                data:['ben','wazza','foo','bar']
+                data: dqfs.ls(__dirname)
             }
         },
         cd(i) {
