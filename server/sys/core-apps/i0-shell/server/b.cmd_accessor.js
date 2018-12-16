@@ -128,7 +128,7 @@ const command_accessor = (parsed_command,permission) => {
                     parsed_command.switched = false
                     parsed_command.body = exec.data
                     parsed_command.uitype = exec.ui
-                    parsed_command.err = false
+                    parsed_command.err = exec.ui == 'err' ? true : false
                 }
 
                 if(typeof t == 'boolean'){
