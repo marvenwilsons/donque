@@ -218,20 +218,18 @@ export default {
               data: `use ${this.current_class} ${u != undefined ? u : this.user_input}`,
               nested_mode: false,
               token: this.token
-            })
-            .then(res => {
+          }).then(res => {
               this.response_handler(res);              
-            })
-            .catch(e => {
-              this.current_stack.push({
-                arguments_array: null,
-                command: this.user_input,
-                body: e,
-                class: this.current_class,
-                uitype: "err"
-              });
-              this.fs_path_history.push(this.current_fs_path)
+          }).catch(e => {
+            this.current_stack.push({
+              arguments_array: null,
+              command: this.user_input,
+              body: e,
+              class: this.current_class,
+              uitype: "err"
             });
+              this.fs_path_history.push(this.current_fs_path)
+          });
 
           // reset field
           this.user_input = "";

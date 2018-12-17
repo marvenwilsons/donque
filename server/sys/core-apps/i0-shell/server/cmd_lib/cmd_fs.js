@@ -32,6 +32,7 @@ fileSystem.fs = {
         ls(i) {
             // console.log(__dirname)
             // console.log(dqfs.ls(fileSystem_starting_path))
+            console.log(cd(i.data))
             return{
                 ui:'arrayList',
                 data: dqfs.ls(fileSystem_starting_path)
@@ -41,7 +42,7 @@ fileSystem.fs = {
             
             try{
                 if (dqfs.cd(path.join(fileSystem_starting_path, i.data))) {
-                    console.log()
+                    console.log('hey')
                     return {
                         ui: null,
                         data: path.join(fileSystem_starting_path, i.data).replace(fileSystem_starting_path, "")
@@ -51,7 +52,7 @@ fileSystem.fs = {
             }catch(e){
                 return {
                     ui: 'err',
-                    data: e
+                    data: e.replace(fileSystem_starting_path, '').replace('/', '').replace('undefined/', '')
                 }
             }
         }
