@@ -302,13 +302,11 @@ export default {
   },
   watch: {
     wsonmessage(newval,oldval) {
-      console.log(newval)
+      console.log(newval.data)
     }
   },
   mounted() {
     this.on_start_defaults_setter();
-
-    const z = 10;
   },
   beforeMount() {
     this.ws = new WebSocket("ws://localhost:4000");
