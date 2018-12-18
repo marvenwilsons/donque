@@ -1,5 +1,6 @@
 const dqfs = require('../../../core-commands/dqfs')
 const path = require('path')
+const queryString = require('querystring')
 const fileSystem_starting_path = path.join(__dirname, '../../../../../../public')
 
 const fileSystem = {}
@@ -32,27 +33,46 @@ fileSystem.fs = {
         ls(i) {
             // console.log(__dirname)
             // console.log(dqfs.ls(fileSystem_starting_path))
-            console.log(cd(i.data))
-            return{
-                ui:'arrayList',
-                data: dqfs.ls(fileSystem_starting_path)
+            // console.log(cd(i.data))
+            return {
+                ui: 'arrayList',
+                data: ['hey', 'boo']
             }
         },
         cd(i) {
-            
-            try{
+            const p = Object.keys(queryString.parse(path.join(fileSystem_starting_path, i.data), '/', null))
+            const pathArr = i.data.split("/")
+            pathArr.pop()
+            const traversBackwards = pathArr.every(el => el == '..') && pathArr.length != 0
+
+            if (traversBackwards) {
+                // get length
+                if (p[p.length - 1] != 'public') {
+                    return {
+                        ui: 'err',
+                        data: 'going outside beyond the public folder is not pirmited'
+                    }
+                }
+            }
+
+            try {
+                // console.log(dqfs.cd(path.join(fileSystem_starting_path, i.data)))   
+
                 if (dqfs.cd(path.join(fileSystem_starting_path, i.data))) {
-                    console.log('hey')
+                    // console.log(path.join(fileSystem_starting_path, i.data))
                     return {
                         ui: null,
                         data: path.join(fileSystem_starting_path, i.data).replace(fileSystem_starting_path, "")
+                        // data: 'test'
                     }
                 }
-                
-            }catch(e){
+
+            } catch (e) {
+                console.log(e)
                 return {
                     ui: 'err',
-                    data: e.replace(fileSystem_starting_path, '').replace('/', '').replace('undefined/', '')
+                    // data: e.replace(fileSystem_starting_path, '').replace('/', '').replace('undefined/', '')
+                    data: e
                 }
             }
         }

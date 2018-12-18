@@ -318,7 +318,7 @@ export default {
   border: none;
   color: white;
   width: 100%;
-  font-family: monospace;
+  font-size: 14px;
 }
 #shell-input:focus {
   border-style: none;

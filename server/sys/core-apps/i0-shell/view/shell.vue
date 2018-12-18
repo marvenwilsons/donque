@@ -7,7 +7,7 @@
             <div class="shell-textcolor-currentuser">
               {{usergroup}}@{{username}}:{{items.class}}:
               <span v-if="items.fspath">{{items.fspath}}:</span>
-              <span style="color:white;">{{items.command}} {{items.arguments_string}}</span>
+              <span class="dq-cmd-trace">{{items.command}} <span v-if="items.arguments_string != 'undefined'" >{{items.arguments_string}}</span> </span>
             </div>
           </span>
           <div id="cli-output" :is="items.uitype" :val="items.body"></div>
@@ -223,7 +223,7 @@ export default {
             is_absolute_path_forward  = input.arguments_string.split('/').length >= 2 && input.arguments_string.split('/')[1] != "" && input.arguments_string.split('/').every(item => item != ".."),
             is_absolute_path_backward  = cur_inp.every(item => item == "..") && cur_inp.length > 1
 
-        // cd cases handling
+        // cd cases handling on every success state
         if(go_back_wards){
             // cd ../
             console.log('go back wards')
@@ -247,6 +247,7 @@ export default {
         if(is_absolute_path_backward){
             // cd ../../
             console.log('is absolute backward')
+            console.log(input)
         }
     },
     on_every_after_submition() {
@@ -304,6 +305,9 @@ export default {
   color: white;
   overflow-y:  scroll;
 }
+#dq-terminal > *{
+  font-family: monospace;
+}
 #shell-input {
   background: none;
   border: none;
@@ -324,5 +328,12 @@ export default {
 }
 #cli-output {
   margin-left: 5px;
+}
+.dq-cmd-trace{
+  color: white;
+  font-family: monospace;
+}
+.dq-cmd-trace > span{
+  font-family: monospace;
 }
 </style>
