@@ -35,10 +35,23 @@ router.post('/dqcli',(req,res) => {
 })
 
 
-// const user_input = req.body.data.split(" ")
-// command_parser.set(user_input,(output) => {
-//     res.status(200).json({ response: output })
-// })
+
+const WebSocketServer = require('ws')
+const wss = new WebSocketServer.Server({port: 4000})
+
+wss.on('connection', function connection(ws) {
+
+    ws.on('message', function (message) {
+        // wss.clients.forEach((client) => {
+        //     client.send(message)
+        // })
+        // console.log(message)
+        ws.send(message)
+    })
+
+    ws.send("welcome !!!")
+})
+
 
 module.exports = {
     path: '/dq',
