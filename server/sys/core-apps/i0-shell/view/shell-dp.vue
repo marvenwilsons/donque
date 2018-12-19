@@ -1,70 +1,41 @@
 <template>
-  <div
-    id="dq-shellHolder"
-    class="flex f1 flexcol shellbody relative shell-textcolor-user"
-  >
-  <!-- <span class="test">
-    {{fs_path_history}}
-    {{current_index}}  
-  </span> -->
-    <!-- <button @click="scrollDown">down</button> -->
-    <span id="dq-shell" class="absolute fullwidth">
-      <!-- terminal output trace -->
-      <div
-        :id="`dq-ter-result-${index}`"
-        v-if="current_stack.length != 0"
-        v-for="(stack,index) in current_stack"
-        :key="index"
-      >
-        <!-- indicator -->
-        <div class="flex">
-          <div
-            class="shell-textcolor-currentuser"
-          >{{user_group}}@{{current_user}}({{ current_stack[index > 0 ? index - 1 : index].class }}):~<span>{{fs_path_history[index]}}{{index}} </span>$</div>
-          <span
-            id="shell-trace"
-          >{{current_stack[index].command}} {{current_stack[index].arguments_string}}</span>
+  <div id="dq-terminal" class="flex flexcol relative fullheight">
+    <span class="absolute fullwidth">
+      <main role="terminal-trace" class="flexwrap flexcol">
+        <div :id="`dq-ter-result-${index}`" v-for="(items,index) in terminal_logs" :key="index">
+          <span class="fullwidth flex">
+            <div class="shell-textcolor-currentuser">
+              {{usergroup}}@{{username}}:{{items.class}}:
+              <span v-if="items.fspath">{{items.fspath}}:</span>
+              <span class="dq-cmd-trace">
+                {{items.command}}
+                <span
+                  v-if="items.arguments_string != 'undefined'"
+                >{{items.arguments_string}}</span>
+              </span>
+            </div>
+          </span>
+          <div id="cli-output" :is="items.uitype" :val="items.body"></div>
         </div>
-        <!-- end indicator -->
+      </main>
 
-        <!-- cli output -->
-        <div
-          class="terminal-output-err-indicator-wrapper"
-          v-if="current_stack[index].uitype != null"
-          id="cli-output"
-          :is="current_stack[index].uitype"
-          :val="current_stack[index].body"
-          :selfClass="current_stack[index].class"
-        ></div>
-        <div
-          id="cli-output"
-          v-if="current_stack[index].uitype == null"
-        >{{current_stack[index].body}}</div>
-        <!-- end cli output -->
-      </div>
-      <!-- end terminal output trace -->
-      <!-- terminal input -->
-      <div id="dq-terminal-wrapper" class="flex flexcol relative">
-        <span class="flex">
-          <div v-if="!input_visible" id="inp_mask" class="absolute"></div>
-          <div
-            class="shell-textcolor-currentuser"
-          >{{user_group}}@{{current_user}}({{current_class}}):~<span>{{current_fs_path}}</span>$</div>
-          <input
-            @keyup.up="getcmdhistory('up')"
-            @keyup.down="getcmdhistory('down')"
-            id="shell-input"
-            @keyup.enter="submit"
-            v-model="user_input"
-            type="text"
-          >
+      <main role="terminal-input" class="flex">
+        <span class="shell-textcolor-currentuser flex">
+          {{usergroup}}@{{username}}:{{current_class}}:
+          <span v-if="fspath">{{fspath}}:</span>
         </span>
-        <span id="dq-btm-spacer" class="" ></span>
-      </div>
-      <!-- end terminal input -->
+        <input
+          id="shell-input"
+          @keyup.enter="submit"
+          v-model="user_input"
+          class="fullwidth"
+          type="text"
+        >
+      </main>
     </span>
   </div>
 </template>
+
 <script>
 import arrayList from "../server/ui library/arrayList.vue";
 import prompt from "../server/ui library/prompt.vue";
@@ -72,178 +43,281 @@ import selection from "../server/ui library/selection.vue";
 import tableObject from "../server/ui library/tableObject.vue";
 import err from "../server/ui library/err.vue";
 import normal from "../server/ui library/normal.vue";
-import clear from "../server/ui library/clear.vue"
+import clear from "../server/ui library/clear.vue";
+// import Vue from 'vue' 
+// import VueSocketio from 'vue-socket.io';
+// Vue.use(VueSocketio, 'ws://localhost:4000');
 
 export default {
   data() {
     return {
       user_input: undefined,
-      current_input: undefined,
-      user_group: "marven",
-      current_user: "marven",
-      current_stack: [],
-      current_output_stack: [],
-      input_visible: false,
+      global_classes: undefined,
+      user_token: undefined,
+      current_class: undefined,
+      terminal_logs: [],
+      usergroup: undefined,
+      username: undefined,
       current_index: 0,
-      current_class: "fs",
-      command_history: [],
-      command_history_count: -1,
-      fs_path_history:[],
-      current_fs_path: undefined,
-      token: "iasdgjkfgui23498629834",
-      shell: undefined,
-      clientHeight: undefined,
-      cleard: false
+      dqterresult: [],
+      fspath: undefined,
+      fspath_arr: [],
+      ws: undefined,
+      wsonmessage: undefined
     };
   },
   methods: {
-    scrollDown() {
-      let shellbody = document.getElementById("dq-shell");
-      let shellHolder = document.getElementById("dq-shellHolder");
+    // methods v2 by marven wilson donque
 
-      setTimeout(() => {
-        shellHolder.scrollTop = shellbody.scrollHeight + 1;
-      }, 5);
-    },
-    getcmdhistory(mode) {
-      this.scrollDown();
-      if (this.current_stack.length != 0) {
-        let farr = this.current_stack.filter(el => el.body);
-
-        if (mode == "up") {
-          this.command_history_count++;
-          if (this.command_history_count == farr.length) {
-            this.command_history_count = 0;
-          }
-        }
-
-        if (mode == "down") {
-          this.command_history_count--;
-          if (this.command_history_count == -1) {
-            this.command_history_count = farr.length - 1;
-          }
-        }
-        this.user_input = farr[this.command_history_count].command;
-      }
-    },
-    response_handler(res) {
-      let u_inp = this.current_input.replace('cd','')
-
-      if(res.response.err == false && res.response.class == 'fs' && res.response.command == 'cd'){
-        this.fs_path_history.push(res.response.body)
-        this.current_fs_path = res.response.body
-
-        res.response.arguments_string = u_inp
-
-        res.response.body = ""
-      }else{
-        if(!res.response.err){
-          res.response.arguments_string = u_inp
-          this.fs_path_history.push(this.current_fs_path)
-        }else{
-          res.response.arguments_string = u_inp
-          this.fs_path_history.push(this.current_fs_path)
-        }
-      }
-
-      this.current_class = res.response.class;
-      this.current_stack.splice(this.current_index - 1, 1, res.response);
-      this.input_visible = true;
-      this.scrollDown();
-
-      if(this.cleard){
-        console.log(document.getElementById(x).clientHeight)
-
-        let x = `dq-ter-result-${this.current_stack.length - 1}`
-        let z = document.getElementById(x).clientHeight  + 38
-        document.getElementById("dq-btm-spacer").style.paddingTop = `${this.clientHeight -= z}px`
-        // console.log(document.getElementById("dq-btm-spacer").style.paddingTop)
-      }
-
-    },
     submit() {
-      this.current_input = this.user_input
-      this.scrollDown();
+      this.a_user_input_parser(this.user_input);
+    },
+    a_user_input_parser(input) {
+      // parsed the user input breaks down each section of the input and
+      // turn it into an object
 
-      this.current_index++;
+      // detec empty and not empty
+      input =
+        input == undefined
+          ? ""
+          : String(input).trim() == ""
+          ? ""
+          : input.split(" ");
 
-      // clear
-      if (`${this.user_input}`.trim() == "clear") {
-        // add space to the bottom do not empty the array you idiot
-        // padding top
-        document.getElementById("dq-btm-spacer").style.paddingTop = `${document.getElementById("dq-shellHolder").clientHeight - 25}px`
-        this.clientHeight = document.getElementById("dq-shellHolder").clientHeight - 25
-        this.cleard = true
-        this.current_stack.push({
-            arguments_array: null,
-            command: this.user_input,
-            body: "",
-            class: this.current_class,
-            uitype: 'clear'
-          })
+      //
+      typeof input == "string" &&
+        this.b_parsed_input_handler({ firstArg: null });
+
+      //
+      typeof input == "object" &&
+        this.b_parsed_input_handler({
+          firstArg: input[0],
+          secondArg: input[1],
+          arguments_string: input.join(" "),
+          class: this.current_class
+        });
+    },
+    b_parsed_input_handler(input) {
+      // the purpose of this method is to assign a case on each command the
+      // user cast
+
+      // case container
+      let CASE_SELECTED = undefined;
+
+      // cases difine
+      input.firstArg == "clear" && (CASE_SELECTED = "CLEAR_THE_SCREEN");
+      input.firstArg == "use" && (CASE_SELECTED = "SWITCH_CLASS");
+      input.firstArg != "clear" &&
+        input.firstArg != "use" &&
+        input.firstArg != null &&
+        (CASE_SELECTED = "SEND_TO_SERVER");
+      input.firstArg == null && (CASE_SELECTED = "EMPTY");
+
+      switch (CASE_SELECTED) {
+        case "CLEAR_THE_SCREEN":
+          this.c_terminal_view_handler("CLEAR_THE_SCREEN");
+          break;
+
+        case "SWITCH_CLASS":
+          this.global_classes.indexOf(input.secondArg) == -1
+            ? this.terminal_log({
+                uitype: "err",
+                body: `${input.secondArg} class not found`,
+                class: input.class,
+                command: input.arguments_string
+              })
+            : this.terminal_log(
+                {
+                  uitype: "normal",
+                  body: `switched to ${input.secondArg} successfully`,
+                  command: input.arguments_string,
+                  class: input.class
+                },
+                (this.current_class = input.secondArg)
+              );
+          this.on_every_after_submition();
+          break;
+
+        case "SEND_TO_SERVER":
+          this.d_command_sender(input);
+          this.on_every_after_submition();
+          break;
+
+        case "EMPTY":
+          this.c_terminal_view_handler("EMPTY");
+          this.on_every_after_submition();
+          break;
+      }
+    },
+    c_terminal_view_handler(input) {
+      // this method is responsible for the ui on what to display
+
+      // on case clear
+      if (input == "CLEAR_THE_SCREEN" && this.dqterresult.length != 0) {
+        this.dqterresult.map(id => document.getElementById(id).remove());
+        this.dqterresult = [];
         this.user_input = "";
       } else {
-        if (this.user_input == "".trim() || this.user_input == undefined) {
-          this.current_stack.push({
-            body: "",
-            class: this.current_class
-          });
-        this.fs_path_history.push(this.current_fs_path)
-        } else {
-          //
-          this.input_visible = false;
-          
-          // waiting for response
-          this.current_stack.push({
-            arguments_array: null,
-            command: this.user_input,
-            body: "waiting..",
-            class: this.current_class,
-            uitype: null
-          });
-          
-          let u = undefined
+        this.user_input = "";
+      }
 
-          //
-          if(this.current_fs_path != undefined){
-            let n_index = this.fs_path_history.length - 2
-            let u_cmd = this.user_input.split(" ")[1]
-            let f = `cd ${this.fs_path_history[n_index + 1]}/${u_cmd}`
-            this.input = u_cmd
-            u = f
-          }
+      // on case empty
+      input == "EMPTY" &&
+        this.terminal_log({
+          body: "",
+          class: this.current_class
+        });
+    },
+    d_command_sender(input) {      
+      // this method is responsible for sending the parsed input to the
+      // this.ws.send(input.arguments_string)
 
-          // send request
-          this.$axios.$post("/dq/dqcli", {
-              data: `use ${this.current_class} ${u != undefined ? u : this.user_input}`,
-              nested_mode: false,
+      // server to be processed
+      if (input.class == "fs") {
+          this.$axios
+          .$post("/dq/dqcli", {
+              data: `use fs ${input.firstArg} ${input.secondArg}`,
               token: this.token
-          }).then(res => {
-              this.response_handler(res);              
-          }).catch(e => {
-            this.current_stack.push({
-              arguments_array: null,
-              command: this.user_input,
-              body: e,
-              class: this.current_class,
-              uitype: "err"
-            });
-              this.fs_path_history.push(this.current_fs_path)
+          })
+          .then(res => {
+              this.e_command_response_handler(res.response);
+          })
+          .catch(err => {
+              this.terminal_log({
+                  uitype: 'err',
+                  body: err
+              });
           });
-
-          // reset field
-          this.user_input = "";
-
-          // set fucos to input
-          document.getElementById("shell-input").focus();
-
-
-        }
+      } else {
+          this.$axios
+          .$post("/dq/dqcli", {
+              data: `use ${input.class} ${input.firstArg} ${input.secondArg}`,
+              token: this.token
+          })
+          .the(res => {
+              this.e_command_response_handler(res.response);
+          })
+          .catch(err => {
+              this.terminal_log({
+                  uitype: 'err',
+                  body: err
+              });
+          });
       }
     },
-    fucosOn() {
+    e_command_response_handler(input) {
+      // this method is responsilbe for handling the response from the server
+
+      // too many cases dealing with cd, so im assigning it with its own handler
+      input.command == "cd" && this.fs_change_dir_handler(input);
+
+      // normal
+      input.command != "cd" &&
+        (() => {
+          this.terminal_log(input);
+        })();
+    },
+    terminal_log(log) {
+      this.terminal_logs.push(log);
+    },
+    fs_change_dir_handler(input) {
+      // handle error
+      input.err && this.terminal_log(input);
+
+      // cd cases definitions
+      const cur_inp = input.arguments_string.split("/");
+      cur_inp.pop();
+
+      const go_back_wards =
+          input.arguments_string == ".." || input.arguments_string == "../",
+        go_one_level_up_a =
+          input.arguments_string.split("/").length >= 1 &&
+          cur_inp.indexOf("..") == -1 &&
+          input.arguments_string.split("/").pop() == "",
+        go_one_level_up_b =
+          input.arguments_string.split("/").length == 1 &&
+          input.arguments_string != "..",
+        is_absolute_path_forward =
+          input.arguments_string.split("/").length >= 2 &&
+          input.arguments_string.split("/")[1] != "" &&
+          input.arguments_string.split("/").every(item => item != ".."),
+        is_absolute_path_backward =
+          cur_inp.every(item => item == "..") && cur_inp.length > 1;
+
+      // cd cases handling on every success state
+      if (go_back_wards) {
+        // cd ../
+        console.log("go back wards");
+      }
+
+      if (go_one_level_up_a) {
+        // cd files
+        console.log("go one level up");
+      }
+
+      if (go_one_level_up_b) {
+        // cd files/
+        console.log("go one level up 2");
+      }
+
+      if (is_absolute_path_forward) {
+        // cd files/bar
+        console.log("is absolute forward");
+      }
+
+      if (is_absolute_path_backward) {
+        // cd ../../
+        console.log("is absolute backward");
+        console.log(input);
+      }
+    },
+    on_every_after_submition() {
+      this.user_input = "";
+      this.current_index++;
+      this.dqterresult.push(`dq-ter-result-${this.current_index - 1}`);
+    },
+    on_start_defaults_setter() {
+      // this method fires when the shell instantiate, set all the defaults and
+      // runs all the starting checklist before even the user can interac to the ui
+
+      // fucos
       document.getElementById("shell-input").focus();
+
+      // get global classes
+      this.global_classes = ["fs", "mysql", "dq"];
+
+      // get token
+      this.user_token = "asdjfhkjashdkfwiuerqwqweb7248ythek";
+
+      // set default class
+      this.current_class = "fs";
+
+      // set user group
+      this.usergroup = "dev";
+
+      // set user name
+      this.username = "marven";
     }
+  },
+  // watch: {
+  //   wsonmessage(newval,oldval) {
+  //     console.log(newval.data)
+  //   }
+  // },
+  mounted() {
+    this.on_start_defaults_setter();
+  },
+  beforeMount() {
+    // this.ws = new WebSocket("ws://localhost:4000");
+    // this.ws.onopen = () => {
+    //   console.log("CONNECTED");
+    // };
+    // this.ws.onmessage = (pl) => {
+    //   this.wsonmessage = pl
+    // }
+    // this.ws.inclose = function close(){
+    //   console.log('closed')
+    // }
   },
   components: {
     arrayList,
@@ -253,58 +327,35 @@ export default {
     err,
     normal,
     clear
-  },
-  mounted() {
-    this.clientHeight = document.getElementById("dq-shellHolder").clientHeight - 25
-
-    this.fs_path_history.push("")
-
-    // focus input
-    this.fucosOn();
-
-    // user can type
-    this.input_visible = true;
-
-    // set pane attr
-    this.$store.commit("assign_pane_title", "@marven yeah!");
-
-    // init call
-    // important: get the token from the local storage that is saved during login and trace that token to db, get user group and user associated with that token
-    this.$axios
-      .$post("/dq/dqcli", { data: "use fs _clear", token: this.token })
-      .then(res => {
-        if (res.response.body != "") {
-          this.current_stack.push(res.response);
-        }
-      })
-      .catch(e => {
-        console.log(e);
-        this.current_output_stack.push(e);
-      });
   }
 };
 </script>
 
 <style>
-@import url("@/server/sys/admin assets/css/normalize.css");
-@import url("@/server/sys/admin assets/css/tana 0.2.css");
-
 :root {
   --bgColor: #414446;
   --ln: 1.5rem;
 }
 
-.shellbody {
+#dq-terminal {
+  height: 100%;
   background-color: var(--bgColor);
-  min-width: 1000px;
-  flex: 1;
-  overflow-y: auto;
-}
-.shell-textcolor-user {
   color: white;
+  overflow-y: scroll;
 }
-#shell-trace {
+#dq-terminal > * {
   font-family: monospace;
+}
+#shell-input {
+  background: none;
+  border: none;
+  color: white;
+  width: 100%;
+  font-family: monospace;
+}
+#shell-input:focus {
+  border-style: none;
+  outline: none;
 }
 .shell-textcolor-currentuser {
   color: #5be616;
@@ -313,24 +364,15 @@ export default {
   padding-right: 10px;
   font-family: monospace;
 }
-#shell-input {
-  background: none;
-  border: none;
-  color: white;
-  width: 100%;
-  font-size: 14px;
-}
-#shell-input:focus {
-  border-style: none;
-  outline: none;
-}
 #cli-output {
   margin-left: 5px;
 }
-#inp_mask {
-  width: 100%;
-  height: 100%;
-  background-color: var(--bgColor);
+.dq-cmd-trace {
+  color: white;
+  font-family: monospace;
+}
+.dq-cmd-trace > span {
+  font-family: monospace;
 }
 
 .test{
@@ -342,6 +384,4 @@ export default {
   margin-left: 500px;
   color: black;
 }
-</style>:
-
-
+</style>

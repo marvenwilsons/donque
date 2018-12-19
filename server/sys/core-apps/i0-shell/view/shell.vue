@@ -1,5 +1,6 @@
 <template>
   <div id="dq-terminal" class="flex flexcol relative fullheight">
+    <!-- <span class="test">{{test}}</span> -->
     <span class="absolute fullwidth">
       <main role="terminal-trace" class="flexwrap flexcol">
         <div :id="`dq-ter-result-${index}`" v-for="(items,index) in terminal_logs" :key="index">
@@ -63,7 +64,8 @@ export default {
       fspath: undefined,
       fspath_arr: [],
       ws: undefined,
-      wsonmessage: undefined
+      wsonmessage: undefined,
+      test: undefined
     };
   },
   methods: {
@@ -168,43 +170,24 @@ export default {
           class: this.current_class
         });
     },
-    d_command_sender(input) {      
+    d_command_sender(input) {
       // this method is responsible for sending the parsed input to the
-      this.ws.send(input.arguments_string)
 
       // console.log(this.wsonmessage.data)
       // server to be processed
-      // if (input.class == "fs") {
-      //     this.$axios
-      //     .$post("/dq/dqcli", {
-      //         data: `use fs ${input.firstArg} ${input.secondArg}`,
-      //         token: this.token
-      //     })
-      //     .then(res => {
-      //         this.e_command_response_handler(res.response);
-      //     })
-      //     .catch(err => {
-      //         this.terminal_log({
-      //             uitype: 'err',
-      //             body: err
-      //         });
-      //     });
-      // } else {
-      //     this.$axios
-      //     .$post("/dq/dqcli", {
-      //         data: `use ${input.class} ${input.firstArg} ${input.secondArg}`,
-      //         token: this.token
-      //     })
-      //     .the(res => {
-      //         this.e_command_response_handler(res.response);
-      //     })
-      //     .catch(err => {
-      //         this.terminal_log({
-      //             uitype: 'err',
-      //             body: err
-      //         });
-      //     });
-      // }
+      if (input.class == "fs") {
+        console.log('fs')
+        const b = {
+          data: `use fs ${input.firstArg} ${input.secondArg}`,
+          token: this.user_token
+        }
+        this.ws.send(JSON.stringify(b));
+      } else {
+        this.ws.send({
+          data: `use ${input.class} ${input.firstArg} ${input.secondArg}`,
+          token: this.user_token
+        });
+      }
     },
     e_command_response_handler(input) {
       // this method is responsilbe for handling the response from the server
@@ -301,8 +284,10 @@ export default {
     }
   },
   watch: {
-    wsonmessage(newval,oldval) {
-      console.log(newval.data)
+    wsonmessage(newval, oldval) {
+      const x = newval.data
+      const obj = JSON.parse(x)
+      this.terminal_log(obj)
     }
   },
   mounted() {
@@ -313,12 +298,12 @@ export default {
     this.ws.onopen = () => {
       console.log("CONNECTED");
     };
-    this.ws.onmessage = (pl) => {
-      this.wsonmessage = pl
-    }
-    this.ws.inclose = function close(){
-      console.log('closed')
-    }
+    this.ws.onmessage = pl => {
+      this.wsonmessage = pl;
+    };
+    this.ws.inclose = function close() {
+      console.log("closed");
+    };
   },
   components: {
     arrayList,
@@ -374,5 +359,16 @@ export default {
 }
 .dq-cmd-trace > span {
   font-family: monospace;
+}
+
+.test{
+  border: 3px solid green;
+  background-color: white;
+  z-index: 900;
+  height: 800px;
+  max-width: 600px;
+  margin-top: 20px;
+  margin-left: 500px;
+  color: black;
 }
 </style>
