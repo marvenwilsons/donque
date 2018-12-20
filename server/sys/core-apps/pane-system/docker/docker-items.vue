@@ -12,7 +12,7 @@
         headName: 'Pages',
         closable: true}"
           :position="0"
-        >pages</sender>
+        > <span class="flex spacebetween"> <span>pages</span> <span class="dq-n-ind" >7</span> </span> </sender>
       </span>
 
       <!-- pages -->
@@ -42,7 +42,7 @@
         closable:true
       }"
           :position="0"
-        >collections</sender>
+        ><span class="flex spacebetween"> <span>collections</span> <span class="dq-n-ind" >10</span> </span></sender>
       </span>
 
       <!-- Components -->
@@ -182,5 +182,9 @@ export default {
 }
 #dq-nav-ul > span {
   flex: 1;
+}
+.dq-n-ind{
+  margin-right: var(--size-1-full);
+  border-radius: 100%;
 }
 </style>

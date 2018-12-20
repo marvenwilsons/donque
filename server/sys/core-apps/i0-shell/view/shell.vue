@@ -179,7 +179,7 @@ export default {
           this.fs_change_dir_before_send_handler(input);
         } else {
           const b = {
-            data: `use fs ${input.firstArg} ${input.secondArg}`,
+            data: `use fs ${input.firstArg.trim} ${input.secondArg}`,
             token: this.user_token
           };
           this.ws.send(JSON.stringify(b));
@@ -208,94 +208,50 @@ export default {
       this.terminal_logs.push(log);
     },
     fs_change_dir_handler(input) {
-      // handle error
       if (input.err) {
+        const err = input.arguments_string.split("/");
+        this.fspath_arr.splice(this.fspath_arr.indexOf(err[err.length - 1]), 1);
         this.terminal_log(input);
-        if (input.body.split(" ")[1] === "NotFoundError:") {
-          const p = input.body.split(" ")[6].split("/");
-          p.pop();
-          const i = this.fspath_arr.indexOf(p.pop());
-          this.fspath_arr.splice(i, 1);
-        }
+      } else {
+        console.log(input.body)
+        this.terminal_log(input);
+        // if len is 1
+          // try splitting it with / see if you can divide it
+          // if the result is 1 then it is genuine 1
+          // else split it and change the fspath_arr
       }
-
-      // cd cases definitions
-      const cur_inp = input.arguments_string.split("/");
-      cur_inp.pop();
-
-      const go_back_wards =
-          input.arguments_string == ".." || input.arguments_string == "../",
-        go_one_level_up_a =
-          input.arguments_string.split("/").length >= 1 &&
-          cur_inp.indexOf("..") == -1 &&
-          input.arguments_string.split("/").pop() == "",
-        go_one_level_up_b =
-          input.arguments_string.split("/").length == 1 &&
-          input.arguments_string != "..",
-        is_absolute_path_forward =
-          input.arguments_string.split("/").length >= 2 &&
-          input.arguments_string.split("/")[1] != "" &&
-          input.arguments_string.split("/").every(item => item != ".."),
-        is_absolute_path_backward =
-          cur_inp.every(item => item == "..") && cur_inp.length > 1;
-
-      const cn = () => {
-        this.fspath != undefined
-          ? (this.fspath = this.fspath.concat("", input.body))
-          : (this.fspath = input.body);
-      };
-      cn();
-
-      // cd cases handling on every success state
-      // if (go_back_wards) {
-      //   // cd ../
-      //   console.log("go back wards");
-      //   console.log(input);
-      // }
-
-      // if (go_one_level_up_a) {
-      //   // cd files
-      //   console.log("go one level up");
-      //   console.log(input);
-      // }
-
-      // if (go_one_level_up_b) {
-      //   // cd files/
-      //   console.log("go one level up 2");
-      //   cn();
-      //   console.log(this.fspath);
-      // }
-
-      // if (is_absolute_path_forward) {
-      //   // cd files/bar
-      //   console.log("is absolute forward");
-      //   console.log(input)
-      //   cn();
-      //   console.log(this.fspath);
-      // }
-
-      // if (is_absolute_path_backward) {
-      //   // cd ../../
-      //   console.log("is absolute backward");
-      //   console.log(input);
-      // }
     },
     fs_change_dir_before_send_handler(input) {
       let pure_backwards = input.secondArg.replace("/", "");
+
       const backward_times =
-        pure_backwards.replace("/", "").split("").length / 2;
-      const is_absolute_path_backward = pure_backwards
+        pure_backwards
         .replace("/", "")
-        .split("")
-        .every(el => el == ".");
+        .split('')
+        .join('')
+        .replace('/','')
+        .split('')
+        .length / 2;
+
+      const is_absolute_path_backward = pure_backwards
+        .replace('/', '')
+        .split('')
+        .join('')
+        .replace('/','')
+        .split('')
+        .every(el => el == '.')
+
+      // console.log(is_absolute_path_backward)
 
       if (is_absolute_path_backward) {
+        console.log("is backward! : " + backward_times + " times");
         const removefrom_index = this.fspath_arr.length - 1;
+        // there is a bug here
 
-        if (removefrom_index - 1 == 0) {
-          this.fspath_arr.splice(removefrom_index, backward_times);
-        } else {
+        if (backward_times > 1) {
           this.fspath_arr.splice(removefrom_index - 1, backward_times);
+        } else {
+          this.fspath_arr.splice(removefrom_index, backward_times);
         }
 
         this.fspath = this.fspath_arr.join("/");
@@ -311,6 +267,7 @@ export default {
 
       try {
         if (this.fspath.split("/").indexOf("..") != -1) {
+          console.log("this one");
           this.fspath = undefined;
           this.fspath_arr = [];
         }
@@ -318,7 +275,7 @@ export default {
         this.fspath = undefined;
         this.fspath_arr = [];
       }
-
+      console.log(this.fspath_arr);
       if (this.fspath) {
         this.ws.send(
           JSON.stringify({
