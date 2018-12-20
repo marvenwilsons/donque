@@ -1,7 +1,7 @@
 <template>
     <div class="">
-        <span>
-            <span id="terminal-output-err-indicator">[ error ]</span>  {{val}}
+        <span class="terminal-output-err" >
+            <span id="terminal-output-err-indicator">[ error ]</span>  <span>{{val}}</span>
         </span>
     </div>
 </template>
@@ -22,6 +22,9 @@ export default {
 }
 .terminal-output-err-indicator-wrapper{
     padding: calc(var(--fontSize)*1.25);
+}
+.terminal-output-err > *{
+    font-family: monospace;
 }
 </style>
 

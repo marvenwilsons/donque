@@ -173,20 +173,23 @@ export default {
     d_command_sender(input) {
       // this method is responsible for sending the parsed input to the
 
-      // console.log(this.wsonmessage.data)
       // server to be processed
       if (input.class == "fs") {
-        console.log('fs')
-        const b = {
-          data: `use fs ${input.firstArg} ${input.secondArg}`,
-          token: this.user_token
+        if (input.firstArg == "cd") {
+          this.fs_change_dir_before_send_handler(input);
+        } else {
+          const b = {
+            data: `use fs ${input.firstArg} ${input.secondArg}`,
+            token: this.user_token
+          };
+          this.ws.send(JSON.stringify(b));
         }
-        this.ws.send(JSON.stringify(b));
       } else {
-        this.ws.send({
+        const c = {
           data: `use ${input.class} ${input.firstArg} ${input.secondArg}`,
           token: this.user_token
-        });
+        };
+        this.ws.send(JSON.stringify(c));
       }
     },
     e_command_response_handler(input) {
@@ -206,7 +209,15 @@ export default {
     },
     fs_change_dir_handler(input) {
       // handle error
-      input.err && this.terminal_log(input);
+      if (input.err) {
+        this.terminal_log(input);
+        if (input.body.split(" ")[1] === "NotFoundError:") {
+          const p = input.body.split(" ")[6].split("/");
+          p.pop();
+          const i = this.fspath_arr.indexOf(p.pop());
+          this.fspath_arr.splice(i, 1);
+        }
+      }
 
       // cd cases definitions
       const cur_inp = input.arguments_string.split("/");
@@ -228,31 +239,93 @@ export default {
         is_absolute_path_backward =
           cur_inp.every(item => item == "..") && cur_inp.length > 1;
 
+      const cn = () => {
+        this.fspath != undefined
+          ? (this.fspath = this.fspath.concat("", input.body))
+          : (this.fspath = input.body);
+      };
+      cn();
+
       // cd cases handling on every success state
-      if (go_back_wards) {
-        // cd ../
-        console.log("go back wards");
-      }
+      // if (go_back_wards) {
+      //   // cd ../
+      //   console.log("go back wards");
+      //   console.log(input);
+      // }
 
-      if (go_one_level_up_a) {
-        // cd files
-        console.log("go one level up");
-      }
+      // if (go_one_level_up_a) {
+      //   // cd files
+      //   console.log("go one level up");
+      //   console.log(input);
+      // }
 
-      if (go_one_level_up_b) {
-        // cd files/
-        console.log("go one level up 2");
-      }
+      // if (go_one_level_up_b) {
+      //   // cd files/
+      //   console.log("go one level up 2");
+      //   cn();
+      //   console.log(this.fspath);
+      // }
 
-      if (is_absolute_path_forward) {
-        // cd files/bar
-        console.log("is absolute forward");
-      }
+      // if (is_absolute_path_forward) {
+      //   // cd files/bar
+      //   console.log("is absolute forward");
+      //   console.log(input)
+      //   cn();
+      //   console.log(this.fspath);
+      // }
+
+      // if (is_absolute_path_backward) {
+      //   // cd ../../
+      //   console.log("is absolute backward");
+      //   console.log(input);
+      // }
+    },
+    fs_change_dir_before_send_handler(input) {
+      let pure_backwards = input.secondArg.replace("/", "");
+      const backward_times =
+        pure_backwards.replace("/", "").split("").length / 2;
+      const is_absolute_path_backward = pure_backwards
+        .replace("/", "")
+        .split("")
+        .every(el => el == ".");
 
       if (is_absolute_path_backward) {
-        // cd ../../
-        console.log("is absolute backward");
-        console.log(input);
+        const removefrom_index = this.fspath_arr.length - 1;
+
+        if (removefrom_index - 1 == 0) {
+          this.fspath_arr.splice(removefrom_index, backward_times);
+        } else {
+          this.fspath_arr.splice(removefrom_index - 1, backward_times);
+        }
+
+        this.fspath = this.fspath_arr.join("/");
+      } else {
+        this.fspath_arr.push(input.secondArg);
+        this.fspath = this.fspath_arr.join("/");
+      }
+
+      if (this.fspath == "") {
+        this.fspath = undefined;
+        this.fspath_arr = [];
+      }
+
+      try {
+        if (this.fspath.split("/").indexOf("..") != -1) {
+          this.fspath = undefined;
+          this.fspath_arr = [];
+        }
+      } catch (e) {
+        this.fspath = undefined;
+        this.fspath_arr = [];
+      }
+
+      if (this.fspath) {
+        this.ws.send(
+          JSON.stringify({
+            data: `use fs cd ${this.fspath}`,
+            token: this.user_token
+          })
+        );
       }
     },
     on_every_after_submition() {
@@ -281,29 +354,29 @@ export default {
 
       // set user name
       this.username = "marven";
+
+      // init webSocket
+      this.ws = new WebSocket("ws://localhost:4000");
+      this.ws.onopen = () => {
+        console.log("CONNECTED");
+      };
+      this.ws.onmessage = pl => {
+        this.wsonmessage = pl;
+      };
+      this.ws.inclose = function close() {
+        console.log("closed");
+      };
     }
   },
   watch: {
     wsonmessage(newval, oldval) {
-      const x = newval.data
-      const obj = JSON.parse(x)
-      this.terminal_log(obj)
+      const x = newval.data;
+      const obj = JSON.parse(x);
+      this.e_command_response_handler(obj);
     }
   },
   mounted() {
     this.on_start_defaults_setter();
-  },
-  beforeMount() {
-    this.ws = new WebSocket("ws://localhost:4000");
-    this.ws.onopen = () => {
-      console.log("CONNECTED");
-    };
-    this.ws.onmessage = pl => {
-      this.wsonmessage = pl;
-    };
-    this.ws.inclose = function close() {
-      console.log("closed");
-    };
   },
   components: {
     arrayList,
@@ -361,7 +434,7 @@ export default {
   font-family: monospace;
 }
 
-.test{
+.test {
   border: 3px solid green;
   background-color: white;
   z-index: 900;
