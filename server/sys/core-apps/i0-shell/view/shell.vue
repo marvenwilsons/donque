@@ -196,7 +196,7 @@ export default {
       // this method is responsilbe for handling the response from the server
 
       // too many cases dealing with cd, so im assigning it with its own handler
-      input.command == "cd" && this.fs_change_dir_handler(input);
+      input.command == "cd" && this.fs_change_dir_response_handler(input);
 
       // normal
       input.command != "cd" &&
@@ -207,18 +207,23 @@ export default {
     terminal_log(log) {
       this.terminal_logs.push(log);
     },
-    fs_change_dir_handler(input) {
+    fs_change_dir_response_handler(input) {
       if (input.err) {
         const err = input.arguments_string.split("/");
         this.fspath_arr.splice(this.fspath_arr.indexOf(err[err.length - 1]), 1);
         this.terminal_log(input);
       } else {
-        console.log(input.body)
-        this.terminal_log(input);
-        // if len is 1
-          // try splitting it with / see if you can divide it
-          // if the result is 1 then it is genuine 1
-          // else split it and change the fspath_arr
+        // this operation is essintial for the backwards cd.. operation in the future
+        this.fspath_arr.map(el => {
+          const pathIsNotSingle = el.indexOf('/') != -1
+          if(pathIsNotSingle){
+            const index_location = this.fspath_arr.length - 1
+            const brokend_absolute_path = this.fspath_arr[index_location].split('/')
+            this.fspath_arr.splice(index_location,1)
+            this.fspath_arr = this.fspath_arr.concat(brokend_absolute_path)
+          }
+        })
+        this.terminal_log(input)
       }
     },
     fs_change_dir_before_send_handler(input) {
@@ -275,7 +280,7 @@ export default {
         this.fspath = undefined;
         this.fspath_arr = [];
       }
-      console.log(this.fspath_arr);
+      // console.log(this.fspath_arr);
       if (this.fspath) {
         this.ws.send(
           JSON.stringify({
