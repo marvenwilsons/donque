@@ -1,6 +1,5 @@
 <template>
   <div id="dq-terminal" class="flex flexcol relative fullheight">
-    <!-- <span class="test">{{test}}</span> -->
     <span class="absolute fullwidth">
       <main role="terminal-trace" class="flexwrap flexcol">
         <div :id="`dq-ter-result-${index}`" v-for="(items,index) in terminal_logs" :key="index">
@@ -399,16 +398,5 @@ export default {
 }
 .dq-cmd-trace > span {
   font-family: monospace;
-}
-
-.test {
-  border: 3px solid green;
-  background-color: white;
-  z-index: 900;
-  height: 800px;
-  max-width: 600px;
-  margin-top: 20px;
-  margin-left: 500px;
-  color: black;
 }
 </style>
