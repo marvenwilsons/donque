@@ -34,9 +34,10 @@ fileSystem.fs = {
             // console.log(__dirname)
             // console.log(dqfs.ls(fileSystem_starting_path))
             // console.log(cd(i.data))
+            console.log(i.data)
             return {
                 ui: 'arrayList',
-                data: ['hey', 'boo']
+                data: dqfs.ls(i.data)
             }
         },
         cd(i) {

@@ -178,13 +178,15 @@ export default {
         if (input.firstArg == "cd") {
           this.fs_change_dir_before_send_handler(input);
         } else {
+          console.log("EXECUTED: command sender 1.b");
           const b = {
-            data: `use fs ${input.firstArg.trim} ${input.secondArg}`,
+            data: `use fs ${input.firstArg.trim()} ${input.secondArg}`,
             token: this.user_token
           };
           this.ws.send(JSON.stringify(b));
         }
       } else {
+        console.log("EXECUTED: command sender 2");
         const c = {
           data: `use ${input.class} ${input.firstArg} ${input.secondArg}`,
           token: this.user_token
@@ -215,15 +217,17 @@ export default {
       } else {
         // this operation is essintial for the backwards cd.. operation in the future
         this.fspath_arr.map(el => {
-          const pathIsNotSingle = el.indexOf('/') != -1
-          if(pathIsNotSingle){
-            const index_location = this.fspath_arr.length - 1
-            const brokend_absolute_path = this.fspath_arr[index_location].split('/')
-            this.fspath_arr.splice(index_location,1)
-            this.fspath_arr = this.fspath_arr.concat(brokend_absolute_path)
+          const pathIsNotSingle = el.indexOf("/") != -1;
+          if (pathIsNotSingle) {
+            const index_location = this.fspath_arr.length - 1;
+            const brokend_absolute_path = this.fspath_arr[index_location].split(
+              "/"
+            );
+            this.fspath_arr.splice(index_location, 1);
+            this.fspath_arr = this.fspath_arr.concat(brokend_absolute_path);
           }
-        })
-        this.terminal_log(input)
+        });
+        this.terminal_log(input);
       }
     },
     fs_change_dir_before_send_handler(input) {
@@ -231,22 +235,19 @@ export default {
 
       const backward_times =
         pure_backwards
-        .replace("/", "")
-        .split('')
-        .join('')
-        .replace('/','')
-        .split('')
-        .length / 2;
+          .replace("/", "")
+          .split("")
+          .join("")
+          .replace("/", "")
+          .split("").length / 2;
 
       const is_absolute_path_backward = pure_backwards
-        .replace('/', '')
-        .split('')
-        .join('')
-        .replace('/','')
-        .split('')
-        .every(el => el == '.')
-
-      // console.log(is_absolute_path_backward)
+        .replace("/", "")
+        .split("")
+        .join("")
+        .replace("/", "")
+        .split("")
+        .every(el => el == ".");
 
       if (is_absolute_path_backward) {
         console.log("is backward! : " + backward_times + " times");
@@ -254,7 +255,11 @@ export default {
         // there is a bug here
 
         if (backward_times > 1) {
-          this.fspath_arr.splice(removefrom_index - 1, backward_times);
+          if (backward_times == this.fspath_arr.length) {
+            this.fspath_arr = []
+          } else {
+            this.fspath_arr.splice(removefrom_index - 1, backward_times);
+          }
         } else {
           this.fspath_arr.splice(removefrom_index, backward_times);
         }
@@ -280,7 +285,7 @@ export default {
         this.fspath = undefined;
         this.fspath_arr = [];
       }
-      // console.log(this.fspath_arr);
+      console.log(this.fspath_arr);
       if (this.fspath) {
         this.ws.send(
           JSON.stringify({
