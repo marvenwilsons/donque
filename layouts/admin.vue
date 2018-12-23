@@ -53,6 +53,12 @@ export default {
 
   /* hovers */
   --hover-blue: var(--blue-2);
+
+  /* fonts */
+  --oxygen-mono:'Oxygen Mono', monospace;
+  --ubunto-mono:'Ubuntu Mono', monospace;
+  --inconsolata:'Inconsolata', monospace;
+
 }
 .dq-pane-container-padding {
   padding-top: var(--size-1-half);

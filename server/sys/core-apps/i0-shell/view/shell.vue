@@ -6,7 +6,10 @@
           <span class="fullwidth flex">
             <div class="shell-textcolor-currentuser">
               {{usergroup}}@{{username}}:{{items.class}}:
-              <span v-if="items.fspath">{{items.fspath}}:</span>
+              <span
+                class="dq-ter-p-trace"
+                v-if="items.fspath"
+              >{{items.fspath}}:</span>
               <span class="dq-cmd-trace">
                 {{items.command}}
                 <span
@@ -22,7 +25,10 @@
       <main role="terminal-input" class="flex">
         <span class="shell-textcolor-currentuser flex">
           {{usergroup}}@{{username}}:{{current_class}}:
-          <span v-if="fspath">{{fspath}}:</span>
+          <span
+            class="dq-ter-p-trace"
+            v-if="fspath"
+          >{{fspath}}:</span>
         </span>
         <input
           id="shell-input"
@@ -44,9 +50,6 @@ import tableObject from "../server/ui library/tableObject.vue";
 import err from "../server/ui library/err.vue";
 import normal from "../server/ui library/normal.vue";
 import clear from "../server/ui library/clear.vue";
-// import Vue from 'vue'
-// import VueSocketio from 'vue-socket.io';
-// Vue.use(VueSocketio, 'ws://localhost:4000');
 
 export default {
   data() {
@@ -155,7 +158,12 @@ export default {
 
       // on case clear
       if (input == "CLEAR_THE_SCREEN" && this.dqterresult.length != 0) {
-        this.dqterresult.map(id => document.getElementById(id).remove());
+        try {
+          this.dqterresult.map(id => document.getElementById(id).remove());
+        } catch (e) {
+          this.dqterresult = [];
+          this.user_input = "";
+        }
         this.dqterresult = [];
         this.user_input = "";
       } else {
@@ -255,7 +263,7 @@ export default {
 
         if (backward_times > 1) {
           if (backward_times == this.fspath_arr.length) {
-            this.fspath_arr = []
+            this.fspath_arr = [];
           } else {
             this.fspath_arr.splice(removefrom_index - 1, backward_times);
           }
@@ -368,15 +376,12 @@ export default {
   color: white;
   overflow-y: scroll;
 }
-#dq-terminal > * {
-  font-family: monospace;
-}
+
 #shell-input {
   background: none;
   border: none;
   color: white;
   width: 100%;
-  font-family: monospace;
 }
 #shell-input:focus {
   border-style: none;
@@ -387,16 +392,21 @@ export default {
   /* font-weight: bold; */
   padding-left: 5px;
   padding-right: 10px;
-  font-family: monospace;
 }
 #cli-output {
   margin-left: 5px;
 }
 .dq-cmd-trace {
   color: white;
-  font-family: monospace;
 }
-.dq-cmd-trace > span {
-  font-family: monospace;
+
+.dq-cmd-trace > span,
+.dq-cmd-trace,
+.dq-ter-p-trace,
+.shell-textcolor-currentuser,
+#shell-input,
+#dq-terminal > * {
+  font-family: var(--inconsolata);
+  font-size: calc(var(--fontSize) * 1.25);
 }
 </style>

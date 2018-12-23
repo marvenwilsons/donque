@@ -15,7 +15,10 @@ module.exports = {
       { hid: 'description', name: 'description', content: pkg.description }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { href:'https://fonts.googleapis.com/css?family=Oxygen+Mono', rel:'stylesheet'},
+      { href:'https://fonts.googleapis.com/css?family=Ubuntu+Mono', rel:'stylesheet'},
+      { href:'https://fonts.googleapis.com/css?family=Inconsolata', rel:'stylesheet' }
     ]
   },
 
