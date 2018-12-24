@@ -1,12 +1,11 @@
 <template>
   <div id="dq-terminal" class="flex flexcol relative fullheight">
-    <span class="absolute fullwidth">
+    <span id="dq-shell" class="absolute fullwidth">
       <main role="terminal-trace" class="flexwrap flexcol">
         <div :id="`dq-ter-result-${index}`" v-for="(items,index) in terminal_logs" :key="index">
           <span class="fullwidth flex">
             <div class="shell-textcolor-currentuser">
-              {{usergroup}}@{{username}}:{{items.class}}:
-              <span
+              {{usergroup}}@{{username}}-{{items.class}}:<span
                 class="dq-ter-p-trace"
                 v-if="items.fspath"
               >{{items.fspath}}:</span>
@@ -22,19 +21,19 @@
         </div>
       </main>
 
-      <main role="terminal-input" class="flex">
+      <main role="terminal-input" id="terminal-input" class="flex">
         <span class="shell-textcolor-currentuser flex">
-          {{usergroup}}@{{username}}:{{current_class}}:
+          {{usergroup}}@{{username}}-{{current_class}}:
           <span
             class="dq-ter-p-trace"
             v-if="fspath"
-          >{{fspath}}:</span>
+          >/{{fspath}}:</span>
         </span>
         <input
           id="shell-input"
           @keyup.enter="submit"
           v-model="user_input"
-          class="fullwidth"
+          class="borderred"
           type="text"
         >
       </main>
@@ -63,11 +62,17 @@ export default {
       username: undefined,
       current_index: 0,
       dqterresult: [],
+
+      // cd related
       fspath: undefined,
       fspath_arr: [],
+      fspath_arr_path_trace: [],
+      fspath_arr_input_trace: [],
+      fs_secondArgs: [],
+
+      // webSocket
       ws: undefined,
-      wsonmessage: undefined,
-      test: undefined
+      wsonmessage: undefined
     };
   },
   methods: {
@@ -76,6 +81,8 @@ export default {
     submit() {
       this.a_user_input_parser(this.user_input);
     },
+
+    // terminal logic layer
     a_user_input_parser(input) {
       // parsed the user input breaks down each section of the input and
       // turn it into an object
@@ -174,8 +181,10 @@ export default {
       input == "EMPTY" &&
         this.terminal_log({
           body: "",
+          fspath: this.fspath == undefined ? '' : `/${this.fspath}`,
           class: this.current_class
         });
+
     },
     d_command_sender(input) {
       // this method is responsible for sending the parsed input to the
@@ -183,9 +192,21 @@ export default {
       // server to be processed
       if (input.class == "fs") {
         if (input.firstArg == "cd") {
-          this.fs_change_dir_before_send_handler(input);
+          try{
+            this.fs_secondArgs.push(input.secondArg);
+          this.a_fs_change_dir_before_send_handler(input)
+          }catch(e){
+            this.terminal_log({
+              class: "fs",
+              uitype: "err",
+              body: "cd: file operand missing",
+              arguments_string: "cd"
+            })
+          }
+
+          
         } else {
-          console.log("EXECUTED: command sender 1.b");
+          // console.log("EXECUTED: command sender 1.b");
           const b = {
             data: `use fs ${input.firstArg.trim()} ${input.secondArg}`,
             token: this.user_token
@@ -193,7 +214,7 @@ export default {
           this.ws.send(JSON.stringify(b));
         }
       } else {
-        console.log("EXECUTED: command sender 2");
+        // console.log("EXECUTED: command sender 2");
         const c = {
           data: `use ${input.class} ${input.firstArg} ${input.secondArg}`,
           token: this.user_token
@@ -205,7 +226,7 @@ export default {
       // this method is responsilbe for handling the response from the server
 
       // too many cases dealing with cd, so im assigning it with its own handler
-      input.command == "cd" && this.fs_change_dir_response_handler(input);
+      input.command == "cd" && this.b_fs_change_dir_response_handler(input);
 
       // normal
       input.command != "cd" &&
@@ -213,31 +234,23 @@ export default {
           this.terminal_log(input);
         })();
     },
+
+    //
     terminal_log(log) {
       this.terminal_logs.push(log);
     },
-    fs_change_dir_response_handler(input) {
-      if (input.err) {
-        const err = input.arguments_string.split("/");
-        this.fspath_arr.splice(this.fspath_arr.indexOf(err[err.length - 1]), 1);
-        this.terminal_log(input);
-      } else {
-        // this operation is essintial for the backwards cd.. operation in the future
-        this.fspath_arr.map(el => {
-          const pathIsNotSingle = el.indexOf("/") != -1;
-          if (pathIsNotSingle) {
-            const index_location = this.fspath_arr.length - 1;
-            const brokend_absolute_path = this.fspath_arr[index_location].split(
-              "/"
-            );
-            this.fspath_arr.splice(index_location, 1);
-            this.fspath_arr = this.fspath_arr.concat(brokend_absolute_path);
-          }
-        });
-        this.terminal_log(input);
-      }
+    scroll_downn() {
+      let shellbody = document.getElementById("dq-shell");
+      let shellHolder = document.getElementById("dq-terminal");
+
+      setTimeout(() => {
+        shellHolder.scrollTop = shellbody.scrollHeight + 1;
+      }, 5);
     },
-    fs_change_dir_before_send_handler(input) {
+
+    // cd - change directory handler only
+    a_fs_change_dir_before_send_handler(input) {
+      this.fspath_arr_input_trace.push(input.arguments_string);
       let pure_backwards = input.secondArg.replace("/", "");
 
       const backward_times =
@@ -257,7 +270,7 @@ export default {
         .every(el => el == ".");
 
       if (is_absolute_path_backward) {
-        console.log("is backward! : " + backward_times + " times");
+        // console.log("is backward! : " + backward_times + " times");
         const removefrom_index = this.fspath_arr.length - 1;
         // there is a bug here
 
@@ -267,11 +280,14 @@ export default {
           } else {
             this.fspath_arr.splice(removefrom_index - 1, backward_times);
           }
+          console.log("more than one");
         } else {
           this.fspath_arr.splice(removefrom_index, backward_times);
         }
 
         this.fspath = this.fspath_arr.join("/");
+        // console.log('3333')
+        // console.log(this.fspath)
       } else {
         this.fspath_arr.push(input.secondArg);
         this.fspath = this.fspath_arr.join("/");
@@ -281,18 +297,7 @@ export default {
         this.fspath = undefined;
         this.fspath_arr = [];
       }
-
-      try {
-        if (this.fspath.split("/").indexOf("..") != -1) {
-          console.log("this one");
-          this.fspath = undefined;
-          this.fspath_arr = [];
-        }
-      } catch (e) {
-        this.fspath = undefined;
-        this.fspath_arr = [];
-      }
-      console.log(this.fspath_arr);
+      // console.log(`fspath: ${this.fspath}`)
       if (this.fspath) {
         this.ws.send(
           JSON.stringify({
@@ -300,12 +305,102 @@ export default {
             token: this.user_token
           })
         );
+      } else {
+        this.ws.send(
+          JSON.stringify({
+            data: `use fs cd ${null}`,
+            token: this.user_token
+          })
+        );
       }
     },
+    b_fs_change_dir_response_handler(input) {
+      if (input.err) {
+        console.log("err code");
+        // console.log(input)
+        const err = input.arguments_string.split("/");
+        this.fspath_arr.splice(this.fspath_arr.indexOf(err[err.length - 1]), 1);
+        this.fspath = this.fspath_arr.join("/");
+        // this.terminal_log(input);
+      } else {
+        // this operation is essential for allowing the backwards cd.. operation
+        this.fspath_arr.map(el => {
+          const pathIsNotSingle = el.indexOf("/") != -1;
+          if (pathIsNotSingle) {
+            const index_location = this.fspath_arr.length - 1;
+            const brokend_absolute_path = this.fspath_arr[index_location].split(
+              "/"
+            );
+            this.fspath_arr.splice(index_location, 1);
+            this.fspath_arr = this.fspath_arr.concat(brokend_absolute_path);
+          }
+        });
+      }
+      this.c_fs_change_dir_ui_handler(input);
+    },
+    c_fs_change_dir_ui_handler(input) {
+      this.fspath_arr_path_trace.push(input.body);
+
+      if (!input.err) {
+        //
+        input.fspath = this.fspath_arr_path_trace[
+          this.fspath_arr_path_trace.length - 2
+        ];
+
+        input.arguments_string = this.fspath_arr_input_trace[
+          this.fspath_arr_path_trace.length - 1
+        ].replace("cd", "");
+
+//
+        if (input.arguments_string.trim() == "") {
+            this.terminal_log({
+              class: "fs",
+              uitype: "err",
+              body: "cd: file operand missing",
+              arguments_string: "cd"
+            })
+        }else{
+          this.terminal_log(input);
+        }
+      } else {
+        // console.log(input)
+
+        if (this.fspath_arr_path_trace.length == 1) {
+          this.fspath_arr_path_trace = [];
+          this.fspath_arr_input_trace = []
+        } 
+        else{
+          //
+          const problematic_index = this.fspath_arr_path_trace.length - 1;
+          const prev_working_index = this.fspath_arr_path_trace.length - 2;
+          //
+          this.fspath_arr_path_trace.splice(
+            problematic_index,
+            1,
+            this.fspath_arr_path_trace[prev_working_index]
+          );
+          //
+          input.fspath = this.fspath_arr_path_trace[
+            this.fspath_arr_path_trace.length - 2
+          ];
+
+          //
+          input.arguments_string = this.fspath_arr_input_trace[
+          this.fspath_arr_path_trace.length - 1
+          ].replace("cd", "");
+
+        }
+        this.terminal_log(input);
+      }
+    },
+
+    // routines
     on_every_after_submition() {
       this.user_input = "";
       this.current_index++;
       this.dqterresult.push(`dq-ter-result-${this.current_index - 1}`);
+      this.scroll_downn();
+      // console.log(this.fspath);
     },
     on_start_defaults_setter() {
       // this method fires when the shell instantiate, set all the defaults and
@@ -332,13 +427,13 @@ export default {
       // init webSocket
       this.ws = new WebSocket("ws://localhost:4000");
       this.ws.onopen = () => {
-        console.log("CONNECTED");
+        // console.log("CONNECTED");
       };
       this.ws.onmessage = pl => {
         this.wsonmessage = pl;
       };
       this.ws.inclose = function close() {
-        console.log("closed");
+        // console.log("closed");
       };
     }
   },
@@ -381,7 +476,7 @@ export default {
   background: none;
   border: none;
   color: white;
-  width: 100%;
+  width: 50%;
 }
 #shell-input:focus {
   border-style: none;
@@ -405,7 +500,7 @@ export default {
 .dq-ter-p-trace,
 .shell-textcolor-currentuser,
 #shell-input,
-#dq-terminal > * {
+#cli-output > * #dq-terminal > * {
   font-family: var(--inconsolata);
   font-size: calc(var(--fontSize) * 1.25);
 }

@@ -456,7 +456,9 @@ const d = (() => {
 
         fs.renameSync(frm, to)
     }
-
+    lib.killpath = () => {
+        lib.rootPath = undefined
+    }
     delete lib.rootPath
     return lib
 })()
