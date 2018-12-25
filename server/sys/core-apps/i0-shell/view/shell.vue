@@ -147,6 +147,9 @@ export default {
                 (this.current_class = input.secondArg)
               );
           this.on_every_after_submition();
+          this.fspath = undefined
+          this.fspath_arr_input_trace = []
+          this.fspath_arr_path_trace = []
           break;
 
         case "SEND_TO_SERVER":
@@ -181,7 +184,7 @@ export default {
       input == "EMPTY" &&
         this.terminal_log({
           body: "",
-          fspath: this.fspath == undefined ? '' : `/${this.fspath}`,
+          fspath: this.fspath == undefined ? '' : this.fspath != undefined ? `/${this.fspath}` : this.fspath,
           class: this.current_class
         });
 
@@ -339,8 +342,7 @@ export default {
       this.c_fs_change_dir_ui_handler(input);
     },
     c_fs_change_dir_ui_handler(input) {
-      this.fspath_arr_path_trace.push(input.body);
-
+      this.fspath_arr_path_trace.push(input.body === true ? '' : input.body);
       if (!input.err) {
         //
         input.fspath = this.fspath_arr_path_trace[
@@ -351,7 +353,7 @@ export default {
           this.fspath_arr_path_trace.length - 1
         ].replace("cd", "");
 
-//
+        //
         if (input.arguments_string.trim() == "") {
             this.terminal_log({
               class: "fs",
@@ -362,9 +364,10 @@ export default {
         }else{
           this.terminal_log(input);
         }
-      } else {
-        // console.log(input)
 
+        console.log( this.fspath_arr_input_trace)
+
+      } else {
         if (this.fspath_arr_path_trace.length == 1) {
           this.fspath_arr_path_trace = [];
           this.fspath_arr_input_trace = []
@@ -388,7 +391,6 @@ export default {
           input.arguments_string = this.fspath_arr_input_trace[
           this.fspath_arr_path_trace.length - 1
           ].replace("cd", "");
-
         }
         this.terminal_log(input);
       }
