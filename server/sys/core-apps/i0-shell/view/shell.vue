@@ -26,7 +26,7 @@
           {{usergroup}}@{{username}}-{{current_class}}:
           <span
             class="dq-ter-p-trace"
-            v-if="fspath"
+            v-if="fspath && current_class == 'fs'"
           >/{{fspath}}:</span>
         </span>
         <input
@@ -130,26 +130,29 @@ export default {
           break;
 
         case "SWITCH_CLASS":
-          this.global_classes.indexOf(input.secondArg) == -1
-            ? this.terminal_log({
+          if(this.global_classes.indexOf(input.secondArg) == -1){
+            this.terminal_log({
                 uitype: "err",
                 body: `${input.secondArg} class not found`,
                 class: input.class,
                 command: input.arguments_string
               })
-            : this.terminal_log(
-                {
-                  uitype: "normal",
-                  body: `switched to ${input.secondArg} successfully`,
-                  command: input.arguments_string,
-                  class: input.class
-                },
-                (this.current_class = input.secondArg)
-              );
+          }else{
+            this.terminal_log({
+              uitype: "normal",
+              body: `switched to ${input.secondArg} successfully`,
+              command: input.arguments_string,
+              fspath:this.fspath_arr_path_trace[this.current_index - 1],
+              class: input.class
+            })
+            this.current_class = input.secondArg
+            if(this.current_class == 'fs'){
+              this.fspath = this.fspath_arr_path_trace[this.fspath_arr_path_trace.length - 1].replace('/','')
+            }else{
+              this.fspath = undefined
+            }
+          }
           this.on_every_after_submition();
-          this.fspath = undefined
-          this.fspath_arr_input_trace = []
-          this.fspath_arr_path_trace = []
           break;
 
         case "SEND_TO_SERVER":
@@ -229,13 +232,11 @@ export default {
       // this method is responsilbe for handling the response from the server
 
       // too many cases dealing with cd, so im assigning it with its own handler
-      input.command == "cd" && this.b_fs_change_dir_response_handler(input);
-
-      // normal
-      input.command != "cd" &&
-        (() => {
-          this.terminal_log(input);
-        })();
+      if(input.command == "cd" && input.class == 'fs'){
+        this.b_fs_change_dir_response_handler(input);
+      }else{
+        this.terminal_log(input);
+      }
     },
 
     //
@@ -319,7 +320,7 @@ export default {
     },
     b_fs_change_dir_response_handler(input) {
       if (input.err) {
-        console.log("err code");
+        // console.log("err code");
         // console.log(input)
         const err = input.arguments_string.split("/");
         this.fspath_arr.splice(this.fspath_arr.indexOf(err[err.length - 1]), 1);
@@ -349,9 +350,11 @@ export default {
           this.fspath_arr_path_trace.length - 2
         ];
 
-        input.arguments_string = this.fspath_arr_input_trace[
+        try{
+          input.arguments_string = this.fspath_arr_input_trace[
           this.fspath_arr_path_trace.length - 1
         ].replace("cd", "");
+        }catch(e){}
 
         //
         if (input.arguments_string.trim() == "") {
@@ -391,6 +394,8 @@ export default {
           input.arguments_string = this.fspath_arr_input_trace[
           this.fspath_arr_path_trace.length - 1
           ].replace("cd", "");
+
+          console.log('exec')
         }
         this.terminal_log(input);
       }

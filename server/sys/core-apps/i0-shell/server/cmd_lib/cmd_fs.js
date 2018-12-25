@@ -54,7 +54,15 @@ fileSystem.fs = {
                     ui: null,
                     data: dqfs.cd(fileSystem_starting_path)
                 }
-            }else{
+            }
+            else if (i.data == '001EACRESET'){
+                dqfs.killpath()
+                return {
+                    ui: null,
+                    data: dqfs.cd(fileSystem_starting_path)
+                }
+            }
+            else{
                 const p = Object.keys(queryString.parse(path.join(fileSystem_starting_path, i.data), '/', null))
                 const pathArr = i.data.split("/")
                 pathArr.pop()
