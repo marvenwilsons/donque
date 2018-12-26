@@ -19,10 +19,9 @@ const cli_handler = (command,response) =>{
         allowed_action: 'rw',
         exeptions: ['mysql','collections']
     }
-
     // command accessor
     const users_command = command_accessor(parsed_user_input,user_permission)
-
+    
     // response formater
     const final_response = response_formater(users_command)
 

@@ -33,18 +33,24 @@ fileSystem.fs = {
         ls(i) {
             // console.log(__dirname)
             // console.log(dqfs.ls(fileSystem_starting_path))
-            console.log(path.join(fileSystem_starting_path, i.data))
-            if (i.data == 'undefined') {
-                return {
-                    ui: 'arrayList',
-                    data: dqfs.ls(fileSystem_starting_path)
-                }
-            } else {
-                return {
-                    ui: 'arrayList',
-                    data: dqfs.ls(path.join(fileSystem_starting_path, i.data))
-                }
+            // console.log(path.join(fileSystem_starting_path, i.data))
+            console.log(i)
+            return {
+                ui: 'arrayList',
+                data: ['foo']
             }
+
+            // if (i.data == 'undefined') {
+            //     return {
+            //         ui: 'arrayList',
+            //         data: dqfs.ls(fileSystem_starting_path)
+            //     }
+            // } else {
+            //     return {
+            //         ui: 'arrayList',
+            //         data: dqfs.ls(path.join(fileSystem_starting_path, i.data))
+            //     }
+            // }
 
         },
         cd(i) {

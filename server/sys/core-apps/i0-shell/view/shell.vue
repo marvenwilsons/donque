@@ -197,32 +197,12 @@ export default {
 
       // server to be processed
       if (input.class == "fs") {
-        if (input.firstArg == "cd") {
-          try{
-            this.fs_secondArgs.push(input.secondArg);
-            this.a_fs_change_dir_before_send_handler(input)
-          }catch(e){
-            this.terminal_log({
-              class: "fs",
-              uitype: "err",
-              body: "cd: file operand missing",
-              arguments_string: "cd"
-            })
-          }
-
-          
-        } else {
-          console.log("EXECUTED: command sender 1.b");
-          const b = {
-            data: `use fs ${input.firstArg.trim()} ${input.secondArg}`,
-            token: this.user_token
-          };
-          this.ws.send(JSON.stringify(b));
-        }
+        this.fs_command_sender(input)
       } else {
         console.log("EXECUTED: command sender 2");
         const c = {
           data: `use ${input.class} ${input.firstArg} ${input.secondArg}`,
+          extraPayload: null,
           token: this.user_token
         };
         this.ws.send(JSON.stringify(c));
@@ -236,7 +216,7 @@ export default {
         this.b_fs_change_dir_response_handler(input);
       }else{
         if(this.current_class == 'fs'){
-          input.fspath = `/${this.fspath}`
+          input.fspath = this.fspath == undefined ? '' : `/${this.fspath}`
           this.terminal_log(input);
 
         }else{
@@ -312,6 +292,7 @@ export default {
         this.ws.send(
           JSON.stringify({
             data: `use fs cd ${this.fspath}`,
+            extraPayload: null,
             token: this.user_token
           })
         );
@@ -319,6 +300,7 @@ export default {
         this.ws.send(
           JSON.stringify({
             data: `use fs cd ${null}`,
+            extraPayload:null,
             token: this.user_token
           })
         );
@@ -405,6 +387,35 @@ export default {
         }
         this.terminal_log(input);
       }
+    },
+
+    // fs related
+    fs_command_sender(input){
+      if (input.firstArg == "cd") {
+          try{
+            this.fs_secondArgs.push(input.secondArg);
+            this.a_fs_change_dir_before_send_handler(input)
+          }catch(e){
+            this.terminal_log({
+              class: "fs",
+              uitype: "err",
+              body: "cd: file operand missing",
+              arguments_string: "cd"
+            })
+          }          
+        } else {
+          console.log("EXECUTED: command sender 1.b");
+          const req = {
+            path: this.fspath,
+            data: input.secondArg
+          }
+          const b = {
+            data: `use fs ${input.firstArg.trim()} ${this.fspath}`,
+            extraPayload: 'hey',
+            token: this.user_token
+          };
+          this.ws.send(JSON.stringify(b));
+        }
     },
 
     // routines

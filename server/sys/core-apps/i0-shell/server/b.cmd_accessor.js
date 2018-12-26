@@ -64,6 +64,7 @@ const command_accessor = (parsed_command,permission) => {
                     const command_res = user_issued_command({
                         command: parsed_command.command,
                         data: parsed_command.arguments_string.trim() == '' ? undefined : parsed_command.arguments_string,
+                        extraPayload: parsed_command.extraPayload,
                         dataArr: parsed_command.arguments_array
                     })
                     parsed_command.class = parsed_command.class
@@ -122,6 +123,7 @@ const command_accessor = (parsed_command,permission) => {
                     let exec = t({
                         command: parsed_command.command,
                         data: parsed_command.arguments_string.trim() == '' ? undefined : parsed_command.arguments_string,
+                        extraPayload: parsed_command.extraPayload,
                         dataArr: parsed_command.arguments_array
                     })
                     parsed_command.class = parsed_command.class
