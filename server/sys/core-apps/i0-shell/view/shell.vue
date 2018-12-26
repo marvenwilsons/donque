@@ -200,7 +200,7 @@ export default {
         if (input.firstArg == "cd") {
           try{
             this.fs_secondArgs.push(input.secondArg);
-          this.a_fs_change_dir_before_send_handler(input)
+            this.a_fs_change_dir_before_send_handler(input)
           }catch(e){
             this.terminal_log({
               class: "fs",
@@ -212,7 +212,7 @@ export default {
 
           
         } else {
-          // console.log("EXECUTED: command sender 1.b");
+          console.log("EXECUTED: command sender 1.b");
           const b = {
             data: `use fs ${input.firstArg.trim()} ${input.secondArg}`,
             token: this.user_token
@@ -220,7 +220,7 @@ export default {
           this.ws.send(JSON.stringify(b));
         }
       } else {
-        // console.log("EXECUTED: command sender 2");
+        console.log("EXECUTED: command sender 2");
         const c = {
           data: `use ${input.class} ${input.firstArg} ${input.secondArg}`,
           token: this.user_token
@@ -235,7 +235,13 @@ export default {
       if(input.command == "cd" && input.class == 'fs'){
         this.b_fs_change_dir_response_handler(input);
       }else{
-        this.terminal_log(input);
+        if(this.current_class == 'fs'){
+          input.fspath = `/${this.fspath}`
+          this.terminal_log(input);
+
+        }else{
+          this.terminal_log(input)
+        }
       }
     },
 
