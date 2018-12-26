@@ -405,13 +405,9 @@ export default {
           }          
         } else {
           console.log("EXECUTED: command sender 1.b");
-          const req = {
-            path: this.fspath,
-            data: input.secondArg
-          }
           const b = {
-            data: `use fs ${input.firstArg.trim()} ${this.fspath}`,
-            extraPayload: 'hey',
+            data: `use fs ${input.firstArg.trim()} ${input.secondArg}`,
+            extraPayload: this.fspath,
             token: this.user_token
           };
           this.ws.send(JSON.stringify(b));

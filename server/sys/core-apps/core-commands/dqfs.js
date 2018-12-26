@@ -149,6 +149,7 @@ const d = (() => {
         return true
     }
     lib.ls = (absolutePath, options) => {
+
         const ref = {
             root: lib.rootPath,
             setC,

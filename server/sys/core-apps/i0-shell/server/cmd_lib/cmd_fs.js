@@ -33,24 +33,42 @@ fileSystem.fs = {
         ls(i) {
             // console.log(__dirname)
             // console.log(dqfs.ls(fileSystem_starting_path))
-            // console.log(path.join(fileSystem_starting_path, i.data))
-            console.log(i)
-            return {
-                ui: 'arrayList',
-                data: ['foo']
-            }
-
-            // if (i.data == 'undefined') {
-            //     return {
-            //         ui: 'arrayList',
-            //         data: dqfs.ls(fileSystem_starting_path)
-            //     }
-            // } else {
-            //     return {
-            //         ui: 'arrayList',
-            //         data: dqfs.ls(path.join(fileSystem_starting_path, i.data))
-            //     }
+            // console.log(path.join(fileSystem_starting_path, i.extraPayload))
+            // console.log(i.extraPayload)
+            // return {
+            //     ui: 'arrayList',
+            //     data: ['foo']
             // }
+
+            try{
+                if (i.data == 'undefined' && i.extraPayload == null) {
+                    return {
+                        ui: 'arrayList',
+                        data: dqfs.ls(fileSystem_starting_path)
+                    }
+                } else {
+                    dqfs.killpath()
+                    const res = dqfs.ls(path.join(fileSystem_starting_path, i.extraPayload))
+
+                    if(res.length == 0){
+                        return{
+                            ui: 'normal',
+                            data: 'directory is empty'
+                        }
+                    }else{
+                        return {
+                            ui: 'arrayList',
+                            data: res
+                        }
+                    }
+                    
+                }
+            }catch(e){
+                return {
+                    ui: 'err',
+                    data: e
+                }
+            }
 
         },
         cd(i) {
