@@ -263,7 +263,7 @@ const d = (() => {
 
         if (ref.root == undefined) {
             files.map(e => {
-                const p = `${__dirname}/${e.trim()}`.trim()
+                const p = `${e.trim()}`.trim()
                 fs.existsSync(p) && ref.error.err(ERRORS.CustomErr('touch', `${userInput} already exist`))
                 fs.writeFileSync(p, '', "utf-8")
             })

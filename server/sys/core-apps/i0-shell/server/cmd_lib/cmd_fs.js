@@ -26,7 +26,20 @@ fileSystem.fs = {
             }
         },
         touch(i) {
-
+            try {
+                dqfs.killpath()
+                dqfs.touch(path.join(fileSystem_starting_path, `${i.extraPayload}/${i.data}`))
+                return {
+                    ui: 'normal',
+                    data: `${i.data} file created successfully`
+                }
+            } catch (e) {
+                console.log(e)
+                return {
+                    ui: 'err',
+                    data: e
+                }
+            }
         },
         rm(i) {
 
