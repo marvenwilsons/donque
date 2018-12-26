@@ -1,4 +1,5 @@
-
+const fs = require('fs')
+const path = require('path')
 
 let donqueCoreCommands = {}
 
@@ -62,10 +63,10 @@ donqueCoreCommands.dq = {
         },
 
         //
-        listAll(i) {
+        listAllCommands(i) {
             return {
-                ui: 'arrayList',
-                data: ['ben', 'wazza', 'foo', 'bar']
+                ui: 'txtfile',
+                data: fs.readFileSync(path.join(__dirname, '../assets/command-list.txt'),'utf-8').toString()
             }
         },
         selectColor(i) {

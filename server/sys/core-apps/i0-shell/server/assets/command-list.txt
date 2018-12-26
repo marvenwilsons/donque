@@ -1,0 +1,27 @@
+
+filesSystem Commands  | dq-v.0.1
+
+    -------------------------------------------------------------
+    |   Command     |   operation   |   Description             |
+    -------------------------------------------------------------
+    |   cd          |       r       |   change directory        |
+    |   cp          |       rw      |   copy                    |
+    |   ls          |       r       |   list                    |
+    |   mv          |       rw      |   move                    |
+    |   rm          |       rw      |   remove                  |
+    |   touch       |       w       |   create new file         |
+    |   mkdir       |       r       |   create new directory    |
+    -------------------------------------------------------------
+
+dq Commands | dq-v.0.1  | User Related
+
+    -------------------------------------------------------------------------
+    |   Command             | operation |   Description                     |
+    -------------------------------------------------------------------------
+    |   listAllCommands     |   r       |   Prints All Commands             |
+    |   userPermission      |   r       |   Prints your permission type     |
+    |   userRole            |   r       |   Prints you role                 |
+    |   SpawnPane body=pane |           |   Open's new pane                 |
+    -------------------------------------------------------------------------
+
+dq Commands | dq-v.0.1  | Collections Related

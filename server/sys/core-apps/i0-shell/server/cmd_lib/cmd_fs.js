@@ -42,19 +42,47 @@ fileSystem.fs = {
             }
         },
         rm(i) {
-
+            
+            try {
+                if (i.extraPayload == undefined){
+                    return {
+                        ui: 'err',
+                        data: 'Cardinal_Security_Protocol: removing system directory(s) is not allowed'
+                    }
+                }else{
+                    dqfs.killpath()
+                    dqfs.rm(path.join(fileSystem_starting_path, `${i.extraPayload}/${i.data}`))
+                    return {
+                        ui: 'normal',
+                        data: `${i.data} file removed successfully`
+                    }
+                }
+            } catch(e){
+                console.log(e)
+                return {
+                    ui: 'err',
+                    data:e
+                }
+            }
         },
         cp(i) {
-
+            // console.log(i.dataArr)
+            // console.log(i)
+            console.log(path.join(__dirname,'../assets/command-list.txt'))
+            // if extra payload is undefined it means the user wants to copy the system folders
+            return {
+                ui: 'normal',
+                data: `${i.data} file removed successfully`
+            }
         },
         mv(i) {
-
+            console.log(i)
         }
     },
     r: {
         ls(i) {
             try{
-                if (i.data == 'undefined' && i.extraPayload == null) {
+                if (i.data == undefined && i.extraPayload == null) {
                     dqfs.killpath()
                     return {
                         ui: 'arrayList',
