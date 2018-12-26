@@ -23,9 +23,6 @@ export default {
 .terminal-output-err-indicator-wrapper{
     padding: calc(var(--fontSize)*1.25);
 }
-.terminal-output-err > *{
-    font-family: monospace;
-}
 </style>
 
 

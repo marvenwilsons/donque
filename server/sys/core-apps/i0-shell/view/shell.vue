@@ -503,13 +503,16 @@ export default {
   outline: none;
 }
 .shell-textcolor-currentuser {
-  color: #5be616;
-  /* font-weight: bold; */
+  color: #59f10d;
+  /* font-weight: 600; */
   padding-left: 5px;
   padding-right: 10px;
 }
 #cli-output {
   margin-left: 5px;
+  font-weight: 100;
+  padding: calc(var(--fontSize) * 1.25);
+  font-size: calc(var(--fontSize) * 1.12) !important;
 }
 .dq-cmd-trace {
   color: white;
@@ -520,7 +523,7 @@ export default {
 .dq-ter-p-trace,
 .shell-textcolor-currentuser,
 #shell-input,
-#cli-output > * #dq-terminal > * {
+#cli-output, #dq-terminal > * {
   font-family: var(--inconsolata);
   font-size: calc(var(--fontSize) * 1.25);
 }

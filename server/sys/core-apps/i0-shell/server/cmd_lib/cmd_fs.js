@@ -11,9 +11,18 @@ fileSystem.fs = {
     },
     w: {
         mkdir(i) {
-            return {
-                data: ['hello'],
-                ui: 'arrayList'
+            try{
+                dqfs.killpath()
+                dqfs.mkdir(path.join(fileSystem_starting_path, `${i.extraPayload}/${i.data}`))
+                return{
+                    ui: 'normal',
+                    data:`${i.data} directory created successfully`
+                }
+            }catch(e){
+                return{
+                    ui:'err',
+                    data:e
+                }
             }
         },
         touch(i) {
@@ -31,17 +40,9 @@ fileSystem.fs = {
     },
     r: {
         ls(i) {
-            // console.log(__dirname)
-            // console.log(dqfs.ls(fileSystem_starting_path))
-            // console.log(path.join(fileSystem_starting_path, i.extraPayload))
-            // console.log(i.extraPayload)
-            // return {
-            //     ui: 'arrayList',
-            //     data: ['foo']
-            // }
-
             try{
                 if (i.data == 'undefined' && i.extraPayload == null) {
+                    dqfs.killpath()
                     return {
                         ui: 'arrayList',
                         data: dqfs.ls(fileSystem_starting_path)
@@ -69,11 +70,9 @@ fileSystem.fs = {
                     data: e
                 }
             }
-
         },
         cd(i) {
             if(i.data == 'null'){
-                console.log(i.data)
                 return {
                     ui: null,
                     data: dqfs.cd(fileSystem_starting_path)
@@ -93,7 +92,6 @@ fileSystem.fs = {
                 const traversBackwards = pathArr.every(el => el == '..') && pathArr.length != 0
 
                 if (traversBackwards) {
-                    // get length
                     if (p[p.length - 1] != 'public') {
                         return {
                             ui: 'err',
@@ -102,22 +100,15 @@ fileSystem.fs = {
                     }
                 }
                 try {
-                    // console.log(dqfs.cd(path.join(fileSystem_starting_path, i.data)))   
-
                     if (dqfs.cd(path.join(fileSystem_starting_path, i.data))) {
-                        // console.log(path.join(fileSystem_starting_path, i.data))
                         return {
                             ui: null,
                             data: path.join(fileSystem_starting_path, i.data).replace(fileSystem_starting_path, "")
-                            // data: 'test'
                         }
                     }
-
                 } catch (e) {
-                    console.log(e)
                     return {
                         ui: 'err',
-                        // data: e.replace(fileSystem_starting_path, '').replace('/', '').replace('undefined/', '')
                         data: e
                     }
                 }
