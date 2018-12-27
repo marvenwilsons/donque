@@ -34,10 +34,6 @@ body {
     bottom: 0;
 }
 
-
-body{
-    /* background-color:black; */
-}
 article,
 aside,
 details,
@@ -149,7 +145,7 @@ img{
  /* My Own Style ( dq framework 0.2 )
      ============================================================================*/
      :root{
-        --fontSize: 15px;
+        --fontSize: 14px;
         --ln: 1.5rem
       }
       html {
