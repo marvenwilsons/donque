@@ -11,17 +11,17 @@ fileSystem.fs = {
     },
     w: {
         mkdir(i) {
-            try{
+            try {
                 dqfs.killpath()
                 dqfs.mkdir(path.join(fileSystem_starting_path, `${i.extraPayload}/${i.data}`))
-                return{
+                return {
                     ui: 'normal',
-                    data:`${i.data} directory created successfully`
+                    data: `${i.data} directory created successfully`
                 }
-            }catch(e){
-                return{
-                    ui:'err',
-                    data:e
+            } catch (e) {
+                return {
+                    ui: 'err',
+                    data: e
                 }
             }
         },
@@ -34,7 +34,6 @@ fileSystem.fs = {
                     data: `${i.data} file created successfully`
                 }
             } catch (e) {
-                console.log(e)
                 return {
                     ui: 'err',
                     data: e
@@ -43,18 +42,43 @@ fileSystem.fs = {
         },
         rm(i) {
 
+            try {
+                if (i.extraPayload == undefined) {
+                    return {
+                        ui: 'err',
+                        data: 'Cardinal_Security_Protocol: removing system directory(s) is not allowed'
+                    }
+                } else {
+                    dqfs.killpath()
+                    dqfs.rm(path.join(fileSystem_starting_path, `${i.extraPayload}/${i.data}`))
+                    return {
+                        ui: 'normal',
+                        data: `${i.data} file removed successfully`
+                    }
+                }
+            } catch (e) {
+                return {
+                    ui: 'err',
+                    data: e
+                }
+            }
         },
         cp(i) {
-
+            // console.log(i.dataArr)
+            // console.log(i)
+            // if extra payload is undefined it means the user wants to copy the system folders
+            return {
+                ui: 'normal',
+                data: `${i.data} file removed successfully`
+            }
         },
         mv(i) {
-
         }
     },
     r: {
         ls(i) {
-            try{
-                if (i.data == 'undefined' && i.extraPayload == null) {
+            try {
+                if (i.data == undefined && i.extraPayload == null) {
                     dqfs.killpath()
                     return {
                         ui: 'arrayList',
@@ -64,20 +88,20 @@ fileSystem.fs = {
                     dqfs.killpath()
                     const res = dqfs.ls(path.join(fileSystem_starting_path, i.extraPayload))
 
-                    if(res.length == 0){
-                        return{
+                    if (res.length == 0) {
+                        return {
                             ui: 'normal',
                             data: 'directory is empty'
                         }
-                    }else{
+                    } else {
                         return {
                             ui: 'arrayList',
                             data: res
                         }
                     }
-                    
+
                 }
-            }catch(e){
+            } catch (e) {
                 return {
                     ui: 'err',
                     data: e
@@ -85,20 +109,20 @@ fileSystem.fs = {
             }
         },
         cd(i) {
-            if(i.data == 'null'){
+            if (i.data == 'null') {
                 return {
                     ui: null,
                     data: dqfs.cd(fileSystem_starting_path)
                 }
             }
-            else if (i.data == '001EACRESET'){
+            else if (i.data == '001EACRESET') {
                 dqfs.killpath()
                 return {
                     ui: null,
                     data: dqfs.cd(fileSystem_starting_path)
                 }
             }
-            else{
+            else {
                 const p = Object.keys(queryString.parse(path.join(fileSystem_starting_path, i.data), '/', null))
                 const pathArr = i.data.split("/")
                 pathArr.pop()

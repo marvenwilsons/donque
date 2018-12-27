@@ -36,7 +36,7 @@ router.post('/dqcli',(req,res) => {
 
 const WebSocketServer = require('ws')
 const wss = new WebSocketServer.Server({
-    port: 4000,
+    port: 8080,
     perMessageDeflate: false
 })
 

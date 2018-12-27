@@ -1,4 +1,5 @@
-
+const fs = require('fs')
+const path = require('path')
 
 let donqueCoreCommands = {}
 
@@ -27,45 +28,45 @@ donqueCoreCommands.dq = {
 
         },
         // collection
-        createNewCollection(i){
+        createNewCollection(i) {
 
         },
-        deleteCollection(i){
+        deleteCollection(i) {
 
         },
-        updateCollection(i){
+        updateCollection(i) {
 
         },
         // page
-        createNewPage(){
+        createNewPage() {
 
         },
-        deletePage(){
+        deletePage() {
 
         },
-        updatePage(){
+        updatePage() {
 
         }
     },
     r: {
         // user
-        getUser(i){
+        getUser(i) {
 
         },
         // collection
-        getCollections(i){
+        getCollections(i) {
 
         },
         // page
-        getPages(i){
+        getPages(i) {
 
         },
 
         //
-        listAll(i) {
+        listAllCommands(i) {
             return {
-                ui: 'arrayList',
-                data: ['ben', 'wazza', 'foo', 'bar']
+                ui: 'txtfile',
+                data: fs.readFileSync(path.join(__dirname, '../assets/command-list.txt'), 'utf-8').toString()
             }
         },
         selectColor(i) {
@@ -102,7 +103,7 @@ donqueCoreCommands.dq = {
                             data: ['foo', 'bar']
                         }
                     }
-                    if(i.data == 'install-vue'){
+                    if (i.data == 'install-vue') {
                         return {
                             ui: 'normal',
                             data: 'you selected install-vue'

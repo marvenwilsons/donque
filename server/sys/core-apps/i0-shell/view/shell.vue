@@ -49,6 +49,7 @@ import tableObject from "../server/ui library/tableObject.vue";
 import err from "../server/ui library/err.vue";
 import normal from "../server/ui library/normal.vue";
 import clear from "../server/ui library/clear.vue";
+import txtfile from "../server/ui library/txtfile.vue"
 
 export default {
   data() {
@@ -389,7 +390,7 @@ export default {
       }
     },
 
-    // fs related
+    // fileSystem related only
     fs_command_sender(input){
       if (input.firstArg == "cd") {
           try{
@@ -406,10 +407,12 @@ export default {
         } else {
           console.log("EXECUTED: command sender 1.b");
           const b = {
-            data: `use fs ${input.firstArg.trim()} ${input.secondArg}`,
+            data: `use fs ${input.firstArg.trim()} ${input.arguments_string.replace(input.firstArg,'').trim()}`,
+            flags:'',
             extraPayload: this.fspath,
             token: this.user_token
           };
+          console.log(b)
           this.ws.send(JSON.stringify(b));
         }
     },
@@ -445,7 +448,7 @@ export default {
       this.username = "marven";
 
       // init webSocket
-      this.ws = new WebSocket("ws://localhost:4000");
+      this.ws = new WebSocket("ws://localhost:8080");
       this.ws.onopen = () => {
         // console.log("CONNECTED");
       };
@@ -474,6 +477,7 @@ export default {
     tableObject,
     err,
     normal,
+    txtfile,
     clear
   }
 };
