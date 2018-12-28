@@ -33,7 +33,6 @@ router.post('/dqcli',(req,res) => {
     cli_handler(req,(cli_response) => res.status(200).json({response: cli_response}))
 })
 
-
 const WebSocketServer = require('ws')
 const wss = new WebSocketServer.Server({port: 4000})
 

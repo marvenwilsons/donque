@@ -66,6 +66,7 @@ module.exports = {
   },
   serverMiddleware: [
     bodyParser.json(),
+    '~/server/sys/core-apps/app/index.js',
     '~/server/sys/core-apps/i0-shell/server/handler.js'
   ]
 }

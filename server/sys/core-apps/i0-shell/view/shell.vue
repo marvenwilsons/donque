@@ -471,6 +471,7 @@ export default {
   },
   mounted() {
     this.on_start_defaults_setter();
+
   },
   components: {
     arrayList,
