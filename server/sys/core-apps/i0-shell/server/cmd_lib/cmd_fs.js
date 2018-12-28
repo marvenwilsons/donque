@@ -64,12 +64,42 @@ fileSystem.fs = {
             }
         },
         cp(i) {
-            // console.log(i.dataArr)
-            // console.log(i)
+            let origin = undefined
+            let dist = `${fileSystem_starting_path}/${i.dataArr[1]}`
+
             // if extra payload is undefined it means the user wants to copy the system folders
-            return {
-                ui: 'normal',
-                data: `${i.data} file removed successfully`
+            if (i.extraPayload == undefined) {
+                origin = `${fileSystem_starting_path}/${i.dataArr[0]}`
+            }else{
+                origin = path.join(fileSystem_starting_path, `${i.extraPayload}/${i.dataArr[0]}`)
+            }
+
+            try{
+                dqfs.cp(origin,dist)
+                return{
+                    ui:'normal',
+                    data:'done'
+                }
+            }catch(e){
+                console.log(e.path.split('/')[e.path.split('/').length - 1])
+                if(e.syscall == 'lstat'){
+                    return {
+                        ui: 'err',
+                        data: `origin path ${e.path.split('/')[e.path.split('/').length - 1]} not found`
+                    }
+                }else{
+                    if (e.path.split('/')[e.path.split('/').length - 1] == 'undefined'){
+                        return {
+                            ui: 'err',
+                            data: `distination path or origin path cannot be undefined`
+                        }
+                    }else{
+                        return {
+                            ui: 'err',
+                            data: `distination path ${e.path.split('/')[e.path.split('/').length - 1]} not found`
+                        }
+                    }
+                }
             }
         },
         mv(i) {

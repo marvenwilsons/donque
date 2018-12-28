@@ -1,27 +1,38 @@
 
-filesSystem Commands  | dq-v.0.1
+Class: filesSystem | dq-v.0.1
 
     -------------------------------------------------------------
     |   Command     |   operation   |   Description             |
     -------------------------------------------------------------
     |   cd          |       r       |   change directory        |
-    |   cp          |       rw      |   copy                    |
-    |   ls          |       r       |   list                    |
-    |   mv          |       rw      |   move                    |
-    |   rm          |       rw      |   remove                  |
+    |   cp          |       rw      |   copy a file or a dir    |
+    |   ls          |       r       |   list contents of dir    |
+    |   mv          |       rw      |   move item in a dir      |
+    |   rm          |       rw      |   remove an item in a dir |
     |   touch       |       w       |   create new file         |
     |   mkdir       |       r       |   create new directory    |
     -------------------------------------------------------------
 
-dq Commands | dq-v.0.1  | User Related
+Class: dq | dq-v.0.1  | User Related
 
     -------------------------------------------------------------------------
     |   Command             | operation |   Description                     |
     -------------------------------------------------------------------------
     |   listAllCommands     |   r       |   Prints All Commands             |
     |   userPermission      |   r       |   Prints your permission type     |
-    |   userRole            |   r       |   Prints you role                 |
-    |   SpawnPane body=pane |           |   Open's new pane                 |
+    |   userRole            |   r       |   Prints your role title          |
     -------------------------------------------------------------------------
 
-dq Commands | dq-v.0.1  | Collections Related
+Class: dq | dq-v.0.1  | Pane Related
+
+    -------------------------------------------------------------------------------------------------
+    |   Command         |   options     |   Usage           |   Usage Description                   |
+    -------------------------------------------------------------------------------------------------
+    |   spawn pane      |    --body     |   --body=shell    |   creates new shell pane              |
+    |                   |    --width    |   --width=200px   |   adjusts the width of the pane       |
+    |   close-pane      |   null        |   null            |   closes the pane                     |
+    |   keep-pane-alive |   null        |   null            |   keeps the session of all panes when |
+    |                   |               |                   |   switched to other pane              |
+    -------------------------------------------------------------------------------------------------
+
+Class: dq | dq-v.0.1  | Collections Related

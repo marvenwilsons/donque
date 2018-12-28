@@ -148,7 +148,7 @@ export default {
             })
             this.current_class = input.secondArg
             if(this.current_class == 'fs'){
-              this.fspath = this.fspath_arr_path_trace[this.fspath_arr_path_trace.length - 1].replace('/','')
+              this.fspath = this.fspath_arr_path_trace[this.fspath_arr_path_trace.length - 1].trim()
             }else{
               this.fspath = undefined
             }
@@ -448,15 +448,17 @@ export default {
       this.username = "marven";
 
       // init webSocket
-      this.ws = new WebSocket("ws://localhost:8080");
+      this.ws = new WebSocket("ws://localhost:4000");
+      
       this.ws.onopen = () => {
-        // console.log("CONNECTED");
+        console.log("CONNECTED");
       };
       this.ws.onmessage = pl => {
         this.wsonmessage = pl;
       };
-      this.ws.inclose = function close() {
-        // console.log("closed");
+      this.ws.onclose = function close() {
+        // keep alive
+      //  alert('closing')
       };
     }
   },
