@@ -31,12 +31,18 @@ dqApp.admins = () => {
 }
 
 // creates new admin
-dqApp.createAdmin = () => {
+dqApp.createAdmin = (admin_schem) => {
 
 }
 
 // delete the admin
-dqApp.deleteAdmin = () => {
+dqApp.deleteAdmin = (admin_code) => {
+
+}
+
+// returns an object that represents the brief outline of an admin
+// that will be view in the front end
+dqApp.adminProfile = (admin_code) => {
 
 }
 
@@ -51,17 +57,17 @@ dqApp.updateAdminPermission = (admin_unicode,permission_type) => {
 }
 
 // returns an array of classes that a certain admin can access
-dqApp.adminClassAccessList = (admin_unicode) => {
+dqApp.adminClassAccessList = (admin_code) => {
 
 }
 
 // retunrs an array of sections in the dashboard that an adminc can access
-dqApp.adminSectionAccessList = (admin_unicode) => {
+dqApp.adminSectionAccessList = (admin_code) => {
 
 }
 
 // returns a login trace of a certain admin
-dqApp.adminLogins = (admin_unicode) => {
+dqApp.adminLogins = (admin_code) => {
 
 }
 
@@ -73,7 +79,7 @@ dqApp.createPage = (page_name) =>{
 }
 
 // updates the page
-dqApp.updatePage = (page_name,update) => {
+dqApp.updatePage = (page_name,update,history_code) => {
 
 }
 
@@ -84,19 +90,19 @@ dqApp.deletePage = (page_name) => {
 
 // app collections *****
 
-// create new collection
-dqApp.createCollection = (collection_name) => {
+// create new collection, takes an object or schema that represents the collection
+dqApp.createCollection = (collection_schem) => {
 
 }
 
 // updates the collection
-dqApp.updateCollection = (collection_name,update) => {
+dqApp.updateCollection = (collection_name,update,history_code) => {
 
 }
 
 // deletes the collection
 dqApp.deleteCollection = (collection_name) => {
-    
+
 }
 
 module.exports = dqApp
