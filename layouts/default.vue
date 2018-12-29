@@ -7,7 +7,7 @@
 <script>
 export default {
   mounted(){
-    this.$axios.$post("/dqapp/users", { data: "use fs _clear", token: this.token })
+    this.$axios.$get("/dqapp/users")
     .then(res => {
       console.log(res.response)
     })
