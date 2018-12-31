@@ -75,6 +75,12 @@ export default {
       }
     }
   },
+  watch: {
+    ComponentsArray(newVal, oldVal) {
+      // console.log(location.href = this.$store.state.comp.currentUrl)
+      // console.log(this.$route);
+    }
+  },
   components: {
     shell,
 

@@ -12,11 +12,11 @@ router.get('/users', function  incoming(req, res) {
 router.get('/init',function incoming(req,res) {
     
     // this is what an initialized app looks like
-    app.name != undefined
-    app.users != 0
-    app.owner != undefined
-    app.userIsSet == true
-    app.appIsSet == true
+    // app.name != undefined
+    // app.users != 0
+    // app.owner != undefined
+    // app.userIsSet == true
+    // app.appIsSet == true
 })
 
 

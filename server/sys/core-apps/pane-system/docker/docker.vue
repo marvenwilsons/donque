@@ -18,11 +18,6 @@
 import dockerItems from './docker-items.vue'
 
 export default {
-  methods: {
-    send(comp, pos, width) {
-      this.$store.commit("addComponent", { comp, pos, width });
-    }
-  },
   components: {
     dockerItems
   }

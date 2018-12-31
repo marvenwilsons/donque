@@ -10,22 +10,22 @@ const createStore = () => {
                 currentPosition: 0,
                 paneTitle: undefined,
                 paneWidth: [],
-                paneHeadColor: []
+                paneHeadColor: [],
+                currentUrl: undefined
             },
             modal: {
-                visibility:false,
-                head:undefined,
-                body:undefined,
+                visibility: false,
+                head: undefined,
+                body: undefined,
                 closable: false
             }
         },
         mutations: {
             close_pane(state, payload) {
-                state.comp.paneWidth.splice(payload,1)
+                state.comp.paneWidth.splice(payload, 1)
                 state.comp.arr.splice(payload, 1)
             },
             addComponent(state, payload) {
-                // console.log(payload)
                 // pushing new item to array
                 state.comp.arr.push(payload.component)
 
@@ -52,10 +52,27 @@ const createStore = () => {
 
                     var currentLength = state.comp.arr.splice(state.comp.currentIndex, 1).length + state.comp.arrLen - 1
                     state.comp.arrLen = currentLength
-
                 }
+
+
+                //
+                let cur_url = []
+                state.comp.arr.map(e => {
+                    cur_url.push(e.headName)
+                })
+                state.comp.currentUrl = `admin/${cur_url.join('/')}`
+
+                // emet section has change
+                this.$axios.$get("/dqapp/users")
+                    .then(res => {
+                        console.log(res.response)
+                    })
+                    .catch((e) => {
+                        console.log(e)
+                    })
+
             },
-            assign_pane_title(state, payload){
+            assign_pane_title(state, payload) {
                 state.comp.paneTitle = payload
             }
         }

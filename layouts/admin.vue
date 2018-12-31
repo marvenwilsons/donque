@@ -21,6 +21,15 @@ export default {
     closeModal(){
       this.$store.state.modal.visibility = false
     }
+  },
+  mounted(){
+    this.$axios.$get("/dqapp/users")
+    .then(res => {
+      console.log(res.response)
+    })
+    .catch((e) => {
+      console.log(e)
+    })
   }
 }
 </script>
