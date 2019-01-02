@@ -22,6 +22,7 @@ export default {
       this.$store.state.modal.visibility = false
     }
   },
+<<<<<<< HEAD
   mounted(){
     this.$store.dispatch('firstLoad')
     this.$axios.$get("/dqapp/users")
@@ -32,6 +33,8 @@ export default {
       console.log(e)
     })
   }
+=======
+>>>>>>> 5442b2c7af36b72b8dff71cd01274551d96cef6b
 }
 </script>
 

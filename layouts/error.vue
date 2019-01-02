@@ -1,16 +1,15 @@
 <template>
-  <section class="container">
-    test
-  </section>
+    <div>
+        an error occured, we're sorry! {{$route.path}}
+    </div>
 </template>
 
 <script>
-
 export default {
-  components: {
-  }
+
 }
 </script>
 
 <style>
+
 </style>

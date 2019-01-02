@@ -1,11 +1,25 @@
 <template>
-  <section role="admin-page" id="dq-parent-wrapper" :class="[$store.state.modal.visibility && 'blur', 'flex ','relative']">
-    <header><dqhead/></header>
-    <section id="dq-content-wrapper" class="flex">
-      <nav><docker/></nav>
-      <main id="dq-work-room" class="flex" ><main-window/></main>
+  <section
+    role="admin-page"
+    id="dq-parent-wrapper"
+    :class="[$store.state.modal.visibility && 'blur', 'flex ','relative']"
+  >
+    <header v-if="isSet">
+      <dqhead/>
+    </header>
+    <section v-if="isSet" id="dq-content-wrapper" class="flex">
+      <nav>
+        <docker/>
+      </nav>
+      <main id="dq-work-room" class="flex">
+        <main-window/>
+      </main>
       <aside></aside>
     </section>
+   
+    <div v-if="!isSet">
+      <init-form/>
+    </div>
   </section>
 </template>
 <script>
@@ -14,17 +28,31 @@ import main_window from "@/server/sys/core-apps/pane-system/main-window/main-win
 import docker from "@/server/sys/core-apps/pane-system/docker/docker.vue";
 import notify from "@/server/sys/core-apps/notify/view/notify.vue";
 import dqhead from "@/server/sys/core-apps/dq-head/view/dq-head.vue";
+import initForm from "@/server/sys/core-apps/init-app/init.vue";
 
 export default {
   data() {
-    return {};
+    return {
+      isSet: undefined
+    };
   },
   components: {
     mainWindow: main_window,
     docker,
     notify,
     dqhead,
-    main_window
+    main_window,
+    initForm
+  },
+  mounted() {
+    this.$axios
+      .$get("/dqapp/init")
+      .then(res => {
+        this.isSet = res.response
+      })
+      .catch(e => {
+        console.log(e);
+      });
   },
   layout: "admin"
 };
@@ -40,13 +68,13 @@ export default {
   align-items: stretch;
   flex-flow: column wrap;
 }
-.blur{
-  filter: blur(10px)
+.blur {
+  filter: blur(10px);
 }
 #dq-content-wrapper {
   flex: 1;
 }
-#dq-work-room{
+#dq-work-room {
   background-color: var(--blue-3);
 }
 header {
@@ -64,7 +92,6 @@ nav {
   flex: 1;
 }
 /* aside { */
-  /* border: 1px solid hotpink; */
+/* border: 1px solid hotpink; */
 /* } */
-
 </style>
