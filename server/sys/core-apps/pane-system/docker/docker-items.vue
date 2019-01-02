@@ -161,7 +161,8 @@ import sender from "../module/component-sender.vue";
 export default {
   data() {
     return {
-      isActive: undefined
+      isActive: undefined,
+      arr: this.$store.state.comp.arr
     };
   },
   methods: {
@@ -171,6 +172,11 @@ export default {
       let btns = parent.getElementsByClassName("light-text");
       // btns[p].className += " active";
       this.isActive = p;
+    }
+  },
+  watch: {
+    arr(o,n) {
+      n[0].name == 'dashboard' && this.activate(9)
     }
   },
   components: {

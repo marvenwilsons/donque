@@ -59,7 +59,6 @@ export default {
         component:'dashboard',
         position: index
       })
-      // console.log(this.$store)
     },
     normalizeStyle(color, width) {
       if (color != null) {
