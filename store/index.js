@@ -21,11 +21,24 @@ const createStore = () => {
                 closable: false
             }
         },
+        actions: {
+            close_pane: ({commit},payload) => {
+                commit('close_pane',payload)
+                if(payload.position == 0){
+                    commit('addComponent',{
+                        component:{
+                            name:'dashboard'
+                        },
+                        position:0
+                    })
+                }
+            }
+        },
         mutations: {
             close_pane(state, payload) {
                 state.comp.paneWidth.splice(payload, 1)
                 state.comp.arr.splice(payload, 1)
-                history.go(-1)
+                // history.go(-1)
             },
             addComponent(state, payload) {
                 // pushing new item to array

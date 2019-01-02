@@ -54,7 +54,12 @@ export default {
   },
   methods: {
     close_pane(index) {
-      this.$store.commit("close_pane", index);
+      // this.$store.commit("close_pane", index);
+      this.$store.dispatch('close_pane',{
+        component:'dashboard',
+        position: index
+      })
+      // console.log(this.$store)
     },
     normalizeStyle(color, width) {
       if (color != null) {
