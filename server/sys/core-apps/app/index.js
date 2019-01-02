@@ -17,6 +17,7 @@ router.get('/init',function incoming(req,res) {
     // app.owner != undefined
     // app.userIsSet == true
     // app.appIsSet == true
+    res.status(200).json({ response: true })
 })
 
 
