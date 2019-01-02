@@ -1,6 +1,6 @@
 <template>
     <div>
-        I am dashboard
+        Analytics here
     </div>
 </template>
 

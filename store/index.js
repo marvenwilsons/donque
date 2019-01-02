@@ -1,4 +1,5 @@
 import Vuex from 'vuex'
+import axios from 'axios'
 
 const createStore = () => {
     return new Vuex.Store({
@@ -41,6 +42,7 @@ const createStore = () => {
                     position: 0
                 })
             },
+            
         },
         mutations: {
             close_pane(state, payload) {
