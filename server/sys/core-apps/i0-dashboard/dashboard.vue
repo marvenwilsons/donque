@@ -1,6 +1,7 @@
 <template>
     <div>
         Analytics here
+        {{this.$store.state.user}}
     </div>
 </template>
 

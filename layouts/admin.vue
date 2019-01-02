@@ -26,7 +26,7 @@ export default {
     this.$store.dispatch('firstLoad')
     this.$axios.$get("/dqapp/users")
     .then(res => {
-      console.log(res.response)
+      // console.log(res.response)
     })
     .catch((e) => {
       console.log(e)

@@ -1,9 +1,9 @@
 import Vuex from 'vuex'
-import axios from 'axios'
 
 const createStore = () => {
     return new Vuex.Store({
         state: {
+            user: undefined,
             comp: {
                 arr: [],
                 arrLen: 0,
@@ -42,11 +42,23 @@ const createStore = () => {
                     position: 0
                 })
             },
-            
+            nuxtServerInit(vuexContext,context) {
+                return this.$axios.$get('/dqapp/users')
+                .then(res => {
+                    // store to state
+                    vuexContext.commit('setUser',res)
+                })
+                .catch(e => {
+                    context.error(e)
+                })
+            }
+
         },
         mutations: {
+            setUser(state,payload){
+                state.user = payload
+            },
             close_pane(state, payload) {
-
                 state.comp.paneWidth.splice(payload, 1)
                 state.comp.arr.splice(payload, 1)
                 // history.go(-1)
@@ -94,17 +106,6 @@ const createStore = () => {
                 // } else if (state.comp.currentIndex == 1){
                 //     history.pushState(null, null, cur_url.join('/'))
                 // }
-
-
-                // emet section has change
-                // this.$axios.$get("/dqapp/users")
-                //     .then(res => {
-                //         console.log(res.response)
-                //     })
-                //     .catch((e) => {
-                //         console.log(e)
-                //     })
-
             },
             assign_pane_title(state, payload) {
                 state.comp.paneTitle = payload
