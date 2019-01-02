@@ -54,7 +54,8 @@ export default {
   },
   methods: {
     close_pane(index) {
-      if (index == 0) {
+      console.log()
+      if (this.ComponentsArray.length == 1) {
         this.$store.dispatch("close_pane", {
           component: "dashboard",
           position: index
@@ -62,6 +63,7 @@ export default {
       }else{
         this.$store.commit('close_pane',index)
       }
+
     },
     normalizeStyle(color, width) {
       if (color != null) {
