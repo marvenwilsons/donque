@@ -11,7 +11,8 @@ const createStore = () => {
                 paneTitle: undefined,
                 paneWidth: [],
                 paneHeadColor: [],
-                currentUrl: undefined
+                currentUrl: undefined,
+                parentUrl: undefined
             },
             modal: {
                 visibility: false,
@@ -24,6 +25,7 @@ const createStore = () => {
             close_pane(state, payload) {
                 state.comp.paneWidth.splice(payload, 1)
                 state.comp.arr.splice(payload, 1)
+                history.go(-1)
             },
             addComponent(state, payload) {
                 // pushing new item to array
@@ -61,15 +63,23 @@ const createStore = () => {
                     cur_url.push(e.headName)
                 })
                 state.comp.currentUrl = `admin/${cur_url.join('/')}`
+                state.comp.parentUrl = state.comp.currentUrl.split('/')[state.comp.currentPosition]
+
+                // if (state.comp.currentIndex == 0){
+                //     history.pushState(null, null, state.comp.currentUrl)
+                // } else if (state.comp.currentIndex == 1){
+                //     history.pushState(null, null, cur_url.join('/'))
+                // }
+
 
                 // emet section has change
-                this.$axios.$get("/dqapp/users")
-                    .then(res => {
-                        console.log(res.response)
-                    })
-                    .catch((e) => {
-                        console.log(e)
-                    })
+                // this.$axios.$get("/dqapp/users")
+                //     .then(res => {
+                //         console.log(res.response)
+                //     })
+                //     .catch((e) => {
+                //         console.log(e)
+                //     })
 
             },
             assign_pane_title(state, payload) {

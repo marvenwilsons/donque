@@ -1,6 +1,20 @@
 <template>
   <div>
     <ul id="dq-nav-ul">
+      <!-- dashboard -->
+      <span @click="activate(9)">
+        <sender
+          :class="[isActive == 9 && 'active']"
+          :component="{
+        name:'dashboard',
+        headColor:'#0086c0',
+        headWidth: '100%',
+        headName: 'dashboard',
+        closable: false}"
+          :position="0"
+        > <span class="flex spacebetween"> <span>Dashboard</span> </span> </sender>
+      </span>
+
       <!-- pages -->
       <span @click="activate(0)">
         <sender
@@ -12,7 +26,7 @@
         headName: 'Pages',
         closable: true}"
           :position="0"
-        > <span class="flex spacebetween"> <span>pages</span> <span class="dq-n-ind" >7</span> </span> </sender>
+        > <span class="flex spacebetween"> <span>Pages</span> <span class="dq-n-ind" >7</span> </span> </sender>
       </span>
 
       <!-- pages -->
@@ -42,7 +56,7 @@
         closable:true
       }"
           :position="0"
-        ><span class="flex spacebetween"> <span>collections</span> <span class="dq-n-ind" >10</span> </span></sender>
+        ><span class="flex spacebetween"> <span>Collections</span> <span class="dq-n-ind" >10</span> </span></sender>
       </span>
 
       <!-- Components -->
@@ -57,7 +71,7 @@
         closable:false
       }"
           :position="0"
-        >components</sender>
+        >Components</sender>
       </span>
 
       <!-- Database -->
@@ -73,7 +87,7 @@
         closable:true
       }"
           :position="0"
-        >database</sender>
+        >Database</sender>
       </span>
 
       <!-- Files -->
@@ -89,7 +103,7 @@
         closable: true
       }"
           :position="0"
-        >files</sender>
+        >Files</sender>
       </span>
 
       <!-- Plugins -->
@@ -105,7 +119,7 @@
         closable:false
       }"
           :position="0"
-        >plugins</sender>
+        >Plugins</sender>
       </span>
 
       <!-- MarketPlace -->
@@ -121,7 +135,7 @@
         closable:false
       }"
           :position="0"
-        >marketplace</sender>
+        >Marketplace</sender>
       </span>
 
       <!-- Shell -->
@@ -152,6 +166,7 @@ export default {
   },
   methods: {
     activate(p) {
+      // console.log(p)
       let parent = document.getElementById("dq-nav-ul");
       let btns = parent.getElementsByClassName("light-text");
       // btns[p].className += " active";
