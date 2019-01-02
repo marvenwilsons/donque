@@ -2,7 +2,7 @@
   <div id="dynamic-pane" class="flex">
     <div
       :style="normalizeStyle(null,$store.state.comp.arr[index].headWidth)"
-      class="flex flexcol box-shad"
+      :class="['flex', 'flexcol', ComponentsArray[0].name != 'dashboard' && 'box-shad']"
       v-for="(item, index) in ComponentsArray"
       :key="index"
     >
