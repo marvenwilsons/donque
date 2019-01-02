@@ -23,6 +23,7 @@ export default {
     }
   },
   mounted(){
+    this.$store.dispatch('firstLoad')
     this.$axios.$get("/dqapp/users")
     .then(res => {
       console.log(res.response)

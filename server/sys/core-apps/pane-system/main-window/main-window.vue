@@ -54,7 +54,6 @@ export default {
   },
   methods: {
     close_pane(index) {
-      console.log()
       if (this.ComponentsArray.length == 1) {
         this.$store.dispatch("close_pane", {
           component: "dashboard",

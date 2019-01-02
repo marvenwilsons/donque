@@ -32,7 +32,15 @@ const createStore = () => {
                         position:0
                     })
                 }
-            }
+            },
+            firstLoad: ({commit}) => {
+                commit('addComponent', {
+                    component: {
+                        name: 'dashboard'
+                    },
+                    position: 0
+                })
+            },
         },
         mutations: {
             close_pane(state, payload) {
@@ -71,7 +79,7 @@ const createStore = () => {
                 }
 
 
-                //
+                // current url
                 let cur_url = []
                 state.comp.arr.map(e => {
                     cur_url.push(e.headName)
