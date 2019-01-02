@@ -43,7 +43,7 @@ import files from "@/server/sys/core-apps/i0-files/files.vue";
 import marketplace from "@/server/sys/core-apps/i0-marketplace/marketplace.vue";
 import plugins from "@/server/sys/core-apps/i0-plugins/plugins.vue";
 import app from "@/server/sys/core-apps/i0-app/app.vue";
-import dashboard from '@/server/sys/core-apps/i0-dashboard/dashboard.vue'
+import dashboard from "@/server/sys/core-apps/i0-dashboard/dashboard.vue";
 
 export default {
   data() {
@@ -54,11 +54,14 @@ export default {
   },
   methods: {
     close_pane(index) {
-      // this.$store.commit("close_pane", index);
-      this.$store.dispatch('close_pane',{
-        component:'dashboard',
-        position: index
-      })
+      if (index == 0) {
+        this.$store.dispatch("close_pane", {
+          component: "dashboard",
+          position: index
+        });
+      }else{
+        this.$store.commit('close_pane',index)
+      }
     },
     normalizeStyle(color, width) {
       if (color != null) {

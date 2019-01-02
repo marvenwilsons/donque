@@ -36,6 +36,7 @@ const createStore = () => {
         },
         mutations: {
             close_pane(state, payload) {
+
                 state.comp.paneWidth.splice(payload, 1)
                 state.comp.arr.splice(payload, 1)
                 // history.go(-1)
