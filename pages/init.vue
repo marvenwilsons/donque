@@ -1,13 +1,13 @@
 <template>
   <div id="dq-init-parent-wrapper" class="flex flexwrap relative">
-    <div class="fullwidth flex absolute abs ">
-      <div v-if="!ready">
+    <div class="fullwidth flex absolute abs">
+      <div class="flex flexcenter" v-if="!ready">
         <spinner/>
       </div>
-      <div v-if="ready" id="dq-init-wrapper" class="flex flexwrap  ">
-          <div id="tc-logo-h" class="flex fullwidth flexcenter">
-              <h1>dq</h1>
-          </div>
+      <div v-if="ready" id="dq-init-wrapper" class="flex flexwrap">
+        <div id="tc-logo-h" class="flex fullwidth flexcenter">
+          <h1>dq</h1>
+        </div>
         <div id="tc-f-wrap">
           <h5 class="tc">Welcome</h5>
           <hr>
@@ -27,10 +27,18 @@
                 <span class="flex fullwidth spacebetween">
                   <span class="flex tc-title">Site Title:</span>
                   <span class="flex flexcol tc-input">
-                    <input v-model="siteTitle" class="fullwidth" type="text">
+                    <input
+                      v-on:input="_validate('siteTitle')"
+                      v-model="siteTitle"
+                      class="fullwidth"
+                      type="text"
+                    >
                     <span class="tc-desc">no special characters allowed</span>
                   </span>
-                  <span class="tc-ind flex">c</span>
+                  <span class="tc-ind flex">
+                    <span v-if="passed.indexOf('siteTitle') != -1" class="tc-suc">&#10004;</span>
+                    <span v-if="errors.siteTitle.length != 0" class="tc-err">&#x2718;</span>
+                  </span>
                 </span>
               </div>
               <!--  -->
@@ -41,7 +49,9 @@
                     <input v-model="username" class="fullwidth" type="text">
                     <span class="tc-desc">no white space and special characters allowed</span>
                   </span>
-                  <span class="tc-ind flex">c</span>
+                  <span class="tc-ind flex">
+                    <span v-if="passed.indexOf('username') != -1" class="tc-suc">&#10004;</span>
+                  </span>
                 </span>
               </div>
               <!--  -->
@@ -52,7 +62,9 @@
                     <input v-model="password" class="fullwidth" type="password">
                     <span class="tc-desc">must contain numbers and special characters</span>
                   </span>
-                  <span class="tc-ind flex">c</span>
+                  <span class="tc-ind flex">
+                    <span v-if="passed.indexOf('password') != -1" class="tc-suc">&#10004;</span>
+                  </span>
                 </span>
               </div>
               <!--  -->
@@ -63,7 +75,9 @@
                     <input v-model="repassword" class="fullwidth" type="password">
                     <span class="tc-desc">re type your password</span>
                   </span>
-                  <span class="tc-ind flex">c</span>
+                  <span class="tc-ind flex">
+                    <span v-if="passed.indexOf('repassword') != -1" class="tc-suc">&#10004;</span>
+                  </span>
                 </span>
               </div>
               <!--  -->
@@ -74,7 +88,9 @@
                     <input v-model="email" class="fullwidth" type="text">
                     <span class="tc-desc">please review email before submit</span>
                   </span>
-                  <span class="tc-ind flex">c</span>
+                  <span class="tc-ind flex">
+                    <span v-if="passed.indexOf('email') != -1" class="tc-suc">&#10004;</span>
+                  </span>
                 </span>
               </div>
               <span class="flex tc-b">
@@ -98,15 +114,42 @@ export default {
       username: undefined,
       password: undefined,
       repassword: undefined,
-      email: undefined
+      email: undefined,
+      passed: [],
+      errors: {
+        siteTitle: []
+      },
+      readyObj: {},
+      validations: {
+        hasWhiteSpace: e => e.indexOf(" ") != -1,
+        hasSpecialChar: e => {},
+        hasNumber: e => {},
+        isValidEmail: e => {}
+      }
     };
   },
   components: {
     spinner
   },
   methods: {
+    getIndexAndDelete(e) {},
+    pushErrors(errObj, errName) {
+      if (this.errors[errObj].indexOf(errName) == -1) {
+        this.errors[errObj].push(errName);
+			}
+    },
     _validate(e) {
-      console.log(this.siteTitle.trim());
+      const vdn = this.validations;
+
+      // white space detection
+      vdn.hasWhiteSpace(this.siteTitle)
+        ? this.pushErrors("siteTitle", "hasWhiteSpace")
+        : this.getIndexAndDelete("siteTitle", "hasWhiteSpace");
+
+      // char len detection
+      this.siteTitle.length < 2
+        ? this.pushErrors("siteTitle", "charIsOnly2")
+        : this.getIndexAndDelete("siteTitle", "charIsOnly2");
     },
     submit() {
       console.log(this.siteTitle);
@@ -121,22 +164,27 @@ export default {
 </script>
 
 <style>
-#tc-logo-h{
-  padding: calc(var(--fontSize) * 1.25);  
+#tc-logo-h {
+  padding: calc(var(--fontSize) * 1.25);
   margin: calc(var(--fontSize) * 1.25);
 }
-#tc-logo-h > h1{
-    color: white;
-    font-family: var(--lobster);
-    border: 1px dashed white;
-    padding-left: calc(var(--fontSize) * 1.25);
-    padding-right: calc(var(--fontSize) * 1.25);
-
+.tc-suc {
+  color: #00c09a;
 }
-#tc-f-wrap{
-    background: white;
+.tc-err {
+  color: red;
+}
+#tc-logo-h > h1 {
+  color: white;
+  font-family: var(--lobster);
+  border: 1px dashed white;
+  padding-left: calc(var(--fontSize) * 1.25);
+  padding-right: calc(var(--fontSize) * 1.25);
+}
+#tc-f-wrap {
+  background: white;
   padding: calc(var(--fontSize) * 1.25);
-    padding-left: calc(var(--fontSize) * 2.25);
+  padding-left: calc(var(--fontSize) * 2.25);
   padding-right: calc(var(--fontSize) * 2.25);
   margin-bottom: calc(var(--fontSize) * 2.25);
 }
@@ -153,7 +201,7 @@ export default {
 .abs {
   overflow-x: auto;
   height: 100%;
-    justify-content: center;
+  justify-content: center;
 }
 .tc {
   color: var(--blue-text-2);
