@@ -1,6 +1,9 @@
 <template>
   <div id="dq-init-parent-wrapper" class="flex fullheight-VH flexcenter flexwrap">
-    <div id="dq-init-wrapper" class="flex flexwrap">
+    <div v-if="!ready">
+        <spinner/>
+    </div>
+    <div v-if="ready" id="dq-init-wrapper" class="flex flexwrap">
       <div>
         <h5 class="tc">Welcome</h5>
         <hr>
@@ -52,7 +55,22 @@
 </template>
 
 <script>
-export default {};
+import spinner from '@/server/sys/core-apps/pane-system/module/spinner-1.vue'
+export default {
+    components:{
+        spinner
+    },
+    data(){
+        return{
+            ready: false
+        }
+    },
+    mounted(){
+        setTimeout(() => {
+            this.ready = true
+        },1000)
+    }
+};
 </script>
 
 <style>
@@ -61,6 +79,7 @@ export default {};
   background: white;
   padding: calc(var(--fontSize) * 1.25);
   max-width: 650px;
+  transition: 0.3s;
 }
 #dq-init-parent-wrapper {
   background: var(--blue-1);
