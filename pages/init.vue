@@ -22,7 +22,7 @@
           >Please provide the necessary information on the input fields, you can change it in settings later.</p>
           <div>
             <form class="flex flex flexcol">
-              <!--  -->
+              <!-- site title  -->
               <div class="flex flexcenter flexcol tc-wrap">
                 <span class="flex fullwidth spacebetween">
                   <span class="flex tc-title">Site Title:</span>
@@ -32,38 +32,68 @@
                       v-model="siteTitle"
                       class="fullwidth"
                       type="text"
+                      required
                     >
-                    <span class="tc-desc">no special characters allowed</span>
+                    <span class="tc-desc">no special characters allowed like !@#$*
+                      <br>no whitespace allowed and
+                      <br>must be more than 2 characters
+                    </span>
                   </span>
                   <span class="tc-ind flex">
-                    <span v-if="passed.indexOf('siteTitle') != -1" class="tc-suc">&#10004;</span>
+                    <span
+                      v-if="errors.siteTitle.length == 0 && siteTitle != undefined"
+                      class="tc-suc"
+                    >&#10004;</span>
                     <span v-if="errors.siteTitle.length != 0" class="tc-err">&#x2718;</span>
                   </span>
                 </span>
               </div>
-              <!--  -->
+              <!-- username  -->
               <div class="flex flexcenter flexcol tc-wrap">
                 <span class="flex fullwidth spacebetween">
                   <span class="flex tc-title">Username:</span>
                   <span class="flex flexcol tc-input">
-                    <input v-model="username" class="fullwidth" type="text">
-                    <span class="tc-desc">no white space and special characters allowed</span>
+                    <input
+                      v-on:input="_validate('username')"
+                      v-model="username"
+                      class="fullwidth"
+                      type="text"
+                      required
+                    >
+                    <span class="tc-desc">no special characters allowed like !@#$*
+                      <br>no whitespace allowed and
+                      <br>must be more than 6 characters
+                    </span>
                   </span>
                   <span class="tc-ind flex">
-                    <span v-if="passed.indexOf('username') != -1" class="tc-suc">&#10004;</span>
+                    <span
+                      v-if="errors.username.length == 0 && username != undefined"
+                      class="tc-suc"
+                    >&#10004;</span>
+                    <span v-if="errors.username.length != 0" class="tc-err">&#x2718;</span>
                   </span>
                 </span>
               </div>
-              <!--  -->
+              <!-- password -->
               <div class="flex flexcenter flexcol tc-wrap">
                 <span class="flex fullwidth spacebetween">
                   <span class="flex tc-title">Password:</span>
                   <span class="flex flexcol tc-input">
-                    <input v-model="password" class="fullwidth" type="password">
+                    <input
+                      v-on:input="_validate('password')"
+                      v-model="password"
+                      class="fullwidth"
+                      type="password"
+                      required
+                    >
                     <span class="tc-desc">must contain numbers and special characters</span>
                   </span>
                   <span class="tc-ind flex">
-                    <span v-if="passed.indexOf('password') != -1" class="tc-suc">&#10004;</span>
+                    <span
+                      v-if="errors.password.length == 0 && password != undefined"
+                      class="tc-suc"
+                    >&#10004;</span>
+                    <span v-if="errors.password.length != 0" class="tc-err">&#x2718;</span>
                   </span>
                 </span>
               </div>
@@ -110,14 +140,17 @@ export default {
   data() {
     return {
       ready: false,
-      siteTitle: "",
+      siteTitle: undefined,
       username: undefined,
       password: undefined,
       repassword: undefined,
       email: undefined,
       passed: [],
       errors: {
-        siteTitle: []
+        siteTitle: [],
+        username: [],
+        password: [],
+        email: []
       },
       readyObj: {},
       validations: {
@@ -132,24 +165,51 @@ export default {
     spinner
   },
   methods: {
-    getIndexAndDelete(e) {},
+    pullErrors(errObj, errName) {
+      if (this.errors[errObj].indexOf(errName) != -1) {
+        // console.log(`get > ${errName} in ${errObj}`)
+        this.errors[errObj].splice(this.errors[errObj].indexOf(errName), 1);
+      }
+    },
     pushErrors(errObj, errName) {
       if (this.errors[errObj].indexOf(errName) == -1) {
         this.errors[errObj].push(errName);
-			}
+      }
     },
-    _validate(e) {
+    _validate(curField) {
       const vdn = this.validations;
 
-      // white space detection
-      vdn.hasWhiteSpace(this.siteTitle)
-        ? this.pushErrors("siteTitle", "hasWhiteSpace")
-        : this.getIndexAndDelete("siteTitle", "hasWhiteSpace");
+      switch (curField) {
+        case "siteTitle":
+          vdn.hasWhiteSpace(this[curField])
+            ? this.pushErrors(curField, "hasWhiteSpace")
+            : this.pullErrors(curField, "hasWhiteSpace");
 
-      // char len detection
-      this.siteTitle.length < 2
-        ? this.pushErrors("siteTitle", "charIsOnly2")
-        : this.getIndexAndDelete("siteTitle", "charIsOnly2");
+          this[curField].length < 2
+            ? this.pushErrors(curField, "charIsOnly2")
+            : this.pullErrors(curField, "charIsOnly2");
+          break;
+
+        case "username":
+          vdn.hasWhiteSpace(this[curField])
+            ? this.pushErrors(curField, "hasWhiteSpace")
+            : this.pullErrors(curField, "hasWhiteSpace");
+
+          this[curField].length < 6
+            ? this.pushErrors(curField, "charIsOnly2")
+            : this.pullErrors(curField, "charIsOnly2");
+          break;
+
+        case "password":
+          vdn.hasWhiteSpace(this[curField])
+            ? this.pushErrors(curField, "hasWhiteSpace")
+            : this.pullErrors(curField, "hasWhiteSpace");
+
+          this[curField].length < 6
+            ? this.pushErrors(curField, "charIsOnly2")
+            : this.pullErrors(curField, "charIsOnly2");
+          break;
+      }
     },
     submit() {
       console.log(this.siteTitle);
