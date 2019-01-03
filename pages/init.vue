@@ -1,7 +1,7 @@
 <template>
   <div id="dq-init-parent-wrapper" class="flex fullheight-VH flexcenter flexwrap">
     <div v-if="!ready">
-        <spinner/>
+      <spinner/>
     </div>
     <div v-if="ready" id="dq-init-wrapper" class="flex flexwrap">
       <div>
@@ -19,33 +19,62 @@
         <div>
           <form class="flex flex flexcol">
             <!--  -->
-            <span class="flex flexcenter">
-              <span class="tc-2">Site title:</span>
-              <input class="tc-3" type="text">
-            </span>
+            <div class="flex flexcenter flexcol tc-wrap">
+              <span class="flex fullwidth spacebetween">
+                <span class="flex tc-title">Site Title:</span>
+                <span class="flex flexcol tc-input">
+                  <input v-model="siteTitle" class="fullwidth" type="text">
+                  <span class="tc-desc"></span>
+                </span>
+                <span class="tc-ind flex">c</span>
+              </span>
+            </div>
             <!--  -->
-            <span class="flex flexcenter">
-              <span class="tc-2">Username:</span>
-              <input class="tc-3" type="text">
-            </span>
+            <div class="flex flexcenter flexcol tc-wrap">
+              <span class="flex fullwidth spacebetween">
+                <span class="flex tc-title">Username:</span>
+                <span class="flex flexcol tc-input">
+                  <input v-model="username" class="fullwidth" type="text">
+                  <span class="tc-desc">no white space and special characters allowed</span>
+                </span>
+                <span class="tc-ind flex">c</span>
+              </span>
+            </div>
             <!--  -->
-            <span class="flex flexcenter">
-              <span class="tc-2">Password:</span>
-              <input class="tc-3" type="password">
-            </span>
+            <div class="flex flexcenter flexcol tc-wrap">
+              <span class="flex fullwidth spacebetween">
+                <span class="flex tc-title">Password:</span>
+                <span class="flex flexcol tc-input">
+                  <input v-model="password" class="fullwidth" type="password">
+                  <span class="tc-desc">must contain numbers and special characters</span>
+                </span>
+                <span class="tc-ind flex">c</span>
+              </span>
+            </div>
             <!--  -->
-            <span class="flex flexcenter">
-              <span class="tc-2">re type password:</span>
-              <input class="tc-3" type="password">
-            </span>
+            <div class="flex flexcenter flexcol tc-wrap">
+              <span class="flex fullwidth spacebetween">
+                <span class="flex tc-title">re-Password:</span>
+                <span class="flex flexcol tc-input">
+                  <input v-model="repassword" class="fullwidth" type="password">
+                  <span class="tc-desc">re type your password</span>
+                </span>
+                <span class="tc-ind flex">c</span>
+              </span>
+            </div>
             <!--  -->
-            <span class="flex flexcenter">
-              <span class="tc-2">Email:</span>
-              <input class="tc-3" type="text">
-            </span>
-            <!--  -->
+            <div class="flex flexcenter flexcol tc-wrap">
+              <span class="flex fullwidth spacebetween">
+                <span class="flex tc-title">email:</span>
+                <span class="flex flexcol tc-input">
+                  <input v-model="email" class="fullwidth" type="text">
+                  <span class="tc-desc">please review email before submit</span>
+                </span>
+                <span class="tc-ind flex">c</span>
+              </span>
+            </div>
             <span class="flex tc-b">
-              <span class="tc-b-inner">Initialized site</span>
+              <span @click="submit" class="tc-b-inner">Initialized site</span>
             </span>
           </form>
         </div>
@@ -55,21 +84,34 @@
 </template>
 
 <script>
-import spinner from '@/server/sys/core-apps/pane-system/module/spinner-1.vue'
+import spinner from "@/server/sys/core-apps/pane-system/module/spinner-1.vue";
 export default {
-    components:{
-        spinner
+  data() {
+    return {
+      ready: false,
+      siteTitle: "",
+      username: undefined,
+      password: undefined,
+      repassword: undefined,
+      email: undefined
+    };
+  },
+  components: {
+    spinner
+  },
+  methods: {
+    _validate(e) {
+      console.log(this.siteTitle.trim());
     },
-    data(){
-        return{
-            ready: false
-        }
-    },
-    mounted(){
-        setTimeout(() => {
-            this.ready = true
-        },1000)
+    submit() {
+      console.log(this.siteTitle);
     }
+  },
+  mounted() {
+    setTimeout(() => {
+      this.ready = true;
+    }, 1000);
+  }
 };
 </script>
 
@@ -84,35 +126,48 @@ export default {
 #dq-init-parent-wrapper {
   background: var(--blue-1);
 }
-.tc {
+.tc{
   color: var(--blue-text-2);
 }
-.tc-2 {
+.tc-title {
   color: var(--blue-text-2);
-  font-weight: 600;
   flex: 1;
+  font-weight: 600;
 }
-.tc-3 {
-  flex: 3;
-  margin: calc(var(--fontSize) * 1.25);
+.tc-input {
+  flex: 4;
+}
+.tc-input > input {
   padding: calc(var(--fontSize) * 0.25);
-  min-width: 400px;
+  margin-bottom: calc(var(--fontSize) * 0.25);
   color: var(--blue-text-2);
   font-weight: 600;
+}
+.tc-ind {
+  flex: 0.5;
+  justify-content: center;
+}
+.tc-wrap {
+  padding-top: calc(var(--fontSize) * 1.25);
+  padding-bottom: calc(var(--fontSize) * 1.25);
+}
+.tc-desc {
+  color: var(--blue-text-2);
+  font-style: italic;
 }
 .tc-b {
   justify-content: flex-end;
-  padding: calc(var(--fontSize) * 1.25);
+  padding: calc(var(--fontSize) * 2.25);
   cursor: pointer;
 }
-.tc-b-inner:hover{
-    color: rgb(245, 245, 245);
-    transition: 0.1s;
+.tc-b-inner:hover {
+  color: rgb(245, 245, 245);
+  transition: 0.1s;
 }
 .tc-b-inner {
   background-color: var(--blue-1);
   color: white;
-  padding: calc(var(--fontSize) * 0.25);
+  padding: calc(var(--fontSize) * 0.50);
   font-weight: 600;
 }
 hr {
