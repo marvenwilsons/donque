@@ -5,26 +5,16 @@ const router = express.Router()
 //
 const app = require('./app-agent')
 
-router.get('/users', function  incoming(req, res) {
+router.get('/admin', function  incoming(req, res) {
     res.status(200).json({ response: 'hello world' })
 })
 
-router.get('/init',function incoming(req,res) {
-
+router.get('/init',function incoming({res}) {
     if(app.isSet()){
-        res.status(200).json({
-            isInit: false
-        })
+        res.status(200).json(true)
     }else{
         res.status(200).json(false)
     }
-    
-    // this is what an initialized app looks like
-    // app.name != undefined
-    // app.users != 0
-    // app.owner != undefined
-    // app.userIsSet == true
-    // app.appIsSet == true
 })
 
 
