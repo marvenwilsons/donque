@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 const createStore = () => {
     return new Vuex.Store({
         state: {
+            app: undefined,
             user: undefined,
             comp: {
                 arr: [],
@@ -46,7 +47,7 @@ const createStore = () => {
                 return this.$axios.$get('/dqapp/init')
                 .then(res => {
                     // store to state
-                    vuexContext.commit('setUser',res)
+                    vuexContext.commit('setApp',res)
                 })
                 .catch(e => {
                     context.error(e)
@@ -55,8 +56,8 @@ const createStore = () => {
 
         },
         mutations: {
-            setUser(state,payload){
-                state.user = payload
+            setApp(state,payload){
+                state.app = payload
             },
             close_pane(state, payload) {
                 state.comp.paneWidth.splice(payload, 1)

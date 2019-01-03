@@ -1,38 +1,43 @@
 <template>
-  <main role="admin-layout" class="flex flexcol">
-    <div v-if="$store.state.modal.visibility" id="dq-modal-holder" class="absolute fullwidth fullheight-VH flex flexcenter">
+  <main v-if="$store.state.app" role="admin-layout" class="flex flexcol">
+    <div
+      v-if="$store.state.modal.visibility"
+      id="dq-modal-holder"
+      class="absolute fullwidth fullheight-VH flex flexcenter"
+    >
       <div id="dq-modal-host" class="flex flexcol absolute">
-        <span id="dq-modal-head" class="flex spacebetween" >
-          <span> <strong>{{$store.state.modal.head}}</strong> </span>
-          <span @click="closeModal" class="light-text" > <strong>&#10006;</strong> </span>
+        <span id="dq-modal-head" class="flex spacebetween">
+          <span>
+            <strong>{{$store.state.modal.head}}</strong>
+          </span>
+          <span @click="closeModal" class="light-text">
+            <strong>&#10006;</strong>
+          </span>
         </span>
-        <span id="dq-modal-body" class="flex center" >
-          <div class="flex flexcenter fullwidth" :is="$store.state.modal.body" ></div>
+        <span id="dq-modal-body" class="flex center">
+          <div class="flex flexcenter fullwidth" :is="$store.state.modal.body"></div>
         </span>
       </div>
     </div>
-    <nuxt/>
+      <nuxt/>
   </main>
 </template>
 
 <script>
 export default {
   methods: {
-    closeModal(){
-      this.$store.state.modal.visibility = false
+    closeModal() {
+      this.$store.state.modal.visibility = false;
     }
   },
-  mounted(){
-    this.$store.dispatch('firstLoad')
-    this.$axios.$get("/dqapp/users")
-    .then(res => {
-      // console.log(res.response)
-    })
-    .catch((e) => {
-      console.log(e)
-    })
-  }
-}
+  mounted() {
+    this.$store.dispatch("firstLoad");
+
+    if(!this.$store.state.app){
+      location.href = "init"
+    }
+  },
+};
 </script>
 
 
@@ -65,10 +70,9 @@ export default {
   --hover-blue: var(--blue-2);
 
   /* fonts */
-  --oxygen-mono:'Oxygen Mono', monospace;
-  --ubunto-mono:'Ubuntu Mono', monospace;
-  --inconsolata:'Inconsolata', monospace;
-
+  --oxygen-mono: "Oxygen Mono", monospace;
+  --ubunto-mono: "Ubuntu Mono", monospace;
+  --inconsolata: "Inconsolata", monospace;
 }
 .dq-pane-container-padding {
   padding-top: var(--size-1-half);
@@ -94,28 +98,27 @@ export default {
   justify-content: center;
 }
 
-#dq-modal-holder{
+#dq-modal-holder {
   z-index: 50;
   background-color: #393e428e;
   transition: 0.3s;
 }
-#dq-modal-host{
+#dq-modal-host {
   z-index: 150 !important;
   min-width: 450px;
   min-height: 200px;
   background: white;
   /* margin-top: -500px; */
-  top:250px;
+  top: 250px;
   box-shadow: 2px 2px 15px 1px #393e4244;
 }
-#dq-modal-head{
+#dq-modal-head {
   padding: var(--size-1-half);
   background-color: var(--blue-1);
   color: white;
 }
-#dq-modal-body{
+#dq-modal-body {
   padding: var(--size-1-half);
   flex: 1;
 }
-
 </style>

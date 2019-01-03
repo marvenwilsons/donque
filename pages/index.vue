@@ -1,6 +1,6 @@
 <template>
-  <section class="container">
-    test
+  <section v-if="$store.state.app">
+    <h1>TESTING</h1>
   </section>
 </template>
 
@@ -8,6 +8,11 @@
 
 export default {
   components: {
+  },
+  mounted(){
+    if(!this.$store.state.app){
+      location.href = "init"
+    }
   }
 }
 </script>

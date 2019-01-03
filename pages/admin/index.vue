@@ -26,7 +26,7 @@ export default {
     dqhead,
     main_window
   },
-  layout: "admin"
+  layout: "admin",
 };
 </script>
 
