@@ -74,6 +74,7 @@ export default {
   --oxygen-mono: "Oxygen Mono", monospace;
   --ubunto-mono: "Ubuntu Mono", monospace;
   --inconsolata: "Inconsolata", monospace;
+  --lobster: 'Lobster', cursive;
 }
 .dq-pane-container-padding {
   padding-top: var(--size-1-half);

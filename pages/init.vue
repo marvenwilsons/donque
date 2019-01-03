@@ -1,82 +1,87 @@
 <template>
-  <div id="dq-init-parent-wrapper" class="flex fullheight-VH flexcenter flexwrap">
-    <div v-if="!ready">
-      <spinner/>
-    </div>
-    <div v-if="ready" id="dq-init-wrapper" class="flex flexwrap">
-      <div>
-        <h5 class="tc">Welcome</h5>
-        <hr>
-        <p class="tc tt">
-          Welcome to the famous one-minute initialization, please provide all the required information below
-          and you'll be on your way to using the most flexible and the most powerful publisihing platform in the planet.
-        </p>
-        <h5 class="tc">Initialized Site</h5>
-        <hr>
-        <p
-          class="tc"
-        >Please provide the necessary information on the input fields, you can change it in settings later.</p>
-        <div>
-          <form class="flex flex flexcol">
-            <!--  -->
-            <div class="flex flexcenter flexcol tc-wrap">
-              <span class="flex fullwidth spacebetween">
-                <span class="flex tc-title">Site Title:</span>
-                <span class="flex flexcol tc-input">
-                  <input v-model="siteTitle" class="fullwidth" type="text">
-                  <span class="tc-desc"></span>
+  <div id="dq-init-parent-wrapper" class="flex flexwrap relative">
+    <div class="fullwidth flex absolute abs ">
+      <div v-if="!ready">
+        <spinner/>
+      </div>
+      <div v-if="ready" id="dq-init-wrapper" class="flex flexwrap  ">
+          <div id="tc-logo-h" class="flex fullwidth flexcenter">
+              <h1>dq</h1>
+          </div>
+        <div id="tc-f-wrap">
+          <h5 class="tc">Welcome</h5>
+          <hr>
+          <p class="tc tt">
+            Welcome to the famous one-minute initialization, please provide all the required information below
+            and you'll be on your way to using the most flexible and the most powerful publisihing platform in the planet.
+          </p>
+          <h5 class="tc">Initialized Site</h5>
+          <hr>
+          <p
+            class="tc"
+          >Please provide the necessary information on the input fields, you can change it in settings later.</p>
+          <div>
+            <form class="flex flex flexcol">
+              <!--  -->
+              <div class="flex flexcenter flexcol tc-wrap">
+                <span class="flex fullwidth spacebetween">
+                  <span class="flex tc-title">Site Title:</span>
+                  <span class="flex flexcol tc-input">
+                    <input v-model="siteTitle" class="fullwidth" type="text">
+                    <span class="tc-desc">no special characters allowed</span>
+                  </span>
+                  <span class="tc-ind flex">c</span>
                 </span>
-                <span class="tc-ind flex">c</span>
-              </span>
-            </div>
-            <!--  -->
-            <div class="flex flexcenter flexcol tc-wrap">
-              <span class="flex fullwidth spacebetween">
-                <span class="flex tc-title">Username:</span>
-                <span class="flex flexcol tc-input">
-                  <input v-model="username" class="fullwidth" type="text">
-                  <span class="tc-desc">no white space and special characters allowed</span>
+              </div>
+              <!--  -->
+              <div class="flex flexcenter flexcol tc-wrap">
+                <span class="flex fullwidth spacebetween">
+                  <span class="flex tc-title">Username:</span>
+                  <span class="flex flexcol tc-input">
+                    <input v-model="username" class="fullwidth" type="text">
+                    <span class="tc-desc">no white space and special characters allowed</span>
+                  </span>
+                  <span class="tc-ind flex">c</span>
                 </span>
-                <span class="tc-ind flex">c</span>
-              </span>
-            </div>
-            <!--  -->
-            <div class="flex flexcenter flexcol tc-wrap">
-              <span class="flex fullwidth spacebetween">
-                <span class="flex tc-title">Password:</span>
-                <span class="flex flexcol tc-input">
-                  <input v-model="password" class="fullwidth" type="password">
-                  <span class="tc-desc">must contain numbers and special characters</span>
+              </div>
+              <!--  -->
+              <div class="flex flexcenter flexcol tc-wrap">
+                <span class="flex fullwidth spacebetween">
+                  <span class="flex tc-title">Password:</span>
+                  <span class="flex flexcol tc-input">
+                    <input v-model="password" class="fullwidth" type="password">
+                    <span class="tc-desc">must contain numbers and special characters</span>
+                  </span>
+                  <span class="tc-ind flex">c</span>
                 </span>
-                <span class="tc-ind flex">c</span>
-              </span>
-            </div>
-            <!--  -->
-            <div class="flex flexcenter flexcol tc-wrap">
-              <span class="flex fullwidth spacebetween">
-                <span class="flex tc-title">re-Password:</span>
-                <span class="flex flexcol tc-input">
-                  <input v-model="repassword" class="fullwidth" type="password">
-                  <span class="tc-desc">re type your password</span>
+              </div>
+              <!--  -->
+              <div class="flex flexcenter flexcol tc-wrap">
+                <span class="flex fullwidth spacebetween">
+                  <span class="flex tc-title">re-Password:</span>
+                  <span class="flex flexcol tc-input">
+                    <input v-model="repassword" class="fullwidth" type="password">
+                    <span class="tc-desc">re type your password</span>
+                  </span>
+                  <span class="tc-ind flex">c</span>
                 </span>
-                <span class="tc-ind flex">c</span>
-              </span>
-            </div>
-            <!--  -->
-            <div class="flex flexcenter flexcol tc-wrap">
-              <span class="flex fullwidth spacebetween">
-                <span class="flex tc-title">email:</span>
-                <span class="flex flexcol tc-input">
-                  <input v-model="email" class="fullwidth" type="text">
-                  <span class="tc-desc">please review email before submit</span>
+              </div>
+              <!--  -->
+              <div class="flex flexcenter flexcol tc-wrap">
+                <span class="flex fullwidth spacebetween">
+                  <span class="flex tc-title">email:</span>
+                  <span class="flex flexcol tc-input">
+                    <input v-model="email" class="fullwidth" type="text">
+                    <span class="tc-desc">please review email before submit</span>
+                  </span>
+                  <span class="tc-ind flex">c</span>
                 </span>
-                <span class="tc-ind flex">c</span>
+              </div>
+              <span class="flex tc-b">
+                <span @click="submit" class="tc-b-inner">Initialized site</span>
               </span>
-            </div>
-            <span class="flex tc-b">
-              <span @click="submit" class="tc-b-inner">Initialized site</span>
-            </span>
-          </form>
+            </form>
+          </div>
         </div>
       </div>
     </div>
@@ -116,17 +121,41 @@ export default {
 </script>
 
 <style>
+#tc-logo-h{
+  padding: calc(var(--fontSize) * 1.25);  
+  margin: calc(var(--fontSize) * 1.25);
+}
+#tc-logo-h > h1{
+    color: white;
+    font-family: var(--lobster);
+    border: 1px dashed white;
+    padding-left: calc(var(--fontSize) * 1.25);
+    padding-right: calc(var(--fontSize) * 1.25);
+
+}
+#tc-f-wrap{
+    background: white;
+  padding: calc(var(--fontSize) * 1.25);
+    padding-left: calc(var(--fontSize) * 2.25);
+  padding-right: calc(var(--fontSize) * 2.25);
+  margin-bottom: calc(var(--fontSize) * 2.25);
+}
 #dq-init-wrapper {
   min-width: 650px;
-  background: white;
-  padding: calc(var(--fontSize) * 1.25);
+  /* background: white; */
   max-width: 650px;
   transition: 0.3s;
 }
 #dq-init-parent-wrapper {
   background: var(--blue-1);
+  min-height: 100vh;
 }
-.tc{
+.abs {
+  overflow-x: auto;
+  height: 100%;
+    justify-content: center;
+}
+.tc {
   color: var(--blue-text-2);
 }
 .tc-title {
@@ -167,11 +196,12 @@ export default {
 .tc-b-inner {
   background-color: var(--blue-1);
   color: white;
-  padding: calc(var(--fontSize) * 0.50);
+  padding: calc(var(--fontSize) * 0.5);
+  padding-left: calc(var(--fontSize) * 1);
+  padding-right: calc(var(--fontSize) * 1);
   font-weight: 600;
 }
 hr {
   color: #4a6976;
-  /* color:  */
 }
 </style>
