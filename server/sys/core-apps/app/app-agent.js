@@ -15,7 +15,7 @@ dqApp.schem = {
 // returns true if app is initialized
 // returns false if app is not yet initialized
 dqApp.isSet = () => {
-    return true
+    return false
 }
 
 // returns true if user is set and returns false if not

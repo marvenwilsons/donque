@@ -65,6 +65,7 @@ export default {
   --blue-3: #e9eff3;
   --blue-4: #f4f7f9;
   --blue-text: #2d4455;
+  --blue-text-2: #4a6976;
 
   /* hovers */
   --hover-blue: var(--blue-2);
