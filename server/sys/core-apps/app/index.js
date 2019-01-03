@@ -10,6 +10,14 @@ router.get('/users', function  incoming(req, res) {
 })
 
 router.get('/init',function incoming(req,res) {
+
+    if(app.isSet()){
+        res.status(200).json({
+            isInit: false
+        })
+    }else{
+        res.status(200).json(false)
+    }
     
     // this is what an initialized app looks like
     // app.name != undefined

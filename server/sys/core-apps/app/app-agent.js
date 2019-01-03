@@ -15,7 +15,7 @@ dqApp.schem = {
 // returns true if app is initialized
 // returns false if app is not yet initialized
 dqApp.isSet = () => {
-
+    return false
 }
 
 // returns true if user is set and returns false if not
@@ -68,6 +68,11 @@ dqApp.adminSectionAccessList = (admin_code) => {
 
 // returns a login trace of a certain admin
 dqApp.adminLogins = (admin_code) => {
+
+}
+
+// admin object
+dqApp.admin = (admin_code)=> {
 
 }
 
