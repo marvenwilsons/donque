@@ -387,7 +387,27 @@ export default {
       });
 
       if (s.every(e => e == true)) {
-        this.ready = false;
+        // this.ready = false;
+        const app = {}
+        app.siteTitle = this.siteTitle
+        app.username = this.username
+        app.password = this.password
+        app.repassword = this.repassword
+        app.email = this.email
+
+        this.$axios.$post('/dqapp/initapp',app)
+        .then(res => {
+          this.ready = false
+          setTimeout(() => {
+            if(res){
+              location.href = 'dqlogin'
+            }
+          },15000)
+        })
+        .catch(e => {
+          console.log(e)
+        })        
+        
       }
     }
   },
@@ -395,6 +415,9 @@ export default {
     setTimeout(() => {
       this.ready = true;
     }, 1000);
+
+    // make a request if the app is set then redirect to another page if it is set
+    // incase a user try to access this page again after initializing the page
   }
 };
 </script>
