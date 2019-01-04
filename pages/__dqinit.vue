@@ -37,10 +37,21 @@
                       required
                     >
                     <span class="tc-desc">
-                      <span :class="[errors.siteTitle.indexOf('shouldNotHaveSpecialChar') != -1 && 'und-err']">no special characters allowed like !@#$*</span>
-                      <br> <span :class="[errors.siteTitle.indexOf('hasWhiteSpace') != -1 && 'und-err']">no white space allowed</span> and
-                      <br> <span :class="[errors.siteTitle.indexOf('charIsOnly2') != -1 && 'und-err']">must be more than 2 characters</span>
-                      <br> <span :class="[errors.siteTitle.indexOf('required') != -1 && 'und-err']">this is a required field</span>
+                      <span
+                        :class="[errors.siteTitle.indexOf('shouldNotHaveSpecialChar') != -1 && 'und-err']"
+                      >no special characters allowed like !@#$*</span>
+                      <br>
+                      <span
+                        :class="[errors.siteTitle.indexOf('hasWhiteSpace') != -1 && 'und-err']"
+                      >no white space allowed</span> and
+                      <br>
+                      <span
+                        :class="[errors.siteTitle.indexOf('charIsOnly2') != -1 && 'und-err']"
+                      >must be more than 2 characters</span>
+                      <br>
+                      <span
+                        :class="[errors.siteTitle.indexOf('required') != -1 && 'und-err']"
+                      >this is a required field</span>
                     </span>
                   </span>
                   <span class="tc-ind flex">
@@ -65,10 +76,21 @@
                       required
                     >
                     <span class="tc-desc">
-                      <span :class="[errors.username.indexOf('shouldNotHaveSpecialChar') != -1 && 'und-err']">no special characters allowed like !@#$*</span>
-                      <br> <span :class="[errors.username.indexOf('hasWhiteSpace') != -1 && 'und-err']">no white space allowed</span> and
-                      <br> <span :class="[errors.username.indexOf('charIsOnly2') != -1 && 'und-err']">must be more than 6 characters</span>
-                      <br> <span :class="[errors.username.indexOf('required') != -1 && 'und-err']">this is a required field</span>
+                      <span
+                        :class="[errors.username.indexOf('shouldNotHaveSpecialChar') != -1 && 'und-err']"
+                      >no special characters allowed like !@#$*</span>
+                      <br>
+                      <span
+                        :class="[errors.username.indexOf('hasWhiteSpace') != -1 && 'und-err']"
+                      >no white space allowed</span> and
+                      <br>
+                      <span
+                        :class="[errors.username.indexOf('charIsOnly2') != -1 && 'und-err']"
+                      >must be more than 6 characters</span>
+                      <br>
+                      <span
+                        :class="[errors.username.indexOf('required') != -1 && 'und-err']"
+                      >this is a required field</span>
                     </span>
                   </span>
                   <span class="tc-ind flex">
@@ -93,8 +115,16 @@
                       required
                     >
                     <span class="tc-desc">
-                      must contain numbers and special characters
-                      <br> <span :class="[errors.siteTitle.indexOf('required') != -1 && 'und-err']">this is a required field</span>
+                      password
+                      <span
+                        :class="[errors.password.indexOf('shouldIncludeNumber') != -1 && 'und-err']"
+                      >must contain numbers</span> and
+                      <span :class="[errors.password.indexOf('shouldHaveSpecialChar') != -1 && 'und-err']" >should contain special characters</span>
+                      and <span :class="[errors.password.indexOf('charIsOnly2') != -1 && 'und-err']">should be more than 6 characters</span>
+                      <br>
+                      <span
+                        :class="[errors.siteTitle.indexOf('required') != -1 && 'und-err']"
+                      >this is a required field</span>
                     </span>
                   </span>
                   <span class="tc-ind flex">
@@ -139,8 +169,11 @@
                       class="fullwidth"
                       type="text"
                     >
-                    <span class="tc-desc"> 
-                      <span :class="[errors.email.length != 0 && 'und-err']">Enter a valid email format</span></span>
+                    <span class="tc-desc">
+                      <span
+                        :class="[errors.email.length != 0 && 'und-err']"
+                      >Enter a valid email format</span>
+                    </span>
                   </span>
                   <span class="tc-ind flex">
                     <span
@@ -185,35 +218,33 @@ export default {
       validations: {
         hasWhiteSpace: e => e.indexOf(" ") != -1,
         shouldNotHaveSpecialChar: e => {
-          const regex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/gim
-          return regex.exec(e) != null
+          const regex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/gim;
+          return regex.exec(e) != null;
         },
         shouldHaveSpecialChar: e => {
-          const regex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/gim
-          return regex.exec(e) == null
+          const regex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/gim;
+          return regex.exec(e) == null;
         },
         shouldNotIncludeNumber: e => {
-           const regex = /[0-9]/gim
-           return regex.exec(e) != null
+          const regex = /[0-9]/gim;
+          return regex.exec(e) != null;
         },
         shouldIncludeNumber: e => {
-           const regex = /[0-9]/gim
-           return regex.exec(e) == null
+          const regex = /[0-9]/gim;
+          return regex.exec(e) == null;
         },
         required: e => {
-          return e == ''
+          return e == "";
         },
         isValidEmail: e => {
-          const condition = ['@','.com']
-          const res =condition.map(charSet => {
-            return (
-              RegExp(`${charSet}`,'').exec(e)
-            ) != null
-          })
-          return res.join('/') != 'true/true'
+          const condition = ["@", ".com"];
+          const res = condition.map(charSet => {
+            return RegExp(`${charSet}`, "").exec(e) != null;
+          });
+          return res.join("/") != "true/true";
         },
         passwordMatch: e => {
-          return e != this.password
+          return e != this.password;
         }
       }
     };
@@ -245,7 +276,7 @@ export default {
           this[curField].length < 2
             ? this.pushErrors(curField, "charIsOnly2")
             : this.pullErrors(curField, "charIsOnly2");
-          
+
           vdn.shouldNotHaveSpecialChar(this[curField])
             ? this.pushErrors(curField, "shouldNotHaveSpecialChar")
             : this.pullErrors(curField, "shouldNotHaveSpecialChar");
@@ -263,7 +294,7 @@ export default {
           this[curField].length < 6
             ? this.pushErrors(curField, "charIsOnly2")
             : this.pullErrors(curField, "charIsOnly2");
-          
+
           vdn.shouldNotHaveSpecialChar(this[curField])
             ? this.pushErrors(curField, "shouldNotHaveSpecialChar")
             : this.pullErrors(curField, "shouldNotHaveSpecialChar");
@@ -317,7 +348,7 @@ export default {
           vdn.isValidEmail(this[curField])
             ? this.pushErrors(curField, "isValidEmail")
             : this.pullErrors(curField, "isValidEmail");
-          
+
           vdn.required(this[curField])
             ? this.pushErrors(curField, "required")
             : this.pullErrors(curField, "required");
@@ -331,35 +362,33 @@ export default {
         this.password,
         this.repassword,
         this.email
-      ]
+      ];
 
       const fields = [
-        'siteTitle',
-        'username',
-        'password',
-        'repassword',
-        'email'
-      ]
+        "siteTitle",
+        "username",
+        "password",
+        "repassword",
+        "email"
+      ];
       // check for undefined fields
-      undarr.map((e,i) => {
-        if(e == undefined){
-          this.errors[fields[i]].push('required')
+      undarr.map((e, i) => {
+        if (e == undefined) {
+          this.errors[fields[i]].push("required");
         }
-      })
+      });
 
-      const s = fields.map(e => {        
-        if(this.errors[e].length != 0){
-          return false
-        }else{
-          return true
+      const s = fields.map(e => {
+        if (this.errors[e].length != 0) {
+          return false;
+        } else {
+          return true;
         }
-      })
+      });
 
-      if(s.every(e => e == true)){
-        this.ready = false
-        
+      if (s.every(e => e == true)) {
+        this.ready = false;
       }
-      
     }
   },
   mounted() {
@@ -381,7 +410,7 @@ export default {
 .tc-err {
   color: red;
 }
-.und-err{
+.und-err {
   color: red;
   border-bottom: 1px dashed red;
 }
