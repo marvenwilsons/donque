@@ -97,29 +97,47 @@
                   </span>
                 </span>
               </div>
-              <!--  -->
+              <!-- repassword  -->
               <div class="flex flexcenter flexcol tc-wrap">
                 <span class="flex fullwidth spacebetween">
                   <span class="flex tc-title">re-Password:</span>
                   <span class="flex flexcol tc-input">
-                    <input v-model="repassword" class="fullwidth" type="password">
+                    <input
+                      v-on:input="_validate('repassword')"
+                      v-model="repassword"
+                      class="fullwidth"
+                      type="password"
+                    >
                     <span class="tc-desc">re type your password</span>
                   </span>
                   <span class="tc-ind flex">
-                    <span v-if="passed.indexOf('repassword') != -1" class="tc-suc">&#10004;</span>
+                    <span
+                      v-if="errors.repassword.length == 0 && repassword != undefined"
+                      class="tc-suc"
+                    >&#10004;</span>
+                    <span v-if="errors.repassword.length != 0" class="tc-err">&#x2718;</span>
                   </span>
                 </span>
               </div>
-              <!--  -->
+              <!-- email -->
               <div class="flex flexcenter flexcol tc-wrap">
                 <span class="flex fullwidth spacebetween">
                   <span class="flex tc-title">email:</span>
                   <span class="flex flexcol tc-input">
-                    <input v-model="email" class="fullwidth" type="text">
+                    <input
+                      v-on:input="_validate('email')"
+                      v-model="email"
+                      class="fullwidth"
+                      type="text"
+                    >
                     <span class="tc-desc">please review email before submit</span>
                   </span>
                   <span class="tc-ind flex">
-                    <span v-if="passed.indexOf('email') != -1" class="tc-suc">&#10004;</span>
+                    <span
+                      v-if="errors.email.length == 0 && email != undefined"
+                      class="tc-suc"
+                    >&#10004;</span>
+                    <span v-if="errors.email.length != 0" class="tc-err">&#x2718;</span>
                   </span>
                 </span>
               </div>
@@ -150,6 +168,7 @@ export default {
         siteTitle: [],
         username: [],
         password: [],
+        repassword: [],
         email: []
       },
       readyObj: {},
@@ -201,6 +220,26 @@ export default {
           break;
 
         case "password":
+          vdn.hasWhiteSpace(this[curField])
+            ? this.pushErrors(curField, "hasWhiteSpace")
+            : this.pullErrors(curField, "hasWhiteSpace");
+
+          this[curField].length < 6
+            ? this.pushErrors(curField, "charIsOnly2")
+            : this.pullErrors(curField, "charIsOnly2");
+          break;
+
+        case "repassword":
+          vdn.hasWhiteSpace(this[curField])
+            ? this.pushErrors(curField, "hasWhiteSpace")
+            : this.pullErrors(curField, "hasWhiteSpace");
+
+          this[curField].length < 6
+            ? this.pushErrors(curField, "charIsOnly2")
+            : this.pullErrors(curField, "charIsOnly2");
+          break;
+
+        case "email":
           vdn.hasWhiteSpace(this[curField])
             ? this.pushErrors(curField, "hasWhiteSpace")
             : this.pullErrors(curField, "hasWhiteSpace");
