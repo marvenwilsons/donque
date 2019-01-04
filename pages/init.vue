@@ -190,6 +190,9 @@ export default {
            const regex = /[0-9]/gim
            return regex.exec(e) == null
         },
+        required: e => {
+          return e == ''
+        },
         isValidEmail: e => {
           const condition = ['@','.com']
           const res =condition.map(charSet => {
@@ -233,6 +236,10 @@ export default {
           vdn.shouldNotHaveSpecialChar(this[curField])
             ? this.pushErrors(curField, "shouldNotHaveSpecialChar")
             : this.pullErrors(curField, "shouldNotHaveSpecialChar");
+
+          vdn.required(this[curField])
+            ? this.pushErrors(curField, "required")
+            : this.pullErrors(curField, "required");
           break;
 
         case "username":
@@ -247,6 +254,10 @@ export default {
           vdn.shouldNotHaveSpecialChar(this[curField])
             ? this.pushErrors(curField, "shouldNotHaveSpecialChar")
             : this.pullErrors(curField, "shouldNotHaveSpecialChar");
+
+          vdn.required(this[curField])
+            ? this.pushErrors(curField, "required")
+            : this.pullErrors(curField, "required");
           break;
 
         case "password":
@@ -265,6 +276,10 @@ export default {
           vdn.shouldIncludeNumber(this[curField])
             ? this.pushErrors(curField, "shouldIncludeNumber")
             : this.pullErrors(curField, "shouldIncludeNumber");
+
+          vdn.required(this[curField])
+            ? this.pushErrors(curField, "required")
+            : this.pullErrors(curField, "required");
           break;
 
         case "repassword":
@@ -275,6 +290,10 @@ export default {
           this[curField].length < 6
             ? this.pushErrors(curField, "charIsOnly2")
             : this.pullErrors(curField, "charIsOnly2");
+
+          vdn.required(this[curField])
+            ? this.pushErrors(curField, "required")
+            : this.pullErrors(curField, "required");
           break;
 
         case "email":
@@ -289,11 +308,38 @@ export default {
           vdn.isValidEmail(this[curField])
             ? this.pushErrors(curField, "isValidEmail")
             : this.pullErrors(curField, "isValidEmail");
+          
+          vdn.required(this[curField])
+            ? this.pushErrors(curField, "required")
+            : this.pullErrors(curField, "required");
           break;
       }
     },
     submit() {
-      console.log(this.siteTitle);
+      const undarr = [
+        this.siteTitle,
+        this.username,
+        this.password,
+        this.repassword,
+        this.email
+      ]
+
+      const fields = [
+        'siteTitle',
+        'username',
+        'password',
+        'repassword',
+        'email'
+      ]
+    
+      // check for undefined fields
+      undarr.map((e,i) => {
+        if(e == undefined){
+          this.errors[fields[i]].push('required')
+        }
+      })
+
+      console.log(this.errors)
     }
   },
   mounted() {
