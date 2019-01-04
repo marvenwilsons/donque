@@ -11,7 +11,7 @@ export default {
   },
   mounted(){
     if(!this.$store.state.app){
-      location.href = "init"
+      location.href = "__dqinit"
     }
   }
 }

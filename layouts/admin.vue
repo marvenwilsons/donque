@@ -34,7 +34,7 @@ export default {
     this.$store.dispatch("firstLoad");
 
     if(!this.$store.state.app){
-      location.href = "init"
+      location.href = "__dqinit"
     }
   },
 };

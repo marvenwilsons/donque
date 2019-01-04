@@ -1,3 +1,5 @@
+// init dq form v.01
+// author: marven wilson donque
 <template>
   <div id="dq-init-parent-wrapper" class="flex flexwrap relative">
     <div class="fullwidth flex absolute abs">
@@ -34,9 +36,11 @@
                       type="text"
                       required
                     >
-                    <span class="tc-desc">no special characters allowed like !@#$*
-                      <br>no whitespace allowed and
-                      <br>must be more than 2 characters
+                    <span class="tc-desc">
+                      <span :class="[errors.siteTitle.indexOf('shouldNotHaveSpecialChar') != -1 && 'und-err']">no special characters allowed like !@#$*</span>
+                      <br> <span :class="[errors.siteTitle.indexOf('hasWhiteSpace') != -1 && 'und-err']">no white space allowed</span> and
+                      <br> <span :class="[errors.siteTitle.indexOf('charIsOnly2') != -1 && 'und-err']">must be more than 2 characters</span>
+                      <br> <span :class="[errors.siteTitle.indexOf('required') != -1 && 'und-err']">this is a required field</span>
                     </span>
                   </span>
                   <span class="tc-ind flex">
@@ -60,9 +64,11 @@
                       type="text"
                       required
                     >
-                    <span class="tc-desc">no special characters allowed like !@#$*
-                      <br>no whitespace allowed and
-                      <br>must be more than 6 characters
+                    <span class="tc-desc">
+                      <span :class="[errors.username.indexOf('shouldNotHaveSpecialChar') != -1 && 'und-err']">no special characters allowed like !@#$*</span>
+                      <br> <span :class="[errors.username.indexOf('hasWhiteSpace') != -1 && 'und-err']">no white space allowed</span> and
+                      <br> <span :class="[errors.username.indexOf('charIsOnly2') != -1 && 'und-err']">must be more than 6 characters</span>
+                      <br> <span :class="[errors.username.indexOf('required') != -1 && 'und-err']">this is a required field</span>
                     </span>
                   </span>
                   <span class="tc-ind flex">
@@ -86,7 +92,10 @@
                       type="password"
                       required
                     >
-                    <span class="tc-desc">must contain numbers and special characters</span>
+                    <span class="tc-desc">
+                      must contain numbers and special characters
+                      <br> <span :class="[errors.siteTitle.indexOf('required') != -1 && 'und-err']">this is a required field</span>
+                    </span>
                   </span>
                   <span class="tc-ind flex">
                     <span
@@ -130,7 +139,8 @@
                       class="fullwidth"
                       type="text"
                     >
-                    <span class="tc-desc">please review email before submit</span>
+                    <span class="tc-desc"> 
+                      <span :class="[errors.email.length != 0 && 'und-err']">Enter a valid email format</span></span>
                   </span>
                   <span class="tc-ind flex">
                     <span
@@ -201,6 +211,9 @@ export default {
             ) != null
           })
           return res.join('/') != 'true/true'
+        },
+        passwordMatch: e => {
+          return e != this.password
         }
       }
     };
@@ -283,17 +296,13 @@ export default {
           break;
 
         case "repassword":
-          vdn.hasWhiteSpace(this[curField])
-            ? this.pushErrors(curField, "hasWhiteSpace")
-            : this.pullErrors(curField, "hasWhiteSpace");
-
-          this[curField].length < 6
-            ? this.pushErrors(curField, "charIsOnly2")
-            : this.pullErrors(curField, "charIsOnly2");
-
           vdn.required(this[curField])
             ? this.pushErrors(curField, "required")
             : this.pullErrors(curField, "required");
+
+          vdn.passwordMatch(this[curField])
+            ? this.pushErrors(curField, "passwordMatch")
+            : this.pullErrors(curField, "passwordMatch");
           break;
 
         case "email":
@@ -331,7 +340,6 @@ export default {
         'repassword',
         'email'
       ]
-    
       // check for undefined fields
       undarr.map((e,i) => {
         if(e == undefined){
@@ -339,7 +347,19 @@ export default {
         }
       })
 
-      console.log(this.errors)
+      const s = fields.map(e => {        
+        if(this.errors[e].length != 0){
+          return false
+        }else{
+          return true
+        }
+      })
+
+      if(s.every(e => e == true)){
+        this.ready = false
+        
+      }
+      
     }
   },
   mounted() {
@@ -360,6 +380,10 @@ export default {
 }
 .tc-err {
   color: red;
+}
+.und-err{
+  color: red;
+  border-bottom: 1px dashed red;
 }
 #tc-logo-h > h1 {
   color: white;
