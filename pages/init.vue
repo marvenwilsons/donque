@@ -108,7 +108,7 @@
                       class="fullwidth"
                       type="password"
                     >
-                    <span class="tc-desc">re type your password</span>
+                    <span class="tc-desc">re type your password must match your password</span>
                   </span>
                   <span class="tc-ind flex">
                     <span
@@ -174,9 +174,31 @@ export default {
       readyObj: {},
       validations: {
         hasWhiteSpace: e => e.indexOf(" ") != -1,
-        hasSpecialChar: e => {},
-        hasNumber: e => {},
-        isValidEmail: e => {}
+        shouldNotHaveSpecialChar: e => {
+          const regex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/gim
+          return regex.exec(e) != null
+        },
+        shouldHaveSpecialChar: e => {
+          const regex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/gim
+          return regex.exec(e) == null
+        },
+        shouldNotIncludeNumber: e => {
+           const regex = /[0-9]/gim
+           return regex.exec(e) != null
+        },
+        shouldIncludeNumber: e => {
+           const regex = /[0-9]/gim
+           return regex.exec(e) == null
+        },
+        isValidEmail: e => {
+          const condition = ['@','.com']
+          const res =condition.map(charSet => {
+            return (
+              RegExp(`${charSet}`,'').exec(e)
+            ) != null
+          })
+          return res.join('/') != 'true/true'
+        }
       }
     };
   },
@@ -207,6 +229,10 @@ export default {
           this[curField].length < 2
             ? this.pushErrors(curField, "charIsOnly2")
             : this.pullErrors(curField, "charIsOnly2");
+          
+          vdn.shouldNotHaveSpecialChar(this[curField])
+            ? this.pushErrors(curField, "shouldNotHaveSpecialChar")
+            : this.pullErrors(curField, "shouldNotHaveSpecialChar");
           break;
 
         case "username":
@@ -217,6 +243,10 @@ export default {
           this[curField].length < 6
             ? this.pushErrors(curField, "charIsOnly2")
             : this.pullErrors(curField, "charIsOnly2");
+          
+          vdn.shouldNotHaveSpecialChar(this[curField])
+            ? this.pushErrors(curField, "shouldNotHaveSpecialChar")
+            : this.pullErrors(curField, "shouldNotHaveSpecialChar");
           break;
 
         case "password":
@@ -227,6 +257,14 @@ export default {
           this[curField].length < 6
             ? this.pushErrors(curField, "charIsOnly2")
             : this.pullErrors(curField, "charIsOnly2");
+
+          vdn.shouldHaveSpecialChar(this[curField])
+            ? this.pushErrors(curField, "shouldHaveSpecialChar")
+            : this.pullErrors(curField, "shouldHaveSpecialChar");
+
+          vdn.shouldIncludeNumber(this[curField])
+            ? this.pushErrors(curField, "shouldIncludeNumber")
+            : this.pullErrors(curField, "shouldIncludeNumber");
           break;
 
         case "repassword":
@@ -247,6 +285,10 @@ export default {
           this[curField].length < 6
             ? this.pushErrors(curField, "charIsOnly2")
             : this.pullErrors(curField, "charIsOnly2");
+
+          vdn.isValidEmail(this[curField])
+            ? this.pushErrors(curField, "isValidEmail")
+            : this.pullErrors(curField, "isValidEmail");
           break;
       }
     },
