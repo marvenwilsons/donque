@@ -10,7 +10,7 @@
         <div id="tc-logo-h" class="flex fullwidth flexcenter">
           <h1>dq</h1>
         </div>
-        <div id="tc-f-wrap">
+        <div id="tc-f-wrap" >
           <h5 class="tc">Welcome</h5>
           <hr>
           <p class="tc tt">
@@ -22,7 +22,7 @@
           <p
             class="tc"
           >Please provide the necessary information on the input fields, you can change it in settings later.</p>
-          <div>
+          <div class="tc-f-wrap-inner">
             <form class="flex flex flexcol">
               <!-- site title  -->
               <div class="flex flexcenter flexcol tc-wrap">
@@ -119,8 +119,13 @@
                       <span
                         :class="[errors.password.indexOf('shouldIncludeNumber') != -1 && 'und-err']"
                       >must contain numbers</span> and
-                      <span :class="[errors.password.indexOf('shouldHaveSpecialChar') != -1 && 'und-err']" >should contain special characters</span>
-                      and <span :class="[errors.password.indexOf('charIsOnly2') != -1 && 'und-err']">should be more than 6 characters</span>
+                      <span
+                        :class="[errors.password.indexOf('shouldHaveSpecialChar') != -1 && 'und-err']"
+                      >should contain special characters</span>
+                      and
+                      <span
+                        :class="[errors.password.indexOf('charIsOnly2') != -1 && 'und-err']"
+                      >should be more than 6 characters</span>
                       <br>
                       <span
                         :class="[errors.siteTitle.indexOf('required') != -1 && 'und-err']"
@@ -185,7 +190,7 @@
                 </span>
               </div>
               <span class="flex tc-b">
-                <span @click="submit" class="tc-b-inner">Initialized site</span>
+                <span @click="submit" class="tc-b-inner">Initialize site</span>
               </span>
             </form>
           </div>
@@ -387,27 +392,26 @@ export default {
       });
 
       if (s.every(e => e == true)) {
-        // this.ready = false;
-        const app = {}
-        app.siteTitle = this.siteTitle
-        app.username = this.username
-        app.password = this.password
-        app.repassword = this.repassword
-        app.email = this.email
+        const app = {};
+        app.siteTitle = this.siteTitle;
+        app.username = this.username;
+        app.password = this.password;
+        app.repassword = this.repassword;
+        app.email = this.email;
 
-        this.$axios.$post('/dqapp/initapp',app)
-        .then(res => {
-          this.ready = false
-          setTimeout(() => {
-            if(res){
-              location.href = 'dqlogin'
-            }
-          },15000)
-        })
-        .catch(e => {
-          console.log(e)
-        })        
-        
+        this.$axios
+          .$post("/dqapp/initapp", app)
+          .then(res => {
+            this.ready = false;
+            setTimeout(() => {
+              if (res) {
+                location.reload()
+              }
+            }, 15000);
+          })
+          .catch(e => {
+            console.log(e);
+          });
       }
     }
   },
@@ -415,6 +419,17 @@ export default {
     setTimeout(() => {
       this.ready = true;
     }, 1000);
+
+    this.$axios
+      .$get("dqapp/app")
+      .then(res => {
+        if (res) {
+          location.href = "dqlogin";
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
 
     // make a request if the app is set then redirect to another page if it is set
     // incase a user try to access this page again after initializing the page
@@ -444,12 +459,18 @@ export default {
   padding-left: calc(var(--fontSize) * 1.25);
   padding-right: calc(var(--fontSize) * 1.25);
 }
+
+:root{
+  --bg-c:white;
+}
+
 #tc-f-wrap {
-  background: white;
+  background: var(--bg-c);
   padding: calc(var(--fontSize) * 1.25);
   padding-left: calc(var(--fontSize) * 2.25);
   padding-right: calc(var(--fontSize) * 2.25);
   margin-bottom: calc(var(--fontSize) * 2.25);
+  box-shadow: 0px 0px 20px 1px var(--blue-text-2)
 }
 #dq-init-wrapper {
   min-width: 650px;
@@ -460,6 +481,13 @@ export default {
 #dq-init-parent-wrapper {
   background: var(--blue-1);
   min-height: 100vh;
+}
+.tc-f-wrap-inner{
+  /* border: 1px solid red; */
+  border-radius: 5px;
+  padding-left: calc(var(--fontSize) * 1.25);
+  padding-top: calc(var(--fontSize) * 2.25);
+  margin-bottom: calc(var(--fontSize) * 1.25);
 }
 .abs {
   overflow-x: auto;
@@ -482,6 +510,7 @@ export default {
   margin-bottom: calc(var(--fontSize) * 0.25);
   color: var(--blue-text-2);
   font-weight: 600;
+  background-color: var(--bg-c)
 }
 .tc-ind {
   flex: 0.5;
@@ -511,6 +540,7 @@ export default {
   padding-left: calc(var(--fontSize) * 1);
   padding-right: calc(var(--fontSize) * 1);
   font-weight: 600;
+  box-shadow: 0px 1px 1px 1px var(--blue-2)
 }
 hr {
   color: #4a6976;

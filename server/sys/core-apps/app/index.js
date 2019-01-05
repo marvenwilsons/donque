@@ -7,20 +7,36 @@ const path = require('path')
 //
 const app = require('./app-agent')
 
-router.get('/admin', function incoming(req, res) {
-    res.status(200).json({ response: 'hello world' })
+router.get('/app',  ({res}) => {
+    const isInit = fs.existsSync(path.join(__dirname, '../../admin assets/json/temp.json'))
+    res.status(200).json(isInit)
+})
+
+router.post('/applogin', (req,res) => {
+
 })
 
 router.post('/initapp', function incoming(req, res) {
     // validate then init app
     const p = path.join(__dirname, '../../admin assets/json/')
-
+    console.log(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/gim.exec(req.body.siteTitle) == null,)
     const arr = [
+        // should not have white spaces
         req.body.siteTitle.indexOf(" ") == -1,
         req.body.username.indexOf(" ") == -1,
-        req.body.password.indexOf(" ") == -1,
-        req.body.repassword.indexOf(" ") == -1,
-        req.body.email.indexOf(" ") == -1
+
+        // should be more than 2 char
+        req.body.siteTitle.length > 2,
+        req.body.username.length >= 6,
+
+        // special characters
+        /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/gim.exec(req.body.username) == null,
+        /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/gim.exec(req.body.siteTitle) == null,
+
+        // email
+        req.body.email.indexOf('@') != -1,
+        req.body.email.indexOf('.') != -1,
+        req.body.email.indexOf('.com') != -1
 
     ]
 
