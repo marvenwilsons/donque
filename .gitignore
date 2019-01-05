@@ -79,3 +79,5 @@ dist
 
 # IDE
 .idea
+
+server/sys/admin assets/json/*

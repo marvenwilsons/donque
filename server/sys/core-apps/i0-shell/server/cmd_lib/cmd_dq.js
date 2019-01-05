@@ -49,6 +49,9 @@ donqueCoreCommands.dq = {
         }
     },
     r: {
+        appRestart(){
+
+        },
         // user
         getUser(i) {
 
