@@ -19,7 +19,9 @@ module.exports = {
       { href:'https://fonts.googleapis.com/css?family=Oxygen+Mono', rel:'stylesheet'},
       { href:'https://fonts.googleapis.com/css?family=Ubuntu+Mono', rel:'stylesheet'},
       { href:'https://fonts.googleapis.com/css?family=Inconsolata', rel:'stylesheet' },
-      { href: 'https://fonts.googleapis.com/css?family=Lobster', rel: 'stylesheet' }
+      { href: 'https://fonts.googleapis.com/css?family=Lobster', rel: 'stylesheet' },
+      { href: 'https://fonts.googleapis.com/css?family=Cuprum', rel: 'stylesheet' }
+
     ]
   },
 

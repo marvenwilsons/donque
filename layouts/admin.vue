@@ -78,6 +78,7 @@ export default {
   --ubunto-mono: "Ubuntu Mono", monospace;
   --inconsolata: "Inconsolata", monospace;
   --lobster: 'Lobster', cursive;
+  --cuprum: 'Cuprum', sans-serif;
 }
 .dq-pane-container-padding {
   padding-top: var(--size-1-half);
