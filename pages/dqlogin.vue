@@ -10,15 +10,27 @@
         <div id="tc-logo-h" class="flex fullwidth flexcenter">
           <h1>dq</h1>
         </div>
+        <!-- retrive password -->
+        <!-- login -->
         <div id="tc-wrap-parent" class>
-          <div v-if="err" id="tc-err-wrap">
-            <div id="tc-err" class="tc-title flex flexcenter"> Username or password is incorect</div>
+          <div v-if="err && !rpassword" id="tc-err-wrap">
+            <div id="tc-err" class="tc-title flex flexcenter">Username or password is incorect</div>
           </div>
 
-          <div id="tc-f-wrap">
+          <div v-if="rpassword" id="tc-f-wrap">
+            <div class="tc-wrap tc-input flex flexcol">
+              <span class="tc-title">Email</span>
+              <input id="dqloginRpassword" type="text">
+            </div>
+            <div class="tc-b flex">
+              <button @click="rp(true)" class="tc-b-inner">Retrieve password</button>
+            </div>
+          </div>
+
+          <div v-if="!rpassword" id="tc-f-wrap">
             <div class="tc-wrap tc-input flex flexcol">
               <span class="tc-title">Username</span>
-              <input type="text">
+              <input id="dqloginUsername" type="text">
             </div>
             <div class="tc-input flex flexcol">
               <span class="tc-title">Password</span>
@@ -29,6 +41,12 @@
             </div>
           </div>
         </div>
+        <div
+          v-if="!rpassword"
+          @click="rp(false)"
+          style="color:white;"
+          class="pad-125 pointer"
+        >retrieve lost password</div>
       </div>
     </div>
   </div>
@@ -41,6 +59,7 @@ export default {
     return {
       ready: false,
       err: false,
+      rpassword: false,
       username: undefined,
       password: undefined
     };
@@ -49,17 +68,34 @@ export default {
     spinner
   },
   methods: {
+    rp(state) {
+      if(state){
+        // send to server
+      }else{
+        this.rpassword = true;
+        document.getElementById('dqloginRpassword').focus()
+      }
+    },
     submit() {
-      this.err = true
+      this.err = true;
     }
   },
   mounted() {
-    setTimeout(() => {
-      this.ready = true;
-    }, 1000);
+    this.ready = false;
 
-    // make a request if the app is set then redirect to another page if it is set
-    // incase a user try to access this page again after initializing the page
+    this.$axios
+      .$get("dqapp/app")
+      .then(res => {
+        if (!res) {
+          location.href = "__dqinit";
+        } else {
+          this.ready = true;
+          document.getElementById("dqloginUsername").focus();
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 };
 </script>
@@ -122,7 +158,7 @@ export default {
   flex: 4;
 }
 .tc-input > input {
-  padding: calc(var(--fontSize) * 0.50);
+  padding: calc(var(--fontSize) * 0.5);
   margin-bottom: calc(var(--fontSize) * 0.25);
   color: var(--blue-text-2);
   font-weight: 600;
@@ -160,6 +196,7 @@ export default {
   cursor: pointer;
   border-radius: 2px;
 }
+
 #tc-err {
   background: #ae110036;
   max-height: 100px;
