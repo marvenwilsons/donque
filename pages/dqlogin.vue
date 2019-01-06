@@ -10,13 +10,13 @@
         <div id="tc-logo-h" class="flex fullwidth flexcenter">
           <h1>dq</h1>
         </div>
-        <!-- retrive password -->
-        <!-- login -->
+
         <div id="tc-wrap-parent" class>
           <div v-if="err && !rpassword" id="tc-err-wrap">
             <div id="tc-err" class="tc-title flex flexcenter">Username or password is incorect</div>
           </div>
 
+          <!-- retrive password -->
           <div v-if="rpassword" id="tc-f-wrap">
             <div class="tc-wrap tc-input flex flexcol">
               <span class="tc-title">Email</span>
@@ -26,7 +26,8 @@
               <button @click="rp(true)" class="tc-b-inner">Retrieve password</button>
             </div>
           </div>
-
+          
+          <!-- login -->
           <div v-if="!rpassword" id="tc-f-wrap">
             <div class="tc-wrap tc-input flex flexcol">
               <span class="tc-title">Username</span>
@@ -69,11 +70,11 @@ export default {
   },
   methods: {
     rp(state) {
-      if(state){
+      if (state) {
         // send to server
-      }else{
+      } else {
         this.rpassword = true;
-        document.getElementById('dqloginRpassword').focus()
+        document.getElementById("dqloginRpassword").focus();
       }
     },
     submit() {
