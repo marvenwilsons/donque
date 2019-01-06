@@ -6,22 +6,28 @@
       <div class="flex flexcenter" v-if="!ready">
         <spinner/>
       </div>
-      <div v-if="ready" id="dq-init-wrapper" class="flex flexwrap flexcenter">
+      <div v-if="ready" id="dq-init-wrapper" class="flex flexwrap flexcenter flexcol">
         <div id="tc-logo-h" class="flex fullwidth flexcenter">
           <h1>dq</h1>
         </div>
-        <div id="tc-f-wrap" class="">
-            <div class="tc-wrap tc-input">
-                <span class="tc-title">username: </span>
-                <input type="text">
+        <div id="tc-wrap-parent" class>
+          <div v-if="err" id="tc-err-wrap">
+            <div id="tc-err" class="tc-title flex flexcenter"> Username or password is incorect</div>
+          </div>
+
+          <div id="tc-f-wrap">
+            <div class="tc-wrap tc-input flex flexcol">
+              <span class="tc-title">Username</span>
+              <input type="text">
             </div>
-            <div class="tc-input">
-                <span class="tc-title">password: </span>
-                <input type="password">
+            <div class="tc-input flex flexcol">
+              <span class="tc-title">Password</span>
+              <input type="password">
             </div>
             <div class="tc-b flex">
-                <span class="tc-b-inner">Login</span>
+              <button @click="submit" class="tc-b-inner">Login</button>
             </div>
+          </div>
         </div>
       </div>
     </div>
@@ -34,18 +40,17 @@ export default {
   data() {
     return {
       ready: false,
+      err: false,
       username: undefined,
-      password: undefined,
+      password: undefined
     };
   },
   components: {
     spinner
   },
   methods: {
-
-
     submit() {
-
+      this.err = true
     }
   },
   mounted() {
@@ -81,12 +86,14 @@ export default {
   padding-left: calc(var(--fontSize) * 1.25);
   padding-right: calc(var(--fontSize) * 1.25);
 }
+#tc-wrap-parent {
+  box-shadow: 0px 0px 20px 1px rgba(0, 0, 0, 0.198);
+}
 #tc-f-wrap {
   background: white;
   padding: calc(var(--fontSize) * 1.25);
   padding-left: calc(var(--fontSize) * 2.25);
   padding-right: calc(var(--fontSize) * 2.25);
-  margin-bottom: calc(var(--fontSize) * 2.25);
 }
 #dq-init-wrapper {
   min-width: 650px;
@@ -109,16 +116,17 @@ export default {
 .tc-title {
   color: var(--blue-text-2);
   flex: 1;
-  font-weight: 600;
+  /* font-weight: 600; */
 }
 .tc-input {
   flex: 4;
 }
 .tc-input > input {
-  padding: calc(var(--fontSize) * 0.25);
+  padding: calc(var(--fontSize) * 0.50);
   margin-bottom: calc(var(--fontSize) * 0.25);
   color: var(--blue-text-2);
   font-weight: 600;
+  min-width: calc(var(--fontSize) * 15.25);
 }
 .tc-ind {
   flex: 0.5;
@@ -147,7 +155,19 @@ export default {
   padding: calc(var(--fontSize) * 0.5);
   padding-left: calc(var(--fontSize) * 1);
   padding-right: calc(var(--fontSize) * 1);
-  font-weight: 600;
+  /* font-weight: 600; */
+  border: 1px solid rgba(0, 0, 0, 0.335);
+  cursor: pointer;
+  border-radius: 2px;
+}
+#tc-err {
+  background: #ae110036;
+  max-height: 100px;
+  color: #ae1100;
+  padding: calc(var(--fontSize) * 1.25);
+}
+#tc-err-wrap {
+  background: white;
 }
 hr {
   color: #4a6976;

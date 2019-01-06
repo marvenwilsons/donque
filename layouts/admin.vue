@@ -70,6 +70,9 @@ export default {
   /* hovers */
   --hover-blue: var(--blue-2);
 
+  /* error color */
+  --err: #ae1100;
+
   /* fonts */
   --oxygen-mono: "Oxygen Mono", monospace;
   --ubunto-mono: "Ubuntu Mono", monospace;

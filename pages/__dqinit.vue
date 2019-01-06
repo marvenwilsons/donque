@@ -443,14 +443,14 @@ export default {
   margin: calc(var(--fontSize) * 1.25);
 }
 .tc-suc {
-  color: #00c09a;
+  color: #038203;
 }
 .tc-err {
-  color: red;
+  color: var(--err);
 }
 .und-err {
-  color: red;
-  border-bottom: 1px dashed red;
+  color: var(--err);
+  border-bottom: 1px dashed var(--err);
 }
 #tc-logo-h > h1 {
   color: white;
@@ -539,8 +539,8 @@ export default {
   padding: calc(var(--fontSize) * 0.5);
   padding-left: calc(var(--fontSize) * 1);
   padding-right: calc(var(--fontSize) * 1);
-  font-weight: 600;
-  box-shadow: 0px 1px 1px 1px var(--blue-2)
+  border: 1px solid rgba(0, 0, 0, 0.335);
+
 }
 hr {
   color: #4a6976;
