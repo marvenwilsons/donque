@@ -79,6 +79,7 @@ export default {
   --inconsolata: "Inconsolata", monospace;
   --lobster: 'Lobster', cursive;
   --cuprum: 'Cuprum', sans-serif;
+  --openSans: 'Open Sans', sans-serif;
 }
 .dq-pane-container-padding {
   padding-top: var(--size-1-half);
