@@ -3,14 +3,14 @@
 <template>
   <div id="dq-init-parent-wrapper" class="flex flexwrap relative">
     <div class="fullwidth flex absolute abs">
-      <div class="flex flexcenter" v-if="!ready">
+      <div class="flex flexcenter flex flexcenter flexcol" v-if="!ready">
         <spinner/>
       </div>
       <div v-if="ready" id="dq-init-wrapper" class="flex flexwrap">
         <div id="tc-logo-h" class="flex fullwidth flexcenter">
           <h1>dq</h1>
         </div>
-        <div id="tc-f-wrap" >
+        <div id="tc-f-wrap">
           <h5 class="tc">Welcome</h5>
           <hr>
           <p class="tc tt">
@@ -405,12 +405,12 @@ export default {
             this.ready = false;
             setTimeout(() => {
               if (res) {
-                location.reload()
+                location.reload();
               }
             }, 15000);
           })
           .catch(e => {
-            console.log(e);
+            alert(e)
           });
       }
     }
@@ -428,11 +428,9 @@ export default {
         }
       })
       .catch(err => {
-        alert(err)
+        alert(err);
       });
 
-    // make a request if the app is set then redirect to another page if it is set
-    // incase a user try to access this page again after initializing the page
   }
 };
 </script>
@@ -460,8 +458,8 @@ export default {
   padding-right: calc(var(--fontSize) * 1.25);
 }
 
-:root{
-  --bg-c:white;
+:root {
+  --bg-c: white;
 }
 
 #tc-f-wrap {
@@ -470,7 +468,7 @@ export default {
   padding-left: calc(var(--fontSize) * 2.25);
   padding-right: calc(var(--fontSize) * 2.25);
   margin-bottom: calc(var(--fontSize) * 2.25);
-  box-shadow: 0px 0px 20px 1px var(--blue-text-2)
+  box-shadow: 0px 0px 20px 1px var(--blue-text-2);
 }
 #dq-init-wrapper {
   min-width: 650px;
@@ -482,7 +480,7 @@ export default {
   background: var(--blue-1);
   min-height: 100vh;
 }
-.tc-f-wrap-inner{
+.tc-f-wrap-inner {
   /* border: 1px solid red; */
   border-radius: 5px;
   padding-left: calc(var(--fontSize) * 1.25);
@@ -510,7 +508,7 @@ export default {
   margin-bottom: calc(var(--fontSize) * 0.25);
   color: var(--blue-text-2);
   font-weight: 600;
-  background-color: var(--bg-c)
+  background-color: var(--bg-c);
 }
 .tc-ind {
   flex: 0.5;
@@ -540,7 +538,6 @@ export default {
   padding-left: calc(var(--fontSize) * 1);
   padding-right: calc(var(--fontSize) * 1);
   border: 1px solid rgba(0, 0, 0, 0.335);
-
 }
 hr {
   color: #4a6976;

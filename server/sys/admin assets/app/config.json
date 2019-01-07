@@ -1,3 +1,4 @@
 {
-    "mainDb":"JSON"
+    "mainDb":"JSON",
+    "jsonDir":"app"
 }

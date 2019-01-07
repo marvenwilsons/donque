@@ -4,7 +4,6 @@ const router = express.Router()
 const fs = require('fs')
 const path = require('path')
 const p = path.join(__dirname, '../../admin assets/app/')
-const tempJSON = require(path.join(__dirname, '../../admin assets/app/temp.json'))
 const appConfig = require(path.join(__dirname, '../../admin assets/app/config.json'))
 const dbAgent = require('./db-agent')
 const app = require('./app-agent')
@@ -15,6 +14,8 @@ router.get('/app', ({ res }) => {
 })
 
 router.post('/applogin', (req, res) => {
+    const tempJSON = require(path.join(__dirname, '../../admin assets/app/temp.json'))
+
     dbAgent.readFrom(dbAgent.mainDb(), tempJSON)
         .then(data => {
             if (data.username === req.body.username && data.password === req.body.password) {
@@ -30,7 +31,7 @@ router.post('/applogin', (req, res) => {
         })
         .catch(err => {
             res.status(200).json({
-                status:false,
+                status: false,
                 err: err
             })
         })
@@ -38,7 +39,6 @@ router.post('/applogin', (req, res) => {
 
 router.post('/initapp', function incoming(req, res) {
     // validate then init app
-    console.log(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/gim.exec(req.body.siteTitle) == null)
     const arr = [
         // should not have white spaces
         req.body.siteTitle.indexOf(" ") == -1,
@@ -60,22 +60,14 @@ router.post('/initapp', function incoming(req, res) {
     ]
 
     if (arr.every(e => e == true)) {
-        fs.writeFile(`${p}/temp.json`, JSON.stringify(req.body),
-            (err) => {
-                if (err) {
-                    res.status(500).json(false)
-                } else {
-                    res.status(200).json(true)
-                }
+        dbAgent
+            .createDb('JSON', 'temp',req.body)
+            .then(data => {
+                res.status(200).json(true)
             })
-        // dbAgent
-        // .createDb('JSON', 'admin', `${p}/temp.json`, JSON.stringify(req.body))
-        // .then(data => {
-        //     console.log(data)
-        // })
-        // .catch(err => {
-        //     console.log(err)
-        // })
+            .catch(err => {
+                res.status(500).json(false)
+            })
 
     } else {
         res.status(500).json(false)

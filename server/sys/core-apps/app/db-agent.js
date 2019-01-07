@@ -30,8 +30,11 @@ dbAgent.readFrom = (dbType, dbName) => {
 dbAgent.addFrom = (dbType, dbName, data) => {
     return new Promise((resolve, reject) => {
         dbAgent.dbHandler(dbType, dbName, 'create/entity', null, data, (err, res) => {
-            reject(err)
-            resolve(res)
+            if (err) {
+                reject(err)
+            } else {
+                resolve(res)
+            }
         })
     })
 }
@@ -41,8 +44,11 @@ dbAgent.addFrom = (dbType, dbName, data) => {
 dbAgent.createDb = (dbType, dbName, data) => {
     return new Promise((resolve, reject) => {
         dbAgent.dbHandler(dbType, dbName, 'create/database', null, data, (err, res) => {
-            reject(err)
-            resolve(res)
+            if (err) {
+                reject(err)
+            } else {
+                resolve(res)
+            }
         })
     })
 }
@@ -51,8 +57,11 @@ dbAgent.createDb = (dbType, dbName, data) => {
 dbAgent.renameDb = (dbType, oldName, newName) => {
     return new Promise((resolve, reject) => {
         dbAgent.dbHandler(dbType, dbName, 'update/database', null, { old: oldName, new: newName }, (err, res) => {
-            reject(err)
-            resolve(res)
+            if (err) {
+                reject(err)
+            } else {
+                resolve(res)
+            }
         })
     })
 }
@@ -63,8 +72,11 @@ dbAgent.renameDb = (dbType, oldName, newName) => {
 dbAgent.updateFrom = (dbType, dbName, data) => {
     return new Promise((resolve, reject) => {
         dbAgent.dbHandler(dbType, dbName, 'update/entity', null, { old: data.old, new: data.new }, (err, res) => {
-            reject(err)
-            resolve(res)
+            if (err) {
+                reject(err)
+            } else {
+                resolve(res)
+            }
         })
     })
 }
@@ -75,8 +87,11 @@ dbAgent.updateFrom = (dbType, dbName, data) => {
 dbAgent.removeFrom = (dbType, dbName, query) => {
     return new Promise((resolve, reject) => {
         dbAgent.dbHandler(dbType, dbName, 'delete/entity', query, null, (err, res) => {
-            reject(err)
-            resolve(res)
+            if (err) {
+                reject(err)
+            } else {
+                resolve(res)
+            }
         })
     })
 }
@@ -85,8 +100,11 @@ dbAgent.removeFrom = (dbType, dbName, query) => {
 dbAgent.deleteDb = (dbType, dbName) => {
     return new Promise((resolve, reject) => {
         dbAgent.dbHandler(dbType, dbName, 'delete/database', null, null, (err, res) => {
-            reject(err)
-            resolve(res)
+            if (err) {
+                reject(err)
+            } else {
+                resolve(res)
+            }
         })
     })
 }
@@ -95,8 +113,11 @@ dbAgent.deleteDb = (dbType, dbName) => {
 dbAgent.queryFrom = (dbType, dbName, query) => {
     return new Promise((resolve, reject) => {
         dbAgent.dbHandler(dbType, dbName, '*', query, null, (err, res) => {
-            reject(err)
-            resolve(res)
+            if (err) {
+                reject(err)
+            } else {
+                resolve(res)
+            }
         })
     })
 }
@@ -113,7 +134,7 @@ dbAgent.dbHandler = (dbType, dbName, method, query, data, callback) => {
                     if (err) {
                         callback(err, null)
                     } else {
-                        callback(null, res)
+                        callback(false, res)
                     }
                 })
                 break
@@ -123,7 +144,7 @@ dbAgent.dbHandler = (dbType, dbName, method, query, data, callback) => {
                     if (err) {
                         callback(err, null)
                     } else {
-                        callback(null, res)
+                        callback(false, res)
                     }
                 })
                 break
@@ -133,7 +154,7 @@ dbAgent.dbHandler = (dbType, dbName, method, query, data, callback) => {
                     if (err) {
                         callback(err, null)
                     } else {
-                        callback(null, res)
+                        callback(false, res)
                     }
                 })
                 break
@@ -142,7 +163,7 @@ dbAgent.dbHandler = (dbType, dbName, method, query, data, callback) => {
                     if (err) {
                         callback(err, null)
                     } else {
-                        callback(null, res)
+                        callback(false, res)
                     }
                 })
                 break
