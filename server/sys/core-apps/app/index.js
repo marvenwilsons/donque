@@ -10,29 +10,36 @@ const dbAgent = require('./db-agent')
 //
 const app = require('./app-agent')
 
-router.get('/app',  ({res}) => {
-    const isInit = fs.existsSync(path.join(__dirname, '../../admin assets/json/temp.json'))
+router.get('/app', ({ res }) => {
+    const isInit = fs.existsSync(path.join(__dirname, '../../admin assets/app/temp.json'))
     res.status(200).json(isInit)
 })
 
-router.post('/applogin', (req,res) => {
-    const userObj = JSON.parse(JSON.stringify(tempJSON))
-    
-    if(userObj.username === req.body.username && userObj.password === req.body.password){
-        res.status(200).json({
-            status: true,
-            token:'asjdhkfjhdsklfh82734'
+router.post('/applogin', (req, res) => {
+    dbAgent.readFrom(dbAgent.mainDb(), tempJSON)
+        .then(data => {
+            if (data.username === req.body.username && data.password === req.body.password) {
+                res.status(200).json({
+                    status: true,
+                    token: 'asjdhkfjhdsklfh82734'
+                })
+            } else {
+                res.status(200).json({
+                    status: false
+                })
+            }
         })
-    }else{
-        res.status(200).json({
-            status: false
+        .catch(err => {
+            res.status(200).json({
+                status:false,
+                err: err
+            })
         })
-    }
 })
 
 router.post('/initapp', function incoming(req, res) {
     // validate then init app
-    console.log(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/gim.exec(req.body.siteTitle) == null,)
+    console.log(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/gim.exec(req.body.siteTitle) == null)
     const arr = [
         // should not have white spaces
         req.body.siteTitle.indexOf(" ") == -1,
@@ -70,8 +77,8 @@ router.post('/initapp', function incoming(req, res) {
         // .catch(err => {
         //     console.log(err)
         // })
-        
-    }else{
+
+    } else {
         res.status(500).json(false)
     }
 

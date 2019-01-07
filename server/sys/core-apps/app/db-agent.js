@@ -2,15 +2,21 @@ const JSON_handler = require('./JSON_handler')
 const mongoDB_handler = require('./mongoDB_handler')
 const sql_handler = require('./sql_handler')
 const firebase_handler = require('./firebase_handler')
+const dbConfig = require('../../admin assets/app/config')
 
 
 let dbAgent = {}
+
+// retunrs the main db selected
+dbAgent.mainDb = () => {
+    return JSON.parse(JSON.stringify(dbConfig)).mainDb
+}
 
 // READ
 dbAgent.readFrom = (dbType, dbName) => {
     return new Promise((resolve, reject) => {
         //
-        dbAgent.dbHandler(dbType, dbName, 'read', null, (err, res) => {
+        dbAgent.dbHandler(dbType, dbName, 'read', null, null, (err, res) => {
             if (err) {
                 reject(err)
             } else {
@@ -149,5 +155,4 @@ dbAgent.dbHandler = (dbType, dbName, method, query, data, callback) => {
     }
 }
 
-delete dbAgent.dbHandler
 module.exports = dbAgent
