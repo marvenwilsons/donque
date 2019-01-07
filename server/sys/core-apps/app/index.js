@@ -5,9 +5,8 @@ const fs = require('fs')
 const path = require('path')
 const p = path.join(__dirname, '../../admin assets/app/')
 const tempJSON = require(path.join(__dirname, '../../admin assets/app/temp.json'))
+const appConfig = require(path.join(__dirname, '../../admin assets/app/config.json'))
 const dbAgent = require('./db-agent')
-
-//
 const app = require('./app-agent')
 
 router.get('/app', ({ res }) => {
