@@ -32,10 +32,16 @@ export default {
   },
   mounted() {
     this.$store.dispatch("firstLoad");
-
     if(!this.$store.state.app){
       location.href = "__dqinit"
+    }else{
+      if(localStorage.getItem('auth')){
+      }else{
+        location.href = "dqlogin"
+      }
     }
+
+
   },
 };
 </script>

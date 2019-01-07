@@ -26,7 +26,7 @@
               <button @click="rp(true)" class="tc-b-inner">Retrieve password</button>
             </div>
           </div>
-          
+
           <!-- login -->
           <div v-if="!rpassword" class="tc-f-wrap">
             <div class="tc-wrap tc-input flex flexcol">
@@ -61,7 +61,7 @@ export default {
       ready: false,
       err: false,
       rpassword: false,
-      email:undefined,
+      email: undefined,
       username: undefined,
       password: undefined
     };
@@ -73,30 +73,36 @@ export default {
     rp(state) {
       if (state) {
         // send to server
-        console.log(state)
+        console.log(state);
       } else {
         this.rpassword = true;
       }
     },
     submit() {
       // this.err = true;
-      let userCred = {}
-      userCred.username = this.username
-      userCred.password = this.password
-      this.$axios.$post('dqapp/applogin', userCred)
-      .then(res => {
-        if(res.status){
-          location.href = 'admin'
-        }else{
-          this.err = true
-        }
-      })
-      .catch(err => {
-        alert(err)  
-      })
+      let userCred = {};
+      userCred.username = this.username;
+      userCred.password = this.password;
+      this.$axios
+        .$post("dqapp/applogin", userCred)
+        .then(data => {
+          if (data.status) {
+            // set localstorage
+            localStorage.setItem("auth", data.token);
+            if (localStorage.getItem("auth")) {
+              location.href = "admin";
+            }
+          } else {
+            this.err = true;
+          }
+        })
+        .catch(err => {
+          alert(err);
+        });
     }
   },
   mounted() {
+    localStorage.clear();
     this.ready = false;
 
     this.$axios
@@ -109,7 +115,7 @@ export default {
         }
       })
       .catch(err => {
-        alert(err)
+        alert(err);
       });
   }
 };

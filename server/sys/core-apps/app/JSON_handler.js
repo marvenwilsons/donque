@@ -29,7 +29,6 @@ class _json {
                     
                     fs.writeFile(_loc, JSON.stringify(data),(err,res) => {
                         if(err){
-                            console.log('this?')
                             callback(true, null)
                         }else{
                             callback(false,{

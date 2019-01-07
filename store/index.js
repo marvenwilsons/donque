@@ -44,7 +44,7 @@ const createStore = () => {
                 })
             },
             nuxtServerInit(vuexContext,context) {
-                return this.$axios.$get('/dqapp/init')
+                return this.$axios.$get('/dqapp/app')
                 .then(res => {
                     // store to state
                     vuexContext.commit('setApp',res)
