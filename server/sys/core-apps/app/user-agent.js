@@ -12,6 +12,9 @@ class dqUserAgent {
     deleteUser(){
 
     }
+    generateUserToken(){
+        
+    }
 }
 
 module.exports = dqUserAgent

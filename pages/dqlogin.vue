@@ -17,10 +17,10 @@
           </div>
 
           <!-- retrive password -->
-          <div v-if="rpassword" id="tc-f-wrap">
+          <div v-if="rpassword" class="tc-f-wrap">
             <div class="tc-wrap tc-input flex flexcol">
               <span class="tc-title">Email</span>
-              <input id="dqloginRpassword" type="text">
+              <input v-mode="email" type="text">
             </div>
             <div class="tc-b flex">
               <button @click="rp(true)" class="tc-b-inner">Retrieve password</button>
@@ -28,14 +28,14 @@
           </div>
           
           <!-- login -->
-          <div v-if="!rpassword" id="tc-f-wrap">
+          <div v-if="!rpassword" class="tc-f-wrap">
             <div class="tc-wrap tc-input flex flexcol">
               <span class="tc-title">Username</span>
-              <input id="dqloginUsername" type="text">
+              <input v-model="username" id="dqloginUsername" type="text">
             </div>
             <div class="tc-input flex flexcol">
               <span class="tc-title">Password</span>
-              <input type="password">
+              <input v-model="password" type="password">
             </div>
             <div class="tc-b flex">
               <button @click="submit" class="tc-b-inner">Login</button>
@@ -47,7 +47,7 @@
           @click="rp(false)"
           style="color:white;"
           class="pad-125 pointer"
-        >retrieve lost password</div>
+        >- Retrieve lost password</div>
       </div>
     </div>
   </div>
@@ -61,6 +61,7 @@ export default {
       ready: false,
       err: false,
       rpassword: false,
+      email:undefined,
       username: undefined,
       password: undefined
     };
@@ -72,13 +73,27 @@ export default {
     rp(state) {
       if (state) {
         // send to server
+        console.log(state)
       } else {
         this.rpassword = true;
-        document.getElementById("dqloginRpassword").focus();
       }
     },
     submit() {
-      this.err = true;
+      // this.err = true;
+      let userCred = {}
+      userCred.username = this.username
+      userCred.password = this.password
+      this.$axios.$post('dqapp/applogin', userCred)
+      .then(res => {
+        if(res.status){
+          location.href = 'admin'
+        }else{
+          this.err = true
+        }
+      })
+      .catch(err => {
+        alert(err)  
+      })
     }
   },
   mounted() {
@@ -91,11 +106,10 @@ export default {
           location.href = "__dqinit";
         } else {
           this.ready = true;
-          document.getElementById("dqloginUsername").focus();
         }
       })
       .catch(err => {
-        console.log(err);
+        alert(err)
       });
   }
 };
@@ -126,7 +140,7 @@ export default {
 #tc-wrap-parent {
   box-shadow: 0px 0px 20px 1px rgba(0, 0, 0, 0.198);
 }
-#tc-f-wrap {
+.tc-f-wrap {
   background: white;
   padding: calc(var(--fontSize) * 1.25);
   padding-left: calc(var(--fontSize) * 2.25);

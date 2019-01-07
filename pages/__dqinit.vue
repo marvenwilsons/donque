@@ -428,7 +428,7 @@ export default {
         }
       })
       .catch(err => {
-        console.log(err);
+        alert(err)
       });
 
     // make a request if the app is set then redirect to another page if it is set

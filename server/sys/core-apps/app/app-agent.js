@@ -25,56 +25,61 @@ dqApp.adminIsSet = () => {
 
 // Admin section *****
 
-// returns an array of admin names
-dqApp.admins = () => {
+    // returns an array of admin names
+    dqApp.users = () => {
 
-}
+    }
 
-// creates new admin
-dqApp.createAdmin = (admin_schem) => {
+    // creates new admin
+    dqApp.createUser = (admin_schem) => {
 
-}
+    }
 
-// delete the admin
-dqApp.deleteAdmin = (admin_code) => {
+    // delete the admin
+    dqApp.deleteUser = (user_code) => {
 
-}
+    }
 
-// returns an object that represents the brief outline of an admin
-// that will be view in the front end
-dqApp.adminProfile = (admin_code) => {
+    // returns an object that represents the brief outline of an admin
+    // that will be view in the front end
+    dqApp.userProfile = (user_code) => {
 
-}
+    }
 
-// assigns admin permission
-dqApp.assignAdminPermission = (admin_unicode) => {
+    // assigns admin permission
+    dqApp.assignUserPermission = (admin_unicode) => {
 
-}
+    }
 
-// updating admin permission
-dqApp.updateAdminPermission = (admin_unicode,permission_type) => {
+    // updating admin permission
+    dqApp.updateUserPermission = (admin_unicode,permission_type) => {
 
-}
+    }
 
-// returns an array of classes that a certain admin can access
-dqApp.adminClassAccessList = (admin_code) => {
+    // returns an array of classes that a certain admin can access
+    dqApp.userClassAccessList = (user_code) => {
 
-}
+    }
 
-// retunrs an array of sections in the dashboard that an adminc can access
-dqApp.adminSectionAccessList = (admin_code) => {
+    // retunrs an array of sections in the dashboard that an adminc can access
+    dqApp.userSectionAccessList = (user_code) => {
 
-}
+    }
 
-// returns a login trace of a certain admin
-dqApp.adminLogins = (admin_code) => {
+    // returns a login trace of a certain admin
+    dqApp.userLogins = (user_code) => {
 
-}
+    }
 
-// admin object
-dqApp.admin = (admin_code)=> {
+    //
+    dqApp.generateUserAuthToken = (user_code) => {
 
-}
+    }
+
+    // admin object
+    dqApp.admin = (user_code)=> {
+
+    }
 
 // app pages *****
 
