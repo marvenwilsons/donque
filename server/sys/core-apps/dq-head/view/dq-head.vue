@@ -5,14 +5,18 @@
         </div>
         <div class="flex">
             <div class="dqhead-items">Marven Wilson Donque</div>
-            <div class="dqhead-items">sign out</div>
+            <div @click="logout" class="dqhead-items pointer">sign out</div>
         </div>
     </div>
 </template>
 
 <script>
 export default {
-    
+    methods:{
+        logout(){
+            location.href = "dqlogin"
+        }
+    }
 }
 </script>
 

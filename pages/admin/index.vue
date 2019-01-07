@@ -14,6 +14,7 @@ import main_window from "@/server/sys/core-apps/pane-system/main-window/main-win
 import docker from "@/server/sys/core-apps/pane-system/docker/docker.vue";
 import notify from "@/server/sys/core-apps/notify/view/notify.vue";
 import dqhead from "@/server/sys/core-apps/dq-head/view/dq-head.vue";
+import spinner from "@/server/sys/core-apps/pane-system/module/spinner-1.vue";
 
 export default {
   data() {
@@ -24,7 +25,8 @@ export default {
     docker,
     notify,
     dqhead,
-    main_window
+    main_window,
+    spinner
   },
   layout: "admin",
 };
