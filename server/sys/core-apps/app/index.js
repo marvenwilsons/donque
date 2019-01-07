@@ -5,6 +5,7 @@ const fs = require('fs')
 const path = require('path')
 const p = path.join(__dirname, '../../admin assets/app/')
 const tempJSON = require(path.join(__dirname, '../../admin assets/app/temp.json'))
+const dbAgent = require('./db-agent')
 
 //
 const app = require('./app-agent')
@@ -61,6 +62,15 @@ router.post('/initapp', function incoming(req, res) {
                     res.status(200).json(true)
                 }
             })
+        // dbAgent
+        // .createDb('JSON', 'admin', `${p}/temp.json`, JSON.stringify(req.body))
+        // .then(data => {
+        //     console.log(data)
+        // })
+        // .catch(err => {
+        //     console.log(err)
+        // })
+        
     }else{
         res.status(500).json(false)
     }
