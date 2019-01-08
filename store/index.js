@@ -36,6 +36,7 @@ const createStore = () => {
                 }
             },
             firstLoad: ({commit}) => {
+                console.log('hey')
                 commit('addComponent', {
                     component: {
                         name: 'dashboard'

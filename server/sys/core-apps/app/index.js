@@ -60,6 +60,8 @@ router.post('/initapp', function incoming(req, res) {
     ]
 
     if (arr.every(e => e == true)) {
+        // assign access level as owner
+        // 
         dbAgent
             .createDb('JSON', 'temp',req.body)
             .then(data => {

@@ -179,6 +179,9 @@ export default {
       n[0].name == 'dashboard' && this.activate(9)
     }
   },
+  mounted(){
+    this.activate(9)
+  },
   components: {
     sender
   }
