@@ -23,23 +23,26 @@ dqApp.adminIsSet = () => {
 
 }
 
-// Admin section *****
-
-    // returns an array of admin names
-    dqApp.users = () => {
+// User section *****
+    dqApp.createUser = (schem) => {
 
     }
 
-    // creates new admin
-    dqApp.createUser = (admin_schem) => {
+    dqApp.updateUser = () => {
 
     }
 
-    // delete the admin
-    dqApp.deleteUser = (user_code) => {
+    dqApp.deleteUser = () => {
 
     }
 
+    dqApp.queryUser = () => {
+
+    }
+
+    dqApp.getUsers = () => {
+
+    }
     // returns an object that represents the brief outline of an admin
     // that will be view in the front end
     dqApp.userProfile = (user_code) => {
@@ -76,11 +79,6 @@ dqApp.adminIsSet = () => {
 
     }
 
-    // admin object
-    dqApp.admin = (user_code)=> {
-
-    }
-
 // app pages *****
 
     // create new page
@@ -114,6 +112,7 @@ dqApp.adminIsSet = () => {
     dqApp.deleteCollection = (collection_name) => {
 
     }
+
 
 // app configurations *****
 

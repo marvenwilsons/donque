@@ -19,16 +19,16 @@
         </span>
       </div>
     </div>
-      <nuxt v-if="ready"/>
+    <nuxt v-if="ready"/>
   </main>
 </template>
 
 <script>
 export default {
-  data(){
+  data() {
     return {
       ready: false
-    }
+    };
   },
   methods: {
     closeModal() {
@@ -37,17 +37,23 @@ export default {
   },
   mounted() {
     this.$store.dispatch("firstLoad");
-    if(!this.$store.state.app){
-      location.href = "__dqinit"
-    }else{
-      if(localStorage.getItem('auth')){
-        this.ready = true
-      }else{
-        this.ready = false
-        location.href = "dqlogin"
+    if (!this.$store.state.app) {
+      location.href = "__dqinit";
+    } else {
+      if (localStorage.getItem("auth")) {
+        this.ready = true;
+      } else {
+        this.ready = false;
+        location.href = "dqlogin";
       }
     }
-  },
+    
+    // only trigger when there is unsaved changes
+    // window.onbeforeunload = function() {
+    //   localStorage.clear()
+    //   return "Changes may not be saved";
+    // };
+  }
 };
 </script>
 
@@ -88,9 +94,9 @@ export default {
   --oxygen-mono: "Oxygen Mono", monospace;
   --ubunto-mono: "Ubuntu Mono", monospace;
   --inconsolata: "Inconsolata", monospace;
-  --lobster: 'Lobster', cursive;
-  --cuprum: 'Cuprum', sans-serif;
-  --openSans: 'Open Sans', sans-serif;
+  --lobster: "Lobster", cursive;
+  --cuprum: "Cuprum", sans-serif;
+  --openSans: "Open Sans", sans-serif;
 }
 .dq-pane-container-padding {
   padding-top: var(--size-1-half);

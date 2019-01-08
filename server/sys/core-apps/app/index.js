@@ -61,7 +61,11 @@ router.post('/initapp', function incoming(req, res) {
 
     if (arr.every(e => e == true)) {
         // assign access level as owner
+        // add token property
+        // add logins property
         // 
+        const user = {}
+        
         dbAgent
             .createDb('JSON', 'temp',req.body)
             .then(data => {
