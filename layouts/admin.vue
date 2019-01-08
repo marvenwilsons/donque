@@ -19,12 +19,17 @@
         </span>
       </div>
     </div>
-      <nuxt/>
+      <nuxt v-if="ready"/>
   </main>
 </template>
 
 <script>
 export default {
+  data(){
+    return {
+      ready: false
+    }
+  },
   methods: {
     closeModal() {
       this.$store.state.modal.visibility = false;
@@ -36,7 +41,9 @@ export default {
       location.href = "__dqinit"
     }else{
       if(localStorage.getItem('auth')){
+        this.ready = true
       }else{
+        this.ready = false
         location.href = "dqlogin"
       }
     }
