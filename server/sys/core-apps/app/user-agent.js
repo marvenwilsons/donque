@@ -16,7 +16,8 @@ class dqUserAgent {
         this.token_is_expired = undefined
         this.access_level = undefined // r w rw
         this.ClassAccessList = []
-        this.userSectionAccessList = []
+        this.userSectionAccessList = [],
+        this.sessionId = undefined
     }
     
     // Getter

@@ -23,7 +23,7 @@ dqApp.adminIsSet = () => {
 
 }
 
-// User section *****
+// class a access type methods *****
     dqApp.createUser = (schem) => {
 
     }
