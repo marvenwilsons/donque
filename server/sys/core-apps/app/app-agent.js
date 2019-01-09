@@ -24,55 +24,6 @@ dqApp.adminIsSet = () => {
 }
 
 // class a access type methods *****
-    dqApp.createUser = (schem) => {
-
-    }
-
-    dqApp.updateUser = () => {
-
-    }
-
-    dqApp.deleteUser = () => {
-
-    }
-
-    dqApp.queryUser = () => {
-
-    }
-
-    dqApp.getUsers = () => {
-
-    }
-    // returns an object that represents the brief outline of an admin
-    // that will be view in the front end
-    dqApp.userProfile = (user_code) => {
-
-    }
-
-    // assigns admin permission
-    dqApp.assignUserPermission = (admin_unicode) => {
-
-    }
-
-    // updating admin permission
-    dqApp.updateUserPermission = (admin_unicode,permission_type) => {
-
-    }
-
-    // returns an array of classes that a certain admin can access
-    dqApp.userClassAccessList = (user_code) => {
-
-    }
-
-    // retunrs an array of sections in the dashboard that an adminc can access
-    dqApp.userSectionAccessList = (user_code) => {
-
-    }
-
-    // returns a login trace of a certain admin
-    dqApp.userLogins = (user_code) => {
-
-    }
 
     //
     dqApp.generateUserAuthToken = (user_code) => {
