@@ -56,6 +56,7 @@ router.post('/initapp', function incoming(req, res) {
         appAgent
             .staticMethods('mass-validate', req.body.siteTitle)
             .hasSpecialCharacters(false)
+            .hasWhiteSpace(false)
             .required()
             .isTrue(req.body.siteTitle.length > 2)
             .done()
@@ -63,25 +64,51 @@ router.post('/initapp', function incoming(req, res) {
     const username =
         appAgent
             .staticMethods('mass-validate', req.body.username)
+            .hasSpecialCharacters(false)
+            .hasWhiteSpace(false)
+            .required()
+            .isTrue(req.body.username.length > 6)
+            .done()
+
+    const password = 
+        appAgent
+            .staticMethods('mass-validate', req.body.password)
+            .hasSpecialCharacters()
+            .isTrue(req.body.password.length > 6)
+            .required()
+            .done()
+
+    const email = 
+        appAgent
+            .staticMethods('mass-validate', req.body.email)
+            .required()
+            .done()
 
     // b.
     const v = [
-        siteTitle
+        siteTitle,
+        username,
+        password,
+        email
     ]
 
     if (v.every(items => items != true)) {
         res.status(500).json(false)
     } else {
     // c.
-
-        dbAgent
-            .createDb('JSON', 'temp', req.body)
-            .then(data => {
-                res.status(200).json(true)
-            })
-            .catch(err => {
-                res.status(500).json(false)
-            })
+        req.body.autToken = undefined
+        req.body.uId = undefined
+        req.body.sessionId = undefined
+        req.body.tokenExpyrDate = undefined
+        
+        // dbAgent
+        //     .createDb('JSON', 'temp', req.body)
+        //     .then(data => {
+        //         res.status(200).json(true)
+        //     })
+        //     .catch(err => {
+        //         res.status(500).json(false)
+        //     })
     }
 })
 
