@@ -24,18 +24,18 @@ const createStore = () => {
             }
         },
         actions: {
-            close_pane: ({commit},payload) => {
-                commit('close_pane',payload)
-                if(payload.position == 0){
-                    commit('addComponent',{
-                        component:{
-                            name:'dashboard'
+            close_pane: ({ commit }, payload) => {
+                commit('close_pane', payload)
+                if (payload.position == 0) {
+                    commit('addComponent', {
+                        component: {
+                            name: 'dashboard'
                         },
-                        position:0
+                        position: 0
                     })
                 }
             },
-            firstLoad: ({commit}) => {
+            firstLoad: ({ commit }) => {
                 console.log('hey')
                 commit('addComponent', {
                     component: {
@@ -44,30 +44,34 @@ const createStore = () => {
                     position: 0
                 })
             },
-            nuxtServerInit(store,context) {
+            nuxtServerInit(store, context) {
                 // on every first load after login
                 let request = {}
                 request.componentName = context.route.matched[0].name
 
                 return this.$axios.$get('/dqapp/app')
-                .then(res => {
-                    // store to state
-                    store.commit('setApp',res)
-                })
-                .then(() => {
-                    this.$axios.$post('/dqapp/init', request)
-                    .then(data => {
-                        console.log(data)
+                    .then(res => {
+                        // store to state
+                        store.commit('setApp', res)
+                        if (res) {
+                            this.$axios.$post('/dqapp/init', request)
+                                .then(data => {
+                                    console.log(data)
+                                })
+                                .catch(err => {
+                                    console.log('this is err')
+                                    console.log(err)
+                                })
+                        }
                     })
-                })
-                .catch(e => {
-                    context.error(e)
-                })
+                    .catch(e => {
+                        context.error(e)
+                    })
             }
 
         },
         mutations: {
-            setApp(state,payload){
+            setApp(state, payload) {
                 state.app = payload
             },
             close_pane(state, payload) {
