@@ -68,7 +68,6 @@ class validate {
             }else {
                 return this.final.filter(e => e != true)
             }
-            return this.final
         }
     }
 }
