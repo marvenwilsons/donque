@@ -25,28 +25,61 @@ class dqApp {
             return {
                 isString: value => typeof value == 'string',
                 isNumber: value => typeof value == 'number',
-                hasSpecialCharacter: value => {
+                hasSpecialCharacter: (value,condition) => {
 
                 },
                 hasCharacterSet: (charactersArray, value) => {
 
                 },
-                hasWhiteSpace: value => {
+                hasWhiteSpace: (value, condition)  => {
 
                 },
-                hasCapitalLetters: value => {
+                hasCapitalLetters: (value, condition)  => {
 
                 },
-                hasSmallLetters: value => {
+                hasSmallLetters: (value, condition)  => {
 
                 },
-                hasSmallAndBigLetters: value => {
+                hasSmallAndBigLetters: (value, condition)  => {
 
                 }
             }
         }
         else if (name == 'mass-validate') {
             return new staticValidate(data)
+        }
+        else if(name == 'utils') {
+            const alphabets_allcaps = 'ABCDEFGHIJKLMOPQRSTUVWXYZ'
+            const alphabets_smallcaps = 'abcdefghijklmnopqrstuvwxyz'
+            const alphabets_mix = 'aAbBCcdDeEfFgGHhiIjJkKLlmMNnOoPpqQrRsStTUvVwWXyYZz'
+            const numbers = '0123456789987654321'
+            const specialChars = '!@#$%^&*()_+{}|:"<>?;'
+
+            return {
+                generateRandomAlphabet: (length,mode) => {
+                    var emptyString = "";
+                    var chosen_mode = undefined
+
+                    if(mode == 'allcaps'){
+                        chosen_mode = alphabets_allcaps
+                    }else if(mode == 'smallcaps'){
+                        chosen_mode = alphabets_smallcaps
+                    }else if(mode == 'mix'){
+                        chosen_mode = alphabets_mix
+                    }
+
+                    while (emptyString.length < length) {
+                        emptyString += chosen_mode[Math.floor(Math.random() * chosen_mode.length)];
+                    }
+                    return emptyString
+                },
+                generateRandomNumber: (length) => {
+
+                },
+                generateRandomSpecialCharacters: (length) => {
+
+                }
+            }
         }
     }
 

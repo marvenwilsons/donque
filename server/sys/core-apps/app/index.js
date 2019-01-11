@@ -96,19 +96,21 @@ router.post('/initapp', function incoming(req, res) {
         res.status(500).json(false)
     } else {
     // c.
-        req.body.autToken = undefined
-        req.body.uId = undefined
-        req.body.sessionId = undefined
+        req.body.autToken = appAgent.staticMethods('utils').generateRandomAlphabet(100, 'mix')
+        req.body.uId = appAgent.staticMethods('utils').generateRandomAlphabet(20, 'mix')
+        req.body.sessionId = appAgent.staticMethods('utils').generateRandomAlphabet(15, 'mix')
         req.body.tokenExpyrDate = undefined
-        
-        // dbAgent
-        //     .createDb('JSON', 'temp', req.body)
-        //     .then(data => {
-        //         res.status(200).json(true)
-        //     })
-        //     .catch(err => {
-        //         res.status(500).json(false)
-        //     })
+        // req.body.password = appAgent.staticMethods('utils').hash(req.body.password)
+
+
+        dbAgent
+            .createDb('JSON', 'temp', req.body)
+            .then(data => {
+                res.status(200).json(true)
+            })
+            .catch(err => {
+                res.status(500).json(false)
+            })
     }
 })
 
