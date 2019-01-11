@@ -17,6 +17,24 @@ class dqApp {
         }
     }
 
+    get checklist() {
+        // return {
+        //     "initializing app" : undefined,
+        //     "admin logging in" : undefined,
+        //     "user logging in":undefined
+        // }
+    }
+
+    static staticMethods(name){
+        if(name == 'validate'){
+            return {
+                isString: () => {
+
+                }
+            }
+        }
+    }
+
     changeMainDb(){
 
     }

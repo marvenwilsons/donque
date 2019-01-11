@@ -7,6 +7,7 @@ const p = path.join(__dirname, '../../admin assets/app/')
 const appConfig = require(path.join(__dirname, '../../admin assets/app/config.json'))
 const dbAgent = require('./db-agent')
 const appAgent = require('./app-agent')
+const app = new appAgent
 const userAgent = require('./user-agent')
 
 router.get('/app', ({ res }) => {
@@ -85,11 +86,11 @@ router.post('/initapp', function incoming(req, res) {
 router.post('/init', function incoming(req,res) {
 
     //
-    const app = new appAgent
     const config = app.adminConfig
 
+    console.log(appAgent.staticMethods('validate'))
     //
-    if(req.body.componentName == config.landing){
+    if (config.isSet && req.body.componentName == config.landing){
         // get app's current admin
         // return admin object
         console.log(config.isSet)
