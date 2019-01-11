@@ -6,7 +6,8 @@ const path = require('path')
 const p = path.join(__dirname, '../../admin assets/app/')
 const appConfig = require(path.join(__dirname, '../../admin assets/app/config.json'))
 const dbAgent = require('./db-agent')
-const app = require('./app-agent')
+const appAgent = require('./app-agent')
+const userAgent = require('./user-agent')
 
 router.get('/app', ({ res }) => {
     const isInit = fs.existsSync(path.join(__dirname, '../../admin assets/app/temp.json'))
@@ -82,11 +83,16 @@ router.post('/initapp', function incoming(req, res) {
 })
 
 router.post('/init', function incoming(req,res) {
-    if(req.body.componentName == 'admin'){
+    const app = new appAgent
+    if(req.body.componentName == app.adminConfig.landing){
         // get app's current admin
         // return admin object
+        console.log(app.adminConfig.landing)
+
+        console.log('yes')
     }else{
         console.log('no')
+        res.status(200).json(false)
     }
     
     if (true) {

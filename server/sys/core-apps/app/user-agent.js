@@ -59,8 +59,8 @@ class dqUserAgent {
 }
 
 // usage
-const user = new dqUserAgent(undefined,'username','password','desc')
-user.createUser()
+// const user = new dqUserAgent(undefined,'username','password','desc')
+// user.createUser()
 
 
 module.exports = dqUserAgent
