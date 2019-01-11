@@ -40,6 +40,40 @@ router.post('/applogin', (req, res) => {
 })
 
 router.post('/initapp', function incoming(req, res) {
+
+    /** Checklist
+     *      a. validate req.body
+     *      b. confirm validation
+     *      c. create db
+     */
+
+
+    // a. 
+    const siteTitle =
+        appAgent
+            .staticMethods('mass-validate', req.body.siteTitle)
+            .hasCapitalLetters()
+            .isTrue(req.body.siteTitle.length > 2)
+            .done()
+    
+    const username = 
+        appAgent
+            .staticMethods('mass-validate', req.body.username)
+
+    // b.
+    const v = [
+        siteTitle
+    ]
+
+    if (v.every(items => items != true)) {
+        res.status(500).json(false)
+    } else {
+        res.status(200).json(true)
+    }
+
+    // c.
+
+
     // validate then init app
     const arr = [
         // should not have white spaces
@@ -67,9 +101,9 @@ router.post('/initapp', function incoming(req, res) {
         // add logins property
         // 
         const user = {}
-        
+
         dbAgent
-            .createDb('JSON', 'temp',req.body)
+            .createDb('JSON', 'temp', req.body)
             .then(data => {
                 res.status(200).json(true)
             })
@@ -83,24 +117,23 @@ router.post('/initapp', function incoming(req, res) {
 
 })
 
-router.post('/init', function incoming(req,res) {
+router.post('/init', function incoming(req, res) {
 
     //
     const config = app.adminConfig
 
-    console.log(appAgent.staticMethods('validate'))
     //
-    if (config.isSet && req.body.componentName == config.landing){
+    if (config.isSet && req.body.componentName == config.landing) {
         // get app's current admin
         // return admin object
         console.log(config.isSet)
 
         console.log('yes')
-    }else{
+    } else {
         console.log('no')
         res.status(200).json(false)
     }
-    
+
     if (true) {
         res.status(200).json(req.body)
     } else {

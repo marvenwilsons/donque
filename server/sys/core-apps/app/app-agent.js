@@ -1,6 +1,7 @@
 const path = require('path')
 const appConfig = require(path.join(__dirname, '../../admin assets/app/config.json'))
 const _appConfig = JSON.parse(JSON.stringify(appConfig))
+const staticValidate = require('./static-validate')
 
 class dqApp {
     constructor(appTitle, appDescription, admin) {
@@ -17,29 +18,41 @@ class dqApp {
         }
     }
 
-    get checklist() {
-        // return {
-        //     "initializing app" : undefined,
-        //     "admin logging in" : undefined,
-        //     "user logging in":undefined
-        // }
-    }
-
-    static staticMethods(name){
-        if(name == 'validate'){
+    static staticMethods(name, data) {
+        if (name == 'validate') {
             return {
-                isString: () => {
+                isString: value => typeof value == 'string',
+                isNumber: value => typeof value == 'number',
+                hasSpecialCharacter: value => {
+
+                },
+                hasCharacterSet: (charactersArray, value) => {
+
+                },
+                hasWhiteSpace: value => {
+
+                },
+                hasCapitalLetters: value => {
+
+                },
+                hasSmallLetters: value => {
+
+                },
+                hasSmallAndBigLetters: value => {
 
                 }
             }
         }
+        else if (name == 'mass-validate') {
+            return new staticValidate(data)
+        }
     }
 
-    changeMainDb(){
+    changeMainDb() {
 
     }
 
-    installDbSupport(){
+    installDbSupport() {
 
     }
 
