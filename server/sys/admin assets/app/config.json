@@ -1,4 +1,5 @@
 {
     "mainDb":"JSON",
-    "jsonDir":"app"
+    "jsonDir":"app",
+    "adminLanding":"admin"
 }
