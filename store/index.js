@@ -44,11 +44,21 @@ const createStore = () => {
                     position: 0
                 })
             },
-            nuxtServerInit(vuexContext,context) {
+            nuxtServerInit(store,context) {
+                // on every first load after login
+                let request = {}
+                request.componentName = context.route.matched[0].name
+
                 return this.$axios.$get('/dqapp/app')
                 .then(res => {
                     // store to state
-                    vuexContext.commit('setApp',res)
+                    store.commit('setApp',res)
+                })
+                .then(() => {
+                    this.$axios.$post('/dqapp/init', request)
+                    .then(data => {
+                        console.log(data)
+                    })
                 })
                 .catch(e => {
                     context.error(e)

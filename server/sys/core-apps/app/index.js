@@ -81,9 +81,16 @@ router.post('/initapp', function incoming(req, res) {
 
 })
 
-router.get('/init', function incoming({ res }) {
-    if (app.isSet()) {
-        res.status(200).json(true)
+router.post('/init', function incoming(req,res) {
+    if(req.body.componentName == 'admin'){
+        // get app's current admin
+        // return admin object
+    }else{
+        console.log('no')
+    }
+    
+    if (true) {
+        res.status(200).json(req.body)
     } else {
         res.status(200).json(false)
     }

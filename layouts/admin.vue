@@ -35,8 +35,14 @@ export default {
       this.$store.state.modal.visibility = false;
     }
   },
+  beforeMount(){
+    // alert('yow!')
+  },
   mounted() {
+    // for docker
     this.$store.dispatch("firstLoad");
+
+    //
     if (!this.$store.state.app) {
       location.href = "__dqinit";
     } else {
