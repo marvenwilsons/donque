@@ -81,4 +81,7 @@ dist
 .idea
 
 server/sys/admin assets/json/*
+
 server/sys/core-apps/app/temp.js
+
+temp.js
