@@ -1,4 +1,5 @@
 const path = require('path')
+const fs = require('fs')
 const appConfig = require(path.join(__dirname, '../../admin assets/app/config.json'))
 const _appConfig = JSON.parse(JSON.stringify(appConfig))
 const staticValidate = require('./static-validate')
@@ -11,9 +12,10 @@ class dqApp {
         this.users = undefined
     }
     //getters
-    get adminConfig() {
+    get appConfig() {
         return {
-            isSet: typeof JSON.parse(JSON.stringify(appConfig)) == 'object' && Object.keys(_appConfig).length != 0,
+            isSet: typeof _appConfig == 'object' && Object.keys(_appConfig).length != 0,
+            adminIsSet: fs.existsSync(path.join(__dirname, `../../admin assets/app/${_appConfig.adminPath}`)),
             landing: _appConfig.adminLanding
         }
     }
