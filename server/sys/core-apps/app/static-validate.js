@@ -29,19 +29,32 @@ class validate {
             this.data.length > number ? this.final.push(true) : this.final.push(`should only have ${number} maximum characters`)
             return this
         }
-        this.hasCapitalLetters = () => {
+        this.hasCapitalLetters = (condition) => {
             const regex = /.*[A-Z]/g;
-            regex.exec(this.data) != null ? this.final.push(true) : this.final.push('should have capital letters')            
+            if(condition == undefined || condition == true || condition == null){
+                regex.exec(this.data) != null ? this.final.push(true) : this.final.push('should have capital letters')      
+            }else{
+                regex.exec(this.data) != null ? this.final.push('should not have capital letters') : this.final.push(true)      
+            }
+
             return this
         }
-        this.hasWhiteSpace = () => {
+        this.hasWhiteSpace = (condition) => {
             const regex = /\s/gim
-            regex.exec(this.data) !== null ? this.final.push(true) : this.final.push('should have white space')
+            if (condition == undefined || condition == true || condition == null) {
+                regex.exec(this.data) !== null ? this.final.push(true) : this.final.push('should have white space')
+            }else{
+                regex.exec(this.data) !== null ? this.final.push('should not have white space') : this.final.push(true)
+            }
             return this
         }
-        this.hasSpecialCharacters = () => {
+        this.hasSpecialCharacters = (condition) => {
             const regex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/gim;
-            regex.exec(this.data) != null ? this.final.push(true) : this.final.push('should have special characters')
+            if (condition == undefined || condition == true || condition == null) {
+                regex.exec(this.data) != null ? this.final.push(true) : this.final.push('should have special characters')
+            }else{
+                regex.exec(this.data) != null ? this.final.push('should not have special characters') : this.final.push(true)
+            }
             return this
         }
         this.required = () => {
@@ -52,14 +65,23 @@ class validate {
             }
             return this
         }
-        this.hasNumbers = () => {
+        this.hasNumbers = (condition) => {
             const regex = /.*[0-9]/g;
-            regex.exec(this.data) != null ? this.final.push(true) : this.final.push('should have numbers')
+            if (condition == undefined || condition == true || condition == null) {
+                regex.exec(this.data) != null ? this.final.push(true) : this.final.push('should have numbers')
+            }else{
+                regex.exec(this.data) != null ? this.final.push('should not have numbers') : this.final.push(true)
+            }
             return this
         }
-        this.hasSmallLetters = () => {
+        this.hasSmallLetters = (condition) => {
             const regex = /.*[a-z]/g;
-            regex.exec(this.data) != null ? this.final.push(true) : this.final.push('should have small letters')
+            if (condition == undefined || condition == true || condition == null) {
+                regex.exec(this.data) != null ? this.final.push(true) : this.final.push('should have small letters')
+            }else{
+                regex.exec(this.data) != null ? this.final.push('should not have small letters') : this.final.push(true)
+            }
+
             return this
         }
         this.done = () => {

@@ -55,7 +55,8 @@ router.post('/initapp', function incoming(req, res) {
     const siteTitle =
         appAgent
             .staticMethods('mass-validate', req.body.siteTitle)
-            .hasCapitalLetters()
+            .hasSpecialCharacters(false)
+            .required()
             .isTrue(req.body.siteTitle.length > 2)
             .done()
 
