@@ -1,5 +1,6 @@
 const path = require('path')
 const appConfig = require(path.join(__dirname, '../../admin assets/app/config.json'))
+const _appConfig = JSON.parse(JSON.stringify(appConfig))
 
 class dqApp {
     constructor(appTitle, appDescription, admin) {
@@ -11,17 +12,9 @@ class dqApp {
     //getters
     get adminConfig() {
         return {
-            landing: this.adminLanding()
+            isSet: typeof JSON.parse(JSON.stringify(appConfig)) == 'object' && Object.keys(_appConfig).length != 0,
+            landing: _appConfig.adminLanding
         }
-    }
-
-    adminLanding() {
-        return JSON.parse(JSON.stringify(appConfig)).adminLanding
-    }
-
-    isSet() {
-        // returns true if user is set and returns false if not
-        return false
     }
 
     changeMainDb(){

@@ -83,11 +83,16 @@ router.post('/initapp', function incoming(req, res) {
 })
 
 router.post('/init', function incoming(req,res) {
+
+    //
     const app = new appAgent
-    if(req.body.componentName == app.adminConfig.landing){
+    const config = app.adminConfig
+
+    //
+    if(req.body.componentName == config.landing){
         // get app's current admin
         // return admin object
-        console.log(app.adminConfig.landing)
+        console.log(config.isSet)
 
         console.log('yes')
     }else{
