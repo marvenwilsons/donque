@@ -1,6 +1,0 @@
-{
-    "mainDb":"JSON",
-    "jsonDir":"app",
-    "adminPath":"temp.json",
-    "adminLanding":"admin"
-}

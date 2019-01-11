@@ -27,7 +27,7 @@ class _json {
                     const loc = JSON.parse(JSON.stringify(dbLoc)).jsonDir
                     const _loc = `${p}${loc}/${dbName}.json`
                     
-                    fs.writeFile(_loc, JSON.stringify(data),(err,res) => {
+                    fs.writeFile(_loc, JSON.stringify(data,null,'\t'),(err,res) => {
                         if(err){
                             callback(true, null)
                         }else{

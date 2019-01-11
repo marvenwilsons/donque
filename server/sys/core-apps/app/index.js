@@ -89,6 +89,7 @@ router.post('/initapp', function incoming(req, res) {
         siteTitle,
         username,
         password,
+        password == req.body.repassword,
         email
     ]
 
@@ -100,6 +101,7 @@ router.post('/initapp', function incoming(req, res) {
         req.body.uId = appAgent.staticMethods('utils').generateRandomAlphabet(20, 'mix')
         req.body.sessionId = appAgent.staticMethods('utils').generateRandomAlphabet(15, 'mix')
         req.body.tokenExpyrDate = undefined
+        req.body.modes = []
         // req.body.password = appAgent.staticMethods('utils').hash(req.body.password)
 
 
