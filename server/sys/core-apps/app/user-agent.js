@@ -17,25 +17,24 @@ class dqUserAgent {
         this.access_level = undefined // r w rw
         this.ClassAccessList = []
         this.userSectionAccessList = [],
-        this.sessionId = undefined
+        this.sessionId = undefined,
+        this.mode = undefined
+        this.modes = []
     }
     
     // Getter
     get userProfile() {
-        return this.userProfile()
-        // can be access outside after instance of this class by:
-        // console.log(user.userProfile)
-    }
-
-    userProfile() {
-        // returns name, username, password, desc
         return {
             name: this.name,
             username: this.username,
             password: this.password,
             description: this.description
         }
+        // can be access outside after instance of this class by:
+        // console.log(user.userProfile)
     }
+
+
 
     createUser() {
         this.addedBy = () => {
