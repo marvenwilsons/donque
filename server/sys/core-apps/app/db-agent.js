@@ -27,7 +27,7 @@ dbAgent.readFrom = (dbType, dbName) => {
 }
 
 // CREATE - add new entry to the database selected
-dbAgent.addFrom = (dbType, dbName, data) => {
+dbAgent.addProp = (dbType, dbName, data) => {
     return new Promise((resolve, reject) => {
         dbAgent.dbHandler(dbType, dbName, 'create/entity', null, data, (err, res) => {
             if (err) {
