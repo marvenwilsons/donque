@@ -5,8 +5,9 @@ const fs = require('fs')
 const path = require('path')
 const p = path.join(__dirname, '../../admin assets/app/')
 const appConfig = require(path.join(__dirname, '../../admin assets/app/config.json'))
-const tempJSON = require(path.join(__dirname, '../../admin assets/app/temp.json'))
 const dbAgent = require('./db-agent')
+
+const _app = require('./app')
 
 // app agent
 const appAgent = require('./app-agent')
@@ -15,24 +16,25 @@ const app = new appAgent
 // user agent
 const userAgent = require('./user-agent')
 
-router.get('/app', (req,res) => {
+// for general public
+router.get('/app', (req, res) => {
     const query = req.query.content
-    if (app.appConfig.adminIsSet == app.appConfig.isSet){
+    if (app.appConfig.adminIsSet == app.appConfig.isSet) {
         // get protected routes list
-        if(app.protectedPublicRoutes.indexOf(query) == -1){
+        if (app.protectedPublicRoutes.indexOf(query) == -1) {
             res.status(200).json({
                 status: true,
                 action: null,
                 data: ''
             })
-        }else{
+        } else {
             // general public page, but requires member auth
             res.status(200).json({
                 status: false,
                 action: 'promt-auth'
             })
         }
-    }else{
+    } else {
         res.status(200).json({
             status: false,
             action: null,
@@ -41,13 +43,15 @@ router.get('/app', (req,res) => {
     }
 })
 
+// for app login
 router.post('/applogin', (req, res) => {
-    dbAgent.readFrom(dbAgent.mainDb(), tempJSON)
+    dbAgent.readFrom(dbAgent.mainDb(), 'admin')
         .then(data => {
             if (data.username === req.body.username && data.password === req.body.password) {
                 res.status(200).json({
                     status: true,
-                    token: 'asjdhkfjhdsklfh82734'
+                    token: 'asjdhkfjhdsklfh82734',
+                    tokenlife: undefined
                 })
             } else {
                 res.status(200).json({
@@ -63,6 +67,7 @@ router.post('/applogin', (req, res) => {
         })
 })
 
+// for initializing app
 router.post('/initapp', function incoming(req, res) {
 
     /** Checklist
@@ -91,7 +96,7 @@ router.post('/initapp', function incoming(req, res) {
             .isTrue(req.body.username.length > 6)
             .done()
 
-    const password = 
+    const password =
         appAgent
             .staticMethods('mass-validate', req.body.password)
             .hasSpecialCharacters()
@@ -99,7 +104,7 @@ router.post('/initapp', function incoming(req, res) {
             .required()
             .done()
 
-    const email = 
+    const email =
         appAgent
             .staticMethods('mass-validate', req.body.email)
             .required()
@@ -117,7 +122,7 @@ router.post('/initapp', function incoming(req, res) {
     if (v.every(items => items != true)) {
         res.status(500).json(false)
     } else if (app.appConfig.adminIsSet != app.appConfig.isSet) {
-    // c.
+        // c.
         req.body.autToken = appAgent.staticMethods('utils').generateRandomAlphabet(100, 'mix')
         req.body.uId = appAgent.staticMethods('utils').generateRandomAlphabet(20, 'mix')
         req.body.sessionId = appAgent.staticMethods('utils').generateRandomAlphabet(15, 'mix')
@@ -127,7 +132,7 @@ router.post('/initapp', function incoming(req, res) {
 
 
         dbAgent
-            .createDb('JSON', 'temp', req.body)
+            .createDb('JSON', 'admin', req.body)
             .then(data => {
                 res.status(200).json(true)
             })
@@ -137,23 +142,31 @@ router.post('/initapp', function incoming(req, res) {
     }
 })
 
+// for admin actions
 router.post('/dq', function incoming(req, res) {
-    console.log('fisrt?')
+    //
+    const config = app.appConfig
 
     //
-    // const config = app.appConfig
+    if (config.isSet && req.body.componentName == config.landing) {
+        // get app's current admin
+        // return admin object
+        const admin = _app(
+            req.body.username,
+            req.body.password,
+            req.body.token,
+            req.body.tokenlife,
+            req.body.section,
+            req.body.action
+        )
+        res.status(200).json({
+            data:admin
+        })
 
-    // //
-    // if (config.isSet && req.body.componentName == config.landing) {
-    //     // get app's current admin
-    //     // return admin object
-    //     console.log(config.isSet)
-
-    //     console.log('yes')
-    // } else {
-    //     console.log('no')
-    //     res.status(200).json(false)
-    // }
+    } else {
+        console.log('no')
+        res.status(200).json(false)
+    }
 
     if (true) {
         res.status(200).json(true)

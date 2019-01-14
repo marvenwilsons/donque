@@ -1,7 +1,7 @@
 const fs = require('fs')
 const dbLoc = require('../../admin assets/app/config')
 const path = require('path')
-const p = path.join(__dirname, '../../admin assets/')
+const p = path.join(__dirname, '../../admin assets/app')
 class _json {
 
 
@@ -12,11 +12,13 @@ class _json {
 
         switch (method) {
             case 'read':
-                const res = JSON.parse(JSON.stringify(dbName))
-                if(typeof res != 'object'){
-                    callback(`[JSON handler] please wrap in require statement : ${dbName}`)
+                const requestDb = `${dbName}.json`
+
+                if (fs.readdirSync(p).indexOf(requestDb) != -1){
+                    const content = fs.readFileSync(`${p}/${requestDb}`, 'utf-8')
+                    return callback(null, JSON.parse(content))
                 }else{
-                    return callback(null, JSON.parse(JSON.stringify(dbName)))
+                    callback(`[JSON handler] there is no such database : ${dbName}`)
                 }
                 break
             case 'create':

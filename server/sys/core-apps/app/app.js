@@ -1,14 +1,26 @@
+const dbAgent = require('./db-agent')
+
 function App(username, password, token, tokenlife, action, section) {
     let response = {}
 
     // a. app is initailized?
     const appIsInit = () => {
-        
+
     }
 
     // b.
-    const getUser = () => {
+    const getUser = (username,password,token,tokenlife) => {
+        // read to db
+        dbAgent
+            .readFrom(dbAgent.mainDb, 'temp')
+            .then(data => {
+                
+            })
 
+        let user = {
+            status: false,
+            actions: []
+        }
     }
 
     //
@@ -40,46 +52,37 @@ function App(username, password, token, tokenlife, action, section) {
         action,
 
         start() {
-            
+            // b
+            const user = getUser(username, password, token, tokenlife)
+            const task = `${action}/${section}`
 
-            if(appIsInit()){
-                // b
-                const user = getUser(username, password, token, tokenlife)
-                const task = `${action}/${section}`
-
-                // a
-                if (user.status){
-                    // c
-                    if (user.actions.indexOf(task) != -1){
-                        // d
-                        if(taskCanAlterDb(task)){
-                            temp = task
-                            // e
-                            if (askPassword()){
-                                // f.a
-                                executeTask(temp)
-                            }else{
-                                response.status = false
-                                response.message = 'Password Invalid'
-                            }
-                        }else{
-                            // f.b
-                            executeTask(task)
+            // a
+            if (user.status) {
+                // c
+                if (user.actions.indexOf(task) != -1) {
+                    // d
+                    if (taskCanAlterDb(task)) {
+                        temp = task
+                        // e
+                        if (askPassword()) {
+                            // f.a
+                            executeTask(temp)
+                        } else {
+                            response.status = false
+                            response.message = 'Password Invalid'
                         }
-                    }else{
-                        response.status = false
-                        response.message = 'Permission denied'
+                    } else {
+                        // f.b
+                        executeTask(task)
                     }
-                }else{
+                } else {
                     response.status = false
-                    response.action = 'login'
+                    response.message = 'Permission denied'
                 }
-            }else{
+            } else {
                 response.status = false
-                response.action = 'init'
+                response.action = 'login'
             }
-
-            
         }
     }
 }

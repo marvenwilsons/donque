@@ -108,7 +108,7 @@ export default {
     this.$axios
       .$get("dqapp/app")
       .then(res => {
-        if (!res) {
+        if (!res.status) {
           location.href = "__dqinit";
         } else {
           this.ready = true;
