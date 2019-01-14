@@ -49,20 +49,15 @@ const createStore = () => {
                 let request = {}
                 request.componentName = context.route.matched[0].name
 
-                return this.$axios.$get('/dqapp/app')
+                return this.$axios.$get('/dqapp/app',{
+                    params: {
+                        content: request.componentName
+                    }
+                })
                     .then(res => {
                         // store to state
+                        console.log(res)
                         store.commit('setApp', res)
-                        if (res) {
-                            this.$axios.$post('/dqapp/init', request)
-                                .then(data => {
-                                    console.log(data)
-                                })
-                                .catch(err => {
-                                    console.log('this is err')
-                                    console.log(err)
-                                })
-                        }
                     })
                     .catch(e => {
                         context.error(e)

@@ -35,8 +35,16 @@ export default {
       this.$store.state.modal.visibility = false;
     }
   },
-  beforeMount(){
-    // alert('yow!')
+  beforeMount() {
+    // this.$axios
+    //   .$post("/dqapp/init", 'test')
+    //   .then(data => {
+    //     console.log(data);
+    //   })
+    //   .catch(err => {
+    //     console.log("this is err");
+    //     console.log(err);
+    //   });
   },
   mounted() {
     // for docker
@@ -53,7 +61,7 @@ export default {
         location.href = "dqlogin";
       }
     }
-    
+
     // only trigger when there is unsaved changes
     // window.onbeforeunload = function() {
     //   localStorage.clear()

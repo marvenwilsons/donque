@@ -5,6 +5,7 @@ const fs = require('fs')
 const path = require('path')
 const p = path.join(__dirname, '../../admin assets/app/')
 const appConfig = require(path.join(__dirname, '../../admin assets/app/config.json'))
+const tempJSON = require(path.join(__dirname, '../../admin assets/app/temp.json'))
 const dbAgent = require('./db-agent')
 
 // app agent
@@ -14,13 +15,33 @@ const app = new appAgent
 // user agent
 const userAgent = require('./user-agent')
 
-router.get('/app', ({ res }) => {
-    res.status(200).json(app.appConfig.adminIsSet == app.appConfig.isSet)
+router.get('/app', (req,res) => {
+    const query = req.query.content
+    if (app.appConfig.adminIsSet == app.appConfig.isSet){
+        // get protected routes list
+        if(app.protectedPublicRoutes.indexOf(query) == -1){
+            res.status(200).json({
+                status: true,
+                action: null,
+                data: ''
+            })
+        }else{
+            // general public page, but requires member auth
+            res.status(200).json({
+                status: false,
+                action: 'promt-auth'
+            })
+        }
+    }else{
+        res.status(200).json({
+            status: false,
+            action: null,
+            data: null
+        })
+    }
 })
 
 router.post('/applogin', (req, res) => {
-    const tempJSON = require(path.join(__dirname, '../../admin assets/app/temp.json'))
-
     dbAgent.readFrom(dbAgent.mainDb(), tempJSON)
         .then(data => {
             if (data.username === req.body.username && data.password === req.body.password) {
@@ -95,13 +116,13 @@ router.post('/initapp', function incoming(req, res) {
 
     if (v.every(items => items != true)) {
         res.status(500).json(false)
-    } else {
+    } else if (app.appConfig.adminIsSet != app.appConfig.isSet) {
     // c.
         req.body.autToken = appAgent.staticMethods('utils').generateRandomAlphabet(100, 'mix')
         req.body.uId = appAgent.staticMethods('utils').generateRandomAlphabet(20, 'mix')
         req.body.sessionId = appAgent.staticMethods('utils').generateRandomAlphabet(15, 'mix')
         req.body.tokenExpyrDate = undefined
-        req.body.modes = []
+        req.body.admins = []
         // req.body.password = appAgent.staticMethods('utils').hash(req.body.password)
 
 
@@ -116,25 +137,26 @@ router.post('/initapp', function incoming(req, res) {
     }
 })
 
-router.post('/init', function incoming(req, res) {
+router.post('/dq', function incoming(req, res) {
+    console.log('fisrt?')
 
     //
-    const config = app.appConfig
+    // const config = app.appConfig
 
-    //
-    if (config.isSet && req.body.componentName == config.landing) {
-        // get app's current admin
-        // return admin object
-        console.log(config.isSet)
+    // //
+    // if (config.isSet && req.body.componentName == config.landing) {
+    //     // get app's current admin
+    //     // return admin object
+    //     console.log(config.isSet)
 
-        console.log('yes')
-    } else {
-        console.log('no')
-        res.status(200).json(false)
-    }
+    //     console.log('yes')
+    // } else {
+    //     console.log('no')
+    //     res.status(200).json(false)
+    // }
 
     if (true) {
-        res.status(200).json(req.body)
+        res.status(200).json(true)
     } else {
         res.status(200).json(false)
     }

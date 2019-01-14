@@ -20,6 +20,12 @@ class dqApp {
         }
     }
 
+    get protectedPublicRoutes () {
+        return [
+            'hello'
+        ]
+    }
+
     static staticMethods(name, data) {
         if (name == 'validate') {
             return {
