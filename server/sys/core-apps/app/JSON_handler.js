@@ -20,7 +20,8 @@ class _json {
                 } else {
                     callback(`[JSON handler] there is no such database : ${dbName}`)
                 }
-                break
+            break
+            
             case 'create':
                 if (methodOpt == 'entity') {
                     if(typeof data == 'object'){
@@ -76,8 +77,32 @@ class _json {
                         })
                     }
                 }
-                break
+            break
+            
+            case 'update':
+            break
 
+            case 'delete':
+                if(methodOpt == 'entity'){
+                    
+                }
+                else if(methodOpt == 'database'){
+                    if (fs.existsSync(`${p}/${dbName}.json`)){
+                        fs.unlink(`${p}/${dbName}.json`,(err) => {
+                            if (err) {
+                                callback(true, null)
+                            } else {
+                                callback(false, {
+                                    status: true,
+                                    message: `successfully removed ${dbName} database`
+                                })
+                            }
+                        })
+                    }else{
+                        callback(`[JSON handler] there is no such database : ${dbName}`)
+                    }
+                }
+            break
         }
     }
 }

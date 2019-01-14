@@ -69,7 +69,7 @@ dbAgent.renameDb = (dbType, oldName, newName) => {
 // UPDATE - update a record from the database selected
 // data: { key: 'name', oldVal: 'marven', newVal: 'Marven', action:'update value' }
 // data: { key: 'name', oldVal: 'name', newVal: 'id', action:'update key' }
-dbAgent.updateFrom = (dbType, dbName, data) => {
+dbAgent.updateProp = (dbType, dbName, data) => {
     return new Promise((resolve, reject) => {
         dbAgent.dbHandler(dbType, dbName, 'update/entity', null, { old: data.old, new: data.new }, (err, res) => {
             if (err) {
@@ -84,7 +84,7 @@ dbAgent.updateFrom = (dbType, dbName, data) => {
 
 // REMOVE - remove an entry from the database selecteed
 // query: {keyName: 'valueName'}
-dbAgent.removeFrom = (dbType, dbName, query) => {
+dbAgent.removeProp = (dbType, dbName, query) => {
     return new Promise((resolve, reject) => {
         dbAgent.dbHandler(dbType, dbName, 'delete/entity', query, null, (err, res) => {
             if (err) {
