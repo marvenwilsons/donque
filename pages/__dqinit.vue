@@ -416,6 +416,7 @@ export default {
     }
   },
   mounted() {
+    console.log('hello')
     setTimeout(() => {
       this.ready = true;
     }, 1000);
@@ -423,6 +424,7 @@ export default {
     this.$axios
       .$get("dqapp/app")
       .then(res => {
+        console.log(res.status)
         if (res.status) {
           location.href = "dqlogin";
         }

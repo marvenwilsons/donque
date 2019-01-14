@@ -84,7 +84,7 @@ class _json {
 
             case 'delete':
                 if(methodOpt == 'entity'){
-                    
+                    // build a query system
                 }
                 else if(methodOpt == 'database'){
                     if (fs.existsSync(`${p}/${dbName}.json`)){
