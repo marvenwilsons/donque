@@ -86,8 +86,11 @@ class dqApp {
                 },
                 generateRandomSpecialCharacters: (length) => {
 
+                },
+                hashAndSalt: (value) => {
+
                 }
-            }
+             }
         }
     }
 

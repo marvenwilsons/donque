@@ -7,6 +7,7 @@ const p = path.join(__dirname, '../../admin assets/app/')
 const appConfig = require(path.join(__dirname, '../../admin assets/app/config.json'))
 const dbAgent = require('./db-agent')
 const moment = require('moment')
+const {SHA256} = require('crypto-js')
 
 const _app = require('./app')
 
@@ -54,7 +55,9 @@ router.get('/app', (req, res) => {
 router.post('/applogin', (req, res) => {
     dbAgent.readFrom(dbAgent.mainDb(), 'admin')
         .then(data => {
-            if (data.admins[req.body.username].username === req.body.username && data.admins[req.body.username].password === req.body.password) {
+
+            if (data.admins[req.body.username].username === req.body.username 
+                && data.admins[req.body.username].password === SHA256(JSON.stringify(req.body.password) + data.admins[req.body.username].___s).toString()) {
                 res.status(200).json({
                     status: true,
                     token: data.admins[req.body.username].token,
@@ -131,7 +134,8 @@ router.post('/initapp', function incoming(req, res) {
     if (v.every(items => items != true)) {
         res.status(500).json(false)
     } else if (app.appConfig.adminIsSet != app.appConfig.isSet) {
-        // c.            
+        // c
+        const ___s = appAgent.staticMethods('utils').generateRandomAlphabet(300, 'mix')
         const nObj = {
             siteTitle:req.body.siteTitle,
             siteOwner:req.body.username,
@@ -140,11 +144,12 @@ router.post('/initapp', function incoming(req, res) {
                 [req.body.username] : {
                     title: 'owner',
                     username: req.body.username,
-                    password: req.body.password,
+                    password: SHA256(JSON.stringify(req.body.password) + ___s).toString(),
                     sessionId: req.body.sessionId = appAgent.staticMethods('utils').generateRandomAlphabet(15, 'mix'),
                     tokenlife: req.body.tokenExpyrDate = undefined,
                     token: req.body.autToken = appAgent.staticMethods('utils').generateRandomAlphabet(100, 'mix'),
                     uId: req.body.uId = appAgent.staticMethods('utils').generateRandomAlphabet(20, 'mix'),
+                    ___s,
                     sections: ''
                 }
             }
