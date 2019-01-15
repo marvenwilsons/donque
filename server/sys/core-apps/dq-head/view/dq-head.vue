@@ -4,7 +4,8 @@
             <div class="dqhead-items" > <strong>dq-studio / {{siteTitle}}</strong> </div>
         </div>
         <div class="flex">
-            <div class="dqhead-items">{{$store.state.admin.adminName}}</div>
+            <div class="dqhead-items"> <strong>{{$store.state.admin.adminName}}</strong> </div>
+            <div @click="notifications" class="dqhead-items pointer">Notifications</div>
             <div @click="logout" class="dqhead-items pointer">sign out</div>
         </div>
     </div>
@@ -22,6 +23,9 @@ export default {
     methods:{
         logout(){
             location.href = "dqlogin"
+        },
+        notifications(){
+
         }
     },
     mounted(){
