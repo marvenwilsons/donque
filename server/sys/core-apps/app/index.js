@@ -6,6 +6,7 @@ const path = require('path')
 const p = path.join(__dirname, '../../admin assets/app/')
 const appConfig = require(path.join(__dirname, '../../admin assets/app/config.json'))
 const dbAgent = require('./db-agent')
+const moment = require('moment')
 
 const _app = require('./app')
 
@@ -25,33 +26,41 @@ router.get('/app', (req, res) => {
             res.status(200).json({
                 status: true,
                 action: null,
-                data: ''
+                query: query,
+                isProtected: false,
+                data: 'hello'
             })
         } else {
             // general public page, but requires member auth
             res.status(200).json({
                 status: false,
-                action: 'promt-auth'
+                action: 'promt-auth',
+                isProtected:true,
+                query:query
             })
         }
     } else {
         res.status(200).json({
             status: false,
             action: null,
-            data: null
+            data: null,
+            isProtected: false,
+            query:query
         })
     }
 })
 
-// for app login
+// for app admin login
 router.post('/applogin', (req, res) => {
     dbAgent.readFrom(dbAgent.mainDb(), 'admin')
         .then(data => {
-            if (data.username === req.body.username && data.password === req.body.password) {
+            if (data.admins[req.body.username].username === req.body.username && data.admins[req.body.username].password === req.body.password) {
                 res.status(200).json({
                     status: true,
-                    token: 'asjdhkfjhdsklfh82734',
-                    tokenlife: undefined
+                    token: data.admins[req.body.username].token,
+                    username: data.admins[req.body.username].username,
+                    password: data.admins[req.body.username].password,
+                    adminHref: app.appConfig.landing
                 })
             } else {
                 res.status(200).json({
@@ -122,17 +131,29 @@ router.post('/initapp', function incoming(req, res) {
     if (v.every(items => items != true)) {
         res.status(500).json(false)
     } else if (app.appConfig.adminIsSet != app.appConfig.isSet) {
-        // c.
-        req.body.autToken = appAgent.staticMethods('utils').generateRandomAlphabet(100, 'mix')
-        req.body.uId = appAgent.staticMethods('utils').generateRandomAlphabet(20, 'mix')
-        req.body.sessionId = appAgent.staticMethods('utils').generateRandomAlphabet(15, 'mix')
-        req.body.tokenExpyrDate = undefined
-        req.body.admins = []
+        // c.            
+        const nObj = {
+            siteTitle:req.body.siteTitle,
+            siteOwner:req.body.username,
+            createdOn: moment(),
+            admins: {
+                [req.body.username] : {
+                    title: 'owner',
+                    username: req.body.username,
+                    password: req.body.password,
+                    sessionId: req.body.sessionId = appAgent.staticMethods('utils').generateRandomAlphabet(15, 'mix'),
+                    tokenlife: req.body.tokenExpyrDate = undefined,
+                    token: req.body.autToken = appAgent.staticMethods('utils').generateRandomAlphabet(100, 'mix'),
+                    uId: req.body.uId = appAgent.staticMethods('utils').generateRandomAlphabet(20, 'mix'),
+                    sections: ''
+                }
+            }
+        }
         // req.body.password = appAgent.staticMethods('utils').hash(req.body.password)
 
 
         dbAgent
-            .createDb('JSON', 'admin', req.body)
+            .createDb('JSON', 'admin', nObj)
             .then(data => {
                 res.status(200).json(true)
             })
@@ -143,36 +164,28 @@ router.post('/initapp', function incoming(req, res) {
 })
 
 // for admin actions
-router.post('/dq', function incoming(req, res) {
+router.post('/_dq', (req, res) => {
     //
     const config = app.appConfig
-
-    //
-    if (config.isSet && req.body.componentName == config.landing) {
-        // get app's current admin
-        // return admin object
-        const admin = _app(
-            req.body.username,
-            req.body.password,
-            req.body.token,
-            req.body.tokenlife,
-            req.body.section,
-            req.body.action
-        )
-        res.status(200).json({
-            data:admin
+    
+    if(config.isSet){
+        dbAgent
+        .readFrom(dbAgent.mainDb(),'admin')
+        .then(data => {
+            if(data.admins[req.body.username].username == req.body.username && data.admins[req.body.username].token == req.body.token){
+                res.status(200).json({
+                    title: data.admins[req.body.username].title,
+                    username: data.admins[req.body.username].username,
+                    siteTitle: data.siteTitle
+                })
+            }else{
+                console.log('no')
+            }
         })
 
-    } else {
-        console.log('no')
-        res.status(200).json(false)
     }
 
-    if (true) {
-        res.status(200).json(true)
-    } else {
-        res.status(200).json(false)
-    }
+    // ************
 })
 
 

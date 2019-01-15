@@ -22,7 +22,9 @@ class dqApp {
 
     get protectedPublicRoutes () {
         return [
-            'hello'
+            'hello',
+            'admin',
+            '__dqinit'
         ]
     }
 

@@ -8,7 +8,7 @@
 <script>
 export default {
     beforeCreate(){
-        console.log(localStorage)
+        // console.log(localStorage)
     }
 }
 </script>

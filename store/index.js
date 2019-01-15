@@ -4,6 +4,7 @@ const createStore = () => {
     return new Vuex.Store({
         state: {
             app: undefined,
+            admin: undefined,
             user: undefined,
             comp: {
                 arr: [],
@@ -36,7 +37,6 @@ const createStore = () => {
                 }
             },
             firstLoad: ({ commit }) => {
-                console.log('hey')
                 commit('addComponent', {
                     component: {
                         name: 'dashboard'
@@ -56,7 +56,6 @@ const createStore = () => {
                 })
                     .then(res => {
                         // store to state
-                        console.log(res)
                         store.commit('setApp', res)
                     })
                     .catch(e => {

@@ -35,18 +35,8 @@ export default {
       this.$store.state.modal.visibility = false;
     }
   },
-  beforeMount() {
-    // this.$axios
-    //   .$post("/dqapp/init", 'test')
-    //   .then(data => {
-    //     console.log(data);
-    //   })
-    //   .catch(err => {
-    //     console.log("this is err");
-    //     console.log(err);
-    //   });
-  },
   mounted() {
+    // console.log(this.$store.state.user);
     // for docker
     this.$store.dispatch("firstLoad");
 
@@ -55,7 +45,19 @@ export default {
       location.href = "__dqinit";
     } else {
       if (localStorage.getItem("auth")) {
-        this.ready = true;
+        const req = {
+          token: localStorage.getItem("auth"),
+          username: localStorage.getItem("username")
+        };
+        this.$axios
+          .$post("dqapp/_dq", req)
+          .then(data => {
+            this.$store.state.admin = data;
+            this.ready = true;
+          })
+          .catch(err => {
+            alert(err);
+          });
       } else {
         this.ready = false;
         location.href = "dqlogin";

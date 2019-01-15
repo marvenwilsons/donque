@@ -5,7 +5,7 @@
         fav icon here
       </div>
       <div>
-        usergroup@marven
+        {{$store.state.admin.title}}@{{$store.state.admin.username}}
       </div>
     </div>
     <div>

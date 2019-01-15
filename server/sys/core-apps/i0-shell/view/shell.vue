@@ -59,8 +59,8 @@ export default {
       user_token: undefined,
       current_class: undefined,
       terminal_logs: [],
-      usergroup: undefined,
-      username: undefined,
+      usergroup: this.$store.state.admin.title,
+      username: this.$store.state.admin.title,
       current_index: 0,
       dqterresult: [],
 
@@ -442,10 +442,10 @@ export default {
       this.current_class = "fs";
 
       // set user group
-      this.usergroup = "dev";
+      this.usergroup = this.$store.state.admin.title;
 
       // set user name
-      this.username = "marven";
+      this.username = this.$store.state.admin.username;
 
       // init webSocket
       this.ws = new WebSocket("ws://localhost:4000");

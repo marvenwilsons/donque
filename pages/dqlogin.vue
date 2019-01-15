@@ -89,9 +89,15 @@ export default {
           if (data.status) {
             // set localstorage
             localStorage.setItem("auth", data.token);
+            localStorage.setItem("username", data.username);
             if (localStorage.getItem("auth")) {
               location.href = "admin";
             }
+            // this.$store.commit("setUserCredentials", data);
+
+            // if (this.$store.state.user != undefined) {
+            //   location.href =data.adminHref;
+            // }
           } else {
             this.err = true;
           }

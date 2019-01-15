@@ -56,7 +56,7 @@ export default {
       user_token: undefined,
       current_class: undefined,
       terminal_logs: [],
-      usergroup: undefined,
+      usergroup: 'undefined',
       username: undefined,
       current_index: 0,
       dqterresult: [],
