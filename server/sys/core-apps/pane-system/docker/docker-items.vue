@@ -146,7 +146,7 @@
           name:'shell',
           'headColor':'#0086c0', 
           headWidth:'1250px', 
-          headName:`Shell - ${$store.state.admin.title}@${$store.state.admin.username}`, 
+          headName:`Shell - ${$store.state.admin.title}@${$store.state.admin.adminName}`, 
           closable: false }"
           :position="0"
         >Shell</sender>

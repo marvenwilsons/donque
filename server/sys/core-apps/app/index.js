@@ -7,7 +7,7 @@ const p = path.join(__dirname, '../../admin assets/app/')
 const appConfig = require(path.join(__dirname, '../../admin assets/app/config.json'))
 const dbAgent = require('./db-agent')
 const moment = require('moment')
-const {SHA256} = require('crypto-js')
+const { SHA256 } = require('crypto-js')
 
 const _app = require('./app')
 
@@ -36,8 +36,8 @@ router.get('/app', (req, res) => {
             res.status(200).json({
                 status: false,
                 action: 'promt-auth',
-                isProtected:true,
-                query:query
+                isProtected: true,
+                query: query
             })
         }
     } else {
@@ -46,23 +46,26 @@ router.get('/app', (req, res) => {
             action: null,
             data: null,
             isProtected: false,
-            query:query
+            query: query
         })
     }
 })
 
 // for app admin login
 router.post('/applogin', (req, res) => {
+
     dbAgent.readFrom(dbAgent.mainDb(), 'admin')
         .then(data => {
-
-            if (data.admins[req.body.username].username === req.body.username 
-                && data.admins[req.body.username].password === SHA256(JSON.stringify(req.body.password) + data.admins[req.body.username].___s).toString()) {
-                res.status(200).json({
+            const _user = data.admins[SHA256(JSON.stringify(req.body.username) + app.appConfig.__s).toString()]
+            const condition1 = data.admins[_user.username].password == SHA256(JSON.stringify(req.body.password) + data.admins[_user.username].___s).toString()
+            const condition2 = _user.username === SHA256(JSON.stringify(req.body.username) + app.appConfig.__s).toString()
+            if (condition1 === condition2) {
+                console.log('yes')
+                return res.status(200).json({
                     status: true,
-                    token: data.admins[req.body.username].token,
-                    username: data.admins[req.body.username].username,
-                    password: data.admins[req.body.username].password,
+                    token: data.admins[_user.username].token,
+                    username: data.admins[_user.username].username,
+                    password: data.admins[_user.username].password,
                     adminHref: app.appConfig.landing
                 })
             } else {
@@ -108,6 +111,13 @@ router.post('/initapp', function incoming(req, res) {
             .isTrue(req.body.username.length > 6)
             .done()
 
+    const adminName =
+        appAgent
+            .staticMethods('mass-validate', req.body.username)
+            .hasSpecialCharacters(false)
+            .required()
+            .done()
+
     const password =
         appAgent
             .staticMethods('mass-validate', req.body.password)
@@ -125,6 +135,7 @@ router.post('/initapp', function incoming(req, res) {
     // b.
     const v = [
         siteTitle,
+        adminName,
         username,
         password,
         password == req.body.repassword,
@@ -136,14 +147,27 @@ router.post('/initapp', function incoming(req, res) {
     } else if (app.appConfig.adminIsSet != app.appConfig.isSet) {
         // c
         const ___s = appAgent.staticMethods('utils').generateRandomAlphabet(300, 'mix')
+
+        dbAgent
+            .addProp('JSON', 'config', {
+                __s: appAgent.staticMethods('utils').generateRandomAlphabet(200, 'mix')
+            })
+            .then(data => {
+                console.log(data)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+
         const nObj = {
-            siteTitle:req.body.siteTitle,
-            siteOwner:req.body.username,
+            siteTitle: req.body.siteTitle,
+            siteOwner: req.body.username,
             createdOn: moment(),
             admins: {
-                [req.body.username] : {
+                [SHA256(JSON.stringify(req.body.username) + app.appConfig.__s).toString()]: {
                     title: 'owner',
-                    username: req.body.username,
+                    adminName: req.body.adminName,
+                    username: SHA256(JSON.stringify(req.body.username) + app.appConfig.__s).toString(),
                     password: SHA256(JSON.stringify(req.body.password) + ___s).toString(),
                     sessionId: req.body.sessionId = appAgent.staticMethods('utils').generateRandomAlphabet(15, 'mix'),
                     tokenlife: req.body.tokenExpyrDate = undefined,
@@ -154,8 +178,6 @@ router.post('/initapp', function incoming(req, res) {
                 }
             }
         }
-        // req.body.password = appAgent.staticMethods('utils').hash(req.body.password)
-
 
         dbAgent
             .createDb('JSON', 'admin', nObj)
@@ -172,21 +194,22 @@ router.post('/initapp', function incoming(req, res) {
 router.post('/_dq', (req, res) => {
     //
     const config = app.appConfig
-    
-    if(config.isSet){
+
+    if (config.isSet) {
         dbAgent
-        .readFrom(dbAgent.mainDb(),'admin')
-        .then(data => {
-            if(data.admins[req.body.username].username == req.body.username && data.admins[req.body.username].token == req.body.token){
-                res.status(200).json({
-                    title: data.admins[req.body.username].title,
-                    username: data.admins[req.body.username].username,
-                    siteTitle: data.siteTitle
-                })
-            }else{
-                console.log('no')
-            }
-        })
+            .readFrom(dbAgent.mainDb(), 'admin')
+            .then(data => {
+                if (data.admins[req.body.username].username == req.body.username && data.admins[req.body.username].token == req.body.token) {
+                    res.status(200).json({
+                        title: data.admins[req.body.username].title,
+                        username: data.admins[req.body.username].username,
+                        siteTitle: data.siteTitle,
+                        adminName: data.admins[req.body.username].adminName
+                    })
+                } else {
+                    console.log('no')
+                }
+            })
 
     }
 

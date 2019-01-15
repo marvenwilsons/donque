@@ -52,6 +52,7 @@ export default {
         this.$axios
           .$post("dqapp/_dq", req)
           .then(data => {
+            console.log(data)
             this.$store.state.admin = data;
             this.ready = true;
           })

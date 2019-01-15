@@ -16,7 +16,8 @@ class dqApp {
         return {
             isSet: typeof _appConfig == 'object' && Object.keys(_appConfig).length != 0,
             adminIsSet: fs.existsSync(path.join(__dirname, `../../admin assets/app/${_appConfig.adminPath}`)),
-            landing: _appConfig.adminLanding
+            landing: _appConfig.adminLanding,
+            __s: _appConfig.__s
         }
     }
 

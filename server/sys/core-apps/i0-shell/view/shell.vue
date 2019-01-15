@@ -445,7 +445,7 @@ export default {
       this.usergroup = this.$store.state.admin.title;
 
       // set user name
-      this.username = this.$store.state.admin.username;
+      this.username = this.$store.state.admin.adminName;
 
       // init webSocket
       this.ws = new WebSocket("ws://localhost:4000");

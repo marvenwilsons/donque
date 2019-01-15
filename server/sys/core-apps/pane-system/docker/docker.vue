@@ -5,7 +5,7 @@
         fav icon here
       </div>
       <div>
-        {{$store.state.admin.title}}@{{$store.state.admin.username}}
+        {{$store.state.admin.title}}@{{$store.state.admin.adminName}}
       </div>
     </div>
     <div>

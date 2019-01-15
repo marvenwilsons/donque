@@ -102,6 +102,39 @@
                   </span>
                 </span>
               </div>
+              <!-- admin name  -->
+              <div class="flex flexcenter flexcol tc-wrap">
+                <span class="flex fullwidth spacebetween">
+                  <span class="flex tc-title">Full Name:</span>
+                  <span class="flex flexcol tc-input">
+                    <input
+                      v-on:input="_validate('adminName')"
+                      v-model="adminName"
+                      class="fullwidth"
+                      type="text"
+                      required
+                    >
+                    <span class="tc-desc">
+                      <span>The full name of the owner or the admin</span>
+                      <br>
+                      <span
+                        :class="[errors.username.indexOf('shouldNotHaveSpecialChar') != -1 && 'und-err']"
+                      >no special characters allowed like !@#$*</span>
+                      <br>
+                      <span
+                        :class="[errors.username.indexOf('required') != -1 && 'und-err']"
+                      >this is a required field</span>
+                    </span>
+                  </span>
+                  <span class="tc-ind flex">
+                    <span
+                      v-if="errors.username.length == 0 && username != undefined"
+                      class="tc-suc"
+                    >&#10004;</span>
+                    <span v-if="errors.username.length != 0" class="tc-err">&#x2718;</span>
+                  </span>
+                </span>
+              </div>
               <!-- password -->
               <div class="flex flexcenter flexcol tc-wrap">
                 <span class="flex fullwidth spacebetween">
@@ -210,6 +243,7 @@ export default {
       username: undefined,
       password: undefined,
       repassword: undefined,
+      adminName: undefined,
       email: undefined,
       passed: [],
       errors: {
@@ -217,7 +251,8 @@ export default {
         username: [],
         password: [],
         repassword: [],
-        email: []
+        email: [],
+        adminName: []
       },
       readyObj: {},
       validations: {
@@ -309,6 +344,16 @@ export default {
             : this.pullErrors(curField, "required");
           break;
 
+        case "adminName":
+          vdn.shouldNotHaveSpecialChar(this[curField])
+            ? this.pushErrors(curField, "shouldNotHaveSpecialChar")
+            : this.pullErrors(curField, "shouldNotHaveSpecialChar");
+
+          vdn.required(this[curField])
+            ? this.pushErrors(curField, "required")
+            : this.pullErrors(curField, "required");
+          break;
+
         case "password":
           vdn.hasWhiteSpace(this[curField])
             ? this.pushErrors(curField, "hasWhiteSpace")
@@ -374,6 +419,7 @@ export default {
         "username",
         "password",
         "repassword",
+        "adminName",
         "email"
       ];
       // check for undefined fields
@@ -398,6 +444,7 @@ export default {
         app.password = this.password;
         app.repassword = this.repassword;
         app.email = this.email;
+        app.adminName = this.adminName
 
         this.$axios
           .$post("/dqapp/initapp", app)

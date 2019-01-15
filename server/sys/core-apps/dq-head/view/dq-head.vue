@@ -4,7 +4,7 @@
             <div class="dqhead-items" > <strong>dq-studio / {{siteTitle}}</strong> </div>
         </div>
         <div class="flex">
-            <div class="dqhead-items">{{username}}</div>
+            <div class="dqhead-items">{{$store.state.admin.adminName}}</div>
             <div @click="logout" class="dqhead-items pointer">sign out</div>
         </div>
     </div>
