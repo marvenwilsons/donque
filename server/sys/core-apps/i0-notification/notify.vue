@@ -1,19 +1,19 @@
 <template>
   <div id="notification-pane">
-    <div class>
+    <div id="notification-content">
       <div class="flex flexcol">
         <span class="pointer" id="dq-action-pane-sign-out" @click="signOut">sign out</span>
         <span class>
           <h6>Action Pane</h6>
         </span>
-       <div class="flex">
-            <div id="dq-action-pane-favicon-con" class="flex flexcenter">favicon here</div>
-            <span class="flex flexcol fullwidth flexcenter relative">
-                <span class="fullwidth">{{$store.state.admin.siteTitle}}</span>
-                <span class="fullwidth">{{$store.state.admin.adminName}}</span>
-                <span class="fullwidth">{{$store.state.admin.title}}</span>
-            </span>
-       </div>
+        <div class="flex">
+          <div id="dq-action-pane-favicon-con" class="flex flexcenter">favicon here</div>
+          <span class="flex flexcol fullwidth flexcenter relative">
+            <span class="fullwidth">{{$store.state.admin.siteTitle}}</span>
+            <span class="fullwidth">{{$store.state.admin.adminName}}</span>
+            <span class="fullwidth">{{$store.state.admin.title}}</span>
+          </span>
+        </div>
       </div>
       <div class="borderred">wer</div>
     </div>
@@ -21,12 +21,23 @@
 </template>
 
 <script>
+import { TweenMax, TimelineLite, TweenLite } from "gsap";
+
 export default {
   props: ["mode"],
+  data() {
+    return {
+      isOpen: this.$store.state.notificationPane.isOpen
+    };
+  },
   methods: {
     signOut() {
-        this.$store.commit('signOut')
+      this.$store.commit("signOut");
     }
+  },
+  mounted() {
+    const n = document.getElementById("notification-content");
+    TweenMax.fromTo(n, 0.3, { opacity: "0" }, { opacity: "1" });
   }
 };
 </script>
