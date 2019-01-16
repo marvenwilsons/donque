@@ -118,20 +118,20 @@
                       <span>The full name of the owner or the admin</span>
                       <br>
                       <span
-                        :class="[errors.username.indexOf('shouldNotHaveSpecialChar') != -1 && 'und-err']"
+                        :class="[errors.adminName.indexOf('shouldNotHaveSpecialChar') != -1 && 'und-err']"
                       >no special characters allowed like !@#$*</span>
                       <br>
                       <span
-                        :class="[errors.username.indexOf('required') != -1 && 'und-err']"
+                        :class="[errors.adminName.indexOf('required') != -1 && 'und-err']"
                       >this is a required field</span>
                     </span>
                   </span>
                   <span class="tc-ind flex">
                     <span
-                      v-if="errors.username.length == 0 && username != undefined"
+                      v-if="errors.adminName.length == 0 && username != undefined"
                       class="tc-suc"
                     >&#10004;</span>
-                    <span v-if="errors.username.length != 0" class="tc-err">&#x2718;</span>
+                    <span v-if="errors.adminName.length != 0" class="tc-err">&#x2718;</span>
                   </span>
                 </span>
               </div>
@@ -411,7 +411,8 @@ export default {
         this.username,
         this.password,
         this.repassword,
-        this.email
+        this.email,
+        this.adminName
       ];
 
       const fields = [
