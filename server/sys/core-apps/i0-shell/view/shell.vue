@@ -148,7 +148,8 @@ export default {
             })
             this.current_class = input.secondArg
             if(this.current_class == 'fs'){
-              this.fspath = this.fspath_arr_path_trace[this.fspath_arr_path_trace.length - 1].trim()
+              // this.fspath = this.fspath_arr_path_trace[this.fspath_arr_path_trace.length - 1].trim()
+              this.fspath = ''
             }else{
               this.fspath = undefined
             }
