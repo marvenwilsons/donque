@@ -6,6 +6,7 @@ const createStore = () => {
             app: undefined,
             admin: undefined,
             user: undefined,
+            notificationPane: false,
             comp: {
                 arr: [],
                 arrLen: 0,
@@ -49,7 +50,7 @@ const createStore = () => {
                 let request = {}
                 request.componentName = context.route.matched[0].name
 
-                return this.$axios.$get('/dqapp/app',{
+                return this.$axios.$get('/dqapp/app', {
                     params: {
                         content: request.componentName
                     }
@@ -65,6 +66,13 @@ const createStore = () => {
 
         },
         mutations: {
+            notificationPane(state, payload) {
+                state.notificationPane = payload
+            },
+            signOut(){
+                localStorage.clear();
+                location.reload()
+            },
             setApp(state, payload) {
                 state.app = payload
             },

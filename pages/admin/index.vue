@@ -4,7 +4,7 @@
     <section id="dq-content-wrapper" class="flex">
       <nav><docker/></nav>
       <main id="dq-work-room" class="flex" ><main-window/></main>
-      <aside></aside>
+      <aside> <notify v-if="$store.state.notificationPane.isOpen" :mode="$store.state.notificationPane.mode" /> </aside>
     </section>
   </section>
 </template>
@@ -12,7 +12,7 @@
 // parent
 import main_window from "@/server/sys/core-apps/pane-system/main-window/main-window.vue";
 import docker from "@/server/sys/core-apps/pane-system/docker/docker.vue";
-import notify from "@/server/sys/core-apps/notify/view/notify.vue";
+import notify from "@/server/sys/core-apps/i0-notification/notify.vue";
 import dqhead from "@/server/sys/core-apps/dq-head/view/dq-head.vue";
 import spinner from "@/server/sys/core-apps/pane-system/module/spinner-1.vue";
 
