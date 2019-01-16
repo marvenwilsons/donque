@@ -80,7 +80,51 @@ class _json {
             
             case 'update':
                 if(methodOpt == 'entity'){
-                    console.log(data)
+                    const access = JSON.parse(fs.readFileSync(`${p}/${dbName}.json`, 'utf-8'))
+                    if (fs.readdirSync(p).indexOf(`${dbName}.json`) != -1){
+                        if(data.location){
+                            const location = data.location.split('/')
+                            let propBeingAccess = undefined
+                            location.map((e, i) => {
+                                if (propBeingAccess == undefined) {
+                                    propBeingAccess = access[e]
+                                } else {
+                                    propBeingAccess = propBeingAccess[e]
+
+                                    if (location.length - 1 == i) {
+                                        if (data.action == 'update value') {
+                                            const old = access[location[location.length - 2]]
+                                            old[e][data.key] = data.value
+                                            fs.writeFile(`${p}/${dbName}.json`, JSON.stringify(access, null, '\t'), (err, res) => {
+                                                if (err) {
+                                                    callback(true, null)
+                                                } else {
+                                                    callback(false, {
+                                                        status: true,
+                                                        message: `successfully updated ${data.key} value property in ${dbName} database`
+                                                    })
+                                                }
+                                            })
+                                        } else if (data.action == 'update key') {
+                                            console.log(propBeingAccess)
+                                        }
+                                    }
+                                }
+                            })
+                        }else{
+                            access[data.key] = data.value
+                            fs.writeFile(`${p}/${dbName}.json`, JSON.stringify(access, null, '\t'), (err, res) => {
+                                if (err) {
+                                    callback(true, null)
+                                } else {
+                                    callback(false, {
+                                        status: true,
+                                        message: `successfully updated ${data.key} value property in ${dbName} database`
+                                    })
+                                }
+                            })
+                        }
+                    }
                 }
             break
 

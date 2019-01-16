@@ -57,34 +57,52 @@ router.post('/applogin', (req, res) => {
 
     dbAgent.readFrom(dbAgent.mainDb(), 'admin')
         .then(data => {
-            const _user = data.admins[SHA256(JSON.stringify(req.body.username) + app.appConfig.__s).toString()]
+            // conditions
+            console.log()
+            const _user = data.admins[SHA256(JSON.stringify(req.body.username) ).toString()]
             const condition1 = data.admins[_user.username].password == SHA256(JSON.stringify(req.body.password) + data.admins[_user.username].___s).toString()
-            const condition2 = _user.username === SHA256(JSON.stringify(req.body.username) + app.appConfig.__s).toString()
+            const condition2 = _user.username === SHA256(JSON.stringify(req.body.username)).toString()
             const tokenRecipe = {
                 ingredient1: data.admins[_user.username].password,
                 ingredient2: data.admins[_user.username].username
             }
-            const token = jwt.sign(tokenRecipe, app.appConfig.__s)
+
+            // token
+            const token = jwt.sign(tokenRecipe, _user.uId)
+
+            // update __s
+
+            // validation
             if (condition1 === condition2) {
                 
+                // update token
                 dbAgent
-                .addProp(dbAgent.mainDb(),'admin',{
-                    token: token
+                .updateProp(dbAgent.mainDb(),'admin',{
+                    location: `admins/${data.admins[_user.username].username}`,
+                    key: 'token',
+                    value:token,
+                    action:'update value'
                 })
                 .then(data => {
                     console.log(data)
                 })
                 .catch(err => {
                     console.log(err)
+                    res.status(200).json({
+                        status:false,
+                        message:err
+                    })
                 })
 
-                return res.status(200).json({
+                // return
+                res.status(200).json({
                     status: true,
                     token: token,
                     username: data.admins[_user.username].username,
                     password: data.admins[_user.username].password,
                     adminHref: app.appConfig.landing
                 })
+
             } else {
                 res.status(200).json({
                     status: false
@@ -92,6 +110,7 @@ router.post('/applogin', (req, res) => {
             }
         })
         .catch(err => {
+            console.log(err)
             res.status(200).json({
                 status: false,
                 err: err
@@ -184,9 +203,9 @@ router.post('/initapp', function incoming(req, res) {
                 [SHA256(JSON.stringify(req.body.username) + app.appConfig.__s).toString()]: {
                     title: 'owner',
                     adminName: req.body.adminName,
-                    username: SHA256(JSON.stringify(req.body.username) + app.appConfig.__s).toString(),
+                    username: SHA256(JSON.stringify(req.body.username)).toString(),
                     password: SHA256(JSON.stringify(req.body.password) + ___s).toString(),
-                    token: undefined,
+                    token: '',
                     uId: req.body.uId = appAgent.staticMethods('utils').generateRandomAlphabet(20, 'mix'),
                     ___s,
                     sections: ''
