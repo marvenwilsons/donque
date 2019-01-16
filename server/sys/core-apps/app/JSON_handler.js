@@ -59,7 +59,6 @@ class _json {
                     }else{
                         callback('[JSON handler]  data should be an object')
                     }
-
                 }
                 else if (methodOpt == 'database') {
                     if (fs.readdirSync(p).indexOf(`${dbName}.json`) != -1) {
@@ -80,6 +79,9 @@ class _json {
             break
             
             case 'update':
+                if(methodOpt == 'entity'){
+                    console.log(data)
+                }
             break
 
             case 'delete':

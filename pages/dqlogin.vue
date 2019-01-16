@@ -90,6 +90,7 @@ export default {
             // set localstorage
             localStorage.setItem("auth", data.token);
             localStorage.setItem("username", data.username);
+            console.log(localStorage.getItem("auth"))
             if (localStorage.getItem("auth")) {
               location.href = "admin";
             }

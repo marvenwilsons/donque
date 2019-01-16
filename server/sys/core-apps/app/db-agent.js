@@ -71,7 +71,7 @@ dbAgent.renameDb = (dbType, oldName, newName) => {
 // data: { key: 'name', oldVal: 'name', newVal: 'id', action:'update key' }
 dbAgent.updateProp = (dbType, dbName, data) => {
     return new Promise((resolve, reject) => {
-        dbAgent.dbHandler(dbType, dbName, 'update/entity', null, { old: data.old, new: data.new }, (err, res) => {
+        dbAgent.dbHandler(dbType, dbName, 'update/entity', null, data, (err, res) => {
             if (err) {
                 reject(err)
             } else {

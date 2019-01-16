@@ -8,6 +8,7 @@ const appConfig = require(path.join(__dirname, '../../admin assets/app/config.js
 const dbAgent = require('./db-agent')
 const moment = require('moment')
 const { SHA256 } = require('crypto-js')
+const jwt = require('jsonwebtoken')
 
 const _app = require('./app')
 
@@ -59,11 +60,27 @@ router.post('/applogin', (req, res) => {
             const _user = data.admins[SHA256(JSON.stringify(req.body.username) + app.appConfig.__s).toString()]
             const condition1 = data.admins[_user.username].password == SHA256(JSON.stringify(req.body.password) + data.admins[_user.username].___s).toString()
             const condition2 = _user.username === SHA256(JSON.stringify(req.body.username) + app.appConfig.__s).toString()
+            const tokenRecipe = {
+                ingredient1: data.admins[_user.username].password,
+                ingredient2: data.admins[_user.username].username
+            }
+            const token = jwt.sign(tokenRecipe, app.appConfig.__s)
             if (condition1 === condition2) {
-                console.log('yes')
+                
+                dbAgent
+                .addProp(dbAgent.mainDb(),'admin',{
+                    token: token
+                })
+                .then(data => {
+                    console.log(data)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+
                 return res.status(200).json({
                     status: true,
-                    token: data.admins[_user.username].token,
+                    token: token,
                     username: data.admins[_user.username].username,
                     password: data.admins[_user.username].password,
                     adminHref: app.appConfig.landing
@@ -169,9 +186,7 @@ router.post('/initapp', function incoming(req, res) {
                     adminName: req.body.adminName,
                     username: SHA256(JSON.stringify(req.body.username) + app.appConfig.__s).toString(),
                     password: SHA256(JSON.stringify(req.body.password) + ___s).toString(),
-                    sessionId: req.body.sessionId = appAgent.staticMethods('utils').generateRandomAlphabet(15, 'mix'),
-                    tokenlife: req.body.tokenExpyrDate = undefined,
-                    token: req.body.autToken = appAgent.staticMethods('utils').generateRandomAlphabet(100, 'mix'),
+                    token: undefined,
                     uId: req.body.uId = appAgent.staticMethods('utils').generateRandomAlphabet(20, 'mix'),
                     ___s,
                     sections: ''
