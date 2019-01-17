@@ -52,9 +52,13 @@ export default {
         this.$axios
           .$post("dqapp/_dq", req)
           .then(data => {
-            console.log(data)
-            this.$store.state.admin = data;
-            this.ready = true;
+            if (data.status) {
+              this.$store.state.admin = data;
+              this.ready = true;
+            } else {
+              location.href = "dqlogin";
+              this.ready = false;
+            }
           })
           .catch(err => {
             alert(err);

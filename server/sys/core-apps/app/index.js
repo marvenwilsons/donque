@@ -110,7 +110,8 @@ router.post('/applogin', (req, res) => {
             }
         })
         .catch(err => {
-            console.log(err)
+            // emet attempt login
+            // emet username used and emet password used
             res.status(200).json({
                 status: false,
                 err: err
@@ -228,23 +229,30 @@ router.post('/initapp', function incoming(req, res) {
 router.post('/_dq', (req, res) => {
     //
     const config = app.appConfig
-
-    if (config.isSet) {
+    console.log(req.body.username)
+    if (config.isSet && req.body.username) {
         dbAgent
             .readFrom(dbAgent.mainDb(), 'admin')
             .then(data => {
                 if (data.admins[req.body.username].username == req.body.username && data.admins[req.body.username].token == req.body.token) {
                     res.status(200).json({
+                        status: true,
                         title: data.admins[req.body.username].title,
                         username: data.admins[req.body.username].username,
                         siteTitle: data.siteTitle,
                         adminName: data.admins[req.body.username].adminName
                     })
                 } else {
-                    console.log('no')
+                    res.status(200).json({
+                        status: false
+                    })
                 }
             })
-
+            .catch(err => {
+                res.status(200).json({
+                    status: false
+                })
+            })
     }
 
     // ************
