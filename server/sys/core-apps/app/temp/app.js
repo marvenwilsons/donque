@@ -1,4 +1,4 @@
-const dbAgent = require('./db-agent')
+const dbAgent = require('../database/db-agent/db-agent')
 
 function App(username, password, token, tokenlife, action, section) {
     let response = {}
