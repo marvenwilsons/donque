@@ -1,8 +1,8 @@
 const path = require('path')
 const fs = require('fs')
-const appConfig = require(path.join(__dirname, '../../admin assets/app/config.json'))
-const _appConfig = JSON.parse(JSON.stringify(appConfig))
-const staticValidate = require('./static-validate')
+// const appConfig = require(path.join(__dirname, '../../admin assets/app/config.json'))
+// const _appConfig = JSON.parse(JSON.stringify(appConfig))
+// const staticValidate = require('./static-validate')
 
 class dqApp {
     constructor(appTitle, appDescription, admin) {
