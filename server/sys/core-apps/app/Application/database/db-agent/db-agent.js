@@ -1,16 +1,9 @@
-const JSON_handler = require('./JSON_handler')
-const mongoDB_handler = require('./mongoDB_handler')
-const sql_handler = require('./sql_handler')
-const firebase_handler = require('./firebase_handler')
-const dbConfig = require('../../admin assets/app/config')
-
+const JSON_handler = require('../interfaces/JSON_interface')
+const mongoDB_handler = require('../interfaces/mongoDb_interface')
+const sql_handler = require('../interfaces/sql_interface')
+const firebase_handler = require('../interfaces/firebase_interface')
 
 let dbAgent = {}
-
-// retunrs the main db selected
-dbAgent.mainDb = () => {
-    return JSON.parse(JSON.stringify(dbConfig)).mainDb
-}
 
 // READ
 dbAgent.readFrom = (dbType, dbName) => {
