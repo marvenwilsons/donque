@@ -1,12 +1,13 @@
-const JSON_handler = require('../interfaces/JSON_interface')
-const mongoDB_handler = require('../interfaces/mongoDb_interface')
-const sql_handler = require('../interfaces/sql_interface')
-const firebase_handler = require('../interfaces/firebase_interface')
+const JSON_handler = require('./interfaces/JSON_interface')
+const mongoDB_handler = require('./interfaces/mongoDb_interface')
+const sql_handler = require('./interfaces/sql_interface')
+const firebase_handler = require('./interfaces/firebase_interface')
 
 let dbAgent = {}
 
 // READ
 dbAgent.readFrom = (dbType, dbName) => {
+    console.log('ReadFrom')
     return new Promise((resolve, reject) => {
         //
         dbAgent.dbHandler(dbType, dbName, 'read', null, null, (err, res) => {

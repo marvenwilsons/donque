@@ -10,21 +10,20 @@ router.get('/app', (req, res) => {
 })
 
 // for app admin login
-const App = require('./Application/main/main')
-router.post('/applogin', ({body:{username,password}}, res) => {
-    console.log('/applogin')
-    const InitailizeNewUser = App(username,password,null,null,'UserLogin',null)
-    res.status(200).json('OK')
+router.post('/_dq', ({body:{username,password,token,data,command,section}}, res) => {
+    
+    // init new admin
+    // const InitailizeNewUser = App(body)
+    
+    // return
+    // InitailizeNewUser
+    // .then(data => {
+    //     res.status(200).json(data)        
+    // })
+    // .catch(err => {
+    //     console.log(err)
+    // })
 })
-
-// for initializing app
-router.post('/initapp', ({body:{siteTitle,username,password,email,adminName,repassword}}, res) => {
-})
-
-// for admin actions
-router.post('/_dq', (req, res) => {
-})
-
 
 module.exports = {
     path: '/dqapp',

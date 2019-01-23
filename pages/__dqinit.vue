@@ -464,7 +464,7 @@ export default {
     }
   },
   mounted() {
-    console.log('hello')
+    console.log(this.ws)
     setTimeout(() => {
       this.ready = true;
     }, 1000);
