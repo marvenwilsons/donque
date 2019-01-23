@@ -7,7 +7,6 @@ let dbAgent = {}
 
 // READ
 dbAgent.readFrom = (dbType, dbName) => {
-    console.log('ReadFrom')
     return new Promise((resolve, reject) => {
         //
         dbAgent.dbHandler(dbType, dbName, 'read', null, null, (err, res) => {

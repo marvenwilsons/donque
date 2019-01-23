@@ -8,7 +8,6 @@ class _json {
 
         switch (method) {
             case 'read':
-                console.log('Read')
                 const requestDb = `${dbName}.json`
 
                 if (fs.readdirSync(database).indexOf(requestDb) != -1) {
@@ -21,9 +20,10 @@ class _json {
             
             case 'create':
                 if (methodOpt == 'entity') {
+                    console.log('entity')
                     if(typeof data == 'object'){
-                        if (fs.readdirSync(p).indexOf(`${dbName}.json`) != -1){
-                            const _data = JSON.parse(fs.readFileSync(`${p}/${dbName}.json`, 'utf-8'))
+                        if (fs.readdirSync(database).indexOf(`${dbName}.json`) != -1){
+                            const _data = JSON.parse(fs.readFileSync(`${database}/${dbName}.json`, 'utf-8'))
                             const keyCurDb = new Set (Object.keys(_data))
                             const keyToBeAdded = Object.keys(data)
                             const keysAlreadyExist = []
@@ -39,7 +39,7 @@ class _json {
                             if(keysAlreadyExist.length != 0){
                                 callback(`[JSON handler] ${keysAlreadyExist} key already exist in ${dbName} database`)
                             }else{
-                                fs.writeFile(`${p}/${dbName}.json`, JSON.stringify(nData, null, '\t'), (err, res) => {
+                                fs.writeFile(`${database}/${dbName}.json`, JSON.stringify(nData, null, '\t'), (err, res) => {
                                     if (err) {
                                         callback(true, null)
                                     } else {
@@ -58,27 +58,36 @@ class _json {
                     }
                 }
                 else if (methodOpt == 'database') {
-                    if (fs.readdirSync(p).indexOf(`${dbName}.json`) != -1) {
+                    if (fs.readdirSync(database).indexOf(`${dbName}.json`) != -1) {
                         callback(`${dbName} database already exist`)
                     } else {
-                        fs.writeFile(`${p}/${dbName}.json`, JSON.stringify(data, null, '\t'), (err, res) => {
-                            if (err) {
-                                callback(true, null)
-                            } else {
-                                callback(false, {
-                                    status: true,
-                                    message: `successfully created ${dbName} database`
-                                })
+                        if(!dbName){
+                            return callback('database name cannot be undefined')
+                        }else{
+                            let _data = undefined
+                            if(data == null || data == undefined || data == "" || data == " "){
+                                _data = {}
                             }
-                        })
+
+                            fs.writeFile(`${database}/${dbName}.json`, JSON.stringify(_data, null, '\t'), (err, res) => {
+                                if (err) {
+                                    callback(true, null)
+                                } else {
+                                    callback(false, {
+                                        status: true,
+                                        message: `successfully created ${dbName} database`
+                                    })
+                                }
+                            })
+                        }
                     }
                 }
             break
             
             case 'update':
                 if(methodOpt == 'entity'){
-                    const access = JSON.parse(fs.readFileSync(`${p}/${dbName}.json`, 'utf-8'))
-                    if (fs.readdirSync(p).indexOf(`${dbName}.json`) != -1){
+                    const access = JSON.parse(fs.readFileSync(`${database}/${dbName}.json`, 'utf-8'))
+                    if (fs.readdirSync(database).indexOf(`${dbName}.json`) != -1){
                         if(data.location){
                             const location = data.location.split('/')
                             let propBeingAccess = undefined
@@ -92,7 +101,7 @@ class _json {
                                         if (data.action == 'update value') {
                                             const old = access[location[location.length - 2]]
                                             old[e][data.key] = data.value
-                                            fs.writeFile(`${p}/${dbName}.json`, JSON.stringify(access, null, '\t'), (err, res) => {
+                                            fs.writeFile(`${database}/${dbName}.json`, JSON.stringify(access, null, '\t'), (err, res) => {
                                                 if (err) {
                                                     callback(true, null)
                                                 } else {
@@ -110,7 +119,7 @@ class _json {
                             })
                         }else{
                             access[data.key] = data.value
-                            fs.writeFile(`${p}/${dbName}.json`, JSON.stringify(access, null, '\t'), (err, res) => {
+                            fs.writeFile(`${database}/${dbName}.json`, JSON.stringify(access, null, '\t'), (err, res) => {
                                 if (err) {
                                     callback(true, null)
                                 } else {
