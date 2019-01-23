@@ -80,6 +80,6 @@ dist
 # IDE
 .idea
 
-server/sys/admin assets/app/*
+server/sys/core-apps/app/Application/database/database/*
 
 server/sys/core-apps/app/temp.js
