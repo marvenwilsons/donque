@@ -2,6 +2,8 @@
 	"primaryDatabase": "JSON",
 	"adminPath": "admin.json",
 	"adminLanding": "admin",
-	"protectedRoutes":["profile"],
-	"isInit":true
+	"protectedRoutes": [
+		"profile"
+	],
+	"isInit": true
 }

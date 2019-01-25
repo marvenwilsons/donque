@@ -2,7 +2,9 @@
 	"siteTitle": "GreenWorks",
 	"siteOwner": "marvenwilsons",
 	"createdOn": "2019-01-16T16:19:52.482Z",
-	"currentLiveAdmins":[],
+	"currentLiveAdmins": [
+		"marvenwilsons"
+	],
 	"admins": {
 		"marvenwilsons": {
 			"title": "owner",
@@ -12,14 +14,22 @@
 			"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbmdyZWRpZW50MSI6ImU5NWRjYjczNmRiYWQ5MGE2NzlkYTk2MGFlZTZlZjM4YTk4MTQzYTBhNzc4NjJkYmUyYTY2NDAyMTAxNzA5MmYiLCJpbmdyZWRpZW50MiI6IjcyZmYwMTlkYmVlNTA5MTc5MTU1YmEwNTM0MTBjM2IxNWM0NWFiYWVkNjI1NDMwNjE5YWYxM2IxYTUzYmE1NmYiLCJpYXQiOjE1NDc3NDI4MjR9.vWjOf4U9pK4fA8bEweW1DlW9MZAWtA1ZpffOUDKuwbQ",
 			"___s": "ofWsEOeeDJXTcHskBiAFqrVODyZORyRMliRakaJwoBdQpRMpBkiDnisvEdLGkWMhmRryYEImHDfXTRAPqsgEJbVUhUYojEWSoEhRyvKrEmNWBdVIBLlMUOGWEVsnRtyhaZbjNJAKOAObrvZHKVtwDYYhnywkJwfFjnBkotGYCSPMlrGKztlVRsfbIkGmcUBcvLQwbiOJaXTBWHXVRNBKwpzdwOCjfcoqBGOiJrCJzQZJmlniWoZNbVsVIOklPmmEBcaVPNLUorZEmXUaBjIeXhYhVRKrfzpXVXBKqGgWzfNM",
 			"sectionPermissions": {
-				"page":["delete","update","read"],
-				"components":["read"]
+				"page": [
+					"delete",
+					"update",
+					"read"
+				],
+				"components": [
+					"read"
+				]
 			},
 			"luckSections": {
-				"app":[],
-				"page":[],
-				"components":[]
-			}
+				"app": [],
+				"page": [],
+				"components": []
+			},
+			"lastModefied":"",
+			"lastActivity":""
 		}
 	}
 }

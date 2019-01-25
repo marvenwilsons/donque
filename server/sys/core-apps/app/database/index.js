@@ -7,6 +7,7 @@ const DatabaseContent = (async () => {
 
     const Obj = {
         admins: admins.admins,
+        app: admins,
         config
     }
 
