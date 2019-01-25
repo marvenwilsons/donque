@@ -1,32 +1,38 @@
 const adminMethods = {}
 
 // Login
-adminMethods.adminlogin = (admins,{username,password}) => {
-    const resp = {}
+adminMethods.adminlogin = {
+    get permission() {
+        return []
+    },
+    adminlogin({ dep, admins, username, password }){
+        if (admins[username]) {
+            if (admins[username].password === password) {
 
-    if (admins[username]){
-        if (admins[username].password === password){
-            return  {
-                status: true,
-                data: {
-                    username: admins[username].username,
-                    token: admins[username].token
+                // log
+
+                return {
+                    status: true,
+                    data: {
+                        username: admins[username].username,
+                        token: admins[username].token
+                    }
+                }
+            } else {
+                return {
+                    status: false,
+                    data: {
+                        msg: 'incorrect username or password'
+                    }
                 }
             }
-        }else{
+        } else {
+            console.log('this error!')
             return {
                 status: false,
                 data: {
                     msg: 'incorrect username or password'
                 }
-            }
-        }
-    }else{
-        console.log('this error!')
-        return {
-            status: false,
-            data: {
-                msg: 'incorrect username or password'
             }
         }
     }

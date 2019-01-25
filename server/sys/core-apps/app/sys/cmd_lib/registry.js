@@ -1,13 +1,8 @@
-const { adminlogin } = require('./admin/methods')
+const AdminActions = require('./admin/methods')
 
 const registry = (() => {
     return {
-        'admin':{
-            adminlogin,
-            read:{
-                
-            }
-        }
+        AdminActions
     }
 })()
 

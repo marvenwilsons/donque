@@ -1,6 +1,7 @@
 
 const Cardinal = async ({username,password,token,data,command,section}) => {
     const {admins,config} = await require('../database/index')
+    const dbAgent = require('../database/db-agent')
     const registry = require('./cmd_lib/registry')
 
     // command response container
@@ -26,10 +27,13 @@ const Cardinal = async ({username,password,token,data,command,section}) => {
 
 
     // command accessor
-    if(section == 'admin'){
+    if(section == 'AdminActions'){
         if(command == 'adminlogin'){ 
-            response.data = 
-            await registry['admin']['adminlogin'](admins, { username, password })
+            response.data = await registry
+            [section]
+            [command]
+            [command]
+            ({dep:{dbAgent},admins, username, password })
         }else{
             registry
         }
