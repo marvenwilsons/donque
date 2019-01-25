@@ -1,1 +1,0 @@
-const AppInterface = require('./interface')

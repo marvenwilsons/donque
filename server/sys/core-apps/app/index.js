@@ -10,19 +10,10 @@ router.get('/app', (req, res) => {
 })
 
 // for app admin login
-router.post('/_dq', ({body:{username,password,token,data,command,section}}, res) => {
-    
-    // init new admin
-    // const InitailizeNewUser = App(body)
-    
-    // return
-    // InitailizeNewUser
-    // .then(data => {
-    //     res.status(200).json(data)        
-    // })
-    // .catch(err => {
-    //     console.log(err)
-    // })
+const cardinal = require('./sys/cardinal')
+router.post('/_dq', async ({ body: { username, password, token, data, command, section } }, res) => {
+    const response =  await cardinal(body)
+    res(response)
 })
 
 module.exports = {
