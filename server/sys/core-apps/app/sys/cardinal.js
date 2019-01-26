@@ -25,19 +25,55 @@ const Cardinal = async ({username,password,token,data,command,section}) => {
     }
 
 
+    const { permissions, allowedTitle } = registry[section][command]
+    const adminRes = () => {
+        response.data = registry
+        [section]
+        [command]
+        [command]
+            ({ dep: { dbAgent, app, config }, admins, username, password, data })
+    }
 
     // command accessor
     if(section == 'AdminActions'){
         if(command == 'adminlogin' || command == 'adminlogout'){
-            response.data = registry
-            [section]
-            [command]
-            [command]
-            ({dep:{dbAgent,app,config},admins, username, password, data })
+            adminRes()
         }else{
-            // Crud operations on admin
-            const {permissions, alloweTitle} = registry[section][command]
-            console.log(permissions)
+            
+            // Crud operations on admin.. case sensitive
+            // admin data
+            const adminPermissions = admins[username]['sectionPermissions']['admin']
+            
+            const adminTitle = 
+                admins[username]['title']
+            
+            // command data
+            const funcReqData = { fpermission, ftitle } = {
+                fpermission: registry[section][command].permissions,
+                ftitle: registry[section][command].allowedTitle
+            }
+
+            // check permission
+            if (adminPermissions.includes(fpermission)){
+                // check title
+                if (ftitle.includes(adminTitle)){
+                    adminRes()
+                } else {
+                    response.data = {
+                        status:false,
+                        data:{
+                            msg:'Illegal access on admin actions, permission denied'
+                        }
+                    }
+                }
+            } else{
+                response.data = {
+                    status:false,
+                    data:{
+                        msg: 'Permission Denied'
+                    }
+                }
+            }
         }
     }else{
 

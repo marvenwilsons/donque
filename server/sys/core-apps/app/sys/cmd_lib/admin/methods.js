@@ -79,13 +79,18 @@ adminMethods.adminlogout = {
 // Add new admin
 adminMethods.CreateNewAdmin = {
     get permissions(){
-        return ['create']
+        return 'create'
     },
     get allowedTitle(){
-        return ['Owner']
+        return ['owner']
     },
     CreateNewAdmin({ username, password, adminName, title }){
-
+        return {
+            status: true,
+            data:{
+                msg:'Test'
+            }
+        }
     }
 }
 
@@ -95,7 +100,7 @@ adminMethods.UpdateAdmin = {
         return ['update']
     },
     allowedTitle(){
-        return ['Owner']
+        return ['owner']
     },
     UpdateAdmin({dep, username, password, data}){
 
