@@ -28,6 +28,10 @@
 				"page": [],
 				"components": []
 			},
+			"task":{
+				"pending":[],
+				"done":[]
+			},
 			"lastModefied":"",
 			"lastActivity":""
 		}

@@ -2,7 +2,7 @@ const adminMethods = {}
 
 // Login
 adminMethods.adminlogin = {
-    get permission() {
+    get permissions() {
         return []
     },
     adminlogin({ dep, admins, username, password }) {
@@ -77,8 +77,42 @@ adminMethods.adminlogout = {
 }
 
 // Add new admin
-adminMethods.CreateNewAdmin = (admins, { username, password, adminName, title }) => {
+adminMethods.CreateNewAdmin = {
+    get permissions(){
+        return ['create']
+    },
+    get allowedTitle(){
+        return 'Owner'
+    },
+    CreateNewAdmin({ username, password, adminName, title }){
 
+    }
+}
+
+// UpdateAdmin
+adminMethods.UpdateAdmin = {
+    get permissions() {
+        return ['update']
+    },
+    allowedTitle(){
+        return 'Owner'
+    },
+    UpdateAdmin({dep, username, password, data}){
+
+    }
+}
+
+// Delete Admin
+adminMethods.DeleteAdmin = {
+    get permissions() {
+        return ['delete']
+    },
+    allowedTitle() {
+        return 'Owner'
+    },
+    DeleteAdmin({dep, username}) {
+
+    }
 }
 
 module.exports = adminMethods
