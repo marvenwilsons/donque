@@ -82,7 +82,7 @@ adminMethods.CreateNewAdmin = {
         return ['create']
     },
     get allowedTitle(){
-        return 'Owner'
+        return ['Owner']
     },
     CreateNewAdmin({ username, password, adminName, title }){
 
@@ -95,7 +95,7 @@ adminMethods.UpdateAdmin = {
         return ['update']
     },
     allowedTitle(){
-        return 'Owner'
+        return ['Owner']
     },
     UpdateAdmin({dep, username, password, data}){
 
@@ -108,7 +108,7 @@ adminMethods.DeleteAdmin = {
         return ['delete']
     },
     allowedTitle() {
-        return 'Owner'
+        return ['Owner']
     },
     DeleteAdmin({dep, username}) {
 

@@ -28,15 +28,19 @@ const Cardinal = async ({username,password,token,data,command,section}) => {
 
     // command accessor
     if(section == 'AdminActions'){
-        if(command == 'adminlogin'){
-            response.data = await registry
+        if(command == 'adminlogin' || command == 'adminlogout'){
+            response.data = registry
             [section]
             [command]
             [command]
-            ({dep:{dbAgent,app,config},admins, username, password })
+            ({dep:{dbAgent,app,config},admins, username, password, data })
         }else{
-            registry
+            // Crud operations on admin
+            const {permissions, alloweTitle} = registry[section][command]
+            console.log(permissions)
         }
+    }else{
+
     }
 
     // return
