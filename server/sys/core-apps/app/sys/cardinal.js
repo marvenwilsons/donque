@@ -42,10 +42,17 @@ const Cardinal = async ({ username, password, token, data, command, section }) =
 
     // Choosen command
     const ExecuteAdminCommand = async () => {
-        const adArgs = { dep: { dbAgent, app, config }, admins, username, password, data }
-        if (funcIsDestructive == false) {
-            console.log('*** function is not destructive executing function')
-            return await r(adArgs)
+        const adArgs = (s) => {
+            if (s === 'AdminActions'){
+                return { dep: { dbAgent, app, config }, admins, username, password, data }
+            }else{
+                return { dep: { dbAgent }, data }
+            }    
+        }
+        
+        if (funcIsDestructive == false || funcIsDestructive == undefined) {
+            console.log('** function is not destructive executing function')
+            return await r(adArgs(section))
         } else {
             console.log('** destructive function asking for password')
 
@@ -53,7 +60,7 @@ const Cardinal = async ({ username, password, token, data, command, section }) =
                 console.log('** password detected')
                 if (admins[username].password === password) {
                     console.log(`** executing ${command}`)
-                    return await r(adArgs)
+                    return await r(adArgs(section))
                 }
             } else {
                 console.log('** prompting for password')
@@ -70,7 +77,7 @@ const Cardinal = async ({ username, password, token, data, command, section }) =
     // Crud operations on admin.. case sensitive
     // admin data
     const { AdminPermissions, AdminTitle } = {
-        AdminPermissions: admins[username]['sectionPermissions']['admin'],
+        AdminPermissions: admins[username]['sectionPermissions'][section],
         AdminTitle: admins[username]['title']
     }
 
@@ -81,11 +88,18 @@ const Cardinal = async ({ username, password, token, data, command, section }) =
         if (typeof a === 'boolean' && a) {
             return true
         } else {
-            console.log('test')
-            console.log(AdminPermissions)
             if (permissions.length == 0){
                 return true
-            }else{
+            }
+            else if(section != 'AdminActions'){
+                return [
+                    AdminPermissions.includes(permissions),
+                    allowedTitle.includes(AdminTitle),
+                    admins[username].token === token,
+                    admins[username].username === username
+                ].every(ItemsInArray => ItemsInArray === true)
+            }
+            else{
                 return [
                     AdminPermissions.includes(permissions),
                     allowedTitle.includes(AdminTitle)
@@ -105,11 +119,20 @@ const Cardinal = async ({ username, password, token, data, command, section }) =
                 : response.data = {
                     status: false,
                     data: {
-                        msg: 'Permission Denied'
+                        msg: 'Administrator permission type Denied'
                     }
                 }
         }
     } else {
+        console.log('** Apps')
+        ReqIsValid
+            ? response.data = await ExecuteAdminCommand()
+            : response.data = {
+                status: false,
+                data: {
+                    msg: 'Permission Denied'
+                }
+            }
     }
 
     // return

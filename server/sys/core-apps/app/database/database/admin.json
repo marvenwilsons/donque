@@ -15,13 +15,13 @@
 			"ip": "",
 			"___s": "sadfasdfwer",
 			"sectionPermissions": {
-				"admin": [
+				"AdminActions": [
 					"read",
 					"update",
 					"create",
 					"delete"
 				],
-				"page": [
+				"PageMethods": [
 					"delete",
 					"update",
 					"read",
