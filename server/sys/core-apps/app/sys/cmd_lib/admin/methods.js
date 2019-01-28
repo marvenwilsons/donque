@@ -122,6 +122,7 @@ adminMethods.adminlogout = {
     }
 }
 
+// 
 adminMethods.initapp = {
     get permissions(){
         return 'create'
@@ -141,6 +142,9 @@ adminMethods.initapp = {
 adminMethods.App = {
     get NoValidationRequiredCommands() {
         return ['initapp']
+    },
+    get Pages() {
+        
     }
 }
 
