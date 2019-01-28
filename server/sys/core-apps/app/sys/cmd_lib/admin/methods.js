@@ -127,7 +127,7 @@ adminMethods.initapp = {
     get permissions(){
         return 'create'
     },
-    initapp({dep,}){
+    initapp({dep,data}){
         return new Promise((resolve,reject) => {
             resolve({
                 status:true,
@@ -144,7 +144,7 @@ adminMethods.App = {
         return ['initapp']
     },
     get Pages() {
-        
+
     }
 }
 
