@@ -1,20 +1,20 @@
 
-const Cardinal = async ({username,password,token,data,command,section}) => {
-    const {app,admins,config} = await require('../database/index')
+const Cardinal = async ({ username, password, token, data, command, section }) => {
+    const { app, admins, config } = await require('../database/index')
     const dbAgent = require('../database/db-agent')
     const registry = require('./cmd_lib/registry')
 
     // command response container
     const response = {
-        state:{},
-        set data(r){
-            if (config.isInit && Object.keys(admins).length != 0){
+        state: {},
+        set data(r) {
+            if (config.isInit && Object.keys(admins).length != 0) {
                 this.state = r
-            }else{
+            } else {
                 this.state = {
-                    status:false,
-                    data:{
-                        action:'init'
+                    status: false,
+                    data: {
+                        action: 'initapp'
                     }
                 }
             }
@@ -24,69 +24,102 @@ const Cardinal = async ({username,password,token,data,command,section}) => {
         }
     }
 
-
-    const { permissions, allowedTitle } = registry[section][command]
-    const adminRes = () => {
-        response.data = registry
-        [section]
-        [command]
-        [command]
-            ({ dep: { dbAgent, app, config }, admins, username, password, data })
+    if (registry[section][command] === undefined) {
+        throw {
+            status: false,
+            data: {
+                msg: `cannot find ${command} command in ${section}`
+            }
+        }
     }
 
-    // command accessor
-    if(section == 'AdminActions'){
-        if(command == 'adminlogin' || command == 'adminlogout'){
-            adminRes()
-        }else{
-            
-            // Crud operations on admin.. case sensitive
-            // admin data
-            const adminPermissions = admins[username]['sectionPermissions']['admin']
-            
-            const adminTitle = 
-                admins[username]['title']
-            
-            // command data
-            const funcReqData = { fpermission, ftitle } = {
-                fpermission: registry[section][command].permissions,
-                ftitle: registry[section][command].allowedTitle
-            }
+    const { permissions, allowedTitle, funcIsDestructive } = registry[section][command]
+    const r = registry
+    [section]
+    [command]
+    [command]
 
-            // check permission
-            if (adminPermissions.includes(fpermission)){
-                // check title
-                if (ftitle.includes(adminTitle)){
-                    adminRes()
-                } else {
-                    response.data = {
-                        status:false,
-                        data:{
-                            msg:'Illegal access on admin actions, permission denied'
-                        }
+
+    // Choosen command
+    const ExecuteAdminCommand = async () => {
+        const adArgs = { dep: { dbAgent, app, config }, admins, username, password, data }
+        if (funcIsDestructive == false) {
+            console.log('*** function is not destructive executing function')
+            return await r(adArgs)
+        } else {
+            console.log('** destructive function asking for password')
+
+            if (password) {
+                console.log('** password detected')
+                if (admins[username].password === password) {
+                    console.log(`** executing ${command}`)
+                    return await r(adArgs)
+                }
+            } else {
+                console.log('** prompting for password')
+                response.data = {
+                    status: false,
+                    data: {
+                        action: 'promptpassword'
                     }
                 }
-            } else{
-                response.data = {
-                    status:false,
-                    data:{
+            }
+        }
+    }
+
+    // Crud operations on admin.. case sensitive
+    // admin data
+    const { AdminPermissions, AdminTitle } = {
+        AdminPermissions: admins[username]['sectionPermissions']['admin'],
+        AdminTitle: admins[username]['title']
+    }
+
+    // req isvalid?
+    // const ReqIsValid = 
+
+    const ReqIsValid = (a => {
+        if (typeof a === 'boolean' && a) {
+            return true
+        } else {
+            console.log('test')
+            console.log(AdminPermissions)
+            if (permissions.length == 0){
+                return true
+            }else{
+                return [
+                    AdminPermissions.includes(permissions),
+                    allowedTitle.includes(AdminTitle)
+                ].every(ItemsInArray => ItemsInArray === true)
+            }            
+        }
+    })(registry.AdminActions.App.NoValidationRequiredCommands.includes(command))
+
+    // command accessor
+    if (section == 'AdminActions') {
+        if (command == 'adminlogin' || command == 'adminlogout') {
+            response.data = await ExecuteAdminCommand()
+        } else {
+            // check permission
+            ReqIsValid
+                ? response.data = await ExecuteAdminCommand()
+                : response.data = {
+                    status: false,
+                    data: {
                         msg: 'Permission Denied'
                     }
                 }
-            }
         }
-    }else{
-
+    } else {
     }
 
     // return
-    return new Promise((resolve,reject) => {
-        if (response.data.status){
+    return new Promise((resolve, reject) => {
+        if (response.data.status) {
             resolve(response.data)
-        }else{
+        } else {
             reject(response.data)
         }
-    }) 
+    })
 }
 
 module.exports = Cardinal

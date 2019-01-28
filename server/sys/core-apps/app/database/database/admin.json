@@ -12,10 +12,10 @@
 			"username": "marvenwilsons",
 			"password": "password123",
 			"token": "asdfhqwe",
+			"ip": "",
 			"___s": "sadfasdfwer",
-			"primaryPermissions":["read","update","crate","delete"],
 			"sectionPermissions": {
-				"admin":[
+				"admin": [
 					"read",
 					"update",
 					"create",
@@ -39,12 +39,15 @@
 				"page": [],
 				"components": []
 			},
-			"task":{
-				"pending":[],
-				"done":[]
+			"task": {
+				"pending": [],
+				"done": []
 			},
-			"lastModefied":"",
-			"lastActivity":""
+			"messages": [
+				{}
+			],
+			"lastModefied": "",
+			"lastActivity": ""
 		}
 	}
 }
