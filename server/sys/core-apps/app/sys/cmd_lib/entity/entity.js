@@ -1,27 +1,27 @@
 // ***
 const entity = {}
 
-entity.CreateEntity = () => {
+entity.CreateEntity = (data) => {
 
 }
 
-entity.CreateEntityModel = () => {
+entity.CreateEntityModel = (data) => {
 
 }
 
-entity.RemoveEntity = () => {
+entity.RemoveEntity = (modelName,EntityName) => {
 
 }
 
-entity.RemoveModel = () => {
+entity.RemoveModel = (ModelName) => {
 
 }
 
-entity.UpdateEntity = () => {
+entity.UpdateEntity = (modelName,EntityName,key,value) => {
 
 }
 
-entity.UpdateModel = () => {
+entity.UpdateModel = (ModelName,OldKeyName,NewKeyName) => {
 
 }
 
