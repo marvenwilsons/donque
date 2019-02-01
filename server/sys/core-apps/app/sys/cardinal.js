@@ -1,8 +1,13 @@
 
 const Cardinal = async ({ username, password, token, data, command, section }) => {
+    
+    // dependecies
     const { app, admins, config } = await require('../database/index')
     const dbAgent = require('../database/db-agent')
     const registry = require('./cmd_lib/registry')
+
+    const { permissions, allowedTitle, funcIsDestructive } = registry[section][command]
+    const r = registry[section][command][command]
 
     // command response container
     const response = {
@@ -32,13 +37,6 @@ const Cardinal = async ({ username, password, token, data, command, section }) =
             }
         }
     }
-
-    const { permissions, allowedTitle, funcIsDestructive } = registry[section][command]
-    const r = registry
-    [section]
-    [command]
-    [command]
-
 
     // Choosen command
     const ExecuteAdminCommand = async () => {

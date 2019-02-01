@@ -56,7 +56,7 @@
         closable:true
       }"
           :position="0"
-        ><span class="flex spacebetween"> <span>Collections</span> <span class="dq-n-ind" >10</span> </span></sender>
+        ><span class="flex spacebetween"> <span>Services</span> <span class="dq-n-ind" >10</span> </span></sender>
       </span>
 
       <!-- Components -->
