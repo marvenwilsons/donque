@@ -1,5 +1,5 @@
 
-const Cardinal = async ({ username, password, token, data, command, section }) => {
+const Cardinal = async ({ username, password, token, data, command, section, method }) => {
     
     // dependecies
     const db = await require('../database/index')

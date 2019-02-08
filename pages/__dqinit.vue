@@ -445,7 +445,7 @@ export default {
         app.password = this.password;
         app.repassword = this.repassword;
         app.email = this.email;
-        app.adminName = this.adminName
+        app.adminName = this.adminName;
 
         this.$axios
           .$post("/dqapp/initapp", app)
@@ -458,29 +458,31 @@ export default {
             }, 15000);
           })
           .catch(e => {
-            alert(e)
+            alert(e);
           });
       }
     }
   },
   mounted() {
-    console.log(this.ws)
     setTimeout(() => {
       this.ready = true;
     }, 1000);
 
     this.$axios
-      .$get("dqapp/app")
+      .$get("dqapp/_dq", {
+        params: {
+          command:'init',
+          section:'adminActions'
+        }
+      })
       .then(res => {
-        console.log(res.status)
         if (res.status) {
           location.href = "dqlogin";
         }
       })
       .catch(err => {
-        alert(err);
+        // alert(err);
       });
-
   }
 };
 </script>
