@@ -1,12 +1,6 @@
 {
-	"siteTitle": "GreenWorks",
-	"siteOwner": "marvenwilsons",
-	"createdOn": "2019-01-16T16:19:52.482Z",
-	"currentLiveAdmins": [
-		"marvenwilsons"
-	],
-	"admins": {
-		"marvenwilsons": {
+	"admins": [
+		{
 			"title": "owner",
 			"adminName": "John B Doe",
 			"username": "marvenwilsons",
@@ -49,5 +43,5 @@
 			"lastModefied": "",
 			"lastActivity": ""
 		}
-	}
+	]
 }

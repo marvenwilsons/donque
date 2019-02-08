@@ -1,17 +1,25 @@
+const MongoClient = require('mongodb').MongoClient
+
 const DatabaseContent = (async () => {
+    console.log('initializing database')
     
-    const dbAgent = require('./db-agent')
-    
-    let config = await dbAgent.readFrom('JSON','config')
-    let admins = await dbAgent.readFrom('JSON','admin')
+    // const config = await dbAgent.readFrom('JSON','config')
+    // const admins = await dbAgent.readFrom('JSON','admin')
+    // const dataModels = {}
 
-    const Obj = {
-        admins: admins.admins,
-        app: admins,
-        config
+    // const Obj = {
+    //     admins: {},
+    //     app: {},
+    //     dataModels,
+    //     config: {}
+    // }
+
+    return {
+        status: false,
+        data:{
+            msg: 'db is not initialized'
+        }
     }
-
-    return Obj
 })()
 
 module.exports = DatabaseContent
