@@ -2,59 +2,47 @@
 const Cardinal = async ({ username, password, token, data, command, section, method }) => {
     
     // dependecies
-    const db = await require('../database/index')
-    // const dbAgent = require('../database/db-agent')
+    const db = require('../database/index')
     const registry = require('./cmd_lib/registry')
-
-    const { permissions, allowedTitle, funcIsDestructive } = registry[section][command]
-    const r = registry[section][command][command]
 
     // command response container
     const response = {
         state: {},
         set data(r) {
             this.state = r
-
-            // if (config.isInit && Object.keys(admins).length != 0) {
-            //     this.state = r
-            // } else {
-            //     this.state = {
-            //         status: false,
-            //         data: {
-            //             action: 'initapp'
-            //         }
-            //     }
-            // }
         },
         get data() {
             return this.state
         }
     }
 
-    // check db
-    if(!db.status){
-        response.data = db
-    }
-
-    /**
-     * ENGINE
-     */
-
-
-    /**
-     * END Engine
-     */
-
-    if (registry[section][command] === undefined) {
-        throw {
-            status: false,
-            data: {
-                msg: `cannot find ${command} command in ${section}`
-            }
-        }
-    }
-
+    const selectedCommand = registry[section][command]
     
+    /**
+     * returns true if command is allowed for execution
+     * returns an object if command is not allowed to execute
+     */
+    const commandIsAllowed = await registry.dqapp.universalprotocol({
+        dep: {
+            db,
+            data
+        },
+        selectedCommand,
+        username,
+        password,
+        token,
+        section,
+        command,
+        method
+    })
+
+
+    if(commandIsAllowed.status){
+        console.log('** execute function')
+        // response.data
+    }else {
+        response.data = ''
+    }
 
     // return
     return new Promise((resolve, reject) => {

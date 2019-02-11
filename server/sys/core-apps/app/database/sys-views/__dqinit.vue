@@ -448,18 +448,14 @@ export default {
         app.adminName = this.adminName;
 
         this.$axios
-          .$post("/dqapp/_dq", {
-            command:'dqinitapp',
-            section:'dqapp',
-            data: app
-          })
+          .$post("/dqapp/initapp", app)
           .then(res => {
             this.ready = false;
             setTimeout(() => {
               if (res) {
-                location.href="dqlogin"
+                location.reload();
               }
-            }, 1000);
+            }, 15000);
           })
           .catch(e => {
             alert(e);
@@ -471,6 +467,22 @@ export default {
     setTimeout(() => {
       this.ready = true;
     }, 1000);
+
+    this.$axios
+      .$get("dqapp/_dq", {
+        params: {
+          command:'init',
+          section:'adminActions'
+        }
+      })
+      .then(res => {
+        if (res.status) {
+          location.href = "dqlogin";
+        }
+      })
+      .catch(err => {
+        // alert(err);
+      });
   }
 };
 </script>

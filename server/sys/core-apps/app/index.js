@@ -11,7 +11,15 @@ router.get('/app', (req, res) => {
 })
 
 router.post('/_dq', async ({ body: { username, password, token, data, command, section } }, res) => {
-    const response =  await cardinal(body)
+    const response =  await cardinal({
+        username,
+        password,
+        token,
+        data,
+        command,
+        section,
+        method:'POST'
+    })
     res(response)
 })
 
@@ -25,6 +33,8 @@ router.get('/_dq', async ({ query: { username, password, token, data, command, s
         section,
         method:'GET'
     })
+    console.log('get response')
+    console.log(response)
     res(response)
 })
 

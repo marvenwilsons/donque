@@ -28,7 +28,7 @@
 					"create"
 				]
 			},
-			"luckSections": {
+			"lockSections": {
 				"app": [],
 				"page": [],
 				"components": []
