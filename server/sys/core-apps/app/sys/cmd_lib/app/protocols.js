@@ -1,4 +1,5 @@
 const validator = require('../utils/utils').validator
+const encrypt = require('../utils/utils').encrypt
 const MongoClient = require('mongodb').MongoClient
 const protocols = {}
 
@@ -59,7 +60,7 @@ const init = ({ siteTitle, username, password, email, adminName }, callback) => 
                             colName: 'dq_admins', data: {
                                 adminName,
                                 username,
-                                password,
+                                password: encrypt.encrypt(username,password),
                                 token: '',
                                 title: 'owner',
                                 email,
