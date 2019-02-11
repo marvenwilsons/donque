@@ -34,7 +34,7 @@ const init = ({ siteTitle, username, password, email, adminName }, callback) => 
                  */
                 const dbDoesNotExist = dbs.databases.map(({ name }) => {
                     if (name === dbName) {
-                        callback(`${dbName} database already exist in mongoDb`)
+                        callback(`${dbName} database already exist in mongo database`)
                     } else {
                         return true
                     }
@@ -99,6 +99,25 @@ const init = ({ siteTitle, username, password, email, adminName }, callback) => 
                         })
 
                         if (cols.length - 1 == i) {
+                            /**
+                             * Create new database admin
+                             * Note! dq admin and db admin are two different things
+                             * so if an admin can do crud in certain parts of the applications it
+                             * doesnt mean that admin can do crud or has access to mongoDb database
+                             * app admin and db admin are not similar
+                             */
+                            adminDb.addUser(username,password, {
+                                roles:['dbOwner']
+                            },(err,result) => {
+                                if(err){
+                                    callback('Unable to create new admin',null)
+                                }
+                            })
+                            
+
+                            /**
+                             * Close database connection
+                             */
                             client
                                 .close()
                                 .then(data => {
