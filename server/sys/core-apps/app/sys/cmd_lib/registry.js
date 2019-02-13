@@ -1,10 +1,10 @@
-const AdminActions = require('./admin/methods')
+const adminMethods = require('./admin/methods')
 const PageMethods = require('./page/methods')
 const dqapp = require('./app/protocols')
 
 const registry = (() => {
     return {
-        AdminActions,
+        adminMethods,
         PageMethods,
         dqapp
     }

@@ -1,8 +1,12 @@
 const validator = require('../utils/utils').validator
 const encrypt = require('../utils/utils').encrypt
 const MongoClient = require('mongodb').MongoClient
+const auth = require('./auth')
 const protocols = {}
+const fs = require('fs')
+const path = require('path')
 
+console.log()
 protocols.dqinitapp = {
     get prop() {
         return {
@@ -16,132 +20,114 @@ protocols.dqinitapp = {
     }
 }
 
-const init = ({ siteTitle, username, password, email, adminName }, callback) => {
+const initApplicationProtocol = async ({ siteTitle, username, password, email, adminName }, callback) => {
     const dbName = `dq_${siteTitle}`
 
     /**
      * Connect and create dq database
      */
-    MongoClient.connect(`mongodb://localhost:27017/${dbName}`, { useNewUrlParser: true }, (err, client) => {
-        if (err) {
-            callback('unable to connect to MongoDb server', null)
-        } else {
-            const adminDb = client.db(dbName).admin()
+    const db = () => MongoClient.connect(`mongodb://localhost:27017/${dbName}`, { useNewUrlParser: true })
+    db().then(async (client) => {
 
-            adminDb.listDatabases((err, dbs) => {
+        /**
+         * Does dbName already a database?
+         */
+        const adminDb = client.db(dbName),
+            AccessDbList = adminDb.admin().listDatabases(),
+            dbList = await AccessDbList.then(list => list.databases).catch(() => { throw new Error('Listing database error') })
+            dbExistStat = dbList.map(({ name }) => name === dbName ? callback(`${dbName} already exist in mongo database`) : true),
+            dbDoesNotExist = dbExistStat.every(items => items === true)
 
-                /**
-                 * Check if db already exist
-                 */
-                const dbDoesNotExist = dbs.databases.map(({ name }) => {
-                    if (name === dbName) {
-                        callback(`${dbName} database already exist in mongo database`)
-                    } else {
-                        return true
-                    }
+        /**
+         * Collections and its data
+         */
+        const CollectionsAndData = [{
+            colName: 'dq_app', data: {
+                siteTitle,
+                siteOwner: adminName,
+                created: new Date,
+                currentLiveAdmins: []
+            },
+        },
+        {
+            colName: 'dq_admins', data: {
+                adminName,
+                username,
+                password: encrypt.encrypt(username, password),
+                token: '',
+                title: 'owner',
+                email,
+                ip: '',
+                sectionPermissions: {
+                    adminActions: ['c', 'r', 'u', 'd'],
+                    pageMethods: ['c', 'r', 'u', 'd'],
+                    components: ['c', 'r', 'u', 'd'],
+                    shell: ['c', 'r', 'u', 'd']
+                },
+                task: {
+                    pending: [],
+                    done: []
+                },
+                messages: [],
+                lastModefied: '',
+                lastActivity: ''
+            }
+        }, {
+            colName: 'dq_config', data: {
+                adminLanding: 'admin',
+                protectedRoutes: []
+            }
+        }]
+
+        /**
+         * Creating and Saving to database
+         */
+        dbDoesNotExist && CollectionsAndData.map((items, index) => {
+            
+            /**
+             * Create collections and insert data to each collections
+             */
+            client.db(dbName)
+            .collection(items.colName)
+            .insertOne(items.data)
+            .catch(() => callback(`unable to create collection ${colName}`))
+
+            /**
+             * Create admin to the database
+             */
+            if (CollectionsAndData.length - 1 === index){
+                // create user 
+                adminDb.addUser(username, encrypt.encrypt(username, password),{roles:['readWrite']})
+                .catch(() => callback(`unable to create admin "${username}" to ${dbName} database`))
+                
+                // create app db config
+                const _path = path.join(__dirname, '../../../database/iniConf.json')
+                const _data = JSON.stringify({
+                    title:siteTitle,
+                    appName: dbName,
+                    owner: adminName,
+                    ini:true
+                },null,'\t')
+                fs.writeFile(_path,_data,'utf-8',(err) => {
+                    err ? console.log(err) : console.log('** write done')
                 })
 
                 /**
-                 * If database name does not yet exist 
+                 * Close connection
                  */
-                if (dbDoesNotExist.every(items => items == true)) {
-                    const cols = [
-                        // dq_app collection
-                        {
-                            colName: 'dq_app', data: {
-                                siteTitle,
-                                siteOwner: adminName,
-                                created: new Date,
-                                currentLiveAdmins: []
-                            }
-                        },
-                        // dq_admins collection
-                        {
-                            colName: 'dq_admins', data: {
-                                adminName,
-                                username,
-                                password: encrypt.encrypt(username,password),
-                                token: '',
-                                title: 'owner',
-                                email,
-                                ip: '',
-                                sectionPermissions: {
-                                    adminActions: ['c', 'r', 'u', 'd'],
-                                    pageMethods: ['c', 'r', 'u', 'd'],
-                                    components: ['c', 'r', 'u', 'd'],
-                                    shell: ['c', 'r', 'u', 'd']
-                                },
-                                task: {
-                                    pending: [],
-                                    done: []
-                                },
-                                messages: [],
-                                lastModefied: '',
-                                lastActivity: ''
-                            }
-                        },
-                        // dq_config collection
-                        {
-                            colName: 'dq_config', data: {
-                                adminLanding: 'admin',
-                                protectedRoutes: []
-                            }
-                        }
-                    ]
-
-                    /**
-                     *  save to database
-                     */
-                    cols.map((e, i) => {
-                        client.db(dbName).collection(e.colName).insertOne(e.data, (err, result) => {
-                            if (err) {
-                                callback(`Unable to create collection ${e.colName}`, null)
-                            }
-                        })
-
-                        if (cols.length - 1 == i) {
-                            /**
-                             * Create new database admin
-                             * Note! dq admin and db admin are two different things
-                             * so if an admin can do crud in certain parts of the applications it
-                             * doesnt mean that admin can do crud or has access to mongoDb database
-                             * app admin and db admin are not similar
-                             */
-                            adminDb.addUser(username,password, {
-                                roles:['dbOwner']
-                            },(err,result) => {
-                                if(err){
-                                    callback('Unable to create new admin',null)
-                                }
-                            })
-                            
-
-                            /**
-                             * Close database connection
-                             */
-                            client
-                                .close()
-                                .then(data => {
-                                    callback(null, {
-                                        status: true,
-                                        data: {
-                                            msg: `${siteTitle} successfully created`
-                                        }
-                                    })
-                                })
-                                .catch(err => {
-                                    callback(err, null)
-                                })
+                client.close().then(() => {
+                    callback(null, {
+                        status: true,
+                        data: {
+                            msg: `${siteTitle} successfully created`
                         }
                     })
-                }
-            })
-        }
+                })
+            }
+        })
+    }).catch(err => {
+        throw new Error(err)
     })
-}
-
-const checkpermission = (permissions) => {
-
 }
 
 protocols.universalprotocol = async ({ dep, selectedCommand, username, password, token, command, section, method }) => {
@@ -200,11 +186,17 @@ protocols.universalprotocol = async ({ dep, selectedCommand, username, password,
                 /**
                  * Initialize app
                  */
-                init(data, (err, db) => {
+                initApplicationProtocol(data, (err, db) => {
                     if (err) {
-                        reject(err)
+                        reject({
+                            status: false,
+                            data: {
+                                msg: err
+                            }
+                        })
                     } else {
-                        if (db.status){
+                        if (db.status) {
+                            db.data.section = 'dqapp'
                             resolve(db)
                         }
                     }
@@ -213,7 +205,19 @@ protocols.universalprotocol = async ({ dep, selectedCommand, username, password,
                 reject('Validation failed')
             }
         } else {
-
+            console.log('universal protocol')
+            auth({ selectedCommand, username, password, token, command, data, section, method }, (err) => {
+                if (err) {
+                    reject(err)
+                } else {
+                    resolve({
+                        status: true,
+                        data: {
+                            msg: 'testing'
+                        }
+                    })
+                }
+            })
         }
     })
 }
