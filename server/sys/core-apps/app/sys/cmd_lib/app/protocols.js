@@ -21,6 +21,7 @@ protocols.dqinitapp = {
 }
 
 const initApplicationProtocol = async ({ siteTitle, username, password, email, adminName }, callback) => {
+    console.log('init')
     const dbName = `dq_${siteTitle}`
 
     /**

@@ -20,7 +20,7 @@ router.post('/_dq', async ({ body: { username, password, token, data, command, s
         section,
         method:'POST'
     })
-    res(response)
+    res.status(200).json(response)
 })
 
 router.get('/_dq', async ({ query: { username, password, token, data, command, section} },res) => {
@@ -35,7 +35,7 @@ router.get('/_dq', async ({ query: { username, password, token, data, command, s
     })
     console.log('get response')
     console.log(response)
-    res(response)
+    res.status(200).json(response)
 })
 
 module.exports = {

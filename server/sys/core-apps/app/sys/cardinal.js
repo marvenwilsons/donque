@@ -31,9 +31,10 @@ const Cardinal = async ({ username, password, token, data, command, section, met
         }
     }
 
-
     const userdb = await db(username, password)
+    console.log(userdb)
     if (userdb) {
+
         /**
          * returns true if command is allowed for execution
          * returns an object if command is not allowed to execute
@@ -73,6 +74,8 @@ const Cardinal = async ({ username, password, token, data, command, section, met
             console.log('** fail')
             response.data = commandIsAllowed.data.msg
         }
+    }else{
+        console.log('not connected to db')
     }
 
     // return

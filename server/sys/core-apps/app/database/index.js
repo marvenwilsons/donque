@@ -28,8 +28,14 @@ let _appName = undefined
  */
 const db = (user, pwd) => {
     return new Promise((resolve,reject) => {
+        /**
+         * To perform initialization
+         */
+        !iniFile && resolve(true)
 
-
+        /**
+         * After initialization
+         */
         if (iniFile && !con) {
             /**
              * Local host connection
