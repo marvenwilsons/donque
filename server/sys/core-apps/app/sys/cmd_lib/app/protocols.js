@@ -53,7 +53,7 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
             colName: 'dq_admins', data: {
                 adminName,
                 username,
-                password: encrypt.encrypt(username, password),
+                password: encrypt.encrypt(password,username),
                 token: '',
                 title: 'owner',
                 email,
@@ -106,6 +106,7 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                     title:siteTitle,
                     appName: dbName,
                     owner: adminName,
+                    username:encrypt.encrypt(username,adminName),
                     ini:true
                 },null,'\t')
                 fs.writeFile(_path,_data,'utf-8',(err) => {
@@ -206,15 +207,14 @@ protocols.universalprotocol = async ({ dep, selectedCommand, username, password,
             }
         } else {
             console.log('universal protocol')
-            auth({ selectedCommand, username, password, token, command, data, section, method }, (err) => {
+            auth({ dep, selectedCommand, username, password, token, command, data, section, method }, (err,data) => {
                 if (err) {
                     reject(err)
                 } else {
+                    console.log('** [universal protocol] Command is allowed')
                     resolve({
                         status: true,
-                        data: {
-                            msg: 'testing'
-                        }
+                        ...data
                     })
                 }
             })

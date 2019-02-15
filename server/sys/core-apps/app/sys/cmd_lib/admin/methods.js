@@ -1,4 +1,6 @@
 const adminMethods = {}
+const security = require('../utils/utils').encrypt
+const jwt = require('jsonwebtoken')
 
 // Login
 adminMethods.adminlogin = {
@@ -9,12 +11,45 @@ adminMethods.adminlogin = {
             funcIsDestructive: false
         }
     },
-    adminlogin({username,password}) {
+    adminlogin({ dep, username, password }) {
+        const { user, db } = dep
         // check user name validity
-       console.log('logging in')
-       return {
-           status: true
-       }
+        console.log('logging in')
+        return new Promise((resolve,reject) => {
+            if (security.decrypt(user.password, username) === security.encrypt(password, username)) {
+                let reUser = user
+
+                /**
+                 * Create token
+                 */
+                db.collection('dq_admins').findOneAndUpdate({ username }, { $set: { 
+                    token: jwt.sign({username,password},security.encrypt(password, username))}}, {
+                    returnOriginal:false
+                },(err,u) => {
+                   if(err){
+                       reject({
+                           status:false,
+                           data:{
+                               msg:err
+                           }
+                       })
+                   }else{
+                    reUser = u
+                   }
+                })
+
+                /**
+                 * Return
+                 */
+                delete(reUser._id)
+                delete(reUser.password)
+                delete(reUser.ip)
+                resolve({
+                    status: true,
+                    data:reUser
+                })
+            }
+        })
     }
 }
 
@@ -23,7 +58,7 @@ adminMethods.adminlogout = {
     get permissions() {
         return []
     },
-    
+
 }
 
 adminMethods.App = {
@@ -37,22 +72,22 @@ adminMethods.App = {
 
 // Add new admin
 adminMethods.CreateNewAdmin = {
-    get permissions(){
+    get permissions() {
         return 'create'
     },
-    get allowedTitle(){
+    get allowedTitle() {
         return ['owner']
     },
     get funcIsDestructive() {
         return true
     },
-    CreateNewAdmin({ username, password, adminName, title }){
+    CreateNewAdmin({ username, password, adminName, title }) {
         console.log('** Creating New Admin')
         // get schema
         // hash the username and password
         // add new admin entry to databasen
 
-        return new Promise((resolve,reject) => {
+        return new Promise((resolve, reject) => {
             resolve({
                 status: true,
                 data: {
@@ -60,7 +95,7 @@ adminMethods.CreateNewAdmin = {
                 }
             })
         })
-        
+
     }
 }
 
@@ -72,10 +107,10 @@ adminMethods.UpdateAdmin = {
     get funcIsDestructive() {
         return true
     },
-    allowedTitle(){
+    allowedTitle() {
         return ['owner']
     },
-    UpdateAdmin({dep, username, password, data}){
+    UpdateAdmin({ dep, username, password, data }) {
 
     }
 }
@@ -88,7 +123,7 @@ adminMethods.DeleteAdmin = {
     allowedTitle() {
         return ['Owner']
     },
-    DeleteAdmin({dep, username}) {
+    DeleteAdmin({ dep, username }) {
 
     }
 }
