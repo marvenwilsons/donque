@@ -24,7 +24,7 @@ let _appName = undefined
 
 
 /**
- * Return the database context to the current user
+ * Return the database context
  */
 const db = (user, pwd) => {
     return new Promise((resolve,reject) => {
@@ -36,12 +36,11 @@ const db = (user, pwd) => {
         /**
          * After initialization
          */
-        if (iniFile && !con) {
+        if (con == false && d == undefined) {
             /**
              * Local host connection
              */
-            console.log('Connecting of fisrt load')
-            console.log(con)
+            console.log('** Connecting on fisrt load')
             const { appName, owner, } = require('./iniConf.json')
 
             /**
@@ -57,15 +56,15 @@ const db = (user, pwd) => {
                 useNewUrlParser: true
             })
                 .then(data => {
-                    console.log('** [MongoDb] Success loging in Mongo Database')
-                    console.log('** [MongoDb] user type is admin app, and admin database')
+                    console.log(`   [MongoDb] Success loging in Mongo Database`)
+                    console.log(`   [MongoDb] user type is admin app, and admin database`)
                     //
                     con = true
                     d = data
                     _appName = appName
                     //
-                    data.applicationUserType = 'appAdminAndUserAdmin'
                     data.isOwner = _user === user ? true : false
+                    data.firstLoad = true
                     //
                     resolve(data)
                 })
@@ -90,7 +89,7 @@ const db = (user, pwd) => {
 
         } else if (iniFile && con) {
             console.log('connecting as a application user')
-            d.applicationUserType = 'appUser'
+            d.firstLoad = false
             d.appName = _appName
             resolve(d)
         }

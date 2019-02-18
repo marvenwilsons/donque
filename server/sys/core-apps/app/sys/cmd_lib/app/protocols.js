@@ -207,12 +207,12 @@ protocols.universalprotocol = async ({ dep, selectedCommand, username, password,
                 reject('Validation failed')
             }
         } else {
-            console.log('universal protocol')
+            console.log('** Executing protocols')
             auth({ dep, selectedCommand, username, password, token, command, data, section, method }, (err,data) => {
                 if (err) {
                     reject(err)
                 } else {
-                    console.log('** [universal protocol] Command is allowed')
+                    console.log('   [universal protocol] Command is allowed')
                     resolve({
                         status: true,
                         ...data

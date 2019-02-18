@@ -1,16 +1,19 @@
 const permissionHandler = (permissions) => {
+    console.log('   [Universal protocol] permission handler')
     return true
 }
 
 const titleHandler = (titles) => {
+    console.log('   [Universal protocol] title handler')
     return true
 }
 
 const sectionHandler = (section) => {
-
+    console.log('   [Universal protocol] section handler')
 }
 
 const functionHandler = (func) => {
+    console.log('   [Universal protocol] function handler')
     // return {
     //     status:false,
     //     data:'func needs addtional auth process'
@@ -20,18 +23,18 @@ const functionHandler = (func) => {
 
 const security = require('../utils/utils').encrypt
 
-const validateUser = async (dbclient, { username, password, token }) => {
-    console.log('validate user')
+const _validateUser = async (dbclient, { username }) => {
+    console.log('   [Universal protocol] Validating user')
     const userdb = dbclient.db(dbclient.appName).collection('dq_admins')
     const db = dbclient.db(dbclient.appName)
-    const user = await userdb.findOne({ $and: [{ username }, { password: security.encrypt(password, username) }] })
+    const user = await userdb.findOne({username})
 
     return new Promise(async (resolve, reject) => {
         if (dbclient.applicationUserType === 'appUser') {
             /**
              * Get dq user admin
              */
-            console.log('** [validateUser] user is an app admin only')
+            console.log('   [Universal protocol] validating user: user is an app admin only')
             
             if(user){
                 if (user.title == 'owner'){
@@ -65,7 +68,7 @@ const validateUser = async (dbclient, { username, password, token }) => {
              * is db admin is owner ? full access : validate
              */
             if (dbclient.isOwner){
-                console.log('** [validateUser] user is an owner')
+                console.log('   [Universal protocol] validating user: user is an owner')
                 resolve({
                     validated: true,
                     action:'full access',
@@ -89,12 +92,39 @@ const validateUser = async (dbclient, { username, password, token }) => {
     })
 }
 
+const validateUserExistance = async (dbclient, { username }) => {
+    const userdb = dbclient.db(dbclient.appName).collection('dq_admins')
+    const db = dbclient.db(dbclient.appName)
+    const user = await userdb.findOne({ username })
+
+    const fullPrevilegeTitle = [
+        'owner'
+    ]
+
+    return new Promise((resolve,reject) => {
+        if(user){
+            resolve({
+                validated: true,
+                accessType: fullPrevilegeTitle.includes(user.title) ? 'full' : 'limited',
+                data: {
+                    user,
+                    db
+                }
+            })
+        }else{
+            reject({
+                validated: false,
+            })
+        }
+    })
+}
+
 const auth = async ({ dep, selectedCommand, username, password, token, command, data, section, method }, callback) => {
     const { userdb } = dep
 
-    const isAValidUser = await validateUser(userdb, { username, password, token })
+    const userDoesExist = await validateUserExistance(userdb, { username, password, token })
     
-    if (isAValidUser.validated && isAValidUser.action == 'limited') {
+    if (userDoesExist.validated && userDoesExist.accessType == 'limited') {
         const res = [
             { output: permissionHandler(selectedCommand.prop) },
             { output: titleHandler(selectedCommand.prop) },
@@ -110,10 +140,10 @@ const auth = async ({ dep, selectedCommand, username, password, token, command, 
         } else {
             callback(res[pIndex].output, null)
         }
-    } else if (isAValidUser.validated && isAValidUser.action == 'full access'){
+    } else if (userDoesExist.validated && userDoesExist.accessType == 'full'){
         callback(null, {
             status: true,
-            data: isAValidUser.data
+            data: userDoesExist.data
         })
     } else {
         callback({

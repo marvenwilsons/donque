@@ -4,19 +4,7 @@ const Cardinal = async ({ username, password, token, data, command, section, met
     // dependecies
     const registry = require('./cmd_lib/registry')
 
-    // command response container
-    const response = {
-        state: {},
-        set data(r) {
-            if (r.status === false) {
-                throw Error(r.data.msg)
-            }
-            this.state = r
-        },
-        get data() {
-            return this.state
-        }
-    }
+    let response = {}
 
     let selectedCommand = undefined
 
@@ -53,40 +41,32 @@ const Cardinal = async ({ username, password, token, data, command, section, met
         })
 
         if (commandIsAllowed.status) {
-            console.log('** [CardinalSystem] execute function')
-            if (commandIsAllowed.data.section === 'dqapp') {
-                response.data = commandIsAllowed
-            } else {
-                console.log('** [CardinalSystem] executing command')
-                /**
-                 * Execute function
-                 */
-                const _d = commandIsAllowed.data
-                const param = section != 'adminMethods' ? data : { dep: _d,username, password, token, data }
+            console.log('** [CardinalSystem] command validation done')
+            console.log('   [CardinalSystem] executing command')
+            /**
+             * Execute function
+             */
+            const _d = commandIsAllowed.data
+            const param = section != 'adminMethods' ? data : { dep: _d, username, password, token, data }
 
-                if (commandIsAllowed.status) {
-                    const CommandResponse = await selectedCommand[command](param)
-                    response.data = CommandResponse
-                }
-            }
+            console.log(`   [CardinalSystem] Entering ${section}`)
+            console.log(`   [CardinalSystem] Exectuing ${command}`)
+
+            selectedCommand[command](param).then(data => {
+                response.data = data
+            }).catch(err => {
+                response.data = err
+            })
         } else {
             console.log('** fail')
             response.data = commandIsAllowed.data.msg
         }
-    }else{
+    } else {
         console.log('not connected to db')
     }
 
     // return
-    return new Promise((resolve, reject) => {
-        if (response.data.status) {
-            console.log('** [CardinalSystem] returning success to client')
-            resolve(response.data)
-        } else {
-            console.log('** returning fail to client')
-            reject(response.data)
-        }
-    })
+    return await response
 }
 
 module.exports = Cardinal
