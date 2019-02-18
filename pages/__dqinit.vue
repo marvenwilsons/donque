@@ -11,7 +11,7 @@
           <h1>dq</h1>
         </div>
         <div id="tc-f-wrap">
-          <h5 class="tc">Welcome</h5>
+          <h5 class="tc">Welcome!</h5>
           <hr>
           <p class="tc tt">
             Welcome to the famous one-minute initialization, please provide all the required information below
@@ -456,7 +456,8 @@ export default {
           .then(res => {
             this.ready = false;
             setTimeout(() => {
-              if (res) {
+              if (res.status) {
+                console.log('response front end')
                 location.href="dqlogin"
               }
             }, 1000);
@@ -468,6 +469,7 @@ export default {
     }
   },
   mounted() {
+    console.log('testing')
     setTimeout(() => {
       this.ready = true;
     }, 1000);

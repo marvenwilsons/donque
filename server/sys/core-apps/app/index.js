@@ -11,7 +11,7 @@ router.get('/app', (req, res) => {
 })
 
 router.post('/_dq', async ({ body: { username, password, token, data, command, section } }, res) => {
-    const response =  await cardinal({
+    cardinal({
         username,
         password,
         token,
@@ -19,8 +19,13 @@ router.post('/_dq', async ({ body: { username, password, token, data, command, s
         command,
         section,
         method:'POST'
+    }).then(data => {
+        res.status(200).json(data)
+    }).catch(err => {
+        console.log('oopppsie')
+        console.log(err)
+        res.status(204).json(err)
     })
-    res.status(200).json(response)
 })
 
 router.get('/_dq', async ({ query: { username, password, token, data, command, section} },res) => {
@@ -34,7 +39,7 @@ router.get('/_dq', async ({ query: { username, password, token, data, command, s
         method:'GET'
     })
     console.log('get response')
-    console.log(response)
+    console.log(command)
     res.status(200).json(response)
 })
 

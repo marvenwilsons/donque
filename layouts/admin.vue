@@ -36,10 +36,11 @@ export default {
     }
   },
   mounted() {
-    // console.log(this.$store.state.user);
-    // for docker
-    this.$store.dispatch("firstLoad");
-
+    /**
+     * For the docker, it will set up first item highlight
+     * to the dashboard
+     */
+    this.$store.dispatch("firstLoad")
     //
     if (!this.$store.state.app) {
       location.href = "__dqinit";
@@ -47,7 +48,9 @@ export default {
       if (localStorage.getItem("auth")) {
         const req = {
           token: localStorage.getItem("auth"),
-          username: localStorage.getItem("username")
+          username: localStorage.getItem("username"),
+          section:'adminMethods',
+          command:'initAdminDashboard'
         };
         this.$axios
           .$post("dqapp/_dq", req)

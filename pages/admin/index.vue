@@ -28,7 +28,7 @@ export default {
     main_window,
     spinner
   },
-  layout: "admin",
+  layout: "admin"
 };
 </script>
 

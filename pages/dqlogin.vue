@@ -80,17 +80,19 @@ export default {
     },
     submit() {
       // this.err = true;
-      let userCred = {};
-      userCred.username = this.username;
-      userCred.password = this.password;
       this.$axios
-        .$post("dqapp/applogin", userCred)
+        .$post("dqapp/_dq", {
+          command: "adminlogin",
+          section: "adminMethods",
+          username:this.username,
+          password: this.password
+        })
         .then(data => {
           if (data.status) {
             // set localstorage
             localStorage.setItem("auth", data.token);
             localStorage.setItem("username", data.username);
-            console.log(localStorage.getItem("auth"))
+            console.log(localStorage.getItem("auth"));
             if (localStorage.getItem("auth")) {
               location.href = "admin";
             }
@@ -111,19 +113,9 @@ export default {
   mounted() {
     localStorage.clear();
     this.ready = false;
-
-    this.$axios
-      .$get("dqapp/app")
-      .then(res => {
-        if (!res.status) {
-          location.href = "__dqinit";
-        } else {
-          this.ready = true;
-        }
-      })
-      .catch(err => {
-        alert(err);
-      });
+    setTimeout(() => {
+      this.ready = true;
+    }, 500);
   }
 };
 </script>

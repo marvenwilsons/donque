@@ -26,13 +26,12 @@ const Cardinal = async ({ username, password, token, data, command, section, met
         response.data = {
             status: false,
             data: {
-                msg: `System error, section or command does not exist in registry`
+                msg: `CardinalSystem Error: ${section} ${registry[section] == undefined ? 'section' : 'command'} does not exist or is undefined`
             }
         }
     }
 
     const userdb = await db(username, password)
-    console.log(userdb)
     if (userdb) {
 
         /**

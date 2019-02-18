@@ -21,7 +21,7 @@ const functionHandler = (func) => {
 const security = require('../utils/utils').encrypt
 
 const validateUser = async (dbclient, { username, password, token }) => {
-
+    console.log('validate user')
     const userdb = dbclient.db(dbclient.appName).collection('dq_admins')
     const db = dbclient.db(dbclient.appName)
     const user = await userdb.findOne({ $and: [{ username }, { password: security.encrypt(password, username) }] })

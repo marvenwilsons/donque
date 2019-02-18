@@ -464,10 +464,11 @@ export default {
     }
   },
   mounted() {
+    console.log('init')
+
     setTimeout(() => {
       this.ready = true;
     }, 1000);
-
     this.$axios
       .$get("dqapp/_dq", {
         params: {

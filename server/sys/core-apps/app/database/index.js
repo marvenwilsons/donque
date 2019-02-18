@@ -47,8 +47,8 @@ const db = (user, pwd) => {
             /**
              * Credentials
              */
-            const _user = security.decrypt(user, owner)
-            const _pass = security.encrypt(pwd, _user)
+            const _user = user && pwd ? security.decrypt(user, owner) : null
+            const _pass = user && pwd ? security.encrypt(pwd, _user) : null
 
             /**
              * Connection
@@ -75,7 +75,7 @@ const db = (user, pwd) => {
                         reject({
                             status:false,
                             data:{
-                                msg: 'Connection to database is not yet established, system cannot perform any validation, please login as a database admin'
+                                msg: 'Wrong database password or username'
                             }
                         })
                     }else{

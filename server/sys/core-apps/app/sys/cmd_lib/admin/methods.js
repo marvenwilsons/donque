@@ -12,6 +12,7 @@ adminMethods.adminlogin = {
         }
     },
     adminlogin({ dep, username, password }) {
+        console.log('admin login')
         const { user, db } = dep
         // check user name validity
         console.log('logging in')
@@ -61,7 +62,7 @@ adminMethods.adminlogout = {
 
 }
 
-adminMethods.App = {
+adminMethods.properties = {
     get NoValidationRequiredCommands() {
         return ['initapp']
     },
