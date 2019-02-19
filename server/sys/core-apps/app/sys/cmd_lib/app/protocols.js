@@ -108,6 +108,8 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                     appName: dbName,
                     owner: adminName,
                     username:encrypt.encrypt(username,adminName),
+                    allowDuplicateAdminLogins: true,
+                    maxDuplicateAdminLogins:5,
                     ini:true
                 },null,'\t')
                 fs.writeFile(_path,_data,'utf-8',(err) => {

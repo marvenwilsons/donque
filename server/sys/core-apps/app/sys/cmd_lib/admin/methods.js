@@ -14,34 +14,62 @@ adminMethods.adminlogin = {
     },
     adminlogin({ dep, username, password }) {
         const { user, db } = dep
+        let reUser = user
         console.log('admin login')
         // check user name validity
-        return new Promise((resolve, reject) => {
-            if (security.decrypt(user.password, username) === security.encrypt(password, username)) {
-                let reUser = user
 
-                /**
-                 * Create token
-                 */
-                db.collection('dq_admins').findOneAndUpdate({ username }, {
-                    $set: {
-                        token: jwt.sign({ username, password }, security.encrypt(password, username))
+        const updateUser = () => {
+            /**
+              * Create token
+              */
+            db.collection('dq_admins').findOneAndUpdate({ username }, {
+                $set: {
+                    token: jwt.sign({ username, password }, security.encrypt(password, username))
+                }
+            }, {
+                    returnOriginal: false
+                }, (err, u) => {
+                    if (err) {
+                        reject({
+                            status: false,
+                            data: {
+                                msg: err
+                            }
+                        })
+                    } else {
+                        reUser = u
+                        updateCurrentLiveAdmins()
                     }
-                }, {
-                        returnOriginal: false
-                    }, (err, u) => {
-                        if (err) {
-                            reject({
-                                status: false,
-                                data: {
-                                    msg: err
-                                }
-                            })
-                        } else {
-                            reUser = u
+                })
+        }
+
+        const updateCurrentLiveAdmins = () => {
+            db
+                .collection('dq_app')
+                .findOneAndUpdate(
+                    { siteOwner: user.adminName },
+                    {
+                        $push: {
+                            currentLiveAdmins: {
+                                username,
+                                started: new Date()
+                            }
+                        }
+                    }
+                ).catch(err => {
+                    reject({
+                        status: false,
+                        data: {
+                            msg: err
                         }
                     })
+                })
 
+        }
+
+        return new Promise((resolve) => {
+            if (security.decrypt(user.password, username) === security.encrypt(password, username)) {
+                updateUser()
                 /**
                  * Return
                  */
@@ -91,10 +119,64 @@ adminMethods.initAdminDashboard = {
 }
 
 // logout
-adminMethods.adminlogout = {
-    get permissions() {
-        return []
+adminMethods.adminLogout = {
+    get prop() {
+        return {
+            permissions: null,
+            allowedtitle: null,
+            funcIsDestructive: false
+        }
     },
+    adminLogout({dep,username}){
+        console.log('logging out')
+        const {db,user} = dep
+        /**
+         * a. delete token
+         * b. remove user from current live admins
+         * c. refresh admin dashboard
+         */
+        const clearingToken = db.collection('dq_admins').findOneAndUpdate({ username }, {
+            $set: {
+                token: undefined
+            }
+        })
+
+        const clearingLiveAdmins = db
+            .collection('dq_app')
+            .findOneAndUpdate(
+                { siteOwner: user.adminName },
+                {
+                    $pull: {
+                        currentLiveAdmins: {
+                            username
+                        }
+                    }
+                }
+            )
+
+
+        return new Promise((resolve,reject) => {
+            const clearedToken = clearingToken.then(() => clearingLiveAdmins.then(() => true).catch(() => false))
+            if (clearedToken){
+                resolve({
+                    status: true,
+                })
+            }else{
+                reject({
+                    status: false,
+                    data:{
+                        msg:`there was an error while logging ${username} out`,
+                        data: {
+                            action: 'process to temp',
+                            data:{
+                                username
+                            }
+                        }
+                    }
+                })
+            }            
+        })
+    }
 
 }
 
@@ -118,7 +200,7 @@ adminMethods.CreateNewAdmin = {
     get funcIsDestructive() {
         return true
     },
-    CreateNewAdmin({ username, password, adminName, title }) {
+    CreateNewAdmin({ username, password, adminName, roles, database }) {
         console.log('** Creating New Admin')
         // get schema
         // hash the username and password
