@@ -19,9 +19,11 @@ router.post('/_dq', async ({ body: { username, password, token, data, command, s
         command,
         section,
         method:'POST'
-    }).then(data => {
+    }).then(({data}) => {
+        console.log('success')
+        console.log(data)
         res.status(200).json(data)
-    }).catch(err => {
+    }).catch(({err}) => {
         console.log('oopppsie')
         console.log(err)
         res.status(204).json(err)

@@ -23,7 +23,8 @@ const createStore = () => {
                 head: undefined,
                 body: undefined,
                 closable: false
-            }
+            },
+            spinner: false
         },
         actions: {
             close_pane: ({ commit }, payload) => {

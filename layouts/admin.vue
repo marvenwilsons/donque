@@ -5,7 +5,12 @@
       id="dq-modal-holder"
       class="absolute fullwidth fullheight-VH flex flexcenter"
     >
-      <div id="dq-modal-host" class="flex flexcol absolute">
+      <div class="dqspc fullwidth fullheight-VH flex flexcenter">
+        <div>
+          <spinner/>
+        </div>
+      </div>
+      <div v-if="$store.state.spinner == false" id="dq-modal-host" class="flex flexcol absolute">
         <span id="dq-modal-head" class="flex spacebetween">
           <span>
             <strong>{{$store.state.modal.head}}</strong>
@@ -24,6 +29,8 @@
 </template>
 
 <script>
+import spinner from "@/server/sys/core-apps/pane-system/module/spinner-1.vue";
+
 export default {
   data() {
     return {
@@ -35,12 +42,15 @@ export default {
       this.$store.state.modal.visibility = false;
     }
   },
+  components:{
+    spinner
+  },
   mounted() {
     /**
      * For the docker, it will set up first item highlight
      * to the dashboard
      */
-    this.$store.dispatch("firstLoad")
+    this.$store.dispatch("firstLoad");
     //
     if (!this.$store.state.app) {
       location.href = "__dqinit";
@@ -49,15 +59,22 @@ export default {
         const req = {
           token: localStorage.getItem("auth"),
           username: localStorage.getItem("username"),
-          section:'adminMethods',
-          command:'initAdminDashboard'
+          section: "adminMethods",
+          command: "initAdminDashboard"
         };
         this.$axios
           .$post("dqapp/_dq", req)
-          .then(data => {
-            if (data.status) {
-              this.$store.state.admin = data;
+          .then(res => {
+            if (res.status) {
+              console.log(res);
+              this.$store.state.admin = res.data.data;
               this.ready = true;
+              this.$store.state.modal.visibility = true;
+              this.$store.state.spinner = true;
+              setTimeout(() => {
+                this.$store.state.modal.visibility = false;
+                this.$store.state.spinner = false;
+              }, 500);
             } else {
               location.href = "dqlogin";
               this.ready = false;
@@ -127,6 +144,9 @@ export default {
   padding-bottom: var(--size-1-half);
   padding-left: var(--size-1-half);
   padding-right: var(--size-1-half);
+}
+.dqspc{
+  background: var(--blue-1);
 }
 #__layout {
   min-height: 100vh;

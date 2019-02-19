@@ -7,15 +7,37 @@ const fs = require('fs')
 const path = require('path')
 
 console.log()
-protocols.dqinitapp = {
+/**
+ * Deletes all the contents in the database execpt the dbOwner and the
+ * initialization data
+ */
+protocols.dqResetApp = {
     get prop() {
         return {
             permissions: null,
-            allowedtitle: null,
-            funcIsDestructive: false
+            allowedtitle: ['dbOwner'],
+            funcIsDestructive: true,
+            destructiveLevel: 3
         }
     },
-    dqinitapp() {
+    dqResetapp({ username, password, token, ownerName }) {
+
+    }
+}
+/**
+ * Deletes the database, deletes iniConf.json
+ * Start from the beginning
+ */
+protocols.dqPurgeApp = {
+    get prop() {
+        return {
+            permissions: null,
+            allowedtitle: ['dbOwner'],
+            funcIsDestructive: true,
+            destructiveLevel: 3
+        }
+    },
+    dqPurgeApp({ username, password, token, ownerName }) {
 
     }
 }
@@ -36,7 +58,7 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
         const adminDb = client.db(dbName),
             AccessDbList = adminDb.admin().listDatabases(),
             dbList = await AccessDbList.then(list => list.databases).catch(() => { throw new Error('Listing database error') })
-            dbExistStat = dbList.map(({ name }) => name === dbName ? callback(`${dbName} already exist in mongo database`) : true),
+        dbExistStat = dbList.map(({ name }) => name === dbName ? callback(`${dbName} already exist in mongo database`) : true),
             dbDoesNotExist = dbExistStat.every(items => items === true)
 
         /**
@@ -54,7 +76,7 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
             colName: 'dq_admins', data: {
                 adminName,
                 username,
-                password: encrypt.encrypt(password,username),
+                password: encrypt.encrypt(password, username),
                 token: '',
                 title: 'owner',
                 email,
@@ -84,35 +106,35 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
          * Creating and Saving to database
          */
         dbDoesNotExist && CollectionsAndData.map((items, index) => {
-            
+
             /**
              * Create collections and insert data to each collections
              */
             client.db(dbName)
-            .collection(items.colName)
-            .insertOne(items.data)
-            .catch(() => callback(`unable to create collection ${colName}`))
+                .collection(items.colName)
+                .insertOne(items.data)
+                .catch(() => callback(`unable to create collection ${colName}`))
 
             /**
              * Create admin to the database
              */
-            if (CollectionsAndData.length - 1 === index){
+            if (CollectionsAndData.length - 1 === index) {
                 // create user 
-                adminDb.addUser(username, encrypt.encrypt(username, password),{roles:['readWrite']})
-                .catch(() => callback(`unable to create admin "${username}" to ${dbName} database`))
-                
+                adminDb.addUser(username, encrypt.encrypt(username, password), { roles: ['readWrite'] })
+                    .catch(() => callback(`unable to create admin "${username}" to ${dbName} database`))
+
                 // create app db config
                 const _path = path.join(__dirname, '../../../database/iniConf.json')
                 const _data = JSON.stringify({
-                    title:siteTitle,
+                    title: siteTitle,
                     appName: dbName,
                     owner: adminName,
-                    username:encrypt.encrypt(username,adminName),
+                    username: encrypt.encrypt(username, adminName),
                     allowDuplicateAdminLogins: true,
-                    maxDuplicateAdminLogins:5,
-                    ini:true
-                },null,'\t')
-                fs.writeFile(_path,_data,'utf-8',(err) => {
+                    maxDuplicateAdminLogins: 5,
+                    ini: true
+                }, null, '\t')
+                fs.writeFile(_path, _data, 'utf-8', (err) => {
                     err ? console.log(err) : console.log('** write done')
                 })
 
@@ -210,7 +232,7 @@ protocols.universalprotocol = async ({ dep, selectedCommand, username, password,
             }
         } else {
             console.log('** Executing protocols')
-            auth({ dep, selectedCommand, username, password, token, command, data, section, method }, (err,data) => {
+            auth({ dep, selectedCommand, username, password, token, command, data, section, method }, (err, data) => {
                 if (err) {
                     reject(err)
                 } else {

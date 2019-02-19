@@ -87,11 +87,11 @@ export default {
           username:this.username,
           password: this.password
         })
-        .then(data => {
-          if (data.status) {
+        .then(response => {
+          if (response.status) {
             // set localstorage
-            localStorage.setItem("auth", data.token);
-            localStorage.setItem("username", data.username);
+            localStorage.setItem("auth", response.data.token);
+            localStorage.setItem("username", response.data.username);
             console.log(localStorage.getItem("auth"));
             if (localStorage.getItem("auth")) {
               location.href = "admin";
