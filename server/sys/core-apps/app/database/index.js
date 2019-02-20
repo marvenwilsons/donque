@@ -48,7 +48,7 @@ const db = (user, pwd) => {
              */
             const _user = user && pwd ? security.decrypt(user, owner) : null
             const _pass = user && pwd ? security.encrypt(pwd, _user) : null
-
+            console.log(_user)
             /**
              * Connection
              */

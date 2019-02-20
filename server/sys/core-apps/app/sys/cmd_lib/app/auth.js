@@ -52,6 +52,7 @@ const auth = async ({ dep, selectedCommand, username, password, token, command, 
     const { userdb } = dep
 
     try{
+        console.log('kani??')
         const userDoesExist = await validateUserExistance(userdb, { username, password, token })
 
         if (userDoesExist.validated && userDoesExist.accessType == 'limited') {
@@ -85,9 +86,19 @@ const auth = async ({ dep, selectedCommand, username, password, token, command, 
         }
         
     }catch(err){
-        callback({
-            status: false
-        })
+        if(command === 'dqinitapp' && section === 'dqapp'){
+            callback(null,{
+                status: true
+            })
+        }else {
+            callback({
+                status: false,
+                data: {
+                    msg: err
+                }
+            })
+        }
+        
     }
 }
 

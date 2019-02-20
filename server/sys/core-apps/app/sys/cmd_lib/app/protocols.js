@@ -6,7 +6,6 @@ const protocols = {}
 const fs = require('fs')
 const path = require('path')
 
-console.log()
 /**
  * Deletes all the contents in the database execpt the dbOwner and the
  * initialization data
@@ -39,6 +38,79 @@ protocols.dqPurgeApp = {
     },
     dqPurgeApp({ username, password, token, ownerName }) {
 
+    }
+}
+
+protocols.dqinitapp = {
+    get prop() {
+        return {
+            permissions: null,
+            allowedtitle: null,
+            funcIsDestructive: false,
+        }
+    },
+    dqinitapp(data = { siteTitle, username, password, email, repassword, adminName }) {
+
+        /**
+         * Validate data
+         */
+        const _siteTitle = new validator(data.siteTitle)
+        const _username = new validator(data.username)
+        const _password = new validator(data.password)
+        const _email = new validator(data.email)
+
+        const siteTitleIsValid = _siteTitle
+            .hasSpecialCharacters(false)
+            .hasWhiteSpace(false)
+            .required()
+            .isTrue(data.siteTitle.length > 2)
+            .done()
+
+        const usernameIsValid = _username
+            .hasSpecialCharacters(false)
+            .hasWhiteSpace(false)
+            .required()
+            .isTrue(data.username.length > 6)
+            .done()
+
+        const passwordIsValid = _password
+            .hasSpecialCharacters()
+            .isTrue(data.password.length > 6)
+            .isTrue(data.password === data.repassword)
+            .required()
+            .done()
+
+        const emailIsValid = _email
+            .required()
+            .done()
+
+
+        const validationResults = [
+            siteTitleIsValid,
+            usernameIsValid,
+            passwordIsValid,
+            emailIsValid
+        ]
+        return new Promise((resolve, reject) => {
+            const validated = validationResults.every(items => items === true)
+
+            if (validated) {
+                initApplicationProtocol(data, (err) => {
+                    if (err) {
+                        console.log('init error')
+                        throw err
+                    }
+                })
+                return resolve({
+                    status: true,
+                    data: {
+                        msg: `Successfully created ${data.siteTitle}`
+                    }
+                })
+            } else {
+                reject('Validation failed')
+            }
+        })
     }
 }
 
@@ -82,7 +154,7 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
         {
             colName: 'dq_services', data: {
                 name: 'sample',
-                fields:[]
+                fields: []
             }
         },
         {
@@ -123,18 +195,24 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
             /**
              * Create collections and insert data to each collections
              */
-            client.db(dbName)
+            client
+                .db(dbName)
                 .collection(items.colName)
                 .insertOne(items.data)
-                .catch(() => callback(`unable to create collection ${colName}`))
+                .catch((err) => callback(`unable to create collection ${colName}`))
 
             /**
              * Create admin to the database
              */
             if (CollectionsAndData.length - 1 === index) {
                 // create user 
-                adminDb.addUser(username, encrypt.encrypt(username, password), { roles: ['readWrite'] })
-                    .catch(() => callback(`unable to create admin "${username}" to ${dbName} database`))
+                console.log('creating admin')
+                adminDb
+                    .addUser(username, encrypt.encrypt(password, username), { roles: ['readWrite'] })
+                    .catch((err) => {
+                        console.log(err)
+                        callback(`unable to create admin "${username}" to ${dbName} database`)
+                    })
 
                 // create app db config
                 const _path = path.join(__dirname, '../../../database/iniConf.json')
@@ -148,7 +226,7 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                     ini: true
                 }, null, '\t')
                 fs.writeFile(_path, _data, 'utf-8', (err) => {
-                    err ? console.log(err) : console.log('** write done')
+                    err ? console.log(err) : console.log('** iniConf generated')
                 })
 
                 /**
@@ -173,90 +251,24 @@ protocols.universalprotocol = async ({ dep, selectedCommand, username, password,
     const { db, data } = dep
 
     return new Promise((resolve, reject) => {
-        /**
-         * init app handler
-         */
-        if (section == 'dqapp' && command == 'dqinitapp') {
-            /**
-             * Validate data
-             */
-            const _siteTitle = new validator(data.siteTitle)
-            const _username = new validator(data.username)
-            const _password = new validator(data.password)
-            const _email = new validator(data.email)
-
-            const siteTitleIsValid = _siteTitle
-                .hasSpecialCharacters(false)
-                .hasWhiteSpace(false)
-                .required()
-                .isTrue(data.siteTitle.length > 2)
-                .done()
-
-            const usernameIsValid = _username
-                .hasSpecialCharacters(false)
-                .hasWhiteSpace(false)
-                .required()
-                .isTrue(data.username.length > 6)
-                .done()
-
-            const passwordIsValid = _password
-                .hasSpecialCharacters()
-                .isTrue(data.password.length > 6)
-                .isTrue(data.password === data.repassword)
-                .required()
-                .done()
-
-            const emailIsValid = _email
-                .required()
-                .done()
-
-
-            const validationResults = [
-                siteTitleIsValid,
-                usernameIsValid,
-                passwordIsValid,
-                emailIsValid
-            ]
-
-            /**
-             * Validation results
-             */
-            if (validationResults.every(items => items === true)) {
-                /**
-                 * Initialize app
-                 */
-                initApplicationProtocol(data, (err, db) => {
-                    if (err) {
-                        reject({
-                            status: false,
-                            data: {
-                                msg: err
-                            }
-                        })
-                    } else {
-                        if (db.status) {
-                            db.data.section = 'dqapp'
-                            resolve(db)
-                        }
+        console.log('** Executing protocols')
+        auth({ dep, selectedCommand, username, password, token, command, data, section, method }, (err, data) => {
+            if (err) {
+                console.log(err)
+                reject({
+                    status: false,
+                    data: {
+                        msg: 'Error while executing universal protocol'
                     }
                 })
             } else {
-                reject('Validation failed')
+                console.log('   [universal protocol] Command is allowed')
+                resolve({
+                    status: true,
+                    ...data
+                })
             }
-        } else {
-            console.log('** Executing protocols')
-            auth({ dep, selectedCommand, username, password, token, command, data, section, method }, (err, data) => {
-                if (err) {
-                    reject(err)
-                } else {
-                    console.log('   [universal protocol] Command is allowed')
-                    resolve({
-                        status: true,
-                        ...data
-                    })
-                }
-            })
-        }
+        })
     })
 }
 
