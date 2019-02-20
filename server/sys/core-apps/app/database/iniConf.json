@@ -1,10 +1,9 @@
 {
 	"title": "youtube",
 	"appName": "dq_youtube",
-	"owner": "marven wilson donque",
-	"username": "34b10081d0bdcd2b81c8b31761462b04",
-	"ini": true,
-
-	"allowDuplicateAdminLogins":true,
-	"maxDuplicateAdminLogins": 5
+	"owner": "Janny Ann A Bustamante",
+	"username": "dcbba51773c5cb0b3d8c1123d0466637",
+	"allowDuplicateAdminLogins": true,
+	"maxDuplicateAdminLogins": 5,
+	"ini": true
 }

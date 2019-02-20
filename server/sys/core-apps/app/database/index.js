@@ -70,11 +70,18 @@ const db = (user, pwd) => {
                 })
                 .catch(err => {
                     console.log('** Mongo Client Error')
-                    if (err.message == 'Authentication failed.' && con == false){
+                    if(!_user && iniFile){
                         reject({
                             status:false,
-                            data:{
-                                msg: 'Wrong database password or username'
+                            data: {
+                                msg: 'Application is already initialized'
+                            }
+                        })
+                    }else if(_user && _pass){
+                        reject({
+                            status: false,
+                            data: {
+                                msg: 'Authentication failed'
                             }
                         })
                     }else{

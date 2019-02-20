@@ -73,6 +73,19 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
             },
         },
         {
+            colName: 'dq_service_schemas', data: {
+                form: 'sample',
+                type: 'sample',
+                schema: {}
+            }
+        },
+        {
+            colName: 'dq_services', data: {
+                name: 'sample',
+                fields:[]
+            }
+        },
+        {
             colName: 'dq_admins', data: {
                 adminName,
                 username,
