@@ -222,6 +222,7 @@
                   </span>
                 </span>
               </div>
+              <span id="dq-newwork-err" v-if="netErr">{{netErr}}</span>
               <span class="flex tc-b">
                 <span @click="submit" class="tc-b-inner">Initialize site</span>
               </span>
@@ -238,6 +239,7 @@ import spinner from "@/server/sys/core-apps/pane-system/module/spinner-1.vue";
 export default {
   data() {
     return {
+      netErr: undefined,
       ready: false,
       siteTitle: undefined,
       username: undefined,
@@ -437,7 +439,7 @@ export default {
           return true;
         }
       });
-
+      console.log("submit");
       if (s.every(e => e == true)) {
         const app = {};
         app.siteTitle = this.siteTitle;
@@ -449,27 +451,31 @@ export default {
 
         this.$axios
           .$post("/dqapp/_dq", {
-            command:'dqinitapp',
-            section:'dqapp',
+            command: "dqinitapp",
+            section: "dqapp",
             data: app
           })
           .then(res => {
-            this.ready = false;
-            setTimeout(() => {
-              if (res.status) {
-                console.log('response front end')
-                location.href="dqlogin"
-              }
-            }, 1000);
+            if (res.status) {
+              this.ready = false;
+              setTimeout(() => {
+                if (res.status) {
+                  location.href = "dqlogin";
+                }
+              }, 1000);
+            } else {
+              this.netErr = res.data.msg;
+            }
           })
           .catch(e => {
-            alert(e);
+            console.log("error");
+            console.log(e);
           });
       }
     }
   },
   mounted() {
-    console.log('testing')
+    console.log("testing");
     setTimeout(() => {
       this.ready = true;
     }, 1000);
@@ -478,6 +484,12 @@ export default {
 </script>
 
 <style>
+#dq-newwork-err {
+  padding: calc(var(--fontSize) * 1.25);
+  border-radius: 10px;
+  background: #ae110036;
+  color: #ae1100;
+}
 #tc-logo-h {
   padding: calc(var(--fontSize) * 1.25);
   margin: calc(var(--fontSize) * 1.25);

@@ -21,9 +21,11 @@ const functionHandler = (func) => {
     true
 }
 
-const validateUserExistance = async (dbclient, { username }) => {
-    const userdb = dbclient.db(dbclient.appName).collection('dq_admins')
-    const db = dbclient.db(dbclient.appName)
+const validateUserExistance = async ({...dbs}, { username }) => {
+    const {doc} = dbs.data
+
+    const userdb = doc.db(doc.appName).collection('dq_admins')
+    const db = doc.db(doc.appName)
     const user = await userdb.findOne({ username })
 
     const fullPrevilegeTitle = [
@@ -32,6 +34,7 @@ const validateUserExistance = async (dbclient, { username }) => {
 
     return new Promise((resolve,reject) => {
         if(user){
+            console.log('   [Auth] User validated Ok!')
             resolve({
                 validated: true,
                 accessType: fullPrevilegeTitle.includes(user.title) ? 'full' : 'limited',
@@ -41,6 +44,7 @@ const validateUserExistance = async (dbclient, { username }) => {
                 }
             })
         }else{
+            console.log('   [Auth] User validation fail!')
             reject({
                 validated: false,
             })
@@ -49,10 +53,21 @@ const validateUserExistance = async (dbclient, { username }) => {
 }
 
 const auth = async ({ dep, selectedCommand, username, password, token, command, data, section, method }, callback) => {
+    console.log('   [Auth] Entering auth function')
     const { userdb } = dep
 
     try{
-        console.log('kani??')
+        /**
+         * Loging
+         */
+        if(typeof userdb != 'object'){
+            console.log('   [Auth] database userdb is invalid')
+            console.log('   [Auth] returning an error')
+        }else{
+            console.log('   [Auth] database is valid')
+            console.log('   [Auth] proceeding..')
+        }
+
         const userDoesExist = await validateUserExistance(userdb, { username, password, token })
 
         if (userDoesExist.validated && userDoesExist.accessType == 'limited') {

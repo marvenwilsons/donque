@@ -80,6 +80,7 @@ dist
 # IDE
 .idea
 
-server/sys/core-apps/app/Application/database/database/*
+server/sys/core-apps/app/database/iniConf
+server/sys/core-apps/app/database/logs
 
 server/sys/core-apps/app/temp.js

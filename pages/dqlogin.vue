@@ -88,10 +88,12 @@ export default {
           password: this.password
         })
         .then(response => {
-          if (response.status) {
+          const {status, data} = response.data
+          console.log(status)
+          if (status) {
             // set localstorage
-            localStorage.setItem("auth", response.data.token);
-            localStorage.setItem("username", response.data.username);
+            localStorage.setItem("auth", data.token);
+            localStorage.setItem("username", data.username);
             console.log(localStorage.getItem("auth"));
             if (localStorage.getItem("auth")) {
               location.href = "admin";
@@ -159,6 +161,7 @@ export default {
 }
 #dq-init-parent-wrapper {
   background: var(--blue-1);
+  /* background: #45dcfb; */
   min-height: 100vh;
 }
 .abs {
