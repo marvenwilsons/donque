@@ -1,11 +1,25 @@
 const db = require('../database/index')
 
 const Cardinal = async ({ username, password, token, data, command, section, method }) => {
+
+
     console.log('** Starting CardinalSystem')
     // dependecies
     const registry = require('./cmd_lib/registry')
 
     let response = {}
+
+    if (!command && !section && !token && !data) {
+        /**
+         * if app is not initialized it returns false
+         * else true and client will be redirected to login
+         * else to _dqinit page
+         */
+        return {
+            status: true,
+            data: false
+        }
+    }
 
     let selectedCommand = undefined
 
