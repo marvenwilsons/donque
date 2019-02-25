@@ -218,10 +218,13 @@ console.log('** Database')
         if(isIllegalCall){
             console.log(`   [db] Db owner credentials is invalid`)
             console.log(`   [db] Illegal method call, returning an error now`)
+            const msg = iniFile ? 'database is not initialized but iniConf.json file exist, please delete iniConf file to proceed' :
+                'Cannot perform command because admin credentials is missing, Please instantiate the database connection first by logging in as the application owner, Illegal api call error'
             response = {
                 status: false,
                 data: {
-                    msg: 'Cannot perform command because admin credentials is missing, Please instantiate the database connection first by logging in as the application owner, Illegal api call error'
+                    ini: true,
+                    msg: msg
                 }
             }
         }else {
@@ -267,6 +270,7 @@ console.log('** Database')
                         }
                     }
                 })
+                _currentAppState = 'admin login required'
                 response = u
             }else{
                 console.log(`   [db] "${user}" username is invalid and not the owner's username`)
