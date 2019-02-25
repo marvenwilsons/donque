@@ -15,9 +15,13 @@ const Cardinal = async ({ username, password, token, data, command, section, met
          * else true and client will be redirected to login
          * else to _dqinit page
          */
+        
+        // just to make sure db server is running
+        const appState = await db()
+        //
         return {
             status: true,
-            data: false
+            data: appState.data.state
         }
     }
 
@@ -90,12 +94,21 @@ const Cardinal = async ({ username, password, token, data, command, section, met
             const param = section != 'adminMethods' ? data : { dep: _d, username, password, token, data }
 
             console.log(`   [CardinalSystem] Entering ${section}`)
-            console.log(`   [CardinalSystem] Exectuing ${command}`)
+            console.log(`   [CardinalSystem] Executing ${command}`)
 
-            selectedCommand[command](param).then(data => {
-                response.data = data
-            }).catch(err => {
-                response.data = err
+            const r = await selectedCommand[command](param)
+            .then(async data => {
+                const d = await data
+                return d
+            }).catch(async err => {
+                return err
+            })
+            return new Promise((resolve,reject) => {
+                if(r.status){
+                    resolve(r)
+                }else{
+                    reject(r)
+                }
             })
         } else {
             console.log('** fail')

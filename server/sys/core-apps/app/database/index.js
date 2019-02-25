@@ -23,6 +23,7 @@ let db_data_instance = undefined
 let _appName = undefined
 let _appState = undefined
 let _appSummary = undefined
+let _currentAppState = undefined
 
 
 /**
@@ -159,7 +160,7 @@ console.log('** Database')
             status: false,
             data: {
                 action: null,
-                msg: 'Cannot reach Mongo server because it is not running'
+                msg: 'Cannot reach Mongo Db server at link localhost:27017, make sure MongoDb is installed properly and is running'
             }
         }
     }else{
@@ -176,6 +177,7 @@ console.log('** Database')
         console.log('   [db] Checking initialization conditions')
         console.log('   [db] App is not yet initialized')
         console.log('   [db] Requesting SystemInit')
+        _currentAppState = 'init required'
         response = {
             status: true,
             data: {
@@ -205,6 +207,7 @@ console.log('** Database')
      * the connection will be the connection used for api calls later     
      */
     if (appState.includes('app is init') && appState.includes('db connected') && appState.includes('main admin not connected')){
+        _currentAppState = 'owner login required'
         console.log(`   [db] Application is initialized`)
         console.log(`   [db] Mongo Server is initialized and running`)
         console.log(`   [db] Warning Db owner is not connected`)
@@ -281,6 +284,7 @@ console.log('** Database')
     return new Promise(async (resolve, reject) => {
         const res = await response
         if (res.status) {
+            res.data.state = _currentAppState
             resolve(res)
         } else {
             reject(res)

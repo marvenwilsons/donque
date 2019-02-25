@@ -84,12 +84,12 @@ export default {
         .$post("dqapp/_dq", {
           command: "adminlogin",
           section: "adminMethods",
-          username:this.username,
+          username: this.username,
           password: this.password
         })
         .then(response => {
-          const {status, data} = response.data
-          console.log(status)
+          const { status, data } = response.data;
+          console.log(status);
           if (status) {
             // set localstorage
             localStorage.setItem("auth", data.token);
@@ -114,10 +114,27 @@ export default {
   },
   mounted() {
     localStorage.clear();
+    //
     this.ready = false;
-    setTimeout(() => {
-      this.ready = true;
-    }, 500);
+
+    //
+    this.$axios
+      .$get("/dqapp/app", {
+        params: {
+          get: {}
+        }
+      })
+      .then(res => {
+        // store to state
+        console.log(res);
+        setTimeout(() => {
+          this.ready = true;
+        }, 500);
+      })
+      .catch(err => {
+        context.error(err);
+        console.log(err);
+      });
   }
 };
 </script>

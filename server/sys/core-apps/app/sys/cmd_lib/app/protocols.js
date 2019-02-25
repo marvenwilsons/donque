@@ -49,7 +49,8 @@ protocols.dqinitapp = {
             funcIsDestructive: false,
         }
     },
-    dqinitapp(data = { siteTitle, username, password, email, repassword, adminName }) {
+    async dqinitapp(data = { siteTitle, username, password, email, repassword, adminName }) {
+        let response = {}
 
         /**
          * Validate data
@@ -91,159 +92,165 @@ protocols.dqinitapp = {
             passwordIsValid,
             emailIsValid
         ]
-        return new Promise((resolve, reject) => {
-            const validated = validationResults.every(items => items === true)
 
-            if (validated) {
-                initApplicationProtocol(data, (err) => {
-                    if (err) {
-                        console.log('init error')
-                        throw err
-                    }
-                })
-                return resolve({
-                    status: true,
-                    data: {
-                        msg: `Successfully created ${data.siteTitle}`
-                    }
-                })
-            } else {
-                reject('Validation failed')
+        const f = async () => {
+            let stat = []
+            stat.push(validationResults.every(items => items === true))
+            const isInit = await initApplicationProtocol(data).then(data => true).catch(err => err)
+            stat.push(isInit)
+            
+            const res1 = stat.every(i => i == true)
+            const x  = stat.filter(e => e != true)
+            const res = res1 ? {
+                status: true,
+                data: {
+                    msg: 'success',
+                }
+            } : {
+                status: false,
+                data: {
+                    msg: x[0]
+                }
             }
-        })
+
+            return await res
+        }
+        
+        return res = await f()
     }
 }
 
 const initApplicationProtocol = async ({ siteTitle, username, password, email, adminName }, callback) => {
-    console.log('init')
-    const dbName = `dq_${siteTitle}`
-
-    /**
-     * Connect and create dq database
-     */
-    const db = () => MongoClient.connect(`mongodb://localhost:27017/${dbName}`, { useNewUrlParser: true })
-    db().then(async (client) => {
+    return new Promise((resolve,reject) => {
+        const dbName = `dq_${siteTitle}`
 
         /**
-         * Does dbName already a database?
+         * Connect and create dq database
          */
-        const adminDb = client.db(dbName),
-            AccessDbList = adminDb.admin().listDatabases(),
-            dbList = await AccessDbList.then(list => list.databases).catch(() => { throw new Error('Listing database error') })
-        dbExistStat = dbList.map(({ name }) => name === dbName ? callback(`${dbName} already exist in mongo database`) : true),
-            dbDoesNotExist = dbExistStat.every(items => items === true)
+        const db = () => MongoClient.connect(`mongodb://localhost:27017/${dbName}`, { useNewUrlParser: true })
+        db().then(async (client) => {
 
-        /**
-         * Collections and its data
-         */
-        const CollectionsAndData = [{
-            colName: 'dq_app', data: {
-                siteTitle,
-                siteOwner: adminName,
-                created: new Date,
-                currentLiveAdmins: []
+            /**
+             * Does dbName already a database?
+             */
+            const adminDb = client.db(dbName),
+                AccessDbList = adminDb.admin().listDatabases(),
+                dbList = await AccessDbList.then(list => list.databases).catch(() => { throw new Error('Listing database error') })
+            dbExistStat = dbList.map(({ name }) => name === dbName ? reject(`${dbName} already exist in mongo database`) : true),
+                dbDoesNotExist = dbExistStat.every(items => items === true)
+
+            /**
+             * Collections and its data
+             */
+            const CollectionsAndData = [{
+                colName: 'dq_app', data: {
+                    siteTitle,
+                    siteOwner: adminName,
+                    created: new Date,
+                    currentLiveAdmins: []
+                },
             },
-        },
-        {
-            colName: 'dq_service_schemas', data: {
-                form: 'sample',
-                type: 'sample',
-                schema: {}
-            }
-        },
-        {
-            colName: 'dq_services', data: {
-                name: 'sample',
-                fields: []
-            }
-        },
-        {
-            colName: 'dq_admins', data: {
-                adminName,
-                username,
-                password: encrypt.encrypt(password, username),
-                token: '',
-                title: 'owner',
-                email,
-                ip: '',
-                sectionPermissions: {
-                    adminActions: ['c', 'r', 'u', 'd'],
-                    pageMethods: ['c', 'r', 'u', 'd'],
-                    components: ['c', 'r', 'u', 'd'],
-                    shell: ['c', 'r', 'u', 'd']
-                },
-                task: {
-                    pending: [],
-                    done: []
-                },
-                messages: [],
-                lastModefied: '',
-                lastActivity: ''
-            }
-        }, {
-            colName: 'dq_config', data: {
-                adminLanding: 'admin',
-                protectedRoutes: []
-            }
-        }]
-
-        /**
-         * Creating and Saving to database
-         */
-        dbDoesNotExist && CollectionsAndData.map((items, index) => {
+            {
+                colName: 'dq_service_schemas', data: {
+                    form: 'sample',
+                    type: 'sample',
+                    schema: {}
+                }
+            },
+            {
+                colName: 'dq_services', data: {
+                    name: 'sample',
+                    fields: []
+                }
+            },
+            {
+                colName: 'dq_admins', data: {
+                    adminName,
+                    username,
+                    password: encrypt.encrypt(password, username),
+                    token: '',
+                    title: 'owner',
+                    email,
+                    ip: '',
+                    sectionPermissions: {
+                        adminActions: ['c', 'r', 'u', 'd'],
+                        pageMethods: ['c', 'r', 'u', 'd'],
+                        components: ['c', 'r', 'u', 'd'],
+                        shell: ['c', 'r', 'u', 'd']
+                    },
+                    task: {
+                        pending: [],
+                        done: []
+                    },
+                    messages: [],
+                    lastModefied: '',
+                    lastActivity: ''
+                }
+            }, {
+                colName: 'dq_config', data: {
+                    adminLanding: 'admin',
+                    protectedRoutes: []
+                }
+            }]
 
             /**
-             * Create collections and insert data to each collections
+             * Creating and Saving to database
              */
-            client
-                .db(dbName)
-                .collection(items.colName)
-                .insertOne(items.data)
-                .catch((err) => callback(`unable to create collection ${colName}`))
-
-            /**
-             * Create admin to the database
-             */
-            if (CollectionsAndData.length - 1 === index) {
-                // create user 
-                console.log('creating admin')
-                adminDb
-                    .addUser(username, encrypt.encrypt(password, username), { roles: ['readWrite'] })
-                    .catch((err) => {
-                        console.log(err)
-                        callback(`unable to create admin "${username}" to ${dbName} database`)
-                    })
-
-                // create app db config
-                const _path = path.join(__dirname, '../../../database/iniConf.json')
-                const _data = JSON.stringify({
-                    title: siteTitle,
-                    appName: dbName,
-                    owner: adminName,
-                    username: encrypt.encrypt(username, adminName),
-                    allowDuplicateAdminLogins: true,
-                    maxDuplicateAdminLogins: 5,
-                    ini: true
-                }, null, '\t')
-                fs.writeFile(_path, _data, 'utf-8', (err) => {
-                    err ? console.log(err) : console.log('** iniConf generated')
-                })
+            dbDoesNotExist && CollectionsAndData.map((items, index) => {
 
                 /**
-                 * Close connection
+                 * Create collections and insert data to each collections
                  */
-                client.close().then(() => {
-                    callback(null, {
-                        status: true,
-                        data: {
-                            msg: `${siteTitle} successfully created`
-                        }
+                client
+                    .db(dbName)
+                    .collection(items.colName)
+                    .insertOne(items.data)
+                    .catch((err) => reject(`unable to create collection ${colName}`))
+
+                /**
+                 * Create admin to the database
+                 */
+                if (CollectionsAndData.length - 1 === index) {
+                    // create user 
+                    console.log('creating admin')
+                    adminDb
+                        .addUser(username, encrypt.encrypt(password, username), { roles: ['readWrite'] })
+                        .catch((err) => {
+                            console.log(err)
+                            reject(`unable to create admin "${username}" to ${dbName} database`)
+                        })
+
+                    // create app db config
+                    const _path = path.join(__dirname, '../../../database/iniConf.json')
+                    const _data = JSON.stringify({
+                        title: siteTitle,
+                        appName: dbName,
+                        owner: adminName,
+                        username: encrypt.encrypt(username, adminName),
+                        allowDuplicateAdminLogins: true,
+                        maxDuplicateAdminLogins: 5,
+                        ini: true
+                    }, null, '\t')
+                    fs.writeFile(_path, _data, 'utf-8', (err) => {
+                        err ? console.log(err) : console.log('** iniConf generated')
                     })
-                })
-            }
-        })
-    }).catch(err => {
-        throw new Error(err)
+
+                    /**
+                     * Close connection
+                     */
+                    client.close().then(() => {
+                        resolve(null, {
+                            status: true,
+                            data: {
+                                msg: `${siteTitle} successfully created`
+                            }
+                        })
+                    })
+                }
+            })
+        }).catch(err => {
+            throw new Error(err.message)
+        })  
     })
 }
 
