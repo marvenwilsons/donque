@@ -48,12 +48,13 @@ const createStore = () => {
             },
             nuxtServerInit(store, context) {
                 // on every first load after login
+                console.log('test')
                 let request = {}
                 request.componentName = context.route.matched[0].name
 
-                return this.$axios.$get('/dqapp/app', {
+                return this.$axios.$get('/dqapp/_dq', {
                     params: {
-                        content: request.componentName
+                        content: 'init'
                     }
                 })
                     .then(res => {

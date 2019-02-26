@@ -30,19 +30,26 @@ router.post('/_dq', async ({ body: { username, password, token, data, command, s
     })
 })
 
-router.get('/_dq', async ({ query: { username, password, token, data, command, section} },res) => {
-    const response = await cardinal({
-        username,
-        password,
-        token,
-        data,
-        command,
-        section,
-        method:'GET'
-    })
+router.get('/_dq', async (req,res) => {
+    let _req = req.query.content
+    _req.method = 'GET'
+    
+    if(_req === 'init'){
+       const re_i = await cardinal({})
+       res.status(200).json(re_i)
+    }
+
+    // const response = await cardinal({
+    //     username,
+    //     password,
+    //     token,
+    //     data,
+    //     command,
+    //     section,
+    //     method:'GET'
+    // })
     console.log('get response')
-    console.log(command)
-    res.status(200).json(response)
+    // res.status(200).json(response)
 })
 
 module.exports = {

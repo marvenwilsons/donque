@@ -58,9 +58,7 @@ const Cardinal = async ({ username, password, token, data, command, section, met
         }
     }
 
-
     const userdb = await db(username, password)
-
     if (typeof userdb === 'object' && selectedCommand && typeof selectedCommand == 'object' && userdb.data.action != 'SystemInit') {
         console.log(`** [CardinalSystem] Api Calls`)
         console.log(`   [CardinalSystem] b.`)
@@ -128,12 +126,20 @@ const Cardinal = async ({ username, password, token, data, command, section, met
             console.log('** CardinalSystem SystemInit handler')
             console.log('   [CardinalSystem] Skip auth process')
             console.log('   [CardinalSystem] Commence Initialization')
-            selectedCommand[command](data).then(data => {
+            const r = await selectedCommand[command](data).then(async data => {
                 console.log(`** CardinalSystem command confirmed done`)
-                response.data = data
+                const d = await data
+                return d
             }).catch(err => {
                 console.log(`** CardinalSystem error executing command`)
-                response.data = err
+                return err
+            })
+            return new Promise((resolve,reject) => {
+                if(r.status){
+                    resolve(r)
+                }else{
+                    reject(r)
+                }
             })
         }
     } else {

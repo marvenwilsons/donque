@@ -475,9 +475,18 @@ export default {
     }
   },
   mounted() {
-    console.log("testing");
+    this.ready = false;
+
     setTimeout(() => {
-      this.ready = true;
+      if (
+        this.$store.state.app.data === "admin login" ||
+        this.$store.state.app.data === "user login" ||
+        this.$store.state.app.data === "owner login"
+      ) {
+        location.href = "dqlogin";
+      } else {
+        this.ready = true;
+      }
     }, 1000);
   }
 };

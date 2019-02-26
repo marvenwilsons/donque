@@ -24,6 +24,7 @@ let _appName = undefined
 let _appState = undefined
 let _appSummary = undefined
 let _currentAppState = undefined
+let _isInit = undefined
 
 
 /**
@@ -178,6 +179,7 @@ console.log('** Database')
         console.log('   [db] App is not yet initialized')
         console.log('   [db] Requesting SystemInit')
         _currentAppState = 'init required'
+        _isInit = false
         response = {
             status: true,
             data: {
@@ -207,7 +209,8 @@ console.log('** Database')
      * the connection will be the connection used for api calls later     
      */
     if (appState.includes('app is init') && appState.includes('db connected') && appState.includes('main admin not connected')){
-        _currentAppState = 'owner login required'
+        _currentAppState = 'owner login'
+        _isInit = true
         console.log(`   [db] Application is initialized`)
         console.log(`   [db] Mongo Server is initialized and running`)
         console.log(`   [db] Warning Db owner is not connected`)
@@ -218,13 +221,16 @@ console.log('** Database')
         if(isIllegalCall){
             console.log(`   [db] Db owner credentials is invalid`)
             console.log(`   [db] Illegal method call, returning an error now`)
-            const msg = iniFile ? 'database is not initialized but iniConf.json file exist, please delete iniConf file to proceed' :
+            const msg1 = iniFile ? 'database is not initialized but iniConf.json file exist, please delete iniConf file to proceed' :
                 'Cannot perform command because admin credentials is missing, Please instantiate the database connection first by logging in as the application owner, Illegal api call error'
+
+            const msg2 = _isInit ? `Error in initializing app, because app and database is already initialized` : msg1
+
             response = {
                 status: false,
                 data: {
                     ini: true,
-                    msg: msg
+                    msg: msg2
                 }
             }
         }else {
@@ -270,7 +276,7 @@ console.log('** Database')
                         }
                     }
                 })
-                _currentAppState = 'admin login required'
+                _currentAppState = 'admin login'
                 response = u
             }else{
                 console.log(`   [db] "${user}" username is invalid and not the owner's username`)
