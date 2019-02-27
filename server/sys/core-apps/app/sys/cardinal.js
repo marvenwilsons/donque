@@ -145,7 +145,15 @@ const Cardinal = async ({ username, password, token, data, command, section, met
     }
 
     // return
-    return await response
+    // return await response
+    const r = await response
+    return new Promise((resolve,reject) => {
+        if(r.status){
+            resolve(r)
+        }else{
+            reject(r)
+        }
+    })
 }
 
 module.exports = Cardinal
