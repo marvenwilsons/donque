@@ -50,6 +50,7 @@ protocols.dqinitapp = {
         }
     },
     async dqinitapp(data = { siteTitle, username, password, email, repassword, adminName }) {
+        console.log('** dqInitapp, validations and creations')
         let response = {}
 
         /**
@@ -86,21 +87,33 @@ protocols.dqinitapp = {
             .done()
 
 
-        const validationResults = [
+        const validationState = [
             siteTitleIsValid,
             usernameIsValid,
             passwordIsValid,
             emailIsValid
         ]
 
+        const vs = ['siteTitle','username','password','email']
+
         const f = async () => {
+            console.log('   [dqInitapp] validating inputs')
+
             let stat = []
-            stat.push(validationResults.every(items => items === true))
-            const isInit = await initApplicationProtocol(data).then(data => true).catch(err => err)
-            stat.push(isInit)
+            let err = undefined
+            
+            //
+            const validationResuls = validationState.every(items => items === true) ? 
+            stat.push(true) : 
+            validationState.map((e,i) => e != true && (err = `Invalid ${vs[i]}`))
+            console.log(`  [dqInitapp] ${err ? 'validation failed' : 'validation success'}`)
+
+            //
+            const isInit = err ? err : await initApplicationProtocol(data).then(() => true).catch(err => err)
+            
+            isInit === true ? stat.push(isInit) : (stat.push(isInit), err = isInit)
             
             const res1 = stat.every(i => i == true)
-            const x  = stat.filter(e => e != true)
             const res = res1 ? {
                 status: true,
                 data: {
@@ -109,7 +122,7 @@ protocols.dqinitapp = {
             } : {
                 status: false,
                 data: {
-                    msg: x[0]
+                    msg: err
                 }
             }
 

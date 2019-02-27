@@ -479,9 +479,9 @@ export default {
 
     setTimeout(() => {
       if (
-        this.$store.state.app.data === "admin login" ||
-        this.$store.state.app.data === "user login" ||
-        this.$store.state.app.data === "owner login"
+        this.$store.state.app.data.state === "admin login" ||
+        this.$store.state.app.data.state === "user login" ||
+        this.$store.state.app.data.state === "owner login"
       ) {
         location.href = "dqlogin";
       } else {

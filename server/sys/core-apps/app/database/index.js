@@ -22,7 +22,6 @@ let con = false
 let db_data_instance = undefined
 let _appName = undefined
 let _appState = undefined
-let _appSummary = undefined
 let _currentAppState = undefined
 let _isInit = undefined
 
@@ -221,16 +220,13 @@ console.log('** Database')
         if(isIllegalCall){
             console.log(`   [db] Db owner credentials is invalid`)
             console.log(`   [db] Illegal method call, returning an error now`)
-            const msg1 = iniFile ? 'database is not initialized but iniConf.json file exist, please delete iniConf file to proceed' :
-                'Cannot perform command because admin credentials is missing, Please instantiate the database connection first by logging in as the application owner, Illegal api call error'
-
-            const msg2 = _isInit ? `Error in initializing app, because app and database is already initialized` : msg1
-
+            const msg1 = 'Cannot perform command because admin credentials is missing, Please instantiate the database connection first by logging in as the application owner, Illegal api call error'
+            
             response = {
                 status: false,
                 data: {
                     ini: true,
-                    msg: msg2
+                    msg: msg1
                 }
             }
         }else {
@@ -293,8 +289,10 @@ console.log('** Database')
 
     return new Promise(async (resolve, reject) => {
         const res = await response
+        res.data.state = _currentAppState
+        console.log('res')
+        console.log(response)
         if (res.status) {
-            res.data.state = _currentAppState
             resolve(res)
         } else {
             reject(res)

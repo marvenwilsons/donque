@@ -15,7 +15,7 @@ adminMethods.adminlogin = {
     adminlogin({ dep, username, password }) {
         const { user, db } = dep
         let reUser = user
-        console.log('admin login')
+        console.log('** admin login')
         // check user name validity
 
         const updateUser = () => {
@@ -128,7 +128,7 @@ adminMethods.adminLogout = {
         }
     },
     adminLogout({dep,username}){
-        console.log('logging out')
+        console.log('** logging out')
         const {db,user} = dep
         /**
          * a. delete token
@@ -139,6 +139,8 @@ adminMethods.adminLogout = {
             $set: {
                 token: undefined
             }
+        }, {
+            returnOriginal: false
         })
 
         const clearingLiveAdmins = db
@@ -158,6 +160,8 @@ adminMethods.adminLogout = {
         return new Promise((resolve,reject) => {
             const clearedToken = clearingToken.then(() => clearingLiveAdmins.then(() => true).catch(() => false))
             if (clearedToken){
+                console.log('   [adminLogout] token cleared!')
+                console.log(`   [adminLogout] deleting ${username} to current live admins success!`)
                 resolve({
                     status: true,
                 })

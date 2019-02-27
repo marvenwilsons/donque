@@ -7,13 +7,11 @@ const Cardinal = async ({ username, password, token, data, command, section, met
     // dependecies
     const registry = require('./cmd_lib/registry')
 
-    let response = {}
+    let response = undefined
 
     if (!command && !section && !token && !data) {
         /**
-         * if app is not initialized it returns false
-         * else true and client will be redirected to login
-         * else to _dqinit page
+         * Only works when 
          */
         
         // just to make sure db server is running
@@ -21,7 +19,7 @@ const Cardinal = async ({ username, password, token, data, command, section, met
         //
         return {
             status: true,
-            data: appState.data.state
+            data: appState
         }
     }
 
@@ -34,7 +32,7 @@ const Cardinal = async ({ username, password, token, data, command, section, met
     if (!registry[section]) {
         console.log(`   [CardinalSystem] section "${section}" not found`)
         console.log(`   [CardinalSystem] returning an error now`)
-        response.data = {
+        response = {
             status: false,
             data: {
                 msg: `The section named ${section} does not exist in the registry`
@@ -46,7 +44,7 @@ const Cardinal = async ({ username, password, token, data, command, section, met
         if (!registry[section][command]) {
             console.log(`   [CardinalSystem] command "${command}" not found`)
             console.log(`   [CardinalSystem] returning an error now`)
-            response.data = {
+            response = {
                 status: false,
                 data: {
                     msg: `The command named ${command} does not exist in the registry`
@@ -110,13 +108,13 @@ const Cardinal = async ({ username, password, token, data, command, section, met
             })
         } else {
             console.log('** fail')
-            response.data = commandIsAllowed.data.msg
+            response = commandIsAllowed.data.msg
         }
     } else if (userdb.data.action == 'SystemInit') {
         if (command != 'dqinitapp') {
             console.log('** CardinalSystem SystemInit handler')
             console.log('   [CardinalSystem] Illegal call of command')
-            response.data = {
+            response = {
                 status: false,
                 data: {
                     msg: `Cant perform "${command}" command because application is not yet initialize`

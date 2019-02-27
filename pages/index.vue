@@ -10,7 +10,7 @@ export default {
   components: {
   },
   mounted(){
-    if(this.$store.state.app.data === 'init required'){      
+    if(this.$store.state.app.data.state === 'init required'){      
       location.href = "__dqinit"
     }
   }

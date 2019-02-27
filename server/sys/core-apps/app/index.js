@@ -32,24 +32,13 @@ router.post('/_dq', async ({ body: { username, password, token, data, command, s
 
 router.get('/_dq', async (req,res) => {
     let _req = req.query.content
-    _req.method = 'GET'
+    _r = req === 'init' ? {} : _req
     
-    if(_req === 'init'){
-       const re_i = await cardinal({})
-       res.status(200).json(re_i)
-    }
-
-    // const response = await cardinal({
-    //     username,
-    //     password,
-    //     token,
-    //     data,
-    //     command,
-    //     section,
-    //     method:'GET'
-    // })
-    console.log('get response')
-    // res.status(200).json(response)
+    cardinal(_r).then((data) => {
+       res.status(200).json(data)        
+    }).catch((err) => {
+       res.status(200).json(err)        
+    })
 })
 
 module.exports = {

@@ -3,6 +3,10 @@ const permissionHandler = (permissions) => {
     return true
 }
 
+const commitsHandler = (commitId) => {
+
+}
+
 const titleHandler = (titles) => {
     console.log('   [Universal protocol] title handler')
     return true
