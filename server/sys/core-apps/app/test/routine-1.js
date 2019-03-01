@@ -1,5 +1,5 @@
 
-const { execFile } = require('child_process')
+const { execFile, exec, execSync, spawn } = require('child_process')
 
 const username = 'jannyann'
 const password = 'password123@'
@@ -8,6 +8,28 @@ let dbServer = false
 execFile('mongod', ['--dbpath', '/home/marven/Desktop/database/Data', '--shutdown'], (error, stdout, stderr) => {
 });
 
+const startDatabaseServer = (callback) => {
+    console.log('starting mongo server')
+    const mongod = spawn('mongod', ['--dbpath', '/home/marven/Desktop/database/Data'])
+    mongod.stdout.on('data', stdout => {
+        const myRe = /waiting for connections on port 27017/
+        const re = myRe.exec(stdout.toString())
+        console.log(`${stdout.toString()}`.green)
+        if (re != null) {
+            setTimeout(() => {
+                callback(false)
+            }, 1000)
+        }
+    })
+    mongod.stderr.on('data', stderr => {
+        console.log(stderr.toString())
+    })
+    mongod.stdout.on('close', code => {
+        console.log('DONE')
+        console.log(code)
+    })
+}
+
 const routine_a = [
     // test 1
     {
@@ -15,35 +37,21 @@ const routine_a = [
         expected: false,
         expectedMsg: 'Cannot reach Mongo Db server at link localhost:27017, make sure MongoDb is installed properly and is running',
         before: function (callback) {
-            if (dbServer) {
-                execFile('mongod', ['--dbpath', '/home/marven/Desktop/database/Data', '--shutdown'], (error, stdout, stderr) => {
-                    if (error) {
-                        callback(error)
-                    }else{
-                        callback(false)
-                    }
-
-                    console.log('stoping and clearing mongo server')
-                });
-            }
+            callback(false)
         },
         after: function (callback) {
-            dbServer = true
-            execFile('mongod', ['--dbpath', '/home/marven/Desktop/database/Data'], (error, stdout, stderr) => {
-                if (error) {
-                    callback(error)
-                }else{
-                    callback(false)
-                }
-
-                console.log('starting mongo server')
-            });
+            /**
+             * Start mongodb server
+             */
+            startDatabaseServer((s) => {
+                callback(s)
+            })
         },
         input: {
             token: null,
             data: {
                 siteTitle: 'youtube',
-                username:'u',
+                username: 'u',
                 password,
                 repassword: password,
                 email: 'marvenwilsons@gmail.com',
@@ -54,6 +62,19 @@ const routine_a = [
         }
     },
     // test 2
+    {
+        description: 'Get the current app state',
+        expected: true,
+        expectedMsg:'init required',
+        input: {},
+        before(callback){
+            callback(false)
+        },
+        after(callback){
+            callback(false)
+        }
+    },
+    // test 3
     {
         description: 'attempt to initialized app with db server running but with invalid username',
         expected: false,
@@ -71,10 +92,10 @@ const routine_a = [
             section: 'dqapp'
         },
         before(callback) {
-
+            callback(false)
         },
         after(callback) {
-
+            callback(false)
         },
     },
     // test 3
@@ -94,11 +115,9 @@ const routine_a = [
             command: 'dqinitapp',
             section: 'dqapp'
         },
-        before(callback) {
-
-        },
+        before(callback) { },
         after(callback) {
-
+            callback(false)
         }
     },
     // test 4
@@ -107,112 +126,125 @@ const routine_a = [
         expected: false,
         expectedMsg: 'Cant perform "adminlogin" command because application is not yet initialize',
         input: {
-            // data: {
-            //     siteTitle: 'youtube',
-            //     username,
-            //     password,
-            //     repassword: password,
-            //     email: 'marvenwilsons@gmail.com',
-            //     adminName: 'Janny Ann A Bustamante'
-            // },
             username,
             password,
             command: 'adminlogin',
             section: 'adminMethods'
         },
-        before(callback) {
-
-        },
+        before(callback) { },
         after(callback) {
-
+            callback(false)
         }
     },
     // test 5
     {
-        description: 'login with correct information',
-        expected: true,
-        input: {}
-    },
-    // test 5
-    {
-        description: 'calling api with no command',
+        description: 'attempt to reach cardinal system without casting a command or specifying a section is expected to fail',
         expected: false,
-        input: {}
+        expectedMsg: 'Error reaching cardinal system because command and section is undefined, please specify the section and command upon calling the cardinal function',
+        input: {
+            data: {
+                siteTitle: 'youtube',
+                username,
+                password,
+                repassword: password,
+                email: 'marvenwilsons@gmail.com',
+                adminName: 'Janny Ann A Bustamante'
+            },
+        },
+        before(callback) { },
+        after(callback) {
+            callback(false)
+        }
     },
     // test 6
     {
-        description: 'calling api with no section',
+        description: 'attempt to reach cardinal system without specifying a section is expected to fail',
         expected: false,
-        input: {}
+        expectedMsg: 'Error reaching cardinal system because section is undefined, please specify the section upon calling the cardinal function',
+        input: {
+            command: 'test'
+        },
+        before(callback) { },
+        after(callback) {
+            callback(false)
+        }
     },
     // test 7
     {
-        description: 'calling api init dashboard',
-        expected: true,
+        description: 'attempt to reach cardinal system without specifying a command is expected to fail',
+        expected: false,
+        expectedMsg: 'Error reaching cardinal system because command is undefined, please specify the command upon calling the cardinal function',
         input: {
-
+            section: 'foo'
+        },
+        before(callback) { },
+        after(callback) {
+            callback(false)
         }
     },
     // test 8
     {
-        description: 'logout',
-        expected: true,
+        description: 'attempt to reach a section that didnt exist in the registry is expected to fail',
+        expected: false,
+        expectedMsg: 'The section named foo does not exist in the registry',
         input: {
-
+            section: 'foo',
+            command: 'foo'
+        },
+        before(callback) { },
+        after(callback) {
+            callback(false)
         }
     },
     // test 9
     {
-        description: 'calling api with incorrect token',
+        description: 'attempt to reach a command that didnt exist in the registy is expected to fail',
         expected: false,
+        expectedMsg: 'The command named foo does not exist in the registry',
         input: {
-
+            section: 'dqapp',
+            command: 'foo'
+        },
+        before(callback) { },
+        after(callback) {
+            callback(false)
         }
     },
     // test 10
     {
-        description: 'calling api without token at all',
-        expected: false,
+        description: 'initialize the app with correct set of data, with server is running, all is green is expected to succeed',
+        expected: true,
+        expectedMsg: 'Successfully created youtube',
         input: {
-
+            data: {
+                siteTitle: 'youtube',
+                username,
+                password,
+                repassword: password,
+                email: 'marvenwilsons@gmail.com',
+                adminName: 'Janny Ann A Bustamante'
+            },
+            section: 'dqapp',
+            command: 'dqinitapp'
+        },
+        after(err) {
+            err(false)
+        },
+        before(err) {
+            // startDatabaseServer((db) => {
+            //     err(db)
+            // })
+            err(false)
         }
     },
-    // test 11
-    {
-        description: 'login with incorrect information',
-        expected: false,
-        input: {}
-    },
-    // test 12
-    {
-        description: 'login with correct information',
-        expected: true,
-        input: {}
-    },
-    // test 13
-    {
-        description: 'Reset App',
-        expected: true,
-        input: {}
-    },
-    // test 14
-    {
-        description: 'login with incorrect information',
-        expected: false,
-        input: {}
-    },
-    // test 15
-    {
-        description: 'login with correct information',
-        expected: true,
-        input: {}
-    },
-    // test 16
-    {
-        description: 'purge app',
-        expected: true,
-        input: {}
-    }
+    // test initialized dashboard
+    // test logout
+    // test attempt to cast admin command with incorrect token
+    // test attempt to cast admin command with no token at all
+    // test login with incorrect credentials
+    // test login with correct credentials
+    // test reset application
+    // test purge app with owner credentials
 ]
 
 module.exports = routine_a

@@ -15,23 +15,47 @@ const Cardinal = async ({ username, password, token, data, command, section, met
          */
         
         // just to make sure db server is running
-        const appState = await db()
+        const data = await db()
         //
-        return {
-            status: true,
-            data: appState
-        }
+        return data
     }
 
     let selectedCommand = undefined
+    let hasErr = undefined
 
     console.log(`   [CardinalSystem] a.`)
     console.log(`   [CardinalSystem] Input command is ${command}`)
     console.log(`   [CardinalSystem] Input section is ${section}`)
     console.log(`   [CardinalSystem] Locating command in section`)
-    if (!registry[section]) {
+    if(section == undefined && command == undefined){
+        hasErr = true
+        response = {
+            status: false,
+            data: {
+                msg: 'Error reaching cardinal system because command and section is undefined, please specify the section and command upon calling the cardinal function'
+            }
+        }
+    } else if(section === undefined && command) {
+        hasErr = true
+        response = {
+            status: false,
+            data: {
+                msg: 'Error reaching cardinal system because section is undefined, please specify the section upon calling the cardinal function'
+            }
+        }
+    } else if(section && !command){
+        hasErr = true
+        response = {
+            status: false,
+            data: {
+                msg: 'Error reaching cardinal system because command is undefined, please specify the command upon calling the cardinal function'
+            }
+        }
+    } 
+    else if (!registry[section]) {
         console.log(`   [CardinalSystem] section "${section}" not found`)
         console.log(`   [CardinalSystem] returning an error now`)
+        hasErr = true
         response = {
             status: false,
             data: {
@@ -44,6 +68,7 @@ const Cardinal = async ({ username, password, token, data, command, section, met
         if (!registry[section][command]) {
             console.log(`   [CardinalSystem] command "${command}" not found`)
             console.log(`   [CardinalSystem] returning an error now`)
+            hasErr = true
             response = {
                 status: false,
                 data: {
@@ -56,8 +81,16 @@ const Cardinal = async ({ username, password, token, data, command, section, met
         }
     }
 
-    const userdb = await db(username, password)
-    if (typeof userdb === 'object' && selectedCommand && typeof selectedCommand == 'object' && userdb.data.action != 'SystemInit') {
+    console.log('cardinal current response')
+    let userdb = undefined
+
+    if(hasErr == undefined){
+        userdb = await db(username, password)
+    }else{
+        return Promise.reject(response)
+    }
+
+    if (typeof userdb === 'object' && selectedCommand && typeof selectedCommand == 'object' && userdb.data.msg != 'init required' && hasErr == undefined) {
         console.log(`** [CardinalSystem] Api Calls`)
         console.log(`   [CardinalSystem] b.`)
 
@@ -110,7 +143,7 @@ const Cardinal = async ({ username, password, token, data, command, section, met
             console.log('** fail')
             response = commandIsAllowed.data.msg
         }
-    } else if (userdb.data.action == 'SystemInit') {
+    } else if (userdb.data.msg == 'init required' && hasErr == undefined) {
         if (command != 'dqinitapp') {
             console.log('** CardinalSystem SystemInit handler')
             console.log('   [CardinalSystem] Illegal call of command')

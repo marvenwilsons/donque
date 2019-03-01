@@ -117,7 +117,7 @@ protocols.dqinitapp = {
             const res = res1 ? {
                 status: true,
                 data: {
-                    msg: 'success',
+                    msg: `Successfully created ${data.siteTitle}`,
                 }
             } : {
                 status: false,

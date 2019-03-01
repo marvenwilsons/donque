@@ -119,7 +119,7 @@ const _db = (user, pwd) => {
 }
 
 const db = async (user, pwd) => {
-console.log('** Database')
+    console.log('** Database')
     /**
      * Container
      */
@@ -163,7 +163,7 @@ console.log('** Database')
                 msg: 'Cannot reach Mongo Db server at link localhost:27017, make sure MongoDb is installed properly and is running'
             }
         }
-    }else{
+    } else {
         console.log(`   [db] Datbase connection OK!`)
     }
 
@@ -180,9 +180,19 @@ console.log('** Database')
         _currentAppState = 'init required'
         _isInit = false
         response = {
+            // test 5 fail
+            // status: true,
+            // data: {
+            //     actions: 'SystemInit',
+            //     msg: 'init required'
+            // }
             status: true,
             data: {
-                action: 'SystemInit'
+                action:{
+                    title:'redirect', // prompt_msg, prompt_err_msg, prompt_password, propmpt_credentials, redirect,
+                    content:'__dqinit'
+                },
+                msg: 'init required'
             }
         }
     }
@@ -195,7 +205,7 @@ console.log('** Database')
         response = {
             status: true,
             data: {
-                doc : db_data_instance
+                doc: db_data_instance
             }
         }
     }
@@ -207,7 +217,7 @@ console.log('** Database')
      * should be made by the one who initialized this application.  
      * the connection will be the connection used for api calls later     
      */
-    if (appState.includes('app is init') && appState.includes('db connected') && appState.includes('main admin not connected')){
+    if (appState.includes('app is init') && appState.includes('db connected') && appState.includes('main admin not connected')) {
         _currentAppState = 'owner login'
         _isInit = true
         console.log(`   [db] Application is initialized`)
@@ -217,11 +227,11 @@ console.log('** Database')
          * When main admin is not yet connected and tried to do api calls
          */
         const isIllegalCall = user && pwd ? false : true
-        if(isIllegalCall){
+        if (isIllegalCall) {
             console.log(`   [db] Db owner credentials is invalid`)
             console.log(`   [db] Illegal method call, returning an error now`)
             const msg1 = 'Cannot perform command because admin credentials is missing, Please instantiate the database connection first by logging in as the application owner, Illegal api call error'
-            
+
             response = {
                 status: false,
                 data: {
@@ -229,12 +239,12 @@ console.log('** Database')
                     msg: msg1
                 }
             }
-        }else {
+        } else {
             console.log(`   [db] Logging in db owner`)
-            const dbOwner= JSON.parse(fs.readFileSync(`${__dirname}/iniConf.json`, 'utf-8'))
-            
+            const dbOwner = JSON.parse(fs.readFileSync(`${__dirname}/iniConf.json`, 'utf-8'))
+
             console.log('   [db] Checking owner credentials')
-            if (security.decrypt(dbOwner.username, dbOwner.owner) === security.encrypt(user, dbOwner.owner)){
+            if (security.decrypt(dbOwner.username, dbOwner.owner) === security.encrypt(user, dbOwner.owner)) {
                 console.log('   [db] Reaching database')
                 /**
                  * Check password from database
@@ -245,36 +255,36 @@ console.log('** Database')
                 const u = await MongoClient.connect(`mongodb://${_user}:${_pass}@localhost:27017/${dbOwner.appName}`, {
                     useNewUrlParser: true
                 })
-                .then(doc => {
-                    console.log('   [db] Authentication OK!')
-                    con = true
-                    db_data_instance = doc
-                    _appName = dbOwner.appName
-                    _appState = true
-                    _appSummary = dbOwner
-                    appState = []
+                    .then(doc => {
+                        console.log('   [db] Authentication OK!')
+                        con = true
+                        db_data_instance = doc
+                        _appName = dbOwner.appName
+                        _appState = true
+                        _appSummary = dbOwner
+                        appState = []
 
-                    doc.db_data_instance = db_data_instance
-                    doc.appName = _appName
-                    return {
-                        status: true,
-                        data: {
-                            doc
+                        doc.db_data_instance = db_data_instance
+                        doc.appName = _appName
+                        return {
+                            status: true,
+                            data: {
+                                doc
+                            }
                         }
-                    }
-                })
-                .catch(err => {
-                    console.log('   [db] Authentication fail')
-                    return {
-                        status: false,
-                        data: {
-                            msg: err
+                    })
+                    .catch(err => {
+                        console.log('   [db] Authentication fail')
+                        return {
+                            status: false,
+                            data: {
+                                msg: err
+                            }
                         }
-                    }
-                })
+                    })
                 _currentAppState = 'admin login'
                 response = u
-            }else{
+            } else {
                 console.log(`   [db] "${user}" username is invalid and not the owner's username`)
                 console.log(`   [db] returning an error now`)
                 response = {
@@ -289,9 +299,8 @@ console.log('** Database')
 
     return new Promise(async (resolve, reject) => {
         const res = await response
-        res.data.state = _currentAppState
-        console.log('res')
-        console.log(response)
+        // res.data.state = _currentAppState
+        console.log(res)
         if (res.status) {
             resolve(res)
         } else {
