@@ -138,7 +138,7 @@ const db = async (user, pwd) => {
         if (isIllegalCall) {
             console.log(`   [db] Db owner credentials is invalid`)
             console.log(`   [db] Illegal method call, returning an error now`)
-            const msg1 = 'Cannot perform command because admin credentials is missing, Please instantiate the database connection first by logging in as the application owner, Illegal api call error'
+            const msg1 = 'Cannot perform command because admin credentials is missing, Please instantiate a connection first from app to db by logging in as the application owner'
 
             response = {
                 status: false,

@@ -246,8 +246,21 @@ const routine_a = [
         input: {},
         after: err => err(false),
         before: err => err(false)
+    },
+    // test initialized dashboard without instantiating the connection to database credentials
+    {
+        description: 'initializing dashboard or calling a core api without instantiating a connection first from app to database is expected to fail',
+        expected: false,
+        expectedMsg:'Cannot perform command because admin credentials is missing, Please instantiate a connection first from app to db by logging in as the application owner',
+        input: {
+            username: 'foo',
+            token: 'not a valid token',
+            command:'initAdminDashboard',
+            section:'adminMethods'
+        },
+        after: err => err(false),
+        before: err => err(false)
     }
-    // test initialized dashboard
     // test logout
     // test attempt to cast admin command with incorrect token
     // test attempt to cast admin command with no token at all
