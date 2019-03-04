@@ -29,97 +29,10 @@ let _isInit = undefined
 /**
  * Return the database context
  */
-const _db = (user, pwd) => {
-    return new Promise((resolve, reject) => {
-        /**
-         * To perform initialization
-         */
-        if (!iniFile) {
-            console.log('jump here')
-            resolve({
-                status: false,
-            })
-        }
-
-        /**
-         * After initialization
-         */
-        if (con == false && d == undefined) {
-            /**
-             * Local host connection
-             */
-            console.log('** Trying to established connection on fisrt load')
-            console.log(`   [db] username: ${user}`)
-            console.log(`   [db] username: ${pwd}`)
-            console.log(`   [db] variable iniConf is ${iniFile ? 'present' : 'does not exist'}`)
-            console.log(`   [db] assuming process is ${!iniFile ? 'app initialization' : 'api access'}`)
-            const { appName, owner, } = require('./iniConf.json')
-
-            /**
-             * Credentials
-             */
-            const _user = user && pwd ? security.decrypt(user, owner) : null
-            const _pass = user && pwd ? security.encrypt(pwd, _user) : null
-
-            console.log(` [db] encrypting username ${_user}`)
-            console.log(` [db] encrypting password ${_pwd}`)
-            /**
-             * Connection
-             */
-            MongoClient.connect(`mongodb://${_user}:${_pass}@localhost:27017/${appName}`, {
-                useNewUrlParser: true
-            })
-                .then(data => {
-                    console.log(`   [MongoDb] Success loging in Mongo Database`)
-                    console.log(`   [MongoDb] user type is admin app, and admin database`)
-                    //
-                    con = true
-                    d = data
-                    _appName = appName
-                    //
-                    data.isOwner = _user === user ? true : false
-                    data.firstLoad = true
-                    //
-                    resolve(data)
-                })
-                .catch(err => {
-                    console.log('** Mongo Client Error')
-                    if (!_user && iniFile) {
-                        reject({
-                            status: false,
-                            data: {
-                                msg: 'Application is already initialized'
-                            }
-                        })
-                    } else if (_user && _pass) {
-                        reject({
-                            status: false,
-                            data: {
-                                msg: 'Authentication failed'
-                            }
-                        })
-                    } else {
-                        reject({
-                            status: false,
-                            data: {
-                                msg: err.message
-                            }
-                        })
-                    }
-                })
-
-        } else if (iniFile && con) {
-            console.log('connecting as a application user')
-            d.firstLoad = false
-            d.appName = _appName
-            resolve(d)
-        }
-    })
-
-}
-
 const db = async (user, pwd) => {
     console.log('** Database')
+    console.log('')
+
     /**
      * Container
      */
@@ -131,7 +44,7 @@ const db = async (user, pwd) => {
      * if the file exist it means the application has already
      * been initialized
      */
-    iniFile ? appState.push('app is init') : appState.push('app is not init')
+    fs.readdirSync(__dirname).includes('iniConf.json') ? appState.push('app is init') : appState.push('app is not init')
 
     /**
      * Check if the main admin has logged in
@@ -173,21 +86,16 @@ const db = async (user, pwd) => {
      * initialize the app and the database,
      * and will assume its gonna be in the localhost environment
      */
-    if (!appState.includes('db err') && appState.includes('app is not init')) {
+    if (!appState.includes('db err') && appState.includes('app is not init') && iniFile === false) {
         console.log('   [db] Checking initialization conditions')
         console.log('   [db] App is not yet initialized')
         console.log('   [db] Requesting SystemInit')
         _currentAppState = 'init required'
         _isInit = false
         response = {
-            // test 5 fail
-            // status: true,
-            // data: {
-            //     actions: 'SystemInit',
-            //     msg: 'init required'
-            // }
             status: true,
             data: {
+                ini: false,
                 action:{
                     title:'redirect', // prompt_msg, prompt_err_msg, prompt_password, propmpt_credentials, redirect,
                     content:'__dqinit'
@@ -299,7 +207,8 @@ const db = async (user, pwd) => {
 
     return new Promise(async (resolve, reject) => {
         const res = await response
-        // res.data.state = _currentAppState
+        console.log('current app state!')
+        console.log(_currentAppState)
         console.log(res)
         if (res.status) {
             resolve(res)

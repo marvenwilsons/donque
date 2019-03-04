@@ -13,11 +13,30 @@ const Cardinal = async ({ username, password, token, data, command, section, met
         /**
          * Only works when 
          */
-        
+        let res = undefined
         // just to make sure db server is running
-        const data = await db()
+        console.log('retrieving the db data')
+        try {
+            const data = await db()
+            return res = data
+
+        }catch(err){
+            if(err.data.ini){
+                res = {
+                    status: true,
+                    data: {
+                        msg: 'owner login required',
+                        action:{
+                            title:'redirect', // prompt_msg, prompt_err_msg, prompt_password, propmpt_credentials, redirect,
+                            content:'dqlogin'
+                        }
+                    }
+                }
+            }
+        }
+
+        return res
         //
-        return data
     }
 
     let selectedCommand = undefined
@@ -27,7 +46,7 @@ const Cardinal = async ({ username, password, token, data, command, section, met
     console.log(`   [CardinalSystem] Input command is ${command}`)
     console.log(`   [CardinalSystem] Input section is ${section}`)
     console.log(`   [CardinalSystem] Locating command in section`)
-    if(section == undefined && command == undefined){
+    if (section == undefined && command == undefined) {
         hasErr = true
         response = {
             status: false,
@@ -35,7 +54,7 @@ const Cardinal = async ({ username, password, token, data, command, section, met
                 msg: 'Error reaching cardinal system because command and section is undefined, please specify the section and command upon calling the cardinal function'
             }
         }
-    } else if(section === undefined && command) {
+    } else if (section === undefined && command) {
         hasErr = true
         response = {
             status: false,
@@ -43,7 +62,7 @@ const Cardinal = async ({ username, password, token, data, command, section, met
                 msg: 'Error reaching cardinal system because section is undefined, please specify the section upon calling the cardinal function'
             }
         }
-    } else if(section && !command){
+    } else if (section && !command) {
         hasErr = true
         response = {
             status: false,
@@ -51,7 +70,7 @@ const Cardinal = async ({ username, password, token, data, command, section, met
                 msg: 'Error reaching cardinal system because command is undefined, please specify the command upon calling the cardinal function'
             }
         }
-    } 
+    }
     else if (!registry[section]) {
         console.log(`   [CardinalSystem] section "${section}" not found`)
         console.log(`   [CardinalSystem] returning an error now`)
@@ -84,9 +103,9 @@ const Cardinal = async ({ username, password, token, data, command, section, met
     console.log('cardinal current response')
     let userdb = undefined
 
-    if(hasErr == undefined){
+    if (hasErr == undefined) {
         userdb = await db(username, password)
-    }else{
+    } else {
         return Promise.reject(response)
     }
 
@@ -126,16 +145,16 @@ const Cardinal = async ({ username, password, token, data, command, section, met
             console.log(`   [CardinalSystem] Executing ${command}`)
 
             const r = await selectedCommand[command](param)
-            .then(async data => {
-                const d = await data
-                return d
-            }).catch(async err => {
-                return err
-            })
-            return new Promise((resolve,reject) => {
-                if(r.status){
+                .then(async data => {
+                    const d = await data
+                    return d
+                }).catch(async err => {
+                    return err
+                })
+            return new Promise((resolve, reject) => {
+                if (r.status) {
                     resolve(r)
-                }else{
+                } else {
                     reject(r)
                 }
             })
@@ -165,10 +184,10 @@ const Cardinal = async ({ username, password, token, data, command, section, met
                 console.log(`** CardinalSystem error executing command`)
                 return err
             })
-            return new Promise((resolve,reject) => {
-                if(r.status){
+            return new Promise((resolve, reject) => {
+                if (r.status) {
                     resolve(r)
-                }else{
+                } else {
                     reject(r)
                 }
             })
@@ -180,10 +199,10 @@ const Cardinal = async ({ username, password, token, data, command, section, met
     // return
     // return await response
     const r = await response
-    return new Promise((resolve,reject) => {
-        if(r.status){
+    return new Promise((resolve, reject) => {
+        if (r.status) {
             resolve(r)
-        }else{
+        } else {
             reject(r)
         }
     })

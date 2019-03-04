@@ -18,7 +18,7 @@ const startDatabaseServer = (callback) => {
         if (re != null) {
             setTimeout(() => {
                 callback(false)
-            }, 1000)
+            }, 100)
         }
     })
     mongod.stderr.on('data', stderr => {
@@ -30,15 +30,21 @@ const startDatabaseServer = (callback) => {
     })
 }
 
+/**
+ * For this series of test to work
+ * a. database should be empty 
+ * b. iniConf.json should not exist
+ * 
+ * this is to simulate a fresh download from the user
+ */
+
 const routine_a = [
     // test 1
     {
         description: 'attempt to initialized app while mongo db server is not running and invalid inputs',
         expected: false,
         expectedMsg: 'Cannot reach Mongo Db server at link localhost:27017, make sure MongoDb is installed properly and is running',
-        before: function (callback) {
-            callback(false)
-        },
+        before: err => err(false),
         after: function (callback) {
             /**
              * Start mongodb server
@@ -227,16 +233,20 @@ const routine_a = [
             section: 'dqapp',
             command: 'dqinitapp'
         },
-        after(err) {
-            err(false)
-        },
+        after: err => err(false),
         before(err) {
-            // startDatabaseServer((db) => {
-            //     err(db)
-            // })
             err(false)
         }
     },
+    // test 11 get current app state should be owner login required
+    {
+        description: 'get the current app state, output msg should be - owner login required',
+        expected: true,
+        expectedMsg:'owner login required',
+        input: {},
+        after: err => err(false),
+        before: err => err(false)
+    }
     // test initialized dashboard
     // test logout
     // test attempt to cast admin command with incorrect token
