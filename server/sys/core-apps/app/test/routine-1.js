@@ -41,7 +41,7 @@ const startDatabaseServer = (callback) => {
 const routine_a = [
     // test 1
     {
-        description: 'attempt to initialized app while mongo db server is not running and invalid inputs',
+        desc: 'attempt to initialized app while mongo db server is not running and invalid inputs',
         expected: false,
         expectedMsg: 'Cannot reach Mongo Db server at link localhost:27017, make sure MongoDb is installed properly and is running',
         before: err => err(false),
@@ -67,22 +67,18 @@ const routine_a = [
             section: 'dqapp'
         }
     },
-    // test 2
+    // test 2 get current app state
     {
-        description: 'Get the current app state',
+        desc: 'Get the current app state',
         expected: true,
         expectedMsg:'init required',
         input: {},
-        before(callback){
-            callback(false)
-        },
-        after(callback){
-            callback(false)
-        }
+        before: err => err(false),
+        after: err => err(false)
     },
-    // test 3
+    // test 3 attempt to initialized app with db server running but with invalid username
     {
-        description: 'attempt to initialized app with db server running but with invalid username',
+        desc: 'attempt to initialized app with db server running but with invalid username',
         expected: false,
         expectedMsg: 'Invalid username',
         input: {
@@ -97,16 +93,12 @@ const routine_a = [
             command: 'dqinitapp',
             section: 'dqapp'
         },
-        before(callback) {
-            callback(false)
-        },
-        after(callback) {
-            callback(false)
-        },
+        before: err => err(false),
+        after: err => err(false)
     },
-    // test 3
+    // test 3 attempt to initialized app with db server running but with invalid password
     {
-        description: 'attempt to initialized app with db server running but with invalid password',
+        desc: 'attempt to initialized app with db server running but with invalid password',
         expected: false,
         expectedMsg: 'Invalid password',
         input: {
@@ -121,14 +113,12 @@ const routine_a = [
             command: 'dqinitapp',
             section: 'dqapp'
         },
-        before(callback) { },
-        after(callback) {
-            callback(false)
-        }
+        before: err => err(false),
+        after: err => err(false)
     },
-    // test 4
+    // test 4 attempt to login without initializing the application
     {
-        description: 'attempt to login without initializing the application',
+        desc: 'attempt to login without initializing the application',
         expected: false,
         expectedMsg: 'Cant perform "adminlogin" command because application is not yet initialize',
         input: {
@@ -137,14 +127,12 @@ const routine_a = [
             command: 'adminlogin',
             section: 'adminMethods'
         },
-        before(callback) { },
-        after(callback) {
-            callback(false)
-        }
+        before: err => err(false),
+        after: err => err(false)
     },
-    // test 5
+    // test 5 attempt to reach cardinal system without casting a command or specifying a section is expected to fail
     {
-        description: 'attempt to reach cardinal system without casting a command or specifying a section is expected to fail',
+        desc: 'attempt to reach cardinal system without casting a command or specifying a section is expected to fail',
         expected: false,
         expectedMsg: 'Error reaching cardinal system because command and section is undefined, please specify the section and command upon calling the cardinal function',
         input: {
@@ -157,68 +145,58 @@ const routine_a = [
                 adminName: 'Janny Ann A Bustamante'
             },
         },
-        before(callback) { },
-        after(callback) {
-            callback(false)
-        }
+        before: err => err(false),
+        after: err => err(false)
     },
-    // test 6
+    // test 6 attempt to reach cardinal system without specifying a section is expected to fail
     {
-        description: 'attempt to reach cardinal system without specifying a section is expected to fail',
+        desc: 'attempt to reach cardinal system without specifying a section is expected to fail',
         expected: false,
         expectedMsg: 'Error reaching cardinal system because section is undefined, please specify the section upon calling the cardinal function',
         input: {
             command: 'test'
         },
-        before(callback) { },
-        after(callback) {
-            callback(false)
-        }
+        before: err => err(false),
+        after: err => err(false)
     },
-    // test 7
+    // test 7 attempt to reach cardinal system without specifying a command is expected to fail
     {
-        description: 'attempt to reach cardinal system without specifying a command is expected to fail',
+        desc: 'attempt to reach cardinal system without specifying a command is expected to fail',
         expected: false,
         expectedMsg: 'Error reaching cardinal system because command is undefined, please specify the command upon calling the cardinal function',
         input: {
             section: 'foo'
         },
-        before(callback) { },
-        after(callback) {
-            callback(false)
-        }
+        before: err => err(false),
+        after: err => err(false)
     },
-    // test 8
+    // test 8 attempt to reach a section that didnt exist in the registry is expected to fail
     {
-        description: 'attempt to reach a section that didnt exist in the registry is expected to fail',
+        desc: 'attempt to reach a section that didnt exist in the registry is expected to fail',
         expected: false,
         expectedMsg: 'The section named foo does not exist in the registry',
         input: {
             section: 'foo',
             command: 'foo'
         },
-        before(callback) { },
-        after(callback) {
-            callback(false)
-        }
+        before: err => err(false),
+        after: err => err(false)
     },
-    // test 9
+    // test 9 attempt to reach a command that didnt exist in the registy is expected to fail
     {
-        description: 'attempt to reach a command that didnt exist in the registy is expected to fail',
+        desc: 'attempt to reach a command that didnt exist in the registy is expected to fail',
         expected: false,
         expectedMsg: 'The command named foo does not exist in the registry',
         input: {
             section: 'dqapp',
             command: 'foo'
         },
-        before(callback) { },
-        after(callback) {
-            callback(false)
-        }
+        before: err => err(false),
+        after: err => err(false)
     },
-    // test 10
+    // test 10 initialize the app with correct set of data, with server is running, all is green is expected to succeed
     {
-        description: 'initialize the app with correct set of data, with server is running, all is green is expected to succeed',
+        desc: 'initialize the app with correct set of data, with server is running, all is green is expected to succeed',
         expected: true,
         expectedMsg: 'Successfully created youtube',
         input: {
@@ -233,23 +211,21 @@ const routine_a = [
             section: 'dqapp',
             command: 'dqinitapp'
         },
-        after: err => err(false),
-        before(err) {
-            err(false)
-        }
+        before: err => err(false),
+        after: err => err(false)
     },
     // test 11 get current app state should be owner login required
     {
-        description: 'get the current app state, output msg should be - owner login required',
+        desc: 'get the current app state, output msg should be - owner login required',
         expected: true,
         expectedMsg:'owner login required',
         input: {},
-        after: err => err(false),
-        before: err => err(false)
+        before: err => err(false),
+        after: err => err(false)
     },
-    // test initialized dashboard without instantiating the connection to database credentials
+    // test 12 initialized dashboard without instantiating the connection to database credentials
     {
-        description: 'initializing dashboard or calling a core api without instantiating a connection first from app to database is expected to fail',
+        desc: 'initializing dashboard or calling a core api without instantiating a connection first from app to database is expected to fail',
         expected: false,
         expectedMsg:'Cannot perform command because admin credentials is missing, Please instantiate a connection first from app to db by logging in as the application owner',
         input: {
@@ -258,10 +234,24 @@ const routine_a = [
             command:'initAdminDashboard',
             section:'adminMethods'
         },
-        after: err => err(false),
-        before: err => err(false)
-    }
-    // test logout
+        before: err => err(false),
+        after: err => err(false)
+    },
+    // test 13 login as the owner
+    {
+        desc: 'admin login with incorrect credentials is expected to fail',
+        expected: false,
+        expectedMsg:'Authentication fail please login as the application owner',
+        input: {
+            username:'foo',
+            password: 'bar',
+            command:'adminlogin',
+            section:'adminMethods'
+        },
+        before: err => err(false),
+        after: err => err(false)
+    },
+    
     // test attempt to cast admin command with incorrect token
     // test attempt to cast admin command with no token at all
     // test login with incorrect credentials

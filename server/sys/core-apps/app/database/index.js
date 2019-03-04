@@ -207,9 +207,7 @@ const db = async (user, pwd) => {
 
     return new Promise(async (resolve, reject) => {
         const res = await response
-        console.log('current app state!')
-        console.log(_currentAppState)
-        console.log(res)
+
         if (res.status) {
             resolve(res)
         } else {

@@ -77,9 +77,28 @@ adminMethods.adminlogin = {
                 delete (reUser.password)
                 delete (reUser.ip)
                 adminData = reUser
+                // resolve({
+                //     status: true,
+                //     data: reUser
+                // })
                 resolve({
                     status: true,
-                    data: reUser
+                    data: {
+                        msg: 'Auth Ok',
+                        actions: [
+                            {
+                                title: 'saveToLocalStorage',
+                                content: {
+                                    token: reUser.token,
+                                    username: reUser.username
+                                }
+                            },
+                            {
+                                title: 'redirect',
+                                content:'admin'
+                            }
+                        ]
+                    }
                 })
             }
         })
