@@ -1,7 +1,7 @@
 const cardinal = require('./sys/cardinal')
 var colors = require('colors');
 let count = -1
-
+let tempData = []
 const test = (routine,index) => {
     const flow = setInterval(() => {
         // encrement
@@ -84,6 +84,14 @@ const test = (routine,index) => {
                         console.table(data)
 
                         //
+                        tempData.push(data)
+
+                        //
+                        if(routine[count].data != undefined){
+                            routine[count].data(tempData)
+                        }
+
+                        //
                         let _err = undefined
 
                         //
@@ -119,8 +127,10 @@ const test = (routine,index) => {
                                 discontinued.state = true
                             } else {
                                 if (_err == undefined && isDone == false) {
+                                    console.log(count)
                                     console.log('EXECUTING next test')
                                     test(routine, count)
+                                    console.log(count)
                                 } else if (isDone) {
                                     setTimeout(() => {
                                         console.log('')
@@ -182,7 +192,9 @@ const test = (routine,index) => {
                             } else {
                                 if (_err == undefined && isDone == false) {
                                     console.log('EXECUTING next test')
+                                    console.log(count)
                                     test(routine, count)
+                                    console.log(count)
                                 } else if (isDone) {
                                     setTimeout(() => {
                                         console.log('')

@@ -129,9 +129,11 @@ adminMethods.initAdminDashboard = {
                 resolve({
                     status: true,
                     data: {
-                        msg: 'hello',
-                        action: 'save data to localstorage',
-                        data: adminData
+                        msg: null,
+                        actions: [{
+                            title: 'saveToLocalStorage',
+                            content: adminData
+                        }],
                     }
                 })
             } else {
