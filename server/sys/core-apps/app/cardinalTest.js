@@ -1,21 +1,8 @@
-const test1 = require('./test/routine-1')
-const test2 = require('./test/routine-2')
 const cardinal = require('./sys/cardinal')
 var colors = require('colors');
-
-const as = {
-    t: [],
-    set v(val) {
-        this.t.push(val)
-        console.log(this.t)
-    },
-    get vv() {
-        return this.t.length
-    }
-}
-
 let count = -1
-function test (routine, index) {
+
+const test = (routine,index) => {
     const flow = setInterval(() => {
         // encrement
         count++
@@ -96,10 +83,6 @@ function test (routine, index) {
                         console.log('\n final output: '.bold)
                         console.table(data)
 
-                        if (typeof routine[count].response != 'undefined' || typeof routine[count].response != undefined) {
-                            routine[count].response(data)
-                        }
-
                         //
                         let _err = undefined
 
@@ -153,6 +136,7 @@ function test (routine, index) {
                         })
                     })
                     .catch(err => {
+                        console.log(' end process '.inverse.bold)
                         console.log('')
                         console.log(' test report:'.bold)
                         console.log('')
@@ -186,10 +170,6 @@ function test (routine, index) {
                         //
                         if (count == routine.length - 1 && _err == undefined) {
                             isDone = true
-                        }
-
-                        if (typeof routine[count].response != 'undefined' || typeof routine[count].response != undefined) {
-                            routine[count].response(err)
                         }
 
                         routine[count].after((err_Res) => {
@@ -229,19 +209,7 @@ function test (routine, index) {
 
 
         clearInterval(flow)
-    }, 2000)
+    }, 05)
 }
 
-test(test2, 0)
-
-
-
-
-
-// add able to add new item to current live admins array
-
-
-
-
-
-
+module.exports = test

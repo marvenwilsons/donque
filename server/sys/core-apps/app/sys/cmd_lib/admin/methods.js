@@ -19,6 +19,7 @@ adminMethods.adminlogin = {
         // check user name validity
 
         const updateUser = () => {
+            console.log(`   [adminlogin] Updating ${username}'s token`)
             /**
               * Create token
               */
@@ -37,8 +38,10 @@ adminMethods.adminlogin = {
                             }
                         })
                     } else {
+                        console.log(`   [adminlogin] token updated`)
                         reUser = u
                         updateCurrentLiveAdmins()
+                        console.log(`   [adminlogin] updating current live admins`)
                     }
                 })
         }
@@ -56,7 +59,11 @@ adminMethods.adminlogin = {
                             }
                         }
                     }
-                ).catch(err => {
+                )
+                .then(() => {
+                    console.log(`   [adminlogin] ${username} was added to current live admins successfully`)
+                })
+                .catch(err => {
                     reject({
                         status: false,
                         data: {
@@ -81,6 +88,7 @@ adminMethods.adminlogin = {
                 //     status: true,
                 //     data: reUser
                 // })
+                console.log(`   [adminlogin] resolving`)                
                 resolve({
                     status: true,
                     data: {
@@ -95,7 +103,7 @@ adminMethods.adminlogin = {
                             },
                             {
                                 title: 'redirect',
-                                content:'admin'
+                                content: 'admin'
                             }
                         ]
                     }
@@ -115,11 +123,13 @@ adminMethods.initAdminDashboard = {
         }
     },
     initAdminDashboard({ dep, username, token }) {
+        console.log('** init admin dashboard')
         return new Promise((resolve, reject) => {
             if (adminData && username === adminData.username && token === adminData.token) {
                 resolve({
                     status: true,
                     data: {
+                        msg: 'hello',
                         action: 'save data to localstorage',
                         data: adminData
                     }
@@ -146,9 +156,9 @@ adminMethods.adminLogout = {
             funcIsDestructive: false
         }
     },
-    adminLogout({dep,username}){
+    adminLogout({ dep, username }) {
         console.log('** logging out')
-        const {db,user} = dep
+        const { db, user } = dep
         /**
          * a. delete token
          * b. remove user from current live admins
@@ -159,8 +169,8 @@ adminMethods.adminLogout = {
                 token: undefined
             }
         }, {
-            returnOriginal: false
-        })
+                returnOriginal: false
+            })
 
         const clearingLiveAdmins = db
             .collection('dq_app')
@@ -176,28 +186,28 @@ adminMethods.adminLogout = {
             )
 
 
-        return new Promise((resolve,reject) => {
+        return new Promise((resolve, reject) => {
             const clearedToken = clearingToken.then(() => clearingLiveAdmins.then(() => true).catch(() => false))
-            if (clearedToken){
+            if (clearedToken) {
                 console.log('   [adminLogout] token cleared!')
                 console.log(`   [adminLogout] deleting ${username} to current live admins success!`)
                 resolve({
                     status: true,
                 })
-            }else{
+            } else {
                 reject({
                     status: false,
-                    data:{
-                        msg:`there was an error while logging ${username} out`,
+                    data: {
+                        msg: `there was an error while logging ${username} out`,
                         data: {
                             action: 'process to temp',
-                            data:{
+                            data: {
                                 username
                             }
                         }
                     }
                 })
-            }            
+            }
         })
     }
 

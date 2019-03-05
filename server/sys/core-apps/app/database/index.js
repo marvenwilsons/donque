@@ -72,7 +72,9 @@ const db = async (user, pwd) => {
         response = {
             status: false,
             data: {
-                action: null,
+                actions: [{
+                    title: 'prompt_err'
+                }],
                 msg: 'Cannot reach Mongo Db server at link localhost:27017, make sure MongoDb is installed properly and is running'
             }
         }
@@ -96,10 +98,10 @@ const db = async (user, pwd) => {
             status: true,
             data: {
                 ini: false,
-                action:{
-                    title:'redirect', // prompt_msg, prompt_err_msg, prompt_password, propmpt_credentials, redirect,
-                    content:'__dqinit'
-                },
+                actions: [{
+                    title: 'redirect', // prompt_msg, prompt_err_msg, prompt_password, propmpt_credentials, redirect,
+                    content: '__dqinit'
+                }],
                 msg: 'init required'
             }
         }
@@ -144,7 +146,12 @@ const db = async (user, pwd) => {
                 status: false,
                 data: {
                     ini: true,
-                    msg: msg1
+                    msg: msg1,
+                    actions: [
+                        {
+                            title: 'prompt_err'
+                        }
+                    ]
                 }
             }
         } else {
@@ -198,6 +205,9 @@ const db = async (user, pwd) => {
                 response = {
                     status: false,
                     data: {
+                        actions: [{
+                            title: 'prompt_err'
+                        }],
                         msg: 'Authentication fail please login as the application owner'
                     }
                 }

@@ -26,10 +26,10 @@ const Cardinal = async ({ username, password, token, data, command, section, met
                     status: true,
                     data: {
                         msg: 'owner login required',
-                        action:{
+                        actions:[{
                             title:'redirect', // prompt_msg, prompt_err_msg, prompt_password, propmpt_credentials, redirect,
                             content:'dqlogin'
-                        }
+                        }]
                     }
                 }
             }
@@ -51,6 +51,9 @@ const Cardinal = async ({ username, password, token, data, command, section, met
         response = {
             status: false,
             data: {
+                actions:[{
+                    title:'prompt_err'
+                }],
                 msg: 'Error reaching cardinal system because command and section is undefined, please specify the section and command upon calling the cardinal function'
             }
         }
@@ -59,6 +62,9 @@ const Cardinal = async ({ username, password, token, data, command, section, met
         response = {
             status: false,
             data: {
+                actions:[{
+                    title:'prompt_err'
+                }],
                 msg: 'Error reaching cardinal system because section is undefined, please specify the section upon calling the cardinal function'
             }
         }
@@ -67,6 +73,9 @@ const Cardinal = async ({ username, password, token, data, command, section, met
         response = {
             status: false,
             data: {
+                actions:[{
+                    title:'prompt_err'
+                }],
                 msg: 'Error reaching cardinal system because command is undefined, please specify the command upon calling the cardinal function'
             }
         }
@@ -78,6 +87,9 @@ const Cardinal = async ({ username, password, token, data, command, section, met
         response = {
             status: false,
             data: {
+                actions:[{
+                    title:'prompt_err'
+                }],
                 msg: `The section named ${section} does not exist in the registry`
             }
         }
@@ -91,6 +103,9 @@ const Cardinal = async ({ username, password, token, data, command, section, met
             response = {
                 status: false,
                 data: {
+                    actions:[{
+                        title:'prompt_err'
+                    }],
                     msg: `The command named ${command} does not exist in the registry`
                 }
             }
@@ -169,6 +184,9 @@ const Cardinal = async ({ username, password, token, data, command, section, met
             response = {
                 status: false,
                 data: {
+                    actions: [{
+                        title:'prompt_err'
+                    }],
                     msg: `Cant perform "${command}" command because application is not yet initialize`
                 }
             }

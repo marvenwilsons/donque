@@ -118,10 +118,17 @@ protocols.dqinitapp = {
                 status: true,
                 data: {
                     msg: `Successfully created ${data.siteTitle}`,
+                    actions: [{
+                        title: 'redirect',
+                        content:'dqlogin'
+                    }]
                 }
             } : {
                 status: false,
                 data: {
+                    actions: [{
+                        title:'prompt_err'
+                    }],
                     msg: err
                 }
             }

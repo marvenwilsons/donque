@@ -1,5 +1,6 @@
 
 const { execFile, exec, execSync, spawn } = require('child_process')
+const cardinalTest = require('../cardinalTest')
 
 const username = 'jannyann'
 const password = 'password123@'
@@ -250,14 +251,9 @@ const routine_a = [
         },
         before: err => err(false),
         after: err => err(false)
-    },
-    
-    // test attempt to cast admin command with incorrect token
-    // test attempt to cast admin command with no token at all
-    // test login with incorrect credentials
-    // test login with correct credentials
-    // test reset application
-    // test purge app with owner credentials
+    }
 ]
 
-module.exports = routine_a
+cardinalTest(routine_a)
+
+// module.exports = routine_a
