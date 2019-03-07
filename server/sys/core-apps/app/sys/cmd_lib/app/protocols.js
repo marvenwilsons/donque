@@ -281,13 +281,7 @@ protocols.universalprotocol = async ({ dep, selectedCommand, username, password,
         console.log('** Executing protocols')
         auth({ dep, selectedCommand, username, password, token, command, data, section, method }, (err, data) => {
             if (err) {
-                console.log(err)
-                reject({
-                    status: false,
-                    data: {
-                        msg: 'Error while executing universal protocol'
-                    }
-                })
+                reject(err)
             } else {
                 console.log('   [universal protocol] Command is allowed')
                 resolve({
