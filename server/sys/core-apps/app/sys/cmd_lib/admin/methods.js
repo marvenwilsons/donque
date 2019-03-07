@@ -3,7 +3,7 @@ const security = require('../utils/utils').encrypt
 const jwt = require('jsonwebtoken')
 
 let adminData = undefined
-// Login
+// Login <<- done
 adminMethods.adminlogin = {
     get prop() {
         return {
@@ -113,7 +113,7 @@ adminMethods.adminlogin = {
     }
 }
 
-
+// init admin dashboard << -done
 adminMethods.initAdminDashboard = {
     get prop() {
         return {
@@ -149,7 +149,7 @@ adminMethods.initAdminDashboard = {
     }
 }
 
-// logout
+// logout <<- done
 adminMethods.adminLogout = {
     get prop() {
         return {
@@ -195,12 +195,20 @@ adminMethods.adminLogout = {
                 console.log(`   [adminLogout] deleting ${username} to current live admins success!`)
                 resolve({
                     status: true,
+                    data: {
+                        msg: null,
+                        actions:[{
+                            title:'redirect',
+                            content:'dqlogin'
+                        }]
+                    }
                 })
             } else {
                 reject({
                     status: false,
                     data: {
                         msg: `there was an error while logging ${username} out`,
+                        actions:[{}],
                         data: {
                             action: 'process to temp',
                             data: {
@@ -215,25 +223,14 @@ adminMethods.adminLogout = {
 
 }
 
-adminMethods.properties = {
-    get NoValidationRequiredCommands() {
-        return ['initapp']
-    },
-    get Pages() {
-
-    }
-}
-
 // Add new admin
 adminMethods.CreateNewAdmin = {
-    get permissions() {
-        return 'create'
-    },
-    get allowedTitle() {
-        return ['owner']
-    },
-    get funcIsDestructive() {
-        return true
+    get prop() {
+        return {
+            permissions: null,
+            allowedtitle: ['owner'],
+            funcIsDestructive: true
+        }
     },
     CreateNewAdmin({ username, password, adminName, roles, database }) {
         console.log('** Creating New Admin')
@@ -255,14 +252,12 @@ adminMethods.CreateNewAdmin = {
 
 // UpdateAdmin
 adminMethods.UpdateAdmin = {
-    get permissions() {
-        return ['update']
-    },
-    get funcIsDestructive() {
-        return true
-    },
-    allowedTitle() {
-        return ['owner']
+    get prop() {
+        return {
+            permissions: null,
+            allowedtitle: ['owner'],
+            funcIsDestructive: true
+        }
     },
     UpdateAdmin({ dep, username, password, data }) {
 
@@ -271,13 +266,37 @@ adminMethods.UpdateAdmin = {
 
 // Delete Admin
 adminMethods.DeleteAdmin = {
-    get permissions() {
-        return ['delete']
-    },
-    allowedTitle() {
-        return ['Owner']
+    get prop() {
+        return {
+            permissions: null,
+            allowedtitle: ['owner'],
+            funcIsDestructive: true
+        }
     },
     DeleteAdmin({ dep, username }) {
+
+    }
+}
+
+// kill database connection
+adminMethods.killDbConnection = {
+    get prop() {
+        return {
+            permissions: null,
+            allowedtitle: ['owner'],
+            funcIsDestructive: true
+        }
+    },
+    killDbConnection() {
+
+    }
+}
+
+adminMethods.properties = {
+    get NoValidationRequiredCommands() {
+        return ['initapp']
+    },
+    get Pages() {
 
     }
 }

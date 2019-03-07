@@ -26,7 +26,7 @@ const startDatabaseServer = (callback) => {
 const myTests = [
     // test admin login
     {
-        desc: 'admin login expected to succeed',
+        desc: 'owner admin login expected to succeed',
         expected: true,
         expectedMsg: 'Auth Ok',
         input:{
@@ -49,9 +49,9 @@ const myTests = [
             myTests[2].input.username = data[0].data.actions[0].content.username
         }
     },
-    // get app state
+    // test get app state
     {
-        desc: undefined,
+        desc: 'get current app state',
         expected: true,
         expectedMsg: null,
         input: {},
@@ -60,7 +60,7 @@ const myTests = [
         },
         after: err => err(false),
     },
-    // initiate dashboard
+    // test initiate dashboard
     {
         desc: 'initialize admin dashboard with correct set of data should succeed',
         expected: true,
@@ -76,7 +76,45 @@ const myTests = [
         data(data){
             console.log(data[2].data.actions)
         }
-    }
+    },
+    // test logout
+    {
+        desc: 'logout to application',
+        expected: true,
+        expectedMsg: null,
+        input: {
+            username: 'jannyann',
+            section: 'adminMethods',
+            command: 'adminLogout'
+        },
+        before: err => err(false),
+        after: err => err(false),
+    },
+    // test get app state
+    {
+        desc: 'get current app state',
+        expected: true,
+        expectedMsg: null,
+        input: {},
+        before(err){
+            err(false)
+        },
+        after: err => err(false),
+    },
+    // attempt to initialize dashboard without logging in should fail
+    {
+        desc: 'attempt to initialize dashboard without logging in should fail',
+        expected: true,
+        expectedMsg: null,
+        input: {
+            username: 'jannyann',
+            token: undefined,
+            section: 'adminMethods',
+            command:'initAdminDashboard'
+        },
+        before: err => err(false),
+        after: err => err(false),
+    },
 ]
 
 cardinalTest(myTests)
