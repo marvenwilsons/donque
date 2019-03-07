@@ -56,10 +56,11 @@ const validateUserExistance = async ({...dbs}, { username }) => {
     })
 }
 
-const firstLayerAuthentication = async ({userdb}) => {
+const firstLayerAuthentication = async ({userdb,command}) => {
     /**
      * Insures nobody can call an api that is not logged in
      * a. check if there are live admins in current live admins array
+     * b. 
      */
     console.log('** [FirstLayerAuth] Starting')
     console.log('   [FirstLayerAuth] Checking current live admins')
@@ -80,7 +81,7 @@ const auth = async ({ dep, selectedCommand, username, password, token, command, 
             console.log('   [Auth] proceeding for authentication')
         }
 
-        const isValidRequest = await firstLayerAuthentication({userdb})
+        const isValidRequest = await firstLayerAuthentication({userdb,command})
         // return here if request is not valid, otherwise continue
 
         const userDoesExist = await validateUserExistance(userdb, { username, password, token })
