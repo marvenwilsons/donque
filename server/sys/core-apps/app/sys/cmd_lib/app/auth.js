@@ -7,7 +7,7 @@ const commitsHandler = (commitId) => {
 
 }
 
-const titleHandler = (titles) => {
+const adminTitleValidator = (titles) => {
     console.log('   [Universal protocol] title handler')
     return true
 }
@@ -118,7 +118,7 @@ const auth = async ({ dep, selectedCommand, username, password, token, command, 
             if (userDoesExist.validated && userDoesExist.accessType == 'limited') {
                 const res = [
                     { output: permissionHandler(selectedCommand.prop) },
-                    { output: titleHandler(selectedCommand.prop) },
+                    { output: adminTitleValidator(selectedCommand.prop) },
                     { output: functionHandler(selectedCommand.prop) }
                 ]
                 let pIndex = undefined
