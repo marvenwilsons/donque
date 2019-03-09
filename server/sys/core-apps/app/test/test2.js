@@ -104,8 +104,8 @@ const myTests = [
     // attempt to initialize dashboard without logging in should fail
     {
         desc: 'attempt to initialize dashboard without logging in should fail',
-        expected: true,
-        expectedMsg: null,
+        expected: false,
+        expectedMsg: 'Illegal api call detected request is not permitted',
         input: {
             username: 'jannyann',
             token: undefined,
@@ -113,6 +113,17 @@ const myTests = [
             command:'initAdminDashboard'
         },
         before: err => err(false),
+        after: err => err(false),
+    },
+    // test get app state
+    {
+        desc: 'get current app state',
+        expected: true,
+        expectedMsg: null,
+        input: {},
+        before(err){
+            err(false)
+        },
         after: err => err(false),
     },
 ]

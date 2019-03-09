@@ -14,5 +14,9 @@ Cases
                             return an error "illegal api call request is not permitted"
                         b.  if length is not zero find the username associated on the request
                             if the username does not exist in the current live admins
+                            return an error "illegal api call request is not permitted"
+                        c.  check if the command pass is dqlogin, if it is dqlogin let the request pass,
+                            otherwise perform the rest of authentication
                         
     case b -    an attempt to 
+`
