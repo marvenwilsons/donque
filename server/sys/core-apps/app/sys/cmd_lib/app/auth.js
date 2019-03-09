@@ -25,8 +25,8 @@ const functionHandler = (func) => {
     true
 }
 
-const validateUserExistance = async ({...dbs}, { username }) => {
-    const {doc} = dbs.data
+const validateUserExistance = async ({ ...dbs }, { username }) => {
+    const { doc } = dbs.data
 
     const userdb = doc.db(doc.appName).collection('dq_admins')
     const db = doc.db(doc.appName)
@@ -36,8 +36,8 @@ const validateUserExistance = async ({...dbs}, { username }) => {
         'owner'
     ]
 
-    return new Promise((resolve,reject) => {
-        if(user){
+    return new Promise((resolve, reject) => {
+        if (user) {
             console.log('   [Auth] User validated Ok!')
             resolve({
                 validated: true,
@@ -47,7 +47,7 @@ const validateUserExistance = async ({...dbs}, { username }) => {
                     db
                 }
             })
-        }else{
+        } else {
             console.log('   [Auth] User validation fail!')
             reject({
                 validated: false,
@@ -56,7 +56,7 @@ const validateUserExistance = async ({...dbs}, { username }) => {
     })
 }
 
-const firstLayerAuthentication = async ({userdb,command}) => {
+const firstLayerAuthentication = async ({ ...dbs }, { command }) => {
     /**
      * Insures nobody can call an api that is not logged in
      * a. check if there are live admins in current live admins array
@@ -65,72 +65,105 @@ const firstLayerAuthentication = async ({userdb,command}) => {
     console.log('** [FirstLayerAuth] Starting')
     console.log('   [FirstLayerAuth] Checking current live admins')
 
-    // read current live admins
+    const { doc } = dbs.data
+    const userdb = doc.db(doc.appName).collection('dq_app')
+    const db = doc.db(doc.appName)
+    
+    let liveAdmins = undefined   
+    const currentLiveAdmins = await userdb
+        .find()
+        .forEach(items => {
+            liveAdmins = items
+        })
+        .then(data => {
+            return liveAdmins.currentLiveAdmins
+        })
+
+    return new Promise((resolve,reject) => {
+        if(currentLiveAdmins.length === 0 && command != 'adminlogin'){
+            resolve(false)
+        }else{
+            resolve(true)
+        }
+    })
 }
 
 const auth = async ({ dep, selectedCommand, username, password, token, command, data, section, method }, callback) => {
     console.log('   [Auth] Entering auth function')
     const { userdb } = dep
 
-    try{
-        if(typeof userdb != 'object'){
-            console.log('   [Auth] database userdb is invalid')
-            console.log('   [Auth] returning an error')
-        }else{
-            console.log('   [Auth] database is valid')
-            console.log('   [Auth] proceeding for authentication')
-        }
+    const isValidRequest = await firstLayerAuthentication(userdb, { command })
+    if (isValidRequest != true) {
+        callback({
+            status: false,
+            data: {
+                msg: 'Illegal api call detected request is not permitted',
+                actions: [{
+                    title: 'redirect',
+                    contents: 'dqlogin',
+                }]
+            }
+        })
+    } else {
+        try {
+            if (typeof userdb != 'object') {
+                console.log('   [Auth] database userdb is invalid')
+                console.log('   [Auth] returning an error')
+            } else {
+                console.log('   [Auth] database is valid')
+                console.log('   [Auth] proceeding for authentication')
+            }
+            const userDoesExist = await validateUserExistance(userdb, { username, password, token })
 
-        const isValidRequest = await firstLayerAuthentication({userdb,command})
-        // return here if request is not valid, otherwise continue
+            if (userDoesExist.validated && userDoesExist.accessType == 'limited') {
+                const res = [
+                    { output: permissionHandler(selectedCommand.prop) },
+                    { output: titleHandler(selectedCommand.prop) },
+                    { output: functionHandler(selectedCommand.prop) }
+                ]
+                let pIndex = undefined
+                const temp = res.map((e, i) => e.output === true ? true : pIndex = i)
 
-        const userDoesExist = await validateUserExistance(userdb, { username, password, token })
+                if (temp.every(items => items === true)) {
+                    callback(null, {
+                        status: true
+                    })
+                } else {
+                    callback(res[pIndex].output, null)
+                }
+            } else if (userDoesExist.validated && userDoesExist.accessType == 'full') {
+                callback(null, {
+                    status: true,
+                    data: userDoesExist.data
+                })
+            } else {
+                callback({
+                    status: false,
+                    data: {
+                        msg: `Cannot validate "${username}" because it does not exist in the database`
+                    }
+                }, null)
+            }
 
-        if (userDoesExist.validated && userDoesExist.accessType == 'limited') {
-            const res = [
-                { output: permissionHandler(selectedCommand.prop) },
-                { output: titleHandler(selectedCommand.prop) },
-                { output: functionHandler(selectedCommand.prop) }
-            ]
-            let pIndex = undefined
-            const temp = res.map((e, i) => e.output === true ? true : pIndex = i)
-
-            if (temp.every(items => items === true)) {
+        } catch (err) {
+            if (command === 'dqinitapp' && section === 'dqapp') {
                 callback(null, {
                     status: true
                 })
             } else {
-                callback(res[pIndex].output, null)
+                callback({
+                    status: false,
+                    data: {
+                        msg: err
+                    }
+                })
             }
-        } else if (userDoesExist.validated && userDoesExist.accessType == 'full') {
-            callback(null, {
-                status: true,
-                data: userDoesExist.data
-            })
-        } else {
-            callback({
-                status: false,
-                data: {
-                    msg: `Cannot validate "${username}" because it does not exist in the database`
-                }
-            }, null)
+
         }
-        
-    }catch(err){
-        if(command === 'dqinitapp' && section === 'dqapp'){
-            callback(null,{
-                status: true
-            })
-        }else {
-            callback({
-                status: false,
-                data: {
-                    msg: err
-                }
-            })
-        }
-        
     }
+
+
+
 }
 
 module.exports = auth
