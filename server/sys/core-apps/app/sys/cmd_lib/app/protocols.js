@@ -212,8 +212,8 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                     protectedRoutes: []
                 }
             },{
-                colName: 'dq_adminPermissions', data: {
-                    title: 'owner',
+                colName: 'dq_admin_role', data: {
+                    roleTitle: 'owner',
                     sectionPermissions: {
                         adminActions: ['c', 'r', 'u', 'd'],
                         pageMethods: ['c', 'r', 'u', 'd'],
