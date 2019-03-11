@@ -1,0 +1,10 @@
+createNewAdmin
+    rule a: this method is only available for the owner title
+    rule b: only visible for the owner in the front end
+
+Emplementation
+    Conditions that the system assumes to be true in order for the command or request
+    to even land in adminMethods.
+    a. passes the firstLayerAuth conditions
+    b. passes the validateUserExistance conditions
+    c. passes the

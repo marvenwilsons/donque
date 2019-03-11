@@ -1,0 +1,15 @@
+1. owner
+    an owner manages the administrators 
+    also manages the database and has an access to all methods
+    also the one who has an access to the back end and code files
+    also manages users,
+    the one who gives permissions
+
+
+2. administrators
+    an admin manages the content and users
+    can only perform actions that is given to them by the owner
+
+3. users
+    users manages their own content and can view contents
+    from other users.
