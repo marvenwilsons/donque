@@ -88,10 +88,10 @@ protocols.dqinitapp = {
 
 
         const validationState = [
-            siteTitleIsValid,
-            usernameIsValid,
-            passwordIsValid,
-            emailIsValid
+            siteTitleIsValid.hasError == false,
+            usernameIsValid.hasError == false,
+            passwordIsValid.hasError == false,
+            emailIsValid.hasError == false
         ]
 
         const vs = ['siteTitle','username','password','email']
