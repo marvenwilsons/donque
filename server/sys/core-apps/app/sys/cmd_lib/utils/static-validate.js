@@ -1,9 +1,9 @@
 class validate {
-    constructor(data,label) {
+    constructor(data, label) {
         this.data = data
         this.label = label
         this.final = []
-        this.isTrue = (value,err) => {
+        this.isTrue = (value, err) => {
             if (value) {
                 this.final.push(true)
             } else {
@@ -12,7 +12,7 @@ class validate {
 
             return this
         }
-        this.isFalse = (value,err) => {
+        this.isFalse = (value, err) => {
             if (!value) {
                 this.final.push(true)
             } else {
@@ -38,6 +38,18 @@ class validate {
                 regex.exec(this.data) != null ? this.final.push(`${this.label} should not have capital letters`) : this.final.push(true)
             }
 
+            return this
+        }
+        this.hasSetOfCharacters = (ArrayOfCharacters, CharacterToCompare, condition) => {
+            const res = ArrayOfCharacters.map(charSet => {
+                return RegExp(`${charSet}`, "").exec(CharacterToCompare) != null;
+            });
+            const result = res.join("/") == "true/true";
+            if (condition == undefined && result || condition == true && result || condition == null && result) {
+                this.final.push(true)
+            } else {
+                this.final.push(`${this.label} should not have ${ArrayOfCharacters}`)
+            }
             return this
         }
         this.hasWhiteSpace = (condition) => {
@@ -94,8 +106,8 @@ class validate {
                 // return this.final.filter(e => e != true)
                 return {
                     hasError: true,
-                    error:this.final.filter(e => e != true)[0],
-                    errors:this.final.filter(e => e != true)
+                    error: this.final.filter(e => e != true)[0],
+                    errors: this.final.filter(e => e != true)
                 }
             }
         }
