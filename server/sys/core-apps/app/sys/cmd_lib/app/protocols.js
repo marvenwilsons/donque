@@ -204,7 +204,8 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                     },
                     messages: [],
                     lastModefied: '',
-                    lastActivity: ''
+                    lastActivity: '',
+                    activities:[]
                 }
             }, {
                 colName: 'dq_config', data: {
