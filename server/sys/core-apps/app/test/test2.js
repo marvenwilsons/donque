@@ -24,7 +24,7 @@ const startDatabaseServer = (callback) => {
 }
 
 const myTests = [
-    // test admin login
+    // 0 test admin login
     {
         desc: 'owner admin login expected to succeed',
         expected: true,
@@ -49,7 +49,7 @@ const myTests = [
             myTests[2].input.username = data[0].data.actions[0].content.username
         }
     },
-    // test get app state
+    // 1 test get app state
     {
         desc: 'get current app state',
         expected: true,
@@ -60,7 +60,7 @@ const myTests = [
         },
         after: err => err(false),
     },
-    // test initiate dashboard
+    // 2 test initiate dashboard
     {
         desc: 'initialize admin dashboard with correct set of data should succeed',
         expected: true,
@@ -77,7 +77,7 @@ const myTests = [
             console.log(data[2].data.actions)
         }
     },
-    // test logout
+    // 3 test logout
     {
         desc: 'logout to application',
         expected: true,
@@ -90,7 +90,7 @@ const myTests = [
         before: err => err(false),
         after: err => err(false),
     },
-    // test get app state
+    // 4 test get app state
     {
         desc: 'get current app state',
         expected: true,
@@ -101,7 +101,7 @@ const myTests = [
         },
         after: err => err(false),
     },
-    // attempt to initialize dashboard without logging in should fail
+    // 5 attempt to initialize dashboard without logging in should fail
     {
         desc: 'attempt to initialize dashboard without logging in should fail',
         expected: false,
@@ -115,7 +115,7 @@ const myTests = [
         before: err => err(false),
         after: err => err(false),
     },
-    // test get app state
+    // 6 test get app state
     {
         desc: 'get current app state',
         expected: true,
@@ -126,6 +126,52 @@ const myTests = [
         },
         after: err => err(false),
     },
+    // 7 test admin login
+    {
+        desc: 'owner admin login expected to succeed',
+        expected: true,
+        expectedMsg: 'Auth Ok',
+        input:{
+            username:'jannyann',
+            password:'password123@',
+            section:'adminMethods',
+            command:'adminlogin'
+        },
+        before: err => err(false),
+        after: err => err(false),
+        data(data){
+            // set the value of username and token from the return value
+            // of this test, this simulates getting the data from the client
+            // saved in the localStorage
+            myTests[8].input.token = data[0].data.actions[0].content.token
+            myTests[8].input.username = data[0].data.actions[0].content.username
+        }
+    },
+    // 8 test create new admin
+    {
+        desc: 'create new admin',
+        expected: true,
+        expectedMsg: 'Marven was successfully saved to database',
+        input: {
+            username: undefined,
+            token: undefined,
+            section:'adminMethods',
+            command:'createAppAdmin',
+            data: {
+                username: 'sampleusername',
+                password: 'samplepassword123@',
+                adminName:'Marven',
+                roleTitle:'owner',
+                email:'samplemail@smail.com'
+
+            },
+        },
+        before: err => err(false),
+        after: err => err(false)
+    }
+    // 9 logout
+    // 10 login as the new admin
+    // 11 try to create new admin shoud fail on this admin because it doesnt have the title owner
 ]
 
 cardinalTest(myTests)
