@@ -97,6 +97,37 @@ class validate {
 
             return this
         }
+        this.requiredObjectKeys = (ArrayOfKeys,objectToCompare, config) => {
+            const set = new Set(ArrayOfKeys)
+            const keys = Object.keys(objectToCompare)
+            const requiredlen = ArrayOfKeys.length   
+
+            let match_count = 0
+            let current_arr = []
+
+            keys.map((k,i) => {
+                if(set.has(k)){
+                    match_count++
+                    current_arr.push(k)
+                }else{
+                    if(config){
+                        if(!config.allowExtra){
+                            this.final.push(`Extra unregestered key detected - ${k}`)
+                        }
+                    }
+                }
+            })
+
+            if(match_count != requiredlen){
+                // missing object keys
+                const missing = ArrayOfKeys.filter((e,i) => e != current_arr[i] && e)
+                this.final.push(`Error: ${this.label} - missing object keys - ${missing}`)
+            }else if(match_count != requiredlen){
+                this.final.push(true)
+            }
+
+            return this
+        },
         this.done = () => {
             if (this.final.every(items => items == true)) {
                 return {
