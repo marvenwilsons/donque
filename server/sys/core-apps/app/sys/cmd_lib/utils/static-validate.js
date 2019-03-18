@@ -97,6 +97,26 @@ class validate {
 
             return this
         }
+        this.allowFalsyValue = (condition) => {
+            if (condition == undefined || condition == true || condition == null){
+                this.final.push(true)
+            }else{
+                console.log('object data')
+                const keys = Object.keys(this.data)
+                let f = []
+
+                if(f.length === 0){
+                    this.final.push(true)
+                }else{
+                    keys.map((e, i) => {
+                        typeof this.data[e] === 'undefined' && f.push(keys[i])
+                    })
+                    const errmsg = `${f.length != 1 ? f.toString().replace(',', ' and ') : f[0]} ${f.length != 1 ? 'are' : 'is a'} required ${f.length != 1 ? 'fields' : 'field'} and cannot be left undefined`
+                    this.final.push(errmsg)
+                }                
+            }
+            return this
+        }
         this.requiredObjectKeys = (ArrayOfKeys,objectToCompare, config) => {
             const set = new Set(ArrayOfKeys)
             const keys = Object.keys(objectToCompare)
