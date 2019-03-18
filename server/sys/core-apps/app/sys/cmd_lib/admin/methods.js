@@ -224,7 +224,7 @@ adminMethods.adminLogout = {
 
 }
 
-// create new application admin
+// create new application admin <<- done
 adminMethods.createAppAdmin = {
     get prop() {
         return {
@@ -233,12 +233,12 @@ adminMethods.createAppAdmin = {
             funcIsDestructive: false
         }
     },
-    createAppAdmin({ dep, usr, pwd, data }) {
+    createAppAdmin({ dep, data }) {
         console.log('** Creating application Admin')
         // get schema
         // hash the username and password
         // add new admin entry to databasen
-        const { db, user } = dep
+        const { db } = dep
         const { username, password, adminName, roleTitle, email } = data
 
         let hasError = false
@@ -257,13 +257,6 @@ adminMethods.createAppAdmin = {
             }
         }
 
-        // db.collection('dq_admins').insertOne({
-        //     name:'testing'
-        // }).then(() => {
-        //     console.log('no error')
-        // }).catch(() => {
-        //    console.log('errrrr!') 
-        // })
         return new Promise(async (resolve, reject) => {
             /**
              * Validate Username
@@ -355,9 +348,9 @@ adminMethods.createAppAdmin = {
                     done: []
                 },
                 messages: [],
-                lastModefied:'',
-                lastActivity:'',
-                activities:[]
+                lastModefied: '',
+                lastActivity: '',
+                activities: []
             }
 
 
@@ -371,10 +364,10 @@ adminMethods.createAppAdmin = {
                         console.log(`   [createAppAdmin] ${adminName} successfully saved to database`)
                         resolve({
                             status: true,
-                            data:{
+                            data: {
                                 msg: `${adminName} was successfully saved to database`,
-                                actions:[{
-                                    title:'prompt_msg'
+                                actions: [{
+                                    title: 'prompt_msg'
                                 }]
                             }
                         })
@@ -385,8 +378,8 @@ adminMethods.createAppAdmin = {
                             status: false,
                             data: {
                                 msg: err,
-                                actions:[{
-                                    title:'prompt_err'
+                                actions: [{
+                                    title: 'prompt_err'
                                 }]
                             }
                         })
@@ -406,7 +399,133 @@ adminMethods.createAppAdminRule = {
             funcIsDestructive: false
         }
     },
-    createAppAdminRule({ dep, title, rules }) {
+    createAppAdminRule({ dep, data }) {
+        console.log('** creating app admin role!')
+
+        const { approach, permission, roleTitle } = data
+        const { db } = dep
+        const valid_permissions = new Set(['c', 'r', 'u', 'd'])
+        const valid_approach = ['general', 'section']
+
+        let hasError = false
+
+        const err = (err) => {
+            console.log('   [createAppAdminRole] validation failed')
+            hasError = true
+            return {
+                status: false,
+                data: {
+                    msg: err,
+                    actions: [{
+                        title: 'prompt_err'
+                    }]
+                }
+            }
+        }
+
+        
+
+        return new Promise(async (resolve, reject) => {
+
+            const create_permission = (admin_perm_doc) => {
+                return db.collection('dq_admin_role').insertOne(admin_perm_doc)
+                    .then(() => {
+                        return {
+                            status: true,
+                            data: {
+                                msg: `Successfully created ${roleTitle}`,
+                                actions: [{
+                                    title: 'prompt_msg'
+                                }]
+                            }
+                        }
+                    }).catch(err => {
+                        console.log('   [createAppAdminRole] Creating Permission Error')
+                        console.log(err)
+                    })
+            }
+
+            /**
+             * validate 2
+             */
+            !valid_approach.includes(approach) && reject(err(`Invalid approach "${approach}"`))
+
+            /**
+             * validate 4
+             */
+            console.log('   [adminRole] validating admin role title')
+            const ROLE_TITLE = new validator(roleTitle, 'admin role title')
+            const validate_role_title = ROLE_TITLE
+                .required()
+                .hasSpecialCharacters(false)
+                .done()
+            validate_role_title.hasError && reject(err(validate_role_title.error))
+
+            /**
+             * validate 5
+             */
+            console.log('   [adminRole] checking database')
+            const role_title_exist = await db.collection('dq_admin_role').findOne({ roleTitle })
+            role_title_exist && reject(err(`the role title named "${roleTitle}" already exist`))
+
+            /**
+             * Constructing permission object
+             */
+            console.log('   [adminRole] constructing object')
+            let permission_obj = {
+                roleTitle,
+                sectionPermissions: {
+                    adminActions: [],
+                    pageMethods: [],
+                    components: [],
+                    shell: []
+                }
+            }
+
+            /**
+                 * Core Sections
+                 * a. adminActions
+                 * b. pageMethods
+                 * c. components
+                 * d. shell
+                 */
+
+            if (approach === 'general' && !permission.includes('r')) {
+                console.log('   [adminRole] Error! Unusable permission set')
+                reject(err('Error! Unusable permission set, the admin that will be assigned to this permission set cannot even login, because it cannot perform reading'))
+            } else if (approach == 'general' && permission.includes('r') && !hasError) {
+                !Array.isArray(permission) && reject(err(`permission should be an array not ${typeof permission}`))
+                permission.map(e => !valid_permissions.has(e) && reject(err(`Unknown permission type "${e}"`)))
+
+                permission.map(e => {
+                    permission_obj.sectionPermissions.adminActions.push(e)
+                    permission_obj.sectionPermissions.pageMethods.push(e)
+                    permission_obj.sectionPermissions.components.push(e)
+                    permission_obj.sectionPermissions.shell.push(e)
+                })
+                const res = await create_permission(permission_obj)
+                resolve(res)
+            }
+
+            const SECTION_APPR = new validator(permission, 'section based admin permissions')
+            const validate_section_appr = SECTION_APPR
+                .required()
+                .requiredObjectKeys(['adminActions', 'pageMethods', 'components', 'shell'], permission, {
+                    allowExtra: false
+                })
+                .done()
+
+            if (validate_section_appr.hasError && hasError) {
+                reject(err(validate_section_appr.error))
+            } else if(!hasError && approach === 'section') {
+                console.log('   [adminRole] Case section, saving to db')
+                permission_obj.sectionPermissions = permission
+
+                const res = await create_permission(permission_obj)
+                resolve(res)
+            }
+
+        })
 
     }
 }
