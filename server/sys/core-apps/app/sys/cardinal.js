@@ -125,7 +125,7 @@ const Cardinal = async ({ username, password, token, data, command, section, met
         }
     }
 
-    console.log('cardinal current response')
+    console.log('** Cardinal current response')
     let userdb = undefined
 
     if (hasErr == undefined) {
