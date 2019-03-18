@@ -49,9 +49,7 @@ const validateUserExistance = async ({ ...dbs }, { username }) => {
             })
         } else {
             console.log('   [Auth] User validation fail!')
-            reject({
-                validated: false,
-            })
+            reject(`Fail on validating ${username}`)
         }
     })
 }
@@ -116,6 +114,7 @@ const auth = async ({ dep, selectedCommand, username, password, token, command, 
             const userDoesExist = await validateUserExistance(userdb, { username, password, token })
 
             if (userDoesExist.validated && userDoesExist.accessType == 'limited') {
+                console.log('   [Auth] access type is limited')
                 const res = [
                     { output: permissionHandler(selectedCommand.prop) },
                     { output: adminTitleValidator(selectedCommand.prop) },
@@ -132,15 +131,20 @@ const auth = async ({ dep, selectedCommand, username, password, token, command, 
                     callback(res[pIndex].output, null)
                 }
             } else if (userDoesExist.validated && userDoesExist.accessType == 'full') {
+                console.log('   [Auth] access type is full')
                 callback(null, {
                     status: true,
                     data: userDoesExist.data
                 })
-            } else {
+            } else if (userDoesExist.validated == false) {
+                console.log(`   [Auth] Cannot validate "${username}" because it does not exist in the database`)
                 callback({
                     status: false,
                     data: {
-                        msg: `Cannot validate "${username}" because it does not exist in the database`
+                        msg: `Cannot validate "${username}" because it does not exist in the database`,
+                        actions: [{
+                            title:'prompt_err'
+                        }]
                     }
                 }, null)
             }
@@ -154,7 +158,10 @@ const auth = async ({ dep, selectedCommand, username, password, token, command, 
                 callback({
                     status: false,
                     data: {
-                        msg: err
+                        msg: err,
+                        actions: [{
+                            title:'prompt_err'
+                        }]
                     }
                 })
             }
