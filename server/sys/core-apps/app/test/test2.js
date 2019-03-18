@@ -167,11 +167,25 @@ const myTests = [
             },
         },
         before: err => err(false),
-        after: err => err(false)
+        after: err => err(false),
+        data(data){
+            myTests[9].input.token = data[0].data.actions[0].content.token
+            myTests[9].input.username = data[0].data.actions[0].content.username
+        }
+    },
+    // 9 test logout
+    {
+        desc: 'logout to application',
+        expected: true,
+        expectedMsg: null,
+        input: {
+            username: 'jannyann',
+            section: 'adminMethods',
+            command: 'adminLogout'
+        },
+        before: err => err(false),
+        after: err => err(false),
     }
-    // 9 logout
-    // 10 login as the new admin
-    // 11 try to create new admin shoud fail on this admin because it doesnt have the title owner
 ]
 
 cardinalTest(myTests)
