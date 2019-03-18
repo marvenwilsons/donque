@@ -224,6 +224,7 @@ adminMethods.adminLogout = {
 
 }
 
+
 // create new application admin <<- done
 adminMethods.createAppAdmin = {
     get prop() {
@@ -258,6 +259,22 @@ adminMethods.createAppAdmin = {
         }
 
         return new Promise(async (resolve, reject) => {
+            console.log('   [createAppAdmin] validating inputs')
+            const CANNOT_BE_UNDEFINED_SET = new validator({
+                username,
+                password,
+                adminName,
+                roleTitle,
+                email
+            }),
+            validate_cannot_be_undefined_set = CANNOT_BE_UNDEFINED_SET
+                .allowFalsyValue(false)
+                .done()
+            validate_cannot_be_undefined_set.hasError && reject(err(validate_cannot_be_undefined_set.error))
+            if (hasError) return
+            
+            
+
             /**
              * Validate Username
              */
@@ -269,11 +286,11 @@ adminMethods.createAppAdmin = {
                 .required()
                 .isTrue(username.length >= 6, 'username should have at least a minimum of 6 characters')
                 .done()
-
             validate_username.hasError && reject(err(validate_username.error))
 
             const admins_username = await db.collection('dq_admins').findOne({ username })
-            admins_username && reject(err(`the username "${username}" is already exist in the database`))
+            admins_username && reject(err(`the username "${username}" is already exist`))
+            if(hasError) return
 
             /**
              * Validate password
@@ -286,6 +303,7 @@ adminMethods.createAppAdmin = {
                 .required()
                 .done()
             validate_password.hasError && reject(err(validate_password.error))
+            if (hasError) return
 
             /**
              * Validate admin name
@@ -298,6 +316,8 @@ adminMethods.createAppAdmin = {
                 .hasSpecialCharacters(false)
                 .done()
             validate_admin_name.hasError && reject(err(validate_admin_name.error))
+            if (hasError) return
+
 
             /**
              * Validate role
@@ -309,11 +329,13 @@ adminMethods.createAppAdmin = {
                 .isTrue(typeof roleTitle == 'string', `admin role title should be a type of string not ${typeof roles}`)
                 .done()
             validate_roles.hasError && reject(err(validate_roles.error))
+            if (hasError) return
 
             // find role title in the dq_admin_role collection
             let sectionPermissions = undefined
             const role_title = await db.collection('dq_admin_role').findOne({ roleTitle })
             !role_title ? reject(err(`the title "${roleTitle}" does not exist in roles collection`)) : sectionPermissions = role_title
+            if (hasError) return
 
             /**
              * Validate email
@@ -326,9 +348,12 @@ adminMethods.createAppAdmin = {
                 .hasSetOfCharacters(['@', '.com'], email, true)
                 .done()
             validate_email.hasError && reject(err(validate_email.error))
+            if (hasError) return
 
             const email_exist = await db.collection('dq_admins').findOne({ email })
             email_exist && reject(err(`Invalid email, the email "${email}" was already in used by another admin`))
+            if (hasError) return
+
 
 
             /**
@@ -347,6 +372,7 @@ adminMethods.createAppAdmin = {
                     pending: [],
                     done: []
                 },
+                adminInstanceAllowed: 1,
                 messages: [],
                 lastModefied: '',
                 lastActivity: '',
@@ -390,7 +416,7 @@ adminMethods.createAppAdmin = {
     }
 }
 
-// creates a rule that will be applied for admins
+// creates a rule that will be applied for admins <<- done
 adminMethods.createAppAdminRule = {
     get prop() {
         return {
@@ -530,11 +556,6 @@ adminMethods.createAppAdminRule = {
     }
 }
 
-// create new database admin
-adminMethods.createDbAdmin = {
-
-}
-
 // UpdateAdmin
 adminMethods.UpdateAdmin = {
     get prop() {
@@ -561,6 +582,11 @@ adminMethods.DeleteAdmin = {
     DeleteAdmin({ dep, username }) {
 
     }
+}
+
+// create new database admin
+adminMethods.createDbAdmin = {
+
 }
 
 // kill database connection
