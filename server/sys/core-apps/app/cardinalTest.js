@@ -127,10 +127,8 @@ const test = (routine,index) => {
                                 discontinued.state = true
                             } else {
                                 if (_err == undefined && isDone == false) {
-                                    console.log(count)
                                     console.log('EXECUTING next test')
                                     test(routine, count)
-                                    console.log(count)
                                 } else if (isDone) {
                                     setTimeout(() => {
                                         console.log('')
