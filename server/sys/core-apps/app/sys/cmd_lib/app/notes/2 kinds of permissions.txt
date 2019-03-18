@@ -1,12 +1,12 @@
 Two ways of assigning permissions to an admin
 
-1. the general way approach
+1. the "general" way approach
     the general approach, is the kind of action you assign to an admin
     and that admin can perform that action on any section of the application.
     For example john is given a read and write permission, john can
     now perform read and write to pages, to components etc..
 
-2. the section approach
+2. the "section" approach
     this type of approach is more secure and more flexible compared to the
     general approach, for example john is given a read and write permission
     to the page section, john can now perform read and write operations to 
