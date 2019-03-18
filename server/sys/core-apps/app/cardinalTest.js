@@ -172,6 +172,11 @@ const test = (routine,index) => {
                         }
 
                         //
+                        if (routine[count].data != undefined) {
+                            routine[count].data(tempData)
+                        }
+
+                        //
                         _err == undefined ? finalresult.value = true : finalresult.value = _err
 
                         let isDone = false
