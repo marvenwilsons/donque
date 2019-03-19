@@ -167,7 +167,8 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                     siteTitle,
                     siteOwner: adminName,
                     created: new Date,
-                    currentLiveAdmins: []
+                    currentLiveAdmins: [],
+                    admin_passwords: ''
                 },
             },
             {
@@ -259,7 +260,6 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                         owner: adminName,
                         username: encrypt.encrypt(username, adminName),
                         allowDuplicateAdminLogins: true,
-                        maxDuplicateAdminLogins: 5,
                         ini: true
                     }, null, '\t')
                     fs.writeFile(_path, _data, 'utf-8', (err) => {
