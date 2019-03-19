@@ -43,7 +43,7 @@ const myTest = [
         after: err => {
             setTimeout(() => {
                 err(false)
-            },1000)
+            },100)
         },
         data(data){
             // set the value of username and token from the return value
@@ -102,49 +102,76 @@ const myTest = [
         },
         before: err => err(false),
         after: err => err(false),
-        data(){
-            // myTest[3].input.token = data[0].data.actions[0].content.token
-            // myTest[3].input.username = data[0].data.actions[0].content.username
+        data(data){
+            console.log('what??')
+            myTest[3].input.token = data[0].data.actions[0].content.token
+            myTest[3].input.username = data[0].data.actions[0].content.username
         }
     },
     // 3 attempt to create reader2 should fail
-    // {
-    //     desc: 'attempt to create reader2 should fail',
-    //     expected: true,
-    //     expectedMsg: 'the role title named "reader2" already exist',
-    //     input: {
-    //         username: undefined,
-    //         token: undefined,
-    //         section: 'adminMethods',
-    //         command: 'createAppAdminRule',
-    //         data:{
-    //             roleTitle:'reader2',
-    //             approach: 'section',
-    //             permission: {
-    //                 adminActions:['r','w'],
-    //                 pageMethods:['r','w'],
-    //                 components:['r','w'],
-    //                 shell:['r']
-    //             }
-    //         }
-    //     },
-    //     before: err => err(false),
-    //     after: err => err(false)
-    // }
+    {
+        desc: 'attempt to create reader2 should fail',
+        expected: false,
+        expectedMsg: 'the role title named "reader2" already exist',
+        input: {
+            username: undefined,
+            token: undefined,
+            section: 'adminMethods',
+            command: 'createAppAdminRule',
+            data:{
+                roleTitle:'reader2',
+                approach: 'section',
+                permission: {
+                    adminActions:['r','w'],
+                    pageMethods:['r','w'],
+                    components:['r','w'],
+                    shell:['r']
+                }
+            }
+        },
+        before: err => err(false),
+        after: err => err(false),
+        data(data) {
+            myTest[4].input.token = data[0].data.actions[0].content.token
+            myTest[4].input.username = data[0].data.actions[0].content.username
+        }
+    },
 
-    // delete an admin
-    // update an admin
-    // view admin
-
-    // update a role
-    // delete a role
-    // read a role
-
+    // 4 create new admin
+    {
+        desc: 'create new admin using newly created permission set',
+        expected: true,
+        expectedMsg: 'John P Doe was successfully saved to database',
+        input: {
+            username: undefined,
+            token: undefined,
+            section: 'adminMethods',
+            command: 'createAppAdmin',
+            data: {
+                username: 'johndoe',
+                password: 'passwordtesting123@',
+                adminName: 'John P Doe',
+                roleTitle: 'reader',
+                email: 'samplemail@smail2.com'
+            },
+        },
+        before: err => err(false),
+        after: err => err(false),
+    },
+    
     // logout
-    // login as the new created admin
-    // attempt to call some methods that the current admin has no permission
-
-    // 11 try to create new admin shoud fail on this admin because it doesnt have the title owner
+    {
+        desc: 'logout to application',
+        expected: true,
+        expectedMsg: null,
+        input: {
+            username: 'jannyann',
+            section: 'adminMethods',
+            command: 'adminLogout'
+        },
+        before: err => err(false),
+        after: err => err(false),
+    }
 ]
 
 cardinalTest(myTest)
