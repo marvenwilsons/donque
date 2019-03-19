@@ -147,11 +147,11 @@ const myTests = [
             myTests[8].input.username = data[0].data.actions[0].content.username
         }
     },
-    // 8 test create new admin
+    // 8 test create new admin with invalid role tile
     {
         desc: 'create new admin',
-        expected: true,
-        expectedMsg: 'Marven was successfully saved to database',
+        expected: false,
+        expectedMsg: 'Invalid role title,the title named "owner" is a reserved title and is already taken',
         input: {
             username: undefined,
             token: undefined,
@@ -163,7 +163,6 @@ const myTests = [
                 adminName:'Marven',
                 roleTitle:'owner',
                 email:'samplemail@smail.com'
-
             },
         },
         before: err => err(false),
