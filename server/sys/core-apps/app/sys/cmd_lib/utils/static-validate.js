@@ -55,9 +55,9 @@ class validate {
         this.hasWhiteSpace = (condition) => {
             const regex = /\s/gim
             if (condition == undefined || condition == true || condition == null) {
-                regex.exec(this.data) !== null ? this.final.push(true) : this.final.push(`${this.label} should have white spaces`)
+                regex.exec(this.data) == null ? this.final.push(`${this.label} should have white spaces`) : this.final.push(true)
             } else {
-                regex.exec(this.data) !== null ? this.final.push(`${this.label} should not have white spaces`) : this.final.push(true)
+                regex.exec(this.data) == null ? this.final.push(true) : this.final.push(`${this.label} should not have white spaces`)
             }
             return this
         }
