@@ -575,7 +575,7 @@ adminMethods.createAppAdminRule = {
     }
 }
 
-// UpdateAdmin
+// UpdateAdmin <<- done
 adminMethods.updateAppAdmin = {
     get prop() {
         return {
@@ -663,7 +663,7 @@ adminMethods.updateAppAdmin = {
                         return
                     }
 
-                    if (data.title === 'owner' && ownerInifConfProps.includes(Object.keys(customData)[0])) {                        
+                    if (data.title === 'owner' && ownerInifConfProps.includes(Object.keys(customData)[0])) {
                         return {
                             s: true,
                             data
@@ -681,13 +681,13 @@ adminMethods.updateAppAdmin = {
                         // adminMethods._updateIniConf_._updateIniConf_({})
                         // encrypt(username, adminName)
                         let value = undefined
-                        if (toBeUpdatedProps[0] === 'username'){
-                            value = encrypt(customData[toBeUpdatedProps[0]],data.data.adminName)
-                        }else {
+                        if (toBeUpdatedProps[0] === 'username') {
+                            value = encrypt(customData[toBeUpdatedProps[0]], data.data.adminName)
+                        } else {
                             value = customData[toBeUpdatedProps[0]]
                         }
 
-                        dbAgent.updateProp('JSON','iniConf',{
+                        dbAgent.updateProp('JSON', 'iniConf', {
                             location: null,
                             key: toBeUpdatedProps[0],
                             value,
@@ -713,17 +713,17 @@ adminMethods.updateAppAdmin = {
                     } else {
                         // update admin
                         const upadmn = await updateAdmin()
-                        if(upadmn){
+                        if (upadmn) {
                             resolve({
                                 status: true,
                                 data: {
                                     msg: `Successfully updated ${toBeUpdatedProps[0]} to ${customData[toBeUpdatedProps[0]]}`,
-                                    actions:[{
-                                        title:'prompt_msg'
+                                    actions: [{
+                                        title: 'prompt_msg'
                                     }]
                                 }
                             })
-                        }else {
+                        } else {
                             reject(err(data))
                         }
                     }
@@ -734,6 +734,74 @@ adminMethods.updateAppAdmin = {
 
         })
 
+    }
+}
+
+// viewAppAdmin
+adminMethods.viewAppAdmin = {
+    get prop() {
+        return {
+            permissions: null,
+            allowedtitle: ['owner'],
+            funcIsDestructive: true
+        }
+    },
+    viewAppAdmin({ dep, data }) {
+        const { db } = dep
+
+        return new Promise(async (resolve, reject) => {
+            const user = await db.collection('dq_admins').findOne(data)
+            const allowedSearchKeys = ['username','adminName','title','email','ip']
+            const inp = allowedSearchKeys.includes(Object.keys(data)[0])
+            let err = false
+
+            if(!inp){
+                err = true
+                reject({
+                    status: false,
+                    data: {
+                        msg: `Invalid key ${Object.keys(data)[0]}`,
+                        actions: [{
+                            title:'prompt_err'
+                        }]
+                    }
+                })
+            }
+
+            if (Object.keys(data).length != 1){
+                err = true
+                reject({
+                    status: false,
+                    data: {
+                        msg: `Invalid input, too many keys for a findOne operation`,
+                        actions: [{
+                            title:'prompt_err'
+                        }]
+                    }
+                })
+            }
+            
+            if(user && err == false){
+                resolve({
+                    status: true,
+                    data: {
+                        msg: null,
+                        actions:[],
+                        content: user
+                    } 
+                })
+            }else if(!user) {
+                reject({
+                    status: false,
+                    data: {
+                        msg: `There is no such admin ${data[Object.keys(data)]}`,
+                        actions: [{
+                            title: 'prompt_err'
+                        }]
+                    }
+                })
+            }
+        })
     }
 }
 

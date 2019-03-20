@@ -101,8 +101,28 @@ const myTest = [
         after: err => err(false)
     },
 
-    // delete an admin
     // view admin
+    {
+        desc: 'View admin credentials',
+        expected: true,
+        expectedMsg: null,
+        input: {
+            username: 'jannyann',
+            token: undefined,
+            section: 'adminMethods',
+            command: 'viewAppAdmin',
+            data: {
+                username: 'johndoe'
+            }
+        },
+        before: err => err(false),
+        after: err => err(false)
+    }
+    // delete an admin
+    // create admin back
+    // logout
+    // login as the new admin
+    // make illegal api calls
 
     // update a role
     // delete a role
