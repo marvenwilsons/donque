@@ -51,30 +51,56 @@ const myTest = [
             // saved in the localStorage
             myTest[1].input.token = data[0].data.actions[0].content.token
             myTest[1].input.username = data[0].data.actions[0].content.username
+
+            myTest[2].input.token = data[0].data.actions[0].content.token
         }
     },
 
-    // update
+    // update owner admin 1
     {
-        desc: 'update owner admin',
+        desc: 'update owner admin username 1',
         expected: true,
-        expectedMsg: 'clea',
+        expectedMsg: 'Successfully updated username to jannyannbustamante',
         input: {
             username: undefined,
             token: undefined,
             section: 'adminMethods',
             command: 'updateAppAdmin',
             data: {
-                users_username: 'johndoe',
+                users_username: 'jannyann',
                 customData: {
-                    username: 'jannyanndonque',
+                    username: 'jannyannbustamante',
                 }
             }
         },
         before: err => err(false),
         after: err => err(false)
     },
-    // update owner admin    
+    // update owner admin back
+    {
+        desc: 'update owner admin username back',
+        expected: true,
+        expectedMsg: 'Successfully updated username to jannyann',
+        input: {
+            username: 'jannyannbustamante',
+            token: undefined,
+            section: 'adminMethods',
+            command: 'updateAppAdmin',
+            data: {
+                users_username: 'jannyannbustamante',
+                customData: {
+                    username: 'jannyann',
+                }
+            }
+        },
+        before: err => {
+            setTimeout(() => {
+                err(false)
+            },500)
+        },
+        after: err => err(false)
+    },
+
     // delete an admin
     // view admin
 

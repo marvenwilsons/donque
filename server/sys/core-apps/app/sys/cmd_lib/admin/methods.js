@@ -2,6 +2,7 @@ const adminMethods = {}
 const { security, validator } = require('../utils/utils')
 const { encrypt, decrypt } = security
 const jwt = require('jsonwebtoken')
+const dbAgent = require('./db-agent.js')
 
 let adminData = undefined
 // Login <<- done
@@ -224,6 +225,22 @@ adminMethods.adminLogout = {
 
 }
 
+// iniConf api
+adminMethods._updateIniConf_ = {
+    get prop() {
+        return {
+            permissions: null,
+            allowedtitle: ['owner'],
+            funcIsDestructive: false
+        }
+    },
+    _updateIniConf_({ keyToBeUpdated }) {
+        const fs = require('fs')
+        const path = require('path')
+        console.log
+    }
+}
+
 
 // create new application admin <<- done
 adminMethods.createAppAdmin = {
@@ -267,13 +284,13 @@ adminMethods.createAppAdmin = {
                 roleTitle,
                 email
             }),
-            validate_cannot_be_undefined_set = CANNOT_BE_UNDEFINED_SET
-                .allowFalsyValue(false)
-                .done()
+                validate_cannot_be_undefined_set = CANNOT_BE_UNDEFINED_SET
+                    .allowFalsyValue(false)
+                    .done()
             validate_cannot_be_undefined_set.hasError && reject(err(validate_cannot_be_undefined_set.error))
             if (hasError) return
-            
-            
+
+
 
             /**
              * Validate Username
@@ -290,7 +307,7 @@ adminMethods.createAppAdmin = {
 
             const admins_username = await db.collection('dq_admins').findOne({ username })
             admins_username && reject(err(`the username "${username}" is already exist`))
-            if(hasError) return
+            if (hasError) return
 
             /**
              * Validate password
@@ -327,6 +344,7 @@ adminMethods.createAppAdmin = {
             const validate_roles = A_RULES
                 .required()
                 .isTrue(typeof roleTitle == 'string', `admin role title should be a type of string not ${typeof roles}`)
+                .isTrue(`${roleTitle}`.toLowerCase().trim() != 'owner', `Invalid role title,the title named "${roleTitle}" is a reserved title and is already taken`)
                 .done()
             validate_roles.hasError && reject(err(validate_roles.error))
             if (hasError) return
@@ -449,7 +467,7 @@ adminMethods.createAppAdminRule = {
             }
         }
 
-        
+
 
         return new Promise(async (resolve, reject) => {
 
@@ -484,6 +502,7 @@ adminMethods.createAppAdminRule = {
             const validate_role_title = ROLE_TITLE
                 .required()
                 .hasSpecialCharacters(false)
+                .isTrue(`${roleTitle}`.toLocaleLowerCase() != 'owner', `Invalid role title, ${roleTitle} is already taken`)
                 .done()
             validate_role_title.hasError && reject(err(validate_role_title.error))
 
@@ -543,7 +562,7 @@ adminMethods.createAppAdminRule = {
 
             if (validate_section_appr.hasError && hasError) {
                 reject(err(validate_section_appr.error))
-            } else if(!hasError && approach === 'section') {
+            } else if (!hasError && approach === 'section') {
                 console.log('   [adminRole] Case section, saving to db')
                 permission_obj.sectionPermissions = permission
 
@@ -557,7 +576,7 @@ adminMethods.createAppAdminRule = {
 }
 
 // UpdateAdmin
-adminMethods.UpdateAdmin = {
+adminMethods.updateAppAdmin = {
     get prop() {
         return {
             permissions: null,
@@ -565,7 +584,155 @@ adminMethods.UpdateAdmin = {
             funcIsDestructive: true
         }
     },
-    UpdateAdmin({ dep, username, password, data }) {
+    updateAppAdmin({ dep, data }) {
+        const { users_username, customData } = data
+        const { db } = dep
+
+        console.log(`** [updateAppAdmin] Updating ${users_username}`)
+
+        const updatetableProps = ['username', 'password', 'adminName', 'email', 'title', 'ip']
+        const ownerInifConfProps = ['adminName', 'username']
+        const toBeUpdatedProps = Object.keys(customData)
+        let hasError = false
+        cannotBeUpdatedProps = []
+
+        const err = (err) => {
+            console.log('   [updateAppAdmin] validation failed')
+            hasError = true
+            return {
+                status: false,
+                data: {
+                    msg: err,
+                    actions: [{
+                        title: 'prompt_err'
+                    }]
+                }
+            }
+        }
+
+        return new Promise(async (resolve, reject) => {
+            // v1
+            toBeUpdatedProps.length != 1 && reject(err('Invalid input, You can only update one property at a time'))
+
+            // v2
+            toBeUpdatedProps.map(items => {
+                if (!updatetableProps.includes(items)) {
+                    hasError = true
+                    cannotBeUpdatedProps.push(items)
+                }
+            })
+
+            if (hasError) {
+                const errmsg = `Illegal operation detected, Unable to update property "${cannotBeUpdatedProps}" because it is either not listed in "updatetableProps" array or it is not part of the admin schema`
+                reject(err(errmsg))
+                return
+            }
+
+            // v3
+            const VT = new validator(customData[toBeUpdatedProps[0]], toBeUpdatedProps[0])
+            const validate_vt = VT
+                .hasNumbers(false)
+                .hasWhiteSpace(false)
+                .hasSpecialCharacters(false)
+                .isTrue(`${customData[toBeUpdatedProps[0]]}`.length > 5, `${toBeUpdatedProps[0]} should have at least a minimum of 5 characters`)
+                .done()
+            validate_vt.hasError && reject(err(validate_vt.error))
+            if (hasError) return
+
+            // update function
+            const updateAdmin = () => {
+                return db.collection('dq_admins').findOneAndUpdate(
+                    { username: users_username },
+                    { $set: customData },
+                    { returnOriginal: false }
+                ).then(() => {
+                    return true
+                }).catch(error => {
+                    return error
+                })
+            }
+
+            // final
+            db.collection('dq_admins').findOne({ username: users_username })
+                .then(data => {
+                    const prevType = typeof data[toBeUpdatedProps[0]]
+                    const pushType = typeof customData[toBeUpdatedProps[0]]
+
+                    if (prevType != pushType) {
+                        reject(err(`Illegal operation detected, Unable to update ${toBeUpdatedProps[0]}, because the data type of ${toBeUpdatedProps[0]} is not the valid, type should be ${prevType} instead of ${pushType}`))
+                        return
+                    }
+
+                    if (data.title === 'owner' && ownerInifConfProps.includes(Object.keys(customData)[0])) {                        
+                        return {
+                            s: true,
+                            data
+                        }
+                    } else {
+                        return false
+                    }
+
+                })
+                .then(async (data) => {
+                    if (data.s) {
+                        console.log('   [updateAppAdmin] Updating IniConf')
+                        console.log('   [updateAppAdmin] Updating Owner admin')
+                        // update iniConf
+                        // adminMethods._updateIniConf_._updateIniConf_({})
+                        // encrypt(username, adminName)
+                        let value = undefined
+                        if (toBeUpdatedProps[0] === 'username'){
+                            value = encrypt(customData[toBeUpdatedProps[0]],data.data.adminName)
+                        }else {
+                            value = customData[toBeUpdatedProps[0]]
+                        }
+
+                        dbAgent.updateProp('JSON','iniConf',{
+                            location: null,
+                            key: toBeUpdatedProps[0],
+                            value,
+                            action: 'update value'
+                        }).then(async () => {
+                            const upadmn = await updateAdmin()
+                            if (upadmn) {
+                                resolve({
+                                    status: true,
+                                    data: {
+                                        msg: `Successfully updated ${toBeUpdatedProps[0]} to ${customData[toBeUpdatedProps[0]]}`,
+                                        actions: [{
+                                            title: 'prompt_msg'
+                                        }]
+                                    }
+                                })
+                            } else {
+                                reject(err(data))
+                            }
+                        })
+
+                        // update admin
+                    } else {
+                        // update admin
+                        const upadmn = await updateAdmin()
+                        if(upadmn){
+                            resolve({
+                                status: true,
+                                data: {
+                                    msg: `Successfully updated ${toBeUpdatedProps[0]} to ${customData[toBeUpdatedProps[0]]}`,
+                                    actions:[{
+                                        title:'prompt_msg'
+                                    }]
+                                }
+                            })
+                        }else {
+                            reject(err(data))
+                        }
+                    }
+                })
+                .catch(e => {
+                    reject(err(`Error while locating user ${users_username}`))
+                })
+
+        })
 
     }
 }
