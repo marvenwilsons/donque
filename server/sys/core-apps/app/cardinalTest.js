@@ -80,6 +80,8 @@ const test = (routine,index) => {
 
                         console.log('\t expected msg:'.bold, `${routine[count].expectedMsg}`)
                         console.log('\t actions:'.bold, `${data.data.actions.length}`)
+                        console.log('\n actions: '.bold)
+                        console.log(data.data.actions)
                         console.log('\n final output: '.bold)
                         console.table(data)
 
@@ -155,8 +157,11 @@ const test = (routine,index) => {
 
                         console.log('\t expected msg:'.bold, `${routine[count].expectedMsg}`)
                         console.log('\t actions:'.bold, `${err.data.actions.length}`)
+                        console.log('\n actions: '.bold)
+                        console.log(err.data.actions)
                         console.log('\n final output: '.bold)
                         console.table(err)
+                        
 
                         //
                         let _err = undefined

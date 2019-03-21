@@ -25,31 +25,28 @@ adminMethods.adminlogin = {
             /**
               * Create token
               */
-            db.collection('dq_admins').findOneAndUpdate({ username }, {
-                $set: {
+            return db.collection('dq_admins').findOneAndUpdate(
+                { username }, 
+                {$set: {
                     token: jwt.sign({ username, password }, encrypt(password, username))
-                }
-            }, {
-                    returnOriginal: false
-                }, (err, u) => {
-                    if (err) {
-                        reject({
-                            status: false,
-                            data: {
-                                msg: err
-                            }
-                        })
-                    } else {
-                        console.log(`   [adminlogin] token updated`)
-                        reUser = u
-                        updateCurrentLiveAdmins()
-                        console.log(`   [adminlogin] updating current live admins`)
+                }}, 
+                { returnOriginal: false}).then((data) => {
+                    console.log(`   [adminlogin] token updated`)
+                    reUser = data
+                    console.log(`   [adminlogin] updating current live admins`)
+                    return updateCurrentLiveAdmins()
+                }).catch(err => {
+                    return {
+                        status: false,
+                        data: {
+                            msg: err
+                        }
                     }
                 })
         }
 
         const updateCurrentLiveAdmins = () => {
-            db
+            return db
                 .collection('dq_app')
                 .findOneAndUpdate(
                     { siteOwner: user.adminName },
@@ -64,21 +61,22 @@ adminMethods.adminlogin = {
                 )
                 .then(() => {
                     console.log(`   [adminlogin] ${username} was added to current live admins successfully`)
+                    return true
                 })
                 .catch(err => {
-                    reject({
+                    return {
                         status: false,
                         data: {
                             msg: err
                         }
-                    })
+                    } 
                 })
 
         }
 
-        return new Promise((resolve) => {
-            if (decrypt(user.password, username) === encrypt(password, username)) {
-                updateUser()
+        return new Promise(async (resolve,reject) => {
+            const u = await updateUser()
+            if (decrypt(user.password, username) === encrypt(password, username) && u) {
                 /**
                  * Return
                  */
@@ -86,10 +84,9 @@ adminMethods.adminlogin = {
                 delete (reUser.password)
                 delete (reUser.ip)
                 adminData = reUser
-                // resolve({
-                //     status: true,
-                //     data: reUser
-                // })
+                
+                console.log(`   [adminlogin] token ${adminData.value.token}`)
+
                 console.log(`   [adminlogin] resolving`)
                 resolve({
                     status: true,
@@ -99,8 +96,8 @@ adminMethods.adminlogin = {
                             {
                                 title: 'saveToLocalStorage',
                                 content: {
-                                    token: reUser.token,
-                                    username: reUser.username
+                                    token: adminData.value.token,
+                                    username: adminData.value.username
                                 }
                             },
                             {
@@ -110,6 +107,9 @@ adminMethods.adminlogin = {
                         ]
                     }
                 })
+            }else{
+                console.log('adminlogin error not yet ready')
+                console.log(u)
             }
         })
     }

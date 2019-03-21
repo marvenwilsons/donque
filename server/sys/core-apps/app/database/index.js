@@ -188,12 +188,13 @@ const db = async (user, pwd) => {
                             }
                         }
                     })
-                    .catch(err => {
+                    .catch(() => {
                         console.log('   [db] Authentication fail')
                         return {
                             status: false,
                             data: {
-                                msg: err
+                                msg: 'Incorrect password or username',
+                                actions: []
                             }
                         }
                     })
