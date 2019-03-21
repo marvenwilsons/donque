@@ -1,22 +1,26 @@
 const permissionHandler = (permissions) => {
+    // dqsys: auth: METHOD: permissionHandler
     console.log('   [Universal protocol] permission handler')
     return true
 }
 
 const commitsHandler = (commitId) => {
-
+    // dqsys: auth: METHOD: commitsHandler
 }
 
 const adminTitleValidator = (titles) => {
+    // dqsys: auth: METHOD: adminTitleValidator
     console.log('   [Universal protocol] title handler')
     return true
 }
 
 const sectionHandler = (section) => {
+    // dqsys: auth: METHOD: sectionHandler
     console.log('   [Universal protocol] section handler')
 }
 
 const functionHandler = (func) => {
+    // dqsys: auth: METHOD: functionHandler
     console.log('   [Universal protocol] function handler')
     // return {
     //     status:false,
@@ -25,20 +29,20 @@ const functionHandler = (func) => {
     true
 }
 
-const validateUserExistance = async ({ ...dbs }, { username }) => {
+const validateUserExistance = async ({ ...dbs }, { username, token, command }) => {
+    // dqsys: auth: METHOD: validateUserExistance
     const { doc } = dbs.data
-
-    const userdb = doc.db(doc.appName).collection('dq_admins')
-    const db = doc.db(doc.appName)
-    const user = await userdb.findOne({ username })
 
     const fullPrevilegeTitle = [
         'owner'
     ]
 
-    return new Promise((resolve, reject) => {
-        if (user) {
-            console.log('   [Auth] User validated Ok!')
+    const userdb = doc.db(doc.appName).collection('dq_admins')
+    const db = doc.db(doc.appName)
+
+    return new Promise(async (resolve, reject) => {
+        userdb.findOne({ username }).then(user => {
+            // console.log(data.token === token)
             resolve({
                 validated: true,
                 accessType: fullPrevilegeTitle.includes(user.title) ? 'full' : 'limited',
@@ -47,14 +51,15 @@ const validateUserExistance = async ({ ...dbs }, { username }) => {
                     db
                 }
             })
-        } else {
+        }).catch(err => {
             console.log('   [Auth] User validation fail!')
             reject(`Fail on validating ${username}`)
-        }
+        })
     })
 }
 
 const firstLayerAuthentication = async ({ ...dbs }, { command }) => {
+    // dqsys: auth: METHOD: firstLayerAuthentication
     /**
      * Insures nobody can call an api that is not logged in
      * a. check if there are live admins in current live admins array
@@ -66,8 +71,8 @@ const firstLayerAuthentication = async ({ ...dbs }, { command }) => {
     const { doc } = dbs.data
     const userdb = doc.db(doc.appName).collection('dq_app')
     const db = doc.db(doc.appName)
-    
-    let liveAdmins = undefined   
+
+    let liveAdmins = undefined
     const currentLiveAdmins = await userdb
         .find()
         .forEach(items => {
@@ -77,10 +82,10 @@ const firstLayerAuthentication = async ({ ...dbs }, { command }) => {
             return liveAdmins.currentLiveAdmins
         })
 
-    return new Promise((resolve,reject) => {
-        if(currentLiveAdmins.length === 0 && command != 'adminlogin'){
+    return new Promise((resolve, reject) => {
+        if (currentLiveAdmins.length === 0 && command != 'adminlogin') {
             resolve(false)
-        }else{
+        } else {
             resolve(true)
         }
     })
@@ -111,9 +116,11 @@ const auth = async ({ dep, selectedCommand, username, password, token, command, 
                 console.log('   [Auth] database is valid')
                 console.log('   [Auth] proceeding for authentication')
             }
-            const userDoesExist = await validateUserExistance(userdb, { username, password, token })
+            const userDoesExist = await validateUserExistance(userdb, { username, password, token, command })
 
             if (userDoesExist.validated && userDoesExist.accessType == 'limited') {
+                // dqsys: auth: validate token, app admin case
+
                 console.log('   [Auth] access type is limited')
                 const res = [
                     { output: permissionHandler(selectedCommand.prop) },
@@ -132,18 +139,44 @@ const auth = async ({ dep, selectedCommand, username, password, token, command, 
                 }
             } else if (userDoesExist.validated && userDoesExist.accessType == 'full') {
                 console.log('   [Auth] access type is full')
-                callback(null, {
-                    status: true,
-                    data: userDoesExist.data
-                })
+
+                // dqsys: auth: validate token, owner case
+                console.log('   [Auth] Validating token')
+                let tokenIsValid = undefined
+                if(command == 'adminlogin'){
+                    tokenIsValid = true
+                }else {
+                    tokenIsValid = userDoesExist.data.user.token == token
+                }
+
+                if (tokenIsValid){
+                    callback(null, {
+                        status: true,
+                        data: userDoesExist.data
+                    })
+                }else {
+                    callback({
+                        status: false,
+                        data: {
+                            msg: 'Invalid or expired token',
+                            actions:[{
+                                title:'prompt_err'
+                            }]
+                        }
+                    })
+                }
+
+
+                
             } else if (userDoesExist.validated == false) {
+                // dqsys: auth: user does not exist in db
                 console.log(`   [Auth] Cannot validate "${username}" because it does not exist in the database`)
                 callback({
                     status: false,
                     data: {
                         msg: `Cannot validate "${username}" because it does not exist in the database`,
                         actions: [{
-                            title:'prompt_err'
+                            title: 'prompt_err'
                         }]
                     }
                 }, null)
@@ -160,7 +193,7 @@ const auth = async ({ dep, selectedCommand, username, password, token, command, 
                     data: {
                         msg: err,
                         actions: [{
-                            title:'prompt_err'
+                            title: 'prompt_err'
                         }]
                     }
                 })

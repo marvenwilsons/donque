@@ -1,4 +1,4 @@
-TODO in ui library
+in ui library
 1. ui stacks
 2. tableObject
 3. progress

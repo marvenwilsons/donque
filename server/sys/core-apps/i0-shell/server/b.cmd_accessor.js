@@ -37,7 +37,6 @@ const command_accessor = (parsed_command,permission) => {
         parsed_command.uitype = ''
         final = parsed_command
     } else if (classes.indexOf(parsed_command.class) == -1){
-        // TODO: exeptions
         parsed_command.class = parsed_command.class
         parsed_command.switched = false
         parsed_command.body = `you do not have permission to perform this action`
