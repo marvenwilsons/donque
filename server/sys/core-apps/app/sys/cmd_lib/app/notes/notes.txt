@@ -1,3 +1,5 @@
+@dqsys adminlogin notes, @notes
+
 createNewAdmin
     rule a: this method is only available for the owner title
     rule b: only visible for the owner in the front end
@@ -8,3 +10,20 @@ Emplementation
     a. passes the firstLayerAuth conditions
     b. passes the validateUserExistance conditions
     c. passes the
+
+@dqsys admin notes : settings
+    Settings for admin
+        Authentication
+            Tokens -
+                name: token expiration                          type: string        sample: 7 days
+                name: refresh token every transaction           type: boolean       sample: true
+                name: secret salt                               type: string        sample: helloworld
+        Backup app -
+                back up now -- click big button
+        HTTPS Support -
+                name: key                                       type: string
+                name: cert                                      type: string
+        Global Style -
+                name: Application Font size                     type: string
+                name: color palete
+
