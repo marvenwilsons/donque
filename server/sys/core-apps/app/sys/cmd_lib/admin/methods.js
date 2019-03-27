@@ -132,7 +132,7 @@ adminMethods.initAdminDashboard = {
         // @dqsys: admin: initAdminDashboard()
         console.log('** init admin dashboard')
         return new Promise((resolve, reject) => {
-            if (adminData && username === adminData.username && token === adminData.token) {
+            if (adminData && username === adminData.value.username && token === adminData.value.token) {
                 resolve({
                     status: true,
                     data: {
@@ -148,7 +148,9 @@ adminMethods.initAdminDashboard = {
                     status: false,
                     data: {
                         msg: 'Error while initializing admin',
-                        action: 'prompt login'
+                        actions: [{
+                            title:'prompt_err'
+                        }]
                     }
                 })
             }
