@@ -1,4 +1,4 @@
-
+//@test1
 const { execFile, exec, execSync, spawn } = require('child_process')
 const cardinalTest = require('../cardinalTest')
 
@@ -41,6 +41,7 @@ const startDatabaseServer = (callback) => {
 
 const routine_a = [
     // test 1
+    //@test1 index 0 attempt to initialized app while mongo db server is not running and invalid inputs
     {
         desc: 'attempt to initialized app while mongo db server is not running and invalid inputs',
         expected: false,
@@ -68,7 +69,7 @@ const routine_a = [
             section: 'dqapp'
         }
     },
-    // test 2 get current app state
+    //@test1 index 1 get current app state
     {
         desc: 'Get the current app state',
         expected: true,
@@ -77,7 +78,7 @@ const routine_a = [
         before: err => err(false),
         after: err => err(false)
     },
-    // test 3 attempt to initialized app with db server running but with invalid username
+    //@test1 index 2 attempt to initialized app with db server running but with invalid username
     {
         desc: 'attempt to initialized app with db server running but with invalid username',
         expected: false,
@@ -97,7 +98,7 @@ const routine_a = [
         before: err => err(false),
         after: err => err(false)
     },
-    // test 3 attempt to initialized app with db server running but with invalid password
+    //@test1 index 3 attempt to initialized app with db server running but with invalid password
     {
         desc: 'attempt to initialized app with db server running but with invalid password',
         expected: false,
@@ -117,7 +118,7 @@ const routine_a = [
         before: err => err(false),
         after: err => err(false)
     },
-    // test 4 attempt to login without initializing the application
+    //@test1 index 4 attempt to login without initializing the application
     {
         desc: 'attempt to login without initializing the application',
         expected: false,
@@ -131,7 +132,7 @@ const routine_a = [
         before: err => err(false),
         after: err => err(false)
     },
-    // test 5 attempt to reach cardinal system without casting a command or specifying a section is expected to fail
+    //@test1 index 5 attempt to reach cardinal system without casting a command or specifying a section is expected to fail
     {
         desc: 'attempt to reach cardinal system without casting a command or specifying a section is expected to fail',
         expected: false,
@@ -149,7 +150,7 @@ const routine_a = [
         before: err => err(false),
         after: err => err(false)
     },
-    // test 6 attempt to reach cardinal system without specifying a section is expected to fail
+    //@test1 index 6 attempt to reach cardinal system without specifying a section is expected to fail
     {
         desc: 'attempt to reach cardinal system without specifying a section is expected to fail',
         expected: false,
@@ -160,7 +161,7 @@ const routine_a = [
         before: err => err(false),
         after: err => err(false)
     },
-    // test 7 attempt to reach cardinal system without specifying a command is expected to fail
+    //test1 index 7 attempt to reach cardinal system without specifying a command is expected to fail
     {
         desc: 'attempt to reach cardinal system without specifying a command is expected to fail',
         expected: false,
@@ -171,7 +172,7 @@ const routine_a = [
         before: err => err(false),
         after: err => err(false)
     },
-    // test 8 attempt to reach a section that didnt exist in the registry is expected to fail
+    //@test1 index 8 attempt to reach a section that didnt exist in the registry is expected to fail
     {
         desc: 'attempt to reach a section that didnt exist in the registry is expected to fail',
         expected: false,
@@ -183,7 +184,7 @@ const routine_a = [
         before: err => err(false),
         after: err => err(false)
     },
-    // test 9 attempt to reach a command that didnt exist in the registy is expected to fail
+    //@test1 index 9 attempt to reach a command that didnt exist in the registy is expected to fail
     {
         desc: 'attempt to reach a command that didnt exist in the registy is expected to fail',
         expected: false,
@@ -195,7 +196,7 @@ const routine_a = [
         before: err => err(false),
         after: err => err(false)
     },
-    // test 10 initialize the app with correct set of data, with server is running, all is green is expected to succeed
+    //@test1 index 10 initialize the app with correct set of data, with server is running, all is green is expected to succeed
     {
         desc: 'initialize the app with correct set of data, with server is running, all is green is expected to succeed',
         expected: true,
@@ -215,7 +216,7 @@ const routine_a = [
         before: err => err(false),
         after: err => err(false)
     },
-    // test 11 get current app state should be owner login required
+    //@test1 index 11 get current app state should be owner login required
     {
         desc: 'get the current app state, output msg should be - owner login required',
         expected: true,
@@ -224,7 +225,7 @@ const routine_a = [
         before: err => err(false),
         after: err => err(false)
     },
-    // test 12 initialized dashboard without instantiating the connection to database credentials
+    //@test1 index 12 initialized dashboard without instantiating the connection to database credentials
     {
         desc: 'initializing dashboard or calling a core api without instantiating a connection first from app to database is expected to fail',
         expected: false,
@@ -238,7 +239,7 @@ const routine_a = [
         before: err => err(false),
         after: err => err(false)
     },
-    // test 13 login as the owner
+    //@test1 index 13 login as the owner
     {
         desc: 'admin login with incorrect credentials is expected to fail',
         expected: false,
