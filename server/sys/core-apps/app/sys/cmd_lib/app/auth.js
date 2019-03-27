@@ -41,15 +41,17 @@ const validateUserExistance = async ({ ...dbs }, { username, token, command }) =
     const db = doc.db(doc.appName)
 
     return new Promise(async (resolve, reject) => {
-        userdb.findOne({ username }).then(user => {
+        return userdb.findOne({ username }).then(user => {
             resolve({
-                validated: true,
-                accessType: fullPrevilegeTitle.includes(user.title) ? 'full' : 'limited',
-                data: {
-                    user,
-                    db
-                }
-            })
+                    validated: true,
+                    accessType: fullPrevilegeTitle.includes(user.title) ? 'full' : 'limited',
+                    data: {
+                        user,
+                        db
+                    }
+                })
+            
+
         }).catch(err => {
             console.log('   [Auth] User validation fail!')
             reject(`Fail on validating ${username}`)
@@ -90,9 +92,26 @@ const firstLayerAuthentication = async ({ ...dbs }, { command }) => {
     })
 }
 
+const validateToken = ({data, token, jwt, encrypt, decode, command}) => {
+    const userId = data.user._id
+    const encryptedPassword = data.user.password
+    const userUsername = data.user.username
+
+    if(command == 'adminlogin'){
+        return true
+    }else {
+        try{
+            const decodedToken = jwt.verify(token, encrypt(decode(encryptedPassword, userUsername), userId))
+            return decodedToken._id.toString() === userId.toString()
+        }catch(err){
+            return false
+        }    
+    }
+}
+
 const auth = async ({ dep, selectedCommand, username, password, token, command, data, section, method }, callback) => {
     console.log('   [Auth] Entering auth function')
-    const { userdb } = dep
+    const { userdb, jwt, encrypt, decode } = dep
 
     const isValidRequest = await firstLayerAuthentication(userdb, { command })
     if (isValidRequest != true) {
@@ -115,7 +134,7 @@ const auth = async ({ dep, selectedCommand, username, password, token, command, 
                 console.log('   [Auth] database is valid')
                 console.log('   [Auth] proceeding for authentication')
             }
-            const userDoesExist = await validateUserExistance(userdb, { username, password, token, command })
+            const userDoesExist = await validateUserExistance(userdb, { username, password, token, command, jwt, encrypt })
 
             if (userDoesExist.validated && userDoesExist.accessType == 'limited') {
                 // @dqsys: auth: validate token, app admin case, todo
@@ -138,34 +157,23 @@ const auth = async ({ dep, selectedCommand, username, password, token, command, 
                 }
             } else if (userDoesExist.validated && userDoesExist.accessType == 'full') {
                 console.log('   [Auth] access type is full')
-
-                // @dqsys: auth: validate token, owner case
-                console.log('   [Auth] Validating token')
-                let tokenIsValid = undefined
-                if(command == 'adminlogin'){
-                    tokenIsValid = true
-                }else {
-                    tokenIsValid = userDoesExist.data.user.token == token
-                }
-
-                if (tokenIsValid){
+                
+                if (validateToken({ data: userDoesExist.data, jwt, token, encrypt, decode, command }) == true){
                     callback(null, {
                         status: true,
                         data: userDoesExist.data
                     })
-                }else {
+                }else{
                     callback({
                         status: false,
                         data: {
                             msg: 'Invalid or expired token',
                             actions:[{
-                                title:'prompt_err'
+                                title: 'prompt_err'
                             }]
                         }
                     })
                 }
-
-
                 
             } else if (userDoesExist.validated == false) {
                 // @dqsys: auth: user does not exist in db

@@ -1,6 +1,6 @@
 const adminMethods = {}
 const { security, validator } = require('../utils/utils')
-const { encrypt, decrypt } = security
+const { encrypt, decrypt, decode } = security
 const jwt = require('jsonwebtoken')
 const dbAgent = require('./db-agent.js')
 
@@ -27,26 +27,28 @@ adminMethods.adminlogin = {
               * Create token
               */
             // @adminlogin: part1 creating token
-            return db.collection('dq_admins').findOneAndUpdate(
-                { username },
-                {
-                    $set: {
-                        token: jwt.sign({ username, password }, encrypt(password, username))
-                    }
-                },
-                { returnOriginal: false }).then((data) => {
-                    console.log(`   [adminlogin] token updated`)
-                    reUser = data
-                    console.log(`   [adminlogin] updating current live admins`)
-                    return updateCurrentLiveAdmins()
-                }).catch(err => {
-                    return {
-                        status: false,
-                        data: {
-                            msg: err
+            return db.collection('dq_admins').findOne({ username }).then((data) => {
+                return db.collection('dq_admins').findOneAndUpdate(
+                    { username },
+                    {
+                        $set: {
+                            token: jwt.sign({ _id: data._id.toString() }, encrypt(password, data._id.toString()))
                         }
-                    }
-                })
+                    },
+                    { returnOriginal: false }).then((data) => {
+                        console.log(`   [adminlogin] token updated`)
+                        reUser = data
+                        console.log(`   [adminlogin] updating current live admins`)
+                        return updateCurrentLiveAdmins()
+                    }).catch(err => {
+                        return {
+                            status: false,
+                            data: {
+                                msg: err
+                            }
+                        }
+                    })
+            })
         }
 
         const updateCurrentLiveAdmins = () => {
@@ -80,7 +82,8 @@ adminMethods.adminlogin = {
 
         return new Promise(async (resolve, reject) => {
             const u = await updateUser()
-            if (decrypt(user.password, username) === encrypt(password, username) && u) {
+            // console.log(decode(user.password, username) == password)
+            if (decode(user.password, username) == password && u) {
                 /**
                  * Return
                  */
@@ -149,7 +152,7 @@ adminMethods.initAdminDashboard = {
                     data: {
                         msg: 'Error while initializing admin',
                         actions: [{
-                            title:'prompt_err'
+                            title: 'prompt_err'
                         }]
                     }
                 })
