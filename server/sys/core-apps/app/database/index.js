@@ -159,7 +159,7 @@ const db = async (user, pwd) => {
             const dbOwner = JSON.parse(fs.readFileSync(`${__dirname}/iniConf.json`, 'utf-8'))
 
             console.log('   [db] Checking owner credentials')
-            if (security.decrypt(dbOwner.username, dbOwner.owner) === security.encrypt(user, dbOwner.owner)) {
+            if (security.decode(security.encrypt(user, dbOwner.owner), dbOwner.owner) === user) {
                 console.log('   [db] Reaching database')
                 /**
                  * Check password from database
