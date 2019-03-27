@@ -1,0 +1,8 @@
+@help keywords
+
+keyword
+    @dqsys  ........................... jumps to auth.js
+    todo   ........................... jumps to bookmarked todos
+    @cardinal ......................... jumps to cardinalSystem
+    @test ............................. jumps to testing suits
+    
