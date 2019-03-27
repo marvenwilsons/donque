@@ -243,7 +243,7 @@ const routine_a = [
     {
         desc: 'admin login with incorrect credentials is expected to fail',
         expected: false,
-        expectedMsg:'Authentication fail please login as the application owner',
+        expectedMsg:'Incorrect password or username',
         input: {
             username:'foo',
             password: 'bar',

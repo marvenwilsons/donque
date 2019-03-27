@@ -76,8 +76,10 @@ const myTest = [
             // set the value of username and token from the return value
             // of this test, this simulates getting the data from the client
             // saved in the localStorage
+            console.log('HELLO WORLD!')
             myTest[2].input.token = data[0].data.actions[0].content.token
             myTest[2].input.username = data[0].data.actions[0].content.username
+            console.log(myTest[2])
         }
     },
     //@test3 index 2 create a role section approach
@@ -158,6 +160,9 @@ const myTest = [
         },
         before: err => err(false),
         after: err => err(false),
+        data(data){
+            myTest[5].input.token = data[0].data.actions[0].content.token
+        }
     },
     
     //@test3 index 5 logout
@@ -166,6 +171,7 @@ const myTest = [
         expected: true,
         expectedMsg: null,
         input: {
+            token: undefined,
             username: 'jannyann',
             section: 'adminMethods',
             command: 'adminLogout'

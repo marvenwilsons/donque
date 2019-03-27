@@ -23,6 +23,7 @@ const startDatabaseServer = (callback) => {
     })
 }
 
+//@test4
 const myTest = [
     //login
     {
@@ -52,7 +53,7 @@ const myTest = [
             myTest[1].input.token = data[0].data.actions[0].content.token
             myTest[1].input.username = data[0].data.actions[0].content.username
 
-            // myTest[2].input.token = data[0].data.actions[0].content.token
+            myTest[2].input.token = data[0].data.actions[0].content.token
         }
     },
 
@@ -76,48 +77,23 @@ const myTest = [
         before: err => err(false),
         after: err => err(false)
     },
-    // // update owner admin back
-    // {
-    //     desc: 'update owner admin username back',
-    //     expected: true,
-    //     expectedMsg: 'Successfully updated username to jannyann',
-    //     input: {
-    //         username: 'jannyann',
-    //         token: undefined,
-    //         section: 'adminMethods',
-    //         command: 'updateAppAdmin',
-    //         data: {
-    //             users_username: 'jannyann',
-    //             customData: {
-    //                 username: 'jannyann',
-    //             }
-    //         }
-    //     },
-    //     before: err => {
-    //         setTimeout(() => {
-    //             err(false)
-    //         },500)
-    //     },
-    //     after: err => err(false)
-    // },
-
     // // view admin
-    // {
-    //     desc: 'View admin credentials',
-    //     expected: true,
-    //     expectedMsg: null,
-    //     input: {
-    //         username: 'jannyann',
-    //         token: undefined,
-    //         section: 'adminMethods',
-    //         command: 'viewAppAdmin',
-    //         data: {
-    //             username: 'johndoe'
-    //         }
-    //     },
-    //     before: err => err(false),
-    //     after: err => err(false)
-    // }
+    {
+        desc: 'View admin credentials',
+        expected: true,
+        expectedMsg: null,
+        input: {
+            username: 'jannyann',
+            token: undefined,
+            section: 'adminMethods',
+            command: 'viewAppAdmin',
+            data: {
+                username: 'johndoe'
+            }
+        },
+        before: err => err(false),
+        after: err => err(false)
+    }
     // delete an admin
     // create admin back
     // logout

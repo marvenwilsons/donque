@@ -75,16 +75,18 @@ const myTests = [
         before: err => err(false),
         after: err => err(false),
         data(data){
-            console.log(data[2].data.actions)
+            console.log(data)
+            myTests[3].input.token = data[0].data.actions[0].content.token            
         }
     },
-    //@test3 index 3 test logout
+    //@test2 index 3 test logout
     {
         desc: 'logout to application',
         expected: true,
         expectedMsg: null,
         input: {
             username: 'jannyann',
+            token: undefined,
             section: 'adminMethods',
             command: 'adminLogout'
         },
