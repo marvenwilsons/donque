@@ -2,7 +2,7 @@
 
 keyword
     @dqsys  ........................... jumps to auth.js
-    todo   ........................... jumps to bookmarked todos
+    todo   ............................ jumps to bookmarked todos
     @cardinal ......................... jumps to cardinalSystem
     @test ............................. jumps to testing suits
-    
+    @idea ............................. jumps to idea notes
