@@ -23,8 +23,9 @@ const startDatabaseServer = (callback) => {
     })
 }
 
+//@test2
 const myTests = [
-    // 0 test admin login
+    //@test2 index 0 test admin login
     {
         desc: 'owner admin login expected to succeed',
         expected: true,
@@ -49,7 +50,7 @@ const myTests = [
             myTests[2].input.username = data[0].data.actions[0].content.username
         }
     },
-    // 1 test get app state
+    //@test2 index 1 get app state
     {
         desc: 'get current app state',
         expected: true,
@@ -60,7 +61,7 @@ const myTests = [
         },
         after: err => err(false),
     },
-    // 2 test initiate dashboard
+    //@test2 index 2 test initiate dashboard
     {
         desc: 'initialize admin dashboard with correct set of data should succeed',
         expected: true,
@@ -77,7 +78,7 @@ const myTests = [
             console.log(data[2].data.actions)
         }
     },
-    // 3 test logout
+    //@test3 index 3 test logout
     {
         desc: 'logout to application',
         expected: true,
@@ -90,7 +91,7 @@ const myTests = [
         before: err => err(false),
         after: err => err(false),
     },
-    // 4 test get app state
+    //@test2 index 4 test get app state
     {
         desc: 'get current app state',
         expected: true,
@@ -101,7 +102,7 @@ const myTests = [
         },
         after: err => err(false),
     },
-    // 5 attempt to initialize dashboard without logging in should fail
+    //@test2 index 5 attempt to initialize dashboard without logging in should fail
     {
         desc: 'attempt to initialize dashboard without logging in should fail',
         expected: false,
@@ -115,7 +116,7 @@ const myTests = [
         before: err => err(false),
         after: err => err(false),
     },
-    // 6 test get app state
+    //@test2 index 6 test get app state
     {
         desc: 'get current app state',
         expected: true,
@@ -126,7 +127,7 @@ const myTests = [
         },
         after: err => err(false),
     },
-    // 7 test admin login
+    //@test2 index 7 test admin login
     {
         desc: 'owner admin login expected to succeed',
         expected: true,
@@ -147,7 +148,7 @@ const myTests = [
             myTests[8].input.username = data[0].data.actions[0].content.username
         }
     },
-    // 8 test create new admin with invalid role tile
+    //@test2 index 8 test create new admin with invalid role tile
     {
         desc: 'create new admin',
         expected: false,
@@ -172,7 +173,7 @@ const myTests = [
             myTests[9].input.username = data[0].data.actions[0].content.username
         }
     },
-    // 9 test logout
+    //@test2 9 test logout
     {
         desc: 'logout to application',
         expected: true,
