@@ -23,8 +23,9 @@ const startDatabaseServer = (callback) => {
     })
 }
 
+//@test3
 const myTest = [
-    // 0 test admin login
+    //@test3 index 0 test admin login
     {
         desc: 'owner admin login expected to succeed',
         expected: true,
@@ -53,7 +54,7 @@ const myTest = [
             myTest[1].input.username = data[0].data.actions[0].content.username
         }
     },
-    // 1 create a role general approach
+    //@test3 index 1 create a role general approach
     {
         desc: 'create a new role general approach',
         expected: true,
@@ -79,7 +80,7 @@ const myTest = [
             myTest[2].input.username = data[0].data.actions[0].content.username
         }
     },
-    // 2 create a role section approach
+    //@test3 index 2 create a role section approach
     {
         desc: 'create a new role section approach',
         expected: true,
@@ -108,7 +109,7 @@ const myTest = [
             myTest[3].input.username = data[0].data.actions[0].content.username
         }
     },
-    // 3 attempt to create reader2 should fail
+    //@test3 index 3 attempt to create reader2 should fail
     {
         desc: 'attempt to create reader2 should fail',
         expected: false,
@@ -137,7 +138,7 @@ const myTest = [
         }
     },
 
-    // 4 create new admin
+    //@test3 index 4 create new admin
     {
         desc: 'create new admin using newly created permission set',
         expected: true,
@@ -159,7 +160,7 @@ const myTest = [
         after: err => err(false),
     },
     
-    // logout
+    //@test3 index 5 logout
     {
         desc: 'logout to application',
         expected: true,

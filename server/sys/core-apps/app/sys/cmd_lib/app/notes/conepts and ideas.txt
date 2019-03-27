@@ -1,2 +1,2 @@
-@Idea: object viewer
-@Idea: dq builder
+@idea: object viewer
+@idea: dq builder
