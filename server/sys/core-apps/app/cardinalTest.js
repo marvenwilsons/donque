@@ -30,7 +30,7 @@ const test = (routine,index) => {
                     console.log('')
                 } else {
                     console.log('')
-                    console.log(` TEST #${count + 1} FAIL! `.bgRed.bold, ` ${routine[count].desc} `.red.bold)
+                    console.log(` TEST #${count + 1} FAILED!: ${routine[count].desc} `.bold.bgRed)
                     console.log('')
                     console.log('\t', `${val}`.red.bold)
                     console.log('')
