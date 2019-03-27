@@ -6,3 +6,4 @@ keyword
     @cardinal ......................... jumps to cardinalSystem
     @test ............................. jumps to testing suits
     @idea ............................. jumps to idea notes
+    @work ............................. jumps to work notes
