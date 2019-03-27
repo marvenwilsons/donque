@@ -1,26 +1,26 @@
 const permissionHandler = (permissions) => {
-    // dqsys: auth: METHOD: permissionHandler
+    // @dqsys: auth: todo: permissionHandler(),
     console.log('   [Universal protocol] permission handler')
     return true
 }
 
 const commitsHandler = (commitId) => {
-    // dqsys: auth: METHOD: commitsHandler
+    // @dqsys: auth: todo: commitsHandler(),
 }
 
 const adminTitleValidator = (titles) => {
-    // dqsys: auth: METHOD: adminTitleValidator
+    // @dqsys: auth: todo: adminTitleValidator(),
     console.log('   [Universal protocol] title handler')
     return true
 }
 
 const sectionHandler = (section) => {
-    // dqsys: auth: METHOD: sectionHandler
+    // @dqsys: auth: todo: sectionHandler(),
     console.log('   [Universal protocol] section handler')
 }
 
 const functionHandler = (func) => {
-    // dqsys: auth: METHOD: functionHandler
+    // @dqsys: auth: todo: functionHandler(),
     console.log('   [Universal protocol] function handler')
     // return {
     //     status:false,
@@ -30,7 +30,7 @@ const functionHandler = (func) => {
 }
 
 const validateUserExistance = async ({ ...dbs }, { username, token, command }) => {
-    // dqsys: auth: METHOD: validateUserExistance
+    // @dqsys: auth: validateUserExistance()
     const { doc } = dbs.data
 
     const fullPrevilegeTitle = [
@@ -42,7 +42,6 @@ const validateUserExistance = async ({ ...dbs }, { username, token, command }) =
 
     return new Promise(async (resolve, reject) => {
         userdb.findOne({ username }).then(user => {
-            // console.log(data.token === token)
             resolve({
                 validated: true,
                 accessType: fullPrevilegeTitle.includes(user.title) ? 'full' : 'limited',
@@ -59,7 +58,7 @@ const validateUserExistance = async ({ ...dbs }, { username, token, command }) =
 }
 
 const firstLayerAuthentication = async ({ ...dbs }, { command }) => {
-    // dqsys: auth: METHOD: firstLayerAuthentication
+    // @dqsys: auth: firstLayerAuthentication()
     /**
      * Insures nobody can call an api that is not logged in
      * a. check if there are live admins in current live admins array
@@ -119,7 +118,7 @@ const auth = async ({ dep, selectedCommand, username, password, token, command, 
             const userDoesExist = await validateUserExistance(userdb, { username, password, token, command })
 
             if (userDoesExist.validated && userDoesExist.accessType == 'limited') {
-                // dqsys: auth: validate token, app admin case
+                // @dqsys: auth: validate token, app admin case, todo
 
                 console.log('   [Auth] access type is limited')
                 const res = [
@@ -140,7 +139,7 @@ const auth = async ({ dep, selectedCommand, username, password, token, command, 
             } else if (userDoesExist.validated && userDoesExist.accessType == 'full') {
                 console.log('   [Auth] access type is full')
 
-                // dqsys: auth: validate token, owner case
+                // @dqsys: auth: validate token, owner case
                 console.log('   [Auth] Validating token')
                 let tokenIsValid = undefined
                 if(command == 'adminlogin'){
@@ -169,7 +168,7 @@ const auth = async ({ dep, selectedCommand, username, password, token, command, 
 
                 
             } else if (userDoesExist.validated == false) {
-                // dqsys: auth: user does not exist in db
+                // @dqsys: auth: user does not exist in db
                 console.log(`   [Auth] Cannot validate "${username}" because it does not exist in the database`)
                 callback({
                     status: false,
