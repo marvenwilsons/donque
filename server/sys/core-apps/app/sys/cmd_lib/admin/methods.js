@@ -15,6 +15,7 @@ adminMethods.adminlogin = {
         }
     },
     adminlogin({ dep, username, password }) {
+        // @dqsys: admin: adminlogin()
         const { user, db } = dep
         let reUser = user
         console.log('** admin login')
@@ -25,12 +26,15 @@ adminMethods.adminlogin = {
             /**
               * Create token
               */
+            // @adminlogin: part1 creating token
             return db.collection('dq_admins').findOneAndUpdate(
-                { username }, 
-                {$set: {
-                    token: jwt.sign({ username, password }, encrypt(password, username))
-                }}, 
-                { returnOriginal: false}).then((data) => {
+                { username },
+                {
+                    $set: {
+                        token: jwt.sign({ username, password }, encrypt(password, username))
+                    }
+                },
+                { returnOriginal: false }).then((data) => {
                     console.log(`   [adminlogin] token updated`)
                     reUser = data
                     console.log(`   [adminlogin] updating current live admins`)
@@ -69,12 +73,12 @@ adminMethods.adminlogin = {
                         data: {
                             msg: err
                         }
-                    } 
+                    }
                 })
 
         }
 
-        return new Promise(async (resolve,reject) => {
+        return new Promise(async (resolve, reject) => {
             const u = await updateUser()
             if (decrypt(user.password, username) === encrypt(password, username) && u) {
                 /**
@@ -84,7 +88,7 @@ adminMethods.adminlogin = {
                 delete (reUser.password)
                 delete (reUser.ip)
                 adminData = reUser
-                
+
                 console.log(`   [adminlogin] token ${adminData.value.token}`)
 
                 console.log(`   [adminlogin] resolving`)
@@ -107,7 +111,7 @@ adminMethods.adminlogin = {
                         ]
                     }
                 })
-            }else{
+            } else {
                 console.log('adminlogin error not yet ready')
                 console.log(u)
             }
@@ -125,6 +129,7 @@ adminMethods.initAdminDashboard = {
         }
     },
     initAdminDashboard({ dep, username, token }) {
+        // @dqsys: admin: initAdminDashboard()
         console.log('** init admin dashboard')
         return new Promise((resolve, reject) => {
             if (adminData && username === adminData.username && token === adminData.token) {
@@ -161,6 +166,7 @@ adminMethods.adminLogout = {
         }
     },
     adminLogout({ dep, username }) {
+        // @dqsys: admin: adminLogout()
         console.log('** logging out')
         const { db, user } = dep
         /**
@@ -168,6 +174,7 @@ adminMethods.adminLogout = {
          * b. remove user from current live admins
          * c. refresh admin dashboard
          */
+        // @adminlogout: part1 setting token to undefined
         const clearingToken = db.collection('dq_admins').findOneAndUpdate({ username }, {
             $set: {
                 token: undefined
@@ -176,6 +183,7 @@ adminMethods.adminLogout = {
                 returnOriginal: false
             })
 
+        // @adminlogout: part2 pulling admin out to current live admins
         const clearingLiveAdmins = db
             .collection('dq_app')
             .findOneAndUpdate(
@@ -191,6 +199,7 @@ adminMethods.adminLogout = {
 
 
         return new Promise((resolve, reject) => {
+            // @adminlogout: part0 exec
             const clearedToken = clearingToken.then(() => clearingLiveAdmins.then(() => true).catch(() => false))
             if (clearedToken) {
                 console.log('   [adminLogout] token cleared!')
@@ -225,22 +234,6 @@ adminMethods.adminLogout = {
 
 }
 
-// iniConf api
-adminMethods._updateIniConf_ = {
-    get prop() {
-        return {
-            permissions: null,
-            allowedtitle: ['owner'],
-            funcIsDestructive: false
-        }
-    },
-    _updateIniConf_({ keyToBeUpdated }) {
-        const fs = require('fs')
-        const path = require('path')
-        console.log
-    }
-}
-
 
 // create new application admin <<- done
 adminMethods.createAppAdmin = {
@@ -252,6 +245,7 @@ adminMethods.createAppAdmin = {
         }
     },
     createAppAdmin({ dep, data }) {
+        // @dqsys: admin: createAppAdmin()
         console.log('** Creating application Admin')
         // get schema
         // hash the username and password
@@ -444,6 +438,7 @@ adminMethods.createAppAdminRule = {
         }
     },
     createAppAdminRule({ dep, data }) {
+        // @dqsys: admin: createAppAdminRule()
         console.log('** creating app admin role!')
 
         const { approach, permission, roleTitle } = data
@@ -585,6 +580,7 @@ adminMethods.updateAppAdmin = {
         }
     },
     updateAppAdmin({ dep, data }) {
+        // @dqsys: admin: updateAppAdmin()
         const { users_username, customData } = data
         const { db } = dep
 
@@ -747,50 +743,51 @@ adminMethods.viewAppAdmin = {
         }
     },
     viewAppAdmin({ dep, data }) {
+        // @dqsys: admin: viewAppAdmin()
         const { db } = dep
 
         return new Promise(async (resolve, reject) => {
             const user = await db.collection('dq_admins').findOne(data)
-            const allowedSearchKeys = ['username','adminName','title','email','ip']
+            const allowedSearchKeys = ['username', 'adminName', 'title', 'email', 'ip']
             const inp = allowedSearchKeys.includes(Object.keys(data)[0])
             let err = false
 
-            if(!inp){
+            if (!inp) {
                 err = true
                 reject({
                     status: false,
                     data: {
                         msg: `Invalid key ${Object.keys(data)[0]}`,
                         actions: [{
-                            title:'prompt_err'
+                            title: 'prompt_err'
                         }]
                     }
                 })
             }
 
-            if (Object.keys(data).length != 1){
+            if (Object.keys(data).length != 1) {
                 err = true
                 reject({
                     status: false,
                     data: {
                         msg: `Invalid input, too many keys for a findOne operation`,
                         actions: [{
-                            title:'prompt_err'
+                            title: 'prompt_err'
                         }]
                     }
                 })
             }
-            
-            if(user && err == false){
+
+            if (user && err == false) {
                 resolve({
                     status: true,
                     data: {
                         msg: null,
-                        actions:[],
+                        actions: [],
                         content: user
-                    } 
+                    }
                 })
-            }else if(!user) {
+            } else if (!user) {
                 reject({
                     status: false,
                     data: {
@@ -806,7 +803,7 @@ adminMethods.viewAppAdmin = {
 }
 
 // Delete Admin
-adminMethods.DeleteAdmin = {
+adminMethods.deleteAppAdmin = {
     get prop() {
         return {
             permissions: null,
@@ -814,14 +811,14 @@ adminMethods.DeleteAdmin = {
             funcIsDestructive: true
         }
     },
-    DeleteAdmin({ dep, username }) {
-
+    deleteAppAdmin({ dep, username }) {
+        // @dqsys: admin: todo: deleteAppAdmin()
     }
 }
 
 // create new database admin
 adminMethods.createDbAdmin = {
-
+    // @dqsys: admin: todo: createDbAdmin()
 }
 
 // kill database connection
@@ -834,6 +831,7 @@ adminMethods.killDbConnection = {
         }
     },
     killDbConnection() {
+        // @dqsys: admin: todo: killDbConnection()
 
     }
 }
