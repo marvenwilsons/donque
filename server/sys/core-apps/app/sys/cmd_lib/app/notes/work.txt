@@ -1,0 +1,4 @@
+@work
+
+problem 1: system has no token authentication
+problem 2: system has wrong implementation of token so have to fix that first
