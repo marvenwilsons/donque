@@ -1,4 +1,7 @@
 const db = require('../database/index')
+const { security, validator } = require('./cmd_lib/utils/utils')
+const { encrypt, decode } = security
+const jwt = require('jsonwebtoken')
 
 const Cardinal = async ({ username, password, token, data, command, section, method }) => {
 
@@ -145,7 +148,10 @@ const Cardinal = async ({ username, password, token, data, command, section, met
         const commandIsAllowed = await registry.dqapp.universalprotocol({
             dep: {
                 data,
-                userdb
+                userdb,
+                encrypt,
+                decode,
+                jwt
             },
             selectedCommand,
             username,
@@ -171,9 +177,63 @@ const Cardinal = async ({ username, password, token, data, command, section, met
 
             const r = await selectedCommand[command](param)
                 .then(async data => {
+                    // @cardinal: refresh token
+                    // const refreshToken = () => {
+                    //     if (command != 'adminlogin') {
+                    //         console.log('   [CardinalSystem] refreshing token')
+                    //         const doc = userdb.data.doc
+                    //         const _userdb = doc.db(doc.appName).collection('dq_admins')
+
+                    //         return _userdb.findOneAndUpdate({ username }, {
+                    //             $set: {
+                    //                 token: jwt.sign({ username, password }, encrypt(token, username))
+                    //             }
+                    //         }, {
+                    //                 returnOriginal: false
+                    //             }).then((d) => {
+                    //                 console.log(`   [CardinalSystem] ${username} was token updated successfully`)
+                    //                 return {
+                    //                     status: true,
+                    //                     token: d.value.token
+                    //                 }
+                    //             }).catch((err) => {
+                    //                 console.log('   [CardinalSystem] Error while refreshing token')
+                    //                 console.log(err)
+                    //                 return {
+                    //                     status: false,
+                    //                     data: {
+                    //                         msg:'Error while refreshing token',
+                    //                         actions:[{
+                    //                             title: 'prompt_err'
+                    //                         }]
+                    //                     }
+                    //                 }
+                    //             })
+                    //     }else{
+                    //         return {
+                    //             status: undefined
+                    //         }
+                    //     }
+                    // }
+
+                    // const refToken = await refreshToken()
+                    // const _data = await data
+
+                    // // @cardinal: success request return
+                    // // todo: invalid token return
+                    // refToken.status == true ? _data.token = refToken.token : _data
+
+                    // console.log('this is data')
+                    // console.log(command)
+                    // console.log(_data)
+
+                    // return _data
+
                     const d = await data
                     return d
+
                 }).catch(async err => {
+                    // @cardinal: fail request return
                     return err
                 })
             return new Promise((resolve, reject) => {
@@ -186,7 +246,7 @@ const Cardinal = async ({ username, password, token, data, command, section, met
         } else {
             console.log('** fail')
             response = commandIsAllowed.data.msg
-        }localstorage
+        } localstorage
     } else if (userdb.data.msg == 'init required' && hasErr == undefined) {
         if (command != 'dqinitapp') {
             console.log('** CardinalSystem SystemInit handler')
