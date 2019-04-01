@@ -1,8 +1,4 @@
 const adminMethods = {}
-const { security, validator } = require('../utils/utils')
-const { encrypt, decrypt, decode } = security
-const jwt = require('jsonwebtoken')
-const dbAgent = require('./db-agent.js')
 
 let adminData = undefined
 // Login <<- done
@@ -16,7 +12,7 @@ adminMethods.adminlogin = {
     },
     adminlogin({ dep, username, password }) {
         // @dqsys: admin: adminlogin()
-        const { user, db } = dep
+        const { user, db, jwt, encrypt, decode } = dep
         let reUser = user
         console.log('** admin login')
         // check user name validity
@@ -255,7 +251,8 @@ adminMethods.createAppAdmin = {
         // get schema
         // hash the username and password
         // add new admin entry to databasen
-        const { db } = dep
+        const { db, encrypt, validator } = dep
+        
         const { username, password, adminName, roleTitle, email } = data
 
         let hasError = false
@@ -376,9 +373,10 @@ adminMethods.createAppAdmin = {
             /**
              * Constructing admin object
              */
+            const pwd = encrypt(password, username)
             const admin_doc = {
                 username,
-                password,
+                password:pwd,
                 adminName,
                 email,
                 title: sectionPermissions.roleTitle,
@@ -447,7 +445,7 @@ adminMethods.createAppAdminRule = {
         console.log('** creating app admin role!')
 
         const { approach, permission, roleTitle } = data
-        const { db } = dep
+        const { db, validator } = dep
         const valid_permissions = new Set(['c', 'r', 'u', 'd'])
         const valid_approach = ['general', 'section']
 
@@ -581,13 +579,13 @@ adminMethods.updateAppAdmin = {
         return {
             permissions: null,
             allowedtitle: ['owner'],
-            funcIsDestructive: true
+            funcIsDestructive: false
         }
     },
     updateAppAdmin({ dep, data }) {
         // @dqsys: admin: updateAppAdmin()
         const { users_username, customData } = data
-        const { db } = dep
+        const { db, dbAgent, validator, encrypt } = dep
 
         console.log(`** [updateAppAdmin] Updating ${users_username}`)
 
@@ -730,6 +728,7 @@ adminMethods.updateAppAdmin = {
                     }
                 })
                 .catch(e => {
+                    console.log(e)
                     reject(err(`Error while locating user ${users_username}`))
                 })
 
@@ -744,7 +743,7 @@ adminMethods.viewAppAdmin = {
         return {
             permissions: null,
             allowedtitle: ['owner'],
-            funcIsDestructive: true
+            funcIsDestructive: false
         }
     },
     viewAppAdmin({ dep, data }) {
@@ -818,6 +817,17 @@ adminMethods.deleteAppAdmin = {
     },
     deleteAppAdmin({ dep, username }) {
         // @dqsys: admin: todo: deleteAppAdmin()
+        console.log('deleting appAdmnin')
+
+        return new Promise((resolve,reject) => {
+            reject({
+                status: false,
+                data: {
+                    msg: 'delete app admin',
+                    actions: [{}]
+                }
+            })
+        })
     }
 }
 
@@ -837,6 +847,19 @@ adminMethods.killDbConnection = {
     },
     killDbConnection() {
         // @dqsys: admin: todo: killDbConnection()
+
+    }
+}
+
+adminMethods.updateAppSettings = {
+    get prop() {
+        return {
+            permissions: null,
+            allowedtitle: ['owner'],
+            funcIsDestructive: false
+        }
+    },
+    updateAppSettings({SettingName,SettingValue}){
 
     }
 }

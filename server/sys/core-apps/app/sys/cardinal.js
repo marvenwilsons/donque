@@ -2,6 +2,7 @@ const db = require('../database/index')
 const { security, validator } = require('./cmd_lib/utils/utils')
 const { encrypt, decode } = security
 const jwt = require('jsonwebtoken')
+const dbAgent = require('./cmd_lib/admin/db-agent')
 
 const Cardinal = async ({ username, password, token, data, command, section, method }) => {
 
@@ -145,13 +146,15 @@ const Cardinal = async ({ username, password, token, data, command, section, met
          * returns true if command is allowed for execution
          * returns an object if command is not allowed to execute
          */
+        //@cardinal system protocols dependencies
         const commandIsAllowed = await registry.dqapp.universalprotocol({
             dep: {
                 data,
                 userdb,
                 encrypt,
                 decode,
-                jwt
+                jwt,
+                validator
             },
             selectedCommand,
             username,
@@ -170,7 +173,8 @@ const Cardinal = async ({ username, password, token, data, command, section, met
              * Execute function
              */
             const _d = commandIsAllowed.data
-            const param = section != 'adminMethods' ? data : { dep: _d, username, password, token, data }
+            //@cardinal Admin's dependencies
+            const param = section != 'adminMethods' ? data : { dep: { ..._d, jwt, validator, encrypt, decode, dbAgent }, username, password, token, data }
 
             console.log(`   [CardinalSystem] Entering ${section}`)
             console.log(`   [CardinalSystem] Executing ${command}`)
@@ -178,57 +182,6 @@ const Cardinal = async ({ username, password, token, data, command, section, met
             const r = await selectedCommand[command](param)
                 .then(async data => {
                     // @cardinal: refresh token
-                    // const refreshToken = () => {
-                    //     if (command != 'adminlogin') {
-                    //         console.log('   [CardinalSystem] refreshing token')
-                    //         const doc = userdb.data.doc
-                    //         const _userdb = doc.db(doc.appName).collection('dq_admins')
-
-                    //         return _userdb.findOneAndUpdate({ username }, {
-                    //             $set: {
-                    //                 token: jwt.sign({ username, password }, encrypt(token, username))
-                    //             }
-                    //         }, {
-                    //                 returnOriginal: false
-                    //             }).then((d) => {
-                    //                 console.log(`   [CardinalSystem] ${username} was token updated successfully`)
-                    //                 return {
-                    //                     status: true,
-                    //                     token: d.value.token
-                    //                 }
-                    //             }).catch((err) => {
-                    //                 console.log('   [CardinalSystem] Error while refreshing token')
-                    //                 console.log(err)
-                    //                 return {
-                    //                     status: false,
-                    //                     data: {
-                    //                         msg:'Error while refreshing token',
-                    //                         actions:[{
-                    //                             title: 'prompt_err'
-                    //                         }]
-                    //                     }
-                    //                 }
-                    //             })
-                    //     }else{
-                    //         return {
-                    //             status: undefined
-                    //         }
-                    //     }
-                    // }
-
-                    // const refToken = await refreshToken()
-                    // const _data = await data
-
-                    // // @cardinal: success request return
-                    // // todo: invalid token return
-                    // refToken.status == true ? _data.token = refToken.token : _data
-
-                    // console.log('this is data')
-                    // console.log(command)
-                    // console.log(_data)
-
-                    // return _data
-
                     const d = await data
                     return d
 
