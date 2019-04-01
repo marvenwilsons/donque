@@ -19,14 +19,36 @@ const sectionHandler = (section) => {
     console.log('   [Universal protocol] section handler')
 }
 
-const functionHandler = (func) => {
+const functionHandler = ({ dep, isDestructive, userData, pwd, username }) => {
     // @dqsys: auth: todo: functionHandler(),
+    const {decode} = dep
+    
     console.log('   [Universal protocol] function handler')
-    // return {
-    //     status:false,
-    //     data:'func needs addtional auth process'
-    // }
-    true
+    
+    if (!isDestructive){
+        return true
+    }else {
+        if(pwd){
+            // compare password
+            const isValid = decode(userData.password, username).toString() === pwd.toString() ? true : ''
+
+            return decode(userData.password, username).toString() === pwd.toString() ? true : {
+                msg: 'Authentication failed',
+                actions: [{
+                    title: 'prompt_err'
+                }]
+            }
+        }else{
+            console.log('   [Universal protocol] password not found')
+            return {
+                msg: 'Password required',
+                actions: [{
+                    title: 'prompt_password'
+                }]
+            }
+        }
+    }
+
 }
 
 const validateUserExistance = async ({ ...dbs }, { username, token, command }) => {
@@ -158,11 +180,42 @@ const auth = async ({ dep, selectedCommand, username, password, token, command, 
             } else if (userDoesExist.validated && userDoesExist.accessType == 'full') {
                 console.log('   [Auth] access type is full')
                 
-                if (validateToken({ data: userDoesExist.data, jwt, token, encrypt, decode, command }) == true){
-                    callback(null, {
-                        status: true,
-                        data: userDoesExist.data
+                if (validateToken({ data: userDoesExist.data, jwt, token, encrypt, decode, command })){
+                    const functionHandler_response = functionHandler({
+                        dep: {
+                            encrypt,
+                            decode
+                        },
+                        isDestructive: selectedCommand.prop.funcIsDestructive, 
+                        userData: userDoesExist.data.user, 
+                        pwd: password, 
+                        username 
                     })
+                    
+                    if (typeof functionHandler_response === 'boolean'){
+                        callback(null, {
+                            status: true,
+                            data: userDoesExist.data
+                        })
+                    }else{
+                        console.log('handler response')
+                        console.log({
+                            status: false,
+                            data: {
+                                command,
+                                section,
+                                ...functionHandler_response
+                            }
+                        })
+                        callback({
+                            status: false,
+                            data: {
+                                command,
+                                section,
+                                ...functionHandler_response
+                            }
+                        })
+                    }
                 }else{
                     callback({
                         status: false,
