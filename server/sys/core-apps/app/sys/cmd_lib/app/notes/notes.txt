@@ -18,7 +18,13 @@ Emplementation
                 name: token expiration                          type: string        sample: 7 days
                 name: refresh token every transaction           type: boolean       sample: true
                 name: secret salt                               type: string        sample: helloworld
-        Backup app -
+        System Backup app -
+                there is going to be a display or list of when the system perform last backup date and time and who did it,
+                or is it the system automation backup set by owner.
+
+                backup settings
+                name: backup every                              type: selection
+
                 back up now -- click big button
         HTTPS Support -
                 name: key                                       type: string
@@ -26,4 +32,8 @@ Emplementation
         Global Style -
                 name: Application Font size                     type: string
                 name: color palete
+        Appearance -
+                theme selection
+                Create Theme
+        
 
