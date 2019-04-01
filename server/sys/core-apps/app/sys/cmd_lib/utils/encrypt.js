@@ -17,4 +17,11 @@ e.decrypt = (ValueToReHash,Salt) => {
     return decrypted 
 }
 
+e.decode = (ValueToReHash, Salt) => {
+    let decipher = crypto.createDecipher('aes-128-cbc', `${ValueToReHash, Salt}`)
+    let decrypted = decipher.update(ValueToReHash, 'hex', 'utf8')
+    decrypted += decipher.final('utf-8')
+    return decrypted
+}
+
 module.exports = e
