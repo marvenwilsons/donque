@@ -25,7 +25,7 @@ const startDatabaseServer = (callback) => {
 
 //@test4
 const myTest = [
-    //login
+    //@test4 index 0 login
     {
         desc: 'owner admin login expected to succeed',
         expected: true,
@@ -54,10 +54,13 @@ const myTest = [
             myTest[1].input.username = data[0].data.actions[0].content.username
 
             myTest[2].input.token = data[0].data.actions[0].content.token
+            myTest[3].input.token = data[0].data.actions[0].content.token
+            myTest[4].input.token = data[0].data.actions[0].content.token
+            myTest[5].input.token = data[0].data.actions[0].content.token
         }
     },
 
-    // update owner admin 1
+    //@test4 index 1 update owner admin 1
     {
         desc: 'update owner admin username 1',
         expected: true,
@@ -77,7 +80,7 @@ const myTest = [
         before: err => err(false),
         after: err => err(false)
     },
-    // // view admin
+    //@test 4 index 2 view admin
     {
         desc: 'View admin credentials',
         expected: true,
@@ -93,8 +96,52 @@ const myTest = [
         },
         before: err => err(false),
         after: err => err(false)
+    },
+    //@test4 index 3 attempt to delete an admin without password
+    {
+        desc: 'attempt to delete an admin without password',
+        expected: false,
+        expectedMsg: 'Password required',
+        input: {
+            username: 'jannyann',
+            token: undefined,
+            section: 'adminMethods',
+            command: 'deleteAppAdmin',
+        },
+        before: err => err(false),
+        after: err => err(false)
+    },
+    //@test4 index 4 attempt to delete an admin with wrong password
+    //todo test
+    {
+        desc: 'attempt to delete an admin with wrong password',
+        expected: false,
+        expectedMsg: 'Authentication failed',
+        input: {
+            username: 'jannyann',
+            password: 'password123', // <<- wrong password
+            token: undefined,
+            section: 'adminMethods',
+            command: 'deleteAppAdmin',
+        },
+        before: err => err(false),
+        after: err => err(false)
+    },
+    //@test4 index 5 delete an admin correct credentials
+    {
+        desc: 'delete an admin correct credentials',
+        expected: false,
+        expectedMsg: 'Successfully deleted jannyann',
+        input: {
+            username: 'jannyann',
+            password: 'password123@', // <<- correct password
+            token: undefined,
+            section: 'adminMethods',
+            command: 'deleteAppAdmin',
+        },
+        before: err => err(false),
+        after: err => err(false)
     }
-    // delete an admin
     // create admin back
     // logout
     // login as the new admin
