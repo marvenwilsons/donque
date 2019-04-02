@@ -130,14 +130,17 @@ const myTest = [
     //@test4 index 5 delete an admin correct credentials
     {
         desc: 'delete an admin correct credentials',
-        expected: false,
-        expectedMsg: 'Successfully deleted jannyann',
+        expected: true,
+        expectedMsg: 'Successfully deleted johndoe',
         input: {
             username: 'jannyann',
             password: 'password123@', // <<- correct password
             token: undefined,
             section: 'adminMethods',
             command: 'deleteAppAdmin',
+            data: {
+                username: 'johndoe',
+            }
         },
         before: err => err(false),
         after: err => err(false)

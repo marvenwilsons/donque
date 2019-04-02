@@ -252,7 +252,7 @@ adminMethods.createAppAdmin = {
         // hash the username and password
         // add new admin entry to databasen
         const { db, encrypt, validator } = dep
-        
+
         const { username, password, adminName, roleTitle, email } = data
 
         let hasError = false
@@ -376,7 +376,7 @@ adminMethods.createAppAdmin = {
             const pwd = encrypt(password, username)
             const admin_doc = {
                 username,
-                password:pwd,
+                password: pwd,
                 adminName,
                 email,
                 title: sectionPermissions.roleTitle,
@@ -737,7 +737,7 @@ adminMethods.updateAppAdmin = {
     }
 }
 
-// viewAppAdmin
+// viewAppAdmin <<-done
 adminMethods.viewAppAdmin = {
     get prop() {
         return {
@@ -815,18 +815,68 @@ adminMethods.deleteAppAdmin = {
             funcIsDestructive: true
         }
     },
-    deleteAppAdmin({ dep, username }) {
+    deleteAppAdmin({ dep, data }) {
         // @dqsys: admin: todo: deleteAppAdmin()
+        const { db } = dep
         console.log('deleting appAdmnin')
 
-        return new Promise((resolve,reject) => {
-            reject({
-                status: false,
-                data: {
-                    msg: 'delete app admin',
-                    actions: [{}]
-                }
-            })
+        let err = undefined
+        let key = undefined
+
+        if (Object.keys(data).length != 1) {
+            err = 'Invalid input cannot have more than one filter'
+        } else {
+            key = Object.keys(data)[0]
+        }
+
+
+        return new Promise(async (resolve, reject) => {
+            if (err) {
+                reject({
+                    status: false,
+                    data: {
+                        msg: err,
+                        actions: [{
+                            title: 'prompt_err'
+                        }]
+                    }
+                })
+                return
+            }
+
+            db.collection('dq_admins').findOne(data)
+                .then(user => {
+                    if (user.title.toLowerCase() != 'owner') {
+                        return true
+                    } else {
+                        throw new Error('Illegal operation Cannot delete owner')
+                    }
+                })
+                .then(async () => {
+                    const op = await db.collection('dq_admins').findOneAndDelete(data)
+                    if (op.ok == 1) {
+                        resolve({
+                            status: true,
+                            data: {
+                                msg: `Successfully deleted ${data[key]}`,
+                                actions: [{
+                                    title: 'prompt_msg'
+                                }]
+                            }
+                        })
+                    }
+                })
+                .catch(err => {
+                    reject({
+                        status: false,
+                        data: {
+                            msg: err.message,
+                            actions: [{
+                                title: 'prompt_err'
+                            }]
+                        }
+                    })
+                })
         })
     }
 }
@@ -859,7 +909,7 @@ adminMethods.updateAppSettings = {
             funcIsDestructive: false
         }
     },
-    updateAppSettings({SettingName,SettingValue}){
+    updateAppSettings({ SettingName, SettingValue }) {
 
     }
 }
