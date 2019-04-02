@@ -57,6 +57,11 @@ const myTest = [
             myTest[3].input.token = data[0].data.actions[0].content.token
             myTest[4].input.token = data[0].data.actions[0].content.token
             myTest[5].input.token = data[0].data.actions[0].content.token
+            
+            myTest[6].input.username = data[0].data.actions[0].content.username
+            myTest[6].input.token = data[0].data.actions[0].content.token
+            myTest[7].input.token = data[0].data.actions[0].content.token
+
         }
     },
 
@@ -144,9 +149,42 @@ const myTest = [
         },
         before: err => err(false),
         after: err => err(false)
+    },
+    //@test4 index 6 create admin back
+    {
+        desc: 'create new admin using newly created permission set',
+        expected: true,
+        expectedMsg: 'John P Doe was successfully saved to database',
+        input: {
+            username: undefined,
+            token: undefined,
+            section: 'adminMethods',
+            command: 'createAppAdmin',
+            data: {
+                username: 'johndoe',
+                password: 'passwordtesting123@',
+                adminName: 'John P Doe',
+                roleTitle: 'reader',
+                email: 'samplemail@smail2.com'
+            },
+        },
+        before: err => err(false),
+        after: err => err(false)
+    },
+    //@test4 index 7 logout
+    {
+        desc: 'logout to application',
+        expected: true,
+        expectedMsg: null,
+        input: {
+            token: undefined,
+            username: 'jannyann',
+            section: 'adminMethods',
+            command: 'adminLogout'
+        },
+        before: err => err(false),
+        after: err => err(false),
     }
-    // create admin back
-    // logout
     // login as the new admin
     // make illegal api calls
 
