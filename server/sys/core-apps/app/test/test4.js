@@ -184,9 +184,41 @@ const myTest = [
         },
         before: err => err(false),
         after: err => err(false),
-    }
-    // login as the new admin
-    // make illegal api calls
+    },
+    //@test4 index 8 login as the new admin
+    {
+        desc: 'owner admin login expected to succeed',
+        expected: true,
+        expectedMsg: 'Auth Ok',
+        input: {
+            username: 'johndoe',
+            password: 'passwordtesting123@',
+            section: 'adminMethods',
+            command: 'adminlogin'
+        },
+        before: err => err(false),
+        after: err => err(false),
+        data(data) {
+            console.log('testing')
+            myTest[9].input.token = data[0].data.actions[0].content.token
+            console.log(data[6].data.actions[0].content.token)         
+        }
+    },
+    //@test4 index 9 make illegal api call
+    {
+        desc: 'illegal api call',
+        expected: false,
+        expectedMsg: 'Illegal api call detected request is not permitted',
+        input: {
+            token: undefined,
+            username: 'johndoe',
+            password: 'passwordtesting123@',
+            section: 'adminMethods',
+            command: 'deleteAppAdmin'
+        },
+        before: err => err(false),
+        after: err => err(false)
+    },
 
     // update a role
     // delete a role
