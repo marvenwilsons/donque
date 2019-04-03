@@ -174,7 +174,7 @@ const Cardinal = async ({ username, password, token, data, command, section, met
              */
             const _d = commandIsAllowed.data
             //@cardinal Admin's dependencies
-            const param = section != 'adminMethods' ? data : { dep: { ..._d, jwt, validator, encrypt, decode, dbAgent }, username, password, token, data }
+            const param = section != 'adminMethods' ? data : { dep: { ..._d, userdb ,jwt, validator, encrypt, decode, dbAgent }, username, password, token, data }
 
             console.log(`   [CardinalSystem] Entering ${section}`)
             console.log(`   [CardinalSystem] Executing ${command}`)
