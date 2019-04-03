@@ -1,17 +1,34 @@
-const permissionHandler = (permissions) => {
+const permissionHandler = ({ dep, permissions, userData }) => {
     // @dqsys: auth: todo: permissionHandler(),
-    console.log('   [Universal protocol] permission handler')
-    return true
+    console.log('** permission handler')
+    if (permissions != null) {
+        console.log(userData)
+    } else {
+        console.log('   [permissionHandler] permission is null returning true')
+        return true
+    }
 }
 
 const commitsHandler = (commitId) => {
     // @dqsys: auth: todo: commitsHandler(),
 }
 
-const adminTitleValidator = (titles) => {
+const adminTitleValidator = ({title, userTitle}) => {
     // @dqsys: auth: todo: adminTitleValidator(),
-    console.log('   [Universal protocol] title handler')
-    return true
+    console.log('** admin title validator')
+    
+    if (userTitle.includes(title)){
+        return true
+    } else {
+        console.log('   [adminTitleValidator] action not permitted')
+        return {
+            msg: 'Action not permitted',
+            actions: [{
+                title: 'prompt_err'
+            }]
+        }
+    }
+
 }
 
 const sectionHandler = (section) => {
@@ -21,25 +38,25 @@ const sectionHandler = (section) => {
 
 const functionHandler = ({ dep, isDestructive, userData, pwd, username }) => {
     // @dqsys: auth: todo: functionHandler(),
-    const {decode} = dep
-    
-    console.log('   [Universal protocol] function handler')
-    
-    if (!isDestructive){
-        return true
-    }else {
-        if(pwd){
-            // compare password
-            const isValid = decode(userData.password, username).toString() === pwd.toString() ? true : ''
+    const { decode } = dep
 
-            return decode(userData.password, username).toString() === pwd.toString() ? true : {
+    console.log('** function handler')
+    if (!isDestructive) {
+        console.log('   [functionHandler] function is not destructive')
+        return true
+    } else {
+        console.log('   [functionHandler] function is destructive, password is required')
+        if (pwd) {
+            // compare password
+            console.log('   [functionHandler] password field found, authenticating ...')
+            return decode(userData.password, username).toString() === pwd ? true : {
                 msg: 'Authentication failed',
                 actions: [{
                     title: 'prompt_err'
                 }]
             }
-        }else{
-            console.log('   [Universal protocol] password not found')
+        } else {
+            console.log('   [functionHandler] password field not found, prompting user for password')
             return {
                 msg: 'Password required',
                 actions: [{
@@ -65,14 +82,14 @@ const validateUserExistance = async ({ ...dbs }, { username, token, command }) =
     return new Promise(async (resolve, reject) => {
         return userdb.findOne({ username }).then(user => {
             resolve({
-                    validated: true,
-                    accessType: fullPrevilegeTitle.includes(user.title) ? 'full' : 'limited',
-                    data: {
-                        user,
-                        db
-                    }
-                })
-            
+                validated: true,
+                accessType: fullPrevilegeTitle.includes(user.title) ? 'full' : 'limited',
+                data: {
+                    user,
+                    db
+                }
+            })
+
 
         }).catch(err => {
             console.log('   [Auth] User validation fail!')
@@ -101,10 +118,10 @@ const firstLayerAuthentication = async ({ ...dbs }, { command }) => {
         .forEach(items => {
             liveAdmins = items
         })
-        .then(data => {
+        .then(() => {
             return liveAdmins.currentLiveAdmins
         })
-
+    console.log(currentLiveAdmins)
     return new Promise((resolve, reject) => {
         if (currentLiveAdmins.length === 0 && command != 'adminlogin') {
             resolve(false)
@@ -114,20 +131,20 @@ const firstLayerAuthentication = async ({ ...dbs }, { command }) => {
     })
 }
 
-const validateToken = ({data, token, jwt, encrypt, decode, command}) => {
+const validateToken = ({ data, token, jwt, encrypt, decode, command }) => {
     const userId = data.user._id
     const encryptedPassword = data.user.password
     const userUsername = data.user.username
 
-    if(command == 'adminlogin'){
+    if (command == 'adminlogin') {
         return true
-    }else {
-        try{
+    } else {
+        try {
             const decodedToken = jwt.verify(token, encrypt(decode(encryptedPassword, userUsername), userId))
             return decodedToken._id.toString() === userId.toString()
-        }catch(err){
+        } catch (err) {
             return false
-        }    
+        }
     }
 }
 
@@ -162,42 +179,86 @@ const auth = async ({ dep, selectedCommand, username, password, token, command, 
                 // @dqsys: auth: validate token, app admin case, todo
 
                 console.log('   [Auth] access type is limited')
-                const res = [
-                    { output: permissionHandler(selectedCommand.prop) },
-                    { output: adminTitleValidator(selectedCommand.prop) },
-                    { output: functionHandler(selectedCommand.prop) }
-                ]
-                let pIndex = undefined
-                const temp = res.map((e, i) => e.output === true ? true : pIndex = i)
 
-                if (temp.every(items => items === true)) {
+                let hasErr = undefined
+
+                // part1
+                const functionHandler_response = functionHandler({
+                    dep: {
+                        encrypt,
+                        decode
+                    },
+                    isDestructive: selectedCommand.prop.funcIsDestructive,
+                    userData: userDoesExist.data.user,
+                    pwd: password,
+                    username
+                })
+
+                if (functionHandler_response != true) {
+                    hasErr = functionHandler_response
+                }
+
+                // part2
+                const permissionHandler_response = permissionHandler({
+                    dep: {
+                        encrypt,
+                        decode
+                    },
+                    permissions: selectedCommand.prop.permissions,
+                    userData: userDoesExist.data.user
+                })
+
+                if (permissionHandler_response != true) {
+                    hasErr = permissionHandler_response
+                }
+
+                // part3
+                const adminTitleValidator_response = adminTitleValidator({
+                    title: selectedCommand.prop.allowedtitle,
+                    userTitle: userDoesExist.data.user.title
+                })
+
+                if(adminTitleValidator_response != true) {
+                    hasErr = adminTitleValidator_response
+                }
+
+                if (!hasErr) {
                     callback(null, {
-                        status: true
+                        status: true,
+                        data: userDoesExist.data
                     })
                 } else {
-                    callback(res[pIndex].output, null)
+                    console.log('there is error')
+                    callback({
+                        status: false,
+                        data: {
+                            command,
+                            section,
+                            ...hasErr
+                        }
+                    })
                 }
             } else if (userDoesExist.validated && userDoesExist.accessType == 'full') {
                 console.log('   [Auth] access type is full')
-                
-                if (validateToken({ data: userDoesExist.data, jwt, token, encrypt, decode, command })){
+
+                if (validateToken({ data: userDoesExist.data, jwt, token, encrypt, decode, command })) {
                     const functionHandler_response = functionHandler({
                         dep: {
                             encrypt,
                             decode
                         },
-                        isDestructive: selectedCommand.prop.funcIsDestructive, 
-                        userData: userDoesExist.data.user, 
-                        pwd: password, 
-                        username 
+                        isDestructive: selectedCommand.prop.funcIsDestructive,
+                        userData: userDoesExist.data.user,
+                        pwd: password,
+                        username
                     })
-                    
-                    if (typeof functionHandler_response === 'boolean'){
+
+                    if (typeof functionHandler_response === 'boolean') {
                         callback(null, {
                             status: true,
                             data: userDoesExist.data
                         })
-                    }else{
+                    } else {
                         console.log('handler response')
                         console.log({
                             status: false,
@@ -216,18 +277,18 @@ const auth = async ({ dep, selectedCommand, username, password, token, command, 
                             }
                         })
                     }
-                }else{
+                } else {
                     callback({
                         status: false,
                         data: {
                             msg: 'Invalid or expired token',
-                            actions:[{
+                            actions: [{
                                 title: 'prompt_err'
                             }]
                         }
                     })
                 }
-                
+
             } else if (userDoesExist.validated == false) {
                 // @dqsys: auth: user does not exist in db
                 console.log(`   [Auth] Cannot validate "${username}" because it does not exist in the database`)
