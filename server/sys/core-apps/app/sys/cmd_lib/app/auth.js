@@ -16,13 +16,13 @@ const commitsHandler = (commitId) => {
 const adminTitleValidator = ({title, userTitle}) => {
     // @dqsys: auth: todo: adminTitleValidator(),
     console.log('** admin title validator')
-    
-    if (userTitle.includes(title)){
+    console.log(`   [adminTitleValidator] required admin title - ${title}`)
+    if (userTitle.includes(title) || title === null){
         return true
     } else {
         console.log('   [adminTitleValidator] action not permitted')
         return {
-            msg: 'Action not permitted',
+            msg: `Action is not permitted for an admin title "${userTitle}"`,
             actions: [{
                 title: 'prompt_err'
             }]
@@ -132,17 +132,20 @@ const firstLayerAuthentication = async ({ ...dbs }, { command }) => {
 }
 
 const validateToken = ({ data, token, jwt, encrypt, decode, command }) => {
+    console.log('** validating token')
     const userId = data.user._id
     const encryptedPassword = data.user.password
     const userUsername = data.user.username
-
     if (command == 'adminlogin') {
+        console.log('   [validateToken] Token not needed')
         return true
     } else {
         try {
             const decodedToken = jwt.verify(token, encrypt(decode(encryptedPassword, userUsername), userId))
+            console.log(`   [validateToken] ${decodedToken._id.toString() === userId.toString() ? 'token accepted' : 'token is invalid'}`)
             return decodedToken._id.toString() === userId.toString()
         } catch (err) {
+            console.log(err)
             return false
         }
     }
@@ -222,13 +225,22 @@ const auth = async ({ dep, selectedCommand, username, password, token, command, 
                     hasErr = adminTitleValidator_response
                 }
 
+                // part4
+                if (!validateToken({ data: userDoesExist.data, jwt, token, encrypt, decode, command })){
+                    hasErr = {
+                        msg: 'Invalid or expired token',
+                        actions: [{
+                            title: 'prompt_err'
+                        }]
+                    }
+                }
+
                 if (!hasErr) {
                     callback(null, {
                         status: true,
                         data: userDoesExist.data
                     })
                 } else {
-                    console.log('there is error')
                     callback({
                         status: false,
                         data: {
