@@ -94,25 +94,25 @@ protocols.dqinitapp = {
             emailIsValid.hasError == false
         ]
 
-        const vs = ['siteTitle','username','password','email']
+        const vs = ['siteTitle', 'username', 'password', 'email']
 
         const f = async () => {
             console.log('   [dqInitapp] validating inputs')
 
             let stat = []
             let err = undefined
-            
+
             //
-            const validationResuls = validationState.every(items => items === true) ? 
-            stat.push(true) : 
-            validationState.map((e,i) => e != true && (err = `Invalid ${vs[i]}`))
+            const validationResuls = validationState.every(items => items === true) ?
+                stat.push(true) :
+                validationState.map((e, i) => e != true && (err = `Invalid ${vs[i]}`))
             console.log(`  [dqInitapp] ${err ? 'validation failed' : 'validation success'}`)
 
             //
             const isInit = err ? err : await initApplicationProtocol(data).then(() => true).catch(err => err)
-            
+
             isInit === true ? stat.push(isInit) : (stat.push(isInit), err = isInit)
-            
+
             const res1 = stat.every(i => i == true)
             const res = res1 ? {
                 status: true,
@@ -120,28 +120,29 @@ protocols.dqinitapp = {
                     msg: `Successfully created ${data.siteTitle}`,
                     actions: [{
                         title: 'redirect',
-                        content:'dqlogin'
+                        content: 'dqlogin'
                     }]
                 }
             } : {
-                status: false,
-                data: {
-                    actions: [{
-                        title:'prompt_err'
-                    }],
-                    msg: err
+                    status: false,
+                    data: {
+                        actions: [{
+                            title: 'prompt_err'
+                        }],
+                        msg: err
+                    }
                 }
-            }
 
             return await res
         }
-        
+
         return res = await f()
     }
 }
 
+//@protocols
 const initApplicationProtocol = async ({ siteTitle, username, password, email, adminName }, callback) => {
-    return new Promise((resolve,reject) => {
+    return new Promise((resolve, reject) => {
         const dbName = `dq_${siteTitle}`
 
         /**
@@ -206,14 +207,157 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                     messages: [],
                     lastModefied: '',
                     lastActivity: '',
-                    activities:[]
+                    activities: []
                 }
             }, {
                 colName: 'dq_config', data: {
                     adminLanding: 'admin',
-                    protectedRoutes: []
+                    protectedRoutes: [],
+                    authentication: [{
+                        tokenExpr: '7 days',
+                        refreshTokenEveryTransaction: false,
+                        secreteSalt: ''
+                    }]
                 }
-            },{
+            }, {
+                colName: 'dq_resource_registry', data: {
+                    administration: [
+                        // create
+                        'create:createNewAppActor:adminMethods',
+                        'create:createTeam:adminMethods',
+                        // read
+                        'read:listAdmins:adminMethods',
+                        'read:viewAppAdmin:adminMethods',
+                        'read:searchQueryAppAdmin:adminMethods',
+                        'read:listAllTeams:adminMethods',
+                        'read:viewTeam:adminMethods',
+                        // update
+                        'update:assignAppActorToTeam:adminMethods',
+                        'update:assignColorToTeam:adminMethods',
+                        'update:renameTeam:adminMethods',
+                        'update:updateAppActor:adminMethods',
+                        'update:logoutAppActor:adminMethods',
+                        // delete
+                        'delete:deleteAppActor:adminMethods'
+                    ],
+                    page: [
+                        // create
+                        'create:createNewPage:pageMethods',
+                        // read
+                        'read:listAllPages:pageMethods',
+                        'read:getPage:pageMethods',
+                        'read:searchQueryPage:pageMethods',
+                        // update
+                        'update:luckPage:pageMethods',
+                        'update:assignPageDev:pageMethods',
+                        'update:currentDevWorking:pageMethods', // for system only
+                        'update:updateLastModifiedDate:pageMethods', // for system only
+                        'update:commitPageChanges:pageMethods',
+                        // delete
+                        'delete:deletePage:pageMethods'
+                    ],
+                    components: [
+                        // create
+                        'create:createComponent:compMethods',
+                        // read
+                        'read:listAllComp:compMethods',
+                        'read:getComp:compMethods',
+                        // update
+                        'update:updateComp:compMethods',
+                        // delete
+                        'delete:deleteComp"compMethods'
+                    ],
+                    // 1. the person who creates the collections and its category is the owner
+                    // 1.1 ex. of a collection: movie
+                    // 2. then the owner will assign an admin to manage the category 
+                    // 2.1 ex. of a category: horror, comedy
+                    collections: [
+                        // create
+                        'create:createCollection:colMethods',
+                        'create:createColCategory:colMethods',
+                        // read
+                        'read:listAllCol:colMethods',
+                        'read:getCol:colMethods',
+                        // update
+                        'update:updateCol:colMethods',
+                        'update:updateCategory:colMethods',
+                        'update:updateLastModifiedDate:colMethods', // for system only
+                        'update:assignAdminToCollection:colMethods',
+                        'update:assignAdminToCategory:colMethods',
+                        'update:removeAdminToCollection:colMethods',
+                        'update:defineCategoryProperties:colMethods', // for ex. a prop name "start count" or "like count, or "img"
+                        'update:defineCategoryMethods:colMethods',
+                        // delete
+                        'delete:deleteCol:colMethods',
+                        'delete:deleteColCategory:colMethods'
+                    ],
+                    messages: [
+                        // create
+                        'create:composeNewMessage:msgMethods',
+                        'create:saveMsgAsDraft:msgMethods',
+                        'create:replyToMsg:msgMethods',
+                        // read
+                        'read:listAllMsg:msgMethods',
+                        'read:getMSg:msgMethods',
+                        // update
+                        'update:updateSentOnDate:msgMethods', // for system only
+                        'update:updateUnreadMsg:msgMethods', // for system only
+                        // delete
+                        'delete:deleteMsg:msgMethods'
+                    ],
+                    task:[
+                        // create
+                        'create:createNewTask:taskMethods',
+                        'create:createNewTaskFor:taskMethods',
+                        // read
+                        'read:getTaskList:taskMethods',
+                        'read:getTask:taskMethods',
+                        // update
+                        'update:editTask:taskMethods',
+                        'update:assinTaskTo:taskMethods',                        
+                        'update:updateLastModifiedDate:taskMethods', // for system only
+                        // delete
+
+                    ],
+                    todos:[
+                        // create
+                        'create:createNewTodo:todoMethods',
+                        // read
+                        'read:listAllTodos:todoMethods',
+                        'read:getTodo:todoMethods',
+                        // update
+                        'update:updateTodo:todoMethods',
+                        'update:markTodoAsDone:todoMethods',
+                        // delete
+                        'delete:deleteTodo:todoMethods',
+                    ],
+                    work:[
+                        // read
+                        'read:getAssignedResource:workMethods', // returns the categories and methods for managing, this is assigned by the parent admin
+                        'read:getOrganizationalChart:workMethods'
+                    ],
+                    profile:[
+                        // read
+                        'read:getProfile:profileMethods'
+                    ],
+                    plugins: [
+                        // read
+                        'read:getPluginList:pluginMethods',
+                        // update
+                        'update:deactivatePlugin:pluginMethods',
+                        'update:activatePlugin:pluginMethods',
+                        // delete
+                        'delete:removePlugin:pluginMethods'
+                    ],
+                    settings:[],
+                    settings_appearance:[],
+                    settings_security: [],
+                    // where you can install plugins and install component sets or themes 
+                    marketplace:[],
+                    database:[],
+                    console:[]
+                }
+            }, {
                 colName: 'dq_admin_role', data: {
                     roleTitle: 'owner',
                     sectionPermissions: {
@@ -281,7 +425,7 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
             })
         }).catch(err => {
             throw new Error(err.message)
-        })  
+        })
     })
 }
 
