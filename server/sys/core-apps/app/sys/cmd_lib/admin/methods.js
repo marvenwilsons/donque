@@ -1,20 +1,23 @@
 const adminMethods = {}
 
 let adminData = undefined
+/*****************************************************
+ * Access
+ */
 // Login <<- done
 adminMethods.adminlogin = {
     get prop() {
         return {
-            permissions: null,
             allowedtitle: null,
             funcIsDestructive: false
         }
     },
     adminlogin({ dep, username, password }) {
         // @dqsys: admin: adminlogin()
-        const { user, db, jwt, encrypt, decode } = dep
+        const { user, userdb, db, jwt, encrypt, decode } = dep
         let reUser = user
         console.log('** admin login')
+        const siteTitle = userdb.data.doc.appName.toString().replace('dq_', '')
         // check user name validity
 
         const updateUser = () => {
@@ -51,7 +54,7 @@ adminMethods.adminlogin = {
             return db
                 .collection('dq_app')
                 .findOneAndUpdate(
-                    { siteOwner: user.adminName },
+                    { siteTitle },
                     {
                         $push: {
                             currentLiveAdmins: {
@@ -112,41 +115,10 @@ adminMethods.adminlogin = {
                 })
             } else {
                 console.log('adminlogin error not yet ready')
-                console.log(u)
-            }
-        })
-    }
-}
-
-// init admin dashboard << -done
-adminMethods.initAdminDashboard = {
-    get prop() {
-        return {
-            permissions: null,
-            allowedtitle: null,
-            funcIsDestructive: false
-        }
-    },
-    initAdminDashboard({ dep, username, token }) {
-        // @dqsys: admin: initAdminDashboard()
-        console.log('** init admin dashboard')
-        return new Promise((resolve, reject) => {
-            if (adminData && username === adminData.value.username && token === adminData.value.token) {
-                resolve({
-                    status: true,
-                    data: {
-                        msg: null,
-                        actions: [{
-                            title: 'saveToLocalStorage',
-                            content: adminData
-                        }],
-                    }
-                })
-            } else {
                 reject({
                     status: false,
                     data: {
-                        msg: 'Error while initializing admin',
+                        msg: 'Invalid username or password',
                         actions: [{
                             title: 'prompt_err'
                         }]
@@ -156,12 +128,10 @@ adminMethods.initAdminDashboard = {
         })
     }
 }
-
 // logout <<- done
 adminMethods.adminLogout = {
     get prop() {
         return {
-            permissions: null,
             allowedtitle: null,
             funcIsDestructive: false
         }
@@ -234,19 +204,19 @@ adminMethods.adminLogout = {
     }
 
 }
-
-
-// create new application admin <<- done
-adminMethods.createAppAdmin = {
+/**
+ * Create methods for admin
+ */
+//@adminMethods:create. create new application admin <<- todo
+adminMethods.createNewAppActor = {
     get prop() {
         return {
-            permissions: null,
             allowedtitle: ['owner'],
             funcIsDestructive: false
         }
     },
-    createAppAdmin({ dep, data }) {
-        // @dqsys: admin: createAppAdmin()
+    createNewAppActor({ dep, data }) {
+        // @dqsys: admin: createNewAppActor()
         console.log('** Creating application Admin')
         // get schema
         // hash the username and password
@@ -258,7 +228,7 @@ adminMethods.createAppAdmin = {
         let hasError = false
 
         const err = (err) => {
-            console.log('   [createAppAdmin] validation failed')
+            console.log('   [createNewAppActor] validation failed')
             hasError = true
             return {
                 status: false,
@@ -272,7 +242,7 @@ adminMethods.createAppAdmin = {
         }
 
         return new Promise(async (resolve, reject) => {
-            console.log('   [createAppAdmin] validating inputs')
+            console.log('   [createNewAppActor] validating inputs')
             const CANNOT_BE_UNDEFINED_SET = new validator({
                 username,
                 password,
@@ -291,7 +261,7 @@ adminMethods.createAppAdmin = {
             /**
              * Validate Username
              */
-            console.log('   [createAppAdmin] validating username')
+            console.log('   [createNewAppActor] validating username')
             const USERNAME = new validator(username, 'username')
             const validate_username = USERNAME
                 .hasSpecialCharacters(false)
@@ -308,7 +278,7 @@ adminMethods.createAppAdmin = {
             /**
              * Validate password
              */
-            console.log('   [createAppAdmin] validating password')
+            console.log('   [createNewAppActor] validating password')
             const PASSWORD = new validator(password, 'password')
             const validate_password = PASSWORD
                 .hasWhiteSpace(false)
@@ -321,7 +291,7 @@ adminMethods.createAppAdmin = {
             /**
              * Validate admin name
              */
-            console.log('   [createAppAdmin] validating admin name')
+            console.log('   [createNewAppActor] validating admin name')
             const ADMIN_NAME = new validator(adminName, 'admin name')
             const validate_admin_name = ADMIN_NAME
                 .required()
@@ -335,7 +305,7 @@ adminMethods.createAppAdmin = {
             /**
              * Validate role
              */
-            console.log('   [createAppAdmin] validating role title')
+            console.log('   [createNewAppActor] validating role title')
             const A_RULES = new validator(roleTitle, 'admin roles')
             const validate_roles = A_RULES
                 .required()
@@ -354,7 +324,7 @@ adminMethods.createAppAdmin = {
             /**
              * Validate email
              */
-            console.log('   [createAppAdmin] validating email')
+            console.log('   [createNewAppActor] validating email')
             const EMAILS = new validator(email, 'admins email')
             const validate_email = EMAILS
                 .required()
@@ -387,6 +357,14 @@ adminMethods.createAppAdmin = {
                     pending: [],
                     done: []
                 },
+                parentAdmin: '',
+                childAdmins: [],
+                resources: [
+                    { name: 'dashboard' },
+                    { name: 'messages' },
+                    { name: 'tasks' },
+                    { name: 'work' },
+                ], // should be encrypted
                 adminInstanceAllowed: 1,
                 messages: [],
                 lastModefied: '',
@@ -399,10 +377,10 @@ adminMethods.createAppAdmin = {
              * Saving object to database
              */
             if (!hasError) {
-                console.log('   [createAppAdmin] writting new admin to database')
+                console.log('   [createNewAppActor] writting new admin to database')
                 db.collection('dq_admins').insertOne(admin_doc)
                     .then(data => {
-                        console.log(`   [createAppAdmin] ${adminName} successfully saved to database`)
+                        console.log(`   [createNewAppActor] ${adminName} successfully saved to database`)
                         resolve({
                             status: true,
                             data: {
@@ -414,7 +392,7 @@ adminMethods.createAppAdmin = {
                         })
                     })
                     .catch(err => {
-                        console.log(`   [createAppAdmin] an unexpected error occured while inserting admin to database`)
+                        console.log(`   [createNewAppActor] an unexpected error occured while inserting admin to database`)
                         reject({
                             status: false,
                             data: {
@@ -430,9 +408,8 @@ adminMethods.createAppAdmin = {
 
     }
 }
-
-// creates a rule that will be applied for admins <<- done
-adminMethods.createAppAdminRule = {
+//@adminMethods:create. creates a rule that will be applied for admins <<- done
+adminMethods.createNewAppActorRule = {
     get prop() {
         return {
             permissions: null,
@@ -440,8 +417,8 @@ adminMethods.createAppAdminRule = {
             funcIsDestructive: false
         }
     },
-    createAppAdminRule({ dep, data }) {
-        // @dqsys: admin: createAppAdminRule()
+    createNewAppActorRule({ dep, data }) {
+        // @dqsys: admin: createNewAppActorRule()
         console.log('** creating app admin role!')
 
         const { approach, permission, roleTitle } = data
@@ -452,7 +429,7 @@ adminMethods.createAppAdminRule = {
         let hasError = false
 
         const err = (err) => {
-            console.log('   [createAppAdminRole] validation failed')
+            console.log('   [createNewAppActorRole] validation failed')
             hasError = true
             return {
                 status: false,
@@ -482,7 +459,7 @@ adminMethods.createAppAdminRule = {
                             }
                         }
                     }).catch(err => {
-                        console.log('   [createAppAdminRole] Creating Permission Error')
+                        console.log('   [createNewAppActorRole] Creating Permission Error')
                         console.log(err)
                     })
             }
@@ -572,8 +549,163 @@ adminMethods.createAppAdminRule = {
 
     }
 }
+//@adminMethods:create. create team
+adminMethods.createTeam = {
+}
+//@adminMethods:create. create custom role
+adminMethods.createCustomRole = {
+}
+/*****************************************************
+ * Read methods for admin
+ */
+//@adminMethods:read init admin dashboard << -done
+adminMethods.initActorsDashboard = {
+    get prop() {
+        return {
+            allowedtitle: null,
+            funcIsDestructive: false
+        }
+    },
+    initActorsDashboard({ dep, username, token }) {
+        // @dqsys: admin: initAdminDashboard()
+        console.log('** init admin dashboard')
+        return new Promise((resolve, reject) => {
+            if (adminData && username === adminData.value.username && token === adminData.value.token) {
+                resolve({
+                    status: true,
+                    data: {
+                        msg: null,
+                        actions: [{
+                            title: 'saveToLocalStorage',
+                            content: {
+                                token: adminData.value.token,
+                                username: adminData.value.username
+                            }
+                        }, {
+                            title: 'cardinalHandler',
+                            content: {
+                                title: adminData.value.title,
+                                username: adminData.value.username,
+                                adminName: adminData.value.adminName,
+                                email: adminData.value.email,
+                                resources: adminData.value.resource
+                            }
+                        }],
+                    }
+                })
+            } else {
+                reject({
+                    status: false,
+                    data: {
+                        msg: 'Error while initializing admin',
+                        actions: [{
+                            title: 'prompt_err'
+                        }]
+                    }
+                })
+            }
+        })
+    }
+}
+//@adminMethods:read list admins
+adminMethods.listAdmins = {
+}
+//@adminMethods:read viewAppAdmin <<-done
+adminMethods.viewAppAdmin = {
+    get prop() {
+        return {
+            permissions: null,
+            allowedtitle: ['owner'],
+            funcIsDestructive: false
+        }
+    },
+    viewAppAdmin({ dep, data }) {
+        // @dqsys: admin: viewAppAdmin()
+        const { db } = dep
 
-// UpdateAdmin <<- done
+        return new Promise(async (resolve, reject) => {
+            const user = await db.collection('dq_admins').findOne(data)
+            const allowedSearchKeys = ['username', 'adminName', 'title', 'email', 'ip']
+            const inp = allowedSearchKeys.includes(Object.keys(data)[0])
+            let err = false
+
+            if (!inp) {
+                err = true
+                reject({
+                    status: false,
+                    data: {
+                        msg: `Invalid key ${Object.keys(data)[0]}`,
+                        actions: [{
+                            title: 'prompt_err'
+                        }]
+                    }
+                })
+            }
+
+            if (Object.keys(data).length != 1) {
+                err = true
+                reject({
+                    status: false,
+                    data: {
+                        msg: `Invalid input, too many keys for a findOne operation`,
+                        actions: [{
+                            title: 'prompt_err'
+                        }]
+                    }
+                })
+            }
+
+            if (user && err == false) {
+                resolve({
+                    status: true,
+                    data: {
+                        msg: null,
+                        actions: [],
+                        content: user
+                    }
+                })
+            } else if (!user) {
+                reject({
+                    status: false,
+                    data: {
+                        msg: `There is no such admin ${data[Object.keys(data)]}`,
+                        actions: [{
+                            title: 'prompt_err'
+                        }]
+                    }
+                })
+            }
+        })
+    }
+}
+//@adminMethods:read list all teams
+adminMethods.listAllTeams = {
+}
+//@adminMethods:read view team
+adminMethods.viewTeam = {
+}
+//@adminMethods:read list all custom role
+adminMethods.listAllCustomRole = {
+}
+//@adminMethods:read get custom role
+adminMethods.getCustomRole = {
+}
+/*****************************************************
+ * Update methods
+ */
+//@adminMethods:update. assign app actor to team
+adminMethods.assignAppActorToTeam = {
+}
+//@adminMethods:update. assign app actor to role
+adminMethods.asssignAppActorToRole = {
+}
+//@adminMethods:update. assign color to team
+adminMethods.assignAppActorToTeam = {
+}
+//@admunMethods:update. rename team
+adminMethods.renameTeam = {
+}
+//@adminMethods:update. UpdateAdmin <<- done
 adminMethods.updateAppAdmin = {
     get prop() {
         return {
@@ -736,9 +868,8 @@ adminMethods.updateAppAdmin = {
 
     }
 }
-
-// viewAppAdmin <<-done
-adminMethods.viewAppAdmin = {
+//@adminMethod:update. update app settings
+adminMethods.updateAppSettings = {
     get prop() {
         return {
             permissions: null,
@@ -746,67 +877,17 @@ adminMethods.viewAppAdmin = {
             funcIsDestructive: false
         }
     },
-    viewAppAdmin({ dep, data }) {
-        // @dqsys: admin: viewAppAdmin()
-        const { db } = dep
+    updateAppSettings({ SettingName, SettingValue }) {
 
-        return new Promise(async (resolve, reject) => {
-            const user = await db.collection('dq_admins').findOne(data)
-            const allowedSearchKeys = ['username', 'adminName', 'title', 'email', 'ip']
-            const inp = allowedSearchKeys.includes(Object.keys(data)[0])
-            let err = false
-
-            if (!inp) {
-                err = true
-                reject({
-                    status: false,
-                    data: {
-                        msg: `Invalid key ${Object.keys(data)[0]}`,
-                        actions: [{
-                            title: 'prompt_err'
-                        }]
-                    }
-                })
-            }
-
-            if (Object.keys(data).length != 1) {
-                err = true
-                reject({
-                    status: false,
-                    data: {
-                        msg: `Invalid input, too many keys for a findOne operation`,
-                        actions: [{
-                            title: 'prompt_err'
-                        }]
-                    }
-                })
-            }
-
-            if (user && err == false) {
-                resolve({
-                    status: true,
-                    data: {
-                        msg: null,
-                        actions: [],
-                        content: user
-                    }
-                })
-            } else if (!user) {
-                reject({
-                    status: false,
-                    data: {
-                        msg: `There is no such admin ${data[Object.keys(data)]}`,
-                        actions: [{
-                            title: 'prompt_err'
-                        }]
-                    }
-                })
-            }
-        })
     }
 }
-
-// Delete Admin
+//@adminMethods:update.
+adminMethods.updateCustomRole = {
+}
+/*****************************************************
+ * Delete methods
+ */
+//@adminMethods:delete. delete app admin
 adminMethods.deleteAppAdmin = {
     get prop() {
         return {
@@ -823,7 +904,11 @@ adminMethods.deleteAppAdmin = {
         let err = undefined
         let key = undefined
 
-        if (Object.keys(data).length != 1) {
+        console.log(data)
+
+        if(!data){
+            err = 'Invalid input data is undefined'
+        }else if (Object.keys(data).length != 1) {
             err = 'Invalid input cannot have more than one filter'
         } else {
             key = Object.keys(data)[0]
@@ -880,51 +965,17 @@ adminMethods.deleteAppAdmin = {
         })
     }
 }
+//@adminMethods:delete. delete custom role
+adminMethods.removeCustomRole = {
+}
+//@adminMethods:delete. reset app
+adminMethods.resetApp = {
+}
+//@adminMethods:delete. purge app
+adminMethods.purgeApp = {
 
-// create new database admin
-adminMethods.createDbAdmin = {
-    // @dqsys: admin: todo: createDbAdmin()
 }
 
-// kill database connection
-adminMethods.killDbConnection = {
-    get prop() {
-        return {
-            permissions: null,
-            allowedtitle: ['owner'],
-            funcIsDestructive: true
-        }
-    },
-    killDbConnection() {
-        // @dqsys: admin: todo: killDbConnection()
 
-    }
-}
-
-adminMethods.updateAppSettings = {
-    get prop() {
-        return {
-            permissions: null,
-            allowedtitle: ['owner'],
-            funcIsDestructive: false
-        }
-    },
-    updateAppSettings({ SettingName, SettingValue }) {
-
-    }
-}
-
-// message an admin
-// assign task to admin
-
-//
-adminMethods.properties = {
-    get NoValidationRequiredCommands() {
-        return ['initapp']
-    },
-    get Pages() {
-
-    }
-}
 
 module.exports = adminMethods
