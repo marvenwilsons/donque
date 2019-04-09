@@ -164,24 +164,38 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
              * Collections and its data
              */
             const app_resource = {
+                dashboard: [
+                    // create
+                    'create:addItem:dashMethods',
+                    // read
+                    'read:listAllDashItems:dashMethods'
+                    // update
+                    // delete
+                ],
                 administration: [
                     // create
-                    'create:createNewAppActor:adminMethods',
+                    'create:createNewAppActor:adminMethods', // actor because it can be dev or admin
                     'create:createTeam:adminMethods',
+                    'create:createCustomRole',
                     // read
                     'read:listAdmins:adminMethods',
                     'read:viewAppAdmin:adminMethods',
                     'read:searchQueryAppAdmin:adminMethods',
                     'read:listAllTeams:adminMethods',
                     'read:viewTeam:adminMethods',
+                    'read:getCustomRole:adminMethods',
+                    'read:listAllCustomRole:adminMethods',
                     // update
                     'update:assignAppActorToTeam:adminMethods',
+                    'update:asssignAppActorToRole:adminMethods',
                     'update:assignColorToTeam:adminMethods',
                     'update:renameTeam:adminMethods',
                     'update:updateAppActor:adminMethods',
                     'update:logoutAppActor:adminMethods',
+                    'update:updateCustomRole:adminMethods',
                     // delete
-                    'delete:deleteAppActor:adminMethods'
+                    'delete:deleteAppActor:adminMethods',
+                    'delete:removeCustomRole:adminMethods'
                 ],
                 page: [
                     // create
@@ -360,14 +374,9 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
             }, {
                 colName: 'dq_resource_registry', data: app_resource
             }, {
-                colName: 'dq_admin_role', data: {
+                colName: 'dq_actor_role', data: {
                     roleTitle: 'owner',
-                    sectionPermissions: {
-                        adminActions: ['c', 'r', 'u', 'd'],
-                        pageMethods: ['c', 'r', 'u', 'd'],
-                        components: ['c', 'r', 'u', 'd'],
-                        shell: ['c', 'r', 'u', 'd']
-                    }
+                    resource: app_resource
                 }
             }]
 
@@ -389,7 +398,40 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                  * Create admin to the database
                  */
                 if (CollectionsAndData.length - 1 === index) {
-                    // create user 
+                    // creating dev role
+                    client
+                        .db(dbName)
+                        .collection('dq_actor_role')
+                        .insertOne({
+                            roleTitle: 'dev',
+                            resource: {
+                                dashboard: app_resource.dashboard,
+                                page: app_resource.page,
+                                components: app_resource.components,
+                                messages: app_resource.messages,
+                                task: app_resource.task,
+                                todos: app_resource.todos,
+                                profile: app_resource.profile,
+                                plugins: app_resource.plugins
+                            }
+                        })
+                    // creating admin role
+                    client
+                        .db(dbName)
+                        .collection('dq_actor_role')
+                        .insertOne({
+                            roleTitle: 'admin',
+                            resource: {
+                                dashboard: app_resource.dashboard,
+                                work: app_resource.work,
+                                messages: app_resource.messages,
+                                task: app_resource.task,
+                                todos: app_resource.todos,
+                                profile: app_resource.profile,
+                            }
+                        })
+
+                    // creating user 
                     console.log('creating admin')
                     adminDb
                         .addUser(username, encrypt.encrypt(password, username), { roles: ['readWrite'] })
