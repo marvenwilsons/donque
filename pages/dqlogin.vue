@@ -55,6 +55,8 @@
 
 <script>
 import spinner from "@/server/sys/core-apps/pane-system/module/spinner-1.vue";
+import { mapGetters } from 'vuex'
+
 export default {
   data() {
     return {
@@ -88,21 +90,19 @@ export default {
           password: this.password
         })
         .then(response => {
-          const { status, data } = response.data;
-          console.log(status);
+		  const { status, data } = response;
+		  console.log('this is data')
+		//   console.log(data.actions);
+		  this.$store.state.actions = data.actions
+
           if (status) {
-            // set localstorage
-            localStorage.setItem("auth", data.token);
-            localStorage.setItem("username", data.username);
+			// set localstorage
+            localStorage.setItem("auth", data.actions[0].content.token);
+            localStorage.setItem("username", data.actions[0].content.username);
             console.log(localStorage.getItem("auth"));
             if (localStorage.getItem("auth")) {
               location.href = "admin";
             }
-            // this.$store.commit("setUserCredentials", data);
-
-            // if (this.$store.state.user != undefined) {
-            //   location.href =data.adminHref;
-            // }
           } else {
             this.err = true;
           }
