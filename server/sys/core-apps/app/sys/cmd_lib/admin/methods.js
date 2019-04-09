@@ -558,7 +558,7 @@ adminMethods.createCustomRole = {
 /*****************************************************
  * Read methods for admin
  */
-//@adminMethods:read init admin dashboard << -done
+//@adminMethods:read. init admin dashboard << -done
 adminMethods.initActorsDashboard = {
     get prop() {
         return {
@@ -607,10 +607,10 @@ adminMethods.initActorsDashboard = {
         })
     }
 }
-//@adminMethods:read list admins
+//@adminMethods:read. list admins
 adminMethods.listAdmins = {
 }
-//@adminMethods:read viewAppAdmin <<-done
+//@adminMethods:read. viewAppAdmin <<-done
 adminMethods.viewAppAdmin = {
     get prop() {
         return {
@@ -678,16 +678,16 @@ adminMethods.viewAppAdmin = {
         })
     }
 }
-//@adminMethods:read list all teams
+//@adminMethods:read. list all teams
 adminMethods.listAllTeams = {
 }
-//@adminMethods:read view team
+//@adminMethods:read. view team
 adminMethods.viewTeam = {
 }
-//@adminMethods:read list all custom role
+//@adminMethods:read. list all custom role
 adminMethods.listAllCustomRole = {
 }
-//@adminMethods:read get custom role
+//@adminMethods:read. get custom role
 adminMethods.getCustomRole = {
 }
 /*****************************************************
