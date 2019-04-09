@@ -168,6 +168,7 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                     // create
                     'create:addItem:dashMethods',
                     // read
+                    'read:initActorsDashboard:dashMethods', // for system only
                     'read:listAllDashItems:dashMethods'
                     // update
                     // delete
