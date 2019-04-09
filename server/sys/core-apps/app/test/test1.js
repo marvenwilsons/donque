@@ -233,7 +233,7 @@ const routine_a = [
         input: {
             username: 'foo',
             token: 'not a valid token',
-            command:'initAdminDashboard',
+            command:'initActorsDashboard',
             section:'adminMethods'
         },
         before: err => err(false),

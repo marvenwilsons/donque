@@ -70,7 +70,7 @@ const myTests = [
             username: undefined,
             token: undefined,
             section: 'adminMethods',
-            command:'initAdminDashboard'
+            command:'initActorsDashboard'
         },
         before: err => err(false),
         after: err => err(false),
@@ -113,7 +113,7 @@ const myTests = [
             username: 'jannyann',
             token: undefined,
             section: 'adminMethods',
-            command:'initAdminDashboard'
+            command:'initActorsDashboard'
         },
         before: err => err(false),
         after: err => err(false),
