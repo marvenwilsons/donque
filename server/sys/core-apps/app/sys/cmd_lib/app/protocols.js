@@ -164,7 +164,7 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
              * Collections and its data
              */
             const app_resource = {
-                dashboard: [
+                Dashboard: [
                     // create
                     'create:addItem:dashMethods',
                     // read
@@ -173,15 +173,19 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                     // update
                     // delete
                 ],
-                administration: [
+                Administration: [
+                    // access
+                    'access:adminLogout:adminMethods',
+                    'access:adminLogin:adminMethods',
                     // create
                     'create:createNewAppActor:adminMethods', // actor because it can be dev or admin
+                    'create:createNewAppActorRule:adminMethods',
                     'create:createTeam:adminMethods',
-                    'create:createCustomRole',
+                    'create:createCustomRole:adminMethods',
                     // read
+                    'read:initActorsDashboard:adminMethods',
                     'read:listAdmins:adminMethods',
                     'read:viewAppAdmin:adminMethods',
-                    'read:searchQueryAppAdmin:adminMethods',
                     'read:listAllTeams:adminMethods',
                     'read:viewTeam:adminMethods',
                     'read:getCustomRole:adminMethods',
@@ -191,14 +195,16 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                     'update:asssignAppActorToRole:adminMethods',
                     'update:assignColorToTeam:adminMethods',
                     'update:renameTeam:adminMethods',
-                    'update:updateAppActor:adminMethods',
-                    'update:logoutAppActor:adminMethods',
+                    'update:updateAppAdmin:adminMethods',
                     'update:updateCustomRole:adminMethods',
+                    'update:updateAppSettings:adminMethods',
                     // delete
-                    'delete:deleteAppActor:adminMethods',
-                    'delete:removeCustomRole:adminMethods'
+                    'delete:deleteAppAdmin:adminMethods',
+                    'delete:removeCustomRole:adminMethods',
+                    'delete:resetApp:adminMethods',
+                    'delete:purgeApp:adminMethods'
                 ],
-                page: [
+                Pages: [
                     // create
                     'create:createNewPage:pageMethods',
                     // read
@@ -214,7 +220,7 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                     // delete
                     'delete:deletePage:pageMethods'
                 ],
-                components: [
+                Components: [
                     // create
                     'create:createComponent:compMethods',
                     // read
@@ -229,7 +235,7 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                 // 1.1 ex. of a collection: movie
                 // 2. then the owner will assign an admin to manage the category 
                 // 2.1 ex. of a category: horror, comedy
-                collections: [
+                Collections: [
                     // create
                     'create:createCollection:colMethods',
                     'create:createColCategory:colMethods',
@@ -249,7 +255,7 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                     'delete:deleteCol:colMethods',
                     'delete:deleteColCategory:colMethods'
                 ],
-                messages: [
+                Messages: [
                     // create
                     'create:composeNewMessage:msgMethods',
                     'create:saveMsgAsDraft:msgMethods',
@@ -263,7 +269,7 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                     // delete
                     'delete:deleteMsg:msgMethods'
                 ],
-                task: [
+                Task: [
                     // create
                     'create:createNewTask:taskMethods',
                     'create:createNewTaskFor:taskMethods',
@@ -277,7 +283,7 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                     // delete
 
                 ],
-                todos: [
+                Todos: [
                     // create
                     'create:createNewTodo:todoMethods',
                     // read
@@ -289,15 +295,16 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                     // delete
                     'delete:deleteTodo:todoMethods',
                 ],
-                work: [
+                Work: [
                     // read
                     'read:getAssignedResource:workMethods', // returns the categories and methods for managing, this is assigned by the parent admin
                     'read:getOrganizationalChart:workMethods'
                 ],
-                profile: [
+                Profile: [
                     // read
                     'read:getProfile:profileMethods'
                 ],
+                Files: [],
                 plugins: [
                     // read
                     'read:getPluginList:pluginMethods',
@@ -307,12 +314,15 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                     // delete
                     'delete:removePlugin:pluginMethods'
                 ],
-                settings: [],
-                settings_appearance: [],
-                settings_security: [],
+                Settings: [],
+                Settings_appearance: [],
+                Settings_security: [],
                 // where you can install plugins and install component sets or themes 
-                marketplace: [],
-                database: [],
+                Marketplace: [],
+                Database: [
+                    // update
+                    'update:killDbConnection:dbMethods',
+                ],
                 console: []
             }
             const CollectionsAndData = [{
