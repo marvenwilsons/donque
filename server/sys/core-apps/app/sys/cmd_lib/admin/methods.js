@@ -582,7 +582,7 @@ adminMethods.initActorsDashboard = {
                                 username: adminData.value.username
                             }
                         }, {
-                            title: 'cardinalHandler',
+                            title: 'init_user',
                             content: {
                                 title: adminData.value.title,
                                 username: adminData.value.username,
