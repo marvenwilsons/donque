@@ -163,7 +163,7 @@ const auth = async ({ dep, selectedCommand, username, password, token, command, 
                 msg: 'Illegal api call detected request is not permitted',
                 actions: [{
                     title: 'redirect',
-                    contents: 'dqlogin',
+                    content: 'dqlogin',
                 }]
             }
         })
