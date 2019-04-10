@@ -159,7 +159,7 @@ const myTests = [
             username: undefined,
             token: undefined,
             section:'adminMethods',
-            command:'createAppAdmin',
+            command:'createNewAppActor',
             data: {
                 username: 'sampleusername',
                 password: 'samplepassword123@',
