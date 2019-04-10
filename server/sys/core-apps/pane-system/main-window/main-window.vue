@@ -44,6 +44,7 @@ import marketplace from "@/server/sys/core-apps/i0-marketplace/marketplace.vue";
 import plugins from "@/server/sys/core-apps/i0-plugins/plugins.vue";
 import app from "@/server/sys/core-apps/i0-app/app.vue";
 import dashboard from "@/server/sys/core-apps/i0-dashboard/dashboard.vue";
+import administration from "@/server/sys/core-apps/i0-administration/administration.vue";
 
 export default {
   data() {
@@ -104,7 +105,8 @@ export default {
     marketplace,
     plugins,
     app,
-    dashboard
+    dashboard,
+    administration
   },
   mouted() {}
 };
