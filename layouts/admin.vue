@@ -6,7 +6,7 @@
       class="absolute fullwidth fullheight-VH flex flexcenter"
     >
       <div class="dqspc fullwidth fullheight-VH flex flexcenter">
-        <div>
+        <div v-if="$store.state.spinner">
           <spinner/>
         </div>
       </div>
@@ -30,11 +30,14 @@
 
 <script>
 import spinner from "@/server/sys/core-apps/pane-system/module/spinner-1.vue";
+import universal_modal_disp from "@/server/sys/core-apps/pane-system/module/universal_modal_disp.vue";
+import { mapGetters } from "vuex";
 
 export default {
   data() {
     return {
-      ready: false
+      ready: false,
+      action: this.$store.state.actions
     };
   },
   methods: {
@@ -42,8 +45,65 @@ export default {
       this.$store.state.modal.visibility = false;
     }
   },
-  components:{
-    spinner
+  computed: {
+    ...mapGetters({
+      myActionState: "actionState"
+    })
+  },
+  components: {
+    spinner,
+    universal_modal_disp
+  },
+  watch: {
+    myActionState(newActions, oldval) {
+      if (newActions) {
+        newActions.map(e => {
+          switch (e.title) {
+            case "saveToLocalStorage":
+              console.log("saving to local storage!");
+              break;
+            case "prompt_err":
+              this.$store.state.modal.visibility = true;
+              this.$store.state.modal.head = "Error";
+              this.$store.state.modal.body = universal_modal_disp;
+              this.$store.state.current_action_title = e.title
+              break;
+            case "prompt_msg":
+              this.$store.state.modal.visibility = true;
+              this.$store.state.modal.head = "System message";
+              this.$store.state.modal.body = universal_modal_disp;
+              this.$store.state.current_action_title = e.title
+              break;
+            case "prompt_password":
+              this.$store.state.modal.visibility = true;
+              this.$store.state.modal.head = "Authentication required";
+              this.$store.state.modal.body = universal_modal_disp;
+              this.$store.state.current_action_title = e.title
+              break;
+            case "redirect":
+              location.href = e.content;
+              break;
+            case "prompt_credentials":
+              break;
+            case "init_user":
+              // set user
+              this.$store.state.admin = e.content;
+              this.ready = true;
+              this.$store.state.modal.visibility = true;
+              this.$store.state.spinner = true;
+              this.$store.state.resources = e.content.resources;
+
+              // set resource
+              setTimeout(() => {
+                this.$store.state.actions = undefined;
+                this.$store.state.modal.visibility = false;
+                this.$store.state.spinner = false;
+              }, 600);
+              break;
+          }
+        });
+      }
+    }
   },
   mounted() {
     /**
@@ -51,44 +111,14 @@ export default {
      * to the dashboard
      */
     this.$store.dispatch("firstLoad");
-    //
-    if (!this.$store.state.app) {
-      location.href = "__dqinit";
-    } else {
-      if (localStorage.getItem("auth")) {
-        const req = {
-          token: localStorage.getItem("auth"),
-          username: localStorage.getItem("username"),
-          section: "adminMethods",
-          command: "initAdminDashboard"
-        };
-        this.$axios
-          .$post("dqapp/_dq", req)
-          .then(res => {
-            if (res.status) {
-              console.log(res);
-              this.$store.state.admin = res.data.data;
-              this.ready = true;
-              this.$store.state.modal.visibility = true;
-              this.$store.state.spinner = true;
-              setTimeout(() => {
-                this.$store.state.modal.visibility = false;
-                this.$store.state.spinner = false;
-              }, 500);
-            } else {
-              location.href = "dqlogin";
-              this.ready = false;
-            }
-          })
-          .catch(err => {
-            alert(err);
-          });
-      } else {
-        this.ready = false;
-        location.href = "dqlogin";
-      }
-    }
+    this.read = true;
+    this.$store.commit("systemCall", {
+      command: "initActorsDashboard",
+      section: "adminMethods",
+      method: "get"
+    });
 
+  
     // only trigger when there is unsaved changes
     // window.onbeforeunload = function() {
     //   localStorage.clear()
@@ -145,8 +175,9 @@ export default {
   padding-left: var(--size-1-half);
   padding-right: var(--size-1-half);
 }
-.dqspc{
-  background: var(--blue-1);
+.dqspc {
+  /* background: #0086c02d; */
+  /* background-color: #393e4223; */
 }
 #__layout {
   min-height: 100vh;
@@ -161,14 +192,13 @@ export default {
   position: relative;
   min-width: inherit;
   overflow: hidden;
-  /* border: 5px solid blue; */
   flex-flow: row wrap;
   justify-content: center;
 }
 
 #dq-modal-holder {
   z-index: 50;
-  background-color: #393e428e;
+  background-color: #393e426c;
   transition: 0.3s;
 }
 #dq-modal-host {
