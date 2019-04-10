@@ -106,15 +106,22 @@ const createStore = () => {
                             })
                         break;
                 }
-
-                console.log(payload)
             },
             notificationPane(state, payload) {
                 state.notificationPane = payload
             },
             signOut() {
-                localStorage.clear();
-                location.reload()
+                this.$axios.$post('/dqapp/_dq', {
+                    token: localStorage.getItem("auth"),
+                    username: localStorage.getItem("username"),
+                    section:'adminMethods',
+                    command:'adminLogout'
+                }).then((data) => {
+                    if (data.status){
+                        localStorage.clear();
+                        location.reload()
+                    }
+                })
             },
             setApp(state, payload) {
                 console.log('payload')
