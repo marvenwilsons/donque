@@ -43,7 +43,7 @@ export default {
   flex-flow: column wrap;
 }
 .blur{
-  filter: blur(10px)
+  filter: blur(1px)
 }
 #dq-content-wrapper {
   flex: 1;
