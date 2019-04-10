@@ -476,17 +476,16 @@ export default {
   },
   mounted() {
     this.ready = false;
+    
+    
+
 
     setTimeout(() => {
-      if (
-        this.$store.state.app.data.state === "admin login" ||
-        this.$store.state.app.data.state === "user login" ||
-        this.$store.state.app.data.state === "owner login"
-      ) {
-        location.href = "dqlogin";
-      } else {
+      if(this.$store.state.actions[0].title === 'redirect'){
+      location.href = this.$store.state.actions[0].content
+    } else {
         this.ready = true;
-      }
+    }
     }, 1000);
   }
 };
