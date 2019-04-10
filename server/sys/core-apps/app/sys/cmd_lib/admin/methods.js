@@ -576,12 +576,6 @@ adminMethods.initActorsDashboard = {
                     data: {
                         msg: null,
                         actions: [{
-                            title: 'saveToLocalStorage',
-                            content: {
-                                token: adminData.value.token,
-                                username: adminData.value.username
-                            }
-                        }, {
                             title: 'init_user',
                             content: {
                                 title: adminData.value.title,
