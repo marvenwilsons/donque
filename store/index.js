@@ -7,6 +7,10 @@ const createStore = () => {
             admin: undefined,
             user: undefined,
             notificationPane: false,
+            actions: undefined,
+            message: undefined,
+            resources: undefined,
+            current_action_title: '',
             comp: {
                 arr: [],
                 arrLen: 0,
@@ -24,7 +28,12 @@ const createStore = () => {
                 body: undefined,
                 closable: false
             },
-            spinner: false
+            spinner: false,
+        },
+        getters: {
+            actionState: state => {
+                return state.actions
+            }
         },
         actions: {
             close_pane: ({ commit }, payload) => {
@@ -50,7 +59,7 @@ const createStore = () => {
                 // on every first load after login
                 let request = {}
                 request.componentName = context.route.matched[0].name
-
+                console.log('hello world!')
                 return this.$axios.$get('/dqapp/_dq', {
                     params: {
                         content: 'init',
@@ -60,7 +69,6 @@ const createStore = () => {
                     .then(res => {
                         // store to state
                         console.log('store received data')
-                        console.log(res)
                         store.commit('setApp', res)
                     })
                     .catch(e => {
@@ -72,14 +80,45 @@ const createStore = () => {
 
         },
         mutations: {
+            systemCall(state, payload) {
+                payload.username = localStorage.getItem("username")
+                payload.token = localStorage.getItem("auth")
+
+                switch (payload.method) {
+                    case 'get' || 'read':
+                        this.$axios.$get('/dqapp/_dq', {
+                            params: payload
+                        }).then(response => {
+                            state.message = response.data.msg
+                            state.actions = response.data.actions
+                        }).catch(err => {
+                            alert('there was an error in systemCall store')
+                            console.log(err)
+                        })
+                        break;
+                    case 'post' || 'update' || 'delete':
+                        this.$axios.$post('/dqapp/_dq', payload)
+                            .then(response => {
+                                console.log('return obj')
+                                console.log(response)
+                            }).catch(err => {
+                                console.log(err)
+                            })
+                        break;
+                }
+
+                console.log(payload)
+            },
             notificationPane(state, payload) {
                 state.notificationPane = payload
             },
-            signOut(){
+            signOut() {
                 localStorage.clear();
                 location.reload()
             },
             setApp(state, payload) {
+                console.log('payload')
+                state.actions = payload.data.actions
                 state.app = payload
             },
             close_pane(state, payload) {
