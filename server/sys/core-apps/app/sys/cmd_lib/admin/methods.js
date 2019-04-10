@@ -80,9 +80,8 @@ adminMethods.adminlogin = {
         }
 
         return new Promise(async (resolve, reject) => {
-            const u = await updateUser()
-            // console.log(decode(user.password, username) == password)
-            if (decode(user.password, username) == password && u) {
+            if (decode(user.password, username) == password) {
+                const u = await updateUser()
                 /**
                  * Return
                  */
@@ -114,7 +113,7 @@ adminMethods.adminlogin = {
                     }
                 })
             } else {
-                console.log('adminlogin error not yet ready')
+                console.log(`   [adminlogin] rejecting`)
                 reject({
                     status: false,
                     data: {
