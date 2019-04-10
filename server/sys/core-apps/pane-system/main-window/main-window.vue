@@ -94,7 +94,7 @@ export default {
     shell,
 
     // pages
-    pages,
+    Pages: pages,
     pagesDetails,
 
     collections,
