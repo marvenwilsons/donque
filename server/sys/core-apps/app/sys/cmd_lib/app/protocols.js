@@ -305,7 +305,7 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                     'read:getProfile:profileMethods'
                 ],
                 Files: [],
-                plugins: [
+                Plugins: [
                     // read
                     'read:getPluginList:pluginMethods',
                     // update
@@ -315,15 +315,13 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                     'delete:removePlugin:pluginMethods'
                 ],
                 Settings: [],
-                Settings_appearance: [],
-                Settings_security: [],
                 // where you can install plugins and install component sets or themes 
                 Marketplace: [],
                 Database: [
                     // update
                     'update:killDbConnection:dbMethods',
                 ],
-                console: []
+                Console: []
             }
             const CollectionsAndData = [{
                 colName: 'dq_app', data: {
@@ -370,7 +368,22 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                     lastModefied: '',
                     lastActivity: '',
                     activities: [],
-                    resource: app_resource
+                    resource: {
+                        Dashboard: app_resource.Dashboard,
+                        Administration: app_resource.Administration,
+                        Pages: app_resource.Pages,
+                        Components: app_resource.Components,
+                        Collections: app_resource.Collections,
+                        Messages: app_resource.Messages,
+                        Todos: app_resource.Todos,
+                        Profile: app_resource.Profile,
+                        Files: app_resource.Files,
+                        Plugins: app_resource.Plugins,
+                        Settings: app_resource.Settings,
+                        Marketplace: app_resource.Marketplace,
+                        Database: app_resource.Database,
+                        Console: app_resource.Console
+                    }
                 }
             }, {
                 colName: 'dq_config', data: {
@@ -387,7 +400,22 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
             }, {
                 colName: 'dq_actor_role', data: {
                     roleTitle: 'owner',
-                    resource: app_resource
+                    resource: {
+                        Dashboard: app_resource.Dashboard,
+                        Administration: app_resource.Administration,
+                        Pages: app_resource.Pages,
+                        Components: app_resource.Components,
+                        Collections: app_resource.Collections,
+                        Messages: app_resource.Messages,
+                        Todos: app_resource.Todos,
+                        Profile: app_resource.Profile,
+                        Files: app_resource.Files,
+                        Plugins: app_resource.Plugins,
+                        Settings: app_resource.Settings,
+                        Marketplace: app_resource.Marketplace,
+                        Database: app_resource.Database,
+                        Console: app_resource.Console
+                    }
                 }
             }]
 
