@@ -30,8 +30,8 @@ router.post('/_dq', async ({ body: { username, password, token, data, command, s
 
 router.get('/_dq', async (req,res) => {
     let _req = req.query.content
-    _r = req === 'init' ? {} : _req
-    
+    _r = req === 'init' ? {} : req.query
+
     cardinal(_r).then((data) => {
        res.status(200).json(data)        
     }).catch((err) => {
