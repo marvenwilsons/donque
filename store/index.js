@@ -1,4 +1,5 @@
 import Vuex from 'vuex'
+import paneConf from "@/server/sys/core-apps/pane-system/module/paneconf.js";
 
 const createStore = () => {
     return new Vuex.Store({
@@ -11,6 +12,7 @@ const createStore = () => {
             message: undefined,
             resources: undefined,
             current_action_title: '',
+            paneConf,
             comp: {
                 arr: [],
                 arrLen: 0,

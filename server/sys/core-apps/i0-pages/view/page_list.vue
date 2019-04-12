@@ -19,7 +19,7 @@
             name:'pagesDetails',
             headColor:'#0086c0',
             textColor:'white',
-            headWidth:'100%',
+            headWidth:$store.state.paneConf['Pages']['panewidth'][1],
             headName:items,
             closable:true,
           }"

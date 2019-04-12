@@ -8,7 +8,7 @@
           :component="{
         name:items.toLowerCase(),
         headColor:'#0086c0',
-        headWidth: '100%',
+        headWidth: $store.state.paneConf[items]['panewidth'][0],
         headName: items,
         closable: false}"
           :position="0"
