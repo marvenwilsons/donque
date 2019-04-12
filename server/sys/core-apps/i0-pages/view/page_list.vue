@@ -10,10 +10,15 @@
           <strong>Create new page</strong> &#10010;
         </small>
       </div>
-      <div id="dq-page-list-wrapper" class="relative">
+      <div class="relative dq-list-wrapper">
         <span class="absolute">
           <!-- list -->
-          <div @click="active(items)" :class="[activeLink == items && 'active' ,'dq-list-sender']" v-for="(items,key) in pages" :key="key">
+          <div
+            @click="active(items)"
+            :class="[activeLink == items && 'active' ,'dq-list-sender']"
+            v-for="(items,key) in pages"
+            :key="key"
+          >
             <sender
               :component="{
             name:'pagesDetails',
@@ -32,7 +37,7 @@
               <div>
                 <small>
                   <span class="dq-list-page-info flex">lastmodified: 12/23/19 | parent page: about</span>
-                  
+
                   <span class="flex dq-list-methods-wrapper">
                     <span class="dq-text-hover">&#128465; Delete this page</span>
                     <span class="dq-text-hover">&#9998; Edit this page</span>
@@ -51,7 +56,7 @@
 <script>
 import sender from "@/server/sys/core-apps/pane-system/module/component-sender.vue";
 import search from "./search.vue";
-import createPageModal from "./modal-create-page.vue"
+import createPageModal from "./modal-create-page.vue";
 
 export default {
   data() {
@@ -63,7 +68,7 @@ export default {
         "register",
         "portfolio",
         "services",
-        "menu",
+        "menu"
       ],
       activeLink: undefined
     };
@@ -72,13 +77,13 @@ export default {
     send(comp, pos) {
       this.$store.commit("addComponent", { comp, pos });
     },
-    active(i){
-      this.activeLink = i
+    active(i) {
+      this.activeLink = i;
     },
-    createNewPage(){
-      this.$store.state.modal.visibility = true
-      this.$store.state.modal.head = 'Create new page'
-      this.$store.state.modal.body = createPageModal
+    createNewPage() {
+      this.$store.state.modal.visibility = true;
+      this.$store.state.modal.head = "Create new page";
+      this.$store.state.modal.body = createPageModal;
     }
   },
   components: {
@@ -131,18 +136,18 @@ export default {
 .dq-text-hover:hover {
   color: var(--blue-3);
 }
-#dq-page-list-wrapper {
+.dq-list-wrapper {
   height: 100%;
   overflow-y: scroll;
 }
-#dq-page-list-wrapper > span{
+.dq-list-wrapper > span {
   width: 100%;
 }
 .dq-list-page-info {
   min-width: 100%;
   justify-content: space-around;
 }
-.active{
+.active {
   background-color: var(--hover-blue);
   color: white;
 }
@@ -154,7 +159,7 @@ export default {
   padding-right: var(--size-1-half);
   box-shadow: 0px 0px 0px 2px var(--blue-3);
 }
-.dq-button-1:hover{
+.dq-button-1:hover {
   color: var(--blue-2);
 }
 </style>
