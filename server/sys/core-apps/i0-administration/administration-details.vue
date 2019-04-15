@@ -2,12 +2,13 @@
   <div class="fullheight-percent">
     <!-- admins -->
     <div v-if="$store.state.comp.arr[1].headName === 'Admins'" class="fullwidth fullheight-percent">
-      <div v-if="$store.state.administrationCurrentView === 'Add new admin'" class="fullheight-percent">
+      <div
+        v-if="$store.state.administrationCurrentView === 'Add new admin'"
+        class="fullheight-percent"
+      >
         <admin-form/>
       </div>
-      <div v-if="$store.state.administrationCurrentView === 'See admin list'">
-          admin list here
-      </div>
+      <div v-if="$store.state.administrationCurrentView === 'See admin list'">admin list here</div>
     </div>
     <!-- Teams -->
     <div v-if="$store.state.comp.arr[1].headName === 'Teams'" class="borderred fullwidth">
@@ -30,11 +31,27 @@
 </template>
 
 <script>
-import adminForm from './addNewAdminForm.vue'
+import adminForm from "./addNewAdminForm.vue";
+import { mapGetters } from "vuex";
+
 export default {
-    components: {
-        adminForm
+  data() {
+    return {
+    };
+  },
+  components: {
+    adminForm
+  },
+  computed: {
+    ...mapGetters({
+      isCurrentProcessDone: "isCurrentProcessDone"
+    })
+  },
+  watch: {
+    isCurrentProcessDone(oldVal, newVal) {
+      console.log("testing!");
     }
+  }
 };
 </script>
 

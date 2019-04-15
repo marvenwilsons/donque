@@ -8,16 +8,19 @@
       </div>
       <div v-if="ready" id="dq-init-wrapper" class="flex flexwrap">
         <div id="tc-logo-h" class="flex fullwidth flexcenter">
-          <h1>dq-studio <br> Create New Admin</h1>
+          <h1>
+            dq-studio
+            <br>Create New Admin
+          </h1>
           <p class="tc tt" style="color:white;">
-            Add brand new admin, fill the essential information, define its role to your application, <br>
-            provide the required information on the input fields
+            Add brand new admin, fill the essential information, define its role to your application,
+            <br>provide the required information on the input fields
           </p>
         </div>
-        
+
         <div class="fullwidth" id="tc-f-wrap">
           <!-- <h5 class="tc">Add New Admin</h5> -->
-          
+
           <div class="tc-f-wrap-inner">
             <form class="flex flex flexcol">
               <!-- username  -->
@@ -62,7 +65,7 @@
               <!-- admin name  -->
               <div class="flex flexcenter flexcol tc-wrap">
                 <span class="flex fullwidth spacebetween">
-                  <span class="flex tc-title">Full Name:</span>
+                  <span class="flex tc-title">Admin Name:</span>
                   <span class="flex flexcol tc-input">
                     <input
                       v-on:input="_validate('adminName')"
@@ -85,7 +88,7 @@
                   </span>
                   <span class="tc-ind flex">
                     <span
-                      v-if="errors.adminName.length == 0 && username != undefined"
+                      v-if="errors.adminName.length == 0 && adminName != undefined"
                       class="tc-suc"
                     >&#10004;</span>
                     <span v-if="errors.adminName.length != 0" class="tc-err">&#x2718;</span>
@@ -118,7 +121,7 @@
                       >should be more than 6 characters</span>
                       <br>
                       <span
-                        :class="[errors.siteTitle.indexOf('required') != -1 && 'und-err']"
+                        :class="[errors.password.indexOf('required') != -1 && 'und-err']"
                       >this is a required field</span>
                     </span>
                   </span>
@@ -179,6 +182,35 @@
                   </span>
                 </span>
               </div>
+              <!-- role -->
+              <div class="flex flexcenter flexcol tc-wrap">
+                <span class="flex fullwidth spacebetween">
+                  <span class="flex tc-title">Admin Role:</span>
+                  <span class="flex flexcol tc-input">
+                    <select v-model="role" name="rolelist" form="roleform">
+                      <option
+                        v-for="roleTitle in roles"
+                        :key="roleTitle"
+                        :value="roleTitle"
+                      >{{roleTitle}}</option>
+                    </select>
+                    <span class="tc-desc">
+                      <span
+                        :class="[errors.email.length != 0 && 'und-err']"
+                      >Select a role for {{adminName}}</span>
+                      <br>
+                      <span>{{role}}</span>
+                    </span>
+                  </span>
+                  <span class="tc-ind flex">
+                    <span
+                      v-if="errors.email.length == 0 && email != undefined"
+                      class="tc-suc"
+                    >&#10004;</span>
+                    <span v-if="errors.email.length != 0" class="tc-err">&#x2718;</span>
+                  </span>
+                </span>
+              </div>
               <span id="dq-newwork-err" v-if="netErr">{{netErr}}</span>
               <span class="flex tc-b">
                 <span @click="submit" class="tc-b-inner">Create New Admin</span>
@@ -193,20 +225,22 @@
 
 <script>
 import spinner from "@/server/sys/core-apps/pane-system/module/spinner-1.vue";
+import { mapGetters } from "vuex";
+
 export default {
   data() {
     return {
       netErr: undefined,
       ready: false,
-      siteTitle: undefined,
       username: undefined,
       password: undefined,
       repassword: undefined,
       adminName: undefined,
       email: undefined,
+      role: 'admin',
       passed: [],
+      roles: ["dev", "admin", "owner"],
       errors: {
-        siteTitle: [],
         username: [],
         password: [],
         repassword: [],
@@ -254,7 +288,6 @@ export default {
   methods: {
     pullErrors(errObj, errName) {
       if (this.errors[errObj].indexOf(errName) != -1) {
-        // console.log(`get > ${errName} in ${errObj}`)
         this.errors[errObj].splice(this.errors[errObj].indexOf(errName), 1);
       }
     },
@@ -267,24 +300,6 @@ export default {
       const vdn = this.validations;
 
       switch (curField) {
-        case "siteTitle":
-          vdn.hasWhiteSpace(this[curField])
-            ? this.pushErrors(curField, "hasWhiteSpace")
-            : this.pullErrors(curField, "hasWhiteSpace");
-
-          this[curField].length < 2
-            ? this.pushErrors(curField, "charIsOnly2")
-            : this.pullErrors(curField, "charIsOnly2");
-
-          vdn.shouldNotHaveSpecialChar(this[curField])
-            ? this.pushErrors(curField, "shouldNotHaveSpecialChar")
-            : this.pullErrors(curField, "shouldNotHaveSpecialChar");
-
-          vdn.required(this[curField])
-            ? this.pushErrors(curField, "required")
-            : this.pullErrors(curField, "required");
-          break;
-
         case "username":
           vdn.hasWhiteSpace(this[curField])
             ? this.pushErrors(curField, "hasWhiteSpace")
@@ -366,7 +381,6 @@ export default {
     },
     submit() {
       const undarr = [
-        this.siteTitle,
         this.username,
         this.password,
         this.repassword,
@@ -375,7 +389,6 @@ export default {
       ];
 
       const fields = [
-        "siteTitle",
         "username",
         "password",
         "repassword",
@@ -399,39 +412,42 @@ export default {
       console.log("submit");
       if (s.every(e => e == true)) {
         const app = {};
-        app.siteTitle = this.siteTitle;
+        app.roleTitle = this.role;
         app.username = this.username;
         app.password = this.password;
         app.repassword = this.repassword;
         app.email = this.email;
         app.adminName = this.adminName;
 
-        this.$axios
-          .$post("/dqapp/_dq", {
-            command: "dqinitapp",
-            section: "dqapp",
-            data: app
-          })
-          .then(res => {
-            if (res.status) {
-              this.ready = false;
-              setTimeout(() => {
-                if (res.status) {
-                  location.href = "dqlogin";
-                }
-              }, 1000);
-            } else {
-              this.netErr = res.data.msg;
-            }
-          })
-          .catch(e => {
-            console.log("error");
-            console.log(e);
-          });
+        this.$store.commit("systemCall", {
+          command: "createNewAppActor",
+          section: "adminMethods",
+          data: app,
+          method: "post"
+        });
       }
     }
   },
+  computed: {
+    ...mapGetters({
+      isCurrentProcessDone: "isCurrentProcessDone"
+    })
+  },
+  watch: {
+    isCurrentProcessDone(oldVal, newVal) {
+      if(newVal) {
+        this.username = undefined
+        this.adminName = undefined
+        this.password = undefined
+        this.repassword = undefined
+        this.role = 'admin'
+        this.email = undefined
+      }
+     }
+  },
   mounted() {
+    // todo get if the user is even allowed to access this form in the first place
+    // todo fetch admin roles
     this.ready = false;
 
     setTimeout(() => {

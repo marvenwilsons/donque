@@ -12,6 +12,7 @@ const createStore = () => {
             message: undefined,
             resources: undefined,
             current_action_title: '',
+            isCurrentProcessDone: true,
             paneConf,
             comp: {
                 arr: [],
@@ -36,7 +37,11 @@ const createStore = () => {
         getters: {
             actionState: state => {
                 return state.actions
+            },
+            isCurrentProcessDone: state => {
+                return state.isCurrentProcessDone
             }
+
         },
         actions: {
             close_pane: ({ commit }, payload) => {
@@ -103,7 +108,15 @@ const createStore = () => {
                         this.$axios.$post('/dqapp/_dq', payload)
                             .then(response => {
                                 console.log('return obj')
-                                console.log(response)
+                                state.message = response.data.msg
+                                state.actions = response.data.actions
+
+                                if (response.status) {
+                                    state.isCurrentProcessDone = false,
+                                        setTimeout(() => {
+                                            state.isCurrentProcessDone = true
+                                        }, 50)
+                                }
                             }).catch(err => {
                                 console.log(err)
                             })
@@ -117,10 +130,10 @@ const createStore = () => {
                 this.$axios.$post('/dqapp/_dq', {
                     token: localStorage.getItem("auth"),
                     username: localStorage.getItem("username"),
-                    section:'adminMethods',
-                    command:'adminLogout'
+                    section: 'adminMethods',
+                    command: 'adminLogout'
                 }).then((data) => {
-                    if (data.status){
+                    if (data.status) {
                         localStorage.clear();
                         location.reload()
                     }

@@ -26,7 +26,7 @@
             :position="1"
           > 
             <span @click="customPane(items2)" class="sidebar-method-btns flex flexcol" v-for="(items2,key2) in sideBarMethods[items]" :key="key2" >
-              <span>{{items2}}</span>
+              <span :class="[selectedPane === items2 && 'activePane']">{{items2}}</span>
             </span>
           </sender>
         </div>
@@ -41,6 +41,7 @@ import sender from "@/server/sys/core-apps/pane-system/module/component-sender.v
 export default {
   data() {
     return {
+      selectedPane: undefined,
       sideBarlist: [
         "Admins",
         "Teams",
@@ -78,6 +79,7 @@ export default {
       this.$store.commit("addComponent", { comp, pos });
     },
     customPane(paneName){
+      this.selectedPane = paneName
       this.$store.state.administrationCurrentView = paneName
     }
   },
@@ -101,6 +103,10 @@ export default {
   /* align-items: flex-end; */
 }
 .sidebar-method-btns:hover{
+  text-decoration: underline;
+}
+.activePane{
+  font-weight: 600;
   text-decoration: underline;
 }
 </style>

@@ -316,7 +316,7 @@ adminMethods.createNewAppActor = {
 
             // find role title in the dq_admin_role collection
             let sectionPermissions = undefined
-            const role_title = await db.collection('dq_admin_role').findOne({ roleTitle })
+            const role_title = await db.collection('dq_actor_role').findOne({ roleTitle })
             !role_title ? reject(err(`the title "${roleTitle}" does not exist in roles collection`)) : sectionPermissions = role_title
             if (hasError) return
 
