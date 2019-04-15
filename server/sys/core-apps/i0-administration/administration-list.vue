@@ -7,8 +7,15 @@
         v-for="(items,key) in sideBarlist"
         :key="key"
       >
-        <sender
-          :component="{
+        <div>
+          <strong>{{items === 'Admins' ? 'Administrators' : items}}</strong>
+        </div>
+        <div>
+          <small>{{itemsDesc[items]}}</small>
+        </div>
+        <div class="flex flexcol sidebar-method-host">
+          <sender
+            :component="{
             name:'administrationDetails',
             headColor:'#0086c0',
             textColor:'white',
@@ -16,15 +23,13 @@
             headName:items,
             closable:true,
         }"
-          :position="1"
-        >
-          <div>
-            <strong>{{items}}</strong>
-          </div>
-          <div>
-              <small>{{itemsDesc[items]}}</small>
-          </div>
-        </sender>
+            :position="1"
+          > 
+            <span @click="customPane(items2)" class="sidebar-method-btns flex flexcol" v-for="(items2,key2) in sideBarMethods[items]" :key="key2" >
+              <span>{{items2}}</span>
+            </span>
+          </sender>
+        </div>
       </div>
     </span>
   </div>
@@ -43,12 +48,24 @@ export default {
         "Organizational Chart",
         "Activities log"
       ],
+      sideBarMethods: {
+        Admins: ['Add new admin','See admin list'],
+        Teams: ['Create new team','Display all teams'],
+        Roles: ['Create custom roles','Display all roles'],
+        "Organizational Chart": [],
+        "Activities log": []
+      },
       itemsDesc: {
-          Admins: 'admin related settings, manages administrators to manage application resources',
-          Teams: 'Assign admins to teams, a way to categorize admins base on the bussiness role granted to them',
-          Roles: 'A way to grant access to admins for the application resources, and a way to regulate admin actions',
-          'Organizational Chart':'See the diagram that shows the structure of the organization and the relationships',
-          'Activities log': 'A way to track actions of admins, see the log of actions taken by the admins on a certain time'
+        Admins:
+          "admin related settings, manages administrators to manage application resources",
+        Teams:
+          "Assign admins to teams, a way to categorize admins base on the bussiness role granted to them",
+        Roles:
+          "A way to grant access to admins for the application resources, and a way to regulate admin actions",
+        "Organizational Chart":
+          "See the diagram that shows the structure of the organization and the relationships",
+        "Activities log":
+          "A way to track actions of admins, see the log of actions taken by the admins on a certain time"
       },
       activeLink: undefined
     };
@@ -59,6 +76,9 @@ export default {
     },
     send(comp, pos) {
       this.$store.commit("addComponent", { comp, pos });
+    },
+    customPane(paneName){
+      this.$store.state.administrationCurrentView = paneName
     }
   },
   components: {
@@ -68,4 +88,19 @@ export default {
 </script>
 
 <style>
+.sidebar-method-host {
+  margin: calc(var(--fontSize) * 0.25);
+  padding: calc(var(--fontSize) * 0.25);
+}
+.sidebar-method-host > span {
+  padding: calc(var(--fontSize) * 0.25);
+  font-weight: 600;
+}
+.sidebar-method-btns{
+  padding: calc(var(--fontSize) * 0.25);
+  /* align-items: flex-end; */
+}
+.sidebar-method-btns:hover{
+  text-decoration: underline;
+}
 </style>

@@ -6,7 +6,8 @@ export default {
     },
     Administration: {
         panewidth: [
-            '300px'
+            '300px',
+            '60%'
         ]
     },
     Pages: {

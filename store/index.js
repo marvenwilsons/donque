@@ -24,6 +24,7 @@ const createStore = () => {
                 currentUrl: undefined,
                 parentUrl: undefined
             },
+            administrationCurrentView: undefined,
             modal: {
                 visibility: false,
                 head: undefined,
