@@ -400,6 +400,7 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
             }, {
                 colName: 'dq_actor_role', data: {
                     roleTitle: 'owner',
+                    desc: 'This title grants full access in all of the applications resources, application secrets, all actions and the backend files',
                     resource: {
                         Dashboard: app_resource.Dashboard,
                         Administration: app_resource.Administration,
@@ -443,6 +444,7 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                         .collection('dq_actor_role')
                         .insertOne({
                             roleTitle: 'dev',
+                            desc: 'the dev title grants access to system files, public views, and full permission to perform crud operations related to applications bussiness developement',
                             resource: {
                                 dashboard: app_resource.dashboard,
                                 page: app_resource.page,
@@ -460,6 +462,7 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                         .collection('dq_actor_role')
                         .insertOne({
                             roleTitle: 'admin',
+                            desc:'the admin manages the app resources and executes actions that is assigned by the owner',
                             resource: {
                                 dashboard: app_resource.dashboard,
                                 work: app_resource.work,
