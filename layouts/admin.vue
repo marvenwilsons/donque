@@ -47,7 +47,9 @@ export default {
   },
   computed: {
     ...mapGetters({
-      myActionState: "actionState"
+      myActionState: "actionState",
+      modalState: "modalState",
+      hasErr: "hasErr"
     })
   },
   components: {
@@ -66,19 +68,19 @@ export default {
               this.$store.state.modal.visibility = true;
               this.$store.state.modal.head = "Error";
               this.$store.state.modal.body = universal_modal_disp;
-              this.$store.state.current_action_title = e.title
+              this.$store.state.current_action_title = e.title;
               break;
             case "prompt_msg":
               this.$store.state.modal.visibility = true;
               this.$store.state.modal.head = "System message";
               this.$store.state.modal.body = universal_modal_disp;
-              this.$store.state.current_action_title = e.title
+              this.$store.state.current_action_title = e.title;
               break;
             case "prompt_password":
               this.$store.state.modal.visibility = true;
               this.$store.state.modal.head = "Authentication required";
               this.$store.state.modal.body = universal_modal_disp;
-              this.$store.state.current_action_title = e.title
+              this.$store.state.current_action_title = e.title;
               break;
             case "redirect":
               location.href = e.content;
@@ -103,6 +105,14 @@ export default {
           }
         });
       }
+    },
+    modalState(modalsOldState, modalsCurrentState) {
+      if (
+        modalsCurrentState === "modal is close" &&
+        !this.$store.state.hasErr
+      ) {
+        this.$store.dispatch('execAfterTruthy')
+      }
     }
   },
   mounted() {
@@ -110,15 +120,17 @@ export default {
      * For the docker, it will set up first item highlight
      * to the dashboard
      */
+
     this.$store.dispatch("firstLoad");
     this.read = true;
-    this.$store.commit("systemCall", {
+    console.log("");
+    console.log("** [systemCall]-[admin.vue] initialize admins dashboard");
+    this.$store.dispatch("systemCall", {
       command: "initActorsDashboard",
       section: "adminMethods",
       method: "get"
     });
 
-  
     // only trigger when there is unsaved changes
     // window.onbeforeunload = function() {
     //   localStorage.clear()

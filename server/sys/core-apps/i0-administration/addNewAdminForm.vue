@@ -7,7 +7,7 @@
         <spinner/>
       </div>
       <div v-if="ready" id="dq-init-wrapper" class="flex flexwrap">
-        <div id="tc-logo-h" class="flex fullwidth flexcenter">
+        <!-- <div id="tc-logo-h" class="flex fullwidth flexcenter">
           <h1>
             dq-studio
             <br>Create New Admin
@@ -16,7 +16,7 @@
             Add brand new admin, fill the essential information, define its role to your application,
             <br>provide the required information on the input fields
           </p>
-        </div>
+        </div>-->
 
         <div class="fullwidth" id="tc-f-wrap">
           <!-- <h5 class="tc">Add New Admin</h5> -->
@@ -418,40 +418,44 @@ export default {
         app.email = this.email;
         app.adminName = this.adminName;
 
-        this.$store.commit("systemCall", {
+        this.$store.dispatch("systemCall", {
           command: "createNewAppActor",
           section: "adminMethods",
           data: app,
           method: "post"
         });
       }
-    }
-  },
-  computed: {
-    ...mapGetters({
-      modalState: "modalState",
-      hasErr: "hasErr"
-    })
-  },
-  watch: {
-    modalState(o, n) {
-      if (n === "modal is close" && !this.$store.state.hasErr) {
-        console.log("clear the fucking forms!");
-        setTimeout(() => {
-          this.username = undefined;
-          this.adminName = undefined;
-          this.password = undefined;
-          this.repassword = undefined;
-          this.role = "admin";
-          this.email = undefined;
-        }, 150);
-      }
+    },
+    clearForms() {
+      setTimeout(() => {
+        this.username = undefined;
+        this.adminName = undefined;
+        this.password = undefined;
+        this.repassword = undefined;
+        this.role = "admin";
+        this.email = undefined;
+      }, 150);
     }
   },
   mounted() {
     // todo get if the user is even allowed to access this form in the first place
     // todo fetch admin roles
     this.ready = false;
+    this.clearForms();
+
+    this.$store.state.execAfterTruthyModalClose = this.clearForms;
+
+    // this.$store.dispatch("systemCall", {
+    //   command: "getAdminRoles",
+    //   section: "adminMethods",
+    //   method: "get"
+    // }).then(data => {
+    //   console.log('return here')
+    //   console.log(data)
+    // }).catch(err => {
+    //   console.log('errrrr')
+    //   console.log(err)
+    // })
 
     setTimeout(() => {
       this.ready = true;
@@ -502,7 +506,7 @@ export default {
   box-shadow: 0px 0px 20px 1px var(--blue-text-2);
 }
 #dq-init-wrapper {
-  /* min-width: 650px; */
+  min-width: 100%;
   /* background: white; */
   /* max-width: 99%; */
   transition: 0.3s;
