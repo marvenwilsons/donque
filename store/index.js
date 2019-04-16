@@ -34,6 +34,7 @@ const createStore = () => {
                 closable: false,
             },
             spinner: false,
+            execAfterTruthyModalClose: undefined
         },
         getters: {
             actionState: state => {
@@ -88,43 +89,55 @@ const createStore = () => {
                         console.log(e)
                         context.error(e)
                     })
+            },
+            systemCall({commit},context) {
+                console.log('** [systemCall]-[store] reaching server')
+                context.username = localStorage.getItem("username")
+                context.token = localStorage.getItem("auth")
+
+                switch (context.method) {
+                    case 'get' || 'read':
+                        console.log(`** [systemCall]-[store] fetching ${context.command}`)
+                        return this.$axios.$get('/dqapp/_dq', {
+                            params: context
+                        }).then(response => {
+                            console.log(`** [systemCall]-[store] request Ok!`)
+                            commit('systemCallMutation', {
+                                msg: response.data.msg,
+                                actions: response.data.actions
+                            })
+                            return response
+                        }).catch(err => {
+                            console.log(`** [systemCall]-[store] fetch error!`)
+                            alert('there was an error in systemCall store')
+                            console.log(err)
+                        })
+                    case 'post' || 'update' || 'delete':
+                        console.log(`** [systemCall]-[store] executing ${context.command}`)
+                        return this.$axios.$post('/dqapp/_dq', context)
+                            .then(response => {
+                                commit('systemCallMutation', {
+                                    msg: response.data.msg,
+                                    actions: response.data.actions
+                                })
+                                console.log(`** [systemCall]-[store] request Ok!`)
+                                return response
+                            }).catch(err => {
+                                console.log(err)
+                            })
+                }
+            },
+            execAfterTruthy({state}, content) {
+                if(state.execAfterTruthyModalClose){
+                    state.execAfterTruthyModalClose()
+                }
             }
 
         },
         mutations: {
-            systemCall(state, payload) {
-                payload.username = localStorage.getItem("username")
-                payload.token = localStorage.getItem("auth")
-
-                switch (payload.method) {
-                    case 'get' || 'read':
-                        this.$axios.$get('/dqapp/_dq', {
-                            params: payload
-                        }).then(response => {
-                            state.message = response.data.msg
-                            state.actions = response.data.actions
-                        }).catch(err => {
-                            alert('there was an error in systemCall store')
-                            console.log(err)
-                        })
-                        break;
-                    case 'post' || 'update' || 'delete':
-
-                        this.$axios.$post('/dqapp/_dq', payload)
-                            .then(response => {
-                                state.message = response.data.msg
-                                state.actions = response.data.actions
-
-                                if(response.status){
-                                    state.hasErr = false
-                                }else {
-                                    state.hasErr = true
-                                }
-                            }).catch(err => {
-                                console.log(err)
-                            })
-                        break;
-                }
+            systemCallMutation(state, payload) {
+                state.message = payload.msg
+                state.actions = payload.actions
             },
             notificationPane(state, payload) {
                 state.notificationPane = payload
@@ -150,7 +163,6 @@ const createStore = () => {
             close_pane(state, payload) {
                 state.comp.paneWidth.splice(payload, 1)
                 state.comp.arr.splice(payload, 1)
-                // history.go(-1)
             },
             addComponent(state, payload) {
                 // pushing new item to array
