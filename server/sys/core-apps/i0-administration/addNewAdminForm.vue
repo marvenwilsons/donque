@@ -159,7 +159,7 @@
               <!-- email -->
               <div class="flex flexcenter flexcol tc-wrap">
                 <span class="flex fullwidth spacebetween">
-                  <span class="flex tc-title">email:</span>
+                  <span class="flex tc-title">Email:</span>
                   <span class="flex flexcol tc-input">
                     <input
                       v-on:input="_validate('email')"
@@ -237,7 +237,7 @@ export default {
       repassword: undefined,
       adminName: undefined,
       email: undefined,
-      role: 'admin',
+      role: "admin",
       passed: [],
       roles: ["dev", "admin", "owner"],
       errors: {
@@ -409,7 +409,6 @@ export default {
           return true;
         }
       });
-      console.log("submit");
       if (s.every(e => e == true)) {
         const app = {};
         app.roleTitle = this.role;
@@ -430,20 +429,24 @@ export default {
   },
   computed: {
     ...mapGetters({
-      isCurrentProcessDone: "isCurrentProcessDone"
+      modalState: "modalState",
+      hasErr: "hasErr"
     })
   },
   watch: {
-    isCurrentProcessDone(oldVal, newVal) {
-      if(newVal) {
-        this.username = undefined
-        this.adminName = undefined
-        this.password = undefined
-        this.repassword = undefined
-        this.role = 'admin'
-        this.email = undefined
+    modalState(o, n) {
+      if (n === "modal is close" && !this.$store.state.hasErr) {
+        console.log("clear the fucking forms!");
+        setTimeout(() => {
+          this.username = undefined;
+          this.adminName = undefined;
+          this.password = undefined;
+          this.repassword = undefined;
+          this.role = "admin";
+          this.email = undefined;
+        }, 150);
       }
-     }
+    }
   },
   mounted() {
     // todo get if the user is even allowed to access this form in the first place
@@ -452,7 +455,7 @@ export default {
 
     setTimeout(() => {
       this.ready = true;
-    }, 1000);
+    }, 500);
   }
 };
 </script>

@@ -44,13 +44,10 @@ export default {
   },
   computed: {
     ...mapGetters({
-      isCurrentProcessDone: "isCurrentProcessDone"
     })
   },
   watch: {
-    isCurrentProcessDone(oldVal, newVal) {
-      console.log("testing!");
-    }
+
   }
 };
 </script>
