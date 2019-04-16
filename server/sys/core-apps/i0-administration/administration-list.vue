@@ -50,7 +50,7 @@ export default {
         "Activities log"
       ],
       sideBarMethods: {
-        Admins: ['Add new admin','See admin list'],
+        Admins: ['Add new application admin', 'Add new database admin', 'Application admin list', 'Database admin list'],
         Teams: ['Create new team','Display all teams'],
         Roles: ['Create custom roles','Display all roles'],
         "Organizational Chart": [],

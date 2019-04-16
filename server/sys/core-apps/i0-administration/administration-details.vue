@@ -3,7 +3,7 @@
     <!-- admins -->
     <div v-if="$store.state.comp.arr[1].headName === 'Admins'" class="fullwidth fullheight-percent">
       <div
-        v-if="$store.state.administrationCurrentView === 'Add new admin'"
+        v-if="$store.state.administrationCurrentView === 'Add new application admin'"
         class="fullheight-percent"
       >
         <admin-form/>
