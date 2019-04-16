@@ -90,7 +90,7 @@ const createStore = () => {
                         context.error(e)
                     })
             },
-            systemCall({commit},context) {
+            systemCall({commit, state},context) {
                 console.log('** [systemCall]-[store] reaching server')
                 context.username = localStorage.getItem("username")
                 context.token = localStorage.getItem("auth")
@@ -121,6 +121,11 @@ const createStore = () => {
                                     actions: response.data.actions
                                 })
                                 console.log(`** [systemCall]-[store] request Ok!`)
+                                if(!response.status){                                    
+                                    state.hasErr = true
+                                }else {
+                                    state.hasErr = false
+                                }
                                 return response
                             }).catch(err => {
                                 console.log(err)
