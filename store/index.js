@@ -9,10 +9,12 @@ const createStore = () => {
             user: undefined,
             notificationPane: false,
             actions: undefined,
+            current_action_title: '',
             message: undefined,
             resources: undefined,
-            current_action_title: '',
-            isCurrentProcessDone: true,
+            administrationCurrentView: undefined,
+            isCurrentProcessDone: undefined,
+            hasErr: false,
             paneConf,
             comp: {
                 arr: [],
@@ -25,12 +27,11 @@ const createStore = () => {
                 currentUrl: undefined,
                 parentUrl: undefined
             },
-            administrationCurrentView: undefined,
             modal: {
                 visibility: false,
                 head: undefined,
                 body: undefined,
-                closable: false
+                closable: false,
             },
             spinner: false,
         },
@@ -38,8 +39,11 @@ const createStore = () => {
             actionState: state => {
                 return state.actions
             },
-            isCurrentProcessDone: state => {
-                return state.isCurrentProcessDone
+            modalState: state => {
+                return !state.modal.visibility ? 'modal is open' : 'modal is close'
+            },
+            hasErr: state => {
+                return state.hasErr
             }
 
         },
@@ -105,17 +109,16 @@ const createStore = () => {
                         })
                         break;
                     case 'post' || 'update' || 'delete':
+
                         this.$axios.$post('/dqapp/_dq', payload)
                             .then(response => {
-                                console.log('return obj')
                                 state.message = response.data.msg
                                 state.actions = response.data.actions
 
-                                if (response.status) {
-                                    state.isCurrentProcessDone = false,
-                                        setTimeout(() => {
-                                            state.isCurrentProcessDone = true
-                                        }, 50)
+                                if(response.status){
+                                    state.hasErr = false
+                                }else {
+                                    state.hasErr = true
                                 }
                             }).catch(err => {
                                 console.log(err)
