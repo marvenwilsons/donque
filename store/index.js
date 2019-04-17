@@ -102,6 +102,7 @@ const createStore = () => {
                             params: context
                         }).then(response => {
                             console.log(`** [systemCall]-[store] request Ok!`)
+                            console.log(response)
                             commit('systemCallMutation', {
                                 msg: response.data.msg,
                                 actions: response.data.actions
@@ -121,7 +122,7 @@ const createStore = () => {
                                     actions: response.data.actions
                                 })
                                 console.log(`** [systemCall]-[store] request Ok!`)
-                                if(!response.status){                                    
+                                if(!response.status){
                                     state.hasErr = true
                                 }else {
                                     state.hasErr = false

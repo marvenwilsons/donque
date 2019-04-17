@@ -190,16 +190,16 @@
                     <select v-model="role" name="rolelist" form="roleform">
                       <option
                         v-for="roleTitle in roles"
-                        :key="roleTitle"
-                        :value="roleTitle"
-                      >{{roleTitle}}</option>
+                        :key="roleTitle.roleTitle"
+                        :value="roleTitle.roleTitle"
+                      >{{roleTitle.roleTitle}}</option>
                     </select>
                     <span class="tc-desc">
                       <span
                         :class="[errors.email.length != 0 && 'und-err']"
                       >Select a role for {{adminName}}</span>
                       <br>
-                      <span>{{role}}</span>
+                      <span>{{roles[getRoleDesc()].desc}}</span>
                     </span>
                   </span>
                   <span class="tc-ind flex">
@@ -239,7 +239,7 @@ export default {
       email: undefined,
       role: "admin",
       passed: [],
-      roles: ["dev", "admin", "owner"],
+      roles: [],
       errors: {
         username: [],
         password: [],
@@ -435,6 +435,16 @@ export default {
         this.role = "admin";
         this.email = undefined;
       }, 150);
+    },
+    getRoleDesc(x) {
+      console.log("hey");
+      let index = 0
+      this.roles.map((e,i) => {
+        if(e.roleTitle === this.role){
+          return index = i
+        }
+      })
+      return index
     }
   },
   mounted() {
@@ -445,17 +455,20 @@ export default {
 
     this.$store.state.execAfterTruthyModalClose = this.clearForms;
 
-    // this.$store.dispatch("systemCall", {
-    //   command: "getAdminRoles",
-    //   section: "adminMethods",
-    //   method: "get"
-    // }).then(data => {
-    //   console.log('return here')
-    //   console.log(data)
-    // }).catch(err => {
-    //   console.log('errrrr')
-    //   console.log(err)
-    // })
+    this.$store
+      .dispatch("systemCall", {
+        command: "getRoles",
+        section: "adminMethods",
+        method: "get"
+      })
+      .then(data => {
+        console.log("return here");
+        this.roles = data.data.content;
+      })
+      .catch(err => {
+        console.log("errrrr");
+        console.log(err);
+      });
 
     setTimeout(() => {
       this.ready = true;
