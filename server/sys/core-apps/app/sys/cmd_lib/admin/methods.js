@@ -271,7 +271,7 @@ adminMethods.createNewAppActor = {
             validate_username.hasError && reject(err(validate_username.error))
 
             const admins_username = await db.collection('dq_admins').findOne({ username })
-            admins_username && reject(err(`the username "${username}" is already exist`))
+            admins_username && reject(err(`Invalid username, the username "${username}" is already in used by another admin`))
             if (hasError) return
 
             /**
@@ -683,6 +683,49 @@ adminMethods.listAllCustomRole = {
 //@adminMethods:read. get custom role
 adminMethods.getCustomRole = {
 }
+//@adminMethods:read. get roles
+adminMethods.getRoles = {
+    get prop() {
+        return {
+            allowedtitle: ['owner'],
+            funcIsDestructive: false
+        }
+    },
+    getRoles({ dep, data }) {
+        const { db } = dep
+
+        return new Promise(async (resolve, reject) => {
+            const rolesCursor = await db.collection('dq_actor_role').find()
+            let resArray = []
+
+            await rolesCursor.forEach((doc,err) => {
+                if(err) {
+                    reject({
+                        status: false,
+                        data: {
+                            msg: err,
+                            actions:[{
+                                title:'prompt_err'
+                            }]
+                        }
+                    })
+                }else{
+                    resArray.push(doc)
+                }
+            }).then(res => {
+                resolve({
+                    status: true,
+                    data: {
+                        msg: null,
+                        actions:[],
+                        content: resArray
+                    }
+                })
+            })
+        })
+    }
+}
+
 /*****************************************************
  * Update methods
  */
@@ -899,9 +942,9 @@ adminMethods.deleteAppAdmin = {
 
         console.log(data)
 
-        if(!data){
+        if (!data) {
             err = 'Invalid input data is undefined'
-        }else if (Object.keys(data).length != 1) {
+        } else if (Object.keys(data).length != 1) {
             err = 'Invalid input cannot have more than one filter'
         } else {
             key = Object.keys(data)[0]

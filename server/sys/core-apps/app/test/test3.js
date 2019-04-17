@@ -54,118 +54,26 @@ const myTest = [
             myTest[1].input.username = data[0].data.actions[0].content.username
         }
     },
-    //@test3 index 1 create a role general approach
+    //@test3 index 1 test admin get roles
     {
-        desc: 'create a new role general approach',
+        desc: 'get roles list',
         expected: true,
-        expectedMsg: 'Successfully created reader',
+        expectedMsg: null,
         input: {
-            username: undefined,
             token: undefined,
+            username: 'jannyann',
             section: 'adminMethods',
-            command: 'createAppAdminRule',
-            data:{
-                roleTitle:'reader',
-                approach: 'general',
-                permission: ['r']
-            }
-        },
-        before: err => err(false),
-        after: err => err(false),
-        data(data){
-            // set the value of username and token from the return value
-            // of this test, this simulates getting the data from the client
-            // saved in the localStorage
-            console.log('HELLO WORLD!')
-            myTest[2].input.token = data[0].data.actions[0].content.token
-            myTest[2].input.username = data[0].data.actions[0].content.username
-            console.log(myTest[2])
-        }
-    },
-    //@test3 index 2 create a role section approach
-    {
-        desc: 'create a new role section approach',
-        expected: true,
-        expectedMsg: 'Successfully created reader2',
-        input: {
-            username: undefined,
-            token: undefined,
-            section: 'adminMethods',
-            command: 'createAppAdminRule',
-            data:{
-                roleTitle:'reader2',
-                approach: 'section',
-                permission: {
-                    adminActions:['r','w'],
-                    pageMethods:['r','w'],
-                    components:['r','w'],
-                    shell:['r','w']
-                }
-            }
-        },
-        before: err => err(false),
-        after: err => err(false),
-        data(data){
-            console.log('what??')
-            myTest[3].input.token = data[0].data.actions[0].content.token
-            myTest[3].input.username = data[0].data.actions[0].content.username
-        }
-    },
-    //@test3 index 3 attempt to create reader2 should fail
-    {
-        desc: 'attempt to create reader2 should fail',
-        expected: false,
-        expectedMsg: 'the role title named "reader2" already exist',
-        input: {
-            username: undefined,
-            token: undefined,
-            section: 'adminMethods',
-            command: 'createAppAdminRule',
-            data:{
-                roleTitle:'reader2',
-                approach: 'section',
-                permission: {
-                    adminActions:['r','w'],
-                    pageMethods:['r','w'],
-                    components:['r','w'],
-                    shell:['r']
-                }
-            }
+            command: 'getRoles'
         },
         before: err => err(false),
         after: err => err(false),
         data(data) {
-            myTest[4].input.token = data[0].data.actions[0].content.token
-            myTest[4].input.username = data[0].data.actions[0].content.username
+            
+            myTest[2].input.token = data[0].data.actions[0].content.token
+            myTest[2].input.username = data[0].data.actions[0].content.username
         }
     },
-
-    //@test3 index 4 create new admin
-    {
-        desc: 'create new admin using newly created permission set',
-        expected: true,
-        expectedMsg: 'John P Doe was successfully saved to database',
-        input: {
-            username: undefined,
-            token: undefined,
-            section: 'adminMethods',
-            command: 'createAppAdmin',
-            data: {
-                username: 'johndoe',
-                password: 'passwordtesting123@',
-                adminName: 'John P Doe',
-                roleTitle: 'reader',
-                email: 'samplemail@smail2.com'
-            },
-        },
-        before: err => err(false),
-        after: err => err(false),
-        data(data){
-            myTest[5].input.token = data[0].data.actions[0].content.token
-        }
-    },
-    
-    //@test3 index 5 logout
+    // @test3 index 2 logout
     {
         desc: 'logout to application',
         expected: true,
@@ -178,7 +86,137 @@ const myTest = [
         },
         before: err => err(false),
         after: err => err(false),
-    }
+    },
+    // @test3 index 3 get roles list while logout, expected to fail 
+    {
+        desc: 'get roles list while logout, expected to fail',
+        expected: false,
+        expectedMsg: 'Illegal api call detected request is not permitted',
+        input: {
+            token: undefined,
+            username: 'jannyann',
+            section: 'adminMethods',
+            command: 'getRoles'
+        },
+        before: err => err(false),
+        after: err => err(false),
+        data(data) {
+            // myTest[2].input.token = data[0].data.actions[0].content.token
+            // myTest[2].input.username = data[0].data.actions[0].content.username
+        }
+    },
+    //@test3 index 1 create a role general approach
+    // {
+    //     desc: 'create a new role general approach',
+    //     expected: true,
+    //     expectedMsg: 'Successfully created reader',
+    //     input: {
+    //         username: undefined,
+    //         token: undefined,
+    //         section: 'adminMethods',
+    //         command: 'createAppAdminRule',
+    //         data:{
+    //             roleTitle:'reader',
+    //             approach: 'general',
+    //             permission: ['r']
+    //         }
+    //     },
+    //     before: err => err(false),
+    //     after: err => err(false),
+    //     data(data){
+    //         // set the value of username and token from the return value
+    //         // of this test, this simulates getting the data from the client
+    //         // saved in the localStorage
+    //         console.log('HELLO WORLD!')
+    //         myTest[2].input.token = data[0].data.actions[0].content.token
+    //         myTest[2].input.username = data[0].data.actions[0].content.username
+    //         console.log(myTest[2])
+    //     }
+    // },
+    // //@test3 index 2 create a role section approach
+    // {
+    //     desc: 'create a new role section approach',
+    //     expected: true,
+    //     expectedMsg: 'Successfully created reader2',
+    //     input: {
+    //         username: undefined,
+    //         token: undefined,
+    //         section: 'adminMethods',
+    //         command: 'createAppAdminRule',
+    //         data:{
+    //             roleTitle:'reader2',
+    //             approach: 'section',
+    //             permission: {
+    //                 adminActions:['r','w'],
+    //                 pageMethods:['r','w'],
+    //                 components:['r','w'],
+    //                 shell:['r','w']
+    //             }
+    //         }
+    //     },
+    //     before: err => err(false),
+    //     after: err => err(false),
+    //     data(data){
+    //         console.log('what??')
+    //         myTest[3].input.token = data[0].data.actions[0].content.token
+    //         myTest[3].input.username = data[0].data.actions[0].content.username
+    //     }
+    // },
+    // //@test3 index 3 attempt to create reader2 should fail
+    // {
+    //     desc: 'attempt to create reader2 should fail',
+    //     expected: false,
+    //     expectedMsg: 'the role title named "reader2" already exist',
+    //     input: {
+    //         username: undefined,
+    //         token: undefined,
+    //         section: 'adminMethods',
+    //         command: 'createAppAdminRule',
+    //         data:{
+    //             roleTitle:'reader2',
+    //             approach: 'section',
+    //             permission: {
+    //                 adminActions:['r','w'],
+    //                 pageMethods:['r','w'],
+    //                 components:['r','w'],
+    //                 shell:['r']
+    //             }
+    //         }
+    //     },
+    //     before: err => err(false),
+    //     after: err => err(false),
+    //     data(data) {
+    //         myTest[4].input.token = data[0].data.actions[0].content.token
+    //         myTest[4].input.username = data[0].data.actions[0].content.username
+    //     }
+    // },
+
+    // //@test3 index 4 create new admin
+    // {
+    //     desc: 'create new admin using newly created permission set',
+    //     expected: true,
+    //     expectedMsg: 'John P Doe was successfully saved to database',
+    //     input: {
+    //         username: undefined,
+    //         token: undefined,
+    //         section: 'adminMethods',
+    //         command: 'createAppAdmin',
+    //         data: {
+    //             username: 'johndoe',
+    //             password: 'passwordtesting123@',
+    //             adminName: 'John P Doe',
+    //             roleTitle: 'reader',
+    //             email: 'samplemail@smail2.com'
+    //         },
+    //     },
+    //     before: err => err(false),
+    //     after: err => err(false),
+    //     data(data){
+    //         myTest[5].input.token = data[0].data.actions[0].content.token
+    //     }
+    // },
+    
+    
 ]
 
 cardinalTest(myTest)
