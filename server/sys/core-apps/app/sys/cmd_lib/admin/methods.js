@@ -601,7 +601,46 @@ adminMethods.initActorsDashboard = {
     }
 }
 //@adminMethods:read. list admins
-adminMethods.listAdmins = {
+adminMethods.getAdmins = {
+    get prop() {
+        return {
+            allowedtitle: ['owner'],
+            funcIsDestructive: false
+        }
+    },
+    getAdmins({dep}) {
+        const { db } = dep
+
+        return new Promise(async (resolve, reject) => {
+            const rolesCursor = await db.collection('dq_admins').find()
+            let resArray = []
+
+            await rolesCursor.forEach((doc, err) => {
+                if (err) {
+                    reject({
+                        status: false,
+                        data: {
+                            msg: err,
+                            actions: [{
+                                title: 'prompt_err'
+                            }]
+                        }
+                    })
+                } else {
+                    resArray.push(doc)
+                }
+            }).then(res => {
+                resolve({
+                    status: true,
+                    data: {
+                        msg: null,
+                        actions: [],
+                        content: resArray
+                    }
+                })
+            })
+        })
+    }
 }
 //@adminMethods:read. viewAppAdmin <<-done
 adminMethods.viewAppAdmin = {
