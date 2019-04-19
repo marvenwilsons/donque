@@ -31,13 +31,7 @@ export default {
   },
   methods: {
     getHeads(e) {
-      console.log("heads!");
       return e.map(items => Object.keys(items))[0];
-    },
-    nestedObjectHandler(data) {
-      console.log(data[Object.keys(data)[0]]);
-      console.log(typeof data[Object.keys(data)[0]] === "object");
-      console.log(Array.isArray(data[Object.keys(data)[0]]));
     },
     active({ rows, index, trs, items }) {
       const selectedObject = this.inputData[index];
@@ -55,8 +49,6 @@ export default {
         const i2 = newStr.charAt(1) === ".";
         const i3 = newStr.charAt(2) === ".";
 
-        console.log(`${i1} - ${i2} - ${i3}`);
-
         if (i1 && i2 && i3) {
           return newStr.replace("...",'');
         } else {
@@ -68,17 +60,15 @@ export default {
     }
   },
   mounted() {
-    console.log("2. input Data!");
-    // this.theads = this.inputData.map(items => Object.keys(items))[0]
     this.trs = this.inputData.map(items => items).length;
     this.tds = this.inputData;
 
     const x = this.inputData.map(items => Object.keys(items))[0];
-    const onlyInclude = ["adminName", "username", "title", "email"];
+    const onlyInclude = this.onylShowProperties
     const y = x.filter(items => {
       return onlyInclude.includes(items) && items;
     });
-    this.theads = y;
+    this.theads = y;    
   }
 };
 </script>
