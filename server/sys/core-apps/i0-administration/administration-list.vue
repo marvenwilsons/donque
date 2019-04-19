@@ -50,7 +50,7 @@ export default {
         "Activities log"
       ],
       sideBarMethods: {
-        Admins: ['Add new application admin', 'Add new database admin', 'Application admin list', 'Database admin list'],
+        Admins: ['Add new application admin', 'Add new database admin', 'Application admin list', 'Database admin list','Lost password request'],
         Teams: ['Create new team','Display all teams'],
         Roles: ['Create custom roles','Display all roles'],
         "Organizational Chart": [],
@@ -106,7 +106,7 @@ export default {
   text-decoration: underline;
 }
 .activePane{
-  font-weight: 600;
+  /* font-weight: 600; */
   text-decoration: underline;
 }
 </style>

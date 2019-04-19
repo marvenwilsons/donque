@@ -1,26 +1,34 @@
 <template>
   <div class="fullheight-percent">
     <!-- admins -->
-    <div v-if="$store.state.comp.arr[1].headName === 'Admins'" class="fullwidth fullheight-percent">
+    <div v-if="$store.state.comp.arr[1] && $store.state.comp.arr[1].headName === 'Admins'" class="fullwidth fullheight-percent">
+      <!-- Add new application admin -->
       <div
         v-if="$store.state.administrationCurrentView === 'Add new application admin'"
         class="fullheight-percent"
       >
         <admin-form/>
       </div>
+      <!-- application admin list -->
+      <div
+        v-if="$store.state.administrationCurrentView === 'Application admin list'"
+        class="fullheight-percent"
+      >
+        <applist/>
+      </div>
       <div v-if="$store.state.administrationCurrentView === 'See admin list'">admin list here</div>
     </div>
     <!-- Teams -->
-    <div v-if="$store.state.comp.arr[1].headName === 'Teams'" class="borderred fullwidth">
+    <div v-if="$store.state.comp.arr[1] && $store.state.comp.arr[1].headName === 'Teams'" class="borderred fullwidth">
       <span>Create new team</span>
     </div>
     <!-- roles -->
-    <div v-if="$store.state.comp.arr[1].headName === 'Roles'" class="borderred fullwidth">
+    <div v-if="$store.state.comp.arr[1] && $store.state.comp.arr[1].headName === 'Roles'" class="borderred fullwidth">
       <span>Create new roles</span>
     </div>
     <!-- organizational chart -->
     <div
-      v-if="$store.state.comp.arr[1].headName === 'Organizational Chart'"
+      v-if="$store.state.comp.arr[1] && $store.state.comp.arr[1].headName === 'Organizational Chart'"
       class="borderred fullwidth"
     >
       <span>
@@ -32,23 +40,21 @@
 
 <script>
 import adminForm from "./addNewAdminForm.vue";
+import applicationAdminList from "./application-admin-list.vue";
 import { mapGetters } from "vuex";
 
 export default {
   data() {
-    return {
-    };
+    return {};
   },
   components: {
-    adminForm
+    adminForm,
+    applist: applicationAdminList
   },
   computed: {
-    ...mapGetters({
-    })
+    ...mapGetters({})
   },
-  watch: {
-
-  }
+  watch: {}
 };
 </script>
 

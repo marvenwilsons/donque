@@ -437,7 +437,6 @@ export default {
       }, 150);
     },
     getRoleDesc(x) {
-      console.log("hey");
       let index = 0
       this.roles.map((e,i) => {
         if(e.roleTitle === this.role){
@@ -462,12 +461,10 @@ export default {
         method: "get"
       })
       .then(data => {
-        console.log("return here");
         this.roles = data.data.content;
       })
       .catch(err => {
-        console.log("errrrr");
-        console.log(err);
+        alert(err);
       });
 
     setTimeout(() => {

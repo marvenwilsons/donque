@@ -90,6 +90,7 @@ const createStore = () => {
                         context.error(e)
                     })
             },
+            // general purpose method to reach the cardinal system
             systemCall({commit, state},context) {
                 console.log('** [systemCall]-[store] reaching server')
                 context.username = localStorage.getItem("username")
@@ -133,12 +134,16 @@ const createStore = () => {
                             })
                 }
             },
-            execAfterTruthy({state}, content) {
+            // this function execute after every modal close and successful reach to cardinal system 
+            execAfterTruthy({state}) {
                 if(state.execAfterTruthyModalClose){
                     state.execAfterTruthyModalClose()
                 }
-            }
+            },
+            // Pane method
+            changeCurrentPanesWith({commit, state}, context) {
 
+            }
         },
         mutations: {
             systemCallMutation(state, payload) {
@@ -216,7 +221,16 @@ const createStore = () => {
             },
             assign_pane_title(state, payload) {
                 state.comp.paneTitle = payload
+            },
+            changeCurrentPaneSettings(state,{property, value}) {
+                if(property === 'pane-width'){
+                    const currentValidLen = state.comp.arr.length - 1 < 0 ? 0 : state.comp.arr.length - 1
+                    state.comp.arr[currentValidLen].headWidth = value
+                }else {
+                    alert(`Error in Mutations: changeCurrentPaneSettings property ${property} has no cases`)
+                }
             }
+            
         }
     })
 }
