@@ -1,51 +1,99 @@
 <template>
   <div class="fullheight-percent flex flexcol">
     <span class="app-admin-list-heading">
-      <span class="fullwidth"><strong>Application Admin List</strong></span>
+      <span class="fullwidth">
+        <strong>Application Admin List</strong>
+      </span>
       <span>
         <span>| Total Admins: {{len}}</span>
       </span>
     </span>
     <div class="con relative">
-			<div v-if="inputData" class="abs flex">
-        <div class="abs">
-          <simpleTable @rowSelect="selectedRow" v-bind:onylShowProperties="props" v-bind:inputData="inputData" />
+      <div v-if="inputData" class="abs flex">
+        <div :class="[isCollapse && 'win1', 'abs' ,'flex']">
+          <simpleTable
+            v-show="!isCollapse"
+            @rowSelect="selectedRow"
+            v-bind:onylShowProperties="props"
+            v-bind:inputData="inputData"
+          />
+          <span id="dq-collapse-btn-parent" class="flex flexcol flexcenter">
+            <span @click="collapse" class="dq-collapse pointer">
+              {{!isCollapse ? '&#9204;' : '&#9205;'}}
+            </span>
+          </span>
         </div>
-        <div class="abs">
-          <objectify v-bind:inputData="selectedData" />
+        
+        <div class="relative flex flexcol">
+          <!-- 1 -->
+          <div v-if="selectedData" class="entity-menu flex">
+            <span
+              @click="changeView(undefined)"
+              :class="[!selectedView ? '_selWin' : ''  ,'pointer','entity-rebbon-menu-btn']"
+            >Entity View</span>
+            <span
+              @click="changeView('actions')"
+              :class="[selectedView =='actions' ? '_selWin': '' ,'pointer','entity-rebbon-menu-btn']"
+            >Actions</span>
+            <span
+              @click="changeView('analytics')"
+              :class="[selectedView =='analytics' ? '_selWin': '' ,'pointer','entity-rebbon-menu-btn']"
+            >Entity Analytics</span>
+          </div>
+          <!-- 2 -->
+          <div class="entity-display flex fullwidth relative entity-host">
+            <div class="fullwidth absolute ">
+              <objectify v-if="!selectedView && selectedData != undefined" v-bind:inputData="selectedData"/>
+              <actionsWindow v-if="selectedView === 'actions'"/>
+              <analyticsWindow v-if="selectedView === 'analytics'"/>
+            </div>
+          </div>
         </div>
       </div>
-		</div>
+    </div>
   </div>
 </template>
 
 <script>
 import simpleTable from "@/server/sys/core-apps/pane-system/module/simple-table.vue";
 import objectify from "@/server/sys/core-apps/pane-system/module/objectify.vue";
+import actionsWindow from "./actions.vue";
+import analyticsWindow from "./analytics.vue";
 
 export default {
-	data() {
-		return {
+  data() {
+    return {
       inputData: undefined,
       selectedData: undefined,
       props: ["adminName", "username", "title", "email"],
+      selectedView: undefined,
       len: undefined,
-		}
+      isCollapse: false
+    };
   },
   methods: {
-    selectedRow(value){
-      this.selectedData = value
+    selectedRow(value) {
+      this.selectedData = value;
+      this.selectedView = undefined;
+    },
+    changeView(data) {
+      this.selectedView = data;
+    },
+    collapse(){
+      this.isCollapse = !this.isCollapse
     }
   },
-	components: {
+  components: {
     simpleTable,
-    objectify
-	},
+    objectify,
+    actionsWindow,
+    analyticsWindow
+  },
   mounted() {
-    this.$store.commit('changeCurrentPaneSettings',{
-      property: 'pane-width',
-      value: '100%'
-    })
+    this.$store.commit("changeCurrentPaneSettings", {
+      property: "pane-width",
+      value: "100%"
+    });
 
     this.$store
       .dispatch("systemCall", {
@@ -54,9 +102,9 @@ export default {
         method: "get"
       })
       .then(data => {
-				console.log('1. Fetching inputdata app admin list sample')
+        console.log("1. Fetching inputdata app admin list sample");
         this.inputData = data.data.content;
-        this.len = this.inputData.length
+        this.len = this.inputData.length;
       })
       .catch(err => {
         alert(err);
@@ -66,18 +114,45 @@ export default {
 </script>
 
 <style>
-.abs{
+.abs {
   overflow: auto;
   border: 1px solid rgba(0, 0, 0, 0.103);
 }
 .abs > div:nth-child(1) {
-  flex: 1
+  flex: 1;
 }
 .abs > div:nth-child(2) {
-  flex: 1.5
+  flex: 1.5;
 }
-.con{
-	height: 100%;
-	/* border: 2px solid blue; */
+.con {
+  height: 100%;
+  /* border: 2px solid blue; */
+}
+._selWin {
+  border-bottom: 2px solid var(--hover-blue);
+}
+.entity-rebbon-menu-btn {
+  padding: calc(var(--fontSize) * 1.25);
+}
+.entity-host {
+  overflow: auto;
+}
+.entity-menu {
+  flex: 1;
+}
+.entity-display {
+  flex: 100;
+}
+.dq-collapse{
+  font-size: calc(var(--fontSize)*1.25);
+  padding: calc(var(--fontSize) * 0.25);
+  color: var(--blue-text-2);
+}
+#dq-collapse-btn-parent{
+  background-color: var(--blue-3);
+}
+.win1{
+  max-width: 20px;
+  transition: 0.5s;
 }
 </style>
