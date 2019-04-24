@@ -1,11 +1,18 @@
 <template>
   <main class="fullheight-percent">
     <div id="docker-heading" class="flex flexcol">
-      <div>
-        fav icon here
+      <div class="flex flexcenter">
+        <div class="dq-fav-con flex flexcenter">
+          fav icon here
+        </div>
       </div>
-      <div>
-        {{$store.state.admin.title}}@{{$store.state.admin.adminName}}
+      <div class="flex flexcol dq-nav-user-info">
+        <span>
+          {{$store.state.admin.title}}
+        </span>
+        <span>
+          {{$store.state.admin.adminName}}
+        </span>
       </div>
     </div>
     <div>
@@ -39,5 +46,14 @@ main {
 }
 #docker-heading > div{
   text-align: center;
+}
+.dq-fav-con{
+  height: calc(var(--fontSize) * 10.25);
+  width: calc(var(--fontSize) * 10.25);
+  border-radius: 100%;
+  background-color: white;
+}
+.dq-nav-user-info{ 
+  margin-top: calc(var(--fontSize)*1.25);
 }
 </style>
