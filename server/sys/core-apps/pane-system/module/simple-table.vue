@@ -1,6 +1,6 @@
 <template>
-  <div class>
-    <table id="objtotbl">
+  <div>
+    <table class="objtotbl">
       <tr>
         <th v-for="items in theads" :key="items">{{capitalize(items)}}</th>
       </tr>
@@ -73,7 +73,7 @@ export default {
 };
 </script>
 
-<style scoped >
+<style  >
 table,
 th,
 td,
@@ -89,10 +89,10 @@ td {
   text-align: left;
   /* color: rgb(39, 39, 39); */
 }
-table#objtotbl tr:nth-child(even) {
+table.objtotbl tr:nth-child(even) {
   background-color: #86a6bd3d;
 }
-table#objtotbl tr:nth-child(odd) {
+table.objtotbl tr:nth-child(odd) {
   background-color: #fff;
 }
 table {
@@ -106,7 +106,7 @@ td {
 th {
   color: var(--dark-1);
 }
-table#objtotbl tr.mytr:hover {
+table.objtotbl tr.mytr:hover {
   background-color: var(--hover-blue);
   cursor: pointer;
   transition: 0.2s;
