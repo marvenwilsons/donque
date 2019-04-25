@@ -1,80 +1,85 @@
 <template>
-  <div class="flex flexcol flexwrap relative">
-    <div class="fullheight-percentt fullwidth">
-      <span
-        class="pointer flex objtfy-list-render flexcol"
-        v-for="(props,index) in inputData"
-        :key="index"
-      >
-        <div class="flex">
-          <span class="objtfy-list-items flex objtfy-props">{{index}}:</span>
-          <span class="objtfy-list-items flex objtfy-values">
-            <span>{{typeof props === 'string' ? props : '' }}</span>
-            <span
-              @click="expand(props,index)"
-              class="objtfy-expand"
-            >{{typeof props === 'object' ? '...expand' : '' }}</span>
-          </span>
-        </div>
-        <span v-if="isReady && refresh()">
-          <span v-if="expanded[index].isOpen">
-            <span v-if="getype(props) === 'string' || getype(props) === 'number'">{{props}}</span>
-            <span v-if="getype(props) === 'array'">{{props}}</span>
-            <span v-if="getype(props) === 'object'">{{props}}</span>
-          </span>
-        </span>
-      </span>
-    </div>
+  <div>
+    <table v-if="isReady" id="dq-objtfy-table" class="objtotbl">
+      <tr>
+        <th class="objtfy-th">key</th>
+        <th class="objtfy-th">value</th>
+        <th class="objtfy-th">type</th>
+      </tr>
+      <tr class="mytr mytrtxt" v-for="(keys,str_index) in dataStringSet" :key="str_index">
+        <td>{{Object.keys(keys)[0]}}</td>
+        <td>{{keys[Object.keys(keys)[0]] === '' ? `null` : `"${keys[Object.keys(keys)[0]]}"`}}</td>
+        <td>{{gettype(keys[Object.keys(keys)[0]])}}</td>
+      </tr>
+      <objtfyObjView
+        class="mytr mytrtxt"
+        v-for="(obj_keys,obj_index) in dataObjSet"
+        :key="`${obj_index}-${obj_keys}-obj`"
+        v-bind:inputData="dataObjSet"
+      />
+    </table>
   </div>
 </template>
 
 <script>
+import objtfyArrView from "./objectify-array-view.vue";
+import objtfyObjView from "./objectify-object-view.vue";
+import objtfyStrView from "./objectify-str-view.vue";
+
 export default {
   props: ["inputData"],
   data() {
     return {
-      expanded: {},
+      keys: undefined,
+      values: undefined,
+      types: undefined,
+      currentSelected: undefined,
       isReady: false,
-      fromExpand: false
+      rawData: this.inputData,
+      dataStringSet: [],
+      dataObjSet: []
     };
   },
+  components: {
+    objtfyArrView,
+    objtfyObjView
+  },
+  watch: {
+    inputData(o, n) {
+      console.log("it changed!");
+      const arr = [];
+      this.rawData = this.inputData;
+      // key
+      Object.keys(this.rawData).map(e => {
+        arr.push({ [e]: this.rawData[e] });
+      });
+
+      this.keys = arr;
+    }
+  },
   methods: {
-    expand(prop, index) {
-      if (this.expanded[index].isOpen) {
-        this.expanded[index].isOpen = false;
-      } else {
-        this.expanded[index].isOpen = true;
-      }
-      // causes to re render the component
-      this.fromExpand = true;
-      this.isReady = false;
-      this.isReady = true;
-    },
-    refresh() {
-      if (this.fromExpand === true) {
-        // scans the current expanded values for unregistered props that need to be added
-        Object.keys(this.inputData).map(items => {
-          if (Object.keys(this.expanded).includes(items) === false) {
-            this.expanded[items] = {
-              isOpen: false,
-              views: []
-            };
-          }
+    insert(value, index) {
+      console.log("inserted");
+      console.log(value);
+      console.log(index);
+
+      if (this.gettype(value) === "array") {
+        this.keys.splice(index + 1, 0, ...value);
+      } else if (this.gettype(value) === "object") {
+        Object.keys(value).map(e => {
+          this.keys.splice(index + 1, 0, { [e]: value[e] });
         });
-        return true;
-      } else {
-        // the user supplied a new object, this code repopulates the the expanded variable to the new object
-        Object.keys(this.inputData).map(i => {
-          this.expanded[i] = {
-            isOpen: false,
-            views: []
-          };
-        });
-        this.fromExpand = false;
-        return true;
       }
     },
-    getype(v) {
+    getfields(v) {
+      // console.log("get fields");
+      if (v === null) {
+        return "null";
+      } else {
+        return `${Object.keys(v).length} fields`;
+      }
+    },
+    gettype(v) {
       let finalType = undefined;
       if (typeof v === "object") {
         finalType = Array.isArray(v) ? "array" : "object";
@@ -85,52 +90,25 @@ export default {
       return finalType;
     }
   },
-  computed: {
-    latestObj: () => {
-      return this.expanded != undefined && this.expanded;
-    }
-  },
   mounted() {
-    console.log("mounted");
-    console.log(this.inputData);
-    Object.keys(this.inputData).map(i => {
-      this.expanded[i] = {
-        isOpen: false,
-        views: []
-      };
-    });
     this.isReady = true;
+    const arr = [];
+
+    // key
+    Object.keys(this.rawData).map(e => {
+      // arr.push({ [e]: this.rawData[e] });
+      if (this.gettype(this.rawData[e]) === "string") {
+        this.dataStringSet.push({ [e]: this.rawData[e] });
+      } else if (this.gettype(this.rawData[e]) === "object") {
+        this.dataObjSet.push({ [e]: this.rawData[e] });
+      }
+    });
   }
 };
 </script>
 
-<style>
-.objtfy-props {
+<style scoped>
+.objtfy-th {
   flex: 1;
-  font-weight: 600;
-}
-.objtfy-values {
-  flex: 3;
-}
-.objtfy-list-items {
-  padding: var(--size-1-half);
-  color: var(--dark-1);
-  flex-wrap: wrap;
-}
-.objtfy-list-items > span {
-  word-wrap: break-word;
-  /* flex-wrap: wrap; */
-  flex-basis: 600px !important;
-  max-width: 600px !important;
-}
-.objtfy-list-render:nth-child(even) {
-  /* background-color: #86a6bd3d; */
-  background-color: #86a6bd15;
-}
-.objtfy-list-render:nth-child(odd) {
-  background-color: #86a6bd3d;
-}
-.objtfy-expand:hover {
-  text-decoration: underline;
 }
 </style>
