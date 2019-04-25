@@ -160,7 +160,7 @@ img{
  /* My Own Style ( dq framework 0.2 )
      ============================================================================*/
      :root{
-        --fontSize: 13.5px;
+        --fontSize: 13px;
         --ln: 1.5rem
       }
       html {
