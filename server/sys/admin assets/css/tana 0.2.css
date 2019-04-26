@@ -134,7 +134,7 @@ img{
     width: 100%;
 }
 
-/* otheres */
+/* @others */
 .hide{
     display: none;
 }
@@ -142,14 +142,14 @@ img{
     display: block;
 }
 
-/* padding */
-.pad-050{
+/* @paddings */
+.pad050{
   padding: calc(var(--fontSize) * 0.50);
 }
-.pad-025{
+.pad025{
   padding: calc(var(--fontSize) * 0.25);
 }
-.pad-125{
+.pad125{
   padding: calc(var(--fontSize) * 1.25);
 }
 

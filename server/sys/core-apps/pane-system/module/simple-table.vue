@@ -1,12 +1,13 @@
 <template>
   <div>
-    <table class="objtotbl">
+    <table id="objtotbl">
       <tr>
-        <th v-for="items in theads" :key="items">{{capitalize(items)}}</th>
+        <th id="simple-tbl-th" v-for="items in theads" :key="items">{{capitalize(items)}}</th>
       </tr>
       <tr class="mytr mytrtxt" v-for="(rows,index) in trs" :key="rows">
         <td
           :class="currentSelected === index ? 'active' : ''"
+          id="simple-tbl-td"
           v-for="items in theads"
           :key="items"
           @click="active({rows,index,trs})"
@@ -73,40 +74,35 @@ export default {
 };
 </script>
 
-<style  >
-table,
-th,
-td,
-td > span {
-  /* border-left: 1px solid rgba(0, 0, 0, 0.24); */
+<style>
+table#objtotbl,
+th#simple-tbl-th,
+td#simple-tbl-td,
+td#simple-tbl-td > span {
   border-collapse: collapse;
-  /* border-spacing: 5px; */
-  /* font-family: var(--cuprum); */
 }
-th,
-td {
+th#simple-tbl-th,
+td#simple-tbl-td {
   padding: calc(var(--fontSize) * 0.5);
   text-align: left;
-  /* color: rgb(39, 39, 39); */
 }
-table.objtotbl tr:nth-child(even) {
+table#objtotbl tr:nth-child(even) {
   background-color: #86a6bd3d;
 }
-table.objtotbl tr:nth-child(odd) {
+table#objtotbl tr:nth-child(odd) {
   background-color: #fff;
 }
 table {
-  /* border: 1px solid rgba(0, 0, 0, 0.103); */
   width: 100%;
 }
-td {
+td{
   /* min-width: 170px; */
   color: var(--dark-1);
 }
 th {
   color: var(--dark-1);
 }
-table.objtotbl tr.mytr:hover {
+table#objtotbl tr.mytr:hover {
   background-color: var(--hover-blue);
   cursor: pointer;
   transition: 0.2s;
@@ -116,7 +112,7 @@ table.objtotbl tr.mytr:hover {
   box-shadow: 2px 2px 15px 1px #393e4244;
   background-color: var(--hover-blue);
 }
-.mytrtxt:hover > td {
+.mytrtxt:hover > td#simple-tbl-td {
   color: white;
   box-shadow: 2px 2px 15px 1px #393e4244;
 }
