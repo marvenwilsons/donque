@@ -17,13 +17,14 @@
             v-bind:onylShowProperties="props"
             v-bind:inputData="inputData"
           />
-          <span id="dq-collapse-btn-parent" class="flex flexcol flexcenter">
-            <span @click="collapse" class="dq-collapse pointer">
-              {{!isCollapse ? '&#9204;' : '&#9205;'}}
-            </span>
-          </span>
+          <!-- <span id="dq-collapse-btn-parent" class="flex flexcol flexcenter">
+            <span
+              @click="collapse"
+              class="dq-collapse pointer"
+            >{{!isCollapse ? '&#9204;' : '&#9205;'}}</span>
+          </span> -->
         </div>
-        
+
         <div class="relative flex flexcol">
           <!-- 1 -->
           <div v-if="selectedData" class="entity-menu flex">
@@ -42,8 +43,11 @@
           </div>
           <!-- 2 -->
           <div class="entity-display flex fullwidth relative entity-host">
-            <div class="fullwidth absolute ">
-              <objectify v-if="!selectedView && selectedData != undefined" v-bind:inputData="selectedData"/>
+            <div class="fullwidth absolute">
+              <mongbeans
+                v-if="!selectedView && selectedData != undefined"
+                v-bind:inputData="selectedData"
+              />
               <actionsWindow v-if="selectedView === 'actions'"/>
               <analyticsWindow v-if="selectedView === 'analytics'"/>
             </div>
@@ -56,13 +60,40 @@
 
 <script>
 import simpleTable from "@/server/sys/core-apps/pane-system/module/simple-table.vue";
-import objectify from "@/server/sys/core-apps/pane-system/module/objectify.vue";
+import mongbeans from "@/server/sys/core-apps/global-ui/mongbeans/mongbeans.vue";
 import actionsWindow from "./actions.vue";
 import analyticsWindow from "./analytics.vue";
 
 export default {
   data() {
     return {
+      testData: {
+        name: {
+          k: "marven",
+          keyOrValue1: "marven",
+          test: {
+            test1: "123",
+            test2: "123",
+            test: {
+              test1: "123",
+              test2: "123"
+            }
+          },
+          books: {
+            jquery: 'true',
+            sql: true,
+            javascript_frame_works: {
+              vue: 'true'
+            }
+          },
+          todos: [
+            'go to church',
+            'go to metro',
+            'buy groceries',
+            null
+          ]
+        }
+      },
       inputData: undefined,
       selectedData: undefined,
       props: ["adminName", "username", "title", "email"],
@@ -79,13 +110,13 @@ export default {
     changeView(data) {
       this.selectedView = data;
     },
-    collapse(){
-      this.isCollapse = !this.isCollapse
+    collapse() {
+      this.isCollapse = !this.isCollapse;
     }
   },
   components: {
     simpleTable,
-    objectify,
+    mongbeans,
     actionsWindow,
     analyticsWindow
   },
@@ -143,15 +174,15 @@ export default {
 .entity-display {
   flex: 100;
 }
-.dq-collapse{
-  font-size: calc(var(--fontSize)*1.25);
+.dq-collapse {
+  font-size: calc(var(--fontSize) * 1.25);
   padding: calc(var(--fontSize) * 0.25);
   color: var(--blue-text-2);
 }
-#dq-collapse-btn-parent{
+#dq-collapse-btn-parent {
   background-color: var(--blue-3);
 }
-.win1{
+.win1 {
   max-width: 20px;
   transition: 0.5s;
 }

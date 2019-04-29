@@ -1,8 +1,12 @@
 import Vuex from 'vuex'
 import paneConf from "@/server/sys/core-apps/pane-system/module/paneconf.js";
+import mongbeans_module from './mongbeans_store.js'
 
 const createStore = () => {
     return new Vuex.Store({
+        modules: {
+            mongbeans: mongbeans_module
+        },
         state: {
             app: undefined,
             admin: undefined,
@@ -46,7 +50,6 @@ const createStore = () => {
             hasErr: state => {
                 return state.hasErr
             }
-
         },
         actions: {
             close_pane: ({ commit }, payload) => {
