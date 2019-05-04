@@ -4,9 +4,15 @@ const mongbeans = {
     state: {
         mongbeans: [], // array of object only
         expandedCount: 0,
+        initialKeys: [],
+        nesteds: {},
+        isLoaded: false
     },
     actions: {
-        populateMongBeans: ({ commit, state }, context) => {
+        populateInitailKeys({state},context){
+            state.initialKeys = Object.keys(context)
+        },
+        populateMongBeans({ commit, state }, context) {
             state.mongbeans.push(context)
         },
         incExpandedCount: ({state}) => {
@@ -55,6 +61,9 @@ const mongbeans = {
         }
     },
     getters: {
+        getNesteds(state) {
+
+        },
         latestMongbeans: state => {
             return state.mongbeans
         },
