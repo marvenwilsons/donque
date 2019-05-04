@@ -164,6 +164,7 @@ export default {
   --blue-2: #86a6bd;
   --blue-3: #e9eff3;
   --blue-4: #f4f7f9;
+  --blue-5: #86a6bd3d;
   --blue-text: #2d4455;
   --blue-text-2: #4a6976;
 
