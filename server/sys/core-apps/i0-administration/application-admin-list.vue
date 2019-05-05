@@ -17,12 +17,12 @@
             v-bind:onylShowProperties="props"
             v-bind:inputData="inputData"
           />
-          <!-- <span id="dq-collapse-btn-parent" class="flex flexcol flexcenter">
+          <span id="dq-collapse-btn-parent" class="flex flexcol flexcenter">
             <span
               @click="collapse"
               class="dq-collapse pointer"
             >{{!isCollapse ? '&#9204;' : '&#9205;'}}</span>
-          </span> -->
+          </span>
         </div>
 
         <div class="relative flex flexcol">
@@ -42,8 +42,9 @@
             >Entity Analytics</span>
           </div>
           <!-- 2 -->
-          <div class="entity-display flex fullwidth relative entity-host">
-            <div class="fullwidth absolute">
+          <div id="mongbeans-wrap" class="entity-display flex fullwidth relative entity-host">
+            <div
+              class="fullwidth absolute">
               <mongbeans
                 v-if="!selectedView && selectedData != undefined"
                 v-bind:inputData="selectedData"
@@ -60,7 +61,7 @@
 
 <script>
 import simpleTable from "@/server/sys/core-apps/pane-system/module/simple-table.vue";
-import mongbeans from "@/server/sys/core-apps/global-ui/mongbeans/mongbeans.vue";
+import mongbeans from "@/server/sys/core-apps/global-ui/mongbeans/host.vue";
 import actionsWindow from "./actions.vue";
 import analyticsWindow from "./analytics.vue";
 
@@ -68,15 +69,21 @@ export default {
   data() {
     return {
       testData: {
+        age: 22,
         name: {
           k: "marven",
           keyOrValue1: "marven",
           test: {
             test1: "123",
             test2: "123",
-            test: {
+            testNested: {
               test1: "123",
-              test2: "123"
+              test2: "123",
+              math: {
+                average: 10,
+                price: 46.387901234,
+                isPassed: true,
+              }
             }
           },
           books: {
@@ -90,22 +97,54 @@ export default {
             'go to church',
             'go to metro',
             'buy groceries',
-            null
           ]
-        }
+        },
+        cetizenship: 'canadian',
+        education: {
+          elementary: {
+            year: '2001 - 2006',
+            school: 'Kabatuan Elementary school',
+            awards: ['most panctual', 'passed'],
+            subjects: ['English 1','Science 1','Sibika at argicultura'],
+            year_duration: 6
+          },
+          highschool: {
+            year: '2006 - 2011',
+            school: 'Holy Trinity College',
+            awards: 'none',
+            subjects: ['English','Science 1','Chemistry', 'High school Algebra'],
+            year_duration: 4         
+          },
+          college: {
+            year: '2012 - 2015',
+            school: 'Cebu Technological University',
+            awards: 'none',
+            course: 'Bachelors of science in Hospitality Management', 
+            ed_status: {
+              under_grad: true,
+              doctors: false
+            }
+          },
+          number_of_schools_attended: 4
+        },
+        test_Array: ['foo','bar','baz'],
       },
       inputData: undefined,
       selectedData: undefined,
       props: ["adminName", "username", "title", "email"],
       selectedView: undefined,
       len: undefined,
-      isCollapse: false
+      isCollapse: false,
     };
   },
   methods: {
     selectedRow(value) {
+      console.log('testing!')
       this.selectedData = value;
       this.selectedView = undefined;
+      // this.$store.dispatch('populateInitailKeys', value)
+      this.$store.dispatch('populateInitailKeys', this.testData)
+
     },
     changeView(data) {
       this.selectedView = data;
@@ -121,6 +160,7 @@ export default {
     analyticsWindow
   },
   mounted() {
+    console.log('hey!')
     this.$store.commit("changeCurrentPaneSettings", {
       property: "pane-width",
       value: "100%"

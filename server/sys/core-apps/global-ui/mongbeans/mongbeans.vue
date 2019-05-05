@@ -24,41 +24,54 @@
         <span class="mongbeans-key">
           <span class="mongbeans-key-str">{{index}}:</span>
         </span>
-        <span class="mongbeans-val-ind flex">
+        <span
+          :style="{maxWidth: $store.state.mongbeans.curr_width + 'px', minWidth: $store.state.mongbeans.curr_width + 'px' }"
+          class="mongbeans-val-ind flex"
+        >
           <span class="mongbeans-val-con">"{{val}}"</span>
         </span>
-        <span class="mongbeans-type-ind flex flexcenter">String</span>
+        <span
+          :style="{maxWidth: $store.state.mongbeans.curr_width + 'px', minWidth: $store.state.mongbeans.curr_width + 'px' }"
+          class="mongbeans-type-ind flex flexcenter"
+        >String</span>
       </div>
       <!-- number case -->
       <div v-if="gettype(val) === 'number'" class="flex c-items2">
         <span class="mongbeans-key">
           <span class="mongbeans-key-str">{{index}}:</span>
         </span>
-        <span class="mongbeans-val-ind flex">
+        <span
+          :style="{maxWidth: $store.state.mongbeans.curr_width + 'px', minWidth: $store.state.mongbeans.curr_width + 'px' }"
+          class="mongbeans-val-ind flex"
+        >
           <span class="mongbeans-val-con">{{val}}</span>
         </span>
-        <span class="mongbeans-type-ind flex flexcenter">Number</span>
+        <span
+          :style="{maxWidth: $store.state.mongbeans.curr_width + 'px', minWidth: $store.state.mongbeans.curr_width + 'px' }"
+          class="mongbeans-type-ind flex flexcenter"
+        >Number</span>
       </div>
       <!-- boolean case -->
       <div v-if="gettype(val) === 'boolean'" class="flex c-items2">
         <span class="mongbeans-key">
           <span class="mongbeans-key-str">{{index}}:</span>
         </span>
-        <span class="mongbeans-val-ind flex">
+        <span
+          :style="{maxWidth: $store.state.mongbeans.curr_width + 'px', minWidth: $store.state.mongbeans.curr_width + 'px' }"
+          class="mongbeans-val-ind flex"
+        >
           <span class="mongbeans-val-con">{{val}}</span>
         </span>
-        <span class="mongbeans-type-ind flex flexcenter">Boolean</span>
-      </div>translate Vogel im Käfig
+        <span
+          :style="{maxWidth: $store.state.mongbeans.curr_width + 'px', minWidth: $store.state.mongbeans.curr_width + 'px' }"
+          class="mongbeans-type-ind flex flexcenter"
+        >Boolean</span>
+      </div>
       <!-- obj case and array case -->
       <div v-if="gettype(val) === 'obj' || gettype(val) === 'array'">
         <!-- object case expand -->
-        <!-- <small class="pad025" :style="{backgroundColor: 'red' , color:'white'}" >{{nindex}} - {{index}}</small> -->
-        <div class="flex ">
-          <div
-            :id="`${nindex}-${index}-${gettype(val)}`"
-            :style="{paddingLeft: getPadValForObjCase(nindex,index,gettype(val)) +'px'}"
-            class="flex obj-ind-wrapper"
-          >
+        <div class="flex">
+          <div class="flex obj-ind-wrapper">
             <span
               v-if="!openId[index]"
               @click="expand({isOpen: true, type: 'obj', val,index, nindex:`nindex${nindex}`})"
@@ -74,16 +87,23 @@
           <span class="mongbeans-val-ind flex">
             <span
               v-if="val != null"
+              :style="{maxWidth: $store.state.mongbeans.curr_width + 'px', minWidth: $store.state.mongbeans.curr_width + 'px' }"
               class="mongbeans-val-con"
             >{{gettype(val) === 'obj' && `{${Object.keys(val).length} fields}` || gettype(val) === 'array' && `[${Object.keys(val).length} elements]`}}</span>
           </span>
           <span
+            :id="`${nindex}-${index}-${gettype(val)}`"
+            :style="{maxWidth: $store.state.mongbeans.curr_width + 'px', minWidth: $store.state.mongbeans.curr_width + 'px' }"
             class="mongbeans-type-ind flex flexcenter"
-          >{{gettype(val) === 'obj' && 'Object' || gettype(val) === 'array' && 'Array'}}</span>
+          >{{setValAndTypeWidths(nindex,index,gettype(val))}} {{gettype(val) === 'obj' && 'Object' || gettype(val) === 'array' && 'Array'}}</span>
         </div>
         <!-- recursive here -->
         <div v-if="openId[index]">
-          <mongbeans class="mongbeans-nested padleft125" :recursiveData="{index,nindex}" :inputData="val"/>
+          <mongbeans
+            class="mongbeans-nested padleft125"
+            :recursiveData="{parent:index,parent_index:nindex}"
+            :inputData="val"
+          />
         </div>
       </div>
     </div>
@@ -93,16 +113,13 @@
 <script>
 export default {
   name: "mongbeans",
-  props: ["inputData"],
+  props: ["inputData", "recursiveData"],
   data() {
     return {
       isOpen: false,
       isReady: true,
-      openId: {}
+      openId: {},
     };
-  },
-  mounted() {
-    this.refresh();
   },
   methods: {
     expand(data) {
@@ -126,14 +143,17 @@ export default {
       this.isReady = false;
       this.isReady = true;
     },
-    getPadValForObjCase(nindex, index, type) {
+    setValAndTypeWidths(nindex, index, type) {
+      console.log('hello')
       const els = document.getElementById(`${nindex}-${index}-${type}`);
 
       if (els) {
-      console.log(`${nindex}${index}${type}`)
-        const initialParent = els.attributes[0].ownerElement.parentElement.parentElement.parentElement
-        console.log(initialParent.attributes[0].ownerElement.parentElement);
+        this.$store.state.mongbeans.widths[`${nindex}-${index}-${type}`] =
+          els.offsetWidth;
       }
+      this.$store.state.mongbeans.curr_width = Object.values(
+        this.$store.state.mongbeans.widths
+      ).sort()[0];
     },
     gettype(v) {
       let finalType = undefined;
@@ -148,7 +168,7 @@ export default {
       }
       return finalType;
     }
-  }
+  },
 };
 </script>
 

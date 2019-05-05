@@ -6,7 +6,9 @@ const mongbeans = {
         expandedCount: 0,
         initialKeys: [],
         nesteds: {},
-        isLoaded: false
+        isLoaded: false,
+        widths: {},
+        curr_width: undefined
     },
     actions: {
         populateInitailKeys({state},context){
