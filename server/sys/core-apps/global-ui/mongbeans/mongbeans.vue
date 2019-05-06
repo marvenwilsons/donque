@@ -126,11 +126,9 @@ export default {
       }
 
       if (data.isOpen) {
-        console.log("clicked");
         this.$store.state.mongbeans.being_clicked_current = data.index;
-        console.log(this.$store.state.mongbeans.being_clicked_current);
       } else {
-        this.$store.dispatch("trimMongBeansArray", data);
+        
       }
     },
     refresh() {

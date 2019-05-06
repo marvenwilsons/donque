@@ -358,12 +358,7 @@ adminMethods.createNewAppActor = {
                 },
                 parentAdmin: '',
                 childAdmins: [],
-                resources: [
-                    { name: 'dashboard' },
-                    { name: 'messages' },
-                    { name: 'tasks' },
-                    { name: 'work' },
-                ], // should be encrypted
+                resource: role_title.resource, 
                 adminInstanceAllowed: 1,
                 messages: [],
                 lastModefied: '',

@@ -111,7 +111,7 @@ export default {
         modalsCurrentState === "modal is close" &&
         !this.$store.state.hasErr
       ) {
-        this.$store.dispatch('execAfterTruthy')
+        this.$store.dispatch("execAfterTruthy");
       }
     }
   },
@@ -120,7 +120,6 @@ export default {
      * For the docker, it will set up first item highlight
      * to the dashboard
      */
-
     this.$store.dispatch("firstLoad");
     this.read = true;
     console.log("");

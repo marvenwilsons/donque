@@ -14,7 +14,7 @@
       <div id="dq-head-cur-user" class="flex pointer">
         <span @click="notifications('user')" class="relative">
           <strong>{{$store.state.admin.adminName}}</strong>
-          <br><span id="dq-head-user-title" class="absolute">owner</span>
+          <br><span id="dq-head-user-title" class="absolute">{{$store.state.admin.title}}</span>
         </span>
         <svg
           xmlns="http://www.w3.org/2000/svg"

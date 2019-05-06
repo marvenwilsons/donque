@@ -446,14 +446,14 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                             roleTitle: 'dev',
                             desc: 'the dev title grants access to system files, public views, and full permission to perform crud operations related to applications bussiness developement',
                             resource: {
-                                dashboard: app_resource.dashboard,
-                                page: app_resource.page,
-                                components: app_resource.components,
-                                messages: app_resource.messages,
-                                task: app_resource.task,
-                                todos: app_resource.todos,
-                                profile: app_resource.profile,
-                                plugins: app_resource.plugins
+                                Dashboard: app_resource.dashboard,
+                                Pages: app_resource.page,
+                                Components: app_resource.components,
+                                Messages: app_resource.messages,
+                                Task: app_resource.task,
+                                Todos: app_resource.todos,
+                                Profile: app_resource.profile,
+                                Plugins: app_resource.plugins
                             }
                         })
                     // creating admin role
@@ -464,12 +464,12 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                             roleTitle: 'admin',
                             desc:'the admin manages the app resources and executes actions that is assigned by the owner',
                             resource: {
-                                dashboard: app_resource.dashboard,
-                                work: app_resource.work,
-                                messages: app_resource.messages,
-                                task: app_resource.task,
-                                todos: app_resource.todos,
-                                profile: app_resource.profile,
+                                Dashboard: app_resource.dashboard,
+                                Work: app_resource.work,
+                                Messages: app_resource.messages,
+                                Task: app_resource.task,
+                                Todos: app_resource.todos,
+                                Profile: app_resource.profile,
                             }
                         })
 

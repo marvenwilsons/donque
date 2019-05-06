@@ -150,6 +150,10 @@ const db = async (user, pwd) => {
                     actions: [
                         {
                             title: 'prompt_err'
+                        },
+                        {
+                            title: 'redirect',
+                            content: 'dqlogin'
                         }
                     ]
                 }
