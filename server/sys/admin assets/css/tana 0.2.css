@@ -152,6 +152,9 @@ img{
 .pad125{
   padding: calc(var(--fontSize) * 1.25);
 }
+.padleft125{
+  padding-left: calc(var(--fontSize) * 1.25);
+}
 
 /* @margins */
 .margin050{

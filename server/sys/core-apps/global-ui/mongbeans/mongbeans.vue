@@ -1,18 +1,5 @@
 <template>
   <div v-if="isReady" class="relative">
-    <!-- ! -->
-    <span class="tew flex absolute fullwidth fullheight-percent">
-      <span class="exp">
-        <span class="flex flexcenter">|</span>
-      </span>
-      <span class="exp">
-        <span class="flex flexcenter">|</span>
-      </span>
-      <span class="exp">
-        <span class="flex flexcenter">|</span>
-      </span>
-    </span>
-    <!-- ! -->
     <div
       :data-spawn-id="nindex"
       class="mong-items"
@@ -28,12 +15,14 @@
           :style="{maxWidth: $store.state.mongbeans.curr_width + 'px', minWidth: $store.state.mongbeans.curr_width + 'px' }"
           class="mongbeans-val-ind flex"
         >
-          <span class="mongbeans-val-con">"{{val}}"</span>
+          <!-- string val -->
+          <span class="mongbeans-val-con"> "{{val}}"</span>
         </span>
+        <!-- string key -->
         <span
           :style="{maxWidth: $store.state.mongbeans.curr_width + 'px', minWidth: $store.state.mongbeans.curr_width + 'px' }"
           class="mongbeans-type-ind flex flexcenter"
-        >String</span>
+        > String</span>
       </div>
       <!-- number case -->
       <div v-if="gettype(val) === 'number'" class="flex c-items2">
@@ -82,20 +71,25 @@
               @click="expand({isOpen: false, type: 'obj', val,index})"
               class="pointer mongbeans-expand-btn flex flexcenter"
             >-</span>
+            <!-- object key -->
             <span class="mongbeans-key">{{index}}</span>
           </div>
-          <span class="mongbeans-val-ind flex">
+          <!-- object val -->
+          <span
+            :style="{maxWidth: $store.state.mongbeans.curr_width + 'px', minWidth: $store.state.mongbeans.curr_width + 'px' }"
+            class="mongbeans-val-ind flex"
+          >
             <span
               v-if="val != null"
-              :style="{maxWidth: $store.state.mongbeans.curr_width + 'px', minWidth: $store.state.mongbeans.curr_width + 'px' }"
               class="mongbeans-val-con"
-            >{{gettype(val) === 'obj' && `{${Object.keys(val).length} fields}` || gettype(val) === 'array' && `[${Object.keys(val).length} elements]`}}</span>
+            > {{gettype(val) === 'obj' && `{${Object.keys(val).length} fields}` || gettype(val) === 'array' && `[${Object.keys(val).length} elements]`}}</span>
           </span>
+          <!-- object type -->
           <span
             :id="`${nindex}-${index}-${gettype(val)}`"
             :style="{maxWidth: $store.state.mongbeans.curr_width + 'px', minWidth: $store.state.mongbeans.curr_width + 'px' }"
             class="mongbeans-type-ind flex flexcenter"
-          >{{setValAndTypeWidths(nindex,index,gettype(val))}} {{gettype(val) === 'obj' && 'Object' || gettype(val) === 'array' && 'Array'}}</span>
+          > {{setValAndTypeWidths(nindex,index,gettype(val))}} {{gettype(val) === 'obj' && 'Object' || gettype(val) === 'array' && 'Array'}}</span>
         </div>
         <!-- recursive here -->
         <div v-if="openId[index]">
@@ -118,7 +112,7 @@ export default {
     return {
       isOpen: false,
       isReady: true,
-      openId: {},
+      openId: {}
     };
   },
   methods: {
@@ -144,16 +138,18 @@ export default {
       this.isReady = true;
     },
     setValAndTypeWidths(nindex, index, type) {
-      console.log('hello')
+      console.log('this executes!')
       const els = document.getElementById(`${nindex}-${index}-${type}`);
 
       if (els) {
         this.$store.state.mongbeans.widths[`${nindex}-${index}-${type}`] =
           els.offsetWidth;
+
       }
       this.$store.state.mongbeans.curr_width = Object.values(
         this.$store.state.mongbeans.widths
       ).sort()[0];
+
     },
     gettype(v) {
       let finalType = undefined;
@@ -168,7 +164,7 @@ export default {
       }
       return finalType;
     }
-  },
+  }
 };
 </script>
 
@@ -183,14 +179,6 @@ export default {
 .tew {
   z-index: -1;
 }
-
-.c-items {
-  /* padding-left: 20px; */
-  /* margin-left:20px; */
-}
-.c-items2 {
-  /* margin-left: 20px; */
-}
 .type-ind-str {
   color: white;
   border-radius: 2px;
@@ -202,23 +190,30 @@ export default {
 }
 .obj-ind-wrapper {
   flex: 1;
-  max-width: 33.4%;
+  align-items: center;
 }
 .mongbeans-val-ind {
   flex: 1;
   justify-content: flex-end;
-  /* border: 1px solid red; */
+  /* border: 1px solid greenyellow; */
+  border: 1px solid rgba(128, 128, 128, 0.096);
   max-width: 35%;
   word-break: break-all;
+  padding:  calc(var(--fontSize) * 0.50);
 }
 .mongbeans-type-ind {
   flex: 1;
   justify-content: flex-end;
   /* min-width: 100px; */
+  border: 1px solid rgba(128, 128, 128, 0.096);
 }
 .mongbeans-key {
   display: flex;
   flex: 1;
+  border: 1px solid rgba(128, 128, 128, 0.096);
+  align-items: center;
+  padding:  calc(var(--fontSize) * 0.50);
+  /* border: 1px solid red; */
 }
 .mongbeans-key-str {
   padding-left: 22px;
@@ -244,13 +239,12 @@ export default {
 }
 .mong-items {
   z-index: 900;
+  color: var(--dark-1);
+  font-weight: 600;
 }
 .mong-items:hover {
   background-color: var(--blue-5);
   cursor: pointer;
   transition: 0.3s;
-}
-.mongbeans-nested {
-  /* margin-left: 20px; */
 }
 </style>

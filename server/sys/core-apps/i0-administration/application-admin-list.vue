@@ -17,12 +17,12 @@
             v-bind:onylShowProperties="props"
             v-bind:inputData="inputData"
           />
-          <span id="dq-collapse-btn-parent" class="flex flexcol flexcenter">
+          <!-- <span id="dq-collapse-btn-parent" class="flex flexcol flexcenter">
             <span
               @click="collapse"
               class="dq-collapse pointer"
             >{{!isCollapse ? '&#9204;' : '&#9205;'}}</span>
-          </span>
+          </span> -->
         </div>
 
         <div class="relative flex flexcol">
@@ -43,11 +43,10 @@
           </div>
           <!-- 2 -->
           <div id="mongbeans-wrap" class="entity-display flex fullwidth relative entity-host">
-            <div
-              class="fullwidth absolute">
+            <div class="fullwidth absolute">
               <mongbeans
                 v-if="!selectedView && selectedData != undefined"
-                v-bind:inputData="selectedData"
+                :inputData="selectedData"
               />
               <actionsWindow v-if="selectedView === 'actions'"/>
               <analyticsWindow v-if="selectedView === 'analytics'"/>
@@ -82,44 +81,45 @@ export default {
               math: {
                 average: 10,
                 price: 46.387901234,
-                isPassed: true,
+                isPassed: true
               }
             }
           },
           books: {
-            jquery: 'true',
+            jquery: "true",
             sql: true,
             javascript_frame_works: {
-              vue: 'true'
+              vue: "true"
             }
           },
-          todos: [
-            'go to church',
-            'go to metro',
-            'buy groceries',
-          ]
+          todos: ["go to church", "go to metro", "buy groceries"]
         },
-        cetizenship: 'canadian',
+        cetizenship: "canadian",
         education: {
           elementary: {
-            year: '2001 - 2006',
-            school: 'Kabatuan Elementary school',
-            awards: ['most panctual', 'passed'],
-            subjects: ['English 1','Science 1','Sibika at argicultura'],
+            year: "2001 - 2006",
+            school: "Kabatuan Elementary school",
+            awards: ["most panctual", "passed"],
+            subjects: ["English 1", "Science 1", "Sibika at argicultura"],
             year_duration: 6
           },
           highschool: {
-            year: '2006 - 2011',
-            school: 'Holy Trinity College',
-            awards: 'none',
-            subjects: ['English','Science 1','Chemistry', 'High school Algebra'],
-            year_duration: 4         
+            year: "2006 - 2011",
+            school: "Holy Trinity College",
+            awards: "none",
+            subjects: [
+              "English",
+              "Science 1",
+              "Chemistry",
+              "High school Algebra"
+            ],
+            year_duration: 4
           },
           college: {
-            year: '2012 - 2015',
-            school: 'Cebu Technological University',
-            awards: 'none',
-            course: 'Bachelors of science in Hospitality Management', 
+            year: "2012 - 2015",
+            school: "Cebu Technological University",
+            awards: "none",
+            course: "Bachelors of science in Hospitality Management",
             ed_status: {
               under_grad: true,
               doctors: false
@@ -127,7 +127,7 @@ export default {
           },
           number_of_schools_attended: 4
         },
-        test_Array: ['foo','bar','baz'],
+        test_Array: ["foo", "bar", "baz"]
       },
       inputData: undefined,
       selectedData: undefined,
@@ -135,22 +135,33 @@ export default {
       selectedView: undefined,
       len: undefined,
       isCollapse: false,
+      refreshMongbeans: false
     };
   },
   methods: {
     selectedRow(value) {
-      console.log('testing!')
+      // console.log("testing!");
       this.selectedData = value;
       this.selectedView = undefined;
-      // this.$store.dispatch('populateInitailKeys', value)
-      this.$store.dispatch('populateInitailKeys', this.testData)
-
+      this.$store.dispatch('populateInitailKeys', value)
+      // this.$store.dispatch("populateInitailKeys", this.testData);
     },
     changeView(data) {
       this.selectedView = data;
     },
     collapse() {
+      console.log("collapsing!");
       this.isCollapse = !this.isCollapse;
+
+      if (this.isCollapse) {
+        this.$store.dispatch("changeCollapseState", true);
+        // this.$store.state.mongbeans.curr_width = 350
+      } else {
+        this.$store.dispatch("changeCollapseState", false);
+        this.$store.state.mongbeans.testData = false
+        // this.$store.state.mongbeans.curr_width = 248
+      }
+
     }
   },
   components: {
@@ -160,7 +171,7 @@ export default {
     analyticsWindow
   },
   mounted() {
-    console.log('hey!')
+    console.log("hey!");
     this.$store.commit("changeCurrentPaneSettings", {
       property: "pane-width",
       value: "100%"
@@ -201,15 +212,18 @@ export default {
 }
 ._selWin {
   border-bottom: 2px solid var(--hover-blue);
+  font-weight: 600;
 }
 .entity-rebbon-menu-btn {
   padding: calc(var(--fontSize) * 1.25);
+  color: var(--dark-1);
 }
 .entity-host {
   overflow: auto;
 }
 .entity-menu {
   flex: 1;
+  border: 1px solid rgba(128, 128, 128, 0.096);
 }
 .entity-display {
   flex: 100;
