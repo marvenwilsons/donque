@@ -6,6 +6,7 @@
       v-for="(val,index,nindex) in inputData"
       :key="index"
     >
+    {{setValAndTypeWidths(nindex,index,gettype(val))}}
       <!-- string case-->
       <div v-if="gettype(val) === 'string'" class="flex c-items2">
         <span class="mongbeans-key">
@@ -89,7 +90,7 @@
             :id="`${nindex}-${index}-${gettype(val)}`"
             :style="{maxWidth: $store.state.mongbeans.curr_width + 'px', minWidth: $store.state.mongbeans.curr_width + 'px' }"
             class="mongbeans-type-ind flex flexcenter"
-          > {{setValAndTypeWidths(nindex,index,gettype(val))}} {{gettype(val) === 'obj' && 'Object' || gettype(val) === 'array' && 'Array'}}</span>
+          >{{gettype(val) === 'obj' && 'Object' || gettype(val) === 'array' && 'Array'}}</span>
         </div>
         <!-- recursive here -->
         <div v-if="openId[index]">
@@ -115,6 +116,9 @@ export default {
       openId: {}
     };
   },
+  mounted(){
+    this.refresh()
+  },
   methods: {
     expand(data) {
       if (!this.openId[data.index]) {
@@ -136,9 +140,7 @@ export default {
       this.isReady = true;
     },
     setValAndTypeWidths(nindex, index, type) {
-      console.log('this executes!')
       const els = document.getElementById(`${nindex}-${index}-${type}`);
-
       if (els) {
         this.$store.state.mongbeans.widths[`${nindex}-${index}-${type}`] =
           els.offsetWidth;
