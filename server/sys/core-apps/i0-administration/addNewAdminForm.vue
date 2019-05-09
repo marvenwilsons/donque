@@ -7,7 +7,7 @@
         <spinner/>
       </div>
       <div v-if="ready" id="dq-init-wrapper" class="flex flexwrap">
-        <!-- <div id="tc-logo-h" class="flex fullwidth flexcenter">
+        <div id="tc-logo-h" class="flex fullwidth flexcenter">
           <h1>
             dq-studio
             <br>Create New Admin
@@ -16,7 +16,7 @@
             Add brand new admin, fill the essential information, define its role to your application,
             <br>provide the required information on the input fields
           </p>
-        </div>-->
+        </div>
 
         <div class="fullwidth" id="tc-f-wrap">
           <!-- <h5 class="tc">Add New Admin</h5> -->

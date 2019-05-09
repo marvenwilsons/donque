@@ -68,7 +68,7 @@ const functionHandler = ({ dep, isDestructive, userData, pwd, username }) => {
 
 }
 
-const validateUserExistance = async ({ ...dbs }, { username, token, command }) => {
+const validateUserExistance = async ({ ...dbs }, { username }) => {
     // @dqsys: auth: validateUserExistance()
     const { doc } = dbs.data
 

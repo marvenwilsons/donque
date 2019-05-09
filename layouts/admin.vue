@@ -124,11 +124,16 @@ export default {
     this.read = true;
     console.log("");
     console.log("** [systemCall]-[admin.vue] initialize admins dashboard");
-    this.$store.dispatch("systemCall", {
-      command: "initActorsDashboard",
-      section: "adminMethods",
-      method: "get"
-    });
+
+    if (localStorage.getItem("username")) {
+      this.$store.dispatch("systemCall", {
+        command: "initActorsDashboard",
+        section: "adminMethods",
+        method: "get"
+      });
+    }else {
+      location.href = 'dqlogin'
+    }
 
     // only trigger when there is unsaved changes
     // window.onbeforeunload = function() {
