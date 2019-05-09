@@ -29,7 +29,7 @@
 
 <script>
 // shell
-import shell from "@/server/sys/core-apps/i0-shell/view/shell.vue";
+import console from "@/server/sys/core-apps/i0-shell/view/console.vue";
 
 // pages
 import pages from "@/server/sys/core-apps/i0-pages/view/page_list.vue";
@@ -93,7 +93,7 @@ export default {
     }
   },
   components: {
-    shell,
+    console,
 
     // pages
     Pages: pages,
