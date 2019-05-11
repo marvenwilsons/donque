@@ -164,163 +164,143 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
              * Collections and its data
              */
             const app_resource = {
-                Dashboard: [
+                Dashboard: {
                     // create
-                    'create:addItem:dashMethods',
+                    addItem:true,
                     // read
-                    'read:initActorsDashboard:dashMethods', // for system only
-                    'read:listAllDashItems:dashMethods'
+                    initActorsDashboard:true, // system only
+                    listAllDashItems:true
                     // update
                     // delete
-                ],
-                Administration: [
+                },
+                // adminMethods
+                Administration: {
                     // access
-                    'access:adminLogout:adminMethods',
-                    'access:adminLogin:adminMethods',
+                    adminLogout: true,
+                    adminLogin: true,
                     // create
-                    'create:createNewAppActor:adminMethods', // actor because it can be dev or admin
-                    'create:createNewAppActorRule:adminMethods',
-                    'create:createTeam:adminMethods',
-                    'create:createCustomRole:adminMethods',
+                    createNewAppActor: true,
+                    createNewAppActorRule: true,
+                    createTeam: true,
+                    createCustomRole: true,
                     // read
-                    'read:initActorsDashboard:adminMethods',
-                    'read:listAdmins:adminMethods',
-                    'read:viewAppAdmin:adminMethods',
-                    'read:listAllTeams:adminMethods',
-                    'read:viewTeam:adminMethods',
-                    'read:getCustomRole:adminMethods',
-                    'read:listAllCustomRole:adminMethods',
+                    initActorsDashboard: true,
+                    listAdmins: true,
+                    viewAppAdmin: true,
+                    listAllTeams: true,
+                    viewTeam: true,
+                    getCustomRole: true,
+                    listAllCustomRole: true,
                     // update
-                    'update:assignAppActorToTeam:adminMethods',
-                    'update:asssignAppActorToRole:adminMethods',
-                    'update:assignColorToTeam:adminMethods',
-                    'update:renameTeam:adminMethods',
-                    'update:updateAppAdmin:adminMethods',
-                    'update:updateCustomRole:adminMethods',
-                    'update:updateAppSettings:adminMethods',
+                    assignAppActorToTeam: true,
+                    asssignAppActorToRole: true,
+                    assignColorToTeam: true,
+                    renameTeam: true,
+                    updateAppAdmin: true,
+                    updateCustomRole: true,
+                    updateAppSettings: true,
                     // delete
-                    'delete:deleteAppAdmin:adminMethods',
-                    'delete:removeCustomRole:adminMethods',
-                    'delete:resetApp:adminMethods',
-                    'delete:purgeApp:adminMethods'
-                ],
-                Pages: [
+                    deleteAppAdmin: true,
+                    removeCustomRole: true,
+                    resetApp: true,
+                    nukeApp: true
+                },
+                // pageMethods
+                Pages: {
                     // create
-                    'create:createNewPage:pageMethods',
+                    createNewPage: true,
                     // read
-                    'read:listAllPages:pageMethods',
-                    'read:getPage:pageMethods',
-                    'read:searchQueryPage:pageMethods',
+                    listAllPages: true,
+                    getPage: true,
+                    searchQueryPage: true,
                     // update
-                    'update:luckPage:pageMethods',
-                    'update:assignPageDev:pageMethods',
-                    'update:currentDevWorking:pageMethods', // for system only
-                    'update:updateLastModifiedDate:pageMethods', // for system only
-                    'update:commitPageChanges:pageMethods',
+                    luckPage: true,
+                    assignPageDev: true,
+                    currentDevWorking: 'sys',
+                    updateLastModifiedDate: 'sys',
+                    commitPageChanges: true,
                     // delete
-                    'delete:deletePage:pageMethods'
-                ],
-                Components: [
-                    // create
-                    'create:createComponent:compMethods',
-                    // read
-                    'read:listAllComp:compMethods',
-                    'read:getComp:compMethods',
-                    // update
-                    'update:updateComp:compMethods',
-                    // delete
-                    'delete:deleteComp"compMethods'
-                ],
+                    deletePage: true
+                },
+                // compMethods
+                Components: {
+                    createComponent: true,
+                    listAllComp: true,
+                    getComp: true,
+                    updateComp: true,
+                    deleteComp: true
+                },
                 // 1. the person who creates the collections and its category is the owner
                 // 1.1 ex. of a collection: movie
                 // 2. then the owner will assign an admin to manage the category 
                 // 2.1 ex. of a category: horror, comedy
-                Collections: [
-                    // create
-                    'create:createCollection:colMethods',
-                    'create:createColCategory:colMethods',
-                    // read
-                    'read:listAllCol:colMethods',
-                    'read:getCol:colMethods',
-                    // update
-                    'update:updateCol:colMethods',
-                    'update:updateCategory:colMethods',
-                    'update:updateLastModifiedDate:colMethods', // for system only
-                    'update:assignAdminToCollection:colMethods',
-                    'update:assignAdminToCategory:colMethods',
-                    'update:removeAdminToCollection:colMethods',
-                    'update:defineCategoryProperties:colMethods', // for ex. a prop name "start count" or "like count, or "img"
-                    'update:defineCategoryMethods:colMethods',
-                    // delete
-                    'delete:deleteCol:colMethods',
-                    'delete:deleteColCategory:colMethods'
-                ],
-                Messages: [
-                    // create
-                    'create:composeNewMessage:msgMethods',
-                    'create:saveMsgAsDraft:msgMethods',
-                    'create:replyToMsg:msgMethods',
-                    // read
-                    'read:listAllMsg:msgMethods',
-                    'read:getMSg:msgMethods',
-                    // update
-                    'update:updateSentOnDate:msgMethods', // for system only
-                    'update:updateUnreadMsg:msgMethods', // for system only
-                    // delete
-                    'delete:deleteMsg:msgMethods'
-                ],
-                Task: [
-                    // create
-                    'create:createNewTask:taskMethods',
-                    'create:createNewTaskFor:taskMethods',
-                    // read
-                    'read:getTaskList:taskMethods',
-                    'read:getTask:taskMethods',
-                    // update
-                    'update:editTask:taskMethods',
-                    'update:assinTaskTo:taskMethods',
-                    'update:updateLastModifiedDate:taskMethods', // for system only
-                    // delete
+                Collections: {
+                    createCollection: true,
+                    createColCategory: true,
+                    listAllCol: true,
+                    getCol: true,
+                    updateCol: true,
+                    updateCategory: true,
+                    updateLastModifiedDate: true,
+                    assignAdminToCollection: true,
+                    assignAdminToCategory: true,
+                    removeAdminToCollection: true,
+                    defineCategoryProperties: true,
+                    defineCategoryMethods: true,
+                    deleteCol:true,
+                    deleteColCategory: true
+                },
+                Messages: {
+                    composeNewMessage: true,
+                    saveMsgAsDraft: true,
+                    replyToMsg: true,
+                    listAllMsg: true,
+                    getMSg: true,
+                    updateSentOnDate: true,
+                    updateUnreadMsg: true,
+                    deleteMsg: true
+                },
+                Task: {
+                    createNewTask: true,
+                    createNewTaskFor: true,
+                    getTaskList: true,
+                    getTask: true,
+                    editTask: true,
+                    assinTaskTo: true,
+                    updateLastModifiedDate: true // system only
+                },
+                Todos: {
+                    createNewTodo: true,
+                    listAllTodos: true,
+                    getTodo: true,
+                    updateTodo: true,
+                    markTodoAsDone: true,
+                    deleteTodo: true
+                },
+                Work: {
+                    getAssignedResource: true,// returns the categories and methods for managing, this is assigned by the parent admin
+                    getOrganizationalChart: true
 
-                ],
-                Todos: [
-                    // create
-                    'create:createNewTodo:todoMethods',
-                    // read
-                    'read:listAllTodos:todoMethods',
-                    'read:getTodo:todoMethods',
-                    // update
-                    'update:updateTodo:todoMethods',
-                    'update:markTodoAsDone:todoMethods',
-                    // delete
-                    'delete:deleteTodo:todoMethods',
-                ],
-                Work: [
-                    // read
-                    'read:getAssignedResource:workMethods', // returns the categories and methods for managing, this is assigned by the parent admin
-                    'read:getOrganizationalChart:workMethods'
-                ],
-                Profile: [
-                    // read
-                    'read:getProfile:profileMethods'
-                ],
-                Files: [],
+                },
+                Profile: {
+                    getProfile: true
+                },
+                Files: {},
                 Plugins: [
                     // read
-                    'read:getPluginList:pluginMethods',
+                    'read:getPluginList:dqPluginsSys',
                     // update
-                    'update:deactivatePlugin:pluginMethods',
-                    'update:activatePlugin:pluginMethods',
+                    'update:deactivatePlugin:dqPluginsSys',
+                    'update:activatePlugin:dqPluginsSys',
                     // delete
-                    'delete:removePlugin:pluginMethods'
+                    'delete:removePlugin:dqPluginsSys'
                 ],
-                Settings: [],
+                Settings: {},
                 // where you can install plugins and install component sets or themes 
-                Marketplace: [],
-                Database: [
-                    // update
-                    'update:killDbConnection:dbMethods',
-                ],
+                Marketplace: {},
+                Database: {
+                    killDbConnection: true
+                },
                 Console: []
             }
             const CollectionsAndData = [{

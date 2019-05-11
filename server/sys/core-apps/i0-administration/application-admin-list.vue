@@ -33,6 +33,7 @@
               :class="[!selectedView ? '_selWin' : ''  ,'pointer','entity-rebbon-menu-btn']"
             >Entity View</span>
             <span
+              v-if="selectedData.title != 'owner'"
               @click="changeView('actions')"
               :class="[selectedView =='actions' ? '_selWin': '' ,'pointer','entity-rebbon-menu-btn']"
             >Actions</span>
@@ -48,8 +49,8 @@
                 v-if="!selectedView && selectedData != undefined"
                 :inputData="selectedData"
               />
-              <actionsWindow v-if="selectedView === 'actions'"/>
-              <analyticsWindow v-if="selectedView === 'analytics'"/>
+              <actionsWindow :inputData="selectedData" v-if="selectedView === 'actions'"/>
+              <analyticsWindow :inputData="selectedData" v-if="selectedView === 'analytics'"/>
             </div>
           </div>
         </div>
