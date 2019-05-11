@@ -334,16 +334,11 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                     title: 'owner',
                     email,
                     ip: '',
-                    sectionPermissions: {
-                        adminActions: ['c', 'r', 'u', 'd'],
-                        pageMethods: ['c', 'r', 'u', 'd'],
-                        components: ['c', 'r', 'u', 'd'],
-                        shell: ['c', 'r', 'u', 'd']
-                    },
                     task: {
                         pending: [],
                         done: []
                     },
+                    teams: [],
                     messages: [],
                     lastModefied: '',
                     lastActivity: '',
@@ -426,14 +421,14 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                             roleTitle: 'dev',
                             desc: 'the dev title grants access to system files, public views, and full permission to perform crud operations related to applications bussiness developement',
                             resource: {
-                                Dashboard: app_resource.dashboard,
-                                Pages: app_resource.page,
-                                Components: app_resource.components,
-                                Messages: app_resource.messages,
-                                Task: app_resource.task,
-                                Todos: app_resource.todos,
-                                Profile: app_resource.profile,
-                                Plugins: app_resource.plugins
+                                Dashboard: app_resource.Dashboard,
+                                Pages: app_resource.Pages,
+                                Components: app_resource.Components,
+                                Messages: app_resource.Messages,
+                                Task: app_resource.Task,
+                                Todos: app_resource.Todos,
+                                Profile: app_resource.Profile,
+                                Plugins: app_resource.Plugins
                             }
                         })
                     // creating admin role
@@ -444,12 +439,12 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                             roleTitle: 'admin',
                             desc:'the admin manages the app resources and executes actions that is assigned by the owner',
                             resource: {
-                                Dashboard: app_resource.dashboard,
-                                Work: app_resource.work,
-                                Messages: app_resource.messages,
-                                Task: app_resource.task,
-                                Todos: app_resource.todos,
-                                Profile: app_resource.profile,
+                                Dashboard: app_resource.Dashboard,
+                                Work: app_resource.Work,
+                                Messages: app_resource.Messages,
+                                Task: app_resource.Task,
+                                Todos: app_resource.Todos,
+                                Profile: app_resource.Profile,
                             }
                         })
 
