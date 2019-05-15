@@ -176,7 +176,14 @@ const myTest = [
             },
         },
         before: err => err(false),
-        after: err => err(false),
+        after: err => {
+            err(false)
+            const testRunner = require('./testrunner')
+
+            setTimeout(() => {
+                testRunner('test4.js')
+            }, 2000)
+        },
         data(data) {
         }
     }

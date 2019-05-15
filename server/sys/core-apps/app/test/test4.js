@@ -1,5 +1,11 @@
 const { execFile, exec, execSync, spawn } = require('child_process')
 const cardinalTest = require('../cardinalTest')
+const testRunner = require('./testrunner')
+
+execFile('mongod', ['--dbpath', '/home/marven/Desktop/database/Data', '--shutdown'], (error, stdout, stderr) => {
+});
+
+console.log('Starting test 4')
 
 const startDatabaseServer = (callback) => {
     console.log('starting mongo server')
@@ -235,7 +241,9 @@ const myTest = [
             }
         },
         before: err => err(false),
-        after: err => err(false),
+        after: err => {
+            err(false)
+        },
         data(data) {
         }
     },

@@ -1,6 +1,8 @@
 //@test1
 const { execFile, exec, execSync, spawn } = require('child_process')
 const cardinalTest = require('../cardinalTest')
+const testRunner = require('./testrunner')
+
 
 const username = 'jannyann'
 const password = 'password123@'
@@ -251,7 +253,18 @@ const routine_a = [
             section:'adminMethods'
         },
         before: err => err(false),
-        after: err => err(false)
+        after: err => {            
+            err(false)
+           
+            setTimeout(() => {
+                execFile('mongod', ['--dbpath', '/home/marven/Desktop/database/Data', '--shutdown'], (error, stdout, stderr) => {
+                });
+                setTimeout(() => {
+                    testRunner('test2.js')
+
+                },1000)
+            }, 2000)
+        }
     }
 ]
 

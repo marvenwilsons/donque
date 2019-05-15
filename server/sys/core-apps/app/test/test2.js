@@ -1,5 +1,7 @@
 const { execFile, exec, execSync, spawn } = require('child_process')
 const cardinalTest = require('../cardinalTest')
+const testRunner = require('./testrunner')
+
 
 const startDatabaseServer = (callback) => {
     console.log('starting mongo server')
@@ -56,9 +58,7 @@ const myTests = [
         expected: true,
         expectedMsg: null,
         input: {},
-        before(err){
-            err(false)
-        },
+        before: err => err(false),
         after: err => err(false),
     },
     //@test2 index 2 test initiate dashboard
@@ -99,9 +99,7 @@ const myTests = [
         expected: true,
         expectedMsg: null,
         input: {},
-        before(err){
-            err(false)
-        },
+        before: err => err(false),
         after: err => err(false),
     },
     //@test2 index 5 attempt to initialize dashboard without logging in should fail
@@ -124,9 +122,7 @@ const myTests = [
         expected: true,
         expectedMsg: null,
         input: {},
-        before(err){
-            err(false)
-        },
+        before: err => err(false),
         after: err => err(false),
     },
     //@test2 index 7 test admin login
@@ -186,7 +182,12 @@ const myTests = [
             command: 'adminLogout'
         },
         before: err => err(false),
-        after: err => err(false),
+        after: err => {
+            err(false)
+            setTimeout(() => {
+                testRunner('test3.js')
+            }, 2000)
+        }
     }
 ]
 
