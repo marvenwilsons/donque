@@ -406,7 +406,6 @@ adminMethods.createNewAppActor = {
 adminMethods.createNewAppActorRule = {
     get prop() {
         return {
-            permissions: null,
             allowedtitle: ['owner'],
             funcIsDestructive: false
         }
@@ -596,14 +595,14 @@ adminMethods.initActorsDashboard = {
     }
 }
 //@adminMethods:read. list admins
-adminMethods.getAdmins = {
+adminMethods.listAdmins = {
     get prop() {
         return {
             allowedtitle: ['owner'],
             funcIsDestructive: false
         }
     },
-    getAdmins({dep}) {
+    listAdmins({dep}) {
         const { db } = dep
 
         return new Promise(async (resolve, reject) => {
@@ -815,9 +814,12 @@ adminMethods.updateAppAdmin = {
             // v1
             toBeUpdatedProps.length != 1 && reject(err('Invalid input, You can only update one property at a time'))
 
+
             // v2
             toBeUpdatedProps.map(items => {
-                if (!updatetableProps.includes(items)) {
+                if (items.split('.')[0] === 'resource'){
+                    hasError = false
+                } else if (!updatetableProps.includes(items)){
                     hasError = true
                     cannotBeUpdatedProps.push(items)
                 }
@@ -835,7 +837,6 @@ adminMethods.updateAppAdmin = {
                 .hasNumbers(false)
                 .hasWhiteSpace(false)
                 .hasSpecialCharacters(false)
-                .isTrue(`${customData[toBeUpdatedProps[0]]}`.length > 5, `${toBeUpdatedProps[0]} should have at least a minimum of 5 characters`)
                 .done()
             validate_vt.hasError && reject(err(validate_vt.error))
             if (hasError) return
@@ -859,10 +860,10 @@ adminMethods.updateAppAdmin = {
                     const prevType = typeof data[toBeUpdatedProps[0]]
                     const pushType = typeof customData[toBeUpdatedProps[0]]
 
-                    if (prevType != pushType) {
-                        reject(err(`Illegal operation detected, Unable to update ${toBeUpdatedProps[0]}, because the data type of ${toBeUpdatedProps[0]} is not the valid, type should be ${prevType} instead of ${pushType}`))
-                        return
-                    }
+                    // if (prevType != pushType) {
+                    //     reject(err(`Illegal operation detected, Unable to update ${toBeUpdatedProps[0]}, because the data type of ${toBeUpdatedProps[0]} is not the valid, type should be ${prevType} instead of ${pushType}`))
+                    //     return
+                    // }
 
                     if (data.title === 'owner' && ownerInifConfProps.includes(Object.keys(customData)[0])) {
                         return {
