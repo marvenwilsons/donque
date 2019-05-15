@@ -180,7 +180,7 @@ export default {
 
     this.$store
       .dispatch("systemCall", {
-        command: "getAdmins",
+        command: "listAdmins",
         section: "adminMethods",
         method: "get"
       })

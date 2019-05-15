@@ -1,7 +1,7 @@
 {
     "adminMethods": "Administration",
     "dashMethods": "Dashboard",
-    "DqPageMethods": "Pages",
+    "pageMethods": "Pages",
     "compMethods": "Components",
     "colMethods": "Collections",
     "msgMethods":"Messages",

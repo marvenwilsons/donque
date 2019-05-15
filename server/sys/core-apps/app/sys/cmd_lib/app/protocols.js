@@ -191,6 +191,7 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                     viewTeam: true,
                     getCustomRole: true,
                     listAllCustomRole: true,
+                    getRoles: true,
                     // update
                     assignAppActorToTeam: true,
                     asssignAppActorToRole: true,
@@ -220,7 +221,9 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                     updateLastModifiedDate: 'sys',
                     commitPageChanges: true,
                     // delete
-                    deletePage: true
+                    deletePage: true,
+
+                    __$resource: []
                 },
                 // compMethods
                 Components: {
@@ -248,7 +251,8 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                     defineCategoryProperties: true,
                     defineCategoryMethods: true,
                     deleteCol:true,
-                    deleteColCategory: true
+                    deleteColCategory: true,
+                    __$resource: []
                 },
                 Messages: {
                     composeNewMessage: true,
@@ -339,6 +343,7 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                         done: []
                     },
                     teams: [],
+                    isBlocked: false,
                     messages: [],
                     lastModefied: '',
                     lastActivity: '',

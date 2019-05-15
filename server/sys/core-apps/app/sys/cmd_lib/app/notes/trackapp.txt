@@ -1,0 +1,34 @@
+@track
+
+Section: Administration / adminMethods
++---------------------------+-----------+-------------------------------------------------------------------------------------------+
+|   Feature Name            |   isDone  |   Notes                                                                                   |
++---------------------------+-----------+-------------------------------------------------------------------------------------------+
+|   adminLogout             |   true    |  delete admin in currentlive admins, refresh view                                         |
+|   adminLogin              |   true    |  creates new entry to currentlive admins, generates token                                 |
+|   createNewAppActor       |   true    |  creates new entity or user to the application                                            |
+|   createNewAppActorRule   |   false   |  creates new application user title, with its unique set of resources and permisions      |
+|                                          then saves new rule to dq_actor_role collections, so that it can be applied later        |
+|                                          to new users or admins.                                                                  |
+|   createTeam              |   false   |                                                                                           |
+|   createCustomRole        |   false   |                                                                                           |
+|   initActorsDashboard     |   true    |  returns resources that is needed for the admin dashboard                                 |
+|   listAdmins              |   true    |  returns list of all admins                                                               |
+|   viewAppAdmin            |   true    |  returns an object containing information about the admin                                 |
+|   listAllTeams            |   false   |                                                                                           |
+|   viewTeam                |   false   |                                                                                           |
+|   getCustomRole           |   false   |                                                                                           |
+|   getRoles                |   true    |  list all roles                                                                           |
+|   listAllCustomRole       |   false   |                                                                                           |
+|   assignAppActorToTeam    |   false   |                                                                                           |
+|   asssignAppActorToRole   |   false   |                                                                                           |
+|   assignColorToTeam       |   false   |                                                                                           |
+|   renameTeam              |   false   |                                                                                           |
+|   updateAppAdmin          |   true    | update a property of admin, also works in dot notation                                    |
+|   updateCustomRole        |   false   |                                                                                           |
+|   updateAppSettings       |   false   |                                                                                           |
+|   deleteAppAdmin          |   true    | drops admin from dq_admins collections                                                    |
+|   removeCustomRole        |   false   |                                                                                           |
+|   resetApp                |   false   |                                                                                           |
+|   nukeApp                 |   false   |                                                                                           |
++---------------------------+-----------+-------------------------------------------------------------------------------------------+

@@ -7,6 +7,7 @@ keyword
     @test ............................. jumps to testing suits
     @idea ............................. jumps to idea notes
     @work ............................. jumps to work notes
+    @track ............................ jumps to application progress
     
     Administrative
     @adminMethods:create .............. jumps to create admin methods

@@ -356,6 +356,7 @@ adminMethods.createNewAppActor = {
                     pending: [],
                     done: []
                 },
+                isBlocked: false,
                 parentAdmin: '',
                 childAdmins: [],
                 resource: role_title.resource, 

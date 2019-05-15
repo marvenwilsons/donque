@@ -1,39 +1,27 @@
-const permissionHandler = ({ dep, permissions, userData }) => {
-    // @dqsys: auth: todo: permissionHandler(),
+const permissionHandler = ({ command, section, userData }) => {
+    const sec_Alias = require('./section_alias.json')
+
     console.log('** permission handler')
-    if (permissions != null) {
-        console.log(userData)
+    if (userData.resource[sec_Alias[section]] == undefined && command == 'adminlogin'){
+        // check if this admin is blocked
+        if(userData.isBlocked) {
+            console.log('   [permissionHandler] user has no permission to login')
+            return false
+        }else {
+            console.log('   [permissionHandler] Auth Ok!')
+            return true
+        }
+    } else if (!userData.resource[sec_Alias[section]][command]) {
+        console.log(`   [permissionHandler] user has no permission to perform ${command}`)
+        return false
     } else {
-        console.log('   [permissionHandler] permission is null returning true')
+        console.log('   [permissionHandler] Auth Ok!')
         return true
-    }
+    }    
 }
 
 const commitsHandler = (commitId) => {
     // @dqsys: auth: todo: commitsHandler(),
-}
-
-const adminTitleValidator = ({title, userTitle}) => {
-    // @dqsys: auth: todo: adminTitleValidator(),
-    console.log('** admin title validator')
-    console.log(`   [adminTitleValidator] required admin title - ${title}`)
-    if (userTitle.includes(title) || title === null){
-        return true
-    } else {
-        console.log('   [adminTitleValidator] action not permitted')
-        return {
-            msg: `Action is not permitted for an admin title "${userTitle}"`,
-            actions: [{
-                title: 'prompt_err'
-            }]
-        }
-    }
-
-}
-
-const sectionHandler = (section) => {
-    // @dqsys: auth: todo: sectionHandler(),
-    console.log('   [Universal protocol] section handler')
 }
 
 const functionHandler = ({ dep, isDestructive, userData, pwd, username }) => {
@@ -70,6 +58,7 @@ const functionHandler = ({ dep, isDestructive, userData, pwd, username }) => {
 
 const validateUserExistance = async ({ ...dbs }, { username }) => {
     // @dqsys: auth: validateUserExistance()
+    console.log('** [ValidatingUserExistance]')
     const { doc } = dbs.data
 
     const fullPrevilegeTitle = [
@@ -121,7 +110,7 @@ const firstLayerAuthentication = async ({ ...dbs }, { command }) => {
         .then(() => {
             return liveAdmins.currentLiveAdmins
         })
-    console.log(currentLiveAdmins)
+    // console.log(currentLiveAdmins)
     return new Promise((resolve, reject) => {
         if (currentLiveAdmins.length === 0 && command != 'adminlogin') {
             resolve(false)
@@ -201,32 +190,8 @@ const auth = async ({ dep, selectedCommand, username, password, token, command, 
                     hasErr = functionHandler_response
                 }
 
-                // part2
-                const permissionHandler_response = permissionHandler({
-                    dep: {
-                        encrypt,
-                        decode
-                    },
-                    permissions: selectedCommand.prop.permissions,
-                    userData: userDoesExist.data.user
-                })
-
-                if (permissionHandler_response != true) {
-                    hasErr = permissionHandler_response
-                }
-
-                // part3
-                const adminTitleValidator_response = adminTitleValidator({
-                    title: selectedCommand.prop.allowedtitle,
-                    userTitle: userDoesExist.data.user.title
-                })
-
-                if(adminTitleValidator_response != true) {
-                    hasErr = adminTitleValidator_response
-                }
-
-                // part4
-                if (!validateToken({ data: userDoesExist.data, jwt, token, encrypt, decode, command })){
+                // part 2
+                if (!validateToken({ data: userDoesExist.data, jwt, token, encrypt, decode, command })) {
                     hasErr = {
                         msg: 'Invalid or expired token',
                         actions: [{
@@ -235,12 +200,33 @@ const auth = async ({ dep, selectedCommand, username, password, token, command, 
                     }
                 }
 
+                // part 3
+                const permissionHandler_response = permissionHandler({
+                    command,
+                    section,
+                    userData: userDoesExist.data.user
+                })
+
+                // part 3.a
+                if (!permissionHandler_response) {
+                    console.log(`   [Auth|permission-handler] response - ${permissionHandler_response}`)
+                    hasErr = {
+                        msg: 'Permission denied',
+                        actions: [{
+                            title: 'prompt_err'
+                        }]
+                    }
+                }
+
+                
                 if (!hasErr) {
+                    console.log(`   [Auth] Has error false`)
                     callback(null, {
                         status: true,
                         data: userDoesExist.data
                     })
                 } else {
+                    console.log(`   [Auth] Has error true`)
                     callback({
                         status: false,
                         data: {

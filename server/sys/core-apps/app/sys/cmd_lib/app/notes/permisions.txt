@@ -1,0 +1,16 @@
+Introductions
+
+    Each admin is given a "resource"
+
+What is "Resource"
+ 
+    a resource is a list of section's, it is an array.
+    each items in the array represents an item in the sidebar that can be seen after 
+    logging in as an admin.
+
+    A section is an object, so we can say a resource is an array of objects.
+    each sections holds key a value pair, key is the name of the method that can be 
+    invoked by the admin, the value is boolean, true or false, if the method name 
+    has a value of true it means when the admin invoke's the method it will execute
+    when it false, the cardinal system will return "Permission Denied"
+    

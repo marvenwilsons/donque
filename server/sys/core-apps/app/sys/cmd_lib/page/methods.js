@@ -1,6 +1,6 @@
-const page = {}
+const pageMethods = {}
 
-page.CreatePage = {
+pageMethods.CreatePage = {
     get permissions() {
         return 'create'
     },
@@ -15,7 +15,7 @@ page.CreatePage = {
     }
 }
 
-page.ReadPage = {
+pageMethods.ReadPage = {
     get permissions() {
         return 'read'
     },
@@ -36,7 +36,7 @@ page.ReadPage = {
     }
 }
 
-page.ListPage = {
+pageMethods.ListPage = {
     get permissions() {
         return 'read'
     },
@@ -58,7 +58,7 @@ page.ListPage = {
 }
 
 
-page.UpdatePage = {
+pageMethods.UpdatePage = {
     get permissions() {
         return 'update'
     },
@@ -79,19 +79,28 @@ page.UpdatePage = {
     }
 }
 
-page.DeletePage = {
-    get permissions() {
-        return 'delete'
+pageMethods.deletePage = {
+    get prop() {
+        return {
+            allowedtitle: ['owner'],
+            funcIsDestructive: false
+        }
     },
-    get funcIsDestructive() {
-        return true
-    },
-    get allowedTitle() {
-        return ['owner','admin']
-    },
-    DeletePage({dep,data}){
+    deletePage({dep,data}){
+        console.log('** [PageMethods] Deleting page')
 
+        
+
+        return new Promise((resolve,reject) => {
+            resolve({
+                status: true,
+                data: {
+                    msg: null,
+                    actions: []
+                }
+            })
+        })
     }
 }
 
-module.exports = page
+module.exports = pageMethods
