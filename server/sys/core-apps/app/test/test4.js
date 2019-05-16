@@ -1,3 +1,8 @@
+/**
+ * This test simulates the owner editing the an admin's permission
+ * and the admin trying to access am unpermitted method
+ */
+
 const { execFile, exec, execSync, spawn } = require('child_process')
 const cardinalTest = require('../cardinalTest')
 const testRunner = require('./testrunner')
@@ -24,8 +29,8 @@ const startDatabaseServer = (callback) => {
         console.log(stderr.toString())
     })
     mongod.stdout.on('close', code => {
-        console.log('DONE')
-        console.log(code)
+        console.log('Db Server is running')
+
     })
 }
 
@@ -245,7 +250,39 @@ const myTest = [
             err(false)
         },
         data(data) {
+            myTest[10].input.token = data[0].data.actions[0].content.token
+            // myTest[11].input.token = data[4].data.actions[0].content.token
         }
+    },
+//@test4 logout    
+    {
+        desc: 'logout to application owner',
+        expected: true,
+        expectedMsg: null,
+        input: {
+            token: undefined,
+            username: 'jannyann',
+            section: 'adminMethods',
+            command: 'adminLogout'
+        },
+        before: err => err(false),
+        after: err => err(false),
+        data(data) {
+            myTest[11].input.token = data[4].data.actions[0].content.token
+        }
+    },
+    {
+        desc: 'logout to application admin',
+        expected: true,
+        expectedMsg: null,
+        input: {
+            token: undefined,
+            username: 'marvenwilsons',
+            section: 'adminMethods',
+            command: 'adminLogout'
+        },
+        before: err => err(false),
+        after: err => err(false),
     },
 ]
 

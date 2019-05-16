@@ -2,7 +2,7 @@ const permissionHandler = ({ command, section, userData }) => {
     const sec_Alias = require('./section_alias.json')
 
     console.log('** permission handler')
-    if (userData.resource[sec_Alias[section]] == undefined && command == 'adminlogin'){
+    if (userData.resource[sec_Alias[section]] == undefined && command == 'adminlogin' || command == 'adminLogout'){
         // check if this admin is blocked
         if(userData.isBlocked) {
             console.log('   [permissionHandler] user has no permission to login')

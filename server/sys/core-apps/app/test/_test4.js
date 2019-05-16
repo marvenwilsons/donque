@@ -18,8 +18,7 @@ const startDatabaseServer = (callback) => {
         console.log(stderr.toString())
     })
     mongod.stdout.on('close', code => {
-        console.log('DONE')
-        console.log(code)
+        console.log('Db Server is running')
     })
 }
 
