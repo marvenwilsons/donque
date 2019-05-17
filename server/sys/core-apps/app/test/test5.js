@@ -22,6 +22,8 @@ const startDatabaseServer = (callback) => {
     })
 }
 
+let hasErr = false
+
 //@test4
 const myTest = [
     //@test4 index 0 login
@@ -52,15 +54,6 @@ const myTest = [
             myTest[1].input.token = data[0].data.actions[0].content.token
             myTest[1].input.username = data[0].data.actions[0].content.username
 
-            myTest[2].input.token = data[0].data.actions[0].content.token
-            myTest[3].input.token = data[0].data.actions[0].content.token
-            myTest[4].input.token = data[0].data.actions[0].content.token
-            myTest[5].input.token = data[0].data.actions[0].content.token
-            
-            myTest[6].input.username = data[0].data.actions[0].content.username
-            myTest[6].input.token = data[0].data.actions[0].content.token
-            myTest[7].input.token = data[0].data.actions[0].content.token
-
         }
     },
 
@@ -82,7 +75,11 @@ const myTest = [
             }
         },
         before: err => err(false),
-        after: err => err(false)
+        after: err => err(false),
+        data(data){
+            myTest[2].input.token = data[0].data.actions[0].content.token
+            myTest[2].input.username = data[0].data.actions[0].content.username
+        }
     },
     //@test 4 index 2 view admin
     {
@@ -95,11 +92,23 @@ const myTest = [
             section: 'adminMethods',
             command: 'viewAppAdmin',
             data: {
-                username: 'johndoe'
+                username: 'marvenwilsons'
             }
         },
         before: err => err(false),
-        after: err => err(false)
+        after: err => err(false),
+        data(data){            
+            const d = data[2].data.content
+
+            if (d.username != 'marvenwilsons'){
+                hasErr = `test index 2 fail, expected marvenwilsons but got ${d.username}`
+            }else if(typeof d != 'object'){
+                hasErr = "expected return type of viewAppAdmin should be object"
+            }
+
+            myTest[3].input.token = data[0].data.actions[0].content.token
+            myTest[3].input.username = data[0].data.actions[0].content.username
+        }
     },
     //@test4 index 3 attempt to delete an admin without password
     {
@@ -112,11 +121,15 @@ const myTest = [
             section: 'adminMethods',
             command: 'deleteAppAdmin',
         },
-        before: err => err(false),
-        after: err => err(false)
+        b4val: false,
+        before: err => err(hasErr),
+        after: err => err(hasErr),
+        data(data) {
+            myTest[4].input.token = data[0].data.actions[0].content.token
+            myTest[4].input.username = data[0].data.actions[0].content.username
+        }
     },
     //@test4 index 4 attempt to delete an admin with wrong password
-    //todo test
     {
         desc: 'attempt to delete an admin with wrong password',
         expected: false,
@@ -128,14 +141,18 @@ const myTest = [
             section: 'adminMethods',
             command: 'deleteAppAdmin',
         },
-        before: err => err(false),
-        after: err => err(false)
+        before: err => err(hasErr),
+        after: err => err(hasErr),
+        data(data) {
+            myTest[5].input.token = data[0].data.actions[0].content.token
+            myTest[5].input.username = data[0].data.actions[0].content.username
+        }
     },
     //@test4 index 5 delete an admin correct credentials
     {
         desc: 'delete an admin correct credentials',
         expected: true,
-        expectedMsg: 'Successfully deleted johndoe',
+        expectedMsg: 'Successfully deleted marvenwilsons',
         input: {
             username: 'jannyann',
             password: 'password123@', // <<- correct password
@@ -143,32 +160,39 @@ const myTest = [
             section: 'adminMethods',
             command: 'deleteAppAdmin',
             data: {
-                username: 'johndoe',
+                username: 'marvenwilsons',
             }
         },
-        before: err => err(false),
-        after: err => err(false)
+        before: err => err(hasErr),
+        after: err => err(hasErr),
+        data(data) {
+            myTest[6].input.token = data[0].data.actions[0].content.token
+            myTest[6].input.username = data[0].data.actions[0].content.username
+        }
     },
     //@test4 index 6 create admin back
     {
         desc: 'create new admin using newly created permission set',
         expected: true,
-        expectedMsg: 'John P Doe was successfully saved to database',
+        expectedMsg: 'Marven Wilson Donque was successfully saved to database',
         input: {
             username: undefined,
             token: undefined,
             section: 'adminMethods',
-            command: 'createAppAdmin',
+            command: 'createNewAppActor',
             data: {
-                username: 'johndoe',
-                password: 'passwordtesting123@',
-                adminName: 'John P Doe',
-                roleTitle: 'reader',
+                username: 'marvenwilsons',
+                password: 'password123@',
+                adminName: 'Marven Wilson Donque',
+                roleTitle: 'dev',
                 email: 'samplemail@smail2.com'
             },
         },
-        before: err => err(false),
-        after: err => err(false)
+        before: err => err(hasErr),
+        after: err => err(hasErr),
+        data(data) {
+            myTest[7].input.token = data[0].data.actions[0].content.token
+        }
     },
     //@test4 index 7 logout
     {
@@ -182,26 +206,7 @@ const myTest = [
             command: 'adminLogout'
         },
         before: err => err(false),
-        after: err => err(false),
-    },
-    //@test4 index 8 login as the new admin
-    {
-        desc: 'owner admin login expected to succeed',
-        expected: true,
-        expectedMsg: 'Auth Ok',
-        input: {
-            username: 'johndoe',
-            password: 'passwordtesting123@',
-            section: 'adminMethods',
-            command: 'adminlogin'
-        },
-        before: err => err(false),
-        after: err => err(false),
-        data(data) {
-            console.log('testing')
-            myTest[9].input.token = data[0].data.actions[0].content.token
-            console.log(data[6].data.actions[0].content.token)         
-        }
+        after: err => err(false)        
     },
     //@test4 index 9 make illegal api call
     {
@@ -210,24 +215,14 @@ const myTest = [
         expectedMsg: 'Illegal api call detected request is not permitted',
         input: {
             token: undefined,
-            username: 'johndoe',
-            password: 'passwordtesting123@',
+            username: 'marvenwilsons',
+            password: 'password123@',
             section: 'adminMethods',
             command: 'deleteAppAdmin'
         },
         before: err => err(false),
         after: err => err(false)
-    },
-
-    // update a role
-    // delete a role
-    // read a role
-
-    // logout
-    // login as the new created admin
-    // attempt to call some methods that the current admin has no permission
-
-    // 11 try to create new admin shoud fail on this admin because it doesnt have the title owner
+    }
 ]
 
 cardinalTest(myTest)

@@ -24,8 +24,13 @@
             closable:true,
         }"
             :position="1"
-          > 
-            <span @click="customPane(items2)" class="sidebar-method-btns flex flexcol" v-for="(items2,key2) in sideBarMethods[items]" :key="key2" >
+          >
+            <span
+              @click="customPane(items2)"
+              class="sidebar-method-btns flex flexcol"
+              v-for="(items2,key2) in sideBarMethods[items]"
+              :key="key2"
+            >
               <span :class="[selectedPane === items2 && 'activePane']">{{items2}}</span>
             </span>
           </sender>
@@ -50,9 +55,17 @@ export default {
         "Activities log"
       ],
       sideBarMethods: {
-        Admins: ['Add new application admin', 'Add new database admin', 'Application admin list', 'Database admin list','Current live admins', 'Lost password request'],
-        Teams: ['Create new team','Display all teams'],
-        Roles: ['Create custom roles','Display all roles'],
+        Admins: [
+          "Add new application admin",
+          "Add new database admin",
+          "Application admin list",
+          "Database admin list",
+          "Current live admins",
+          "Current blocked admins",
+          "Lost password request"
+        ],
+        Teams: ["Create new team", "Display all teams"],
+        Roles: ["Create custom roles", "Display all roles"],
         "Organizational Chart": [],
         "Activities log": []
       },
@@ -78,9 +91,9 @@ export default {
     send(comp, pos) {
       this.$store.commit("addComponent", { comp, pos });
     },
-    customPane(paneName){
-      this.selectedPane = paneName
-      this.$store.state.administrationCurrentView = paneName
+    customPane(paneName) {
+      this.selectedPane = paneName;
+      this.$store.state.administrationCurrentView = paneName;
     }
   },
   components: {
@@ -98,14 +111,14 @@ export default {
   padding: calc(var(--fontSize) * 0.25);
   font-weight: 600;
 }
-.sidebar-method-btns{
+.sidebar-method-btns {
   padding: calc(var(--fontSize) * 0.25);
   /* align-items: flex-end; */
 }
-.sidebar-method-btns:hover{
+.sidebar-method-btns:hover {
   text-decoration: underline;
 }
-.activePane{
+.activePane {
   /* font-weight: 600; */
   text-decoration: underline;
 }

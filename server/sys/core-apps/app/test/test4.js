@@ -282,7 +282,13 @@ const myTest = [
             command: 'adminLogout'
         },
         before: err => err(false),
-        after: err => err(false),
+        after: err => {
+            const testRunner = require('./testrunner')
+            err(false)
+            setTimeout(() => {
+                testRunner('test5.js')
+            }, 1000)
+        },
     },
 ]
 

@@ -6,7 +6,7 @@
       </tr>
       <tr class="mytr mytrtxt" v-for="(rows,index) in trs" :key="rows">
         <td
-          :class="currentSelected === index ? 'active' : ''"
+          :class="currentSelected === index ? 'st-active' : ''"
           id="simple-tbl-td"
           v-for="items in theads"
           :key="items"
@@ -107,10 +107,11 @@ table#objtotbl tr.mytr:hover {
   cursor: pointer;
   transition: 0.2s;
 }
-.active {
+.st-active {
   color: white;
   box-shadow: 2px 2px 15px 1px #393e4244;
   background-color: var(--hover-blue);
+  font-weight: 600;
 }
 .mytrtxt:hover > td#simple-tbl-td {
   color: white;

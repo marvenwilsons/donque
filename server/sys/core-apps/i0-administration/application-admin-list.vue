@@ -44,7 +44,7 @@
           </div>
           <!-- 2 -->
           <div id="mongbeans-wrap" class="entity-display flex fullwidth relative entity-host">
-            <div class="fullwidth absolute">
+            <div class="fullwidth absolute fullheight-percent">
               <mongbeans
                 v-if="!selectedView && selectedData != undefined"
                 :inputData="selectedData"

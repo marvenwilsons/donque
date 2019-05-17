@@ -157,7 +157,7 @@ adminMethods.adminLogout = {
         const clearingLiveAdmins = db
             .collection('dq_app')
             .findOneAndUpdate(
-                { siteOwner: user.adminName },
+                { siteTitle: db.databaseName.replace('dq_', '').trim() },
                 {
                     $pull: {
                         currentLiveAdmins: {
@@ -165,7 +165,12 @@ adminMethods.adminLogout = {
                         }
                     }
                 }
-            )
+            ).then(data => {
+                console.log('logout data')
+                console.log(data)
+
+                return true
+            })
 
 
         return new Promise((resolve, reject) => {

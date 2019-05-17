@@ -185,6 +185,9 @@ export default {
   --lobster: "Lobster", cursive;
   --cuprum: "Cuprum", sans-serif;
   --openSans: "Open Sans", sans-serif;
+  
+  /* bg */
+  --page-bg: #f9f9fa;
 }
 .dq-pane-container-padding {
   padding-top: var(--size-1-half);
