@@ -550,6 +550,104 @@ adminMethods.createNewAppActorRule = {
 }
 //@adminMethods:create. create team
 adminMethods.createTeam = {
+    get prop() {
+        return {
+            funcIsDestructive: false
+        }
+    },
+    createTeam({dep, data}) {
+        console.log(`** [createTeam] Creating ${data.teamName}`)
+
+        const { teamName } = data
+        const {db, moment} = dep
+        
+        let hasError = false
+
+        !teamName && (hasError = 'Team name is undefined')
+
+        return new Promise(async (resolve, reject) => {
+            // if there are errors
+            if(hasError){
+                console.log(`   [createTeam] Error while creating team`)
+                reject({
+                    status: false,
+                    data: {
+                        msg: hasError,
+                        actions: [{
+                            title: 'prompt_err'
+                        }]
+                    }
+                })
+            }else {
+                // fetch teams
+                let isDup = undefined
+                const scanDups = await db.collection('dq_app').find().forEach(items => {
+                    isDup = items
+                }).then(() => {
+                    const d = isDup.teams.map(i => {
+                        if (i.teamName === data.teamName){
+                            return false
+                        }else {
+                            return true
+                        }
+                    })
+
+                    return d.every(items => items === true)
+                })
+
+                // creating team
+                if (scanDups){
+                    db.collection('dq_app').findOneAndUpdate(
+                        { siteTitle: db.databaseName.replace('dq_', '').trim() },
+                        {
+                            $push: {
+                                teams: {
+                                    teamName: data.teamName,
+                                    createdOn: moment().format("MMM Do YY"),
+                                    createBy: adminData.value.adminName
+                                }
+                            }
+                        }
+                    ).then(() => {
+                        console.log(`   [createTeam] Team was successfully created`)
+                        resolve({
+                            status: true,
+                            data: {
+                                msg: `${data.teamName} team was successfully created`,
+                                actions: [{
+                                    title: 'prompt_msg'
+                                }]
+                            }
+                        })
+                    }).catch(err => {
+                        console.log(`   [createTeam] Error whilre creating team`)
+                        console.log(err)
+                        reject({
+                            status: false,
+                            data: {
+                                msg: `error while creating ${data.teamName} team`,
+                                actions: [{
+                                    title: 'prompt_err'
+                                }]
+                            }
+                        })
+                    }) 
+                }else {
+                    console.log(`   [createTeam] Team already exist`)
+                    reject({
+                        status: false,
+                        data: {
+                            msg: `${data.teamName} team already exist`,
+                            actions: [{
+                                title: 'prompt_err'
+                            }]
+                        }
+                    })
+                }
+                
+            }
+        })
+    }
 }
 //@adminMethods:create. create custom role
 adminMethods.createCustomRole = {

@@ -5,6 +5,7 @@ const auth = require('./auth')
 const protocols = {}
 const fs = require('fs')
 const path = require('path')
+const moment = require('moment')
 
 /**
  * Deletes all the contents in the database execpt the dbOwner and the
@@ -311,9 +312,10 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                 colName: 'dq_app', data: {
                     siteTitle,
                     siteOwner: adminName,
-                    created: new Date,
+                    created: moment().format("MMM Do YY"),
                     currentLiveAdmins: [],
-                    admin_passwords: ''
+                    teams: [],
+                    adminPasswords: ''
                 },
             },
             {
