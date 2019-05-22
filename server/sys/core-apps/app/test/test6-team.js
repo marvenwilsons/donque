@@ -25,7 +25,7 @@ const startDatabaseServer = (callback) => {
 let hasErr = false
 
 myTest = [
-// login as owner
+    // login as owner
     {
         desc: 'owner admin login expected to succeed',
         expected: true,
@@ -54,7 +54,7 @@ myTest = [
 
         }
     },
-// test 1 creating new team width undefined value
+    // test 1 creating new team width undefined value
     {
         desc: 'creating new team width undefined value',
         expected: false,
@@ -69,10 +69,10 @@ myTest = [
         before: err => err(hasErr),
         after: err => err(hasErr),
         data(data) {
-            myTest[2].input.token = data[0].data.actions[0].content.token            
+            myTest[2].input.token = data[0].data.actions[0].content.token
         }
     },
-// test 1 creating new team width undefined value
+    // test 1 creating new team width undefined value
     {
         desc: 'creating new team width null value',
         expected: false,
@@ -89,10 +89,10 @@ myTest = [
         before: err => err(hasErr),
         after: err => err(hasErr),
         data(data) {
-            myTest[3].input.token = data[0].data.actions[0].content.token            
+            myTest[3].input.token = data[0].data.actions[0].content.token
         }
-    },    
-// test 2 creating new team
+    },
+    // test 2 creating new team
     {
         desc: 'creating new team',
         expected: true,
@@ -109,10 +109,10 @@ myTest = [
         before: err => err(hasErr),
         after: err => err(hasErr),
         data(data) {
-            myTest[4].input.token = data[0].data.actions[0].content.token           
+            myTest[4].input.token = data[0].data.actions[0].content.token
         }
     },
-// test 2 creating new team, duplicate test
+    // test 2 creating new team, duplicate test
     {
         desc: 'creating new team duplicate should fail',
         expected: false,
@@ -129,16 +129,26 @@ myTest = [
         before: err => err(hasErr),
         after: err => err(hasErr),
         data(data) {
-
+            // myTest[5].input.token = data[0].data.actions[0].content.token
         }
     },
-// test 2 deleting team
-// test 3 creating new team
-// test 4 getting all team list
-// test 5 assigning an admin to a team
-// test 6 renaming a team
-// test 7 checking if the team name reflected to the admin after rename
-// test 8 illegal api cal
+    // test 5 assigning an admin to a non existent team should fail
+    {
+        section: 'adminMethods',
+        command: 'assignAppActorToTeam',
+        data: {
+            assignTo: 'developers',
+            position: 'member',
+            label: 'font-end dev',
+            username: 'marvenwilsons'
+        }
+    }
+    // test 2 deleting team
+    // test attempt to assign an admin to a deleted team should fail
+    // test 4 getting all team list
+    // test 6 renaming a team
+    // test 7 checking if the team name reflected to the admin after rename
+    // test 8 illegal api cal
 ]
 
 cardinalTest(myTest)

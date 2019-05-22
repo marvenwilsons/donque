@@ -364,7 +364,7 @@ adminMethods.createNewAppActor = {
                 isBlocked: false,
                 parentAdmin: '',
                 childAdmins: [],
-                resource: role_title.resource, 
+                resource: role_title.resource,
                 adminInstanceAllowed: 1,
                 messages: [],
                 lastModefied: '',
@@ -548,26 +548,26 @@ adminMethods.createNewAppActorRule = {
 
     }
 }
-//@adminMethods:create. create team
+//@adminMethods-team:create. create team <- done
 adminMethods.createTeam = {
     get prop() {
         return {
             funcIsDestructive: false
         }
     },
-    createTeam({dep, data}) {
+    createTeam({ dep, data }) {
         console.log(`** [createTeam] Creating ${data.teamName}`)
 
         const { teamName } = data
-        const {db, moment} = dep
-        
+        const { db, moment } = dep
+
         let hasError = false
 
         !teamName && (hasError = 'Team name is undefined')
 
         return new Promise(async (resolve, reject) => {
             // if there are errors
-            if(hasError){
+            if (hasError) {
                 console.log(`   [createTeam] Error while creating team`)
                 reject({
                     status: false,
@@ -578,16 +578,16 @@ adminMethods.createTeam = {
                         }]
                     }
                 })
-            }else {
+            } else {
                 // fetch teams
                 let isDup = undefined
                 const scanDups = await db.collection('dq_app').find().forEach(items => {
                     isDup = items
                 }).then(() => {
                     const d = isDup.teams.map(i => {
-                        if (i.teamName === data.teamName){
+                        if (i.teamName === data.teamName) {
                             return false
-                        }else {
+                        } else {
                             return true
                         }
                     })
@@ -596,7 +596,7 @@ adminMethods.createTeam = {
                 })
 
                 // creating team
-                if (scanDups){
+                if (scanDups) {
                     db.collection('dq_app').findOneAndUpdate(
                         { siteTitle: db.databaseName.replace('dq_', '').trim() },
                         {
@@ -604,7 +604,9 @@ adminMethods.createTeam = {
                                 teams: {
                                     teamName: data.teamName,
                                     createdOn: moment().format("MMM Do YY"),
-                                    createBy: adminData.value.adminName
+                                    createBy: adminData.value.adminName,
+                                    teamLeader: null,
+                                    members: []
                                 }
                             }
                         }
@@ -631,8 +633,8 @@ adminMethods.createTeam = {
                                 }]
                             }
                         })
-                    }) 
-                }else {
+                    })
+                } else {
                     console.log(`   [createTeam] Team already exist`)
                     reject({
                         status: false,
@@ -644,7 +646,7 @@ adminMethods.createTeam = {
                         }
                     })
                 }
-                
+
             }
         })
     }
@@ -706,7 +708,7 @@ adminMethods.listAdmins = {
             funcIsDestructive: false
         }
     },
-    listAdmins({dep}) {
+    listAdmins({ dep }) {
         const { db } = dep
 
         return new Promise(async (resolve, reject) => {
@@ -808,10 +810,10 @@ adminMethods.viewAppAdmin = {
         })
     }
 }
-//@adminMethods:read. list all teams
+//@adminMethods-team:read. list all teams <- todo
 adminMethods.listAllTeams = {
 }
-//@adminMethods:read. view team
+//@adminMethods-team:read. view team <- todo
 adminMethods.viewTeam = {
 }
 //@adminMethods:read. list all custom role
@@ -835,18 +837,18 @@ adminMethods.getRoles = {
             const rolesCursor = await db.collection('dq_actor_role').find()
             let resArray = []
 
-            await rolesCursor.forEach((doc,err) => {
-                if(err) {
+            await rolesCursor.forEach((doc, err) => {
+                if (err) {
                     reject({
                         status: false,
                         data: {
                             msg: err,
-                            actions:[{
-                                title:'prompt_err'
+                            actions: [{
+                                title: 'prompt_err'
                             }]
                         }
                     })
-                }else{
+                } else {
                     resArray.push(doc)
                 }
             }).then(res => {
@@ -854,7 +856,7 @@ adminMethods.getRoles = {
                     status: true,
                     data: {
                         msg: null,
-                        actions:[],
+                        actions: [],
                         content: resArray
                     }
                 })
@@ -866,16 +868,16 @@ adminMethods.getRoles = {
 /*****************************************************
  * Update methods
  */
-//@adminMethods:update. assign app actor to team
+//@adminMethods-team:update. assign app actor to team <- todo
 adminMethods.assignAppActorToTeam = {
 }
 //@adminMethods:update. assign app actor to role
 adminMethods.asssignAppActorToRole = {
 }
-//@adminMethods:update. assign color to team
-adminMethods.assignAppActorToTeam = {
+//@adminMethods-team:update. assign color to team <-todo
+adminMethods.assignColorToTeam = {
 }
-//@admunMethods:update. rename team
+//@adminMethods-team:update. rename team <- todo
 adminMethods.renameTeam = {
 }
 //@adminMethods:update. UpdateAdmin <<- done
@@ -921,9 +923,9 @@ adminMethods.updateAppAdmin = {
 
             // v2
             toBeUpdatedProps.map(items => {
-                if (items.split('.')[0] === 'resource'){
+                if (items.split('.')[0] === 'resource') {
                     hasError = false
-                } else if (!updatetableProps.includes(items)){
+                } else if (!updatetableProps.includes(items)) {
                     hasError = true
                     cannotBeUpdatedProps.push(items)
                 }
@@ -1143,10 +1145,21 @@ adminMethods.deleteAppAdmin = {
 //@adminMethods:delete. delete custom role
 adminMethods.removeCustomRole = {
 }
-//@adminMethods:delete. reset app
+//@adminMethods-team:delete. delete team
+adminMethods.deleteTeam = {
+    get prop() {
+        return {
+            funcIsDestructive: true
+        }
+    },
+    deleteTeam({ dep, data }) {
+
+    }
+}
+//@adminMethods-app:delete. reset app
 adminMethods.resetApp = {
 }
-//@adminMethods:delete. purge app
+//@adminMethods-app:delete. purge app
 adminMethods.purgeApp = {
 
 }
