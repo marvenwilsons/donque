@@ -1,9 +1,0 @@
-lucking a section
-
-the owner has the power to luck sections
-
-1. luck section to a certain admin
-    this feature lucks the admin from operating any kinds of operation
-
-2. luck section to a certain group
-3. luck section to all

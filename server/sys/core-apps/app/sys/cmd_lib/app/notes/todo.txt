@@ -1,8 +1,0 @@
-@todo
-
-1. write a test and logic for creating custom permissions and assigning custom resources to an
-owner defined admin title
-
-2. write the team sever side logic
-
-3. write the permissions sever side logic

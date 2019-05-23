@@ -13,8 +13,23 @@ export const actions = {
     /**
      * fetch data from server on app start
      */
-    async nuxtServerInit (store,context) {
-
+    nuxtServerInit (store,context) {
+        return this.$axios.$get('/dqapp/_dq', {
+            params: {
+                content: 'init',
+                path: context.route.matched[0].name
+            }
+        })
+            .then(res => {
+                // store to state
+                console.log('store received data')
+                store.commit('setApp', res)
+            })
+            .catch(e => {
+                console.log('err')
+                console.log(e)
+                context.error(e)
+            })
     },
     /**
      * general purpose method for reaching the

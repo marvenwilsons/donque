@@ -1,7 +1,0 @@
-{
-    "username": {
-        "type":"string",
-        "makeUnique":false,
-        "required":true
-    }
-}

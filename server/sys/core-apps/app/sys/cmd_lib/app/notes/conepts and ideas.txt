@@ -1,2 +1,0 @@
-@idea: object viewer
-@idea: dq builder
