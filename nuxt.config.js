@@ -1,6 +1,7 @@
 const pkg = require('./package')
 const bodyParser = require('body-parser')
 
+
 module.exports = {
   mode: 'universal',
 
@@ -16,12 +17,12 @@ module.exports = {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { href:'https://fonts.googleapis.com/css?family=Oxygen+Mono', rel:'stylesheet'},
-      { href:'https://fonts.googleapis.com/css?family=Ubuntu+Mono', rel:'stylesheet'},
-      { href:'https://fonts.googleapis.com/css?family=Inconsolata', rel:'stylesheet' },
+      { href: 'https://fonts.googleapis.com/css?family=Oxygen+Mono', rel: 'stylesheet' },
+      { href: 'https://fonts.googleapis.com/css?family=Ubuntu+Mono', rel: 'stylesheet' },
+      { href: 'https://fonts.googleapis.com/css?family=Inconsolata', rel: 'stylesheet' },
       { href: 'https://fonts.googleapis.com/css?family=Lobster', rel: 'stylesheet' },
       { href: 'https://fonts.googleapis.com/css?family=Cuprum', rel: 'stylesheet' },
-      { href: 'https://fonts.googleapis.com/css?family=Cuprum|Open+Sans:300i', rel: 'stylesheet' },      
+      { href: 'https://fonts.googleapis.com/css?family=Cuprum|Open+Sans:300i', rel: 'stylesheet' },
       { href: 'https://cdnjs.cloudflare.com/ajax/libs/gsap/2.0.2/TweenMax.min.js' }
     ]
   },
@@ -47,15 +48,8 @@ module.exports = {
   ** Nuxt.js modules
   */
   modules: [
-    // Doc: https://github.com/nuxt-community/axios-module#usage
     '@nuxtjs/axios'
   ],
-  /*
-  ** Axios module configuration
-  */
-  axios: {
-    // See https://github.com/nuxt-community/axios-module#options
-  },
 
   /*
   ** Build configuration
@@ -65,7 +59,6 @@ module.exports = {
     ** You can extend webpack config here
     */
     extend(config, ctx) {
-      
     }
   },
   serverMiddleware: [
