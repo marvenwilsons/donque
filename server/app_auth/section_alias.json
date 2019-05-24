@@ -1,0 +1,17 @@
+{
+    "adminMethods": "Administration",
+    "dashMethods": "Dashboard",
+    "pageMethods": "Pages",
+    "compMethods": "Components",
+    "colMethods": "Collections",
+    "msgMethods":"Messages",
+    "taskMethods":"Task",
+    "todoMethods":"Todos",
+    "workMethods":"Work",
+    "profileMethods":"Profile",
+    "DqFileSys": "Files",
+    "DqPluginsSys": "Plugins",
+    "DqSettings": "Settings",
+    "DqMarket": "Marketplace",
+    "DqDbSys": "Database"
+}

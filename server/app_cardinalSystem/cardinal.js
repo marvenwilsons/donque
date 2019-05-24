@@ -10,7 +10,7 @@ const Cardinal = async ({ username, password, token, data, command, section, met
 
     console.log('** Starting CardinalSystem')
     // dependecies
-    const registry = require('./cmd_lib/registry')
+    const registry = require('./registry')
 
     let response = undefined
 
@@ -98,6 +98,8 @@ const Cardinal = async ({ username, password, token, data, command, section, met
     else if (!registry[section]) {
         console.log(`   [CardinalSystem] section "${section}" not found`)
         console.log(`   [CardinalSystem] returning an error now`)
+        console.log('** registry'.bold.red)
+        console.log(registry)
         hasErr = true
         response = {
             status: false,

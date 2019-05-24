@@ -1,5 +1,5 @@
 const { execFile, exec, execSync, spawn } = require('child_process')
-const cardinalTest = require('../cardinalTest')
+const cardinalTest = require('./cardinalTest')
 
 const startDatabaseServer = (callback) => {
     console.log('starting mongo server')

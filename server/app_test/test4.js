@@ -4,7 +4,7 @@
  */
 
 const { execFile, exec, execSync, spawn } = require('child_process')
-const cardinalTest = require('../cardinalTest')
+const cardinalTest = require('./cardinalTest')
 const testRunner = require('./testrunner')
 
 execFile('mongod', ['--dbpath', '/home/marven/Desktop/database/Data', '--shutdown'], (error, stdout, stderr) => {

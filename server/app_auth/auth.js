@@ -39,6 +39,129 @@ module.exports = async ({ dep, selectedCommand, username, password, token, comma
     if(is_valid_req === true) {
         try {
             const user_does_ex = await validate_user_ex(userdb, { username, password, token, command, jwt, encrypt })
+
+            if(user_does_ex.validated && user_does_ex.accessType == 'limited'){
+                console.log('   [Auth] access type is limited')
+                let hasErr = undefined
+
+                /**
+                 * invoke function handler function
+                 */
+                const fn_handler_res = fn_handler({
+                    dep: {
+                        encrypt,
+                        decode
+                    },
+                    isDestructive: selectedCommand.prop.funcIsDestructive,
+                    userData: userDoesExist.data.user,
+                    pwd: password,
+                    username
+                })
+
+                fn_handler_res != true && (hasErr = fn_handler_res)
+
+                /**
+                 * invoke validate token function
+                 */
+                !validate_token({ data: userDoesExist.data, jwt, token, encrypt, decode, command }) && (hasErr = {
+                    msg: 'Invalid or expired token',
+                    actions: [{
+                        title: 'prompt_err'
+                    }]
+                })
+
+                /**
+                 * invoke permission handler function
+                 */
+                !perm_handler({command, section, userData: user_does_ex.data.user}) && (
+                    console.log(`   [Auth|permission-handler] response - ${permissionHandler_response}`),
+                    hasErr = {
+                    msg: 'Permission denied',
+                    actions: [{
+                        title: 'prompt_err'
+                    }]
+                })
+                
+                /**
+                 * return err to user
+                 */
+                if (!hasErr) {
+                    console.log(`   [Auth] Has error false`)
+                    callback(null, {
+                        status: true,
+                        data: userDoesExist.data
+                    })
+                } else {
+                    console.log(`   [Auth] Has error true`)
+                    callback({
+                        status: false,
+                        data: {
+                            command,
+                            section,
+                            ...hasErr
+                        }
+                    })
+                }
+            }else if(user_does_ex.validated && user_does_ex.accessType == 'full') {
+                console.log('   [Auth] access type is full')
+
+                /**
+                 * Validate token
+                 */
+                if (validate_token({ data: userDoesExist.data, jwt, token, encrypt, decode, command })){
+
+                    /**
+                     * invoke function handler
+                     */
+                    const fn_handler_res = fn_handler({
+                        dep: {
+                            encrypt,
+                            decode
+                        },
+                        isDestructive: selectedCommand.prop.funcIsDestructive,
+                        userData: userDoesExist.data.user,
+                        pwd: password,
+                        username
+                    })
+
+                    if(typeof fn_handler_res === 'boolean'){
+                        callback(null, {
+                            status: true,
+                            data: userDoesExist.data
+                        })
+                    }else {
+                        console.log('handler response')
+                        console.log({
+                            status: false,
+                            data: {
+                                command,
+                                section,
+                                ...functionHandler_response
+                            }
+                        })
+                        callback({
+                            status: false,
+                            data: {
+                                command,
+                                section,
+                                ...functionHandler_response
+                            }
+                        })
+                    }
+                }
+            } else if (user_does_ex.validated == false) {
+                // @dqsys: auth: user does not exist in db
+                console.log(`   [Auth] Cannot validate "${username}" because it does not exist in the database`)
+                callback({
+                    status: false,
+                    data: {
+                        msg: `Cannot validate "${username}" because it does not exist in the database`,
+                        actions: [{
+                            title: 'prompt_err'
+                        }]
+                    }
+                }, null)
+            }
         } catch (err) {
             if (command === 'dqinitapp' && section === 'dqapp') {
                 callback(null, {
