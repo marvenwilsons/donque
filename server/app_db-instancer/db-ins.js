@@ -8,13 +8,18 @@ const security = require('../app_lib/utils/index').encrypt
 /**
  * __dqinit
  */
-const pages = path.join(__dirname, '../../../../../pages')
+console.log('** db ins --> getting pages')
+console.log(path.join(__dirname, '../../pages'))
+const pages = path.join(__dirname, '../../pages')
+
+console.log('** db ins --> checking dqinit.vue page')
 const __dqinit = fs.readdirSync(pages).includes('__dqinit.vue')
 
 /**
  * ini
  */
-const iniFile = fs.readdirSync(__dirname).includes('iniConf.json')
+const manifest_dir = path.join(__dirname, '../app_manifest')
+const iniFile = fs.readdirSync(manifest_dir).includes('iniConf.json')
 
 
 /**
@@ -40,7 +45,7 @@ module.exports = async (user, pwd) => {
      * if the file exist it means the application has already
      * been initialized
      */
-    fs.readdirSync(__dirname).includes('iniConf.json') ? appState.push('app is init') : appState.push('app is not init')
+    fs.readdirSync(manifest_dir).includes('iniConf.json') ? appState.push('app is init') : appState.push('app is not init')
 
     /**
      * Check if the main admin has logged in
@@ -156,7 +161,7 @@ module.exports = async (user, pwd) => {
             }
         } else {
             console.log(`   [db] Logging in db owner`)
-            const dbOwner = JSON.parse(fs.readFileSync(`${__dirname}/iniConf.json`, 'utf-8'))
+            const dbOwner = JSON.parse(fs.readFileSync(`${manifest_dir}/iniConf.json`, 'utf-8'))
 
             console.log('   [db] Checking owner credentials')
             if (security.decode(security.encrypt(user, dbOwner.owner), dbOwner.owner) === user) {

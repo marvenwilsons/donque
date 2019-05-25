@@ -53,7 +53,7 @@ module.exports = async ({ dep, selectedCommand, username, password, token, comma
                         decode
                     },
                     isDestructive: selectedCommand.prop.funcIsDestructive,
-                    userData: userDoesExist.data.user,
+                    userData: user_does_ex.data.user,
                     pwd: password,
                     username
                 })
@@ -63,7 +63,7 @@ module.exports = async ({ dep, selectedCommand, username, password, token, comma
                 /**
                  * invoke validate token function
                  */
-                !validate_token({ data: userDoesExist.data, jwt, token, encrypt, decode, command }) && (hasErr = {
+                !validate_token({ data: user_does_ex.data, jwt, token, encrypt, decode, command }) && (hasErr = {
                     msg: 'Invalid or expired token',
                     actions: [{
                         title: 'prompt_err'
@@ -89,7 +89,7 @@ module.exports = async ({ dep, selectedCommand, username, password, token, comma
                     console.log(`   [Auth] Has error false`)
                     callback(null, {
                         status: true,
-                        data: userDoesExist.data
+                        data: user_does_ex.data
                     })
                 } else {
                     console.log(`   [Auth] Has error true`)
@@ -108,7 +108,7 @@ module.exports = async ({ dep, selectedCommand, username, password, token, comma
                 /**
                  * Validate token
                  */
-                if (validate_token({ data: userDoesExist.data, jwt, token, encrypt, decode, command })){
+                if (validate_token({ data: user_does_ex.data, jwt, token, encrypt, decode, command })){
 
                     /**
                      * invoke function handler
@@ -119,7 +119,7 @@ module.exports = async ({ dep, selectedCommand, username, password, token, comma
                             decode
                         },
                         isDestructive: selectedCommand.prop.funcIsDestructive,
-                        userData: userDoesExist.data.user,
+                        userData: user_does_ex.data.user,
                         pwd: password,
                         username
                     })
@@ -127,7 +127,7 @@ module.exports = async ({ dep, selectedCommand, username, password, token, comma
                     if(typeof fn_handler_res === 'boolean'){
                         callback(null, {
                             status: true,
-                            data: userDoesExist.data
+                            data: user_does_ex.data
                         })
                     }else {
                         console.log('handler response')

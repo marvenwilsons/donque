@@ -1,10 +1,12 @@
 const fs = require('fs')
 const path = require('path')
-const database = path.join(__dirname, '../../../../database')
 class _json {
     action(dbName, _method, query, data, callback) {
         const method = _method.split('/')[0]
         const methodOpt = _method.split('/')[1]
+
+        const { dir } = data
+        const database = dir
 
         switch (method) {
             case 'read':

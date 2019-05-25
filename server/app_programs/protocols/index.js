@@ -464,7 +464,7 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                         })
 
                     // create app db config
-                    const _path = path.join(__dirname, '../../../database/iniConf.json')
+                    const _path = path.join(__dirname, '../../app_manifest/iniConf.json')
                     const _data = JSON.stringify({
                         title: siteTitle,
                         appName: dbName,

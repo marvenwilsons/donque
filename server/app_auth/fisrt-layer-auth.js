@@ -1,4 +1,4 @@
-module.export = async ({ ...dbs }, { command }) => {
+module.exports = async ({ ...dbs }, { command }) => {
     // @dqsys: auth: firstLayerAuthentication()
     /**
      * Insures nobody can call an api that is not logged in
