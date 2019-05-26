@@ -74,7 +74,7 @@ module.exports = async ({ dep, selectedCommand, username, password, token, comma
                  * invoke permission handler function
                  */
                 !perm_handler({command, section, userData: user_does_ex.data.user}) && (
-                    console.log(`   [Auth|permission-handler] response - ${permissionHandler_response}`),
+                    console.log(`   [Auth|permission-handler]`),
                     hasErr = {
                     msg: 'Permission denied',
                     actions: [{
@@ -136,7 +136,7 @@ module.exports = async ({ dep, selectedCommand, username, password, token, comma
                             data: {
                                 command,
                                 section,
-                                ...functionHandler_response
+                                ...fn_handler_res
                             }
                         })
                         callback({
@@ -144,7 +144,7 @@ module.exports = async ({ dep, selectedCommand, username, password, token, comma
                             data: {
                                 command,
                                 section,
-                                ...functionHandler_response
+                                ...fn_handler_res
                             }
                         })
                     }
