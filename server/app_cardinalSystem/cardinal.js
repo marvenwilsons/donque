@@ -20,7 +20,7 @@ const Cardinal = async ({ username, password, token, data, command, section, met
          */
         let res = undefined
         // just to make sure db server is running
-        console.log('retrieving the db data')
+        console.log('** retrieving the db data')
         try {
             const data = await db()
             if (data.data.doc != undefined) {

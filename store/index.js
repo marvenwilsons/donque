@@ -1,29 +1,37 @@
 export const state = () => {
-    app: undefined
-    admin: undefined
+    app: undefined // add data use for initialing the app admin area
+    admin: undefined // data for the current log admin, used for inializing the admin dashboard
+    actions: undefined // actions received from server, an object containing array of actions
+    messages: undefined
 }
 
 export const mutations = {
-    setAppdata(state,arg) {
-
+    setAppData(state,serverData) {
+        state.actions = serverData.data.actions
+        state.app = serverData
+    },
+    systemCallMutation(state,payloadData){
+        state.actions = payloadData.actions
+        state.messages = payloadData.msg
     }
 }
 
 export const actions = {
     /**
-     * fetch data from server on app start
+     * fetch data from server for application to start
      */
     nuxtServerInit (store,context) {
+        console.log('** [NuxtServerInit] fetching server resource')
         return this.$axios.$get('/dqapp/_dq', {
             params: {
                 content: 'init',
                 path: context.route.matched[0].name
             }
         })
-            .then(res => {
+            .then(serverData => {
                 // store to state
-                console.log('store received data')
-                store.commit('setApp', res)
+                console.log('** [NuxtServerInit] server resource received')
+                store.commit('setAppData', serverData)
             })
             .catch(e => {
                 console.log('err')
@@ -36,6 +44,7 @@ export const actions = {
      * server
      */
     systemCall({commit,state},context) {
+        console.log('** SystemCall')
         switch (context.method) {
             case 'get' || 'read':
                 console.log(`** [systemCall]-[store] fetching ${context.command}`)

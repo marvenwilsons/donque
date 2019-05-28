@@ -4,6 +4,7 @@ const MongoClient = require('mongodb').MongoClient
 const fs = require('fs')
 const path = require('path')
 const security = require('../app_lib/utils/index').encrypt
+var colors = require('colors');
 
 /**
  * __dqinit
@@ -69,7 +70,9 @@ module.exports = async (user, pwd) => {
      */
     console.log(`   [db] Checking database connection`)
     if (appState.includes('db err')) {
-        console.log(`   [db] fail connection`)
+        console.log(`   [db] Error: fail on connecting`.red.bold)
+        console.log(`   [db] Error: database server is not running`.red.bold)
+        console.log(`   [db] Error: database enterface cannot be reached`.red.bold)
         response = {
             status: false,
             data: {
@@ -80,7 +83,7 @@ module.exports = async (user, pwd) => {
             }
         }
     } else {
-        console.log(`   [db] Datbase connection OK!`)
+        console.log(`   [db] Database connection established`)
     }
 
     /**
@@ -133,14 +136,14 @@ module.exports = async (user, pwd) => {
         _isInit = true
         console.log(`   [db] Application is initialized`)
         console.log(`   [db] Mongo Server is initialized and running`)
-        console.log(`   [db] Warning Db owner is not connected`)
+        console.log(`   [db] Error: Db owner or app owner connection is not initialized`.red.bold)
         /**
          * When main admin is not yet connected and tried to do api calls
          */
         const isIllegalCall = user && pwd ? false : true
         if (isIllegalCall) {
-            console.log(`   [db] Db owner credentials is invalid`)
-            console.log(`   [db] Illegal method call, returning an error now`)
+            console.log(`   [db] Error: Db owner credentials is invalid`.red.bold)
+            console.log(`   [db] Error: Illegal method call, returning an error now`.red.bold)
             const msg1 = 'Cannot perform command because admin credentials is missing, Please instantiate a connection first from app to db by logging in as the application owner'
 
             response = {

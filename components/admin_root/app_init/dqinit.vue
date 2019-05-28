@@ -235,7 +235,7 @@
 </template>
 
 <script>
-import spinner from "@/server/sys/core-apps/pane-system/module/spinner-1.vue";
+import spinner from "@/components/global-ui/spinner/spinner-1.vue";
 export default {
   data() {
     return {
@@ -475,17 +475,18 @@ export default {
     }
   },
   mounted() {
-    this.ready = false;
-    
-    
-
-
-    setTimeout(() => {
-      if(this.$store.state.actions[0].title === 'redirect'){
-      location.href = this.$store.state.actions[0].content
-    } else {
-        this.ready = true;
+    if(location.pathname != '/dq-initialize-application'){
+      location.href = 'dq-initialize-application'
     }
+
+    this.ready = false;
+    setTimeout(() => {
+      // if(this.$store.state.actions[0].title === 'redirect'){
+      // // location.href = this.$store.state.actions[0].content
+      // } else {
+      //     this.ready = true;
+      // }
+      this.ready = true
     }, 1000);
   }
 };
