@@ -287,7 +287,7 @@ const myTest = [
             err(false)
             setTimeout(() => {
                 testRunner('test5.js')
-            }, 1000)
+            }, 100)
         },
     },
 ]

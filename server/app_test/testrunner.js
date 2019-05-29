@@ -10,7 +10,7 @@ const runNextTest = (testFile) => {
             `node ${__dirname}/${testFile}`,
             { stdio: 'inherit' }
         );
-    },4000)
+    },50)
 
     
 }

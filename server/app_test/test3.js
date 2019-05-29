@@ -182,7 +182,7 @@ const myTest = [
 
             setTimeout(() => {
                 testRunner('test4.js')
-            }, 2000)
+            }, 100)
         },
         data(data) {
         }
