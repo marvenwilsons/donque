@@ -29,28 +29,32 @@
 
 <script>
 // shell
-import console from "@/server/sys/core-apps/i0-shell/view/console.vue";
+import console from "@/components/admin_sections/console/console.vue";
 
 // pages
-import pages from "@/server/sys/core-apps/i0-pages/view/page_list.vue";
-import pagesDetails from "@/server/sys/core-apps/i0-pages/view/page-detail.vue";
+import pages from "@/components/admin_sections/pages/page_list.vue";
+import pagesDetails from "@/components/admin_sections/pages/page-detail.vue";
 
 //
-import collections from "@/server/sys/core-apps/i0-collection/collections.vue";
-import components from "@/server/sys/core-apps/i0-components/components.vue";
-import database from "@/server/sys/core-apps/i0-database/database.vue";
-import files from "@/server/sys/core-apps/i0-files/files.vue";
-import marketplace from "@/server/sys/core-apps/i0-marketplace/marketplace.vue";
-import plugins from "@/server/sys/core-apps/i0-plugins/plugins.vue";
-import app from "@/server/sys/core-apps/i0-app/app.vue";
-import dashboard from "@/server/sys/core-apps/i0-dashboard/dashboard.vue";
-import administration from "@/server/sys/core-apps/i0-administration/administration-list.vue";
-import administrationDetails from "@/server/sys/core-apps/i0-administration/administration-details.vue";
+import collections from "@/components/admin_sections/collections/collections.vue";
+import components from "@/components/admin_sections/components/components.vue";
+import database from "@/components/admin_sections/database/database.vue";
+import files from "@/components/admin_sections/files/files.vue";
+import marketplace from "@/components/admin_sections/marketplace/marketplace.vue";
+// import plugins from "@/server/sys/core-apps/i0-plugins/plugins.vue";
+
+//
+import app from "@/components/admin_sections/app/app.vue";
+import dashboard from "@/components/admin_sections/dashboard/dashboard.vue";
+
+//
+import administration from "@/components/admin_sections/administration/administration-list.vue";
+import administrationDetails from "@/components/admin_sections/administration/administration-details.vue";
 
 export default {
   data() {
     return {
-      ComponentsArray: this.$store.state.comp.arr,
+      ComponentsArray: this.$store.state.pane_system.arr,
       stylesArray: undefined
     };
   },
@@ -88,7 +92,6 @@ export default {
   },
   watch: {
     ComponentsArray(newVal, oldVal) {
-      // console.log(location.href = this.$store.state.comp.currentUrl)
       // console.log(this.$route);
     }
   },
@@ -104,7 +107,7 @@ export default {
     database,
     files,
     marketplace,
-    plugins,
+    // plugins,
     app,
     dashboard,
     administration,

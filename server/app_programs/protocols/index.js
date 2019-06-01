@@ -314,6 +314,25 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                     created: moment().format("MMM Do YY"),
                     currentLiveAdmins: [],
                     teams: [],
+                    routes: [
+                        {
+                            name: 'admin', 
+                            access_type: 'private',
+                            page_structure: null,
+                            children: null,
+                        },
+                        {
+                            name: '', 
+                            access_type: 'public',
+                            page_structure: [],
+                            children: [],
+                            is_under_maintenance: false,
+                            created_on: null,
+                            created_by: null,
+                            is_locked: false,
+                            last_modified: ''
+                        }
+                    ],                    
                     adminPasswords: ''
                 },
             },

@@ -60,8 +60,8 @@
 </template>
 
 <script>
-import simpleTable from "@/server/sys/core-apps/pane-system/module/simple-table.vue";
-import mongbeans from "@/server/sys/core-apps/global-ui/mongbeans/host.vue";
+import simpleTable from "@/components/global-ui/simple-table/simple-table.vue";
+import mongbeans from "@/components/global-ui/mongbeans/host.vue";
 import actionsWindow from "./actions.vue";
 import analyticsWindow from "./analytics.vue";
 

@@ -165,16 +165,16 @@ export default {
       isActive: undefined,
       r: this.$store.state.resources,
       sideItems() {
-        return Object.keys(this.$store.state.resources)
+        // return Object.keys(this.$store.state.resources)
       },
-      arr: this.$store.state.comp.arr
+      arr: this.$store.state.pane_system.arr
     };
   },
   methods: {
     activate(p) {
       // console.log(p)
       let parent = document.getElementById("dq-nav-ul");
-      let btns = parent.getElementsByClassName("light-text");
+      // let btns = parent.getElementsByClassName("light-text");
       // btns[p].className += " active";
       this.isActive = p;
     }

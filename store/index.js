@@ -3,16 +3,35 @@ export const state = () => {
     admin: undefined // data for the current log admin, used for inializing the admin dashboard
     actions: undefined // actions received from server, an object containing array of actions
     messages: undefined
+    resources: undefined
+}
+
+export const getters = {
+    actionState: state => {
+        console.log('store action state')
+        return state.actions
+    },
+    modalState: state => {
+        return !state.modal.visibility ? 'modal is open' : 'modal is close'
+    },
+    hasErr: state => {
+        return state.hasErr
+    }
 }
 
 export const mutations = {
     setAppData(state,serverData) {
+        console.log('** setting app data')
+        console.log(serverData.data)
         state.actions = serverData.data.actions
         state.app = serverData
     },
     systemCallMutation(state,payloadData){
         state.actions = payloadData.actions
         state.messages = payloadData.msg
+    },
+    setActions(state,payload) {
+        state.actions = payload
     }
 }
 

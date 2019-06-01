@@ -34,7 +34,7 @@
 export default {
   methods: {
     closeModal() {
-      this.$store.state.modal.visibility = false;
+      this.$store.state.modal.commit('set_visibility', false);
     }
   }
 };

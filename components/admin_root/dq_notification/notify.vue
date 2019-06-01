@@ -27,7 +27,7 @@ export default {
   props: ["mode"],
   data() {
     return {
-      isOpen: this.$store.state.notificationPane.isOpen
+      isOpen: this.$store.state.notification_pane.isOpen
     };
   },
   methods: {

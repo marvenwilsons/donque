@@ -88,7 +88,7 @@ export default {
           const { status, data } = response;
           console.log("this is data");
           //   console.log(data.actions);
-          this.$store.state.actions = data.actions;
+          this.$store.commit('setActions',data.actions)
 
           if (status) {
             // set localstorage
@@ -140,6 +140,8 @@ export default {
 </script>
 
 <style>
+@import url('@/assets/dq-css/dq-theme-default.css');
+
 #tc-logo-h {
   padding: calc(var(--fontSize) * 1.25);
   margin: calc(var(--fontSize) * 1.25);

@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import sender from "@/server/sys/core-apps/pane-system/module/component-sender.vue";
+import sender from "@/components/admin_root/dq_pane-system/module/component-sender.vue";
 
 export default {
   data() {

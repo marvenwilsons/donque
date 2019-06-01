@@ -224,7 +224,6 @@
 </template>
 
 <script>
-import spinner from "@/server/sys/core-apps/pane-system/module/spinner-1.vue";
 import { mapGetters } from "vuex";
 
 export default {
@@ -281,9 +280,6 @@ export default {
         }
       }
     };
-  },
-  components: {
-    spinner
   },
   methods: {
     pullErrors(errObj, errName) {
