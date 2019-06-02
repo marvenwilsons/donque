@@ -32,6 +32,19 @@ export const mutations = {
     },
     setActions(state,payload) {
         state.actions = payload
+    },
+    logout() {
+        this.$axios.$post('/dqapp/_dq', {
+            token: localStorage.getItem("auth"),
+            username: localStorage.getItem("username"),
+            section: 'adminMethods',
+            command: 'adminLogout'
+        }).then((data) => {
+            if (data.status) {
+                localStorage.clear()
+                location.reload()
+            }
+        })        
     }
 }
 

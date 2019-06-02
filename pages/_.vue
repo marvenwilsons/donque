@@ -132,9 +132,8 @@ export default {
     /**
      * Setting admin data
      */
-    // this.$store.state.admin = {
-    //   adminName: 'marven'
-    // }
+    console.log('** Mounting _.vue')
+    console.log(location.pathname)
 
     /**
      * page routing
@@ -146,7 +145,8 @@ export default {
     // not dq login anymore after initialization
     if (
       this.$store.state.actions[0].title === "redirect" &&
-      this.$store.state.actions[0].content === "dqlogin"
+      this.$store.state.actions[0].content === "dqlogin" ||
+      location.pathname === '/dqlogin'
     ) {
       return this.view = "dq_login";
     }

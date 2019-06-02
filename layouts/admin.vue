@@ -1,5 +1,5 @@
 <template>
-  <div class="fullheight-VH relative" style="overflow:hidden">
+  <div v-if="isReady" class="fullheight-VH relative" style="overflow:hidden">
     <div class="absolute  fullwidth fullheight-percent relative flex flexcol">
       <!-- modal container-->
       <div
@@ -19,11 +19,21 @@
 import dq_heading from '@/components/admin_root/dq_head/dq_heading.vue'
 
 export default {
+  data() {
+    return {
+      isReady: true
+    }
+  },
   mounted() {
     this.$store.commit("modal/set_visibility", false);
 
     // check localstorage for auth token
-    console.log(localStorage.getItem('auth'))
+    if(!localStorage.getItem('auth')){
+      this.isReady = false
+      location.href = 'dqlogin'
+    }else {
+      this.isReady = true
+    }
   },
   components: {
     dq_heading
