@@ -7,8 +7,8 @@
         class="absolute bgblue fullwidth fullheight-percent flex flexcenter"
       >modal</div>
       <!-- nuxt -->
-      <div class="borderred">head</div>
-      <div style="flex:1"  class="flex fullwidth borderred">
+      <div class="borderred"> <dq_heading/> </div>
+      <div style="flex:1"  class="flex fullwidth">
         <nuxt/>
       </div>
     </div>
@@ -16,12 +16,17 @@
 </template>
 
 <script>
+import dq_heading from '@/components/admin_root/dq_head/dq_heading.vue'
+
 export default {
   mounted() {
     this.$store.commit("modal/set_visibility", false);
 
     // check localstorage for auth token
     console.log(localStorage.getItem('auth'))
+  },
+  components: {
+    dq_heading
   }
 };
 </script>

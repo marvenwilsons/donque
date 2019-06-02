@@ -86,7 +86,13 @@ img{
     flex-direction: column;
 }
 .spacebetween{
-    justify-content: space-between
+    justify-content: space-between;
+}
+.flexend {
+  justify-content: flex-end;
+}
+.flexstart {
+  justify-content: flex-start;
 }
 /*Responsiveness*/
 .flexwrap{
