@@ -368,6 +368,7 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                     lastModefied: '',
                     lastActivity: '',
                     activities: [],
+                    theme: 'dq-blue',
                     resource: {
                         Dashboard: app_resource.Dashboard,
                         Administration: app_resource.Administration,

@@ -8,6 +8,7 @@ export const state = () => ({
     admin_title: undefined,
     admin_email: undefined,
     admin_username: undefined,
+    admin_theme: undefined,
 
     // app related
     app_site_title: undefined,
@@ -15,12 +16,13 @@ export const state = () => ({
 })
 
 export const mutations = {
-    set_admin_data(state, { title, username, adminName, email, resources }) {           
+    set_admin_data(state, { title, username, adminName, email, resources, theme }) {           
         state.title = title
         state.admin_name = adminName
         state.resources = resources
         state.admin_email = email
         state.admin_username = username
+        state.admin_theme = theme
     }
 }
 

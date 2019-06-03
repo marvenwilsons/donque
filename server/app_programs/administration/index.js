@@ -681,7 +681,8 @@ adminMethods.initActorsDashboard = {
                                 username: adminData.value.username,
                                 adminName: adminData.value.adminName,
                                 email: adminData.value.email,
-                                resources: adminData.value.resource
+                                resources: adminData.value.resource,
+                                theme: adminData.theme
                             }
                         }],
                     }

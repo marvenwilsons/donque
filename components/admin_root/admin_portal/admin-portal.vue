@@ -13,14 +13,19 @@
     <!-- main window -->
     <div
       :style="{flex: 9, background: $store.state.theme.main_bg_color}"
-      class="relative"
-    >main window</div>
+      class="relative borderred"
+    >
+      main window
+      {{Object.keys($store.state.dashboard_data)}} <br/>asdf
+      {{$store.state.dashboard_data.admin_theme}}
+    </div>
 
     <!-- notification -->
     <div class="relative">
       <div
+        id="dq_notification_parent"
         style="width:350px; left:-350px; background:whitesmoke;"
-        class="absolute fullheight-percent pad025 flex fullwidth flexcol"
+        class="absolute fullheight-percent flex fullwidth flexcol"
       >
         <div class="flex flexcol fullheight-percent">
           <notify
@@ -46,4 +51,7 @@ export default {
 </script>
 
 <style>
+#dq_notification_parent{
+    box-shadow: 2px 2px 15px 1px #393e4244;
+}
 </style>

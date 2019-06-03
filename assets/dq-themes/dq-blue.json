@@ -1,0 +1,13 @@
+{
+    "name": "dq-blue",
+    "heading_bg_color" : "#0086c0",
+    "heading_text_color": "white",
+    "docker_bg_color": "#0086c0",
+    "docker_text_color": "white",
+    "main_bg_color":"whitesmoke",
+    "pane_head_title_color": "white",
+    "pane_head_controls_color":"white",
+    "pane_body_text_color":"black",
+    "notify_bg_color": "white",
+    "notify_text_color":"#4a6976"
+}

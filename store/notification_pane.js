@@ -8,7 +8,7 @@ export const getters = {
 }
 
 export const mutations = {
-    set_state(state, value) {
+    set_state(state) {
         console.log('set notification state')
         state.isOpen = !state.isOpen
     },

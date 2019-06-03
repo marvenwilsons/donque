@@ -1,0 +1,13 @@
+{
+    "name": "dq-dark",
+    "heading_bg_color": "",
+    "heading_text_color": "",
+    "docker_bg_color": "",
+    "docker_text_color": "",
+    "main_bg_color": "",
+    "pane_head_title_color": "",
+    "pane_head_controls_color": "",
+    "pane_body_text_color": "",
+    "notify_bg_color": "",
+    "notify_text_color": ""
+}
