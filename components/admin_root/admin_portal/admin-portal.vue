@@ -13,11 +13,9 @@
     <!-- main window -->
     <div
       :style="{flex: 9, background: $store.state.theme.main_bg_color}"
-      class="relative borderred"
+      class="relative"
     >
       main window
-      {{Object.keys($store.state.dashboard_data)}} <br/>asdf
-      {{$store.state.dashboard_data.admin_theme}}
     </div>
 
     <!-- notification -->

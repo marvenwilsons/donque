@@ -8,7 +8,7 @@
       >modal</div>
       <!-- nuxt -->
       <div>
-        <heading :bgColor="'blue'" :textColor="'white'" :adminName="$store.state.dashboard_data.admin_name"/>
+        <heading :bgColor="$store.state.theme.heading_bg_color" :textColor="$store.state.theme.heading_text_color" :adminName="$store.state.dashboard_data.admin_name"/>
       </div>
       <div style="flex:1" class="flex fullwidth">
         <nuxt/>

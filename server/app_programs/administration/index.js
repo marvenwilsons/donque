@@ -657,6 +657,19 @@ adminMethods.createCustomRole = {
 /*****************************************************
  * Read methods for admin
  */
+adminMethods.getThemeContent = {
+    get prop() {
+        return {
+            allowedtitle: null,
+            funcIsDestructive: false
+        }
+    },
+    getThemeContent({dep, themeName}) {
+        const path = require('path')
+        const location = require(path.join(__dirname, `../../../assets/dq-themes/${themeName}.json`))
+        return location
+    }
+}
 //@adminMethods:read. init admin dashboard << -done
 adminMethods.initActorsDashboard = {
     get prop() {
@@ -682,7 +695,8 @@ adminMethods.initActorsDashboard = {
                                 adminName: adminData.value.adminName,
                                 email: adminData.value.email,
                                 resources: adminData.value.resource,
-                                theme: adminData.theme
+                                theme: adminData.value.theme,
+                                theme_content: adminMethods.getThemeContent.getThemeContent({dep, themeName: adminData.value.theme})
                             }
                         }],
                     }

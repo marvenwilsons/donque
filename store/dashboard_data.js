@@ -47,5 +47,6 @@ export const actions = {
             });
 
         commit('set_admin_data', sdata)
+        this.commit('theme/load_theme', sdata)
     }
 }

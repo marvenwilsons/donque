@@ -51,8 +51,8 @@ export default {
   mounted() {
     const n = document.getElementById("dq_notification_pane");
     const i = document.getElementById("dq_notification_parent");
-    TweenMax.fromTo(n, 0.1, { x: "0" }, { x: "350" });
-    TweenMax.fromTo(i, 0.1, { x: "0" }, { x: "350" });
+    TweenMax.fromTo(n, 0, { x: "0" }, { x: "350" });
+    TweenMax.fromTo(i, 0, { x: "0" }, { x: "350" });
   }
 };
 </script>
