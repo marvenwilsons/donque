@@ -7,8 +7,8 @@
         class="absolute bgblue fullwidth fullheight-percent flex flexcenter"
       >modal</div>
       <!-- nuxt -->
-      <div class="borderred">
-        <dq_heading/>
+      <div>
+        <heading :bgColor="'blue'" :textColor="'white'" :adminName="$store.state.dashboard_data.admin_name"/>
       </div>
       <div style="flex:1" class="flex fullwidth">
         <nuxt/>
@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import dq_heading from "@/components/admin_root/dq_head/dq_heading.vue";
+import heading from "@/components/admin_root/dq_head/dq_heading.vue";
 
 export default {
   data() {
@@ -47,7 +47,7 @@ export default {
     }
   },
   components: {
-    dq_heading
+    heading
   }
 };
 </script>

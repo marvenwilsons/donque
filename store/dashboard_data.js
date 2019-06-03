@@ -1,6 +1,9 @@
 export const state = () => ({
+    // themes
+    themes: undefined, // list of all themes
+
     // admin related
-    admin_resource: undefined,
+    admin_resource: undefined, // list of admin resource
     admin_name: undefined,
     admin_title: undefined,
     admin_email: undefined,
