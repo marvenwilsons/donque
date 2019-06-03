@@ -1,6 +1,6 @@
 module.exports = async ({ ...dbs }, { username }) => {
     // @dqsys: auth: validateUserExistance()
-    console.log('** [ValidatingUserExistance]')
+    console.log(`** [ValidatingUserExistance] - ${username}`)
     const { doc } = dbs.data
 
     const fullPrevilegeTitle = [
@@ -23,7 +23,8 @@ module.exports = async ({ ...dbs }, { username }) => {
 
 
         }).catch(err => {
-            console.log('   [Auth] User validation fail!')
+            console.log(`   [Auth] User validation fail for ${username}`)
+            console.log(err)
             reject(`Fail on validating ${username}`)
         })
     })

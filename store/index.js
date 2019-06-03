@@ -1,10 +1,10 @@
-export const state = () => {
-    app: undefined // add data use for initialing the app admin area
-    admin: undefined // data for the current log admin, used for inializing the admin dashboard
-    actions: undefined // actions received from server, an object containing array of actions
-    messages: undefined
+export const state = () => ({
+    app: undefined, // add data use for initialing the app admin area
+    admin: undefined, // data for the current log admin, used for inializing the admin dashboard
+    actions: undefined, // actions received from server, an object containing array of actions
+    messages: undefined,
     resources: undefined
-}
+})
 
 export const getters = {
     actionState: state => {
@@ -27,6 +27,7 @@ export const mutations = {
         state.app = serverData
     },
     systemCallMutation(state,payloadData){
+        console.log(payloadData)
         state.actions = payloadData.actions
         state.messages = payloadData.msg
     },
@@ -64,6 +65,9 @@ export const actions = {
                 // store to state
                 console.log('** [NuxtServerInit] server resource received')
                 store.commit('setAppData', serverData)
+
+                console.log('** SERVER DATA')
+                console.log(serverData)
             })
             .catch(e => {
                 console.log('err')
@@ -80,6 +84,7 @@ export const actions = {
         switch (context.method) {
             case 'get' || 'read':
                 console.log(`** [systemCall]-[store] fetching ${context.command}`)
+                console.log(context)
                 return this.$axios.$get('/dqapp/_dq', {
                     params: context
                 }).then(response => {

@@ -1,11 +1,11 @@
 <template>
     <div class=" flex spacebetween">
         <div class="dqhead-items fullwidth flex flexcenter flexstart">
-            <strong>dq-studio / siteTitle</strong>
+            <strong>dq-studio</strong>
         </div>
         <div class="dqhead-items fullwidth">
             <div class="flex flexend headcur fullheight-percent flex flexcenter">
-            <div class="name-title"> Marven Wilson Donque </div>
+            <div class="name-title"> {{$store.state.dashboard_data.admin_name}} </div>
                 <i class="fas fa-user-circle pointer" @click="$store.commit('notification_pane/set_state', true)"></i>
             </div>
         </div>
