@@ -22,7 +22,7 @@
     <div class="relative">
       <div
         id="dq_notification_parent"
-        style="width:350px; left:-350px; background:whitesmoke;"
+        style="width:450px; left:-450px; background:whitesmoke;"
         class="absolute fullheight-percent flex fullwidth flexcol"
       >
         <div class="flex flexcol fullheight-percent">
