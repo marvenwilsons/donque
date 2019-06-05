@@ -340,3 +340,24 @@
     display: none;
   }
  
+
+
+/* scroll bar */
+/* width */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px rgba(128, 128, 128, 0.384); 
+  border-radius: 10px;
+  width: 3px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgba(128, 128, 128, 0.733); 
+  width: 3px;
+  border-radius: 3px;
+}
