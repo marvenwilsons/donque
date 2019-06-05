@@ -9,10 +9,10 @@
         <strong class="logout">logout</strong>
       </div>
     </div>
-    <div>
+    <!-- <div>
       <div><strong>Themes</strong></div>
       <div>boxes here</div>
-    </div>
+    </div> -->
     <div class="flex" style="flex: 1">
       <notif-host class="fullwidth" v-if="!$store.state.notification_pane.isOpen"/>
     </div>
