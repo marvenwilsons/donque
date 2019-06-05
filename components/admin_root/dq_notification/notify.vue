@@ -9,7 +9,10 @@
         <strong class="logout">logout</strong>
       </div>
     </div>
-    <div>theme list here</div>
+    <div>
+      <div><strong>Themes</strong></div>
+      <div>boxes here</div>
+    </div>
     <div class="flex" style="flex: 1">
       <notif-host class="fullwidth" v-if="!$store.state.notification_pane.isOpen"/>
     </div>
@@ -34,14 +37,14 @@ export default {
         const n = document.getElementById("dq_notification_pane");
         const i = document.getElementById("dq_notification_parent");
         // this.$store.commit('notification_pane/set_status',true)
-        TweenMax.fromTo(n, 0.2, { x: "350" }, { x: "0" });
-        TweenMax.fromTo(i, 0.2, { x: "350" }, { x: "0" });
+        TweenMax.fromTo(n, 0.2, { x: "450" }, { x: "0" });
+        TweenMax.fromTo(i, 0.2, { x: "450" }, { x: "0" });
       } else {
         const _this = this;
         const n = document.getElementById("dq_notification_pane");
         const i = document.getElementById("dq_notification_parent");
-        TweenMax.fromTo(n, 0, { x: "0" }, { x: "350" });
-        TweenMax.fromTo(i, 0, { x: "0" }, { x: "350" });
+        TweenMax.fromTo(n, 0.2, { x: "0" }, { x: "450" });
+        TweenMax.fromTo(i, 0.2, { x: "0" }, { x: "450" });
       }
     }
   },
@@ -51,8 +54,8 @@ export default {
   mounted() {
     const n = document.getElementById("dq_notification_pane");
     const i = document.getElementById("dq_notification_parent");
-    TweenMax.fromTo(n, 0, { x: "0" }, { x: "350" });
-    TweenMax.fromTo(i, 0, { x: "0" }, { x: "350" });
+    TweenMax.fromTo(n, 0, { x: "0" }, { x: "450" });
+    TweenMax.fromTo(i, 0, { x: "0" }, { x: "450" });
   }
 };
 </script>

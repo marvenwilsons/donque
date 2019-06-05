@@ -4,10 +4,18 @@
     "heading_text_color": "white",
     "docker_bg_color": "#e9eff3",
     "docker_text_color": "#4a6976",
-    "main_bg_color":"whitesmoke",
+    "main_bg_color":"#f6f8fa",
     "pane_head_title_color": "white",
     "pane_head_controls_color":"white",
     "pane_body_text_color":"black",
     "notify_bg_color": "white",
-    "notify_text_color":"#4a6976"
+    "notify_text_color":"#4a6976",
+    "notify_tile_body_bg_color":"#f6f8fa",
+    "notify_tile_body_bg_hover_color":"#e9eff3",
+    "notify_tile_close_btn_color": "#4a6976",
+    "notify_tile_close_btn_hover_color": "",
+    "notify_tile_title_color": "#4a6976",
+    "notify_tile_desc_color": "#4a6976",
+    "notify_tile_title_and_desc_hover_color": "#4a6976",
+    "notify_tile_border_radios":"3px"
 }

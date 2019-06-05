@@ -18,22 +18,40 @@ export const state = () => ({
 
     // notification
     notify_bg_color: undefined,
-    notify_text_color: undefined
+    notify_text_color: undefined,
+    notify_tile_body_bg_color: undefined,
+    notify_tile_body_bg_hover_color: undefined,
+    notify_tile_close_btn_color: undefined,
+    notify_tile_close_btn_hover_color: undefined,
+    notify_tile_title_color: undefined,
+    notify_tile_desc_color: undefined,
+    notify_tile_title_and_desc_hover_color: undefined,
+    notify_tile_border_color: undefined,
+    notify_tile_border_radios: undefined, // not done
 })
 
 export const mutations = {
     load_theme(state,{theme,theme_content}) {
-        state.heading_bg_color = theme_content.heading_bg_color
-        state.heading_text_color = theme_content.heading_text_color
-        state.docker_bg_color = theme_content.docker_bg_color
-        state.docker_text_color = theme_content.docker_text_color
-        state.main_bg_color = theme_content.main_bg_color
-        state.pane_head_title_color = theme_content.pane_head_title_color
-        state.pane_head_controls_color = theme_content.pane_head_controls_color
-        state.pane_body_bg_color = theme_content.pane_body_bg_color
-        state.pane_body_text_color = theme_content.pane_body_text_color
-        state.notify_bg_color = theme_content.notify_bg_color
-        state.notify_text_color = theme_content.notify_text_color
+        state.heading_bg_color          = theme_content.heading_bg_color
+        state.heading_text_color        = theme_content.heading_text_color
+        state.docker_bg_color           = theme_content.docker_bg_color
+        state.docker_text_color         = theme_content.docker_text_color
+        state.main_bg_color             = theme_content.main_bg_color
+        state.pane_head_title_color     = theme_content.pane_head_title_color
+        state.pane_head_controls_color  = theme_content.pane_head_controls_color
+        state.pane_body_bg_color        = theme_content.pane_body_bg_color
+        state.pane_body_text_color      = theme_content.pane_body_text_color
+        state.notify_bg_color           = theme_content.notify_bg_color
+        state.notify_text_color         = theme_content.notify_text_color
+        state.notify_tile_body_bg_color = theme_content.notify_tile_body_bg_color
+        state.notify_tile_body_bg_hover_color = theme_content.notify_tile_body_bg_hover_color
+        state.notify_tile_close_btn_color = theme_content.notify_tile_close_btn_color
+        state.notify_tile_close_btn_hover_color = theme_content.notify_tile_close_btn_hover_color
+        state.notify_tile_title_color   = theme_content.notify_tile_title_color
+        state.notify_tile_desc_color    = theme_content.notify_tile_desc_color
+        state.notify_tile_title_and_desc_hover_color = theme_content.notify_tile_title_and_desc_hover_color
+        state.notify_tile_border_color = theme_content.notify_tile_border_color
+        state.notify_tile_border_radios = theme_content.notify_tile_border_radios
     }
 }
 
