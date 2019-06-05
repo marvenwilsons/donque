@@ -217,6 +217,9 @@ img{
 .marginright025{
   margin-right: calc(var(--fontSize) * 0.25);
 }
+.marginright125{
+  margin-right: calc(var(--fontSize) * 1.25);
+}
 .margin125{
   margin: calc(var(--fontSize) * 1.25);
 }

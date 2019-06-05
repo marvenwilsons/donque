@@ -14,8 +14,6 @@
     "notify_tile_body_bg_hover_color":"#e9eff3",
     "notify_tile_close_btn_color": "#4a6976",
     "notify_tile_close_btn_hover_color": "",
-    "notify_tile_title_color": "#4a6976",
-    "notify_tile_desc_color": "#4a6976",
-    "notify_tile_title_and_desc_hover_color": "#4a6976",
+    "notify_tile_border_color": "whitesmoke",
     "notify_tile_border_radios":"3px"
 }

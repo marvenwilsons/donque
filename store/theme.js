@@ -19,15 +19,11 @@ export const state = () => ({
     // notification
     notify_bg_color: undefined,
     notify_text_color: undefined,
-    notify_tile_body_bg_color: undefined,
-    notify_tile_body_bg_hover_color: undefined,
-    notify_tile_close_btn_color: undefined,
-    notify_tile_close_btn_hover_color: undefined,
-    notify_tile_title_color: undefined,
-    notify_tile_desc_color: undefined,
-    notify_tile_title_and_desc_hover_color: undefined,
+    notify_tile_body_bg_color: undefined, // done
+    notify_tile_body_bg_hover_color: undefined, // done
+    notify_tile_close_btn_color: undefined, // done
     notify_tile_border_color: undefined,
-    notify_tile_border_radios: undefined, // not done
+    notify_tile_border_radios: undefined, // done
 })
 
 export const mutations = {
@@ -45,11 +41,7 @@ export const mutations = {
         state.notify_text_color         = theme_content.notify_text_color
         state.notify_tile_body_bg_color = theme_content.notify_tile_body_bg_color
         state.notify_tile_body_bg_hover_color = theme_content.notify_tile_body_bg_hover_color
-        state.notify_tile_close_btn_color = theme_content.notify_tile_close_btn_color
         state.notify_tile_close_btn_hover_color = theme_content.notify_tile_close_btn_hover_color
-        state.notify_tile_title_color   = theme_content.notify_tile_title_color
-        state.notify_tile_desc_color    = theme_content.notify_tile_desc_color
-        state.notify_tile_title_and_desc_hover_color = theme_content.notify_tile_title_and_desc_hover_color
         state.notify_tile_border_color = theme_content.notify_tile_border_color
         state.notify_tile_border_radios = theme_content.notify_tile_border_radios
     }
