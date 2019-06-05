@@ -139,6 +139,38 @@ img{
 .fullwidth{
     width: 100%;
 }
+/* flex */
+.flex1 {
+  flex: 1;
+}
+.flex2 {
+  flex: 2;
+}
+.flex3 {
+  flex: 3;
+}
+.flex4 {
+  flex: 4;
+}
+.flex5 {
+  flex: 5;
+}
+.flex6 {
+  flex: 6;
+}
+.flex7 {
+  flex: 7;
+}
+.flex8 {
+  flex: 8;
+}
+.flex9 {
+  flex: 9;
+}
+
+.flex10 {
+  flex: 10;
+}
 
 /* @others */
 .hide{
@@ -158,7 +190,17 @@ img{
 .pad125{
   padding: calc(var(--fontSize) * 1.25);
 }
+/* padding left, padding right */
+.padleft025{
+  padding-left: calc(var(--fontSize) * 0.25);
+}
+.padright025{
+  padding-left: calc(var(--fontSize) * 0.25);
+}
 .padleft125{
+  padding-left: calc(var(--fontSize) * 1.25);
+}
+.padright125{
   padding-left: calc(var(--fontSize) * 1.25);
 }
 
