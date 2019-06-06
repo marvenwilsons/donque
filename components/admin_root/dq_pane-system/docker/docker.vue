@@ -1,59 +1,32 @@
 <template>
-  <main class="fullheight-percent">
-    <div id="docker-heading" class="flex flexcol">
-      <div class="flex flexcenter">
-        <div class="dq-fav-con flex flexcenter">
-          fav icon here
+  <div class="fullheight-percent flex flexcol" style="border-right: 2px solid whitesmoke">
+    <div class="flex1">avatar here</div>
+    <div role="container" class="flex3">
+      <div role="docker-host" class="fullheight-percent">
+        <div
+          class="pad050 pointer padright125"
+          v-for="(items,item_index) in menu_items"
+          :key="`docker-item-${item_index}`"
+        >
+          <strong>{{items}}</strong>
         </div>
       </div>
-      <div class="flex flexcol dq-nav-user-info">
-        <span>
-          {{$store.state.admin.title}}
-        </span>
-        <span>
-          {{$store.state.admin.adminName}}
-        </span>
-      </div>
     </div>
-    <div>
-      <docker-items/>
-    </div>
-  </main>
+  </div>
 </template>
 
 <script>
-import dockerItems from './docker-items.vue'
-
 export default {
-  components: {
-    dockerItems
-  }
+  computed: {
+    menu_items() {
+      return (
+        this.$store.state.dashboard_data.resources &&
+        Object.keys(this.$store.state.dashboard_data.resources)
+      );
+    }
+  },
 };
 </script>
 
-
-<style scoped>
-main {
-  min-width: 200px;
-}
-.light-text{
-    padding-left: calc(var(--fontSize)*1.25);
-    cursor: pointer;
-}
-#docker-heading{
-  padding-top: calc(var(--fontSize)*1.25);
-  padding-bottom: calc(var(--fontSize)*1.25);
-}
-#docker-heading > div{
-  text-align: center;
-}
-.dq-fav-con{
-  height: calc(var(--fontSize) * 10.25);
-  width: calc(var(--fontSize) * 10.25);
-  border-radius: 100%;
-  background-color: white;
-}
-.dq-nav-user-info{ 
-  margin-top: calc(var(--fontSize)*1.25);
-}
+<style>
 </style>

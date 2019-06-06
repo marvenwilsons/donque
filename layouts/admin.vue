@@ -5,10 +5,15 @@
       <div
         v-if="$store.state.modal.visibility"
         class="absolute bgblue fullwidth fullheight-percent flex flexcenter"
+        style="z-index:100;"
       >modal</div>
       <!-- nuxt -->
-      <div>
-        <heading :bgColor="$store.state.theme.heading_bg_color" :textColor="$store.state.theme.heading_text_color" :adminName="$store.state.dashboard_data.admin_name"/>
+      <div v-if="$store.state.dashboard_data.dashboard_ready">
+        <heading
+          :bgColor="$store.state.theme.heading_bg_color"
+          :textColor="$store.state.theme.heading_text_color"
+          :adminName="$store.state.dashboard_data.admin_name"
+        />
       </div>
       <div style="flex:1" class="flex fullwidth">
         <nuxt/>
@@ -19,6 +24,7 @@
 
 <script>
 import heading from "@/components/admin_root/dq_head/dq_heading.vue";
+import { mapGetters } from "vuex";
 
 export default {
   data() {
@@ -26,8 +32,18 @@ export default {
       isReady: true
     };
   },
+  computed: {
+    ...mapGetters({
+      dashboard_ready: "dashboard_data/dashboard_ready"
+    })
+  },
+  watch: {
+    dashboard_ready(n, o) {
+      this.$store.commit("modal/set_visibility", o);
+    }
+  },
   mounted() {
-    this.$store.commit("modal/set_visibility", false);
+    this.$store.commit("modal/set_visibility", true);
 
     if (localStorage.getItem("username")) {
       this.$store.dispatch("dashboard_data/set_admin_data", {

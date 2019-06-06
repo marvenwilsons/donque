@@ -12,11 +12,20 @@ export const state = () => ({
 
     // app related
     app_site_title: undefined,
-    app_theme: undefined
+    app_theme: undefined,
+
+    // status
+    dashboard_ready: false
 })
 
+export const getters = {
+    dashboard_ready: state => state.dashboard_ready
+}
+
 export const mutations = {
-    set_admin_data(state, { title, username, adminName, email, resources, theme }) {           
+    set_admin_data(state, { title, username, adminName, email, resources, theme }) {      
+        state.dashboard_ready = true
+
         state.title = title
         state.admin_name = adminName
         state.resources = resources
@@ -30,7 +39,7 @@ export const actions = {
     /**
      * This action is invoke on admin layout on mounted hook
      */
-    async set_admin_data({commit},context) {
+    async set_admin_data({commit,state},context) {
         const sdata = await this.$axios
             .$post("/dqapp/_dq", {
                 command: "initActorsDashboard",
@@ -46,7 +55,9 @@ export const actions = {
                 }
             });
 
-        commit('set_admin_data', sdata)
-        this.commit('theme/load_theme', sdata)
+        setTimeout(() => {
+            commit('set_admin_data', sdata)
+            this.commit('theme/load_theme', sdata)
+        },2000)
     }
 }

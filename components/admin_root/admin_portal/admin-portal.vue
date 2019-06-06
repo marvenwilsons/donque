@@ -1,5 +1,5 @@
 <template>
-  <div class="fullwidth flex">
+  <div v-if="$store.state.dashboard_data.dashboard_ready" class="fullwidth flex">
     <!-- docker -->
     <div
       :style="{
@@ -8,7 +8,7 @@
         background:$store.state.theme.docker_bg_color,
         color: $store.state.theme.docker_text_color
         }"
-    >docker</div>
+    ><docker/></div>
 
     <!-- main window -->
     <div
@@ -40,10 +40,12 @@
 
 <script>
 import notify from "@/components/admin_root/dq_notification/notify.vue";
+import docker from "@/components/admin_root/dq_pane-system/docker/docker.vue"
 
 export default {
   components: {
-    notify
+    notify,
+    docker
   }
 };
 </script>
