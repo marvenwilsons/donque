@@ -13,6 +13,7 @@ export const state = () => ({
     // panes
     pane_head_title_color: undefined,
     pane_head_controls_color: undefined,
+    pane_head_bg_color: undefined,
     pane_body_bg_color: undefined,
     pane_body_text_color: undefined,
 
@@ -44,6 +45,7 @@ export const mutations = {
         state.notify_tile_close_btn_hover_color = theme_content.notify_tile_close_btn_hover_color
         state.notify_tile_border_color = theme_content.notify_tile_border_color
         state.notify_tile_border_radios = theme_content.notify_tile_border_radios
+        state.pane_head_bg_color = theme_content.pane_head_bg_color
     }
 }
 
