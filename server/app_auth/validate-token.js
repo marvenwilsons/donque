@@ -1,5 +1,6 @@
 module.exports = ({ data, token, jwt, encrypt, decode, command }) => {
     console.log('** validating token')
+    console.log(`   [token] ${token}`)
     const userId = data.user._id
     const encryptedPassword = data.user.password
     const userUsername = data.user.username

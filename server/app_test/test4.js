@@ -66,7 +66,27 @@ const myTest = [
             myTest[1].input.username = data[0].data.actions[0].content.username
         }
     },
-//@test4 list admins
+//@test4 initActros dashboard jannyann
+    {
+        desc: 'init jannyann dashboard',
+        expected: true,
+        expectedMsg: null,
+        input: {
+            username: 'jannyann',
+            token: undefined,
+            section: 'adminMethods',
+            command: 'initActorsDashboard'
+        },
+        before: err => err(false),
+        after: err => err(false),
+        data(data) {
+            // set the value of username and token from the return value
+            // of this test, this simulates getting the data from the client
+            // saved in the localStorage
+            myTest[2].input.token = data[0].data.actions[0].content.token
+            myTest[2].input.username = data[0].data.actions[0].content.username
+        }
+    },
 //@test4 view admin
     {
         desc: 'View admin credentials',
@@ -84,8 +104,8 @@ const myTest = [
         before: err => err(false),
         after: err => err(false),
         data(data) {
-            myTest[2].input.token = data[0].data.actions[0].content.token
-            myTest[2].input.username = data[0].data.actions[0].content.username
+            myTest[3].input.token = data[0].data.actions[0].content.token
+            myTest[3].input.username = data[0].data.actions[0].content.username
         }
     },
 //@test4 attempt to view admin the does not exist.
@@ -105,8 +125,8 @@ const myTest = [
         before: err => err(false),
         after: err => err(false),
         data(data) {
-            myTest[3].input.token = data[0].data.actions[0].content.token
-            myTest[3].input.username = data[0].data.actions[0].content.username
+            myTest[4].input.token = data[0].data.actions[0].content.token
+            myTest[4].input.username = data[0].data.actions[0].content.username
         }
     },
 //@test4 update admin
@@ -129,8 +149,8 @@ const myTest = [
         before: err => err(false),
         after: err => err(false),
         data(data) {
-            myTest[4].input.token = data[0].data.actions[0].content.token
-            myTest[4].input.username = data[0].data.actions[0].content.username
+            myTest[5].input.token = data[0].data.actions[0].content.token
+            myTest[5].input.username = data[0].data.actions[0].content.username
         }
     },
 //@test4 update dev admin resource using dot notation
@@ -152,6 +172,10 @@ const myTest = [
         },
         before: err => err(false),
         after: err => err(false),
+        data(data) {
+            // myTest[6].input.token = data[4].data.actions[0].content.token
+            // myTest[6].input.username = data[4].data.actions[0].content.username
+        }
     },
 //@test4 login as the dev admin
     {
@@ -167,8 +191,26 @@ const myTest = [
         before: err => err(false),
         after: err => err(false),
         data(data) {
-            myTest[6].input.token = data[4].data.actions[0].content.token
-            myTest[6].input.username = data[4].data.actions[0].content.username
+            myTest[7].input.token = data[5].data.actions[0].content.token
+            myTest[7].input.username = data[5].data.actions[0].content.username
+        }
+    },
+//@test4 init marvens dashboard
+    {
+        desc: 'init marvenwilsons dashboard',
+        expected: true,
+        expectedMsg: null,
+        input: {
+            username: 'marvenwilsons',
+            token: 'asdfasdf',
+            section: 'adminMethods',
+            command: 'initActorsDashboard'
+        },
+        before: err => err(false),
+        after: err => err(false),
+        data(data) {
+            myTest[8].input.token = data[5].data.actions[0].content.token
+            myTest[8].input.username = data[5].data.actions[0].content.username
         }
     },
 //@test4 try to make an unpermitted request
@@ -184,10 +226,6 @@ const myTest = [
         },
         before: err => err(false),
         after: err => err(false),
-        data(data) {
-            myTest[6].input.token = data[0].data.actions[0].content.token
-            myTest[6].input.username = data[0].data.actions[0].content.username
-        }
     },
 //@test4 login as the app owner
     {
@@ -203,8 +241,7 @@ const myTest = [
         before: err => err(false),
         after: err => err(false),
         data(data) {
-            myTest[8].input.token = data[0].data.actions[0].content.token
-            myTest[8].input.username = data[0].data.actions[0].content.username
+            myTest[10].input.token = data[0].data.actions[0].content.token
         }
     },
 //@test4 update dev admin resource using dot notation back
@@ -213,7 +250,7 @@ const myTest = [
         expected: true,
         expectedMsg: 'Successfully updated resource.Pages.deletePage to true',
         input: {
-            username: undefined,
+            username: 'jannyann',
             token: undefined,
             section: 'adminMethods',
             command: 'updateAppAdmin',
@@ -227,8 +264,8 @@ const myTest = [
         before: err => err(false),
         after: err => err(false),
         data(data) {
-            myTest[9].input.token = data[4].data.actions[0].content.token
-            myTest[9].input.username = data[4].data.actions[0].content.username
+            myTest[11].input.token = data[5].data.actions[0].content.token
+            myTest[11].input.username = data[5].data.actions[0].content.username
         }
     },
 //@test4 now that the permission is updated, the dev admin should now make successfull request
@@ -250,7 +287,7 @@ const myTest = [
             err(false)
         },
         data(data) {
-            myTest[10].input.token = data[0].data.actions[0].content.token
+            myTest[12].input.token = data[0].data.actions[0].content.token
             // myTest[11].input.token = data[4].data.actions[0].content.token
         }
     },
@@ -268,7 +305,7 @@ const myTest = [
         before: err => err(false),
         after: err => err(false),
         data(data) {
-            myTest[11].input.token = data[4].data.actions[0].content.token
+            myTest[13].input.token = data[5].data.actions[0].content.token
         }
     },
     {

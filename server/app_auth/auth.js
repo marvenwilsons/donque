@@ -63,24 +63,27 @@ module.exports = async ({ dep, selectedCommand, username, password, token, comma
                 /**
                  * invoke validate token function
                  */
-                !validate_token({ data: user_does_ex.data, jwt, token, encrypt, decode, command }) && (hasErr = {
-                    msg: 'Invalid or expired token',
-                    actions: [{
-                        title: 'prompt_err'
-                    }]
-                })
+                if (!validate_token({ data: user_does_ex.data, jwt, token, encrypt, decode, command })){
+                    hasErr = {
+                        msg: 'Invalid or expired token',
+                        actions: [{
+                            title: 'prompt_err'
+                        }]
+                    }
+                }
 
                 /**
                  * invoke permission handler function
                  */
-                !perm_handler({command, section, userData: user_does_ex.data.user}) && (
-                    console.log(`   [Auth|permission-handler]`),
+                if (!perm_handler({ command, section, userData: user_does_ex.data.user })){
+                    console.log(`   [Auth|permission-handler]`)
                     hasErr = {
-                    msg: 'Permission denied',
-                    actions: [{
-                        title: 'prompt_err'
-                    }]
-                })
+                        msg: 'Permission denied',
+                        actions: [{
+                            title: 'prompt_err'
+                        }]
+                    }
+                }
                 
                 /**
                  * return err to user

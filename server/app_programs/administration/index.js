@@ -366,6 +366,7 @@ adminMethods.createNewAppActor = {
                 parentAdmin: '',
                 childAdmins: [],
                 resource: role_title.resource,
+                theme: 'dq-blue',
                 adminInstanceAllowed: 1,
                 messages: [],
                 lastModefied: '',
@@ -667,6 +668,7 @@ adminMethods.getThemeContent = {
     },
     getThemeContent({dep, themeName}) {
         const path = require('path')
+        console.log(`** Locating theme ${themeName}`)
         const location = require(path.join(__dirname, `../../../assets/dq-themes/${themeName}.json`))
         return location
     }
