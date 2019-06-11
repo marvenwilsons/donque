@@ -7,7 +7,7 @@
     "docker_text_color": "#4a6976",
     "main_bg_color":"#f6f8fa",
 
-    "pane_head_title_color": "white",
+    "pane_head_title_color": "#4a6976",
     "pane_head_controls_color":"white",
     "pane_head_bg_color": "#e9eff3",
     "pane_body_text_color":"black",

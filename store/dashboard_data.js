@@ -58,6 +58,6 @@ export const actions = {
         setTimeout(() => {
             commit('set_admin_data', sdata)
             this.commit('theme/load_theme', sdata)
-        },2000)
+        },100)
     }
 }

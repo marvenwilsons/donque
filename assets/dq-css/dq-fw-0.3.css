@@ -195,13 +195,13 @@ img{
   padding-left: calc(var(--fontSize) * 0.25);
 }
 .padright025{
-  padding-left: calc(var(--fontSize) * 0.25);
+  padding-right: calc(var(--fontSize) * 0.25);
 }
 .padleft125{
   padding-left: calc(var(--fontSize) * 1.25);
 }
 .padright125{
-  padding-left: calc(var(--fontSize) * 1.25);
+  padding-right: calc(var(--fontSize) * 1.25);
 }
 
 /* @margins */
