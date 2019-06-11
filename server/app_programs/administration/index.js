@@ -361,6 +361,7 @@ adminMethods.createNewAppActor = {
                     pending: [],
                     done: []
                 },
+                run_onload_command: undefined,
                 isBlocked: false,
                 parentAdmin: '',
                 childAdmins: [],
