@@ -1,7 +1,6 @@
 <template>
     <div>
-        Analytics here
-        {{this.$store.state.user}}
+        admin here
     </div>
 </template>
 
@@ -9,8 +8,10 @@
 export default {
     beforeCreate(){
         this.$store.commit('pane_system/set_pane_config', {
-            head_visibility: false,
-            title: 'Dashboard',
+            target: 'Admin',
+            head_visibility: true,
+            title: 'Administrative options',
+            pane_width: '30%',
         })
     }
 }

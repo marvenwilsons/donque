@@ -10,7 +10,14 @@
 </template>
 
 <script>
-export default {};
+export default {
+  beforeCreate() {
+    this.$store.commit("pane_system/set_pane_config", {
+      title: "Settings",
+      pane_width: "500px"
+    });
+  }
+};
 </script>
 
 <style>
