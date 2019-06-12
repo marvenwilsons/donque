@@ -70,6 +70,7 @@ export const mutations = {
 
 export const actions = {
     set_active({ state, commit }, context){
+        let c = 0
         context.ids.map((ids, id_index) => {
             const fn = () => {
                 const el = document.getElementById(ids)
@@ -81,8 +82,18 @@ export const actions = {
             commit('__load_onMouseLeave', fn)
             
             state._onMouseleave.map(fn => {
+                /**
+                 * this is not needed really, I just added this for 
+                 * animation delay and style
+                 */
                 setTimeout(() => {
                     fn()
+                    c++
+                    if(c === 3){
+                        setTimeout(() => {
+                            this.dispatch("pane_system/init_pane");
+                        },150)
+                    }
                 }, 200)
             })
             
