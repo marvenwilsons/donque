@@ -194,6 +194,9 @@ img{
 .padleft025{
   padding-left: calc(var(--fontSize) * 0.25);
 }
+.padleft050{
+  padding-left: calc(var(--fontSize) * 0.50);
+}
 .padright025{
   padding-right: calc(var(--fontSize) * 0.25);
 }
