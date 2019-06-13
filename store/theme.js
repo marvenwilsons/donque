@@ -18,6 +18,7 @@ export const state = () => ({
     pane_head_bg_color: undefined,
     pane_body_bg_color: undefined,
     pane_body_text_color: undefined,
+    pane_host_style: undefined,
 
     // notification
     notify_bg_color: undefined,
@@ -30,7 +31,7 @@ export const state = () => ({
 
     // sys, should not be access outside store
     _onMouseleave: [],
-    _currentActiveIds: []
+    _currentActiveIds: [],
 })
 
 export const mutations = {
@@ -54,6 +55,7 @@ export const mutations = {
         state.pane_head_bg_color = theme_content.pane_head_bg_color
         state.docker_hover_text_color = theme_content.docker_hover_text_color
         state.docker_hover_menu_item_bg_color = theme_content.docker_hover_menu_item_bg_color
+        state.pane_host_style = theme_content.pane_host_style
     },
     __load_onMouseLeave(state,context) {
         state._onMouseleave.push(context)
@@ -69,52 +71,6 @@ export const mutations = {
 }
 
 export const actions = {
-    set_active({ state, commit }, context){
-        let c = 0
-        context.ids.map((ids, id_index) => {
-            const fn = () => {
-                const el = document.getElementById(ids)
-                el.style[context.css_keys[id_index]] = `${state[context.css_value_on[id_index]]}`
-            }
-            // push current active ids
-            commit('__load_onMouseclick', ids)
-            // push functions to array to be executed later
-            commit('__load_onMouseLeave', fn)
-            
-            state._onMouseleave.map(fn => {
-                /**
-                 * this is not needed really, I just added this for 
-                 * animation delay and style
-                 */
-                setTimeout(() => {
-                    fn()
-                    c++
-                    if(c === 3){
-                        setTimeout(() => {
-                            this.dispatch("pane_system/init_pane");
-                        },150)
-                    }
-                }, 200)
-            })
-            
-        })
-    },
-    mouseover({ state }, context) {
-        context.ids.map((ids,id_index) => {
-            const el = document.getElementById(ids)
-            el.style[context.css_keys[id_index]] = `${state[context.css_values[id_index]]}`
-        })        
-    },
-    mouseleave({ commit, state }, context) {
-        context.ids.map((ids, id_index) => {
-            const el = document.getElementById(ids)
-            el.style[context.css_keys[id_index]] = `${state[context.css_values[id_index]]}`
-        })
-
-        state._onMouseleave.map(fn => {
-            fn()
-        })
-    },
     set_class_css_defaults({ }, context){
         context.class.map((cls,cls_index) => {
             const c = document.getElementsByClassName(cls)
@@ -122,44 +78,5 @@ export const actions = {
                 c[i].style[context.css_keys[cls_index]] = context.css_values[cls_index]
             }
         })
-    },
-    toggle_active({state, commit}, context){
-        // first click
-        if(state._currentActiveIds.length == 0){
-            /**
-             * populate array and apply styles
-             */
-            context.ids.map((ids, id_index) => {
-                const fn = () => {
-                    const el = document.getElementById(ids)
-                    el.style[context.css_keys[id_index]] = `${state[context.css_value_on[id_index]]}`
-                }
-                // push current active ids
-                commit('__load_onMouseclick', ids)
-                // push functions to array to be executed later
-                commit('__load_onMouseLeave', fn)
-            })
-        }else {
-            // clear the array and apply the off version style
-            state._currentActiveIds.map((ids,id_index) => {
-                // Apply the "off" stlye or the un-active style
-                const el = document.getElementById(ids)
-                el.style[context.css_keys[id_index]] = `${state[context.css_value_off[id_index]]}`
-            })
-            commit('__clear_mouseLeave')
-
-            context.ids.map((ids, id_index) => {
-                // Apply the "on" style or the active style
-                const fn = () => {
-                    const el = document.getElementById(ids)
-                    el.style[context.css_keys[id_index]] = `${state[context.css_value_on[id_index]]}`
-                }
-                // push current active ids
-                commit('__load_onMouseclick', ids)
-                // push functions to array to be executed later
-                commit('__load_onMouseLeave', fn)
-            })
-        }
-        
     }
 }

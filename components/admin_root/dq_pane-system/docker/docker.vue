@@ -13,8 +13,8 @@
               background: active === item_index || cur_actv == item_index ? hoverBgColor : '', 
               color: active == item_index || cur_actv == item_index ? hoverColor : '' 
             }"
-          @mouseover="activate(item_index)"
-          @mouseleave="(cur_actv != item_index && (active = undefined))"
+          @mouseover="active = item_index"
+          @mouseleave="cur_actv != item_index && (active = undefined)"
         >
           <strong :id="`dqdi_title_${item_index}_${items}`">{{items}}</strong>
         </div>
@@ -32,11 +32,6 @@ export default {
       hoverBgColor: this.$store.state.theme.docker_hover_menu_item_bg_color,
       hoverColor: this.$store.state.theme.docker_hover_text_color
     };
-  },
-  methods: {
-    activate(arg) {
-      this.active = arg;
-    }
   },
   computed: {
     menu_items() {

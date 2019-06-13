@@ -1,13 +1,13 @@
 {
     "name": "dq-blue",
-    "heading_bg_color" : "#0086c0",
+    "heading_bg_color" : "#84a4b2",
     "heading_text_color": "white",
 
     "docker_bg_color": "#e9eff3",
     "docker_text_color": "#4a6976",
     "docker_hover_text_color": "#f6f8fa",
-    "docker_hover_menu_item_bg_color":"#4a6976",
-    "docker_hover_transition": "0.1s",
+    "docker_hover_menu_item_bg_color":"#84a4b2",
+    "docker_hover_transition": "0s",
 
     "main_bg_color":"#f6f8fa",
 
@@ -15,6 +15,12 @@
     "pane_head_controls_color":"white",
     "pane_head_bg_color": "#e9eff3",
     "pane_body_text_color":"black",
+    "pane_host_style": {
+        "borderRight": "1px solid #e9eff3",
+        "borderTop": "1px solid #e9eff3",
+        "background": "white",
+        "color": "#4a6976"
+    },
 
     "notify_bg_color": "white",
     "notify_text_color":"#4a6976",
