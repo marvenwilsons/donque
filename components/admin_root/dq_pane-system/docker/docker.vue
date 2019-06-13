@@ -8,22 +8,13 @@
           v-for="(items,item_index) in menu_items"
           :key="`docker-item-${item_index}`"
           :id="`dqdi_${item_index}_${items}`"
-          @click="$store.dispatch('pane_system/start',items), $store.dispatch('theme/toggle_active', {
-            ids: [`dqdi_${item_index}_${items}`, `dqdi_title_${item_index}_${items}`],
-            css_keys: ['background','color'],
-            css_value_on: ['docker_hover_menu_item_bg_color','docker_hover_text_color'],
-            css_value_off: ['docker_bg_color', 'docker_text_color']
-          })"
-          @mouseover="$store.dispatch('theme/mouseover',{
-            ids: [`dqdi_${item_index}_${items}`, `dqdi_title_${item_index}_${items}`],
-            css_keys: ['background','color'],
-            css_values: ['docker_hover_menu_item_bg_color','docker_hover_text_color']
-          })"
-          @mouseleave="$store.dispatch('theme/mouseleave',{
-            ids: [`dqdi_${item_index}_${items}`, `dqdi_title_${item_index}_${items}`],
-            css_keys: ['background','color'],
-            css_values: ['docker_bg_color', 'docker_text_color']
-          })"
+          @click="$store.dispatch('pane_system/start',items), cur_actv = item_index"
+          :style="{
+              background: active === item_index || cur_actv == item_index ? hoverBgColor : '', 
+              color: active == item_index || cur_actv == item_index ? hoverColor : '' 
+            }"
+          @mouseover="activate(item_index)"
+          @mouseleave="(cur_actv != item_index && (active = undefined))"
         >
           <strong :id="`dqdi_title_${item_index}_${items}`">{{items}}</strong>
         </div>
@@ -34,6 +25,19 @@
 
 <script>
 export default {
+  data() {
+    return {
+      cur_actv: undefined,
+      active: undefined,
+      hoverBgColor: this.$store.state.theme.docker_hover_menu_item_bg_color,
+      hoverColor: this.$store.state.theme.docker_hover_text_color
+    };
+  },
+  methods: {
+    activate(arg) {
+      this.active = arg;
+    }
+  },
   computed: {
     menu_items() {
       return (
@@ -45,6 +49,8 @@ export default {
   mounted() {
     this.$store.dispatch("pane_system/init_pane");
 
+    this.cur_actv = 0;
+
     // setting css defaults to a specific class
     this.$store.dispatch("theme/set_class_css_defaults", {
       class: ["dq-docker-items"],
@@ -54,22 +60,10 @@ export default {
 
     // setting default active menu
     // ids: ["dqdi_0_Dashboard","dqdi_title_0_Dashboard"]
-    this.$store.dispatch("theme/set_active", {
-      ids: ["dqdi_0_Dashboard","dqdi_title_0_Dashboard"],
-      css_keys: ["background", "color"],
-      css_value_on: [
-        "docker_hover_menu_item_bg_color",
-        "docker_hover_text_color"
-      ],
-      css_value_off: ["docker_bg_color", "docker_text_color"]
-    });
   }
 };
 </script>
 
 
 <style>
-.active {
-  background: red;
-}
 </style>
