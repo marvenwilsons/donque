@@ -1,6 +1,12 @@
 <template>
   <div class="fullheight-percent flex flexcol" style="border-right: 2px solid whitesmoke">
-    <div class="flex1">avatar here</div>
+    <div class="flex1  flex flexcenter">
+      <div class="flex flexcenter ">
+        <div class="dq-fav-con flex flexcenter">
+          <!-- fav icon here -->
+        </div>
+      </div>
+    </div>
     <div role="container" class="flex3">
       <div role="docker-host" class="fullheight-percent">
         <div
@@ -16,7 +22,24 @@
           @mouseover="active = item_index"
           @mouseleave="cur_actv != item_index && (active = undefined)"
         >
-          <strong :id="`dqdi_title_${item_index}_${items}`">{{items}}</strong>
+          <strong :id="`dqdi_title_${item_index}_${items}`">
+            <i v-if="items === 'Administration'" class="fas fa-user-alt padleft025  padright025"></i>
+            <i v-if="items === 'Dashboard'" class="fas fa-columns padleft025 padright025"></i>
+            <i v-if="items === 'Pages'" class="fas fa-copy padleft025 padright025"></i>
+            <i v-if="items === 'Components'" class="fas fa-puzzle-piece padleft025 padright025"></i>
+            <i v-if="items === 'Collections'" class="fas fa-server padleft025 padright025"></i>
+            <i v-if="items === 'Messages'" class="fas fa-envelope padleft025 padright025"></i>
+            <i v-if="items === 'Todos'" class="fas fa-list-alt padleft025 padright025"></i>
+            <i v-if="items === 'Profile'" class="fas fa-id-card padleft025 padright025"></i>
+            <i v-if="items === 'Files'" class="fas fa-folder padleft025 padright025"></i>
+            <i v-if="items === 'Plugins'" class="fas fa-folder-plus padleft025 padright025"></i>
+            <i v-if="items === 'Settings'" class="fas fa-cog padleft025 padright025"></i>
+            <i v-if="items === 'Marketplace'" class="fab fa-slideshare padleft025 padright025"></i>
+            <i v-if="items === 'Database'" class="fas fa-database padleft025 padright025"></i>
+            <i v-if="items === 'Console'" class="fas fa-terminal padleft025 padright025"></i>
+            <i v-if="items === 'Task'" class="fas fa-tasks padleft025 padright025"></i>
+            {{items}}
+            </strong>
         </div>
       </div>
     </div>
@@ -60,5 +83,15 @@ export default {
 </script>
 
 
-<style>
+<style scoped>
+.fas.padright025, .fab.padright025{
+  /* border: 1px solid red; */
+  width: 20px;
+}
+.dq-fav-con{
+  height: calc(var(--fontSize) * 10.25);
+  width: calc(var(--fontSize) * 10.25);
+  border-radius: 100%;
+  background-color: white;
+}
 </style>
