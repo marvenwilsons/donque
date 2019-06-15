@@ -1,142 +1,159 @@
 <template>
-  <div id="dynamic-pane" class="flex">
-    <div
-      :style="normalizeStyle(null,$store.state.comp.arr[index].headWidth)"
-      :class="['flex', 'flexcol', ComponentsArray[0].name != 'dashboard' && 'box-shad']"
-      v-for="(item, index) in ComponentsArray"
-      :key="index"
-    >
-      <span
-        id="pane_head"
-        v-if="$store.state.comp.arr[index].name != 'dashboard'"
-        class="flex spacebetween"
-        :style="normalizeStyle($store.state.comp.arr[index].headColor,null)"
+  <div class="fullheight-percent fullwidth relative flex">
+    <div v-if="isReady" id="dq-main-w" class="absolute fullwidth flex fullheight-percent">
+      <div
+        v-for="(panes,pane_index) in $store.state.pane_system.pane_index_list"
+        :key="`p-${pane_index}`"
+        role="pane-host"
+        class="fullheight-percent"
+        :style="{ minWidth: width_handler(config != undefined,config,pane_index), maxWidth: width_handler(config != undefined,config,pane_index), ...$store.state.theme.pane_host_style}"
       >
-        <div
-          style="color:white"
-        >{{ $store.state.comp.arr[index].headName.charAt(0).toUpperCase() + $store.state.comp.arr[index].headName.slice(1)}}</div>
-        <div
-          style="color:white"
-          v-if="$store.state.comp.arr[index].closable"
-          @click="close_pane(index)"
-          class="pointer"
-        >&#10006;</div>
-      </span>
-      <div class="flex" v-bind:index="index" :is="ComponentsArray[index].name"></div>
+        <!-- pane -->
+        <div class="fullheight-percent">
+          <!-- pane head -->
+          <div v-if="isReady">
+            {{init_head($store.state.pane_system.pane_index_config_list)}}
+            <!-- pane head and controls -->
+            <div v-if="config[pane_index]" class="flex fullwidth">
+              <div
+                v-if="config[pane_index].head_visibility"
+                :style="{background:config[pane_index].pane_head_bg_color}"
+                class="flex spacebetween fullwidth pad025"
+              >
+                <div :style="{ color:config[pane_index].pane_head_title_color}">
+                  <strong>{{config[pane_index].title}}</strong>
+                </div>
+                <div>
+                  <i
+                    :style="{color:config[pane_index].pane_head_title_color}"
+                    v-if="config[pane_index].maximizable"
+                    class="pointer far fa-window-maximize padright025"
+                    @click="$store.dispatch('pane_system/maximize')"
+                  ></i>
+                  <i
+                    :style="{color:config[pane_index].pane_head_title_color}"
+                    v-if="config[pane_index].closable"
+                    class="pointer fas fa-times padright025"
+                    @click="$store.dispatch('pane_system/close')"
+                  ></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- pane body -->
+          <div>
+            <div :my_pane_index="pane_index" :is="panes"></div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-// shell
-import console from "@/components/admin_sections/console/console.vue";
+/**
+ * Administration
+ */
+import Administration from "@/components/admin_sections/administration/admin.vue"; // admin options list
+import Addnewapplicationadmin from "@/components/admin_sections/administration/addNewAdminForm.vue"; // add new application admin from
+// add new application admin from
+// add new database admin form
+// database admin list
+// current live admins
+// current blocked admins
+// lost password request list
 
-// pages
-import pages from "@/components/admin_sections/pages/page_list.vue";
-import pagesDetails from "@/components/admin_sections/pages/page-detail.vue";
+/**
+ * Pages
+ */
+import Pages from "@/components/admin_sections/pages/page.vue"; // page list
+// page details and struture
 
 //
-import collections from "@/components/admin_sections/collections/collections.vue";
-import components from "@/components/admin_sections/components/components.vue";
-import database from "@/components/admin_sections/database/database.vue";
-import files from "@/components/admin_sections/files/files.vue";
-import marketplace from "@/components/admin_sections/marketplace/marketplace.vue";
-// import plugins from "@/server/sys/core-apps/i0-plugins/plugins.vue";
+import Dashboard from "@/components/admin_sections/dashboard/dashboard.vue";
+import Components from "@/components/admin_sections/components/components.vue";
+import Collections from "@/components/admin_sections/collections/collections.vue";
+import Messages from "@/components/admin_sections/messages/messages.vue";
+import Todos from "@/components/admin_sections/todos/todos.vue";
+import Profile from "@/components/admin_sections/profile/profile.vue";
+import Files from "@/components/admin_sections/files/files.vue";
+import Plugins from "@/components/admin_sections/plugins/plugins.vue";
+import Settings from "@/components/admin_sections/settings/settings.vue";
+import Marketplace from "@/components/admin_sections/marketplace/marketplace.vue";
+import Database from "@/components/admin_sections/database/database.vue";
+import Console from "@/components/admin_sections/console/console.vue";
+import Task from "@/components/admin_sections/task/task.vue";
 
 //
-import app from "@/components/admin_sections/app/app.vue";
-import dashboard from "@/components/admin_sections/dashboard/dashboard.vue";
-
-//
-import administration from "@/components/admin_sections/administration/administration-list.vue";
-import administrationDetails from "@/components/admin_sections/administration/administration-details.vue";
+import { mapGetters } from "vuex";
 
 export default {
   data() {
     return {
-      ComponentsArray: this.$store.state.pane_system.arr,
-      stylesArray: undefined
+      isReady: false,
+      config_copy: undefined
     };
   },
   methods: {
-    close_pane(index) {
-      if (this.ComponentsArray.length == 1) {
-        this.$store.dispatch("close_pane", {
-          component: "dashboard",
-          position: index
-        });
-      }else{
-        this.$store.commit('close_pane',index)
-      }
-
+    init_head(arg) {
+      this.config_copy = arg;
     },
-    normalizeStyle(color, width) {
-      if (color != null) {
-        return {
-          "background-color": color
-        };
-      }
-
-      if (width != null) {
-        if (width == "100%") {
-          return {
-            flex: 1
-          };
-        } else {
-          return {
-            "max-width": width
-          };
+    width_handler(arg, config, index) {
+      if (arg) {
+        console.log(index);
+        if (config[index] === undefined) {
+          return "300px";
+        }else {
+          return config[index].pane_width
         }
+      } else {
+        return "300px";
       }
-    }
-  },
-  watch: {
-    ComponentsArray(newVal, oldVal) {
-      // console.log(this.$route);
     }
   },
   components: {
-    console,
+    Dashboard,
+    /**
+     * administartion
+     */
+    Administration,
+    Addnewapplicationadmin, // this is a form
 
-    // pages
-    Pages: pages,
-    pagesDetails,
-
-    collections,
-    components,
-    database,
-    files,
-    marketplace,
-    // plugins,
-    app,
-    dashboard,
-    administration,
-    administrationDetails
+    /**
+     * pages
+     */
+    Pages,
+    Components,
+    Collections,
+    Messages,
+    Todos,
+    Profile,
+    Plugins,
+    Settings,
+    Marketplace,
+    Database,
+    Console,
+    Files,
+    Task
   },
-  mouted() {}
+  computed: {
+    ...mapGetters({
+      config_state: "pane_system/config_state"
+    }),
+    config() {
+      return this.config_copy;
+    }
+  },
+  watch: {
+    config_state(n, o) {
+      this.isReady = true;
+    }
+  }
 };
 </script>
 
 <style>
-#dynamic-pane {
-  border-left: 1px solid rgba(128, 128, 128, 0.328);
-  box-shadow: 2px 2px 5px 1px rgba(128, 128, 128, 0.328);
-  padding: calc(var(--fontSize) * 0.25);
-  /* border: 5px solid teal; */
-  flex: 1;
-}
-#dynamic-pane > * {
-  overflow: hidden;
-}
-.box-shad {
-  box-shadow: 0px 2px 5px 1px rgba(128, 128, 128, 0.328);
-  border: 1px solid rgba(128, 128, 128, 0.233);
-  flex: 1;
-  background-color: white;
-  overflow: hidden;
-  transition: 0.2s;
-}
-#pane_head {
-  padding: calc(var(--fontSize) * 0.25);
+#dq-main-w {
+  overflow-y: hidden;
 }
 </style>
