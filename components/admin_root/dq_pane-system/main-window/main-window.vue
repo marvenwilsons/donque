@@ -34,7 +34,7 @@
                     :style="{color:config[pane_index].pane_head_title_color}"
                     v-if="config[pane_index].closable"
                     class="pointer fas fa-times padright025"
-                    @click="$store.dispatch('pane_system/close')"
+                    @click="$store.dispatch('pane_system/close',pane_index)"
                   ></i>
                 </div>
               </div>
@@ -55,13 +55,17 @@
  * Administration
  */
 import Administration from "@/components/admin_sections/administration/admin.vue"; // admin options list
-import Addnewapplicationadmin from "@/components/admin_sections/administration/addNewAdminForm.vue"; // add new application admin from
-// add new application admin from
-// add new database admin form
-// database admin list
-// current live admins
-// current blocked admins
-// lost password request list
+import Addnewapplicationadmin from "@/components/admin_sections/administration/addNewAdminForm.vue"; // add new application admin from]
+import Addnewdatabaseadmin from "@/components/admin_sections/administration/add-new-db-admin/add_new_db_admin.vue"; // add new database admin form
+import Applicationadminlist from "@/components/admin_sections/administration/app-admin-list/app_admin_list.vue"; // database admin list
+import Currentliveadmins from "@/components/admin_sections/administration/cur-live-admins/cur_live_admins"; // current live admins
+import Databaseadminlist from "@/components/admin_sections/administration/db-admin-list/db_admin_list.vue" // database admin list
+import Currentblockedadmins from "@/components/admin_sections/administration/cur-blocked-admins/cur_blocked_admins.vue"// current blocked admins
+import Lostpasswordrequest from "@/components/admin_sections/administration/lost-pass-req/lost-pass-req.vue" // lost password request list
+import Createnewteam from "@/components/admin_sections/administration/team-create/create-team.vue" // crate team form
+import Displayallteams from "@/components/admin_sections/administration/team-list/team-list.vue" // team list
+import Createcustomroles from "@/components/admin_sections/administration/roles-create/roles-create.vue" // roles create
+import Displayallroles from "@/components/admin_sections/administration/roles-list/roles-list.vue"
 
 /**
  * Pages
@@ -100,11 +104,10 @@ export default {
     },
     width_handler(arg, config, index) {
       if (arg) {
-        console.log(index);
         if (config[index] === undefined) {
           return "300px";
-        }else {
-          return config[index].pane_width
+        } else {
+          return config[index].pane_width;
         }
       } else {
         return "300px";
@@ -118,6 +121,16 @@ export default {
      */
     Administration,
     Addnewapplicationadmin, // this is a form
+    Addnewdatabaseadmin,
+    Applicationadminlist,
+    Currentliveadmins,
+    Databaseadminlist,
+    Currentblockedadmins,
+    Lostpasswordrequest,
+    Createnewteam,
+    Displayallteams,
+    Createcustomroles,
+    Displayallroles,
 
     /**
      * pages
