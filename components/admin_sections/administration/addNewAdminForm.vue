@@ -7,7 +7,7 @@
         <spinner/>
       </div>
       <div v-if="ready" id="dq-init-wrapper" class="flex flexwrap">
-        <div id="tc-logo-h" class="flex fullwidth flexcenter">
+        <!-- <div id="tc-logo-h" class="flex fullwidth flexcenter">
           <h1>
             dq-studio
             <br>Create New Admin
@@ -16,7 +16,7 @@
             Add brand new admin, fill the essential information, define its role to your application,
             <br>provide the required information on the input fields
           </p>
-        </div>
+        </div> -->
 
         <div class="fullwidth" id="tc-f-wrap">
           <!-- <h5 class="tc">Add New Admin</h5> -->
@@ -199,7 +199,7 @@
                         :class="[errors.email.length != 0 && 'und-err']"
                       >Select a role for {{adminName}}</span>
                       <br>
-                      <span>{{roles[getRoleDesc()].desc}}</span>
+                      <!-- <span>{{roles[getRoleDesc()].desc}}</span> -->
                     </span>
                   </span>
                   <span class="tc-ind flex">
@@ -414,12 +414,12 @@ export default {
         app.email = this.email;
         app.adminName = this.adminName;
 
-        this.$store.dispatch("systemCall", {
-          command: "createNewAppActor",
-          section: "adminMethods",
-          data: app,
-          method: "post"
-        });
+        // this.$store.dispatch("systemCall", {
+        //   command: "createNewAppActor",
+        //   section: "adminMethods",
+        //   data: app,
+        //   method: "post"
+        // });
       }
     },
     clearForms() {
@@ -448,25 +448,32 @@ export default {
     this.ready = false;
     this.clearForms();
 
-    this.$store.state.execAfterTruthyModalClose = this.clearForms;
+    // this.$store.state.execAfterTruthyModalClose = this.clearForms;
 
-    this.$store
-      .dispatch("systemCall", {
-        command: "getRoles",
-        section: "adminMethods",
-        method: "get"
-      })
-      .then(data => {
-        this.roles = data.data.content;
-      })
-      .catch(err => {
-        alert(err);
-      });
+    // this.$store
+    //   .dispatch("systemCall", {
+    //     command: "getRoles",
+    //     section: "adminMethods",
+    //     method: "get"
+    //   })
+    //   .then(data => {
+    //     this.roles = data.data.content;
+    //   })
+    //   .catch(err => {
+    //     alert(err);
+    //   });
 
     setTimeout(() => {
       this.ready = true;
     }, 500);
-  }
+  },
+  beforeCreate() {
+    this.$store.commit("pane_system/set_pane_config", {
+      target: "Admin",
+      title: "Add new admin",
+      pane_width:"700px"
+    });
+  },
 };
 </script>
 

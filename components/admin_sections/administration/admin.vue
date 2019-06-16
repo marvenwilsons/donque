@@ -11,7 +11,7 @@
         :key="`admn_opts_${items}`"
         :id="`admn_opts_${items}`"
         :style="{background: active === `admn-${item_index}` || cur_actv == `admn-${item_index}` ? hoverBgColor : ''}"
-        @click="cur_actv = `admn-${item_index}`"
+        @click="cur_actv = `admn-${item_index}`,$store.dispatch('pane_system/open',{name: items, index: my_pane_index})"
         @mouseover="active = `admn-${item_index}`"
         @mouseleave="cur_actv != `admn-${item_index}` && (active = undefined)"
       >{{items}}</div>
@@ -29,7 +29,7 @@
         :key="`ad_opts_${items}`"
         :id="`ad_opts_${items}`"
         :style="{background: active === `teams-${item_index}` || cur_actv == `teams-${item_index}` ? hoverBgColor : ''}"
-        @click="cur_actv = `teams-${item_index}`"
+        @click="cur_actv = `teams-${item_index}`,$store.dispatch('pane_system/open',{name: items, index: my_pane_index})"
         @mouseover="active = `teams-${item_index}`"
         @mouseleave="cur_actv != `teams-${item_index}` && (active = undefined)"
       >{{items}}</div>
@@ -47,7 +47,7 @@
         :key="`ad_opts_${items}`"
         :id="`ad_opts_${items}`"
         :style="{background: active === `roles-${item_index}` || cur_actv == `roles-${item_index}` ? hoverBgColor : ''}"
-        @click="cur_actv = `roles-${item_index}`"
+        @click="cur_actv = `roles-${item_index}`,$store.dispatch('pane_system/open',{name: items, index: my_pane_index})"
         @mouseover="active = `roles-${item_index}`"
         @mouseleave="cur_actv != `roles-${item_index}` && (active = undefined)"
       >{{items}}</div>
@@ -57,6 +57,7 @@
 
 <script>
 export default {
+  props: ["my_pane_index"],
   data() {
     return {
       cur_actv: undefined,
