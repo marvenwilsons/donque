@@ -5,10 +5,8 @@
         <div :id="`dq-ter-result-${index}`" v-for="(items,index) in terminal_logs" :key="index">
           <span class="fullwidth flex">
             <div class="shell-textcolor-currentuser">
-              {{usergroup}}@{{username}}-{{items.class}}:<span
-                class="dq-ter-p-trace"
-                v-if="items.fspath"
-              >{{items.fspath}}:</span>
+              {{usergroup}}@{{username}}-{{items.class}}:
+              <span class="dq-ter-p-trace" v-if="items.fspath">{{items.fspath}}:</span>
               <span class="dq-cmd-trace">
                 {{items.command}}
                 <span
@@ -49,7 +47,7 @@ import tableObject from "../server/ui library/tableObject.vue";
 import err from "../server/ui library/err.vue";
 import normal from "../server/ui library/normal.vue";
 import clear from "../server/ui library/clear.vue";
-import txtfile from "../server/ui library/txtfile.vue"
+import txtfile from "../server/ui library/txtfile.vue";
 
 export default {
   data() {
@@ -59,8 +57,8 @@ export default {
       user_token: undefined,
       current_class: undefined,
       terminal_logs: [],
-      usergroup: this.$store.state.admin.title,
-      username: this.$store.state.admin.title,
+      usergroup: undefined,
+      username: undefined,
       current_index: 0,
       dqterresult: [],
 
@@ -131,27 +129,27 @@ export default {
           break;
 
         case "SWITCH_CLASS":
-          if(this.global_classes.indexOf(input.secondArg) == -1){
+          if (this.global_classes.indexOf(input.secondArg) == -1) {
             this.terminal_log({
-                uitype: "err",
-                body: `${input.secondArg} class not found`,
-                class: input.class,
-                command: input.arguments_string
-              })
-          }else{
+              uitype: "err",
+              body: `${input.secondArg} class not found`,
+              class: input.class,
+              command: input.arguments_string
+            });
+          } else {
             this.terminal_log({
               uitype: "normal",
               body: `switched to ${input.secondArg} successfully`,
               command: input.arguments_string,
-              fspath:this.fspath_arr_path_trace[this.current_index - 1],
+              fspath: this.fspath_arr_path_trace[this.current_index - 1],
               class: input.class
-            })
-            this.current_class = input.secondArg
-            if(this.current_class == 'fs'){
+            });
+            this.current_class = input.secondArg;
+            if (this.current_class == "fs") {
               // this.fspath = this.fspath_arr_path_trace[this.fspath_arr_path_trace.length - 1].trim()
-              this.fspath = ''
-            }else{
-              this.fspath = undefined
+              this.fspath = "";
+            } else {
+              this.fspath = undefined;
             }
           }
           this.on_every_after_submition();
@@ -189,17 +187,21 @@ export default {
       input == "EMPTY" &&
         this.terminal_log({
           body: "",
-          fspath: this.fspath == undefined ? '' : this.fspath != undefined ? `/${this.fspath}` : this.fspath,
+          fspath:
+            this.fspath == undefined
+              ? ""
+              : this.fspath != undefined
+              ? `/${this.fspath}`
+              : this.fspath,
           class: this.current_class
         });
-
     },
     d_command_sender(input) {
       // this method is responsible for sending the parsed input to the
 
       // server to be processed
       if (input.class == "fs") {
-        this.fs_command_sender(input)
+        this.fs_command_sender(input);
       } else {
         console.log("EXECUTED: command sender 2");
         const c = {
@@ -214,15 +216,14 @@ export default {
       // this method is responsilbe for handling the response from the server
 
       // too many cases dealing with cd, so im assigning it with its own handler
-      if(input.command == "cd" && input.class == 'fs'){
+      if (input.command == "cd" && input.class == "fs") {
         this.b_fs_change_dir_response_handler(input);
-      }else{
-        if(this.current_class == 'fs'){
-          input.fspath = this.fspath == undefined ? '' : `/${this.fspath}`
+      } else {
+        if (this.current_class == "fs") {
+          input.fspath = this.fspath == undefined ? "" : `/${this.fspath}`;
           this.terminal_log(input);
-
-        }else{
-          this.terminal_log(input)
+        } else {
+          this.terminal_log(input);
         }
       }
     },
@@ -302,7 +303,7 @@ export default {
         this.ws.send(
           JSON.stringify({
             data: `use fs cd ${null}`,
-            extraPayload:null,
+            extraPayload: null,
             token: this.user_token
           })
         );
@@ -333,39 +334,37 @@ export default {
       this.c_fs_change_dir_ui_handler(input);
     },
     c_fs_change_dir_ui_handler(input) {
-      this.fspath_arr_path_trace.push(input.body === true ? '' : input.body);
+      this.fspath_arr_path_trace.push(input.body === true ? "" : input.body);
       if (!input.err) {
         //
         input.fspath = this.fspath_arr_path_trace[
           this.fspath_arr_path_trace.length - 2
         ];
 
-        try{
+        try {
           input.arguments_string = this.fspath_arr_input_trace[
-          this.fspath_arr_path_trace.length - 1
-        ].replace("cd", "");
-        }catch(e){}
+            this.fspath_arr_path_trace.length - 1
+          ].replace("cd", "");
+        } catch (e) {}
 
         //
         if (input.arguments_string.trim() == "") {
-            this.terminal_log({
-              class: "fs",
-              uitype: "err",
-              body: "cd: file operand missing",
-              arguments_string: "cd"
-            })
-        }else{
+          this.terminal_log({
+            class: "fs",
+            uitype: "err",
+            body: "cd: file operand missing",
+            arguments_string: "cd"
+          });
+        } else {
           this.terminal_log(input);
         }
 
-        console.log( this.fspath_arr_input_trace)
-
+        console.log(this.fspath_arr_input_trace);
       } else {
         if (this.fspath_arr_path_trace.length == 1) {
           this.fspath_arr_path_trace = [];
-          this.fspath_arr_input_trace = []
-        } 
-        else{
+          this.fspath_arr_input_trace = [];
+        } else {
           //
           const problematic_index = this.fspath_arr_path_trace.length - 1;
           const prev_working_index = this.fspath_arr_path_trace.length - 2;
@@ -382,40 +381,42 @@ export default {
 
           //
           input.arguments_string = this.fspath_arr_input_trace[
-          this.fspath_arr_path_trace.length - 1
+            this.fspath_arr_path_trace.length - 1
           ].replace("cd", "");
 
-          console.log('exec')
+          console.log("exec");
         }
         this.terminal_log(input);
       }
     },
 
     // fileSystem related only
-    fs_command_sender(input){
+    fs_command_sender(input) {
       if (input.firstArg == "cd") {
-          try{
-            this.fs_secondArgs.push(input.secondArg);
-            this.a_fs_change_dir_before_send_handler(input)
-          }catch(e){
-            this.terminal_log({
-              class: "fs",
-              uitype: "err",
-              body: "cd: file operand missing",
-              arguments_string: "cd"
-            })
-          }          
-        } else {
-          console.log("EXECUTED: command sender 1.b");
-          const b = {
-            data: `use fs ${input.firstArg.trim()} ${input.arguments_string.replace(input.firstArg,'').trim()}`,
-            flags:'',
-            extraPayload: this.fspath,
-            token: this.user_token
-          };
-          console.log(b)
-          this.ws.send(JSON.stringify(b));
+        try {
+          this.fs_secondArgs.push(input.secondArg);
+          this.a_fs_change_dir_before_send_handler(input);
+        } catch (e) {
+          this.terminal_log({
+            class: "fs",
+            uitype: "err",
+            body: "cd: file operand missing",
+            arguments_string: "cd"
+          });
         }
+      } else {
+        console.log("EXECUTED: command sender 1.b");
+        const b = {
+          data: `use fs ${input.firstArg.trim()} ${input.arguments_string
+            .replace(input.firstArg, "")
+            .trim()}`,
+          flags: "",
+          extraPayload: this.fspath,
+          token: this.user_token
+        };
+        console.log(b);
+        this.ws.send(JSON.stringify(b));
+      }
     },
 
     // routines
@@ -443,14 +444,14 @@ export default {
       this.current_class = "fs";
 
       // set user group
-      this.usergroup = this.$store.state.admin.title;
+      // this.usergroup = this.$store.state.admin.title;
 
       // set user name
-      this.username = this.$store.state.admin.adminName;
+      // this.username = this.$store.state.admin.adminName;
 
       // init webSocket
       this.ws = new WebSocket("ws://localhost:4000");
-      
+
       this.ws.onopen = () => {
         console.log("CONNECTED");
       };
@@ -459,7 +460,7 @@ export default {
       };
       this.ws.onclose = function close() {
         // keep alive
-      //  alert('closing')
+        //  alert('closing')
       };
     }
   },
@@ -472,7 +473,6 @@ export default {
   },
   mounted() {
     this.on_start_defaults_setter();
-
   },
   components: {
     arrayList,
@@ -483,6 +483,13 @@ export default {
     normal,
     txtfile,
     clear
+  },
+  beforeCreate() {
+    this.$store.commit("pane_system/set_pane_config", {
+      title: "Console",
+      pane_width: "80%",
+      maximizable: false
+    });
   }
 };
 </script>
@@ -531,7 +538,8 @@ export default {
 .dq-ter-p-trace,
 .shell-textcolor-currentuser,
 #shell-input,
-#cli-output, #dq-terminal > * {
+#cli-output,
+#dq-terminal > * {
   font-family: var(--inconsolata);
   font-size: calc(var(--fontSize) * 1.25);
 }
