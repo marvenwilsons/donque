@@ -4,7 +4,8 @@
     <div
       :style="{
         flex:1, 
-        minWidth:200+'px',
+        minWidth:180+'px',
+        maxWidth:180+'px',
         background:$store.state.theme.docker_bg_color,
         color: $store.state.theme.docker_text_color
         }"
@@ -12,10 +13,10 @@
 
     <!-- main window -->
     <div
-      :style="{flex: 9, background: $store.state.theme.main_bg_color}"
+      :style="{flex: 15, background: $store.state.theme.main_bg_color}"
       class="relative"
     >
-      main window
+      <mainWindow/>
     </div>
 
     <!-- notification -->
@@ -41,11 +42,13 @@
 <script>
 import notify from "@/components/admin_root/dq_notification/notify.vue";
 import docker from "@/components/admin_root/dq_pane-system/docker/docker.vue"
+import main_window from "@/components/admin_root/dq_pane-system/main-window/main-window.vue"
 
 export default {
   components: {
     notify,
-    docker
+    docker,
+    mainWindow: main_window
   }
 };
 </script>

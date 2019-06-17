@@ -1,7 +1,7 @@
 <template>
   <div class="fullheight-percent flex flexcol" style="border-right: 2px solid whitesmoke">
-    <div class="flex1  flex flexcenter">
-      <div class="flex flexcenter ">
+    <div class="flex1 flex flexcenter">
+      <div class="flex flexcenter">
         <div class="dq-fav-con flex flexcenter">
           <!-- fav icon here -->
         </div>
@@ -23,7 +23,7 @@
           @mouseleave="cur_actv != item_index && (active = undefined)"
         >
           <strong :id="`dqdi_title_${item_index}_${items}`">
-            <i v-if="items === 'Administration'" class="fas fa-user-alt padleft025  padright025"></i>
+            <i v-if="items === 'Administration'" class="fas fa-user-alt padleft025 padright025"></i>
             <i v-if="items === 'Dashboard'" class="fas fa-columns padleft025 padright025"></i>
             <i v-if="items === 'Pages'" class="fas fa-copy padleft025 padright025"></i>
             <i v-if="items === 'Components'" class="fas fa-puzzle-piece padleft025 padright025"></i>
@@ -39,7 +39,7 @@
             <i v-if="items === 'Console'" class="fas fa-terminal padleft025 padright025"></i>
             <i v-if="items === 'Task'" class="fas fa-tasks padleft025 padright025"></i>
             {{items}}
-            </strong>
+          </strong>
         </div>
       </div>
     </div>
@@ -47,6 +47,8 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   data() {
     return {
@@ -57,11 +59,25 @@ export default {
     };
   },
   computed: {
+    ...mapGetters({
+      listState: "pane_system/list_state"
+    }),
     menu_items() {
       return (
         this.$store.state.dashboard_data.resources &&
         Object.keys(this.$store.state.dashboard_data.resources)
       );
+    }
+  },
+  watch: {
+    listState(n, o) {
+      const a = Object.keys(this.$store.state.dashboard_data.resources).indexOf(
+        n[0]
+      );
+      if (a != -1) {
+        this.cur_actv = a;
+        this.active = a;
+      }
     }
   },
   mounted() {
@@ -73,22 +89,20 @@ export default {
     this.$store.dispatch("theme/set_class_css_defaults", {
       class: ["dq-docker-items"],
       css_keys: ["transition"],
-      css_values: ["0.3s"]
+      css_values: ["0.2s"]
     });
-
-    // setting default active menu
-    // ids: ["dqdi_0_Dashboard","dqdi_title_0_Dashboard"]
   }
 };
 </script>
 
 
 <style scoped>
-.fas.padright025, .fab.padright025{
+.fas.padright025,
+.fab.padright025 {
   /* border: 1px solid red; */
   width: 20px;
 }
-.dq-fav-con{
+.dq-fav-con {
   height: calc(var(--fontSize) * 10.25);
   width: calc(var(--fontSize) * 10.25);
   border-radius: 100%;

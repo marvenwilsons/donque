@@ -1,16 +1,14 @@
 export const state = () => ({
-    logic: {
-        current_index: undefined,
-        index_being_clicked: undefined,
-        delete_items_starting_from_index: undefined,
-    },
     root_selected: undefined,
     pane_index_config_list: [],
+    pane_got_close: false,
     pane_index_list: []
 })
 
 export const getters = {
-    config_state: state => state.pane_index_config_list
+    config_state: state => state.pane_index_config_list,
+    list_state: state => state.pane_index_list,
+    close_state: state => state.pane_got_close
 }
 
 
@@ -70,6 +68,7 @@ export const mutations = {
             state.pane_index_config_list.splice(1, compIndex)
         }
 
+        state.pane_got_close = true
     },
     set_pane_config(state, payload) {
         console.log(`--> setting pane config ${payload}`)
