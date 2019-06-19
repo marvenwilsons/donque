@@ -20,7 +20,7 @@
     <!--  -->
     <div class="flex flexcol margin125">
       <div class="pad050">
-        <strong>Website settings</strong>
+        <strong>Website general settings</strong>
         <!-- <div>admin related settings</div> -->
       </div>
       <div
@@ -70,7 +70,7 @@ export default {
         "Dashboard settings",
         "Change admin access route",
       ],
-      Webs: ["Universal font-size", "Favicon"],
+      Webs: ["Universal font-size", "Favicon", "Site title"],
       Sec: ["HTTPS settings", "Perm Certifecates"],
 
     };
