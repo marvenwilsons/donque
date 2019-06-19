@@ -146,9 +146,10 @@ export default {
           els.offsetWidth;
 
       }
-      this.$store.state.mongbeans.curr_width = Object.values(
-        this.$store.state.mongbeans.widths
-      ).sort()[0];
+      // this.$store.state.mongbeans.curr_width = Object.values(
+      //   this.$store.state.mongbeans.widths
+      // ).sort()[0];
+      this.$store.commit('mongbeans/setCurWidth')
 
     },
     gettype(v) {

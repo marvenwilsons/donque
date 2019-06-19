@@ -18,10 +18,10 @@
           </p>
         </div>-->
 
-        <div class="fullwidth" id="tc-f-wrap">
+        <div class="fullwidth" id="tc-f-wrap-admn">
           <!-- <h5 class="tc">Add New Admin</h5> -->
 
-          <div class="tc-f-wrap-inner">
+          <div class="tc-f-wrap-inner-admn">
             <form class="flex flex flexcol">
               <!-- username  -->
               <div class="flex flexcenter flexcol tc-wrap">
@@ -478,19 +478,13 @@ export default {
 </script>
 
 <style>
-#dq-admn-parent-wrapper{
-  min-height: 100vh;
-}
 #dq-newwork-err {
   padding: calc(var(--fontSize) * 1.25);
   border-radius: 10px;
   background: #ae110036;
   color: #ae1100;
 }
-#tc-logo-h {
-  padding: calc(var(--fontSize) * 1.25);
-  margin: calc(var(--fontSize) * 1.25);
-}
+
 .tc-suc {
   color: #038203;
 }
@@ -513,12 +507,11 @@ export default {
   --bg-c: white;
 }
 
-#tc-f-wrap {
+#tc-f-wrap-admn {
   background: var(--bg-c);
   padding: calc(var(--fontSize) * 1.25);
   padding-left: calc(var(--fontSize) * 2.25);
   padding-right: calc(var(--fontSize) * 2.25);
-  /* margin-bottom: calc(var(--fontSize) * 2.25); */
   box-shadow: 0px 0px 20px 1px var(--blue-text-2);
 }
 #dq-init-wrapper {
@@ -527,12 +520,11 @@ export default {
   /* max-width: 99%; */
   transition: 0.3s;
 }
-.tc-f-wrap-inner {
+.tc-f-wrap-inner-admn {
   /* border: 1px solid red; */
   border-radius: 5px;
   padding-left: calc(var(--fontSize) * 1.25);
   padding-top: calc(var(--fontSize) * 2.25);
-  margin-bottom: calc(var(--fontSize) * 1.25);
 }
 .abs {
   overflow-x: auto;
@@ -552,7 +544,7 @@ export default {
 }
 .tc-input > input {
   padding: calc(var(--fontSize) * 0.25);
-  margin-bottom: calc(var(--fontSize) * 0.25);
+  /* margin-bottom: calc(var(--fontSize) * 0.25); */
   color: var(--blue-text-2);
   font-weight: 600;
   background-color: var(--bg-c);
