@@ -10,3 +10,15 @@
 $ npm start
 ```
 For detailed explanation on how things work, checkout [dq-studio docs](https://nuxtjs.org).
+
+## Technologies used
+* Front End
+    * VueJs
+    * GreenSock(GSAP)
+    * HTML5
+    * CSS
+* Back End
+    * NodeJS
+    * MongoDB (Default database)
+* Programming language
+    * JavaScript 
