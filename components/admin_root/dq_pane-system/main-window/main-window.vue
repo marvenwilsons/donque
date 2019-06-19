@@ -85,7 +85,7 @@ import Plugins from "@/components/admin_sections/plugins/plugins.vue";
 import Settings from "@/components/admin_sections/settings/settings.vue";
 import Marketplace from "@/components/admin_sections/marketplace/marketplace.vue";
 import Database from "@/components/admin_sections/database/database.vue";
-import Console from "@/components/admin_sections/console/console.vue";
+import Console from "@/components/admin_sections/console//view/console.vue";
 import Task from "@/components/admin_sections/task/task.vue";
 
 //
