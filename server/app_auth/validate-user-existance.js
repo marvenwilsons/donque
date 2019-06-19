@@ -1,4 +1,4 @@
-module.exports = async ({ ...dbs }, { username }) => {
+module.exports = async ({ ...dbs }, { username, command }) => {
     // @dqsys: auth: validateUserExistance()
     console.log(`** [ValidatingUserExistance] - ${username}`)
     const { doc } = dbs.data
@@ -25,7 +25,7 @@ module.exports = async ({ ...dbs }, { username }) => {
         }).catch(err => {
             console.log(`   [Auth] User validation fail for ${username}`)
             console.log(err)
-            reject(`Fail on validating ${username}`)
+            reject(`Fail on executing ${command} because username passed is ${username}`)
         })
     })
 }
