@@ -28,10 +28,14 @@ export const mutations = {
         state.app = serverData
     },
     systemCallMutation(state,payloadData){
-        console.log('systemCall mutation')
+        console.log('** systemCall mutation')
+        console.log(`   actionPointer (b) ${state.actionPointer}`)
+
         state.actions = payloadData.actions
         state.messages = payloadData.msg
         state.actionPointer = 0
+
+        console.log(`   actionPointer (a) ${state.actionPointer}`)
     },
 
     // actions
@@ -43,7 +47,6 @@ export const mutations = {
     },
     nextAction(state) {
         if(state.actions.length - 1 != state.actionPointer ){
-            console.log('this')
             state.actionPointer = state.actionPointer + 1
         }else{
             // clear actions, msgs, actionPointer
@@ -51,6 +54,9 @@ export const mutations = {
             state.messages = undefined
             state.actionPointer = undefined
             state.modal.visibility = false
+
+            this.commit("modal/exec_after_hook")
+
         }
     },
 
@@ -105,16 +111,17 @@ export const actions = {
         switch (context.method) {
             case 'get' || 'read':
                 console.log(`** [systemCall]-[store] fetching ${context.command}`)
-                console.log(context)
                 return this.$axios.$get('/dqapp/_dq', {
                     params: context
                 }).then(response => {
                     console.log(`** [systemCall]-[store] request Ok!`)
-                    console.log(response)
-                    commit('systemCallMutation', {
-                        msg: response.data.msg,
-                        actions: response.data.actions
-                    })
+                    if (response.data.msg != null){
+                        commit('systemCallMutation', {
+                            msg: response.data.msg,
+                            actions: response.data.actions
+                        })
+                    }
+
                     return response
                 }).catch(err => {
                     console.log(`** [systemCall]-[store] fetch error!`)
@@ -123,12 +130,17 @@ export const actions = {
                 })
             case 'post' || 'update' || 'delete':
                 console.log(`** [systemCall]-[store] executing ${context.command}`)
+                context.username = localStorage.getItem('username')
+                context.token = localStorage.getItem('auth')
                 return this.$axios.$post('/dqapp/_dq', context)
                     .then(response => {
-                        commit('systemCallMutation', {
-                            msg: response.data.msg,
-                            actions: response.data.actions
-                        })
+                        console.log(response)
+                        if (response.data.msg != null) {
+                            commit('systemCallMutation', {
+                                msg: response.data.msg,
+                                actions: response.data.actions
+                            })
+                        }
                         console.log(`** [systemCall]-[store] request Ok!`)
                         if (!response.status) {
                             state.hasErr = true

@@ -7,7 +7,8 @@ export const state = () => ({
 
     // content
     body: undefined,
-    head: undefined
+    head: undefined,
+    exec_after_msg: []
 })
 
 export const mutations = {
@@ -30,6 +31,18 @@ export const mutations = {
         // content
         state.body = body
         state.head = head
+    },
+
+    exec_after_hook(state) {
+        if(state.exec_after_msg.length != 0){
+            state.exec_after_msg.map(e => {
+                e()
+            })
+        }        
+    },
+
+    exec_after_msg(state,fn) {
+        state.exec_after_msg.push(fn)
     }
 }
 

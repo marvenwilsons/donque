@@ -540,7 +540,7 @@ export default {
   transition: 0.3s;
 }
 #dq-init-parent-wrapper {
-  background: var(--blue-1);
+  /* background: var(--blue-1); */
   min-height: 100vh;
 }
 .tc-f-wrap-inner {
@@ -600,7 +600,7 @@ export default {
   padding: calc(var(--fontSize) * 0.5);
   padding-left: calc(var(--fontSize) * 1);
   padding-right: calc(var(--fontSize) * 1);
-  border: 1px solid rgba(0, 0, 0, 0.335);
+  /* border: 1px solid rgba(0, 0, 0, 0.335); */
 }
 hr {
   color: #4a6976;

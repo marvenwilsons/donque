@@ -414,12 +414,12 @@ export default {
         app.email = this.email;
         app.adminName = this.adminName;
 
-        // this.$store.dispatch("systemCall", {
-        //   command: "createNewAppActor",
-        //   section: "adminMethods",
-        //   data: app,
-        //   method: "post"
-        // });
+        this.$store.dispatch("systemCall", {
+          command: "createNewAppActor",
+          section: "adminMethods",
+          data: app,
+          method: "post"
+        });
       }
     },
     clearForms() {
@@ -448,20 +448,22 @@ export default {
     this.ready = false;
     this.clearForms();
 
-    // this.$store.state.execAfterTruthyModalClose = this.clearForms;
+    this.$store.commit('modal/exec_after_msg',this.clearForms)
 
-    // this.$store
-    //   .dispatch("systemCall", {
-    //     command: "getRoles",
-    //     section: "adminMethods",
-    //     method: "get"
-    //   })
-    //   .then(data => {
-    //     this.roles = data.data.content;
-    //   })
-    //   .catch(err => {
-    //     alert(err);
-    //   });
+    this.$store
+      .dispatch("systemCall", {
+        command: "getRoles",
+        section: "adminMethods",
+        username: localStorage.getItem('username'),
+        token: localStorage.getItem('auth'),
+        method: "get"
+      })
+      .then(data => {
+        this.roles = data.data.content;
+      })
+      .catch(err => {
+        alert(err);
+      });
 
     setTimeout(() => {
       this.ready = true;
@@ -524,10 +526,6 @@ export default {
   /* max-width: 99%; */
   transition: 0.3s;
 }
-#dq-init-parent-wrapper {
-  background: var(--blue-1);
-  /* min-height: 100%; */
-}
 .tc-f-wrap-inner {
   /* border: 1px solid red; */
   border-radius: 5px;
@@ -578,14 +576,6 @@ export default {
 .tc-b-inner:hover {
   color: rgb(245, 245, 245);
   transition: 0.1s;
-}
-.tc-b-inner {
-  background-color: var(--blue-1);
-  color: white;
-  padding: calc(var(--fontSize) * 0.5);
-  padding-left: calc(var(--fontSize) * 1);
-  padding-right: calc(var(--fontSize) * 1);
-  border: 1px solid rgba(0, 0, 0, 0.335);
 }
 hr {
   color: #4a6976;
