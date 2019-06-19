@@ -1,7 +1,7 @@
 // init dq form v.01
 // author: marven wilson donque
 <template>
-  <div id="dq-init-parent-wrapper" class="flex flexwrap relative fullheight-percent">
+  <div id="dq-admn-parent-wrapper" class="dq-admin-w flex flexwrap relative fullheight-percent">
     <div class="fullwidth flex absolute abs">
       <div class="flex flexcenter flex flexcenter flexcol" v-if="!ready">
         <spinner/>
@@ -16,7 +16,7 @@
             Add brand new admin, fill the essential information, define its role to your application,
             <br>provide the required information on the input fields
           </p>
-        </div> -->
+        </div>-->
 
         <div class="fullwidth" id="tc-f-wrap">
           <!-- <h5 class="tc">Add New Admin</h5> -->
@@ -433,13 +433,13 @@ export default {
       }, 150);
     },
     getRoleDesc(x) {
-      let index = 0
-      this.roles.map((e,i) => {
-        if(e.roleTitle === this.role){
-          return index = i
+      let index = 0;
+      this.roles.map((e, i) => {
+        if (e.roleTitle === this.role) {
+          return (index = i);
         }
-      })
-      return index
+      });
+      return index;
     }
   },
   mounted() {
@@ -448,38 +448,39 @@ export default {
     this.ready = false;
     this.clearForms();
 
-    this.$store.commit('modal/exec_after_msg',this.clearForms)
+    this.$store.commit("modal/exec_after_msg", this.clearForms);
 
     this.$store
       .dispatch("systemCall", {
         command: "getRoles",
         section: "adminMethods",
-        username: localStorage.getItem('username'),
-        token: localStorage.getItem('auth'),
+        username: localStorage.getItem("username"),
+        token: localStorage.getItem("auth"),
         method: "get"
       })
       .then(data => {
+        this.ready = true;
+
         this.roles = data.data.content;
       })
       .catch(err => {
         alert(err);
       });
-
-    setTimeout(() => {
-      this.ready = true;
-    }, 500);
   },
   beforeCreate() {
     this.$store.commit("pane_system/set_pane_config", {
       target: "Admin",
       title: "Add new admin",
-      pane_width:"700px"
+      pane_width: "700px"
     });
-  },
+  }
 };
 </script>
 
 <style>
+#dq-admn-parent-wrapper{
+  min-height: 100vh;
+}
 #dq-newwork-err {
   padding: calc(var(--fontSize) * 1.25);
   border-radius: 10px;

@@ -65,8 +65,8 @@ export default {
       hoverBgColor: this.$store.state.theme.notify_tile_body_bg_hover_color,
       admin_opts: [
         "Add new application admin",
-        "Add new database admin",
         "Application admin list",
+        "Add new database admin",
         "Database admin list",
         "Current live admins",
         "Current blocked admins",
