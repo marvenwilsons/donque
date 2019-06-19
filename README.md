@@ -1,22 +1,13 @@
-# dq
+# dq studio
 
-> My fabulous Nuxt.js project
+> The most scalable CMS ever 
 
 ## Build Setup
 
+> Download dq studio here >  
+
 ``` bash
-# install dependencies
-$ npm install
-
-# serve with hot reload at localhost:3000
-$ npm run dev
-
-# build for production and launch server
-$ npm run build
+# to start using dq studio, cd to the dq studio folder first then start
 $ npm start
-
-# generate static project
-$ npm run generate
 ```
-
 For detailed explanation on how things work, checkout [Nuxt.js docs](https://nuxtjs.org).
