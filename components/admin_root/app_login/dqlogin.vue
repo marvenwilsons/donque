@@ -37,8 +37,8 @@
               <span class="tc-title">Password</span>
               <input v-model="password" type="password">
             </div>
-            <div class="tc-b flex">
-              <button @click="submit" class="tc-b-inner">Login</button>
+            <div class="margintop125 padright025 padtop125 padbottom125 flexend flex">
+              <button @click="submit" class="tc-b-inner"><strong>Login</strong></button>
             </div>
           </div>
         </div>
@@ -179,8 +179,10 @@ export default {
   transition: 0.3s;
 }
 #dq-init-parent-wrapper {
-  background: var(--blue-1);
+  /* background: var(--blue-1); */
   /* background: #45dcfb; */
+  background-image: url("/thomas-lefebvre-5691-unsplash.jpg");
+  background-size: cover;
   min-height: 100vh;
 }
 .abs {
@@ -228,13 +230,14 @@ export default {
   transition: 0.1s;
 }
 .tc-b-inner {
-  background-color: var(--blue-1);
+  /* background-color: var(--blue-1); */
   color: white;
   padding: calc(var(--fontSize) * 0.5);
   padding-left: calc(var(--fontSize) * 1);
   padding-right: calc(var(--fontSize) * 1);
   /* font-weight: 600; */
-  border: 1px solid rgba(0, 0, 0, 0.335);
+  /* border: 1px solid rgba(0, 0, 0, 0.335); */
+  border: none;
   cursor: pointer;
   border-radius: 2px;
 }
