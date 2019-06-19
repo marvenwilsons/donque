@@ -22,6 +22,29 @@
         "color": "#4a6976"
     },
 
+    "modal_host_style" : {
+        "boxShadow":"2px 2px 15px 1px #393e4244",
+        "border": "4px solid #e9eff3",
+        "borderRadius": "5px"
+    },
+    "modal_head_style" : {
+        "color": "#f6f8fa",
+        "background": "#4a6976",
+        "borderRadius":"5px 5px 0px 0px"    
+    },
+    "modal_button_style": {
+        "color": "#f6f8fa",
+        "background": "#4a6976"
+    },
+    "modal_head_title_style": {
+
+    },
+    "modal_head_close_btn_style": {
+    },
+    "modal_body_style": {
+        "background": "#e9eff3"
+    },
+
     "notify_bg_color": "white",
     "notify_text_color":"#4a6976",
     "notify_tile_body_bg_color":"#f6f8fa",

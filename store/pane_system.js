@@ -19,19 +19,14 @@ export const mutations = {
      */
     pane_reset(state,payload) {
         if (state.pane_index_list[0] != payload){
-            console.log(`--> pane reset to ${payload}`)
             state.pane_index_config_list = []
             state.pane_index_list = [`${payload}`]
         }
-    },
-    pane_config_reset(state,payload){
-        console.log('--> pane config reset')
     },
     /**
      * pane push adds one new pane to the view
      */
     pane_push(state,payload) {
-        console.log(`--> pane push ${payload}`)
         state.pane_index_list.push(payload)
     },
     /**
@@ -57,7 +52,6 @@ export const mutations = {
      * closes the pane
      */
     pane_close(state, compIndex) {
-        console.log(`remove ${state.pane_index_list[compIndex]} index ${compIndex}`)
 
         // remove one item or component from the index supplied        
         if(compIndex === 0){
@@ -71,7 +65,6 @@ export const mutations = {
         state.pane_got_close = true
     },
     set_pane_config(state, payload) {
-        console.log(`--> setting pane config ${payload}`)
 
         let final_conf = {}
 
@@ -171,7 +164,6 @@ export const actions = {
         }
     },
     close({ commit, state }, context) {
-        console.log('--> close')
         // return to dashboard
         if (state.pane_index_list.length === 1){
             commit('pane_reset', 'Dashboard')

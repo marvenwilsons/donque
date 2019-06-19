@@ -29,6 +29,14 @@ export const state = () => ({
     notify_tile_border_color: undefined,
     notify_tile_border_radios: undefined, // done
 
+    // modal
+    modal_host_style: undefined,
+    modal_head_style: undefined,
+    modal_head_title_style: undefined,
+    modal_head_close_btn_style: undefined,
+    modal_body_style: undefined,
+    modal_button_style: undefined,
+
     // sys, should not be access outside store
     _onMouseleave: [],
     _currentActiveIds: [],
@@ -56,6 +64,12 @@ export const mutations = {
         state.docker_hover_text_color = theme_content.docker_hover_text_color
         state.docker_hover_menu_item_bg_color = theme_content.docker_hover_menu_item_bg_color
         state.pane_host_style = theme_content.pane_host_style
+        state.modal_body_style = theme_content.modal_body_style
+        state.modal_host_style = theme_content.modal_host_style
+        state.modal_head_title_style = theme_content.modal_head_title_style
+        state.modal_head_close_btn_style = theme_content.modal_head_close_btn_style
+        state.modal_head_style = theme_content.modal_head_style
+        state.modal_button_style = theme_content.modal_button_style
     },
     __load_onMouseLeave(state,context) {
         state._onMouseleave.push(context)
@@ -64,7 +78,6 @@ export const mutations = {
         state._currentActiveIds.push(context)
     },
     __clear_mouseLeave(state) {
-        console.log('clear mouse leave')
         state._onMouseleave = []
         state._currentActiveIds = []
     }

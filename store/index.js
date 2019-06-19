@@ -1,9 +1,10 @@
 export const state = () => ({
     app: undefined, // add data use for initialing the app admin area
     admin: undefined, // data for the current log admin, used for inializing the admin dashboard
-    actions: undefined, // actions received from server, an object containing array of actions
+    actions: [], // actions received from server, an object containing array of actions
     messages: undefined,
-    resources: undefined
+    resources: undefined,
+    actionPointer: undefined,
 })
 
 export const getters = {
@@ -11,6 +12,7 @@ export const getters = {
         console.log('store action state')
         return state.actions
     },
+    actionPointer: state => state.actionPointer,
     modalState: state => {
         return !state.modal.visibility ? 'modal is open' : 'modal is close'
     },
@@ -22,18 +24,37 @@ export const getters = {
 export const mutations = {
     setAppData(state,serverData) {
         console.log('** setting app data')
-        console.log(serverData.data)
         state.actions = serverData.data.actions
         state.app = serverData
     },
     systemCallMutation(state,payloadData){
-        console.log(payloadData)
+        console.log('systemCall mutation')
         state.actions = payloadData.actions
         state.messages = payloadData.msg
+        state.actionPointer = 0
     },
+
+    // actions
     setActions(state,payload) {
-        state.actions = payload
+        state.actions.push(payload)
     },
+    clearActions(state){
+        state.actions = []
+    },
+    nextAction(state) {
+        if(state.actions.length - 1 != state.actionPointer ){
+            console.log('this')
+            state.actionPointer = state.actionPointer + 1
+        }else{
+            // clear actions, msgs, actionPointer
+            state.actions = []
+            state.messages = undefined
+            state.actionPointer = undefined
+            state.modal.visibility = false
+        }
+    },
+
+    //
     logout() {
         this.$axios.$post('/dqapp/_dq', {
             token: localStorage.getItem("auth"),

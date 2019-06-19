@@ -12,23 +12,22 @@ import public_portal from "@/components/admin_root/public_portal/public-portal.v
 import { mapGetters } from "vuex";
 
 export default {
-  
   data() {
     return {
       siteTitle: "petroff",
       mounted_data: undefined,
       auth: undefined,
       view: undefined,
-      layout: 'admin'
+      layout: "admin"
     };
   },
-  layout: (context) => {
-    console.log('********* layout')
-    if(context.route.path === '/admin'){
-      return 'admin'
-    }else {
-      return 'default'
-    }   
+  layout: context => {
+    console.log("********* layout");
+    if (context.route.path === "/admin") {
+      return "admin";
+    } else {
+      return "default";
+    }
     // return this.layou
   },
   validate({ query, params, store }) {
@@ -54,6 +53,7 @@ export default {
     ...mapGetters({
       myActionState: "actionState",
       modalState: "modalState",
+      actionPointer: "actionPointer",
       hasErr: "hasErr"
     }),
     route() {
@@ -67,7 +67,7 @@ export default {
     },
     queryObject() {
       return this.$route.query;
-    },
+    }
   },
   components: {
     dq_login,
@@ -75,65 +75,64 @@ export default {
     admin_portal,
     public_portal
   },
-    watch: {
-    // myActionState(newActions, oldval) {
-    //   console.log('********* myActionState')
-    //   if (newActions) {
-    //     newActions.map(e => {
-    //       console.log(e)
-    //       switch (e.title) {
-    //         case "saveToLocalStorage":
-    //           console.log("saving to local storage!");
-    //           break;
-    //         case "prompt_err":
-    //           this.$store.state.modal.commit('set_visibility', true)
-    //           this.$store.state.modal.head = "Error";
-    //           this.$store.state.modal.body = universal_modal_disp;
-    //           this.$store.state.current_action_title = e.title;
-    //           break;
-    //         case "prompt_msg":
-    //           tthis.$store.state.modal.commit('set_visibility', true)
-    //           this.$store.state.modal.head = "System message";
-    //           this.$store.state.modal.body = universal_modal_disp;
-    //           this.$store.state.current_action_title = e.title;
-    //           break;
-    //         case "prompt_password":
-    //           this.$store.state.modal.commit('set_visibility', true)
-    //           this.$store.state.modal.head = "Authentication required";
-    //           this.$store.state.modal.body = universal_modal_disp;
-    //           this.$store.state.current_action_title = e.title;
-    //           break;
-    //         case "redirect":
-    //           location.href = e.content;
-    //           break;
-    //         case "prompt_credentials":
-    //           break;
-    //         case "init_user":
-    //           // set user
-    //           this.$store.state.admin = e.content;
-    //           this.ready = true;
-    //           this.$store.state.modal.commit('set_visibility', true)
-    //           this.$store.state.spinner = true;
-    //           this.$store.state.resources = e.content.resources;
-
-    //           // set resource
-    //           setTimeout(() => {
-    //             this.$store.state.actions = undefined;
-    //             this.$store.state.modal.commit('set_visibility', false)
-    //             this.$store.state.spinner = false;
-    //           }, 600);
-    //           break;
-    //       }
-    //     });
-    //   }
-    // },
+  watch: {
+    actionPointer(n, o) {
+      const action = this.$store.state.actions[n];
+      
+      //
+      if (n != undefined) {
+        switch (action.title) {
+          case "saveToLocalStorage":
+            console.log("saving to local storage!");
+            break;
+          case "prompt_err":
+            this.$store.commit("modal/set_modal", {
+              head: "Error",
+              body: this.$store.state.messages,
+              config: {
+                ui_type: "err",
+                closable: false
+              }
+            });
+            // set modal to err
+            break;
+          case "prompt_msg":
+            // set modal to prompt msg
+            this.$store.commit("modal/set_modal", {
+              head: "Alert",
+              body: this.$store.state.messages,
+              config: {
+                ui_type: "msg",
+                closable: false
+              }
+            });
+            break;
+          case "prompt_password":
+            // prompt modal for password
+            this.$store.commit("modal/set_modal", {
+              head: "Alert",
+              body: "Prompt password is not yet coded by marven! code it madafaka!!",
+              config: {
+                ui_type: "msg",
+                closable: false
+              }
+            });
+            break;
+          case "redirect":
+            location.href = e.content;
+            break;
+          case "prompt_credentials":
+            break;
+        }
+      }
+    }
   },
   mounted() {
     /**
      * Setting admin data
      */
-    console.log('** Mounting _.vue')
-    console.log(location.pathname)
+    console.log("** Mounting _.vue");
+    console.log(location.pathname);
 
     /**
      * page routing
@@ -144,11 +143,11 @@ export default {
     // the owner has the capability to change the login link, so it is posible that the login page is
     // not dq login anymore after initialization
     if (
-      this.$store.state.actions[0].title === "redirect" &&
-      this.$store.state.actions[0].content === "dqlogin" ||
-      location.pathname === '/dqlogin'
+      (this.$store.state.actions[0].title === "redirect" &&
+        this.$store.state.actions[0].content === "dqlogin") ||
+      location.pathname === "/dqlogin"
     ) {
-      return this.view = "dq_login";
+      return (this.view = "dq_login");
     }
     // this code will only execute if the app is not initialized yet
     // no admin, no app manifest, no database yet
@@ -156,13 +155,13 @@ export default {
       this.$store.state.actions[0].title === "redirect" &&
       this.$store.state.actions[0].content === "__dqinit"
     ) {
-      return this.view = "dq_init";
+      return (this.view = "dq_init");
     }
     // else if auth server admin page
     // check if token exist in localstorage if it does serve the admin page.
     // if admin page is renamed the app needs to be restarted
     else if (this.auth) {
-      return this.view = 'admin_portal'
+      return (this.view = "admin_portal");
     }
   }
 };
@@ -170,5 +169,5 @@ export default {
 
 <style>
 @import url("@/assets/dq-css/dq-fw-0.3.css");
-@import url('@/assets/dq-css/normalize.css');
+@import url("@/assets/dq-css/normalize.css");
 </style>
