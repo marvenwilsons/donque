@@ -50,12 +50,15 @@ export const mutations = {
             state.actionPointer = state.actionPointer + 1
         }else{
             // clear actions, msgs, actionPointer
+            if (state.actions[state.actionPointer].title != 'prompt_err'){
+                this.commit("modal/exec_after_hook")
+            }
+
             state.actions = []
             state.messages = undefined
             state.actionPointer = undefined
             state.modal.visibility = false
 
-            this.commit("modal/exec_after_hook")
 
         }
     },
@@ -111,6 +114,8 @@ export const actions = {
         switch (context.method) {
             case 'get' || 'read':
                 console.log(`** [systemCall]-[store] fetching ${context.command}`)
+                context.username = localStorage.getItem('username')
+                context.token = localStorage.getItem('auth')
                 return this.$axios.$get('/dqapp/_dq', {
                     params: context
                 }).then(response => {
