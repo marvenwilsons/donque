@@ -1,11 +1,8 @@
 <template>
   <div class="fullheight-percent flex flexcol ">
     <span class="app-admin-list-heading">
-      <span class="fullwidth">
-        <strong>Application Admin List</strong>
-      </span>
       <span>
-        <span>| Total Admins: {{len}}</span>
+        <span>Total Admins: {{len}}</span>
       </span>
     </span>
     <div class="con relative ">
