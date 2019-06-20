@@ -77,52 +77,76 @@ export default {
   },
   watch: {
     actionPointer(n, o) {
+      console.log('** Executing action pointer')
       const action = this.$store.state.actions[n];
-      
+      console.log('   ')
+
       //
       if (n != undefined) {
-        switch (action.title) {
-          case "saveToLocalStorage":
-            console.log("saving to local storage!");
-            break;
-          case "prompt_err":
-            this.$store.commit("modal/set_modal", {
-              head: "Error",
-              body: this.$store.state.messages,
-              config: {
-                ui_type: "err",
-                closable: false
-              }
-            });
-            // set modal to err
-            break;
-          case "prompt_msg":
-            // set modal to prompt msg
-            this.$store.commit("modal/set_modal", {
-              head: "Alert",
-              body: this.$store.state.messages,
-              config: {
-                ui_type: "msg",
-                closable: false
-              }
-            });
-            break;
-          case "prompt_password":
-            // prompt modal for password
-            this.$store.commit("modal/set_modal", {
-              head: "Alert",
-              body: "Prompt password is not yet coded by marven! code it madafaka!!",
-              config: {
-                ui_type: "msg",
-                closable: false
-              }
-            });
-            break;
-          case "redirect":
-            location.href = e.content;
-            break;
-          case "prompt_credentials":
-            break;
+        if (action != undefined) {
+          switch (action.title) {
+            case "saveToLocalStorage":
+              console.log("saving to local storage!");
+              this.$store.commit("modal/set_modal", {
+                head: "Alert",
+                body:
+                  "saving to localStorage is not yet handled",
+                config: {
+                  ui_type: "msg",
+                  closable: false
+                }
+              });
+              break;
+            case "prompt_err":
+              this.$store.commit("modal/set_modal", {
+                head: "Error",
+                body: this.$store.state.messages,
+                config: {
+                  ui_type: "err",
+                  closable: false
+                }
+              });
+              // set modal to err
+              break;
+            case "prompt_msg":
+              // set modal to prompt msg
+              this.$store.commit("modal/set_modal", {
+                head: "Alert",
+                body: this.$store.state.messages,
+                config: {
+                  ui_type: "msg",
+                  closable: false
+                }
+              });
+              break;
+            case "prompt_password":
+              // prompt modal for password
+              this.$store.commit("modal/set_modal", {
+                head: "Alert",
+                body:
+                  "Prompt password is not yet coded by marven! code it madafaka!!",
+                config: {
+                  ui_type: "msg",
+                  closable: false
+                }
+              });
+              break;
+            case "redirect":
+              location.href = e.content;
+              this.$store.commit("modal/set_modal", {
+                head: "Alert",
+                body:
+                  "redirect is yet to be handled by marven!!!!",
+                config: {
+                  ui_type: "msg",
+                  closable: false
+                }
+              });
+              break;
+            case "prompt_credentials":
+              alert('prompt credentials')
+              break;
+          }
         }
       }
     }
