@@ -15,8 +15,7 @@ export const mutations = {
     // when call it will show a spinner into a screen
     set_visibility(state,value) {
         state.visibility = value
-    },
-        
+    },        
     set_modal(state,{body,head,config}){
         const {visibility,closable,head_visibility, ui_type} = config 
 

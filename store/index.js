@@ -5,6 +5,7 @@ export const state = () => ({
     messages: undefined,
     resources: undefined,
     actionPointer: undefined,
+    fromServer: false
 })
 
 export const getters = {
@@ -34,6 +35,7 @@ export const mutations = {
         state.actions = payloadData.actions
         state.messages = payloadData.msg
         state.actionPointer = 0
+        state.fromServer = true
 
         console.log(`   actionPointer (a) ${state.actionPointer}`)
     },
@@ -46,20 +48,25 @@ export const mutations = {
         state.actions = []
     },
     nextAction(state) {
-        if(state.actions.length - 1 != state.actionPointer ){
+        const clear = () => {
+            state.actions = []
+            state.messages = undefined
+            state.actionPointer = undefined
+            state.modal.visibility = false
+            state.fromServer = false
+        }
+        
+        if (state.actions.length - 1 != state.actionPointer){
             state.actionPointer = state.actionPointer + 1
+            if (state.fromServer == false){
+                clear()
+            }
         }else{
             // clear actions, msgs, actionPointer
             if (state.actions[state.actionPointer].title != 'prompt_err'){
                 this.commit("modal/exec_after_hook")
             }
-
-            state.actions = []
-            state.messages = undefined
-            state.actionPointer = undefined
-            state.modal.visibility = false
-
-
+            clear()
         }
     },
 

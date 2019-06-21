@@ -2,7 +2,8 @@ export const state = () => ({
     root_selected: undefined,
     pane_index_config_list: [],
     pane_got_close: false,
-    pane_index_list: []
+    pane_index_list: [],
+    root: undefined
 })
 
 export const getters = {
@@ -13,7 +14,7 @@ export const getters = {
         //     console.log('SHOULD SCROLL')
         //     setTimeout(() => {
         //         host.scrollTo(host.offsetWidth, 0);
-        //     },100)
+        //     },50)
         // }
         return state.pane_index_list
     },
@@ -30,6 +31,7 @@ export const mutations = {
         if (state.pane_index_list[0] != payload){
             state.pane_index_config_list = []
             state.pane_index_list = [`${payload}`]
+            state.root = payload
         }
     },
     /**
@@ -181,7 +183,7 @@ export const actions = {
         }
 
     },
-    maximize() {
+    maximize({state}, comp) {
         console.log('--> maximize')
     },
     init_pane({ commit, state }) {
