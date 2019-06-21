@@ -1,6 +1,6 @@
 <template>
   <div class="fullheight-percent">
-    <div class="borderred fullheight-percent">
+    <div class="fullheight-percent">
         Dashboard widgets here!
     </div>
   </div>
