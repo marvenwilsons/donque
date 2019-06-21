@@ -7,19 +7,15 @@
         <spinner/>
       </div>
       <div v-if="ready" id="dq-init-wrapper" class="flex flexwrap">
-        <!-- <div id="tc-logo-h" class="flex fullwidth flexcenter">
-          <h1>
-            dq-studio
-            <br>Create New Admin
-          </h1>
-          <p class="tc tt" style="color:white;">
-            Add brand new admin, fill the essential information, define its role to your application,
-            <br>provide the required information on the input fields
-          </p>
-        </div>-->
-
         <div class="fullwidth" id="tc-f-wrap-admn">
-          <!-- <h5 class="tc">Add New Admin</h5> -->
+          <div class="pad125">
+            <p><strong>About</strong></p>
+            <span>
+              This form is for creating an application admin, 
+              the that admin manages the app resources and executes actions that is assigned by the owner,
+              including logging in to the dashboard and executing CRUD operations using the GUI assigned.
+            </span>
+          </div>
 
           <div class="tc-f-wrap-inner-admn">
             <form class="flex flex flexcol">
@@ -199,7 +195,7 @@
                         :class="[errors.email.length != 0 && 'und-err']"
                       >Select a role for {{adminName}}</span>
                       <br>
-                      <!-- <span>{{roles[getRoleDesc()].desc}}</span> -->
+                      <span>{{roles[getRoleDesc()].desc}}</span>
                     </span>
                   </span>
                   <span class="tc-ind flex">
@@ -467,11 +463,12 @@ export default {
         alert(err);
       });
   },
+  // 
   beforeCreate() {
     this.$store.commit("pane_system/set_pane_config", {
       target: "Admin",
-      title: "Add new admin",
-      pane_width: "700px"
+      title: "Application Admin Form",
+      pane_width: "900px",
     });
   }
 };
