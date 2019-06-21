@@ -9,7 +9,7 @@
         :style="{ minWidth: width_handler(config != undefined,config,pane_index), maxWidth: width_handler(config != undefined,config,pane_index), ...$store.state.theme.pane_host_style}"
       >
         <!-- pane -->
-        <div class="fullheight-percent">
+        <div class="fullheight-percent flex flexcol flex1">
           <!-- pane head -->
           <div v-if="isReady">
             {{init_head($store.state.pane_system.pane_index_config_list)}}
@@ -24,12 +24,12 @@
                   <strong>{{config[pane_index].title}}</strong>
                 </div>
                 <div>
-                  <i
+                  <!-- <i
                     :style="{color:config[pane_index].pane_head_title_color}"
                     v-if="config[pane_index].maximizable"
                     class="pointer far fa-window-maximize padright025"
-                    @click="$store.dispatch('pane_system/maximize')"
-                  ></i>
+                    @click="$store.dispatch('pane_system/maximize',config[pane_index].comp)"
+                  ></i> -->
                   <i
                     :style="{color:config[pane_index].pane_head_title_color}"
                     v-if="config[pane_index].closable"
@@ -41,7 +41,7 @@
             </div>
           </div>
           <!-- pane body -->
-          <div>
+          <div class="fullheight-percent">
             <div :my_pane_index="pane_index" :is="panes"></div>
           </div>
         </div>
@@ -95,7 +95,10 @@ export default {
   data() {
     return {
       isReady: false,
-      config_copy: undefined
+      config_copy: undefined,
+      comps: {
+        
+      }
     };
   },
   methods: {
