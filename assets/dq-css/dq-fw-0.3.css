@@ -88,6 +88,9 @@ img{
 .spacebetween{
     justify-content: space-between;
 }
+.spacearound{
+    justify-content: space-around;
+}
 .flexend {
   justify-content: flex-end;
 }
