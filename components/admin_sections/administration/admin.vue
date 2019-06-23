@@ -1,5 +1,5 @@
 <template>
-  <div class>
+  <div>
     <div class="flex flexcol margin125">
       <div class="pad050">
         <strong>Administration</strong>

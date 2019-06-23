@@ -41,8 +41,8 @@
             </div>
           </div>
           <!-- pane body -->
-          <div class="fullheight-percent">
-            <div :my_pane_index="pane_index" :is="panes"></div>
+          <div class="fullheight-percent flex flexcol">
+            <div :data="$store.state.pane_system.pane_data_obj[panes]" :my_pane_index="pane_index" :is="panes"></div>
           </div>
         </div>
       </div>
@@ -71,7 +71,7 @@ import Displayallroles from "@/components/admin_sections/administration/roles-li
  * Pages
  */
 import Pages from "@/components/admin_sections/pages/page.vue"; // page list
-// page details and struture
+import PageSelected from "@/components/admin_sections/pages/page-selected/page-selected.vue" // page details and struture
 
 //
 import Dashboard from "@/components/admin_sections/dashboard/dashboard.vue";
@@ -139,6 +139,9 @@ export default {
      * pages
      */
     Pages,
+    PageSelected,
+
+    // 
     Components,
     Collections,
     Messages,
