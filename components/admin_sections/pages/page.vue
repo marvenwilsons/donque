@@ -16,34 +16,26 @@
       <div class="fullheight-percent relative" style="overflow:auto;">
         <div class="absolute fullwidth fullheight-percent">
           <div
-            class="pointer margin050 pad050 flex"
+            class="pointer margin050 pad050 flex dq-page-item-host"
             v-for="(page,p_index) in pages"
             :key="`dq-page-list-${p_index}-${page.name}`"
             :id="`dq-page-${p_index}`"
-            :style="{background: active === `dq-page-${p_index}` || cur_actv == `dq-page-${p_index}` ? hoverBgColor : ''}"
+            :style="setStyle( active === `dq-page-${p_index}` || cur_actv == `dq-page-${p_index}`)"
             @mouseover="active = `dq-page-${p_index}`"
             @mouseleave="cur_actv != `dq-page-${p_index}` && (active = undefined)"
-            @click="cur_actv = `dq-page-${p_index}`,$store.dispatch('pane_system/open',{name: 'pageSelected', index: my_pane_index, data: page, data_index: p_index})"
           >
             <div class="flex1">
               <div>
                 <strong>{{page.name}}</strong>
               </div>
-              <div>last-updated: MM/DD/YY</div>
-            </div>
-            <div class="flex flex1 flexend" style="align-items: center;">
-              <!-- <i
-                class="pad050 dq-page-item fas fa-edit"
-                :id="`dq-page-i-${p_index}`"
-                :style="{background: i_active === `dq-page-i-${p_index}` && cur_actv === `dq-page-${p_index}` ? heverBgColor2 : ''}"
-                @mouseover="i_active = `dq-page-i-${p_index}`"
-              ></i>
-              <i
-                class="pad050 dq-page-item fas fa-redo-alt"
-                :id="`dq-page-ref-${p_index}`"
-                :style="{background: i_active === `dq-page-ref-${p_index}` && cur_actv === `dq-page-${p_index}` ? heverBgColor2 : ''}"
-                @mouseover="i_active = `dq-page-ref-${p_index}`"
-              ></i> -->
+              <small class="flex spacebetween">
+                <span class="padright125">last-updated: MM/DD/YY</span> |
+                <span class="underlinehover flex flex1 flexcenter">sub pages - 8</span> |
+                <span
+                  @click="cur_actv = `dq-page-${p_index}`,$store.dispatch('pane_system/open',{name: 'pageSelected', index: my_pane_index, data: page, data_index: p_index})"
+                  :class="[cur_actv == `dq-page-${p_index}` && 'underline' , 'underlinehover', 'flex' ,'flex1' ,'flexcenter']"
+                >edit</span>
+              </small>
             </div>
           </div>
         </div>
@@ -64,14 +56,39 @@ export default {
       heverBgColor2: this.$store.state.theme.heading_bg_color,
       pages: [
         { name: "home", lastModified: "" },
-        { name: "products", lastModified: "" }
+        { name: "products", lastModified: "" },
+        { name: "services", lastModified: "" },
+        { name: "team", lastModified: "" },
       ]
     };
+  },
+  methods: {
+    setStyle(c) {
+      if (c) {
+        return {
+          background: this.$store.state.theme.notify_tile_body_bg_hover_color,
+          borderLeft: `2px solid ${this.$store.state.theme.heading_bg_color}`,
+          border: "2px solid whitesmoke"
+        };
+      } else {
+        return {
+          background: this.$store.state.theme.notify_tile_body_bg_color,
+          border: "2px solid whitesmoke"
+        };
+      }
+    }
   },
   beforeCreate() {
     this.$store.commit("pane_system/set_pane_config", {
       title: "Page list",
       pane_width: "350px"
+    });
+  },
+  mounted(){
+    this.$store.dispatch("theme/set_class_css_defaults", {
+      class: ["dq-page-item-host"],
+      css_keys: ["transition"],
+      css_values: ["0.2s"]
     });
   }
 };
@@ -80,5 +97,11 @@ export default {
 <style>
 .dq-page-item {
   border-radius: 100%;
+}
+.underlinehover:hover {
+  text-decoration: underline;
+}
+.underline{
+  text-decoration: underline;
 }
 </style>
