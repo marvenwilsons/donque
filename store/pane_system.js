@@ -1,6 +1,7 @@
 export const state = () => ({
     root_selected: undefined,
     pane_index_config_list: [],
+    pane_index_config_vault: {},
     pane_got_close: false,
     pane_index_list: [],
     pane_data_obj: {},
@@ -13,7 +14,7 @@ export const getters = {
     list_state: state => {
         // const host = document.getElementById('dq-main-w')
         // if (host){
-        //     console.log('SHOULD SCROLL')
+        //     // console.log('SHOULD SCROLL')
         //     setTimeout(() => {
         //         host.scrollTo(host.offsetWidth, 0);
         //     },50)
@@ -31,11 +32,22 @@ export const mutations = {
      * this function executes
      */
     pane_reset(state,payload) {
+        // console.log('** PANE RESET')
+
         if (state.pane_index_list[0] != payload){
             state.pane_index_config_list = []
             state.pane_index_list = [`${payload}`]
             state.pane_data_list = []
             state.root = payload
+        }
+        else if (state.pane_index_list.length > 1){
+            for (var i = state.pane_index_list.length - 1; i > 0; i--){
+                state.pane_index_list.splice(i,1)
+                state.pane_index_config_list.splice(i, 1)
+            }
+            
+            state.root = payload
+            state.pane_data_list = []
         }
     },
     /**
@@ -50,26 +62,93 @@ export const mutations = {
         }
     },
     /**
+     * storing the configuration data with comps name as a key
+     * well access later when splicing the pane_config_list
+     * to match the current panes displaying in main window
+     */
+    config_store_vault(state, { compName, index}){
+        // console.log(`   | ==> set key to object - ${compName}`)
+        // console.log(`   | ==> object value is from config list index - ${index}`)
+        state.pane_index_config_vault[compName] = state.pane_index_config_list[index]
+    },
+    config_splice_to_level(state, { compName, startingIndex, numOfComps}) {
+        // console.log('| ==> splice config to sync to index list')
+
+        // remove
+        state.pane_index_config_list.splice(
+            startingIndex, // number, the specified index in the array
+            numOfComps // number, the length of items in an array
+            )
+        
+        // replace
+        if (state.pane_index_config_vault[compName].renderOnce == true){
+            state.pane_index_config_list.splice(
+                numOfComps, // number, the length of items in an array
+                0, // number of items in array that needs to be removed
+                state.pane_index_config_vault[compName] // Object, the value that will be inserted in the array
+            )
+        }
+    },
+    /**
      * pane reset from will execute when a "non last index" pane
      * fire's a pane_push event,
      * it deducts pane starting from the last index to the origin
      * of the pane_push event
      */
-    pane_replace_from(state,{startingIndex, compName, numOfComps, data, data_index}) {
+    pane_replace_from(state,{clickOrigin,startingIndex, compName, numOfComps, data, data_index}) {
+        // vars
+        const num_of_comps_needs_to_be_replaced = state.pane_index_list.length - 1
+        const starting_index_to_splice = clickOrigin + 1
+        const new_component_replacement = compName
+
         /**
          * to avoid re redering the same component twice
          * when the user hit the same option twice
          */
         if (state.pane_index_list[startingIndex] != compName){
-
-            // remove
-            state.pane_index_list.splice(numOfComps, startingIndex)
-            state.pane_index_config_list.splice(numOfComps, startingIndex)
-
-            // replace
-            state.pane_index_list.splice(numOfComps, 0, compName)
+            // console.log('')
+            // console.log('******* Remove > Replace pane system')
+            // console.log(`| ==> Click Origin - ${clickOrigin}`)
+            // console.log(`| ==> Number of comps - ${numOfComps}`)
             
-        } else if (state.pane_index_config_list[startingIndex].renderOnce){
+
+            // remove > index list for each pane
+            state.pane_index_list.splice(
+                    starting_index_to_splice, // number, an index of an item in an array 
+                    num_of_comps_needs_to_be_replaced // number, the length of items in an array
+                )
+            
+
+            // replace > index list
+            state.pane_index_list.splice(
+                    num_of_comps_needs_to_be_replaced, // number, the length of items in an array
+                    0, // number of items in array that needs to be removed
+                    new_component_replacement // string, the value that will be inserted in the array
+                )
+            
+            if(clickOrigin + 1 == numOfComps){
+                state.pane_index_config_list.splice(
+                    starting_index_to_splice, // number, an index of an item in an array 
+                    num_of_comps_needs_to_be_replaced // number, the length of items in an array
+                )
+            }else{
+                // console.log('| ==> config store vault')
+                this.commit('pane_system/config_store_vault', {
+                    compName,
+                    index: starting_index_to_splice
+                })
+
+                setTimeout(() => {
+                    this.commit('pane_system/config_splice_to_level', {
+                        compName,
+                        startingIndex: starting_index_to_splice,
+                        numOfComps: num_of_comps_needs_to_be_replaced
+                    })
+                }, 0);
+            }                        
+        } 
+        else if (state.pane_index_config_list[startingIndex].renderOnce){
+            // console.log('********* RENDER ONCE ')
             /**
              * Occurs when a list is using one component and re used but the data is dynamically
              * different everytime.
@@ -78,10 +157,11 @@ export const mutations = {
             // the index number of the item from the array origin
             state.data_index = data_index
 
-            // by removing
-            state.pane_index_list.splice(numOfComps, startingIndex)
-            state.pane_index_config_list.splice(numOfComps, startingIndex)
+            // removing
+            state.pane_index_list.splice(starting_index_to_splice, num_of_comps_needs_to_be_replaced)
+            state.pane_index_config_list.splice(starting_index_to_splice, num_of_comps_needs_to_be_replaced)
             state.pane_data_list = []
+
 
             // replacing to trigger re render
             // for some reason vue or maybe js wont trigger "re-render" even after
@@ -112,8 +192,8 @@ export const mutations = {
             state.pane_index_list.shift()
             state.pane_index_config_list.shift()
         }else{
-            state.pane_index_list.splice(1, compIndex)
-            state.pane_index_config_list.splice(1, compIndex)
+            state.pane_index_list.splice(compIndex,1)
+            state.pane_index_config_list.splice(compIndex, 1)
         }
 
         state.pane_got_close = true
@@ -162,7 +242,7 @@ export const mutations = {
         // pane head text color
         pane_head_title_color ? final_conf.pane_head_title_color = payload.pane_head_title_color : final_conf.pane_head_title_color = this.state.theme.pane_head_title_color
         // pane width
-        pane_width ? final_conf.pane_width = payload.pane_width : final_conf.pane_width = '100%'
+        pane_width ? final_conf.pane_width = payload.pane_width : final_conf.pane_width = '95%'
         // pane body bg color
         pane_body_bg_color ? final_conf.pane_body_bg_color = payload.pane_body_bg_color : final_conf.pane_body_bg_color = 'transparent'
 
@@ -206,10 +286,12 @@ export const actions = {
        
         /**
          * if the numbers of components displaying in the main window
-         * is only 1,just add one new component to pane index list,
-         * at this point user can only do pane_reset and pane_push
+         * is only 1, add one new component to pane index list, or
+         * if the click origin + 1 is equavalent to number of components
+         * displaying in the main window, add one component.
          */
-        if(n_comps_mw === 1){
+        if (n_comps_mw === 1 || i_c_origin + 1 == n_comps_mw){
+            // console.log('** paneSystem case: num of comps in window is only 1 so add one comp')
             commit('pane_push', {
                 compName: component_name, 
                 data
@@ -223,14 +305,23 @@ export const actions = {
          * deleted or be replaced 
          */
         if (n_comps_mw - 1 != i_c_origin){
-            commit('pane_replace_from', { 
+            // console.log('** paneSystem case: comp next after click origin will be replaced of del')
+            commit('pane_replace_from', {
                 startingIndex: s_i_comp_rep, 
+                clickOrigin: i_c_origin, 
                 compName: component_name, 
                 numOfComps: s_i_comp_rep,
                 data,
                 data_index
             })
         }
+        
+        
+        // console.log(n_comps_mw - 1 != i_c_origin)
+        // console.log(n_comps_mw === 1)
+        // console.log(n_comps_mw - 1)
+        // console.log(i_c_origin)
+        // console.log(component_name)
     },
     close({ commit, state }, context) {
         // return to dashboard
