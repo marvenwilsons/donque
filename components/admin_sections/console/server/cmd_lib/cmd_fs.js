@@ -1,4 +1,4 @@
-const dqfs = require('../../../../../server/sys/core-apps/core-commands/dqfs')
+const dqfs = require('../../../../../server/app_lib/utils/dqfs.js')
 const path = require('path')
 const queryString = require('querystring')
 const fileSystem_starting_path = path.join(__dirname, '../../../../../../public')

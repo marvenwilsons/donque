@@ -67,6 +67,6 @@ module.exports = {
   serverMiddleware: [
     bodyParser.json(),
     '~/server/app_cardinalSystem/index.js',
-    // '~/server/sys/core-apps/i0-shell/server/handler.js'
+    '~/components/admin_sections/console/server/handler.js'
   ]
 }
