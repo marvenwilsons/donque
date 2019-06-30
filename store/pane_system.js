@@ -72,7 +72,9 @@ export const mutations = {
         state.pane_index_config_vault[compName] = state.pane_index_config_list[index]
     },
     config_splice_to_level(state, { compName, startingIndex, numOfComps}) {
-        // console.log('| ==> splice config to sync to index list')
+        console.log('| ==> splice config to sync to index list')
+        console.log(numOfComps)
+        // console.log(startingIndex)
 
         // remove
         state.pane_index_config_list.splice(
@@ -102,10 +104,13 @@ export const mutations = {
         const new_component_replacement = compName
 
         /**
-         * to avoid re redering the same component twice
-         * when the user hit the same option twice
+         * statement = state.pane_index_list[startingIndex] != compName is
+         * to avoid re redering the same component twice when the user hit the same option.
+         * 
+         * Normal render handler
+         * this if statement is for the "NORMAL" remove and replace pane 
          */
-        if (state.pane_index_list[startingIndex] != compName){
+        if (state.pane_index_list[startingIndex] != compName && state.pane_index_config_list[starting_index_to_splice].renderOnce == false){
             // console.log('')
             // console.log('******* Remove > Replace pane system')
             // console.log(`| ==> Click Origin - ${clickOrigin}`)
@@ -146,9 +151,13 @@ export const mutations = {
                     })
                 }, 0);
             }                        
-        } 
-        else if (state.pane_index_config_list[startingIndex].renderOnce){
-            // console.log('********* RENDER ONCE ')
+        }
+        
+        /**
+         * Render once handler
+         * this if statement is for "RENDER ONCE" is true in the pane config
+         */
+        else if (state.pane_index_config_list[starting_index_to_splice].renderOnce){
             /**
              * Occurs when a list is using one component and re used but the data is dynamically
              * different everytime.
@@ -168,7 +177,6 @@ export const mutations = {
             // the component removal, my guess is because the removal code and the
             // insertion code executes at the same time, so I wrap it in a setTimeout func
             // so that the removal will execute first then the insertion will execute next
-            // and my guess is write lol.
             setTimeout(() => {
                 /**
                  * why do I want to re render the same component if I can just pass the data in that component as a prop?
@@ -181,6 +189,7 @@ export const mutations = {
                 })
             }, 0);
         }
+        // end
     },
     /**
      * closes the pane
