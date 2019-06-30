@@ -9,12 +9,15 @@
         :style="{ minWidth: width_handler(config != undefined,config,pane_index), maxWidth: width_handler(config != undefined,config,pane_index), ...$store.state.theme.pane_host_style}"
       >
         <!-- pane -->
-        <div class="fullheight-percent flex flexcol flex1">
+        <div :id="`pane-${pane_index}-${panes}`" class="fullheight-percent flex flexcol flex1">
+          {{ani(`pane-${pane_index}-${panes}`)}}
           <!-- pane head -->
           <div v-if="isReady">
             {{init_head($store.state.pane_system.pane_index_config_list)}}
             <!-- pane head and controls -->
-            <div v-if="config[pane_index]" class="flex fullwidth">
+            <div v-if="config[pane_index]" class="flex fullwidth flexcol">
+              <!-- {{config[pane_index].title}} -->
+              <!-- {{config[pane_index]}} -->
               <div
                 v-if="config[pane_index].head_visibility"
                 :style="{background:config[pane_index].pane_head_bg_color}"
@@ -29,7 +32,7 @@
                     v-if="config[pane_index].maximizable"
                     class="pointer far fa-window-maximize padright025"
                     @click="$store.dispatch('pane_system/maximize',config[pane_index].comp)"
-                  ></i> -->
+                  ></i>-->
                   <i
                     :style="{color:config[pane_index].pane_head_title_color}"
                     v-if="config[pane_index].closable"
@@ -42,7 +45,13 @@
           </div>
           <!-- pane body -->
           <div class="fullheight-percent flex flexcol">
-            <div :data="$store.state.pane_system.pane_data_obj[panes]" :my_pane_index="pane_index" :is="panes"></div>
+            <div
+              :data="$store.state.pane_system.pane_data_obj[panes]"
+              :theme="$store.state.theme"
+              :store="$store.state"
+              :my_pane_index="pane_index"
+              :is="panes"
+            ></div>
           </div>
         </div>
       </div>
@@ -59,19 +68,19 @@ import Addnewapplicationadmin from "@/components/admin_sections/administration/a
 import Addnewdatabaseadmin from "@/components/admin_sections/administration/add-new-db-admin/add_new_db_admin.vue"; // add new database admin form
 import Applicationadminlist from "@/components/admin_sections/administration/app-admin-list/app_admin_list.vue"; // database admin list
 import Currentliveadmins from "@/components/admin_sections/administration/cur-live-admins/cur_live_admins"; // current live admins
-import Databaseadminlist from "@/components/admin_sections/administration/db-admin-list/db_admin_list.vue" // database admin list
-import Currentblockedadmins from "@/components/admin_sections/administration/cur-blocked-admins/cur_blocked_admins.vue"// current blocked admins
-import Lostpasswordrequest from "@/components/admin_sections/administration/lost-pass-req/lost-pass-req.vue" // lost password request list
-import Createnewteam from "@/components/admin_sections/administration/team-create/create-team.vue" // crate team form
-import Displayallteams from "@/components/admin_sections/administration/team-list/team-list.vue" // team list
-import Createcustomroles from "@/components/admin_sections/administration/roles-create/roles-create.vue" // roles create
-import Displayallroles from "@/components/admin_sections/administration/roles-list/roles-list.vue"
+import Databaseadminlist from "@/components/admin_sections/administration/db-admin-list/db_admin_list.vue"; // database admin list
+import Currentblockedadmins from "@/components/admin_sections/administration/cur-blocked-admins/cur_blocked_admins.vue"; // current blocked admins
+import Lostpasswordrequest from "@/components/admin_sections/administration/lost-pass-req/lost-pass-req.vue"; // lost password request list
+import Createnewteam from "@/components/admin_sections/administration/team-create/create-team.vue"; // crate team form
+import Displayallteams from "@/components/admin_sections/administration/team-list/team-list.vue"; // team list
+import Createcustomroles from "@/components/admin_sections/administration/roles-create/roles-create.vue"; // roles create
+import Displayallroles from "@/components/admin_sections/administration/roles-list/roles-list.vue";
 
 /**
  * Pages
  */
 import Pages from "@/components/admin_sections/pages/page.vue"; // page list
-import PageSelected from "@/components/admin_sections/pages/page-selected/page-selected.vue" // page details and struture
+import PageSelected from "@/components/admin_sections/pages/page-selected/page-selected.vue"; // page details and struture
 
 //
 import Dashboard from "@/components/admin_sections/dashboard/dashboard.vue";
@@ -96,9 +105,7 @@ export default {
     return {
       isReady: false,
       config_copy: undefined,
-      comps: {
-        
-      }
+      comps: {}
     };
   },
   methods: {
@@ -115,6 +122,9 @@ export default {
       } else {
         return "300px";
       }
+    },
+    ani(id) {
+      // console.log(id)
     }
   },
   components: {
@@ -141,7 +151,7 @@ export default {
     Pages,
     PageSelected,
 
-    // 
+    //
     Components,
     Collections,
     Messages,
