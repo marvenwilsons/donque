@@ -19,17 +19,20 @@ export default {
     })
   },
   mounted() {
+    // for pane title refeclects the page user selected
     this.$store.commit("pane_system/alter_pane_config", {
       pane_index: this.my_pane_index,
       alter: {
-        title: `${this.data.name} page`
+        title: `${this.data} page`
       }
     });
+
+    // call systemCall to fetch the data of the selected page
   },
   beforeCreate() {
     this.$store.commit("pane_system/set_pane_config", {
       title: " ",
-      pane_width: "950px",
+      pane_width: "95%",
       renderOnce: true,
     });
   }
