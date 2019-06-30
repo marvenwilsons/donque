@@ -1,3 +1,0 @@
-for devs looking at pane system
-Q: Why I didnt use the page and layout feature to achive similar effect
-A: because it so painful to maintain, when I was developing it I have to hold a lot of in my head
