@@ -12,13 +12,13 @@ export const state = () => ({
 export const getters = {
     config_state: state => state.pane_index_config_list,
     list_state: state => {
-        // const host = document.getElementById('dq-main-w')
-        // if (host){
-        //     // console.log('SHOULD SCROLL')
-        //     setTimeout(() => {
-        //         host.scrollTo(host.offsetWidth, 0);
-        //     },50)
-        // }
+        const host = document.getElementById('dq-main-w')
+        if (host){
+            // console.log('SHOULD SCROLL')
+            setTimeout(() => {
+                host.scrollTo(host.offsetWidth, 0);
+            },50)
+        }
         return state.pane_index_list
     },
     close_state: state => state.pane_got_close,

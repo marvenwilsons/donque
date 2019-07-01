@@ -29,7 +29,11 @@ export const actions = {
                         scope1: {},
                         scope2: {
                             insider: {},
-                            insider2: {}
+                            insider2: {
+                                guiness: {
+                                    the_quick_brown_fox_jumps_over: {}
+                                }
+                            }
                         },
                     }
                 },
