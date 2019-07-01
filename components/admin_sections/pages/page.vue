@@ -2,6 +2,7 @@
   <div class="flex1">
     <div class="fullheight-percent relative">
       <!--  -->
+      {{my_pane_index}}
       <div
         v-if="create_route"
         class="flex flexcol absolute fullwidth fullheight-percent"
@@ -33,7 +34,9 @@
       <!--  -->
       <div class="pad125">
         <div class="flex flexcenter">
-          <div class="flex1 padright025"><strong>search:</strong></div>
+          <div class="flex1 padright025">
+            <strong>search:</strong>
+          </div>
           <div class="flex7">
             <input class="pad025 flex fullwidth" type="text" />
           </div>
@@ -144,14 +147,47 @@ export default {
         this.pages = this.data.page;
 
         // altering pane title
-        this.$store.commit("pane_system/alter_pane_config", {
-          pane_index: this.my_pane_index,
-          alter: {
-            title: `${this.data.root} sub route`
+        if (this.my_pane_index > 1) {
+          console.log("hey");
+          let r = [];
+          let z = 0;
+
+          this.$store.state.pane_system.pane_index_config_list.map(
+            (configObject, configIndex) => {
+
+              if (configIndex > 0 && configIndex != this.my_pane_index) {
+                console.log(configObject.title);
+                r.push(configObject.title);
+              }
+
+              if (configIndex == this.my_pane_index) {
+                r.push(this.data.root);
+              }
+            }
+          );
+
+          if(this.my_pane_index > 2){
+            const t = r
+            r.splice(0,this.my_pane_index - 2)
           }
-        });
+
+          console.log(r.join("/"));
+          this.$store.commit("pane_system/alter_pane_config", {
+            pane_index: this.my_pane_index,
+            alter: {
+              title: r.join("/")
+            }
+          });
+        } else {
+          this.$store.commit("pane_system/alter_pane_config", {
+            pane_index: this.my_pane_index,
+            alter: {
+              title: this.data.root
+            }
+          });
+        }
       } else {
-        // after the store is been initialized, but pages section 
+        // after the store is been initialized, but pages section
         // somehow got initialized
         this.pages = this.$store.state.pages.route;
       }
