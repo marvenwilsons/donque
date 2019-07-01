@@ -1,8 +1,12 @@
 <template>
   <div class="flex1">
-    <div class="fullheight-percent relative">
+    <div v-if="data">
+      <div v-if="data.ui === 'page_selected' && ui_index === my_pane_index" >
+        <pageSel :data="$store.state.pane_system.pane_index_config_list[my_pane_index].title"></pageSel>
+      </div>
+    </div>
+    <div v-if="ui === 'page'" class="fullheight-percent relative">
       <!--  -->
-      {{my_pane_index}}
       <div
         v-if="create_route"
         class="flex flexcol absolute fullwidth fullheight-percent"
@@ -33,7 +37,7 @@
       </div>
       <!--  -->
       <div class="pad125">
-        <div class="flex flexcenter">
+        <div class="flex flexcenter padtop125 padbottom125">
           <div class="flex1 padright025">
             <strong>search:</strong>
           </div>
@@ -64,20 +68,22 @@
                 <span class="flex1">
                   <Strong>{{p_index}}</Strong>
                 </span>
+                <!-- click -->
                 <span
                   @click="
                     cur_actv = `dq-page-${p_index}`,
-                    $store.dispatch('pane_system/open',{name: 'pages', index: my_pane_index, data: {page,root: p_index}, data_index: p_index})"
+                    $store.dispatch('pane_system/open',{name: 'pages', index: my_pane_index, data: {page,root: p_index, ui: 'page'}, data_index: p_index})"
                   class="underlinehover flex flexend"
                 >sub pages - {{Object.keys(page).length}}</span>
                 <span class="flex flexend padleft125">refresh</span>
+                <!-- click -->
                 <span
                   @click="
                     cur_actv = `dq-page-${p_index}`,
-                    $store.dispatch('pane_system/open',{name: 'pageSelected', index: my_pane_index, data: p_index, data_index: p_index})
-                    "
+                    $store.dispatch('pane_system/open',{name: 'pages', index: my_pane_index, data: {page,root: p_index, ui:'page_selected'}, data_index: p_index})"
                   :class="[cur_actv == `dq-page-${p_index}` && 'underline' , 'underlinehover', 'flex' ,'padleft125' ,'flexend']"
                 >edit</span>
+                <!--  -->
               </small>
             </div>
           </div>
@@ -89,18 +95,26 @@
 </template>
 
 <script>
+import page_sel from './page-selected/page-selected.vue'
+
 export default {
   props: ["my_pane_index", "data", "theme", "data_index"],
   data() {
     return {
+      ui: 'page',
+      ui_index: undefined,
       create_route: false,
       cur_actv: undefined,
       i_active: undefined,
       active: undefined,
+      cur_root: undefined,
       hoverBgColor: this.$store.state.theme.notify_tile_body_bg_hover_color,
       heverBgColor2: this.$store.state.theme.heading_bg_color,
       pages: {}
     };
+  },
+  components: {
+    pageSel: page_sel
   },
   methods: {
     setStyle(c) {
@@ -145,16 +159,26 @@ export default {
       if (this.data) {
         // assigning data to sub page
         this.pages = this.data.page;
+        
+        this.ui = this.data.ui
+        if(this.data.ui === 'page_selected'){
+          this.ui_index = this.my_pane_index
+          this.$store.commit("pane_system/alter_pane_config", {
+            pane_index: this.my_pane_index,
+            alter: {
+              pane_width: '95%'
+            }
+          });
+        }
 
         // altering pane title
-        if (this.my_pane_index > 1) {
+        if (this.my_pane_index > 0) {
           console.log("hey");
           let r = [];
           let z = 0;
 
           this.$store.state.pane_system.pane_index_config_list.map(
             (configObject, configIndex) => {
-
               if (configIndex > 0 && configIndex != this.my_pane_index) {
                 console.log(configObject.title);
                 r.push(configObject.title);
@@ -166,12 +190,12 @@ export default {
             }
           );
 
-          if(this.my_pane_index > 2){
-            const t = r
-            r.splice(0,this.my_pane_index - 2)
+          if (this.my_pane_index > 2) {
+            const t = r;
+            r.splice(0, this.my_pane_index - 2);
           }
 
-          console.log(r.join("/"));
+          this.cur_root = r.join("/")
           this.$store.commit("pane_system/alter_pane_config", {
             pane_index: this.my_pane_index,
             alter: {
