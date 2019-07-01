@@ -23,8 +23,8 @@
                 :style="{background:config[pane_index].pane_head_bg_color}"
                 class="flex spacebetween fullwidth pad025"
               >
-                <div :style="{ color:config[pane_index].pane_head_title_color}">
-                  <strong>{{config[pane_index].title}}</strong>
+                <div class="fullwidth relative" :style="{ color:config[pane_index].pane_head_title_color}">
+                  <strong style="word-wrap: break-word">{{config[pane_index].title}}</strong>
                 </div>
                 <div>
                   <!-- <i
