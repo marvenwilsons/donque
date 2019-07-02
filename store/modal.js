@@ -11,6 +11,33 @@ export const state = () => ({
     exec_after_msg: []
 })
 
+/**
+ * @api_modal
+ * @param {*} body
+ * @param {*} head
+ * @param {string} config.ui_type
+ * @param {boolean} config.closable
+ * 
+ * @example 
+ * this.$store.commit("modal/set_modal", { 
+ *      head: "", // text you want to appear to modal head 
+ *      body: 'your msg here', 
+ *      config: {  
+ *          ui_type: "msg", // msg, prompt_err, custom
+ *          closable: false } 
+ *      });
+ * 
+ * @copy_to_components
+    this.$store.commit("modal/set_modal", {
+        head: "", 
+        body: "your msg here",
+        config: {
+          ui_type: "msg",
+          closable: false
+        }
+      });
+ */
+
 export const mutations = {
     // when call it will show a spinner into a screen
     set_visibility(state,value) {
