@@ -1,7 +1,7 @@
 <template>
   <div class="flex1">
     <div v-if="data">
-      <div v-if="data.ui === 'page_selected' && ui_index === my_pane_index" >
+      <div v-if="data.ui === 'page_selected' && ui_index === my_pane_index">
         <pageSel :data="$store.state.pane_system.pane_index_config_list[my_pane_index].title"></pageSel>
       </div>
     </div>
@@ -75,14 +75,14 @@
                     $store.dispatch('pane_system/open',{name: 'pages', index: my_pane_index, data: {page,root: p_index, ui: 'page'}, data_index: p_index})"
                   class="underlinehover flex flexend"
                 >sub pages - {{Object.keys(page).length}}</span>
-                <span class="flex flexend padleft125">refresh</span>
+                <span :class="[cur_actv == `dq-page-${p_index}` && 'underline' , 'underlinehover', 'flex' ,'padleft125' ,'flexend']">route settings</span>
                 <!-- click -->
                 <span
                   @click="
                     cur_actv = `dq-page-${p_index}`,
                     $store.dispatch('pane_system/open',{name: 'pages', index: my_pane_index, data: {page,root: p_index, ui:'page_selected'}, data_index: p_index})"
                   :class="[cur_actv == `dq-page-${p_index}` && 'underline' , 'underlinehover', 'flex' ,'padleft125' ,'flexend']"
-                >edit</span>
+                >open</span>
                 <!--  -->
               </small>
             </div>
@@ -95,13 +95,13 @@
 </template>
 
 <script>
-import page_sel from './page-selected/page-selected.vue'
+import page_sel from "./page-selected/page-selected.vue";
 
 export default {
   props: ["my_pane_index", "data", "theme", "data_index"],
   data() {
     return {
-      ui: 'page',
+      ui: "page",
       ui_index: undefined,
       create_route: false,
       cur_actv: undefined,
@@ -159,14 +159,14 @@ export default {
       if (this.data) {
         // assigning data to sub page
         this.pages = this.data.page;
-        
-        this.ui = this.data.ui
-        if(this.data.ui === 'page_selected'){
-          this.ui_index = this.my_pane_index
+
+        this.ui = this.data.ui;
+        if (this.data.ui === "page_selected") {
+          this.ui_index = this.my_pane_index;
           this.$store.commit("pane_system/alter_pane_config", {
             pane_index: this.my_pane_index,
             alter: {
-              pane_width: '95%'
+              pane_width: "95%"
             }
           });
         }
@@ -195,7 +195,7 @@ export default {
             r.splice(0, this.my_pane_index - 2);
           }
 
-          this.cur_root = r.join("/")
+          this.cur_root = r.join("/");
           this.$store.commit("pane_system/alter_pane_config", {
             pane_index: this.my_pane_index,
             alter: {
@@ -216,11 +216,12 @@ export default {
         this.pages = this.$store.state.pages.route;
       }
     } else {
+      
+
       // route is undefined fetching all routes
       console.log("getting routes");
       this.$store.dispatch("pages/get_routes");
 
-      this.$store.state.pages.route;
       // simulating request
       setTimeout(() => {
         this.pages = this.$store.state.pages.route;

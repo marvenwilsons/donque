@@ -1,24 +1,56 @@
+console.log('am i a joke to you?')
 const pageMethods = {}
 pageMethods.createRoute = {
     createRoute({dep,data}){
 
     }
 }
-pageMethods.getRoutes = {
+pageMethods.getAllRoutes = {
+    get prop() {
+        return {
+            funcIsDestructive: false
+        }
+    },
     /**
      * reutrns all of the routes
      * returns an object
      */
-    getRoutes({dep,data}){
+    getAllRoutes({dep,data}){
         console.log('** reading page')
-        return new Promise((resolve,reject) => {
-            resolve({
-                status:true,
-                data:{
-                    content:'test',
-                    promptmessage:null
-                }
+
+        const { db } = dep
+
+        let routes = {}
+
+        return new Promise(async (resolve, reject) => {
+            const dq_appCursor = await db.collection('dq_app').find()
+
+            await dq_appCursor.forEach((doc,err) => {
+                return routes = doc.routes
+            }).then(() => {
+                resolve({
+                    status: true,
+                    data: {
+                        msg: null,
+                        actions: [{
+                            title: null,
+                            contents: routes 
+                        }]
+                    }
+                })
+            }).cath(err => {
+                resolve({
+                    status: false,
+                    data: {
+                        msg: err,
+                        actions: [{
+                            title: 'prompt_err'
+                        }]
+                    }
+                })
             })
+            
+            
         })
     }
 }
@@ -34,8 +66,18 @@ pageMethods.updateRoute = {
 
     }
 }
+
+/**
+ * 
+ */
 pageMethods.updatePage = {
 }
+
+/**
+ * only deletes the route from the routes
+ * object, but the contents that is linked
+ * into this route is still in the database
+ */
 pageMethods.deleteRoute = {
     get prop() {
         return {
@@ -57,6 +99,28 @@ pageMethods.deleteRoute = {
                 }
             })
         })
+    }
+}
+
+/**
+ * only deletes the route contents from the database
+ * but doesnt delete the route
+ */
+pageMethods.deleteRouteContents = {
+
+}
+
+/**
+ * delets the route and the route contents all at once
+ */
+pageMethods.deletePage = {
+    get prop() {
+        return {
+            funcIsDestructive: true
+        }
+    },
+    deletePage(){
+
     }
 }
 

@@ -14,35 +14,36 @@ export const mutations = {
 }
 export const actions = {
     get_routes({commit,state},context){
-        // systemCall
-        setTimeout(() => {
-            commit('set_route',{
-                home: {},
-                products: {
-                    _id: {}
-                },
-                services: {
-                    service1: {},
-                    service2: {},
-                    service3: {
-                        scope: {},
-                        scope1: {},
-                        scope2: {
-                            insider: {},
-                            insider2: {
-                                guiness: {
-                                    the_quick_brown_fox_jumps_over: {}
-                                }
-                            }
-                        },
-                    }
-                },
-                team: {
-                    devs: {},
-                    directors: {}
-                },
-                portfolio: {}
+        this.dispatch('systemCall', {
+            command: "getAllRoutes",
+            section: "pageMethods",
+            username: localStorage.getItem("username"),
+            token: localStorage.getItem("auth"),
+            method: "get"
+        })
+            .then(data => {                
+                if (data.status){
+                    commit('set_route', data.data.actions[0].contents)
+                } else {
+                    this.commit("modal/set_modal", {
+                        head: "Error while fetching all routes",
+                        body: data.data.msg,
+                        config: {
+                            ui_type: "prompt_err",
+                            closable: false
+                        }
+                    });
+                }   
             })
-        }, 100);
+            .catch(err => {
+                this.commit("modal/set_modal", {
+                    head: "Page error",
+                    body: err,
+                    config: {
+                        ui_type: "prompt_err",
+                        closable: false
+                    }
+                });
+            });
     }
 }
