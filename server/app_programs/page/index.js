@@ -126,7 +126,7 @@ pageMethods.createPage = {
 
             if(parent) {
                 if (parent.indexOf('.') != -1) {
-                    rcpath = parent.replace('.', '-')
+                    rcpath = parent.replace('.', '/')
                 } else {
                     rcpath = parent
                 }
@@ -140,7 +140,7 @@ pageMethods.createPage = {
             } else {
                 path = {
                     r: `routes.${parent}.${name}`,
-                    rc: `routeContents.${rcpath.replace('.', '-')}-${name}`
+                    rc: `routeContents.${rcpath.split('.').join('/')}/${name}`
                 }
             }
 
@@ -166,6 +166,7 @@ pageMethods.createPage = {
                     })
 
             // writing to routeContents
+            console.log('path-rc')
             console.log(path.rc)
             db.collection('dq_app').findOneAndUpdate(
                 {},
