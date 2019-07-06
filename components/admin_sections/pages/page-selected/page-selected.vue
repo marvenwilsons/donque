@@ -1,6 +1,10 @@
 <template>
   <div>
-    <div>details here</div>
+    <div>
+      route settings,
+      page,
+      
+    </div>
     {{data}}
   </div>
 </template>

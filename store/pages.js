@@ -6,10 +6,14 @@ export const state = () => ({
     route_contents: {}
 })
 
+export const getters = {
+    routes: state => state.route
+}
+
 export const mutations = {
     set_route(state,data) {
         state.route = data
-        console.log('setting route')
+        // console.log('setting route')
     }
 }
 export const actions = {

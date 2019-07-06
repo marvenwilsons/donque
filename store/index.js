@@ -136,9 +136,15 @@ export const actions = {
 
                     return response
                 }).catch(err => {
-                    console.log(`** [systemCall]-[store] fetch error!`)
-                    alert('there was an error in systemCall store')
-                    console.log(err)
+                    console.log(`** [systemCall]-[store] fetch error!`)                    
+                    this.commit("modal/set_modal", {
+                        head: "SystemCall Error",
+                        body: err,
+                        config: {
+                            ui_type: "err",
+                            closable: false
+                        }
+                    });
                 })
             case 'post' || 'update' || 'delete':
                 console.log(`** [systemCall]-[store] executing ${context.command}`)

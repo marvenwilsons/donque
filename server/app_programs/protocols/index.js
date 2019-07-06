@@ -315,10 +315,10 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                     currentLiveAdmins: [],
                     teams: [],
                     routes: {
-                        "/":{}
+                        "home":{}
                     },
                     routeContents: {
-                        "/": {
+                        "home": {
                             layout: {}, 
                             sections: {}, 
                             data_collection: {}, 

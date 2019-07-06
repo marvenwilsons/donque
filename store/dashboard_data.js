@@ -51,7 +51,14 @@ export const actions = {
                 if (serverData.status) {
                     return serverData.data.actions[0].content;
                 } else {
-                    alert("Error while initializing admins dashboard");
+                    this.$store.commit("modal/set_modal", {
+                        head: "Connection error",
+                        body: "Error while initializing admins dashboard, server resource cannot be reach.",
+                        config: {
+                            ui_type: "msg",
+                            closable: false
+                        }
+                    });
                 }
             });
 
