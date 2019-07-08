@@ -1,7 +1,7 @@
 <template>
-  <div v-if="ready" class="flex1">
-    <div v-if="data">
-      <div v-if="data.ui === 'page_selected' && ui_index === my_pane_index">
+  <div v-if="ready" class="flex1 flex flexcol">
+    <div class="flex1" v-if="data">
+      <div class="fullheight-percent" v-if="data.ui === 'page_selected' && ui_index === my_pane_index">
         <pageSel :data="$store.state.pane_system.pane_index_config_list[my_pane_index].title"></pageSel>
       </div>
     </div>

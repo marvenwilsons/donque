@@ -1,45 +1,34 @@
 <template>
-  <div>
-    <div>
-      route settings,
-      page,
-      
+  <div class="flex flexcol fullheight-percent">
+    <div class="flex1 flex">
+      <div class="borderred fullwidth" :is="comp" ></div>
     </div>
-    {{data}}
+    <div id="dq-sel-page-pane" class="borderred flex">
+      <div :data="data" @click="comp = 'editor'" class="pad050 pointer">Editor</div>
+      <div :data="data" @click="comp = 'rs'" class="pad050 pointer">Route settings</div>
+      <div :data="data" @click="comp = 'props'" class="pad050 pointer">Properties</div>
+    </div>
   </div>
 </template>
 
 <script>
 // import { mapGetters } from "vuex";
+import editor from './editor-view'
+import route_settings from './route-settings-view'
+import properties from './props-view'
 
 export default {
   props: ["data", "my_pane_index"],
-  // data() {
-  //   return {};
-  // },
-  // computed: {
-  //   ...mapGetters({
-  //     data_list: "pane_system/data_list"
-  //   })
-  // },
-  // mounted() {
-  //   // for pane title refeclects the page user selected
-  //   this.$store.commit("pane_system/alter_pane_config", {
-  //     pane_index: this.my_pane_index,
-  //     alter: {
-  //       title: `${this.data} page`
-  //     }
-  //   });
-
-  //   // call systemCall to fetch the data of the selected page
-  // },
-  // beforeCreate() {
-  //   this.$store.commit("pane_system/set_pane_config", {
-  //     title: " ",
-  //     pane_width: "95%",
-  //     renderOnce: true,
-  //   });
-  // }
+  data() {
+    return {
+      comp: 'editor'
+    }
+  },
+  components: {
+    editor,
+    rs: route_settings,
+    props: properties
+  }
 };
 </script>
 
