@@ -20,7 +20,7 @@
     <!--  -->
     <div class="flex flexcol margin125">
       <div class="pad050">
-        <strong>Website general settings</strong>
+        <strong>General settings</strong>
         <!-- <div>admin related settings</div> -->
       </div>
       <div
@@ -38,7 +38,7 @@
     <!--  -->
     <div class="flex flexcol margin125">
       <div class="pad050">
-        <strong>Application security</strong>
+        <strong>Security</strong>
         <!-- <div>admin related settings</div> -->
       </div>
       <div
@@ -54,6 +54,22 @@
     </div>
 
     <!--  -->
+    <div class="flex flexcol margin125">
+      <div class="pad050">
+        <strong>Application</strong>
+        <!-- <div>admin related settings</div> -->
+      </div>
+      <div
+        v-for="(items,item_index) in App"
+        class="pad050 pointer"
+        :key="`admn_st2_p${items}`"
+        :id="`admn_st2_p${items}`"
+        :style="{background: active === `admn_st2_p${item_index}` || cur_actv == `admn_st2_p${item_index}` ? hoverBgColor : ''}"
+        @click="cur_actv = `admn_st2_p${item_index}`,$store.dispatch('pane_system/open',{name: items, index: my_pane_index})"
+        @mouseover="active = `admn_st2_p${item_index}`"
+        @mouseleave="cur_actv != `admn_st2_p${item_index}` && (active = undefined)"
+      >{{items}}</div>
+    </div>
   </div>
 </template>
 
@@ -71,8 +87,8 @@ export default {
         "Change admin access route",
       ],
       Webs: ["Universal font-size", "Favicon", "Site title"],
-      Sec: ["HTTPS settings", "Perm Certifecates"],
-
+      Sec: ["HTTPS settings", "Perm Certifecates", "Update Password","Log History"],
+      App: ["Rename Application", "Export / Import app data", "Delete Application", "Emails"]
     };
   },
   beforeCreate() {
