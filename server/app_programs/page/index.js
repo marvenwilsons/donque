@@ -224,6 +224,28 @@ pageMethods.createPage = {
     }
 }
 
+pageMethods.getPageContents = {
+    get prop() {
+        return {
+            funcIsDestructive: false
+        }
+    },
+    getPageContents({dep,data}) {
+        console.log('testing!!!!!!! getPageContents')
+        console.log(data)
+        return new Promise((resolve,reject) => {
+            return {
+                status: true,
+                data: {
+                    msg: '',
+                    actions: [{}],
+                    contents: 'test'
+                }
+            }
+        })
+    }
+}
+
 /**
  * create a route only no contents
  */

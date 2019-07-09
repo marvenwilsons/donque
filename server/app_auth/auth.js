@@ -10,6 +10,15 @@ module.exports = async ({ dep, selectedCommand, username, password, token, comma
     const validate_user_ex = require('./validate-user-existance')
 
     /**
+     * 
+     */
+    if (command === 'getPageContents' && section === 'pageMethods') {
+        return callback(null, {
+            status: true
+        })
+    }
+
+    /**
      * destruc dep object
      */
     const { userdb, jwt, encrypt, decode } = dep

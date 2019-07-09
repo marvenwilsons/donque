@@ -11,10 +11,9 @@ const Cardinal = async ({ username, password, token, data, command, section, met
     console.log('** Starting CardinalSystem')
     // dependecies
     const registry = require('./registry')
-
     let response = undefined
 
-    if (!command && !section && !token && !data) {
+    if (!command && !section && !token && !data) {        
         /**
          * Only works when 
          */

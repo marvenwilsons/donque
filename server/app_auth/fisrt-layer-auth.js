@@ -20,7 +20,7 @@ module.exports = async ({ ...dbs }, { command }) => {
         .then(() => {
             return liveAdmins.currentLiveAdmins
         })
-    console.log(currentLiveAdmins)
+    // console.log(currentLiveAdmins)
     return new Promise((resolve, reject) => {
         if (currentLiveAdmins.length === 0 && command != 'adminlogin') {
             resolve(false)

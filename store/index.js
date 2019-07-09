@@ -92,19 +92,34 @@ export const actions = {
      */
     nuxtServerInit (store,context) {
         console.log('** [NuxtServerInit] fetching server resource')
-        return this.$axios.$get('/dqapp/_dq', {
-            params: {
+
+        let param = {}
+
+        if(context.route.path == '/admin'){
+            param = {
                 content: 'init',
-                path: context.route.matched[0].name
+                path: context.route.path
             }
-        })
+        } else {
+            param = {
+                username: undefined,
+                token: undefined,
+                section: 'pageMethods',
+                command: 'getPageContents',
+                data: {
+                    path: context.route.path
+                }
+            }
+        }
+        
+        return this.$axios.$get('/dqapp/_dq', {params: param})
             .then(serverData => {
                 // store to state
                 console.log('** [NuxtServerInit] server resource received')
                 store.commit('setAppData', serverData)
 
                 console.log('** SERVER DATA')
-                console.log(serverData)
+                // console.log(serverData)
             })
             .catch(e => {
                 console.log('err')
