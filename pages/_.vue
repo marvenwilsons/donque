@@ -25,10 +25,11 @@ export default {
     console.log("** _.vue layout");
     if (context.route.path === "/admin") {
       return "admin";
+    } else if(context.store.state.current_page != undefined) {
+      return context.store.state.current_page.layout
     } else {
-      return "default";
+      context.store.commit('set404',true)
     }
-    // return this.layou
   },
   validate({ query, params, store }) {
     // validate if params
@@ -185,8 +186,13 @@ export default {
     // else if auth server admin page
     // check if token exist in localstorage if it does serve the admin page.
     // if admin page is renamed the app needs to be restarted
-    else if (this.auth) {
+    else if (this.auth && this.$store.state.current_page == undefined) {
+      console.log('admin portal')
       return (this.view = "admin_portal");
+    } 
+    else if (this.$store.state.current_page) {
+      console.log('public portal')
+      return (this.view = "public_portal")
     }
   }
 };

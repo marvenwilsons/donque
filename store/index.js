@@ -5,7 +5,9 @@ export const state = () => ({
     messages: undefined,
     resources: undefined,
     actionPointer: undefined,
-    fromServer: false
+    fromServer: false,
+    current_page: undefined,
+    is404: false,
 })
 
 export const getters = {
@@ -27,6 +29,12 @@ export const mutations = {
         console.log('** setting app data')
         state.actions = serverData.data.actions
         state.app = serverData
+        
+        //
+        state.current_page = serverData.data.public
+    },
+    set404(state,val) {
+        state.is404 = val
     },
     systemCallMutation(state,payloadData){
         console.log('** systemCall mutation')

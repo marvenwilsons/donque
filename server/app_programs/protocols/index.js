@@ -319,7 +319,7 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                     },
                     routeContents: {
                         "home": {
-                            layout: {}, 
+                            layout: 'default', 
                             sections: {}, 
                             data_collection: {}, 
 

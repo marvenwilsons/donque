@@ -173,7 +173,7 @@ pageMethods.createPage = {
                 {
                     $set: {
                         [`${path.rc}`] : {
-                            layout: {},
+                            layout: 'default',
                             sections: {},
                             data_collection: {},
 
@@ -250,9 +250,6 @@ pageMethods.getPageContents = {
 
 
         return new Promise( async (resolve,reject) => {
-            console.log('the path')
-            console.log(path)
-
             const content = await db.collection('dq_app').findOne({
                 [path] : {$exists: true}
             }).then(data => {
@@ -268,13 +265,12 @@ pageMethods.getPageContents = {
             
             //
             if (content[path]){
-                console.log(content[path])
                 return resolve({
                     status: true,
                     data: {
                         msg: null,
                         actions: [{}],
-                        contents: {
+                        public: {
                             layout: content[path].layout,
                             sections: content[path].sections
                         }
