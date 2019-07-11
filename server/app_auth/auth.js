@@ -10,13 +10,14 @@ module.exports = async ({ dep, selectedCommand, username, password, token, comma
     const validate_user_ex = require('./validate-user-existance')
 
     /**
-     * 
+     * for function access without database access
+     * code here
      */
-    if (command === 'getPageContents' && section === 'pageMethods') {
-        return callback(null, {
-            status: true
-        })
-    }
+    // if (command === 'getPageContents' && section === 'pageMethods') {
+    //     return callback(null, {
+    //         status: true
+    //     })
+    // }
 
     /**
      * destruc dep object
@@ -116,6 +117,12 @@ module.exports = async ({ dep, selectedCommand, username, password, token, comma
                 }
             }else if(user_does_ex.validated && user_does_ex.accessType == 'full') {
                 console.log('   [Auth] access type is full')
+                 if (command === 'getPageContents' && section === 'pageMethods') {
+                    return callback(null, {
+                        status: true,
+                        data: user_does_ex.data
+                    })
+                }
 
                 /**
                  * Validate token

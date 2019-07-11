@@ -118,7 +118,6 @@ export const actions = {
                 console.log('** [NuxtServerInit] server resource received')
                 store.commit('setAppData', serverData)
 
-                console.log('** SERVER DATA')
                 // console.log(serverData)
             })
             .catch(e => {

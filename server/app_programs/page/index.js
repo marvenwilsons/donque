@@ -187,7 +187,7 @@ pageMethods.createPage = {
                                 isLokced: false,
                                 password: "",
                                 allowedAdminsToWrite: [],
-                                access_type: '',
+                                access_type: 'public',
                                 is_under_maintenance: ''
                             }
                         }
@@ -231,17 +231,67 @@ pageMethods.getPageContents = {
         }
     },
     getPageContents({dep,data}) {
-        console.log('testing!!!!!!! getPageContents')
-        console.log(data)
-        return new Promise((resolve,reject) => {
-            return {
-                status: true,
-                data: {
-                    msg: '',
-                    actions: [{}],
-                    contents: 'test'
+        console.log('** [getPageContents]')
+        
+        const { db } = dep
+        
+        // path mutations
+        if(typeof data != 'object'){
+            data = JSON.parse(data)
+        }
+
+        let { path } = data
+        path === '/' && (path = '/home')
+        // construct access string
+        path = path.split('/')
+        path.shift()
+        path = path.join('/')
+        path = `routeContents.${path}`
+
+
+        return new Promise( async (resolve,reject) => {
+            console.log('the path')
+            console.log(path)
+
+            const content = await db.collection('dq_app').findOne({
+                [path] : {$exists: true}
+            }).then(data => {
+                if (data !== null){
+                    return data.routeContents
+                }else {
+                    return false
                 }
+            })
+
+            // path mutation
+            path = path.replace('routeContents.','')
+            
+            //
+            if (content[path]){
+                console.log(content[path])
+                return resolve({
+                    status: true,
+                    data: {
+                        msg: null,
+                        actions: [{}],
+                        contents: {
+                            layout: content[path].layout,
+                            sections: content[path].sections
+                        }
+                    }
+                })
+            }else {
+                reject({
+                    status: false,
+                    data: {
+                        statusCode: 404,
+                        msg: `Page ${path} not found`,
+                        actions: [{}]
+                    }
+                })
             }
+
+            
         })
     }
 }

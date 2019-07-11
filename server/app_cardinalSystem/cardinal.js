@@ -180,6 +180,7 @@ const Cardinal = async ({ username, password, token, data, command, section, met
 
             console.log(`   [CardinalSystem] Entering ${section}`)
             console.log(`   [CardinalSystem] Executing ${command}`)
+            console.log(Object.keys(param.dep))
             const r = await selectedCommand[command](param)
                 .then(async data => {
                     // @cardinal: refresh token

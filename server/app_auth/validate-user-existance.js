@@ -20,12 +20,20 @@ module.exports = async ({ ...dbs }, { username, command }) => {
                     db
                 }
             })
-
-
         }).catch(err => {
-            console.log(`   [Auth] User validation fail for ${username}`)
-            console.log(err)
-            reject(`Fail on executing ${command} because username passed is ${username}`)
+
+            if (command === 'getPageContents'){
+                resolve({
+                    validated: true,
+                    accessType: 'full',
+                    data: {
+                        db
+                    }
+                })
+            }else {
+                console.log(`   [Auth] User validation fail for ${username}`)
+                reject(`Fail on executing ${command} because username passed is ${username}`)
+            }
         })
     })
 }
