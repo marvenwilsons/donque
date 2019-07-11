@@ -22,7 +22,7 @@ export default {
     };
   },
   layout: context => {
-    console.log("********* layout");
+    console.log("** _.vue layout");
     if (context.route.path === "/admin") {
       return "admin";
     } else {
@@ -32,8 +32,9 @@ export default {
   },
   validate({ query, params, store }) {
     // validate if params
-    console.log(params);
-    console.log(query);
+    console.log('** _.vue validating route')
+    // console.log(params);
+    // console.log(query);
 
     return true;
   },
