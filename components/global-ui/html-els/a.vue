@@ -1,5 +1,7 @@
 <template>
-    <a href=""></a>
+    <a href="">
+        <slot></slot>
+    </a>
 </template>
 
 <script>

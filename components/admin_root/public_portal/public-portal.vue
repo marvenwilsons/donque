@@ -1,16 +1,26 @@
 <template>
-    <div>this is public portal</div>
+  <div>
+    <section v-for="(secs,secs_index) in data" :key="`sec-${secs_index}`">
+      <div 
+      :is="el['tag']" 
+      v-for="(el,el_i) in secs['els']"
+      :key="`${secs_index}-${el_i}`"
+      
+      :els="el.els"
+      :style="el.inlineStyle"
+      :class="el.classList"
+      >{{el.innerText}} </div>
+    </section>
+  </div>
 </template>
 
 <script>
-import html_p   from '@/components/global-ui/html-els/p.vue'
-import html_div from '@/components/global-ui/html-els/div.vue'
-
 export default {
-    layout: 'default'
-}
+  layout: "default",
+  name: "public_portal",
+  props: ["data"],
+};
 </script>
 
 <style>
-
 </style>

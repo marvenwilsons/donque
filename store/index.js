@@ -1,3 +1,15 @@
+const gots = ({ tag, name, role, inlineStyle, innerText, classList, els}) => {
+    return {
+        tag: tag ? tag : 'html_div',
+        name,
+        role,
+        inlineStyle: inlineStyle ? inlineStyle : {},
+        innerText,
+        classList: classList ? classList : [],
+        els: els ? els : []
+    }
+}
+
 export const state = () => ({
     app: undefined, // add data use for initialing the app admin area
     admin: undefined, // data for the current log admin, used for inializing the admin dashboard
@@ -8,6 +20,56 @@ export const state = () => ({
     fromServer: false,
     current_page: undefined,
     is404: false,
+
+
+    // sample data for page
+    root: [
+        // first section
+        {
+            els: [
+                {
+                    // gots here
+                    tag: 'html_div',
+                    innerText: 'hello world',
+                    els: [
+                        {
+                            inlineStyle: {},
+                            tag: 'html_div',
+                            innerText: 'I am a child of hello world',
+                            els: [
+                                {
+                                    tag: 'html_h1',
+                                    innerText: 'I am a child of hello world 2',
+                                    els: [
+                                        {
+                                            tag: 'html_div',
+                                            innerText: 'I am a child of hello world 3',
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                },
+                // {
+                //     // gots here
+                //     inlineStyle: {},
+                //     innerText: 'this is section',
+                //     tag: 'html_div'
+                // }
+            ]
+        },
+        // second section
+        // gots({
+        //     tag:'html_span',
+        //     innerText: 'this is html span',
+        //     els: [
+        //         gots({})
+        //     ]
+        // })
+        // third section
+        // {}
+    ]
 })
 
 export const getters = {
@@ -32,6 +94,7 @@ export const mutations = {
         
         //
         state.current_page = serverData.data.public
+        // state.current_page.sections = []
     },
     set404(state,val) {
         state.is404 = val
