@@ -271,6 +271,16 @@ img {
   margin: calc(var(--fontSize) * 1.25);
 }
 
+.marginleft025 {
+  margin-left: calc(var(--fontSize) * 0.25);
+}
+.marginleft050 {
+  margin-left: calc(var(--fontSize) * 0.25);
+}
+.marginleft125 {
+  margin-left: calc(var(--fontSize) * 0.25);
+}
+
 /* button reset */
 .buttonreset {
   display: inline-block;

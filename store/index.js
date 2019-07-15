@@ -6,7 +6,16 @@ const gots = ({ tag, name, role, inlineStyle, innerText, classList, els}) => {
         inlineStyle: inlineStyle ? inlineStyle : {},
         innerText,
         classList: classList ? classList : [],
-        els: els ? els : []
+        els: els ? els : [],
+        uid: ((length) => {
+            var result = '';
+            var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            var charactersLength = characters.length;
+            for (var i = 0; i < length; i++) {
+                result += characters.charAt(Math.floor(Math.random() * charactersLength));
+            }
+            return result;
+        })(15)
     }
 }
 
@@ -27,46 +36,52 @@ export const state = () => ({
         // first section
         {
             els: [
-                {
-                    // gots here
+                gots({
                     tag: 'html_div',
                     innerText: 'hello world',
                     els: [
-                        {
-                            inlineStyle: {},
-                            tag: 'html_div',
+                        gots({
+                            innerText: 'hello world',
+                            els: [
+                                gots({
+                                    innerText: 'I am a child of hello world',
+                                    tag: 'html_h1',
+                                    els: [
+                                        gots({
+                                            tag: 'html_main',
+                                            innerText: 'I am a child of hello world 2',
+                                            els: [
+                                                gots({
+                                                    innerText: 'I am a child of hello world 3',
+                                                })
+                                            ]
+                                        })
+                                    ]
+                                }),
+                                gots({})
+                            ]
+                        }),
+                        gots({}),
+                        gots({
                             innerText: 'I am a child of hello world',
                             els: [
-                                {
-                                    tag: 'html_h1',
-                                    innerText: 'I am a child of hello world 2',
-                                    els: [
-                                        {
-                                            tag: 'html_div',
-                                            innerText: 'I am a child of hello world 3',
-                                        }
-                                    ]
-                                }
+                                gots({})
                             ]
-                        }
+                        })
                     ],
-                },
-                // {
-                //     // gots here
-                //     inlineStyle: {},
-                //     innerText: 'this is section',
-                //     tag: 'html_div'
-                // }
+                }),
+                gots({}),
+                gots({}),
             ]
         },
         // second section
-        // gots({
-        //     tag:'html_span',
-        //     innerText: 'this is html span',
-        //     els: [
-        //         gots({})
-        //     ]
-        // })
+        gots({
+            tag:'html_span',
+            innerText: 'this is html span',
+            els: [
+                gots({})
+            ]
+        })
         // third section
         // {}
     ]

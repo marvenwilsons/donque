@@ -1,7 +1,7 @@
 <template>
   <div class="flex flexcol fullheight-percent">
     <div class="flex1 flex">
-      <div class="borderred fullwidth" :is="comp" ></div>
+      <div class="fullwidth" :is="comp" ></div>
     </div>
     <div id="dq-sel-page-pane" class="borderred flex">
       <div :data="data" @click="comp = 'editor'" class="pad050 pointer">Editor</div>

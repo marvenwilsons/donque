@@ -1,5 +1,5 @@
 <template>
-  <div :is="view"></div>
+  <div :data="$store.state.root" :is="view"></div>
 </template>
 
 <script>
@@ -27,6 +27,8 @@ export default {
       return "admin";
     } else if(context.store.state.current_page != undefined) {
       return context.store.state.current_page.layout
+    } else if(context.route.path === '/dqlogin') {
+      return 'empty'
     } else {
       context.store.commit('set404',true)
     }
