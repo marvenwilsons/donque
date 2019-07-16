@@ -3,7 +3,7 @@
     <!-- <iframe class="borderred fullwidth fullheight-percent" src="https://www6.gogoanime.io/lord-el-melloi-ii-sei-no-jikenbo-rail-zeppelin-grace-note-episode-1" frameborder="0"></iframe> -->
     <div class="flex3 flex flexcol">
       <div id="dq-page-editor-area" class="pad125 flex1 relative flexcol fullwidth">
-        <div class=" " v-for="sections in $store.state.root">
+        <div v-for="(sections,s_i) in $store.state.root" :key="`seccc-${s_i}`">
           <div class="flex">
             <div class="dq-strvw-el">
               <div class="padleft025 padright025 marginright025 pointer">section</div>

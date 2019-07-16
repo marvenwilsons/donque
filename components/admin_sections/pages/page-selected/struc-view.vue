@@ -12,12 +12,13 @@
             v-if="opn_opts.includes(el.uid)"
             class="flex padleft125 relative"
           >
-            <div class="pad025 dq-page-el-opt-bx absolute flex">
-              <div class="flex flexcol">
+            <div class="pad125  dq-page-el-opt-bx absolute flex">
+              <div class=" padright050 flex flexcol">
                 <div @click="view = 'dddesc'">Desc</div>
                 <div @click="view = 'addChild'" >AddChild</div>
                 <div @click="view = 'classList'">ClassList</div>
                 <div @click="view = 'properties'">Properties</div>
+                <div>Style</div>
                 <div>Cut</div>
                 <div @click="view = 'dddel'">Delete</div>
               </div>
