@@ -37,6 +37,10 @@ export const state = () => ({
     modal_body_style: undefined,
     modal_button_style: undefined,
 
+    //pages
+    page_editor_tile_opt_addChild_tiles: undefined,
+    "page_editor_tile_opt_addChild_tiles_hover_&_active": undefined,
+
     // sys, should not be access outside store
     _onMouseleave: [],
     _currentActiveIds: [],
@@ -70,6 +74,8 @@ export const mutations = {
         state.modal_head_close_btn_style = theme_content.modal_head_close_btn_style
         state.modal_head_style = theme_content.modal_head_style
         state.modal_button_style = theme_content.modal_button_style
+        state.page_editor_tile_opt_addChild_tiles = theme_content.page_editor_tile_opt_addChild_tiles
+        state['page_editor_tile_opt_addChild_tiles_hover_&_active'] = theme_content['page_editor_tile_opt_addChild_tiles_hover_&_active']
     },
     __load_onMouseLeave(state,context) {
         state._onMouseleave.push(context)

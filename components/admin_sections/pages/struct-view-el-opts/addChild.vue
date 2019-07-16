@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :style="{color:theme['page_editor_tile_opt_addChild_tiles'].color}">
     <strong>Common HTML</strong>
     <span>
       <strike>(can be nested)</strike>
@@ -7,7 +7,7 @@
     <div style="width:350px" class="flex relative flexwrap padbottom125">
       <div
         @click="selected = el, cur_actv = `cmn-html-${el}`"
-        :style="{background: active === `cmn-html-${el}` || cur_actv == `cmn-html-${el}` ? hoverBgColor : ''}"
+        :style="setStyle(active === `cmn-html-${el}` || cur_actv == `cmn-html-${el}`)"
         @mouseover="active = `cmn-html-${el}`"
         @mouseleave="cur_actv != `cmn-html-${el}` && (active = undefined)"
         class="dq-el-ac flex flexcenter pad025 margin025 pointer"
@@ -22,7 +22,7 @@
     <div style="width:350px" class="flex relative flexwrap padbottom125">
       <div
         @click="selected = el, cur_actv = `ractv-html${el}`"
-        :style="{background: active === `ractv-html${el}` || cur_actv == `ractv-html${el}` ? hoverBgColor : ''}"
+        :style="setStyle(active === `ractv-html${el}` || cur_actv == `ractv-html${el}`)"
         @mouseover="active = `ractv-html${el}`"
         @mouseleave="cur_actv != `ractv-html${el}` && (active = undefined)"
         class="dq-el-ac flex flexcenter pad025 margin025 pointer"
@@ -34,7 +34,7 @@
     <div style="width:350px" class="flex relative flexwrap padbottom125">
       <div
         @click="selected = el, cur_actv = `html-headings-${el}`"
-        :style="{background: active === `html-headings-${el}` || cur_actv == `html-headings-${el}` ? hoverBgColor : ''}"
+        :style="setStyle(active === `html-headings-${el}` || cur_actv == `html-headings-${el}`)"
         @mouseover="active = `html-headings-${el}`"
         @mouseleave="cur_actv != `html-headings-${el}` && (active = undefined)"
         class="dq-el-ac flex flexcenter pad025 margin025 pointer"
@@ -49,7 +49,7 @@
     <div style="width:350px" class="flex relative flexwrap">
       <div
         @click="selected = el, cur_actv = `dq-opt-bx-plgins-${el}`"
-        :style="{background: active === `dq-opt-bx-plgins-${el}` || cur_actv == `dq-opt-bx-plgins-${el}` ? hoverBgColor : ''}"
+        :style="setStyle(active === `dq-opt-bx-plgins-${el}` || cur_actv == `dq-opt-bx-plgins-${el}`)"
         @mouseover="active = `dq-opt-bx-plgins-${el}`"
         @mouseleave="cur_actv != `dq-opt-bx-plgins-${el}` && (active = undefined)"
         class="dq-el-ac flex flexcenter pad025 margin025 pointer"
@@ -59,8 +59,15 @@
     </div>
 
     <div v-if="selected" class="padtop125 flex flexend flexcenter">
-      <span class="padright050">You selected <strong>{{selected}}</strong> </span>
-      <span @click="addElemento(selected)" class="padleft050 padright050 padtop025 padbottom025 pointer">Add Element</span>
+      <span class="padright050">
+        You selected
+        <strong>{{selected}}</strong>
+      </span>
+      <span
+        :style="{...theme['page_editor_tile_opt_addChild_tiles_hover_&_active']}"
+        @click="addElemento(selected)"
+        class="padleft050 padright050 padtop025 padbottom025 pointer"
+      >Add Element</span>
     </div>
   </div>
 </template>
@@ -99,9 +106,23 @@ export default {
     };
   },
   methods: {
-      addElemento(s){
-          console.log(s)
+    addElemento(s) {
+      console.log(s);
+    },
+    setStyle(arg) {
+      if (arg) {
+        return this.theme["page_editor_tile_opt_addChild_tiles_hover_&_active"];
+      } else {
+        return this.theme.page_editor_tile_opt_addChild_tiles;
       }
+    }
+  },
+  mounted() {
+    this.$store.dispatch("theme/set_class_css_defaults", {
+      class: ["dq-el-ac"],
+      css_keys: ["transition"],
+      css_values: ["0.2s"]
+    });
   }
 };
 </script>
