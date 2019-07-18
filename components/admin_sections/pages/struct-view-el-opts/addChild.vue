@@ -100,13 +100,15 @@ export default {
         "listify",
         "collections-free",
         "simple-slider",
-        "simple-tab"
+        "simple-tab",
+        "file-upload"
       ],
       els4: ["button", "img", "audio", "video"]
     };
   },
   methods: {
     addElemento(s) {
+      // call systemCall
       console.log(s);
     },
     setStyle(arg) {

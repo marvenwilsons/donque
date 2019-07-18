@@ -22,10 +22,30 @@
         "color": "#4a6976"
     },
 
+    "global": {
+        "primary_text_color": "#2d4247",
+        "secondary_text_color": "#4a6976",
+
+        "primary_bg_color":"#84a4b2",
+        "secondary_bg_color":"#e9eff3",
+
+        "border_color": "rgba(128, 128, 128, 0.432)",
+
+        "selection1": {
+            "hover_bg_color" : "#2d4247",
+            "active_text_color": "white"
+        },
+
+        "selection2" : {
+            "hover_bg_color": "#e9eff3",
+            "active_text_color": "#2d4247"
+        }
+    },
+
     "page_editor_tile_opt_addChild_tiles": {
-        "color": "#4a6976",
+        "color": "#2d4247",
         "borderRadius":"3px",
-        "border": "1px solid #4a6976"
+        "border": "1px solid #2d4247"
     },
     "page_editor_tile_opt_addChild_tiles_hover_&_active": {
         "background": "#84a4b2",

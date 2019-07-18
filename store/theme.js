@@ -41,6 +41,9 @@ export const state = () => ({
     page_editor_tile_opt_addChild_tiles: undefined,
     "page_editor_tile_opt_addChild_tiles_hover_&_active": undefined,
 
+    // global
+    global : undefined,
+
     // sys, should not be access outside store
     _onMouseleave: [],
     _currentActiveIds: [],
@@ -76,6 +79,7 @@ export const mutations = {
         state.modal_button_style = theme_content.modal_button_style
         state.page_editor_tile_opt_addChild_tiles = theme_content.page_editor_tile_opt_addChild_tiles
         state['page_editor_tile_opt_addChild_tiles_hover_&_active'] = theme_content['page_editor_tile_opt_addChild_tiles_hover_&_active']
+        state.global = theme_content.global
     },
     __load_onMouseLeave(state,context) {
         state._onMouseleave.push(context)

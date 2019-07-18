@@ -34,7 +34,7 @@ export const state = () => ({
     // sample data for page
     root: [
         // first section
-        {
+        gots({
             els: [
                 gots({
                     tag: 'html_div',
@@ -73,7 +73,7 @@ export const state = () => ({
                 gots({}),
                 gots({}),
             ]
-        },
+        }),
         // second section
         gots({
             tag:'html_span',

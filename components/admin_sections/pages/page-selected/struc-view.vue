@@ -1,30 +1,56 @@
 <template>
   <div>
-    <div class="flex" v-for="(el,el_i) in data.els" :key="`el-${el_i}`">
-      <div class="dq-strvw-el padright025 pointer">
-        <div @click="openOpt(el.uid,mode, 1)" class="pointer">
-          <div>
-            <i class="fas fa-caret-right"></i>
+    <div
+      :style="{color:$store.state.theme.global.secondary_text_color}"
+      class="flex"
+      v-for="(el,el_i) in data.els"
+      :key="`el-${el_i}`"
+    >
+      <div class="dq-strvw-el">
+        <div
+          :style="{background:$store.state.theme.global.secondary_bg_color}"
+          @click="openOpt(el.uid,mode, 1)"
+        >
+          <div class="flex spacebetween flexcenter">
             {{trimTitle(el.tag)}}
+            <i class="fas fa-caret-right"></i>
           </div>
           <div
             @click="openOpt(el.uid,mode, 0)"
             v-if="opn_opts.includes(el.uid)"
             class="flex padleft125 relative"
           >
-            <div class="pad125  dq-page-el-opt-bx absolute flex">
-              <div class=" padright050 flex flexcol">
-                <div @click="view = 'dddesc'">Desc</div>
-                <div @click="view = 'addChild'" >AddChild</div>
-                <div @click="view = 'classList'">ClassList</div>
-                <div @click="view = 'properties'">Properties</div>
-                <div>Style</div>
-                <div>Cut</div>
-                <div @click="view = 'dddel'">Delete</div>
+            <div class="dq-page-el-opt-bx absolute flex relative">
+              <div
+                :style="{
+                  boxShadow:`0 0 5px ${$store.state.theme.global.secondary_bg_color}`,
+                  border: `1px solid ${$store.state.theme.global.border_color}`
+                  }"
+                class="pad050 flex flexcol"
+              >
+                <div
+                  @mouseover="active = `optlpp-html${d.text}`"
+                  @mouseleave="cur_actv != `optlpp-html${d.text}` && (active = undefined)"
+                  :style="setStyle(active === `optlpp-html${d.text}` || cur_actv == `optlpp-html${d.text}`)"
+                  @click="view = d.view,  cur_actv = `optlpp-html${d.text}`"
+                  v-for="d in opts"
+                  class="pad025"
+                  :key="`ihga-${d.text}-aw`"
+                >{{d.text}}</div>
+                <div class="pad025">Cut</div>
+                <div class="pad025">Paste</div>
               </div>
-              <div class="padleft050">
-                <div class=" margin025 fullheight-percent">
-                  <div class="fullheight-percent" :data="el" :is="view" ></div>
+              <div
+                v-if="view"
+                :style="{
+                  boxShadow:`0 0 5px ${$store.state.theme.global.secondary_bg_color}`,
+                  left:'86px',
+                  border: `1px solid ${$store.state.theme.global.border_color}`,
+                  background:'white'}"
+                class="pad050 absolute dq-page-el-opt-bx-pu"
+              >
+                <div class="margin025 fullheight-percent">
+                  <div class="fullheight-percent" :data="el" :is="view"></div>
                 </div>
               </div>
             </div>
@@ -37,11 +63,12 @@
 </template>
 
 <script>
-import addChild from '../struct-view-el-opts/addChild'
-import classList from '../struct-view-el-opts/classList'
-import dddel from '../struct-view-el-opts/delete'
-import dddesc from '../struct-view-el-opts/desc'
-import properties from '../struct-view-el-opts/properties'
+import addChild from "../struct-view-el-opts/addChild";
+import classList from "../struct-view-el-opts/classList";
+import dddel from "../struct-view-el-opts/delete";
+import dddesc from "../struct-view-el-opts/desc";
+import properties from "../struct-view-el-opts/properties";
+import ils from "../struct-view-el-opts/inlineStyle";
 
 export default {
   props: ["data"],
@@ -53,7 +80,35 @@ export default {
       opn_opts: [],
       mode: true,
       gg: [],
-      view: 'dddesc'
+      view: undefined,
+      active: undefined,
+      cur_actv: undefined,
+      opts: [
+        {
+          text: "Desc",
+          view: "dddesc"
+        },
+        {
+          text: "AddChild",
+          view: "addChild"
+        },
+        {
+          text: "ClassList",
+          view: "classList"
+        },
+        {
+          text: "properties",
+          view: "properties"
+        },
+        {
+          text: "Delete",
+          view: "dddel"
+        },
+        {
+          text: "Inline Style",
+          view: "ils"
+        }
+      ]
     };
   },
   components: {
@@ -61,7 +116,8 @@ export default {
     classList,
     dddel,
     dddesc,
-    properties
+    properties,
+    ils
   },
   methods: {
     trimTitle(t) {
@@ -69,6 +125,16 @@ export default {
         return t.split("_").pop();
       } else {
         return t;
+      }
+    },
+    setStyle(i){
+      if(i){
+        return {
+          background: this.$store.state.theme.global.selection2.hover_bg_color,
+          color: this.$store.state.theme.global.selection2.active_text_color
+        }
+      }else {
+
       }
     },
     openOpt(uid, mode, c) {
@@ -107,11 +173,9 @@ export default {
 <style>
 .dq-strvw-el {
   border-left: 1px solid rgba(128, 128, 128, 0.432);
-  color: black;
   min-width: 40px;
 }
 .dq-strvw-el > div {
-  background: skyblue;
   padding: calc(var(--fontSize) * 0.25);
   min-width: 60px;
   border-radius: 2px;
@@ -122,10 +186,13 @@ export default {
   left: 60px;
   z-index: 900;
   background: white;
-  border: 1px solid rgba(128, 128, 128, 0.432);
+  /* border: 1px solid rgba(128, 128, 128, 0.432); */
   min-width: 100px;
   border-radius: 2px;
-  box-shadow: 0 0 5px rgba(128, 128, 128, 0.432);
+  /* box-shadow: 0 0 5px rgba(128, 128, 128, 0.432); */
   top: -23px;
+}
+.dq-page-el-opt-bx-pu {
+  z-index: 900;
 }
 </style>

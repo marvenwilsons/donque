@@ -1,13 +1,13 @@
 <template>
   <div id="dq-boxmodel" class="flex flexcenter relative">
     <div id="dq-bxmdl-margin" class="fullwidth fullheight-percent absolute">
-      <small>margin</small>
+      <small class="dq-bxmdl-lbl" >margin</small>
     </div>
     <div id="dq-bxmdl-border" class="fullwidth fullheight-percent absolute">
-      <small>border</small>
+      <small class="dq-bxmdl-lbl" >border</small>
     </div>
     <div id="dq-bxmdl-padding" class="fullwidth fullheight-percent absolute">
-      <small>padding</small>
+      <small class="dq-bxmdl-lbl" >padding</small>
     </div>
     <div id="dq-bxmdl-dimensions" class="fullwidth fullheight-percent absolute flex flexcenter">
       <small>2116.670 x 0</small>
@@ -46,5 +46,8 @@ export default {};
   background-color: #87b0bc;
   height: 10%;
   width: 30%;
+}
+.dq-bxmdl-lbl{
+  padding: 10px;
 }
 </style>
