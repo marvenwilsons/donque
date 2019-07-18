@@ -15,6 +15,7 @@
             {{trimTitle(el.tag)}}
             <i class="fas fa-caret-right"></i>
           </div>
+          <!-- option box -->
           <div
             @click="openOpt(el.uid,mode, 0)"
             v-if="opn_opts.includes(el.uid)"
@@ -28,17 +29,21 @@
                   }"
                 class="pad050 flex flexcol"
               >
-                <div
-                  @mouseover="active = `optlpp-html${d.text}`"
-                  @mouseleave="cur_actv != `optlpp-html${d.text}` && (active = undefined)"
-                  :style="setStyle(active === `optlpp-html${d.text}` || cur_actv == `optlpp-html${d.text}`)"
-                  @click="view = d.view,  cur_actv = `optlpp-html${d.text}`"
-                  v-for="d in opts"
-                  class="pad025"
-                  :key="`ihga-${d.text}-aw`"
-                >{{d.text}}</div>
-                <div class="pad025">Cut</div>
-                <div class="pad025">Paste</div>
+                <!-- option items or the api window of the element -->
+                <span>
+                  <div
+                    @mouseover="active = `optlpp-html${d.text}`"
+                    @mouseleave="cur_actv != `optlpp-html${d.text}` && (active = undefined)"
+                    :style="setStyle(active === `optlpp-html${d.text}` || cur_actv == `optlpp-html${d.text}`)"
+                    @click="view = d.view,  cur_actv = `optlpp-html${d.text}`"
+                    v-for="d in opts"
+                    class="pad025"
+                    :key="`ihga-${d.text}-aw`"
+                  >{{d.text}}</div>
+                  <!-- option items end -->
+                  <div class="pad025">Cut</div>
+                  <div class="pad025">Paste</div>
+                </span>
               </div>
               <div
                 v-if="view"
@@ -55,6 +60,7 @@
               </div>
             </div>
           </div>
+          <!-- end of option box -->
         </div>
       </div>
       <strvw :data="el"></strvw>
@@ -127,14 +133,13 @@ export default {
         return t;
       }
     },
-    setStyle(i){
-      if(i){
+    setStyle(i) {
+      if (i) {
         return {
           background: this.$store.state.theme.global.selection2.hover_bg_color,
           color: this.$store.state.theme.global.selection2.active_text_color
-        }
-      }else {
-
+        };
+      } else {
       }
     },
     openOpt(uid, mode, c) {
