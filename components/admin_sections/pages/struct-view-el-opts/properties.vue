@@ -1,6 +1,6 @@
 <template>
-    <div>
-        this is props
+    <div style="min-width:200px;" >
+        this is props, read only?
     </div>
 </template>
 

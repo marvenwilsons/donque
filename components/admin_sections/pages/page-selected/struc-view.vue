@@ -89,6 +89,7 @@ export default {
       view: undefined,
       active: undefined,
       cur_actv: undefined,
+      rec: undefined,
       opts: [
         {
           text: "Desc",
@@ -126,6 +127,9 @@ export default {
     ils
   },
   methods: {
+    con(x,y) {
+      // console.log(`${x} - ${y}`)
+    },
     trimTitle(t) {
       if (t) {
         return t.split("_").pop();
@@ -171,6 +175,10 @@ export default {
         }, 0);
       }
     }
+  },
+  mounted(){
+      this.$store.commit('pages/set_recur',this.data)
+      this.rec = this.$store.state.pages.recur
   }
 };
 </script>

@@ -3,7 +3,10 @@ export const state = () => ({
     // routing sample
     route: undefined,
     // route contents
-    route_contents: {}
+    route_contents: {},
+
+    // recur
+    recur: 0
 })
 
 export const getters = {
@@ -14,6 +17,9 @@ export const mutations = {
     set_route(state,data) {
         state.route = data
         // console.log('setting route')
+    },
+    set_recur(state,data) {
+        state.recur = state.recur + 1
     }
 }
 export const actions = {

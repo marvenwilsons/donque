@@ -74,6 +74,7 @@
 
 <script>
 export default {
+  props: ['data'],
   data() {
     return {
       selected: undefined,
@@ -109,7 +110,11 @@ export default {
   methods: {
     addElemento(s) {
       // call systemCall
+      // section --> els --> prop
+      // [0].els[1].els[0].prop
       console.log(s);
+      console.log(this.$store.state.root)
+      console.log(this.data)
     },
     setStyle(arg) {
       if (arg) {
