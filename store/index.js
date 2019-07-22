@@ -108,8 +108,9 @@ export const mutations = {
         state.app = serverData
         
         //
-        state.current_page = serverData.data.public
-        // state.current_page.sections = []
+        if (serverData.data.public){
+            state.current_page = serverData.data.public.sections
+        }
     },
     set404(state,val) {
         state.is404 = val

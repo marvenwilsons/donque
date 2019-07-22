@@ -1,5 +1,5 @@
 <template>
-  <div :data="$store.state.root" :is="view"></div>
+  <div :data="$store.state.current_page" :is="view"></div>
 </template>
 
 <script>

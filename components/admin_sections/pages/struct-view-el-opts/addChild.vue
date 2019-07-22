@@ -65,7 +65,7 @@
       </span>
       <span
         :style="{...theme['page_editor_tile_opt_addChild_tiles_hover_&_active']}"
-        @click="addElemento(selected)"
+        @click="addElemento"
         class="padleft050 padright050 padtop025 padbottom025 pointer"
       >Add Element</span>
     </div>
@@ -108,13 +108,13 @@ export default {
     };
   },
   methods: {
-    addElemento(s) {
+    addElemento(arg) {
       // call systemCall
       // section --> els --> prop
       // [0].els[1].els[0].prop
-      console.log(s);
-      console.log(this.$store.state.root)
-      console.log(this.data)
+      console.log(arg);
+      // console.log(this.$store.state.root)
+      // console.log(this.data)
     },
     setStyle(arg) {
       if (arg) {

@@ -1,5 +1,26 @@
 const pageMethods = {}
 
+const gots = ({ tag, name, role, inlineStyle, innerText, classList, els }) => {
+    return {
+        tag: tag ? tag : 'html_div',
+        name,
+        role,
+        inlineStyle: inlineStyle ? inlineStyle : {},
+        innerText,
+        classList: classList ? classList : [],
+        els: els ? els : [],
+        uid: ((length) => {
+            var result = '';
+            var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            var charactersLength = characters.length;
+            for (var i = 0; i < length; i++) {
+                result += characters.charAt(Math.floor(Math.random() * charactersLength));
+            }
+            return result;
+        })(15)
+    }
+}
+
 /**
  * creates route and route contents in database
  */
@@ -292,6 +313,55 @@ pageMethods.getPageContents = {
     }
 }
 
+pageMethods.getPage = {
+    get prop() {
+        return {
+            funcIsDestructive: false
+        }
+    },
+    getPage({dep,data}){
+        console.log('getting page!')
+        
+        // dep
+        const { db } = dep
+        let { path } = data
+
+        // path
+        const og_p = path
+        path === '/' && (path = '/home')
+        path = `routeContents.${path}`        
+
+        return new Promise((resolve,reject) => {
+            // fetching
+            console.log(path)
+            db.collection('dq_app').findOne({
+                [path]: { $exists: true }
+            }).then(data => {
+                if (data) {
+                   resolve({
+                       status: true,
+                       data: {
+                            msg: null,
+                            actions: [],
+                            data: data['routeContents'][og_p]
+                       }
+                   })
+                } else {
+                    reject({
+                        status: false,
+                        data: {
+                            actions:[{
+                                title: 'prompt_err'
+                            }],
+                            msg: `Error! Cannot find ${path}`
+                        }
+                    })
+                }
+            })
+        })
+    }
+}
+
 /**
  * create a route only no contents
  */
@@ -357,7 +427,7 @@ pageMethods.updateRoute = {
         // if value is higher more, display invalid progress counter then refresh page
     },
     updateRoute({dep,data}){
-
+        
     }
 }
 

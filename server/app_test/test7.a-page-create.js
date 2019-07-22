@@ -155,13 +155,32 @@ const myTest = [
         before: err => err(false),
         after: err => err(false),
         data(data) {
-            // myTest[6].input.token = data[0].data.actions[0].content.token
+            myTest[6].input.token = data[0].data.actions[0].content.token
         }
     },
 
     /**
      * 
      */
+    {
+        desc: 'get page',
+        expected: true,
+        expectedMsg: null,
+        input: {
+            username: 'jannyann',
+            token: undefined,
+            section: 'pageMethods',
+            command: 'getPage',
+            data: {
+                path: 'home'
+            }
+        },
+        before: err => err(false),
+        after: err => err(false),
+        data(data) {
+            // myTest[6].input.token = data[0].data.actions[0].content.token
+        }
+    },
 ]
 
 cardinalTest(myTest)
