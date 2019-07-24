@@ -178,7 +178,59 @@ const myTest = [
         before: err => err(false),
         after: err => err(false),
         data(data) {
-            // myTest[6].input.token = data[0].data.actions[0].content.token
+            myTest[7].input.token = data[0].data.actions[0].content.token
+        }
+    },
+    /**
+     * 
+     */
+    {
+        desc: 'Add section, character test',
+        expected: false,
+        expectedMsg: 'Error: section role must not exceed 25 characters',
+        input: {
+            username: 'jannyann',
+            token: undefined,
+            section: 'pageMethods',
+            command: 'updatePage',
+            data: {
+                mode: "addSection",
+                path: 'home',
+                customData: {
+                    role: 'the quick brown fox jumps over the lazy dog.'
+                }
+            }
+        },
+        before: err => err(false),
+        after: err => err(false),
+        data(data) {
+            myTest[8].input.token = data[0].data.actions[0].content.token
+        }
+    },
+    /**
+     * 
+     */
+    {
+        desc: 'Add section, value test',
+        expected: false,
+        expectedMsg: 'Error: section role is required',
+        input: {
+            username: 'jannyann',
+            token: undefined,
+            section: 'pageMethods',
+            command: 'updatePage',
+            data: {
+                mode: "addSection",
+                path: 'home',
+                customData: {
+                    role: ''
+                }
+            }
+        },
+        before: err => err(false),
+        after: err => err(false),
+        data(data) {
+            myTest[7].input.token = data[0].data.actions[0].content.token
         }
     },
 ]

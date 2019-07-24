@@ -8,7 +8,10 @@
           v-if="sec_modal_viz"
           class="absolute fullwidth fullheight-percent flex flexcenter flexcol"
         >
-          <div :style="{width:'350px', ...theme.modal_host_style, ...theme.global.page_modal_background}" class>
+          <div
+            :style="{width:'350px', ...theme.modal_host_style, ...theme.global.page_modal_background}"
+            class
+          >
             <div class="pad125" :style="{...theme.modal_head_style}">Add new section</div>
             <div class="padtop125 padleft125 padright125">
               <span class="padright025">
@@ -19,7 +22,7 @@
             </div>
             <div class="flex flexend padright125 padbottom125">
               <span
-                @click="sec_modal_viz = false"
+                @click="sec_modal_viz = false, sec_err = undefined"
                 :style="{...theme.modal_button_style}"
                 class="pointer margintop125 marginright050 pad025 padleft050 padright050"
               >
@@ -106,7 +109,7 @@
                       class="pad050 absolute dq-page-el-opt-bx-pu"
                     >
                       <div class="margin025 fullheight-percent">
-                        <div class="fullheight-percent" :is="view"></div>
+                        <div class="fullheight-percent" :uid="sections.uid" :is="view"></div>
                       </div>
                     </div>
                   </div>
@@ -226,30 +229,29 @@ export default {
   },
   methods: {
     addSec() {
-
       if (this.sec_data) {
         // validate len
         if (this.sec_data.length > 25) {
-          this.sec_err = "Error: section role must not exceed 25 characters";
+          return (this.sec_err =
+            "Error: section role must not exceed 25 characters");
         } else {
-          this.sec_err = undefined;
+          this.sec_err = undefined
         }
 
         // validate val if there is no character and only spaces
-        if(this.sec_data.trim() == ''){
-          this.sec_err = "Error: section role must have valid characters"
-        }else {
+        if (this.sec_data.trim() == "") {
+          return (this.sec_err =
+            "Error: section role must have valid characters");
+        } else {
           this.sec_err = undefined
         }
       } else if (!this.sec_data) {
         // validate val 2
-        this.sec_err = "Error: section role is required";
+        return (this.sec_err = "Error: section role is required");
       } else {
-        this.sec_err = undefined;
+        this.sec_err = undefined
       }
-      
 
-      // submit
       if (this.sec_err == undefined) {
         this.$store
           .dispatch("systemCall", {
@@ -267,7 +269,7 @@ export default {
           .then(respose => {
             if (respose.status) {
               this.$store.dispatch("pages/update_root", this.page_data.path);
-              this.sec_modal_viz = false
+              this.sec_modal_viz = false;
             }
           });
       }

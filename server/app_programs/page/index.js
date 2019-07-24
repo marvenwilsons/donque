@@ -462,8 +462,9 @@ pageMethods.updatePage = {
     },
     updatePage({dep,data}){
         let { mode, path, customData } = data
-        const { db, moment } = dep
+        const { db, moment, validator } = dep
 
+        og_p = path
         path === '/' && (path = '/home')
         path = `routeContents.${path}` 
 
@@ -472,6 +473,49 @@ pageMethods.updatePage = {
 
             switch(mode){
                 case 'addSection' : 
+
+                    const { role } = customData
+
+                    if (role) {
+                        // validate len
+                        if (role.length > 25) {
+                            return reject({
+                                status: false,
+                                data: {
+                                    msg: "Error: section role must not exceed 25 characters",
+                                    actions: [{
+                                        title: 'prompt_err'
+                                    }]
+                                }
+                            })
+                        }
+
+                        // validate val if there is no character and only spaces
+                        if (role.trim() == "") {
+                            return reject({
+                                status: false,
+                                data: {
+                                    msg: "Error: section role must have valid characters",
+                                    actions: [{
+                                        title: 'prompt_err'
+                                    }]
+                                }
+                            })
+                        } 
+                    }
+                    else if (!role) {
+                        // validate val 2
+                        return reject({
+                            status: false,
+                            data: {
+                                msg: "Error: section role is required",
+                                actions: [{
+                                    title: 'prompt_err'
+                                }]
+                            }
+                        })
+                    }
+
                     db.collection('dq_app').findOneAndUpdate(
                         { [path]: { $exists: true } },
                         {
@@ -504,6 +548,9 @@ pageMethods.updatePage = {
                             }
                         })
                     })
+                break
+                case 'addChild':
+                    
                 break
             }
         })

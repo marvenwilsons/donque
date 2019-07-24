@@ -65,7 +65,7 @@
       </span>
       <span
         :style="{...theme['page_editor_tile_opt_addChild_tiles_hover_&_active']}"
-        @click="addElemento"
+        @click="addElemento(selected,uid)"
         class="padleft050 padright050 padtop025 padbottom025 pointer"
       >Add Element</span>
     </div>
@@ -74,7 +74,7 @@
 
 <script>
 export default {
-  props: ['data'],
+  props: ['uid'],
   data() {
     return {
       selected: undefined,
@@ -108,11 +108,12 @@ export default {
     };
   },
   methods: {
-    addElemento(arg) {
+    addElemento(el,uid) {
       // call systemCall
       // section --> els --> prop
       // [0].els[1].els[0].prop
-      console.log(arg);
+      console.log(el);
+      console.log(uid)
       // console.log(this.$store.state.root)
       // console.log(this.data)
     },
