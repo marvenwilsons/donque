@@ -6,7 +6,9 @@ export const state = () => ({
     route_contents: {},
 
     // recur
-    recur: 0
+    recur: 0,
+
+    root: undefined
 })
 
 export const getters = {
@@ -20,10 +22,39 @@ export const mutations = {
     },
     set_recur(state,data) {
         state.recur = state.recur + 1
+    },
+    set_root(state,data) {
+        console.log('setting root'),
+        console.log(data)
+        state.root = data
     }
 }
 export const actions = {
-    get_routes({commit,state},context){
+    update_root({ commit, state }, context){
+        this.dispatch("systemCall", {
+            command: "getPage",
+            section: "pageMethods",
+            data: {
+                path: context
+            },
+            method: "post"
+        }).then(({ status, data }) => {
+            if (status) {
+                console.log('yeeehaa!')
+                commit('set_root', data.data)
+            } else {
+                this.commit("modal/set_modal", {
+                    head: "Error while fetching editor data",
+                    body: data.msg,
+                    config: {
+                        ui_type: "err",
+                        closable: false
+                    }
+                });
+            }
+        });
+    },
+    get_routes({commit}){
         this.dispatch('systemCall', {
             command: "getAllRoutes",
             section: "pageMethods",

@@ -319,16 +319,20 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                     },
                     routeContents: {
                         "home": {
-                            layout: 'default', 
+                            layout: 'default',
                             sections: [
-                                {}
+                                {
+                                    role: 'dq-default', 
+                                    uid:'dqDefault-872MJUK-sd-3sg0',
+                                    els: []
+                                }
                             ], 
                             data_collection: {}, 
 
                             "stat": {
-                                lastModified: "",
-                                createdOn: "",
-                                createdBy: "",
+                                lastModified: moment().format("MMM Do YY"),
+                                createdOn: moment().format("MMM Do YY"),
+                                createdBy: adminName,
                                 type: "",
                             },
                             "security": {

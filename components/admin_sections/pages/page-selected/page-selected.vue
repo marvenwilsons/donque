@@ -1,7 +1,7 @@
 <template>
   <div class="flex flexcol fullheight-percent">
     <div class="flex1 flex">
-      <div class="fullwidth" :is="comp"></div>
+      <div class="fullwidth" :page_data="page_data" :is="comp"></div>
     </div>
     <div
       id="dq-sel-page-pane"
@@ -25,14 +25,14 @@ export default {
   props: ["data", "my_pane_index"],
   data() {
     return {
-      comp: "editor"
+      comp: "editor",
+      page_data: undefined
     };
   },
   components: {
     editor,
     rs: route_settings,
-    props: properties,
-    editor_data: undefined
+    props: properties
   },
   created() {
     console.log("fetching page contents");
@@ -47,7 +47,8 @@ export default {
       })
       .then(({ status, data }) => {
         if (status) {
-          this.editor_data = data.data;
+          this.$store.commit('pages/set_root',data.data)
+          this.page_data = data.data;
         } else {
           this.$store.commit("modal/set_modal", {
             head: "Error while fetching editor data",

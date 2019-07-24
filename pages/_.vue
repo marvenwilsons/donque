@@ -136,16 +136,7 @@ export default {
               });
               break;
             case "redirect":
-              location.href = e.content;
-              this.$store.commit("modal/set_modal", {
-                head: "Alert",
-                body:
-                  "redirect is yet to be handled by marven!!!!",
-                config: {
-                  ui_type: "msg",
-                  closable: false
-                }
-              });
+              location.href = action.content;
               break;
             case "prompt_credentials":
               alert('prompt credentials')

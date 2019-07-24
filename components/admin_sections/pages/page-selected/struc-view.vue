@@ -41,6 +41,8 @@
                     :key="`ihga-${d.text}-aw`"
                   >{{d.text}}</div>
                   <!-- option items end -->
+                  <div class="pad025">Move up</div>
+                  <div class="pad025">Move down</div>
                   <div class="pad025">Cut</div>
                   <div class="pad025">Paste</div>
                 </span>

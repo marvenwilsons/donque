@@ -7,15 +7,16 @@ const gots = ({ tag, name, role, inlineStyle, innerText, classList, els}) => {
         innerText,
         classList: classList ? classList : [],
         els: els ? els : [],
-        uid: ((length) => {
-            var result = '';
-            var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-            var charactersLength = characters.length;
-            for (var i = 0; i < length; i++) {
-                result += characters.charAt(Math.floor(Math.random() * charactersLength));
-            }
-            return result;
-        })(15)
+        // uid: ((length) => {
+        //     var result = '';
+        //     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        //     var charactersLength = characters.length;
+        //     for (var i = 0; i < length; i++) {
+        //         result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        //     }
+        //     return result;
+        // })(15)
+        uid: 'asdf'
     }
 }
 

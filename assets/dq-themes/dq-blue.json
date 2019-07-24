@@ -39,6 +39,10 @@
         "selection2" : {
             "hover_bg_color": "#e9eff3",
             "active_text_color": "#2d4247"
+        },
+
+        "page_modal_background": {
+            "background":"white"
         }
     },
 

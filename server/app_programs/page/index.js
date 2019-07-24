@@ -1,6 +1,6 @@
 const pageMethods = {}
 
-const gots = ({ tag, name, role, inlineStyle, innerText, classList, els }) => {
+const gots = ({ tag, name, role, inlineStyle, innerText, classList, els, path, createdOn, createdBy, lastModified }) => {
     return {
         tag: tag ? tag : 'html_div',
         name,
@@ -9,6 +9,21 @@ const gots = ({ tag, name, role, inlineStyle, innerText, classList, els }) => {
         innerText,
         classList: classList ? classList : [],
         els: els ? els : [],
+        data_collection: {},
+        "stat": {
+            lastModified,
+            createdOn,
+            createdBy,
+            type: "",
+            path
+        },
+        "security": {
+            isLokced: false,
+            password: "",
+            allowedAdminsToWrite: [],
+            access_type: 'public',
+            is_under_maintenance: false
+        },
         uid: ((length) => {
             var result = '';
             var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -195,9 +210,12 @@ pageMethods.createPage = {
                     $set: {
                         [`${path.rc}`] : {
                             layout: 'default',
-                            sections: {},
+                            sections: [
+                                {
+                                    els:[]
+                                }
+                            ],
                             data_collection: {},
-
                             "stat": {
                                 lastModified: "",
                                 createdOn: "",
@@ -333,7 +351,6 @@ pageMethods.getPage = {
 
         return new Promise((resolve,reject) => {
             // fetching
-            console.log(path)
             db.collection('dq_app').findOne({
                 [path]: { $exists: true }
             }).then(data => {
@@ -343,7 +360,10 @@ pageMethods.getPage = {
                        data: {
                             msg: null,
                             actions: [],
-                            data: data['routeContents'][og_p]
+                            data: {
+                                path: og_p,
+                                ...data['routeContents'][og_p]
+                            }
                        }
                    })
                 } else {
@@ -432,9 +452,62 @@ pageMethods.updateRoute = {
 }
 
 /**
- * 
+ * update
  */
 pageMethods.updatePage = {
+    get prop() {
+        return {
+            funcIsDestructive: false
+        }
+    },
+    updatePage({dep,data}){
+        let { mode, path, customData } = data
+        const { db, moment } = dep
+
+        path === '/' && (path = '/home')
+        path = `routeContents.${path}` 
+
+        
+        return new Promise((resolve,reject) => {
+
+            switch(mode){
+                case 'addSection' : 
+                    db.collection('dq_app').findOneAndUpdate(
+                        { [path]: { $exists: true } },
+                        {
+                            $push:{
+                                [`${path}.sections`] : gots({
+                                    tag: 'html_section',
+                                    role: customData.role,
+                                    createdOn: moment().format("MMM Do YY"),
+                                })
+                            }
+                        }
+                    ).then(data => {
+                        if(data) {
+                            resolve({
+                                status: true,
+                                data: {
+                                    actions: [],
+                                    msg: null
+                                }
+                            })
+                        }
+                    }).catch(err => {
+                        reject({
+                            status: false,
+                            data: {
+                               actions: [{
+                                   title: 'prompt_err'
+                               }],
+                               msg: err
+                            }
+                        })
+                    })
+                break
+            }
+        })
+    }
 }
 
 /**
