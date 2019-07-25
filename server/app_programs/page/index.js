@@ -48,7 +48,7 @@ pageMethods.createPage = {
     async createPage({dep,data}){
         console.log('creating page!')
 
-        const { db, } = dep
+        const { db, moment, user } = dep
         const { name, parent } = data
         let err = undefined
 
@@ -202,8 +202,6 @@ pageMethods.createPage = {
                     })
 
             // writing to routeContents
-            console.log('path-rc')
-            console.log(path.rc)
             db.collection('dq_app').findOneAndUpdate(
                 {},
                 {
@@ -211,24 +209,26 @@ pageMethods.createPage = {
                         [`${path.rc}`] : {
                             layout: 'default',
                             sections: [
-                                {
-                                    els:[]
-                                }
+                                gots({
+                                    role: 'dq-default',
+                                    tag: 'html_section',
+                                    createdOn: moment().format("MMM Do YY")
+                                })
                             ],
                             data_collection: {},
                             "stat": {
-                                lastModified: "",
-                                createdOn: "",
-                                createdBy: "",
+                                lastModified: moment().format("MMM Do YY"),
+                                createdOn: moment().format("MMM Do YY"),
+                                createdBy: user.adminName,
                                 type: "",
                             },
                             "security": {
                                 isLokced: false,
                                 password: "",
                                 allowedAdminsToWrite: [],
-                                access_type: 'public',
+                                access_type: '',
                                 is_under_maintenance: ''
-                            }
+                            },
                         }
                     }
                 }
@@ -462,7 +462,7 @@ pageMethods.updatePage = {
     },
     updatePage({dep,data}){
         let { mode, path, customData } = data
-        const { db, moment, validator } = dep
+        const { db, moment, user } = dep
 
         og_p = path
         path === '/' && (path = '/home')
@@ -524,6 +524,8 @@ pageMethods.updatePage = {
                                     tag: 'html_section',
                                     role: customData.role,
                                     createdOn: moment().format("MMM Do YY"),
+                                    lastModified: moment().format("MMM Do YY"),
+                                    createdBy: user.adminName
                                 })
                             }
                         }

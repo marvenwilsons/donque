@@ -1,16 +1,16 @@
 <template>
   <div class="flex flexcol fullheight-percent">
     <div class="flex1 flex">
-      <div class="fullwidth" :page_data="page_data" :is="comp"></div>
+      <div class="fullwidth" :pane_index="my_pane_index" :data="data" :page_data="page_data" :is="comp"></div>
     </div>
     <div
       id="dq-sel-page-pane"
       :style="{border: `1px solid ${this.$store.state.theme.global.secondary_bg_color}`}"
       class="flex"
     >
-      <div :data="data" @click="comp = 'editor'" class="pad050 pointer">Editor</div>
-      <div :data="data" @click="comp = 'rs'" class="pad050 pointer">Route settings</div>
-      <div :data="data" @click="comp = 'props'" class="pad050 pointer">Properties</div>
+      <div  @click="comp = 'editor'" class="pad050 pointer">Editor</div>
+      <div  @click="comp = 'rs'" class="pad050 pointer">Route settings</div>
+      <div  @click="comp = 'props'" class="pad050 pointer">Properties</div>
     </div>
   </div>
 </template>

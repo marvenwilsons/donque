@@ -109,7 +109,7 @@
                       class="pad050 absolute dq-page-el-opt-bx-pu"
                     >
                       <div class="margin025 fullheight-percent">
-                        <div class="fullheight-percent" :uid="sections.uid" :is="view"></div>
+                        <div class="fullheight-percent" :path="data" :data="page_data" :uid="sections.uid" :is="view"></div>
                       </div>
                     </div>
                   </div>
@@ -157,7 +157,7 @@ import properties from "../struct-view-el-opts/properties";
 import ils from "../struct-view-el-opts/inlineStyle";
 
 export default {
-  props: ["page_data"],
+  props: ["page_data", "data"],
   computed: {
     sections() {
       if (this.$store.state.pages.root) {

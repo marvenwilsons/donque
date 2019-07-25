@@ -74,7 +74,7 @@
 
 <script>
 export default {
-  props: ['uid'],
+  props: ['uid','data','path'],
   data() {
     return {
       selected: undefined,
@@ -114,8 +114,27 @@ export default {
       // [0].els[1].els[0].prop
       console.log(el);
       console.log(uid)
-      // console.log(this.$store.state.root)
-      // console.log(this.data)
+      console.log(this.path)
+      
+      // this.$store
+      //     .dispatch("systemCall", {
+      //       command: "updatePage",
+      //       section: "pageMethods",
+      //       data: {
+      //         mode: "addChild",
+      //         path: this.page_data.path,
+      //         customData: {
+      //           role: this.sec_data
+      //         }
+      //       },
+      //       method: "post"
+      //     })
+      //     .then(respose => {
+      //       if (respose.status) {
+      //         this.$store.dispatch("pages/update_root", this.page_data.path);
+      //         this.sec_modal_viz = false;
+      //       }
+      //     });
     },
     setStyle(arg) {
       if (arg) {
