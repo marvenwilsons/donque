@@ -328,7 +328,7 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                                 }
                             ], 
                             data_collection: {}, 
-
+                            commits: [], // { commitMsg, date, madeBy, commitObj <-- a copy of a section  },
                             "stat": {
                                 lastModified: moment().format("MMM Do YY"),
                                 createdOn: moment().format("MMM Do YY"),

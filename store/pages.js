@@ -8,7 +8,10 @@ export const state = () => ({
     // recur
     recur: 0,
 
-    root: undefined
+    root: undefined,
+
+    stages: [],
+    travers_view: undefined
 })
 
 export const getters = {
@@ -27,6 +30,28 @@ export const mutations = {
         console.log('setting root'),
         console.log(data)
         state.root = data
+    },
+
+    /**
+     * stages
+     */
+    stage_push(state,data) {
+        state.stages.push({
+            title: `st-${state.stages.length + 1}`,
+            desc: data.desc,
+            obj: {
+                sections: data.obj.sections,
+            }
+        })
+    },
+    set_travers(state,data) {
+
+    },
+    stage_clear() {
+
+    },
+    stage_splice(){
+
     }
 }
 export const actions = {

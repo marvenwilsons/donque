@@ -1,7 +1,7 @@
 <template>
   <div id="dq-page-editor" class="flex relative">
     <div class="flex3 flex absolute fullheight-percent">
-      <div id="dq-page-editor-area" class="margin125 flex flex1 relative flexcol fullwidth">
+      <div id="dq-page-editor-area" class="margin125 flex flex3 relative flexcol fullwidth">
         <!-- section modal -->
         <div
           style="z-index:1000"
@@ -45,7 +45,7 @@
         <div
           :style="{filter: sec_modal_viz ? 'blur(2px)' : ''}"
           id="dq-page-editor-area-c1"
-          v-for="(sections,s_i) in sections"
+          v-for="(sections,s_i) in ($store.state.pages.stages.length == 0 ? sections : n_sections)"
           :key="`seccc-${s_i}`"
         >
           <div class="flex">
@@ -109,7 +109,13 @@
                       class="pad050 absolute dq-page-el-opt-bx-pu"
                     >
                       <div class="margin025 fullheight-percent">
-                        <div class="fullheight-percent" :path="data" :data="page_data" :uid="sections.uid" :is="view"></div>
+                        <div
+                          class="fullheight-percent"
+                          :path="data"
+                          :data="page_data"
+                          :uid="sections.uid"
+                          :is="view"
+                        ></div>
                       </div>
                     </div>
                   </div>
@@ -118,6 +124,80 @@
               </div>
             </div>
             <strvw :data="sections"></strvw>
+          </div>
+        </div>
+      </div>
+      <div
+        :style="{borderLeft:`1px solid ${$store.state.theme.global.border_color}`}"
+        class="flex flexcol flex1"
+      >
+        <div
+          :style="{borderBottom:`1px solid ${$store.state.theme.global.border_color}`, borderTop:`1px solid ${$store.state.theme.global.border_color}`}"
+          class="flex2 flex flexcol"
+        >
+          <div
+            :style="{background:`${$store.state.theme.global.secondary_bg_color}`}"
+            class="pad025 spacebetween flex"
+          >
+            stages - {{this.stages.length}} unsave change(s)
+            <span>
+              <i class="fas fa-arrow-circle-left pointer"></i>
+              <i class="fas fa-arrow-circle-right pointer"></i>
+            </span>
+          </div>
+          <div class="dq-edtr-sd-pane flex1 relative">
+            <div class="absolute flexcol fullwidth">
+              <div
+                class="padleft025 pointer"
+                v-for="(st,st_k) in stages"
+                :key="`st-${st_k}`"
+              > <i class="fas fa-caret-right"></i> {{st.title}} - {{st.desc}}</div>
+            </div>
+          </div>
+        </div>
+        <div
+          :style="{borderBottom:`1px solid ${$store.state.theme.global.border_color}`}"
+          class="flex2 flex flexcol"
+        >
+          <div
+            :style="{background:`${$store.state.theme.global.secondary_bg_color}`}"
+            class="pad025"
+          >commits</div>
+          <div class="dq-edtr-sd-pane flex1 relative">
+            <div class="absolute flexcol fullwidth">
+              <div>asdf</div>
+            </div>
+          </div>
+        </div>
+        <div
+          :style="{borderBottom:`1px solid ${$store.state.theme.global.border_color}`}"
+          class="flex2 flex flexcol"
+        >
+          <div
+            :style="{background:`${$store.state.theme.global.secondary_bg_color}`}"
+            class="pad025 flex spacebetween pointer"
+          >
+            versions
+            <span>
+              <i class="fas fa-plus-circle"></i>
+            </span>
+          </div>
+          <div class="dq-edtr-sd-pane flex1 relative">
+            <div class="absolute flexcol fullwidth">
+              <div>asdf</div>
+            </div>
+          </div>
+        </div>
+        <div class="flex flexcol">
+          <div class="flex flexcenter pad025">
+            <div
+              :style="{background: $store.state.theme.global.secondary_bg_color}"
+              class="fullwidth pad025 margin025 pointer flex flexcenter"
+            >commit</div>
+            <div
+              :style="{background: $store.state.theme.global.secondary_bg_color}"
+              class="fullwidth pad025 margin025 pointer flex flexcenter"
+            >save</div>
           </div>
         </div>
       </div>
@@ -163,6 +243,16 @@ export default {
       if (this.$store.state.pages.root) {
         return this.$store.state.pages.root.sections;
       }
+    },
+    n_sections() {
+      return this.$store.state.pages.stages[this.stages.length - 1].obj
+        .sections;
+    },
+    travers_mode() {
+
+    },
+    stages() {
+      return this.$store.state.pages.stages;
     }
   },
   data() {
@@ -171,6 +261,7 @@ export default {
       opn_opts: [],
       mode: true,
       gg: [],
+      cur_sec: undefined,
 
       // current main component being display
       view: undefined,
@@ -228,6 +319,20 @@ export default {
     ils
   },
   methods: {
+    uidGen() {
+      return (length => {
+        var result = "";
+        var characters =
+          "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        var charactersLength = characters.length;
+        for (var i = 0; i < length; i++) {
+          result += characters.charAt(
+            Math.floor(Math.random() * charactersLength)
+          );
+        }
+        return result;
+      })(50);
+    },
     addSec() {
       if (this.sec_data) {
         // validate len
@@ -235,7 +340,7 @@ export default {
           return (this.sec_err =
             "Error: section role must not exceed 25 characters");
         } else {
-          this.sec_err = undefined
+          this.sec_err = undefined;
         }
 
         // validate val if there is no character and only spaces
@@ -243,35 +348,71 @@ export default {
           return (this.sec_err =
             "Error: section role must have valid characters");
         } else {
-          this.sec_err = undefined
+          this.sec_err = undefined;
         }
       } else if (!this.sec_data) {
         // validate val 2
         return (this.sec_err = "Error: section role is required");
       } else {
-        this.sec_err = undefined
+        this.sec_err = undefined;
       }
 
       if (this.sec_err == undefined) {
-        this.$store
-          .dispatch("systemCall", {
-            command: "updatePage",
-            section: "pageMethods",
-            data: {
-              mode: "addSection",
-              path: this.page_data.path,
-              customData: {
-                role: this.sec_data
-              }
-            },
-            method: "post"
-          })
-          .then(respose => {
-            if (respose.status) {
-              this.$store.dispatch("pages/update_root", this.page_data.path);
-              this.sec_modal_viz = false;
-            }
+        if (this.$store.state.pages.stages.length == 0) {
+          let n_sec = [];
+
+          this.sections.map(e => {
+            n_sec.push(e);
           });
+
+          n_sec.push({
+            els: [],
+            role: this.sec_data,
+            uid: this.uidGen()
+          });
+
+          this.$store.commit("pages/stage_push", {
+            desc: `Added new section ${this.sec_data}`,
+            obj: {
+              sections: n_sec
+            },
+            mode: 1
+          });
+
+          this.sec_modal_viz = false;
+        } else {
+          // get all contents from stages and sections
+          // make a new array
+          // push the new data to the array
+          // push to stage
+
+          let tempArr = []
+
+          this.stages.map(i => {
+            tempArr.push(i)
+          })
+
+          let nSec = []
+
+          tempArr[tempArr.length - 1].obj.sections.map(e => {
+            nSec.push(e)
+          })
+
+          nSec.push({
+            els: [],
+            role: this.sec_data,
+            uid: this.uidGen()
+          });
+
+          this.$store.commit("pages/stage_push", {
+            desc: `Added new section ${this.sec_data}`,
+            obj: {
+              sections: nSec
+            },
+          })
+
+          this.sec_modal_viz = false;
+        }
       }
     },
     setStyle(i) {
@@ -317,6 +458,9 @@ export default {
 <style scoped>
 .err {
   color: var(--err);
+}
+.dq-edtr-sd-pane {
+  overflow-x: hidden;
 }
 .dq-page-el-opt-bx-1 {
   z-index: 900;

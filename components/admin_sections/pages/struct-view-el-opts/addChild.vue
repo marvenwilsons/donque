@@ -108,23 +108,17 @@ export default {
     };
   },
   methods: {
-    addElemento(el,uid) {
-      // call systemCall
-      // section --> els --> prop
-      // [0].els[1].els[0].prop
-      console.log(el);
-      console.log(uid)
-      console.log(this.path)
-      
+    addElemento(el,uid) {      
       // this.$store
       //     .dispatch("systemCall", {
       //       command: "updatePage",
       //       section: "pageMethods",
       //       data: {
       //         mode: "addChild",
-      //         path: this.page_data.path,
+      //         path: this.path,
       //         customData: {
-      //           role: this.sec_data
+      //           uid,
+      //           el
       //         }
       //       },
       //       method: "post"
@@ -135,6 +129,9 @@ export default {
       //         this.sec_modal_viz = false;
       //       }
       //     });
+
+      // add new to stage
+      // get the current the current stage and produce a new one
     },
     setStyle(arg) {
       if (arg) {

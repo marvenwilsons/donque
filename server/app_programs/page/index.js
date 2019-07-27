@@ -24,6 +24,7 @@ const gots = ({ tag, name, role, inlineStyle, innerText, classList, els, path, c
             access_type: 'public',
             is_under_maintenance: false
         },
+        commits: [],
         uid: ((length) => {
             var result = '';
             var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -552,6 +553,10 @@ pageMethods.updatePage = {
                     })
                 break
                 case 'addChild':
+                    console.log('adding child')
+                    console.log(path)
+                    console.log(customData)
+
                     
                 break
             }

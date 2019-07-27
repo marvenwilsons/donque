@@ -1,25 +1,3 @@
-const gots = ({ tag, name, role, inlineStyle, innerText, classList, els}) => {
-    return {
-        tag: tag ? tag : 'html_div',
-        name,
-        role,
-        inlineStyle: inlineStyle ? inlineStyle : {},
-        innerText,
-        classList: classList ? classList : [],
-        els: els ? els : [],
-        // uid: ((length) => {
-        //     var result = '';
-        //     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        //     var charactersLength = characters.length;
-        //     for (var i = 0; i < length; i++) {
-        //         result += characters.charAt(Math.floor(Math.random() * charactersLength));
-        //     }
-        //     return result;
-        // })(15)
-        uid: 'asdf'
-    }
-}
-
 export const state = () => ({
     app: undefined, // add data use for initialing the app admin area
     admin: undefined, // data for the current log admin, used for inializing the admin dashboard
@@ -30,62 +8,6 @@ export const state = () => ({
     fromServer: false,
     current_page: undefined,
     is404: false,
-
-
-    // sample data for page
-    root: [
-        // first section
-        gots({
-            els: [
-                gots({
-                    tag: 'html_div',
-                    innerText: 'hello world',
-                    els: [
-                        gots({
-                            innerText: 'hello world',
-                            els: [
-                                gots({
-                                    innerText: 'I am a child of hello world',
-                                    tag: 'html_h1',
-                                    els: [
-                                        gots({
-                                            tag: 'html_main',
-                                            innerText: 'I am a child of hello world 2',
-                                            els: [
-                                                gots({
-                                                    innerText: 'I am a child of hello world 3',
-                                                })
-                                            ]
-                                        })
-                                    ]
-                                }),
-                                gots({})
-                            ]
-                        }),
-                        gots({}),
-                        gots({
-                            innerText: 'I am a child of hello world',
-                            els: [
-                                gots({})
-                            ]
-                        })
-                    ],
-                }),
-                gots({}),
-                gots({}),
-            ]
-        }),
-        // second section
-        gots({
-            tag:'html_span',
-            innerText: 'this is html span',
-            els: [
-                gots({})
-            ]
-        })
-        // third section
-        // {}
-    ]
 })
 
 export const getters = {
