@@ -45,7 +45,7 @@
         <div
           :style="{filter: sec_modal_viz ? 'blur(2px)' : ''}"
           id="dq-page-editor-area-c1"
-          v-for="(sections,s_i) in ($store.state.pages.stages.length == 0 ? sections : n_sections)"
+          v-for="(sections,s_i) in (is_traversing ? travers_mode :  $store.state.pages.stages.length == 0 ? sections : n_sections)"
           :key="`seccc-${s_i}`"
         >
           <div class="flex">
@@ -141,17 +141,20 @@
           >
             stages - {{this.stages.length}} unsave change(s)
             <span>
-              <i class="fas fa-arrow-circle-left pointer"></i>
-              <i class="fas fa-arrow-circle-right pointer"></i>
+              <i @click="travers('down')" class="fas fa-arrow-circle-left pointer"></i>
+              <i @click="travers('up')" class="fas fa-arrow-circle-right pointer padright050"></i>
+              <i class="fas fa-save pointer padright025"></i>
             </span>
           </div>
-          <div class="dq-edtr-sd-pane flex1 relative">
+          <div id="dq-edtr-sd-pane-h" class="dq-edtr-sd-pane flex1 relative">
             <div class="absolute flexcol fullwidth">
-              <div
-                class="padleft025 pointer"
-                v-for="(st,st_k) in stages"
-                :key="`st-${st_k}`"
-              > <i class="fas fa-caret-right"></i> {{st.title}} - {{st.desc}}</div>
+              <div @click="travers('select',st_k)" class="padleft025 pointer flex" v-for="(st,st_k) in stages" :key="`st-${st_k}`">
+                <div>
+                  <i v-if="pointer == st_k" class="fas fa-caret-right" style="min-width:8px;"></i>
+                </div>
+                <div v-if="pointer != st_k" class style="min-width:8px;"></div>
+                {{st.title}} - <span :style="{textDecoration: pointer == st_k ?  `underline dotted ${$store.state.theme.global.primary_text_color}` : ''}" >{{st.desc}}</span>
+              </div>
             </div>
           </div>
         </div>
@@ -161,8 +164,12 @@
         >
           <div
             :style="{background:`${$store.state.theme.global.secondary_bg_color}`}"
-            class="pad025"
-          >commits</div>
+            class="pad025 flex spacebetween pointer"
+          >commits
+            <span>
+              <i class="fas fa-plus-circle"></i>
+            </span>
+          </div>
           <div class="dq-edtr-sd-pane flex1 relative">
             <div class="absolute flexcol fullwidth">
               <div>asdf</div>
@@ -186,18 +193,6 @@
             <div class="absolute flexcol fullwidth">
               <div>asdf</div>
             </div>
-          </div>
-        </div>
-        <div class="flex flexcol">
-          <div class="flex flexcenter pad025">
-            <div
-              :style="{background: $store.state.theme.global.secondary_bg_color}"
-              class="fullwidth pad025 margin025 pointer flex flexcenter"
-            >commit</div>
-            <div
-              :style="{background: $store.state.theme.global.secondary_bg_color}"
-              class="fullwidth pad025 margin025 pointer flex flexcenter"
-            >save</div>
           </div>
         </div>
       </div>
@@ -249,7 +244,8 @@ export default {
         .sections;
     },
     travers_mode() {
-
+      return this.$store.state.pages.stages[this.pointer].obj
+        .sections
     },
     stages() {
       return this.$store.state.pages.stages;
@@ -277,6 +273,11 @@ export default {
       sec_modal_viz: false,
       sec_data: undefined,
       sec_err: undefined,
+
+      // stage travers related
+      pointer: undefined,
+      is_traversing: false,
+      
 
       // options available in every el
       opts: [
@@ -333,6 +334,33 @@ export default {
         return result;
       })(50);
     },
+    travers(mode,val) {
+      this.is_traversing = true
+
+      if (mode == "up") {
+        if(this.pointer == this.stages.length - 1){
+          this.pointer = 0
+        }else {
+          this.pointer = this.pointer + 1
+        }
+      }else if(mode == "down") {
+        if(this.pointer == 0){
+          this.pointer =  this.stages.length - 1
+        }else {
+          this.pointer = this.pointer - 1
+        }
+      }else if(mode == "select"){
+        this.pointer = val
+      }
+
+    },
+    scrollToEnd: function() {    	
+      
+      setTimeout(() => {
+        var container = this.$el.querySelector("#dq-edtr-sd-pane-h");
+      container.scrollTop = container.scrollHeight;
+      }, 1);
+    },
     addSec() {
       if (this.sec_data) {
         // validate len
@@ -386,17 +414,17 @@ export default {
           // push the new data to the array
           // push to stage
 
-          let tempArr = []
+          let tempArr = [];
 
           this.stages.map(i => {
-            tempArr.push(i)
-          })
+            tempArr.push(i);
+          });
 
-          let nSec = []
+          let nSec = [];
 
           tempArr[tempArr.length - 1].obj.sections.map(e => {
-            nSec.push(e)
-          })
+            nSec.push(e);
+          });
 
           nSec.push({
             els: [],
@@ -408,8 +436,8 @@ export default {
             desc: `Added new section ${this.sec_data}`,
             obj: {
               sections: nSec
-            },
-          })
+            }
+          });
 
           this.sec_modal_viz = false;
         }
@@ -450,6 +478,14 @@ export default {
           this.gg = [];
         }, 0);
       }
+    }
+  },
+  watch: {
+    stages() {
+      this.pointer = this.stages.length - 1;
+
+      this.scrollToEnd();
+      this.scrollToEnd();
     }
   }
 };
