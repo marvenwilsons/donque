@@ -1,3 +1,42 @@
+const gots = ({ tag, name, role, inlineStyle, innerText, classList, els, path, createdOn, createdBy, lastModified }) => {
+    return {
+        tag: tag ? tag : 'html_div',
+        name,
+        role,
+        inlineStyle: inlineStyle ? inlineStyle : {},
+        innerText,
+        classList: classList ? classList : [],
+        els: els ? els : [],
+        data_collection: {},
+        "stat": {
+            lastModified,
+            createdOn,
+            createdBy,
+            type: "",
+            path
+        },
+        "security": {
+            isLokced: false,
+            password: "",
+            allowedAdminsToWrite: [],
+            access_type: 'public',
+            is_under_maintenance: false
+        },
+        commits: [],
+        uid: ((length) => {
+            var result = '';
+            var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            var charactersLength = characters.length;
+            for (var i = 0; i < length; i++) {
+                result += characters.charAt(Math.floor(Math.random() * charactersLength));
+            }
+            return result;
+        })(5)
+    }
+}
+
+
+
 export const state = () => ({
 
     // routing sample
@@ -44,15 +83,114 @@ export const mutations = {
             }
         })
     },
-    set_travers(state,data) {
+    update_section(state, { desc, locator, tag, target_prop, exec_on_prop}) {
+        // copy the latest stage and push to the stage
+        const copy = (o,uid) => {
+            if (o === null) return null;
 
+            var output, v, key;
+            output = Array.isArray(o) ? [] : {};
+            for (key in o) {
+                v = o[key];
+                output[key] = typeof v === "object" ? copy(v) : v;
+            }
+            
+            return output;
+        }
+
+        if (state.stages.length == 0){
+            console.log('1st case')
+            state.stages.push({
+                title: `st-${state.stages.length + 1}`,
+                desc: `Added HTML ${tag} element to default section`,
+                obj: {
+                    sections: [
+                        {
+                            els: [
+                                gots({
+                                    tag: `html_${tag}`
+                                })
+                            ],
+                            role: state.root.sections[0].role,
+                            uid: state.root.sections[0].uid
+                        }
+                    ]
+                }
+            })
+        }else {
+            /**
+             * Locate the target property by looping through
+             * the locators array, each item of the array is a key
+             * to the object "the last index value of the stage".
+             * 
+             * each loop will go down one level until the last item in the locators array
+             * is reach.
+             * 
+             * each loop accesses the inner value of stage object, it can be an object, array etc..
+             * each loop the data that is being accessed will be saved to a temp variable
+             */
+
+            // copy
+            console.log('2nd case')
+            
+            const latest_stage_copy = copy(state.stages[state.stages.length - 1])
+            
+            // mutate
+            latest_stage_copy.desc = desc
+
+            let temp = undefined
+
+            const section_index = locator[0]
+            
+            // console.log('The locator')
+            // console.log(locator)
+
+            // inserting the new section view object
+            for(let i = 0; i < locator.length; i++){
+                /**
+                 * Routine
+                 * 
+                 * save data to temp then loop to the temp until loop is done
+                 * on the last lopp item, update the prop  
+                 */                    
+                if(temp == undefined){
+                    console.log('temp is udef')
+                    temp = latest_stage_copy.obj.sections[locator[i]]
+
+                    if(locator.length == 1){
+                        exec_on_prop(temp[target_prop])
+                    }
+                } else {
+                    console.log('temp is not udef')
+
+                    temp = temp[locator[i]]
+
+                    // console.log('the temp')
+                    // console.log(temp)
+                    // console.log('target_prop')
+                    // console.log(target_prop)
+
+                    if (i == locator.length - 1){
+                        exec_on_prop(temp[target_prop])
+                        temp = undefined
+                    }
+                }
+            }
+
+            // console.log(latest_stage_copy)
+            
+            state.stages.push(latest_stage_copy)
+
+            console.log('')
+            console.log('')
+        }
     },
     stage_clear() {
 
     },
     stage_splice(){
 
-    }
+    },
 }
 export const actions = {
     update_root({ commit, state }, context){

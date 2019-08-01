@@ -3,10 +3,11 @@
     <div
       :style="{color:$store.state.theme.global.secondary_text_color}"
       class="flex"
+      :id="`${el_i}--${el.uid}`"
       v-for="(el,el_i) in data.els"
       :key="`el-${el_i}`"
     >
-      <div class="dq-strvw-el">
+      <div   class="dq-strvw-el">
         <div
           :style="{background:$store.state.theme.global.secondary_bg_color}"
           @click="openOpt(el.uid,mode, 1)"
@@ -51,15 +52,16 @@
                 v-if="view"
                 :style="{
                   boxShadow:`0 0 5px ${$store.state.theme.global.secondary_bg_color}`,
-                  left:'86px',
+                  left:'89px',
                   border: `1px solid ${$store.state.theme.global.border_color}`,
                   background:'white'}"
                 class="pad050 absolute dq-page-el-opt-bx-pu"
               >
                 <div class="margin025 fullheight-percent">
-                  <div class="fullheight-percent" :data="el" :is="view"></div>
+                  <div class="fullheight-percent" :uid="`${el_i}--${el.uid}`" :data="el" :is="view"></div>
                 </div>
               </div>
+              <div style="bottom:-50px;color:white;" class="absolute">.</div>
             </div>
           </div>
           <!-- end of option box -->
@@ -129,7 +131,7 @@ export default {
     ils
   },
   methods: {
-    con(x,y) {
+    con(x, y) {
       // console.log(`${x} - ${y}`)
     },
     trimTitle(t) {
@@ -178,9 +180,9 @@ export default {
       }
     }
   },
-  mounted(){
-      this.$store.commit('pages/set_recur',this.data)
-      this.rec = this.$store.state.pages.recur
+  mounted() {
+    this.$store.commit("pages/set_recur", this.data);
+    this.rec = this.$store.state.pages.recur;
   }
 };
 </script>

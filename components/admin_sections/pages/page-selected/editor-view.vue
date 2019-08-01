@@ -1,7 +1,7 @@
 <template>
   <div id="dq-page-editor" class="flex relative">
     <div class="flex3 flex absolute fullheight-percent">
-      <div id="dq-page-editor-area" class="margin125 flex flex3 relative flexcol fullwidth">
+      <div id="dq-page-editor-area" class="margin125 flex flex3 relative flexcol fullwidth ">
         <!-- section modal -->
         <div
           style="z-index:1000"
@@ -40,7 +40,7 @@
         </div>
         <!-- structure vizualizer -->
         <div :style="{filter: sec_modal_viz ? 'blur(2px)' : ''}" class="padbottom050">
-          <strong>Page Structure Visualizer 1.0</strong>
+          <strong>dq Page Structure Editor 1.0</strong>
         </div>
         <div
           :style="{filter: sec_modal_viz ? 'blur(2px)' : ''}"
@@ -48,7 +48,7 @@
           v-for="(sections,s_i) in (is_traversing ? travers_mode :  $store.state.pages.stages.length == 0 ? sections : n_sections)"
           :key="`seccc-${s_i}`"
         >
-          <div class="flex">
+          <div id="dq-viz-host" :data="s_i" class="flex">
             <div style="min-width:64px;" class="dq-strvw-el pointer">
               <div
                 @click="sec_modal_viz = true, sec_data = undefined"
@@ -59,7 +59,7 @@
                 <i class="fas fa-caret-right"></i>
               </div>
             </div>
-            <div class="dq-strvw-el">
+            <div :id="`${s_i}--${sections.uid}`" class="dq-strvw-el">
               <div
                 :style="{background:theme.global.secondary_bg_color}"
                 class="flex flexcenter spacebetween pointer"
@@ -113,7 +113,7 @@
                           class="fullheight-percent"
                           :path="data"
                           :data="page_data"
-                          :uid="sections.uid"
+                          :uid="`${s_i}--${sections.uid}`"
                           :is="view"
                         ></div>
                       </div>
@@ -127,7 +127,9 @@
           </div>
         </div>
       </div>
+
       <div
+        id="dq-opts-indc-bxs"
         :style="{borderLeft:`1px solid ${$store.state.theme.global.border_color}`}"
         class="flex flexcol flex1"
       >
@@ -148,12 +150,19 @@
           </div>
           <div id="dq-edtr-sd-pane-h" class="dq-edtr-sd-pane flex1 relative">
             <div class="absolute flexcol fullwidth">
-              <div @click="travers('select',st_k)" class="padleft025 pointer flex" v-for="(st,st_k) in stages" :key="`st-${st_k}`">
+              <div
+                @click="travers('select',st_k)"
+                class="padleft025 pointer flex"
+                v-for="(st,st_k) in stages"
+                :key="`st-${st_k}`"
+              >
                 <div>
                   <i v-if="pointer == st_k" class="fas fa-caret-right" style="min-width:8px;"></i>
                 </div>
                 <div v-if="pointer != st_k" class style="min-width:8px;"></div>
-                {{st.title}} - <span :style="{textDecoration: pointer == st_k ?  `underline dotted ${$store.state.theme.global.primary_text_color}` : ''}" >{{st.desc}}</span>
+                <span
+                  :style="{textDecoration: pointer == st_k ?  `underline dotted ${$store.state.theme.global.primary_text_color}` : ''}"
+                >{{ st.desc}}</span>
               </div>
             </div>
           </div>
@@ -165,7 +174,8 @@
           <div
             :style="{background:`${$store.state.theme.global.secondary_bg_color}`}"
             class="pad025 flex spacebetween pointer"
-          >commits
+          >
+            commits
             <span>
               <i class="fas fa-plus-circle"></i>
             </span>
@@ -196,6 +206,7 @@
           </div>
         </div>
       </div>
+      
       <div
         :style="{borderLeft:`1px solid ${$store.state.theme.global.secondary_bg_color}`}"
         id="dq-page-editor-area-c2"
@@ -230,6 +241,7 @@ import dddel from "../struct-view-el-opts/delete";
 import dddesc from "../struct-view-el-opts/desc";
 import properties from "../struct-view-el-opts/properties";
 import ils from "../struct-view-el-opts/inlineStyle";
+import plgs from "../struct-view-el-opts/plugins";
 
 export default {
   props: ["page_data", "data"],
@@ -244,8 +256,7 @@ export default {
         .sections;
     },
     travers_mode() {
-      return this.$store.state.pages.stages[this.pointer].obj
-        .sections
+      return this.$store.state.pages.stages[this.pointer].obj.sections;
     },
     stages() {
       return this.$store.state.pages.stages;
@@ -277,7 +288,6 @@ export default {
       // stage travers related
       pointer: undefined,
       is_traversing: false,
-      
 
       // options available in every el
       opts: [
@@ -286,24 +296,28 @@ export default {
           view: "dddesc"
         },
         {
-          text: "AddChild",
+          text: "HTML",
           view: "addChild"
         },
         {
-          text: "ClassList",
-          view: "classList"
+          text: "Plugins",
+          view: "plgs"
         },
         {
           text: "properties",
           view: "properties"
         },
         {
-          text: "Delete",
-          view: "dddel"
+          text: "ClassList",
+          view: "classList"
         },
         {
           text: "Inline Style",
           view: "ils"
+        },
+        {
+          text: "Delete",
+          view: "dddel"
         }
       ]
     };
@@ -317,7 +331,8 @@ export default {
     dddel,
     dddesc,
     properties,
-    ils
+    ils,
+    plgs
   },
   methods: {
     uidGen() {
@@ -332,33 +347,31 @@ export default {
           );
         }
         return result;
-      })(50);
+      })(5);
     },
-    travers(mode,val) {
-      this.is_traversing = true
+    travers(mode, val) {
+      this.is_traversing = true;
 
       if (mode == "up") {
-        if(this.pointer == this.stages.length - 1){
-          this.pointer = 0
-        }else {
-          this.pointer = this.pointer + 1
+        if (this.pointer == this.stages.length - 1) {
+          this.pointer = 0;
+        } else {
+          this.pointer = this.pointer + 1;
         }
-      }else if(mode == "down") {
-        if(this.pointer == 0){
-          this.pointer =  this.stages.length - 1
-        }else {
-          this.pointer = this.pointer - 1
+      } else if (mode == "down") {
+        if (this.pointer == 0) {
+          this.pointer = this.stages.length - 1;
+        } else {
+          this.pointer = this.pointer - 1;
         }
-      }else if(mode == "select"){
-        this.pointer = val
+      } else if (mode == "select") {
+        this.pointer = val;
       }
-
     },
-    scrollToEnd: function() {    	
-      
+    scrollToEnd: function() {
       setTimeout(() => {
         var container = this.$el.querySelector("#dq-edtr-sd-pane-h");
-      container.scrollTop = container.scrollHeight;
+        container.scrollTop = container.scrollHeight;
       }, 1);
     },
     addSec() {
@@ -400,7 +413,7 @@ export default {
           });
 
           this.$store.commit("pages/stage_push", {
-            desc: `Added new section ${this.sec_data}`,
+            desc: `Added new section - ${this.sec_data}`,
             obj: {
               sections: n_sec
             },
@@ -433,7 +446,7 @@ export default {
           });
 
           this.$store.commit("pages/stage_push", {
-            desc: `Added new section ${this.sec_data}`,
+            desc: `Added new section - ${this.sec_data}`,
             obj: {
               sections: nSec
             }
@@ -518,10 +531,13 @@ export default {
   overflow: auto;
 }
 #dq-page-editor-area-c1 {
-  min-width: 900px;
+  min-width: 1250px;
 }
 #dq-page-editor-area-c2 {
   min-width: 1500px;
+}
+#dq-opts-indc-bxs{
+  max-width: 250px;
 }
 .dq-page-gr-hor {
   padding: 10px;
