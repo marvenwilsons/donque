@@ -203,10 +203,8 @@ export default {
   left: 60px;
   z-index: 900;
   background: white;
-  /* border: 1px solid rgba(128, 128, 128, 0.432); */
   min-width: 100px;
   border-radius: 2px;
-  /* box-shadow: 0 0 5px rgba(128, 128, 128, 0.432); */
   top: -23px;
 }
 .dq-page-el-opt-bx-pu {

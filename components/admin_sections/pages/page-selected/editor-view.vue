@@ -1,7 +1,7 @@
 <template>
   <div id="dq-page-editor" class="flex relative">
     <div class="flex3 flex absolute fullheight-percent">
-      <div id="dq-page-editor-area" class="margin125 flex flex3 relative flexcol fullwidth ">
+      <div id="dq-page-editor-area" class="margin125 flex flex3 relative flexcol fullwidth">
         <!-- section modal -->
         <div
           style="z-index:1000"
@@ -145,7 +145,7 @@
             <span>
               <i @click="travers('down')" class="fas fa-arrow-circle-left pointer"></i>
               <i @click="travers('up')" class="fas fa-arrow-circle-right pointer padright050"></i>
-              <i class="fas fa-save pointer padright025"></i>
+              <i @click="$store.commit('pages/save_stage')" class="fas fa-save pointer padright025"></i>
             </span>
           </div>
           <div id="dq-edtr-sd-pane-h" class="dq-edtr-sd-pane flex1 relative">
@@ -206,7 +206,7 @@
           </div>
         </div>
       </div>
-      
+
       <div
         :style="{borderLeft:`1px solid ${$store.state.theme.global.secondary_bg_color}`}"
         id="dq-page-editor-area-c2"
@@ -256,7 +256,9 @@ export default {
         .sections;
     },
     travers_mode() {
-      return this.$store.state.pages.stages[this.pointer].obj.sections;
+      if (this.$store.state.pages.stages.length) {
+        return this.$store.state.pages.stages[this.pointer].obj.sections;
+      }
     },
     stages() {
       return this.$store.state.pages.stages;
@@ -536,7 +538,7 @@ export default {
 #dq-page-editor-area-c2 {
   min-width: 1500px;
 }
-#dq-opts-indc-bxs{
+#dq-opts-indc-bxs {
   max-width: 250px;
 }
 .dq-page-gr-hor {

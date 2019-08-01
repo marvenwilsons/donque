@@ -34,8 +34,18 @@ const gots = ({ tag, name, role, inlineStyle, innerText, classList, els, path, c
         })(5)
     }
 }
+const copy = (o, uid) => {
+    if (o === null) return null;
 
+    var output, v, key;
+    output = Array.isArray(o) ? [] : {};
+    for (key in o) {
+        v = o[key];
+        output[key] = typeof v === "object" ? copy(v) : v;
+    }
 
+    return output;
+}
 
 export const state = () => ({
 
@@ -85,18 +95,6 @@ export const mutations = {
     },
     update_section(state, { desc, locator, tag, target_prop, exec_on_prop}) {
         // copy the latest stage and push to the stage
-        const copy = (o,uid) => {
-            if (o === null) return null;
-
-            var output, v, key;
-            output = Array.isArray(o) ? [] : {};
-            for (key in o) {
-                v = o[key];
-                output[key] = typeof v === "object" ? copy(v) : v;
-            }
-            
-            return output;
-        }
 
         if (state.stages.length == 0){
             console.log('1st case')
@@ -130,17 +128,13 @@ export const mutations = {
              * each loop the data that is being accessed will be saved to a temp variable
              */
 
-            // copy
-            console.log('2nd case')
-            
+            // copying stage latest entry            
             const latest_stage_copy = copy(state.stages[state.stages.length - 1])
             
-            // mutate
+            // mutate stage desc    
             latest_stage_copy.desc = desc
 
             let temp = undefined
-
-            const section_index = locator[0]
             
             // console.log('The locator')
             // console.log(locator)
@@ -154,14 +148,12 @@ export const mutations = {
                  * on the last lopp item, update the prop  
                  */                    
                 if(temp == undefined){
-                    console.log('temp is udef')
                     temp = latest_stage_copy.obj.sections[locator[i]]
 
                     if(locator.length == 1){
                         exec_on_prop(temp[target_prop])
                     }
                 } else {
-                    console.log('temp is not udef')
 
                     temp = temp[locator[i]]
 
@@ -185,11 +177,33 @@ export const mutations = {
             console.log('')
         }
     },
-    stage_clear() {
+    save_stage(state){
+        if (state.stages.length == 0){
+            this.commit("modal/set_modal", {
+                head: "dqPageLogicError",
+                body: "There is currently nothing to save",
+                config: {
+                    ui_type: "err",
+                    closable: false
+                }
+            });
+        } else {
+            console.log(state.stages[state.stages.length - 1].obj.sections)
 
-    },
-    stage_splice(){
+            const root_copy = copy(state.root)
+            root_copy.sections = state.stages[state.stages.length - 1].obj.sections
+            console.log(root_copy)
 
+            // this.commit("modal/set_modal", {
+            //     head: "Please wait",
+            //     body: "Saving ...",
+            //     config: {
+            //         ui_type: "msg",
+            //         closable: false
+            //     }
+            // });
+            state.stages = []
+        }
     },
 }
 export const actions = {
