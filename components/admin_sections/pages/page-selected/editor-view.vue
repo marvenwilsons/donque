@@ -61,7 +61,7 @@
 
           <!-- elements view -->
           <main id="dq-page-editor-area-host" class="flex1 flex relative">
-            <div  class="pad125 relative flex1 absolute">
+            <div class="pad125 relative flex1 absolute">
               <div
                 :style="{filter: sec_modal_viz ? 'blur(2px)' : ''}"
                 class="fullwidth flex"
@@ -153,17 +153,29 @@
           <!-- console view -->
           <div>
             <div
-              class="pad050"
+              class="pad050 flex spacebetween relative"
               :style="{
                 borderTop: `1px solid ${$store.state.theme.global.border_color}`,
                 background:`${$store.state.theme.global.secondary_bg_color}`}"
             >
-              <strong>Console</strong>
-              <strong>Live-view</strong>
+              <div>
+                <strong>Console</strong>
+                <!-- <strong>Live-view</strong> -->
+              </div>
+              <div @click="exp_console" style="text-align:center;" class="padright050 pointer flex flexcenter">
+                <i v-if="!console" class="fas fa-angle-up"></i>
+                <i v-if="console" class="fas fa-angle-down"></i>
+              </div>
+            </div>
+            <div class="relative flex" id="dq-page-edtr-console-host">
+              <div class="absolute fullwidth fullheight-percent">
+                <console></console>
+              </div>
             </div>
           </div>
         </div>
 
+        <!-- side boxes -->
         <div id="dq-opts-indc-bxs" class="flex flexcol">
           <div
             :style="{border:`1px solid ${$store.state.theme.global.border_color}`, borderTop:`1px solid ${$store.state.theme.global.border_color}`}"
@@ -244,6 +256,8 @@
             </div>
           </div>
         </div>
+
+        <!-- end -->
       </div>
     </main>
   </div>
@@ -252,6 +266,7 @@
 <script>
 import el_box_model from "./el-box-model";
 import struct_view from "./struc-view";
+import console from "./console";
 
 import addChild from "../struct-view-el-opts/addChild";
 import classList from "../struct-view-el-opts/classList";
@@ -260,6 +275,8 @@ import dddesc from "../struct-view-el-opts/desc";
 import properties from "../struct-view-el-opts/properties";
 import ils from "../struct-view-el-opts/inlineStyle";
 import plgs from "../struct-view-el-opts/plugins";
+
+import { TweenMax, TimelineLite, TweenLite } from "gsap";
 
 export default {
   props: ["page_data", "data"],
@@ -315,6 +332,9 @@ export default {
       pointer: undefined,
       is_traversing: false,
 
+      // console
+      console: false,
+
       // options available in every el
       opts: [
         {
@@ -351,6 +371,7 @@ export default {
   components: {
     boxmodel: el_box_model,
     strvw: struct_view,
+    console,
 
     addChild,
     classList,
@@ -399,6 +420,16 @@ export default {
         var container = this.$el.querySelector("#dq-edtr-sd-pane-h");
         container.scrollTop = container.scrollHeight;
       }, 1);
+    },
+    exp_console() {
+      this.console = !this.console
+      const n = document.getElementById("dq-page-edtr-console-host");
+      
+      if(this.console){
+        TweenMax.fromTo(n, 0.3, { height: "0" }, { height: "300" });
+      } else {
+        TweenMax.fromTo(n, 0.3, { height: "300" }, { height: "0" });
+      }
     },
     addSec() {
       if (this.sec_data) {
@@ -565,6 +596,10 @@ export default {
   padding: 10px;
   width: 145px;
   border-right: 1px solid rgba(128, 128, 128, 0.205);
+}
+
+#dq-page-edtr-console-host {
+  overflow: hidden;
 }
 
 table,
