@@ -13,8 +13,8 @@
           @click="openOpt(el.uid,mode, 1)"
         >
           <div class="flex spacebetween flexcenter">
-            {{trimTitle(el.tag)}}
-            <i class="fas fa-caret-right"></i>
+            <span class="padleft025">{{trimTitle(el.tag)}}</span>
+            <i class="fas fa-caret-right padright025"></i>
           </div>
           <!-- option box -->
           <div

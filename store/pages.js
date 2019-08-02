@@ -96,7 +96,6 @@ export const mutations = {
         // copy the latest stage and push to the stage
 
         if (state.stages.length == 0){
-            console.log('1st')
 
             // copy root
             const latest_root_copy = copy(state.root)
@@ -138,7 +137,6 @@ export const mutations = {
                 }
             })
         }else {
-            console.log('2nd')
             /**
              * Locate the target property by looping through
              * the locators array, each item of the array is a key
@@ -214,7 +212,7 @@ export const mutations = {
 
             this.commit("modal/set_modal", {
                 head: "Please wait",
-                body: "Saving ...",
+                body: "Saving changes ...",
                 config: {
                     ui_type: "msg",
                     closable: false
@@ -232,8 +230,8 @@ export const mutations = {
             }).then((res) => {
                 if(res.status){
                     this.commit("modal/set_modal", {
-                        head: "saved",
-                        body: "Session saved successfuly!.",
+                        head: "Saved",
+                        body: "Changes were saved successfully.",
                         config: {
                             ui_type: "msg",
                             closable: false
