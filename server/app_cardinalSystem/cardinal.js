@@ -27,7 +27,10 @@ const Cardinal = async ({ username, password, token, data, command, section, met
                     status: true,
                     data: {
                         msg: null,
-                        actions: [{}]
+                        actions: [{}],
+                        content: {
+                            appName: data.data.doc.appName
+                        }
                     }
                 }
             } else {

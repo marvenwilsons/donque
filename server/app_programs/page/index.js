@@ -455,13 +455,13 @@ pageMethods.updateRoute = {
 /**
  * update
  */
-pageMethods.updatePage = {
+pageMethods.updatePage2 = {
     get prop() {
         return {
             funcIsDestructive: false
         }
     },
-    updatePage({dep,data}){
+    updatePage2({dep,data}){
         let { mode, path, customData } = data
         const { db, moment, user } = dep
 
@@ -560,6 +560,55 @@ pageMethods.updatePage = {
                     
                 break
             }
+        })
+    }
+}
+pageMethods.updatePage = {
+    get prop() {
+        return {
+            funcIsDestructive: false
+        }
+    },
+    updatePage({dep,data}){
+
+        let { content, path } = data
+        const { db, moment } = dep
+
+        path === '/' && (path = '/home')
+        path = `routeContents.${path}` 
+
+        content.stat.lastModified = moment().format("MMM Do YY")
+
+        return new Promise((resolve,reject) => {
+
+            db.collection('dq_app').findOneAndUpdate(
+                { [path]: { $exists: true } },
+                {
+                    $set: {
+                        [`${path}`]: content
+                    }
+                }
+            ).then(res => {
+                resolve({
+                    status: true,
+                    data: {
+                        actions: [],
+                        msg: null
+                    }
+                })
+            }).catch(err => {
+                reject({
+                    status: false,
+                    data: {
+                        actions: [{
+                            title: 'prompt_err',
+                            msg: err
+                        }]
+                    }
+                })
+            })
+
+            
         })
     }
 }

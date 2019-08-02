@@ -127,8 +127,6 @@ export const actions = {
                 // store to state
                 console.log('** [NuxtServerInit] server resource received')
                 store.commit('setAppData', serverData)
-
-                // console.log(serverData)
             })
             .catch(e => {
                 console.log('err')

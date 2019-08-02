@@ -77,7 +77,6 @@ export const mutations = {
     },
     set_root(state,data) {
         console.log('setting root'),
-        console.log(data)
         state.root = data
     },
 
@@ -97,25 +96,49 @@ export const mutations = {
         // copy the latest stage and push to the stage
 
         if (state.stages.length == 0){
-            console.log('1st case')
+            console.log('1st')
+
+            // copy root
+            const latest_root_copy = copy(state.root)
+
+            // mutate desc
+            latest_root_copy.desc = desc
+
+            let temp = undefined
+
+            for (let i = 0; i < locator.length; i++) {
+                /**
+                 * Routine
+                 * 
+                 * save data to temp then loop to the temp until loop is done
+                 * on the last lopp item, update the prop  
+                 */
+                if (temp == undefined) {
+                    temp = latest_root_copy.sections[locator[i]]
+
+                    if (locator.length == 1) {
+                        exec_on_prop(temp[target_prop])
+                    }
+                } else {
+
+                    temp = temp[locator[i]]
+
+                    if (i == locator.length - 1) {
+                        exec_on_prop(temp[target_prop])
+                        temp = undefined
+                    }
+                }
+            }
+
             state.stages.push({
                 title: `st-${state.stages.length + 1}`,
                 desc: `Added HTML ${tag} element to default section`,
                 obj: {
-                    sections: [
-                        {
-                            els: [
-                                gots({
-                                    tag: `html_${tag}`
-                                })
-                            ],
-                            role: state.root.sections[0].role,
-                            uid: state.root.sections[0].uid
-                        }
-                    ]
+                    sections: latest_root_copy.sections
                 }
             })
         }else {
+            console.log('2nd')
             /**
              * Locate the target property by looping through
              * the locators array, each item of the array is a key
@@ -136,8 +159,6 @@ export const mutations = {
 
             let temp = undefined
             
-            // console.log('The locator')
-            // console.log(locator)
 
             // inserting the new section view object
             for(let i = 0; i < locator.length; i++){
@@ -172,12 +193,12 @@ export const mutations = {
             // console.log(latest_stage_copy)
             
             state.stages.push(latest_stage_copy)
-
-            console.log('')
-            console.log('')
         }
     },
-    save_stage(state){
+    clear_stage(state){
+        state.stages = []
+    },
+    save_stage(state,{path}){
         if (state.stages.length == 0){
             this.commit("modal/set_modal", {
                 head: "dqPageLogicError",
@@ -188,21 +209,63 @@ export const mutations = {
                 }
             });
         } else {
-            console.log(state.stages[state.stages.length - 1].obj.sections)
-
             const root_copy = copy(state.root)
             root_copy.sections = state.stages[state.stages.length - 1].obj.sections
-            console.log(root_copy)
 
-            // this.commit("modal/set_modal", {
-            //     head: "Please wait",
-            //     body: "Saving ...",
-            //     config: {
-            //         ui_type: "msg",
-            //         closable: false
-            //     }
-            // });
-            state.stages = []
+            this.commit("modal/set_modal", {
+                head: "Please wait",
+                body: "Saving ...",
+                config: {
+                    ui_type: "msg",
+                    closable: false
+                }
+            });
+
+            this.dispatch('systemCall', {
+                command: 'updatePage',
+                section: 'pageMethods',
+                data: {
+                    path,
+                    content: root_copy
+                },
+                method: "post"
+            }).then((res) => {
+                if(res.status){
+                    this.commit("modal/set_modal", {
+                        head: "saved",
+                        body: "Session saved successfuly!.",
+                        config: {
+                            ui_type: "msg",
+                            closable: false
+                        }
+                    });
+
+                    this.dispatch("systemCall", {
+                        command: "getPage",
+                        section: "pageMethods",
+                        data: {
+                            path: path
+                        },
+                        method: "post"
+                    })
+                        .then(({ status, data }) => {
+                            if (status) {
+                                this.commit('pages/set_root', data.data)
+                                this.page_data = data.data;
+                            } else {
+                                this.commit("modal/set_modal", {
+                                    head: "Error while fetching editor data",
+                                    body: data.msg,
+                                    config: {
+                                        ui_type: "err",
+                                        closable: false
+                                    }
+                                });
+                            }
+                        })
+                }
+                this.commit('pages/clear_stage')
+            })
         }
     },
 }
@@ -217,7 +280,6 @@ export const actions = {
             method: "post"
         }).then(({ status, data }) => {
             if (status) {
-                console.log('yeeehaa!')
                 commit('set_root', data.data)
             } else {
                 this.commit("modal/set_modal", {

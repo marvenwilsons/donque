@@ -1,233 +1,246 @@
 <template>
   <div id="dq-page-editor" class="flex relative">
-    <div class="flex3 flex absolute fullheight-percent">
-      <div id="dq-page-editor-area" class="margin125 flex flex3 relative flexcol fullwidth">
-        <!-- section modal -->
+    <main class="flex fullwidth">
+      <div class="fullwidth flex">
         <div
-          style="z-index:1000"
-          v-if="sec_modal_viz"
-          class="absolute fullwidth fullheight-percent flex flexcenter flexcol"
+          id="dq-page-editor-area"
+          :style="{border: `1px solid ${$store.state.theme.global.border_color}`}"
+          class="flex flex3 relative flexcol fullwidth margin050"
         >
+          <!-- section modal -->
           <div
-            :style="{width:'350px', ...theme.modal_host_style, ...theme.global.page_modal_background}"
-            class
+            style="z-index:1000"
+            v-if="sec_modal_viz"
+            class="absolute fullwidth fullheight-percent flex flexcenter flexcol"
           >
-            <div class="pad125" :style="{...theme.modal_head_style}">Add new section</div>
-            <div class="padtop125 padleft125 padright125">
-              <span class="padright025">
-                <strong>Section Role</strong>
-              </span>
-              <input v-model="sec_data" class="margintop025 fullwidth pad025" type="text" />
-              <strike class="err" v-if="sec_err">{{sec_err}}</strike>
-            </div>
-            <div class="flex flexend padright125 padbottom125">
-              <span
-                @click="sec_modal_viz = false, sec_err = undefined"
-                :style="{...theme.modal_button_style}"
-                class="pointer margintop125 marginright050 pad025 padleft050 padright050"
-              >
-                <strong>Cancel</strong>
-              </span>
-              <span
-                @click="addSec"
-                :style="{...theme.modal_button_style}"
-                class="pointer margintop125 pad025 padleft050 padright050"
-              >
-                <strong>Add Section</strong>
-              </span>
-            </div>
-          </div>
-        </div>
-        <!-- structure vizualizer -->
-        <div :style="{filter: sec_modal_viz ? 'blur(2px)' : ''}" class="padbottom050">
-          <strong>dq Page Structure Editor 1.0</strong>
-        </div>
-        <div
-          :style="{filter: sec_modal_viz ? 'blur(2px)' : ''}"
-          id="dq-page-editor-area-c1"
-          v-for="(sections,s_i) in (is_traversing ? travers_mode :  $store.state.pages.stages.length == 0 ? sections : n_sections)"
-          :key="`seccc-${s_i}`"
-        >
-          <div id="dq-viz-host" :data="s_i" class="flex">
-            <div style="min-width:64px;" class="dq-strvw-el pointer">
-              <div
-                @click="sec_modal_viz = true, sec_data = undefined"
-                :style="{background:theme.global.secondary_bg_color}"
-                v-if="s_i == 0"
-              >
-                wrapper
-                <i class="fas fa-caret-right"></i>
+            <div
+              :style="{width:'350px', ...theme.modal_host_style, ...theme.global.page_modal_background}"
+            >
+              <div class="pad125" :style="{...theme.modal_head_style}">Add new section</div>
+              <div class="padtop125 padleft125 padright125">
+                <span class="padright025">
+                  <strong>Section Role</strong>
+                </span>
+                <input v-model="sec_data" class="margintop025 fullwidth pad025" type="text" />
+                <strike class="err" v-if="sec_err">{{sec_err}}</strike>
+              </div>
+              <div class="flex flexend padright125 padbottom125">
+                <span
+                  @click="sec_modal_viz = false, sec_err = undefined"
+                  :style="{...theme.modal_button_style}"
+                  class="pointer margintop125 marginright050 pad025 padleft050 padright050"
+                >
+                  <strong>Cancel</strong>
+                </span>
+                <span
+                  @click="addSec"
+                  :style="{...theme.modal_button_style}"
+                  class="pointer margintop125 pad025 padleft050 padright050"
+                >
+                  <strong>Add Section</strong>
+                </span>
               </div>
             </div>
-            <div :id="`${s_i}--${sections.uid}`" class="dq-strvw-el">
-              <div
-                :style="{background:theme.global.secondary_bg_color}"
-                class="flex flexcenter spacebetween pointer"
-                @click="openOpt(sections.uid,mode,1)"
-              >
-                <span class="padleft025 padright050">
-                  section -
-                  <small>{{sections.role}}</small>
-                </span>
-                <i class="fas fa-caret-right"></i>
-                <!-- option box -->
-                <div
-                  @click="openOpt(sections.uid,mode, 0)"
-                  v-if="opn_opts.includes(sections.uid)"
-                  class="relative"
-                >
+          </div>
+
+          <!-- structure vizualizer -->
+          <div
+            :style="{filter: sec_modal_viz ? 'blur(2px)' : '', background:`${$store.state.theme.global.secondary_bg_color}`}"
+            class="pad050 spacebetween flex st-viz-bnnr"
+          >
+            <div>
+              <strong>dq Page Structure Editor 1.0</strong>
+            </div>
+            <div>
+              <i
+                @click="$store.commit('pages/save_stage',{path: data})"
+                class="fas fa-save pointer padright025"
+              ></i>
+            </div>
+            <!-- http://{{$store.state.app.data.content.appName.split("_")[1]}}.com/{{data}} -->
+          </div>
+
+          <!-- elements view -->
+          <div id="dq-page-editor-area-host" class="pad125 fullheight-percent">
+            <div
+              :style="{filter: sec_modal_viz ? 'blur(2px)' : ''}"
+              class="fullwidth flex"
+              id="dq-page-editor-area-c1"
+              v-for="(sections,s_i) in (is_traversing ? travers_mode :  $store.state.pages.stages.length == 0 ? sections : n_sections)"
+              :key="`seccc-${s_i}`"
+            >
+              <div id="dq-viz-host" :data="s_i" class="flex">
+                <div style="min-width:64px;" class="dq-strvw-el pointer">
                   <div
-                    :style="{boxShadow:`0 0 5px ${$store.state.theme.global.secondary_bg_color}`}"
-                    class="dq-page-el-opt-bx-1 absolute flex pad050"
+                    @click="sec_modal_viz = true, sec_data = undefined"
+                    :style="{background:theme.global.secondary_bg_color}"
+                    v-if="s_i == 0"
                   >
-                    <div class="flex flexcol">
-                      <span>
-                        <div
-                          @mouseover="active = `optlpp-html${d.text}`"
-                          @mouseleave="cur_actv != `optlpp-html${d.text}` && (active = undefined)"
-                          :style="setStyle(active === `optlpp-html${d.text}` || cur_actv == `optlpp-html${d.text}`)"
-                          @click="view = d.view,  cur_actv = `optlpp-html${d.text}`"
-                          v-for="d in opts"
-                          class="pad025"
-                          :key="`ihga-${d.text}-aw`"
-                        >{{d.text}}</div>
-                        <!-- option items end -->
-                        <div class="pad025">Cut</div>
-                        <div class="pad025">Paste</div>
-                        <div class="pad025">Move up</div>
-                        <div class="pad025">Move down</div>
-                      </span>
-                    </div>
+                    wrapper
+                    <i class="fas fa-caret-right"></i>
+                  </div>
+                </div>
+                <div :id="`${s_i}--${sections.uid}`" class="dq-strvw-el">
+                  <div
+                    :style="{background:theme.global.secondary_bg_color}"
+                    class="flex flexcenter spacebetween pointer"
+                    @click="openOpt(sections.uid,mode,1)"
+                  >
+                    <span class="padleft025 padright050">
+                      section -
+                      <small>{{sections.role}}</small>
+                    </span>
+                    <i class="fas fa-caret-right"></i>
+                    <!-- option box -->
                     <div
-                      v-if="view"
-                      :style="{
+                      @click="openOpt(sections.uid,mode, 0)"
+                      v-if="opn_opts.includes(sections.uid)"
+                      class="relative"
+                    >
+                      <div
+                        :style="{boxShadow:`0 0 5px ${$store.state.theme.global.secondary_bg_color}`}"
+                        class="dq-page-el-opt-bx-1 absolute flex pad050"
+                      >
+                        <div class="flex flexcol">
+                          <span>
+                            <div
+                              @mouseover="active = `optlpp-html${d.text}`"
+                              @mouseleave="cur_actv != `optlpp-html${d.text}` && (active = undefined)"
+                              :style="setStyle(active === `optlpp-html${d.text}` || cur_actv == `optlpp-html${d.text}`)"
+                              @click="view = d.view,  cur_actv = `optlpp-html${d.text}`"
+                              v-for="d in opts"
+                              class="pad025"
+                              :key="`ihga-${d.text}-aw`"
+                            >{{d.text}}</div>
+                            <!-- option items end -->
+                            <div class="pad025">Cut</div>
+                            <div class="pad025">Paste</div>
+                            <div class="pad025">Move up</div>
+                            <div class="pad025">Move down</div>
+                          </span>
+                        </div>
+                        <div
+                          v-if="view"
+                          :style="{
                         boxShadow:`0 0 5px ${$store.state.theme.global.secondary_bg_color}`,
                         left:'90px',
                         top: '-1px',
                         border: `1px solid ${$store.state.theme.global.border_color}`,
                         background:'white'}"
-                      class="pad050 absolute dq-page-el-opt-bx-pu"
-                    >
-                      <div class="margin025 fullheight-percent">
-                        <div
-                          class="fullheight-percent"
-                          :path="data"
-                          :data="page_data"
-                          :uid="`${s_i}--${sections.uid}`"
-                          :is="view"
-                        ></div>
+                          class="pad050 absolute dq-page-el-opt-bx-pu"
+                        >
+                          <div class="margin025 fullheight-percent">
+                            <div
+                              class="fullheight-percent"
+                              :path="data"
+                              :data="page_data"
+                              :uid="`${s_i}--${sections.uid}`"
+                              :is="view"
+                            ></div>
+                          </div>
+                        </div>
                       </div>
                     </div>
+                    <!-- end of option box -->
                   </div>
                 </div>
-                <!-- end of option box -->
+                <strvw :data="sections"></strvw>
               </div>
             </div>
-            <strvw :data="sections"></strvw>
+          </div>
+
+          <!-- console view -->
+          <div >
+            <div
+              class="pad050"
+              :style="{
+                borderTop: `1px solid ${$store.state.theme.global.border_color}`,
+                background:`${$store.state.theme.global.secondary_bg_color}`}"
+            >
+              <strong>Console</strong>
+              <strong>Live-view</strong>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div
-        id="dq-opts-indc-bxs"
-        :style="{borderLeft:`1px solid ${$store.state.theme.global.border_color}`}"
-        class="flex flexcol flex1"
-      >
-        <div
-          :style="{borderBottom:`1px solid ${$store.state.theme.global.border_color}`, borderTop:`1px solid ${$store.state.theme.global.border_color}`}"
-          class="flex2 flex flexcol"
-        >
+        <div id="dq-opts-indc-bxs" class="flex flexcol">
           <div
-            :style="{background:`${$store.state.theme.global.secondary_bg_color}`}"
-            class="pad025 spacebetween flex"
+            :style="{border:`1px solid ${$store.state.theme.global.border_color}`, borderTop:`1px solid ${$store.state.theme.global.border_color}`}"
+            class="flex2 flex flexcol margintop050 marginright050"
           >
-            stages - {{this.stages.length}} unsave change(s)
-            <span>
-              <i @click="travers('down')" class="fas fa-arrow-circle-left pointer"></i>
-              <i @click="travers('up')" class="fas fa-arrow-circle-right pointer padright050"></i>
-              <i @click="$store.commit('pages/save_stage')" class="fas fa-save pointer padright025"></i>
-            </span>
-          </div>
-          <div id="dq-edtr-sd-pane-h" class="dq-edtr-sd-pane flex1 relative">
-            <div class="absolute flexcol fullwidth">
-              <div
-                @click="travers('select',st_k)"
-                class="padleft025 pointer flex"
-                v-for="(st,st_k) in stages"
-                :key="`st-${st_k}`"
-              >
-                <div>
-                  <i v-if="pointer == st_k" class="fas fa-caret-right" style="min-width:8px;"></i>
+            <div
+              :style="{background:`${$store.state.theme.global.secondary_bg_color}`}"
+              class="pad050 spacebetween flex"
+            >
+              <span>
+                <strong>Stages</strong>
+                - {{this.stages.length}} unsave change(s)
+              </span>
+              <span>
+                <i @click="travers('down')" class="fas fa-arrow-circle-left pointer"></i>
+                <i @click="travers('up')" class="fas fa-arrow-circle-right pointer"></i>
+              </span>
+            </div>
+            <div id="dq-edtr-sd-pane-h" class="dq-edtr-sd-pane flex1 relative">
+              <div class="absolute flexcol fullwidth">
+                <div
+                  @click="travers('select',st_k)"
+                  class="padleft025 pointer flex"
+                  v-for="(st,st_k) in stages"
+                  :key="`st-${st_k}`"
+                >
+                  <div>
+                    <i v-if="pointer == st_k" class="fas fa-caret-right" style="min-width:8px;"></i>
+                  </div>
+                  <div v-if="pointer != st_k" class style="min-width:8px;"></div>
+                  <span
+                    :style="{textDecoration: pointer == st_k ?  `underline dotted ${$store.state.theme.global.primary_text_color}` : ''}"
+                  >{{ st.desc}}</span>
                 </div>
-                <div v-if="pointer != st_k" class style="min-width:8px;"></div>
-                <span
-                  :style="{textDecoration: pointer == st_k ?  `underline dotted ${$store.state.theme.global.primary_text_color}` : ''}"
-                >{{ st.desc}}</span>
+              </div>
+            </div>
+          </div>
+          <div
+            :style="{border:`1px solid ${$store.state.theme.global.border_color}`}"
+            class="flex2 flex flexcol margintop050 marginright050"
+          >
+            <div
+              :style="{background:`${$store.state.theme.global.secondary_bg_color}`}"
+              class="pad025 flex spacebetween pointer"
+            >
+              <strong>Commits</strong>
+              <span>
+                <i class="fas fa-plus-circle"></i>
+              </span>
+            </div>
+            <div class="dq-edtr-sd-pane flex1 relative">
+              <div class="absolute flexcol fullwidth">
+                <div></div>
+              </div>
+            </div>
+          </div>
+          <div
+            :style="{border:`1px solid ${$store.state.theme.global.border_color}`}"
+            class="flex2 flex flexcol margintop050 marginright050 marginbottom050"
+          >
+            <div
+              :style="{background:`${$store.state.theme.global.secondary_bg_color}`}"
+              class="pad025 flex spacebetween pointer"
+            >
+              <strong>Versions</strong>
+              <span>
+                <i class="fas fa-plus-circle"></i>
+              </span>
+            </div>
+            <div class="dq-edtr-sd-pane flex1 relative">
+              <div class="absolute flexcol fullwidth">
+                <div></div>
               </div>
             </div>
           </div>
         </div>
-        <div
-          :style="{borderBottom:`1px solid ${$store.state.theme.global.border_color}`}"
-          class="flex2 flex flexcol"
-        >
-          <div
-            :style="{background:`${$store.state.theme.global.secondary_bg_color}`}"
-            class="pad025 flex spacebetween pointer"
-          >
-            commits
-            <span>
-              <i class="fas fa-plus-circle"></i>
-            </span>
-          </div>
-          <div class="dq-edtr-sd-pane flex1 relative">
-            <div class="absolute flexcol fullwidth">
-              <div>asdf</div>
-            </div>
-          </div>
-        </div>
-        <div
-          :style="{borderBottom:`1px solid ${$store.state.theme.global.border_color}`}"
-          class="flex2 flex flexcol"
-        >
-          <div
-            :style="{background:`${$store.state.theme.global.secondary_bg_color}`}"
-            class="pad025 flex spacebetween pointer"
-          >
-            versions
-            <span>
-              <i class="fas fa-plus-circle"></i>
-            </span>
-          </div>
-          <div class="dq-edtr-sd-pane flex1 relative">
-            <div class="absolute flexcol fullwidth">
-              <div>asdf</div>
-            </div>
-          </div>
-        </div>
       </div>
-
-      <div
-        :style="{borderLeft:`1px solid ${$store.state.theme.global.secondary_bg_color}`}"
-        id="dq-page-editor-area-c2"
-        class="fullheight-percent flex flexcol"
-      >
-        <div
-          :style="{border:`1px solid ${$store.state.theme.global.border_color}`}"
-          class="pad050 flex spacebetween"
-        >
-          <div>link here</div>
-          <span>
-            <i class="fas fa-desktop padleft125 pointer"></i>
-            <i class="fas fa-tablet-alt padleft125 pointer"></i>
-            <i class="fas fa-mobile-alt padleft125 padright125 pointer"></i>
-          </span>
-        </div>
-        <div class="relative flex1">
-          <div class="absolute fullwidth">live view here</div>
-        </div>
-      </div>
-    </div>
+    </main>
   </div>
 </template>
 
@@ -252,12 +265,18 @@ export default {
       }
     },
     n_sections() {
-      return this.$store.state.pages.stages[this.stages.length - 1].obj
-        .sections;
+      if (this.$store.state.pages.stages.length != 0) {
+        return this.$store.state.pages.stages[this.stages.length - 1].obj
+          .sections;
+      } else {
+        return this.$store.state.pages.root.sections;
+      }
     },
     travers_mode() {
-      if (this.$store.state.pages.stages.length) {
+      if (this.$store.state.pages.stages.length != 0) {
         return this.$store.state.pages.stages[this.pointer].obj.sections;
+      } else {
+        return this.$store.state.pages.root.sections;
       }
     },
     stages() {
@@ -525,21 +544,13 @@ export default {
 #dq-box-model-v {
   min-height: 140px;
 }
-#dq-page-editor {
-  /* max-width: 350px; */
+#dq-page-editor-area-host {
   overflow: auto;
+  /* min-width: 800px; */
 }
-#dq-page-editor-area {
-  overflow: auto;
-}
-#dq-page-editor-area-c1 {
-  min-width: 1250px;
-}
-#dq-page-editor-area-c2 {
-  min-width: 1500px;
-}
+
 #dq-opts-indc-bxs {
-  max-width: 250px;
+  min-width: 300px;
 }
 .dq-page-gr-hor {
   padding: 10px;
