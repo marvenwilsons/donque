@@ -382,6 +382,87 @@ pageMethods.getPage = {
         })
     }
 }
+pageMethods.getCss = {
+    get prop() {
+        return {
+            funcIsDestructive: false
+        }
+    },
+    getCss({ dep, data }){
+        console.log('fetchin all css')
+
+        const path = require('path')
+        const fs = require('fs')
+
+        const ins_css_loc = path.join(__dirname, '../../../assets/installed-css')
+
+        // 
+        let valid_css_files = []
+        fs.readdirSync(ins_css_loc).map((fileName) => {
+            if (fileName.split('.')[fileName.split('.').length - 1] == 'css'){
+                valid_css_files.push(fileName)
+            }
+        })
+
+        //
+        let css = {}
+        let con = []
+
+        valid_css_files.map((fileName) => {
+            const file_loc = `${ins_css_loc}/${fileName}`            
+            const file_content = fs.readFileSync(file_loc).toString()
+
+            css[fileName] = []
+            con[fileName] = []
+
+            let m;
+            const regex = /\.[a-zA-Z_][\w-_]*[^\.\s\{#:\,;]/gm;
+            while ((m = regex.exec(file_content)) !== null) {
+                if (m.index === regex.lastIndex) {
+                    regex.lastIndex++;
+                }
+
+                m.forEach((match, groupIndex) => {
+                    css[fileName].push(match.split('.').pop())
+                });
+            }
+
+            const regex2 = /\{([^}]+)\}/g;
+            while ((n = regex2.exec(file_content)) !== null) {
+                if (n.index === regex2.lastIndex) {
+                    regex2.lastIndex++;
+                }
+
+                n.forEach((match, groupIndex) => {
+                    if(groupIndex == 0 ){
+                        con[fileName].push(match)                        
+                    }
+                });
+            }
+
+        })
+
+        let final = {}
+
+        valid_css_files.map(f => {            
+            final[f] = {}
+            css[f].map((v,i) => {
+                final[f][css[f][i]] = con[f][i]
+            })
+        })
+
+        return new Promise((resolve,reject) => {
+            resolve({
+                status: true,
+                data: {
+                    actions: [],
+                    msg: null,
+                    payload: final
+                }
+            })
+        })
+    }
+}
 
 /**
  * create a route only no contents

@@ -338,8 +338,12 @@ export default {
       // options available in every el
       opts: [
         {
-          text: "Desc",
-          view: "dddesc"
+          text: "properties",
+          view: "properties"
+        },
+        {
+          text: "ClassList",
+          view: "classList"
         },
         {
           text: "HTML",
@@ -350,17 +354,13 @@ export default {
           view: "plgs"
         },
         {
-          text: "properties",
-          view: "properties"
-        },
-        {
-          text: "ClassList",
-          view: "classList"
-        },
-        {
           text: "Inline Style",
           view: "ils"
         },
+        {
+          text: "Desc",
+          view: "dddesc"
+        },        
         {
           text: "Delete",
           view: "dddel"

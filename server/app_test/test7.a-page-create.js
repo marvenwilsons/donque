@@ -74,165 +74,152 @@ const myTest = [
             myTest[2].input.token = data[0].data.actions[0].content.token
         }
     },
-    // create page level 2
     {
-        desc: 'create page level 2',
-        expected: true,
-        expectedMsg: 'service-1 page successfully created',
-        input: {
-            username: 'jannyann',
-            token: undefined,
-            section: 'pageMethods',
-            command: 'createPage',
-            data: {
-                name: 'service-1',
-                parent: 'services'
-            }
-        },
-        before: err => err(false),
-        after: err => err(false),
-        data(data) {
-            myTest[3].input.token = data[0].data.actions[0].content.token
-        }
-    },
-    // create page level 2.a
-    {
-        desc: 'create page level 2.a',
-        expected: true,
-        expectedMsg: 'service-2 page successfully created',
-        input: {
-            username: 'jannyann',
-            token: undefined,
-            section: 'pageMethods',
-            command: 'createPage',
-            data: {
-                name: 'service-2',
-                parent: 'services'
-            }
-        },
-        before: err => err(false),
-        after: err => err(false),
-        data(data) {
-            myTest[4].input.token = data[0].data.actions[0].content.token
-        }
-    },
-    // create page level 3
-    {
-        desc: 'create page level 3',
-        expected: true,
-        expectedMsg: 'foot-massage page successfully created',
-        input: {
-            username: 'jannyann',
-            token: undefined,
-            section: 'pageMethods',
-            command: 'createPage',
-            data: {
-                name: 'foot-massage',
-                parent: 'services.service-2'
-            }
-        },
-        before: err => err(false),
-        after: err => err(false),
-        data(data) {
-            myTest[5].input.token = data[0].data.actions[0].content.token
-        }
-    },
-    // create page level 4
-    {
-        desc: 'create page level 4',
-        expected: true,
-        expectedMsg: 'RMT page successfully created',
-        input: {
-            username: 'jannyann',
-            token: undefined,
-            section: 'pageMethods',
-            command: 'createPage',
-            data: {
-                name: 'RMT',
-                parent: 'services.service-2.foot-massage'
-            }
-        },
-        before: err => err(false),
-        after: err => err(false),
-        data(data) {
-            myTest[6].input.token = data[0].data.actions[0].content.token
-        }
-    },
-
-    /**
-     * 
-     */
-    {
-        desc: 'get page',
+        desc: 'get css',
         expected: true,
         expectedMsg: null,
         input: {
             username: 'jannyann',
             token: undefined,
             section: 'pageMethods',
-            command: 'getPage',
-            data: {
-                path: 'home'
-            }
+            command: 'getCss'
         },
         before: err => err(false),
-        after: err => err(false),
-        data(data) {
-            myTest[7].input.token = data[0].data.actions[0].content.token
-        }
-    },
-    /**
-     * 
-     */
-    {
-        desc: 'Add section, character test',
-        expected: false,
-        expectedMsg: 'Error: section role must not exceed 25 characters',
-        input: {
-            username: 'jannyann',
-            token: undefined,
-            section: 'pageMethods',
-            command: 'updatePage',
-            data: {
-                mode: "addSection",
-                path: 'home',
-                customData: {
-                    role: 'the quick brown fox jumps over the lazy dog.'
-                }
-            }
-        },
-        before: err => err(false),
-        after: err => err(false),
-        data(data) {
-            myTest[8].input.token = data[0].data.actions[0].content.token
-        }
-    },
-    /**
-     * 
-     */
-    {
-        desc: 'Add section, value test',
-        expected: false,
-        expectedMsg: 'Error: section role is required',
-        input: {
-            username: 'jannyann',
-            token: undefined,
-            section: 'pageMethods',
-            command: 'updatePage',
-            data: {
-                mode: "addSection",
-                path: 'home',
-                customData: {
-                    role: ''
-                }
-            }
-        },
-        before: err => err(false),
-        after: err => err(false),
-        data(data) {
-            myTest[7].input.token = data[0].data.actions[0].content.token
-        }
-    },
+        after: err => err(false)
+    }
+    // create page level 2
+    // {
+    //     desc: 'create page level 2',
+    //     expected: true,
+    //     expectedMsg: 'service-1 page successfully created',
+    //     input: {
+    //         username: 'jannyann',
+    //         token: undefined,
+    //         section: 'pageMethods',
+    //         command: 'createPage',
+    //         data: {
+    //             name: 'service-1',
+    //             parent: 'services'
+    //         }
+    //     },
+    //     before: err => err(false),
+    //     after: err => err(false),
+    //     data(data) {
+    //         myTest[3].input.token = data[0].data.actions[0].content.token
+    //     }
+    // },
+    // // create page level 2.a
+    // {
+    //     desc: 'create page level 2.a',
+    //     expected: true,
+    //     expectedMsg: 'service-2 page successfully created',
+    //     input: {
+    //         username: 'jannyann',
+    //         token: undefined,
+    //         section: 'pageMethods',
+    //         command: 'createPage',
+    //         data: {
+    //             name: 'service-2',
+    //             parent: 'services'
+    //         }
+    //     },
+    //     before: err => err(false),
+    //     after: err => err(false),
+    //     data(data) {
+    //         myTest[4].input.token = data[0].data.actions[0].content.token
+    //     }
+    // },
+    // // create page level 3
+    // {
+    //     desc: 'create page level 3',
+    //     expected: true,
+    //     expectedMsg: 'foot-massage page successfully created',
+    //     input: {
+    //         username: 'jannyann',
+    //         token: undefined,
+    //         section: 'pageMethods',
+    //         command: 'createPage',
+    //         data: {
+    //             name: 'foot-massage',
+    //             parent: 'services.service-2'
+    //         }
+    //     },
+    //     before: err => err(false),
+    //     after: err => err(false),
+    //     data(data) {
+    //         myTest[5].input.token = data[0].data.actions[0].content.token
+    //     }
+    // },
+    // // create page level 4
+    // {
+    //     desc: 'create page level 4',
+    //     expected: true,
+    //     expectedMsg: 'RMT page successfully created',
+    //     input: {
+    //         username: 'jannyann',
+    //         token: undefined,
+    //         section: 'pageMethods',
+    //         command: 'createPage',
+    //         data: {
+    //             name: 'RMT',
+    //             parent: 'services.service-2.foot-massage'
+    //         }
+    //     },
+    //     before: err => err(false),
+    //     after: err => err(false),
+    //     data(data) {
+    //         myTest[6].input.token = data[0].data.actions[0].content.token
+    //     }
+    // },
+
+    // /**
+    //  * 
+    //  */
+    // {
+    //     desc: 'get page',
+    //     expected: true,
+    //     expectedMsg: null,
+    //     input: {
+    //         username: 'jannyann',
+    //         token: undefined,
+    //         section: 'pageMethods',
+    //         command: 'getPage',
+    //         data: {
+    //             path: 'home'
+    //         }
+    //     },
+    //     before: err => err(false),
+    //     after: err => err(false),
+    //     data(data) {
+    //         myTest[7].input.token = data[0].data.actions[0].content.token
+    //     }
+    // },
+    // /**
+    //  * 
+    //  */
+    // {
+    //     desc: 'Add section, character test',
+    //     expected: false,
+    //     expectedMsg: 'Error: section role must not exceed 25 characters',
+    //     input: {
+    //         username: 'jannyann',
+    //         token: undefined,
+    //         section: 'pageMethods',
+    //         command: 'updatePage',
+    //         data: {
+    //             mode: "addSection",
+    //             path: 'home',
+    //             customData: {
+    //                 role: 'the quick brown fox jumps over the lazy dog.'
+    //             }
+    //         }
+    //     },
+    //     before: err => err(false),
+    //     after: err => err(false),
+    //     data(data) {
+    //         myTest[8].input.token = data[0].data.actions[0].content.token
+    //     }
+    // }
 ]
 
 cardinalTest(myTest)

@@ -60,7 +60,10 @@ export const state = () => ({
     root: undefined,
 
     stages: [],
-    travers_view: undefined
+    travers_view: undefined,
+
+    //
+    css_classes: undefined
 })
 
 export const getters = {
@@ -78,6 +81,9 @@ export const mutations = {
     set_root(state,data) {
         console.log('setting root'),
         state.root = data
+    },
+    set_css_class(state,data){
+        state.css_classes = data
     },
 
     /**
