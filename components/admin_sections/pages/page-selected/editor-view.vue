@@ -135,6 +135,7 @@
                                 :path="data"
                                 :data="page_data"
                                 :uid="`${s_i}--${sections.uid}`"
+                                :addrs_finder="addrs_finder"
                                 :is="view"
                               ></div>
                             </div>
@@ -162,7 +163,11 @@
                 <strong>Console</strong>
                 <!-- <strong>Live-view</strong> -->
               </div>
-              <div @click="exp_console" style="text-align:center;" class="padright050 pointer flex flexcenter">
+              <div
+                @click="exp_console"
+                style="text-align:center;"
+                class="padright050 pointer flex flexcenter"
+              >
                 <i v-if="!console" class="fas fa-angle-up"></i>
                 <i v-if="console" class="fas fa-angle-down"></i>
               </div>
@@ -307,6 +312,122 @@ export default {
   },
   data() {
     return {
+      addrs_finder: ({ el, uid}, fn) => {
+        let addrs = [];
+        let go = false;
+
+        const recor = id => {
+          const x = document.getElementById(`${id}`);
+
+          if (x.parentElement.id == "dq-viz-host") {
+            /**
+             * split id > push to array
+             * if the id of the element is equal to dq-viz-host
+             * trim and split the id discard the character body
+             * and parse the it to int then push to addrs array
+             */
+            addrs.push(
+              parseInt(x.id.split("--")[0]) == NaN
+                ? x.id.split("--")[0]
+                : parseInt(x.id.split("--")[0])
+            );
+
+            //
+            go = true;
+          }
+          // if the is is not dq-viz-host
+          else {
+            const x = document.getElementById(`${id}`);
+
+            const gtr = r => {
+              if (r.parentElement.id != "dq-page-editor-area-c1") {
+                gtr(r.parentElement);
+
+                if (r.id) {
+                  addrs.push(parseInt(r.id.split("--")[0]));
+                }
+              } else {
+                // replace the first index value of the addrs array to
+                // data attribute value, this represents the section
+                addrs.splice(0, 1, parseInt(r.getAttribute("data")));
+
+                //
+                go = true;
+              }
+            };
+
+            addrs.push(
+              parseInt(id.split("--")[0]) == NaN
+                ? id.split("--")[0]
+                : parseInt(id.split("--")[0])
+            );
+
+            /**
+             * if the html element has no id, execute the gtr function.
+             * the gtr function is a recorsive function,
+             * the gtr function's main purpose is to find the id dq-page-editor-area-c1
+             * until then the gtr function will kepp on executing on its self
+             *
+             * if the current html being examine by each execution of the gtr function
+             * has an id, that id will be push to addrs array
+             *
+             * if the id dq-page-editor-area-c1 found
+             */
+            if (x.parentElement.id == "") {
+              const asfd = gtr(x);
+            } else {
+            }
+          }
+        };
+
+        /**
+         * 1. processing starts here! getting the addrs of the element being click
+         * by reading the ID of each element until the parent host id is reach,
+         * constant addrs mutation
+         */
+        recor(uid);
+
+        const isOdd = num => num % 2;
+
+        let cntr = -1;
+        let new_addrs = [];
+
+        /**
+         * Currently the addrs array is an array of numbers which
+         * represents the position index of arrays in the els object
+         * insided the section object of the stage object located in the store.
+         *
+         * ex. current addrs state: [0,0]
+         * ex. addrs after for loop: [0,'els',0,'els']
+         *
+         * 2. push 'els' string to addrs array if index is even,
+         * push addrs value according by index if it is odd.
+         */
+        for (let i = 0; i < addrs.length * 2; i++) {
+          if (isOdd(i)) {
+            new_addrs.push("els");
+          } else {
+            cntr++;
+            new_addrs.push(addrs[cntr]);
+          }
+        }
+
+        /**
+         * 3
+         */
+        new_addrs.pop();
+
+        /**
+         * 4.
+         * send final data to store for new stage entry
+         */
+        if (go) {
+          fn(new_addrs);
+          addrs = [];
+          new_addrs = [];
+        }
+      },
+
       cur_open: undefined,
       opn_opts: [],
       mode: true,
@@ -360,7 +481,7 @@ export default {
         {
           text: "Desc",
           view: "dddesc"
-        },        
+        },
         {
           text: "Delete",
           view: "dddel"
@@ -422,10 +543,10 @@ export default {
       }, 1);
     },
     exp_console() {
-      this.console = !this.console
+      this.console = !this.console;
       const n = document.getElementById("dq-page-edtr-console-host");
-      
-      if(this.console){
+
+      if (this.console) {
         TweenMax.fromTo(n, 0.3, { height: "0" }, { height: "300" });
       } else {
         TweenMax.fromTo(n, 0.3, { height: "300" }, { height: "0" });

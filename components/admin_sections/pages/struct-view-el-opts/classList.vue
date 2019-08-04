@@ -19,7 +19,7 @@
               >
                 <span class="padleft025">{{cls}}</span>
                 <span @click="rem_cl(cls)">
-                  <strong class="padright025" >
+                  <strong class="padright025">
                     <i class="fa fa-minus"></i>
                   </strong>
                 </span>
@@ -62,7 +62,7 @@
             >
               <div class>Search classes on file:</div>
               <div class="padleft025 padright025 flex1 flexcenter">
-                <input class="fullwidth flex" type="text" />
+                <input id="cl_srch" class="fullwidth flex" type="text" />
               </div>
             </div>
             <div class="relative flex1 flex">
@@ -82,7 +82,9 @@
                   >
                     <span @click="sel_class(classes)">{{classes}}</span>
                     <span @click="addClass(classes)">
-                      <strong><i class="padleft025 fas fa-plus"></i></strong>
+                      <strong>
+                        <i class="padleft025 fas fa-plus"></i>
+                      </strong>
                     </span>
                   </span>
                 </div>
@@ -102,6 +104,7 @@
 
 <script>
 export default {
+  props: ["uid", "addrs_finder"],
   data() {
     return {
       cur_sel: undefined,
@@ -123,9 +126,24 @@ export default {
       return true;
     },
     addClass(cl) {
-      //@note to be finish, push to stage
+      //@note to be finish, add fucos to class search box, and auto complete feature
+
       if (!this.cl_list.includes(cl)) {
         this.cl_list.push(cl);
+
+        this.addrs_finder({el: null, uid: this.uid}, locator => {
+          this.$store.commit("pages/update_section", {
+            desc: `Added new class to HTML element - addrs: ${locator.join(
+              " > "
+            )}`,
+            locator,
+            tag: null,
+            target_prop: "classList",
+            exec_on_prop: function(prop) {
+              prop.push(cl);
+            }
+          });
+        });
       } else {
         this.$store.commit("modal/set_modal", {
           head: "Alert",
@@ -140,6 +158,13 @@ export default {
     rem_cl(cl) {
       this.cl_list.splice(this.cl_list.indexOf(cl), 1);
     }
+  },
+  mounted() {
+    // focus on class search input box
+    document.getElementById("cl_srch").focus()
+
+    // @note on load construct a id, get the classlist, push to cl_list 
+    // console.log(document.getElementById(this.uid))
   }
 };
 </script>
@@ -151,7 +176,7 @@ export default {
 .aut {
   overflow: auto;
 }
-.tc-pn{
+.tc-pn {
   border-radius: 2px;
 }
 </style>

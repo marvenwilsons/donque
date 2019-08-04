@@ -137,7 +137,7 @@ export const mutations = {
 
             state.stages.push({
                 title: `st-${state.stages.length + 1}`,
-                desc: `Added HTML ${tag} element to default section`,
+                desc: desc,
                 obj: {
                     sections: latest_root_copy.sections
                 }
@@ -182,12 +182,11 @@ export const mutations = {
 
                     temp = temp[locator[i]]
 
-                    // console.log('the temp')
-                    // console.log(temp)
-                    // console.log('target_prop')
-                    // console.log(target_prop)
-
                     if (i == locator.length - 1){
+                        console.log('target_prop')
+                        console.log(target_prop)
+                        console.log(temp)
+
                         exec_on_prop(temp[target_prop])
                         temp = undefined
                     }
