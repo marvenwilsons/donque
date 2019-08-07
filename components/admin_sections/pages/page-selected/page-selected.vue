@@ -32,7 +32,7 @@ export default {
   data() {
     return {
       comp: "editor",
-      page_data: undefined
+      page_data: undefined,
     };
   },
   components: {
@@ -75,7 +75,7 @@ export default {
       })
       .then(({ status, data }) => {
         if (status) {
-          this.$store.commit('pages/set_css_class', data.payload)
+          this.$store.commit("pages/set_css_class", data.payload);
         } else {
           this.$store.commit("modal/set_modal", {
             head: "Error while fetching editor data",

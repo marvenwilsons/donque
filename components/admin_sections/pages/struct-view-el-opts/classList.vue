@@ -4,6 +4,7 @@
       <div class="pad050">
         <span class="margin025">
           <strong>Class list</strong>
+          {{uid}}
         </span>
         <div
           :style="{border: `1px solid ${$store.state.theme.global.border_color}`, height:'150px'}"
@@ -165,6 +166,7 @@ export default {
 
     // @note on load construct a id, get the classlist, push to cl_list 
     // console.log(document.getElementById(this.uid))
+    console.log('test')
   }
 };
 </script>

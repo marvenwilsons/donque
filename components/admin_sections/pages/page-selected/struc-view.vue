@@ -1,5 +1,6 @@
 <template>
   <div>
+    {{addrs_finder}}
     <div
       :style="{color:$store.state.theme.global.secondary_text_color}"
       class="flex"
@@ -19,7 +20,7 @@
           <!-- option box -->
           <div
             @click="openOpt(el.uid,mode, 0)"
-            v-if="opn_opts.includes(el.uid)"
+            v-if="opn_opts[0] == el.uid"
             class="flex padleft125 relative"
           >
             <div class="dq-page-el-opt-bx absolute flex relative">
@@ -87,126 +88,10 @@ import properties from "../struct-view-el-opts/properties";
 import ils from "../struct-view-el-opts/inlineStyle";
 
 export default {
-  props: ["data"],
+  props: ["data", "addrs_finder"],
   name: "strvw",
   data() {
     return {
-      addrs_finder: ({ el, uid}, fn) => {
-        let addrs = [];
-        let go = false;
-
-        const recor = id => {
-          const x = document.getElementById(`${id}`);
-
-          if (x.parentElement.id == "dq-viz-host") {
-            /**
-             * split id > push to array
-             * if the id of the element is equal to dq-viz-host
-             * trim and split the id discard the character body
-             * and parse the it to int then push to addrs array
-             */
-            addrs.push(
-              parseInt(x.id.split("--")[0]) == NaN
-                ? x.id.split("--")[0]
-                : parseInt(x.id.split("--")[0])
-            );
-
-            //
-            go = true;
-          }
-          // if the is is not dq-viz-host
-          else {
-            const x = document.getElementById(`${id}`);
-
-            const gtr = r => {
-              if (r.parentElement.id != "dq-page-editor-area-c1") {
-                gtr(r.parentElement);
-
-                if (r.id) {
-                  addrs.push(parseInt(r.id.split("--")[0]));
-                }
-              } else {
-                // replace the first index value of the addrs array to
-                // data attribute value, this represents the section
-                addrs.splice(0, 1, parseInt(r.getAttribute("data")));
-
-                //
-                go = true;
-              }
-            };
-
-            addrs.push(
-              parseInt(id.split("--")[0]) == NaN
-                ? id.split("--")[0]
-                : parseInt(id.split("--")[0])
-            );
-
-            /**
-             * if the html element has no id, execute the gtr function.
-             * the gtr function is a recorsive function,
-             * the gtr function's main purpose is to find the id dq-page-editor-area-c1
-             * until then the gtr function will kepp on executing on its self
-             *
-             * if the current html being examine by each execution of the gtr function
-             * has an id, that id will be push to addrs array
-             *
-             * if the id dq-page-editor-area-c1 found
-             */
-            if (x.parentElement.id == "") {
-              const asfd = gtr(x);
-            } else {
-            }
-          }
-        };
-
-        /**
-         * 1. processing starts here! getting the addrs of the element being click
-         * by reading the ID of each element until the parent host id is reach,
-         * constant addrs mutation
-         */
-        recor(uid);
-
-        const isOdd = num => num % 2;
-
-        let cntr = -1;
-        let new_addrs = [];
-
-        /**
-         * Currently the addrs array is an array of numbers which
-         * represents the position index of arrays in the els object
-         * insided the section object of the stage object located in the store.
-         *
-         * ex. current addrs state: [0,0]
-         * ex. addrs after for loop: [0,'els',0,'els']
-         *
-         * 2. push 'els' string to addrs array if index is even,
-         * push addrs value according by index if it is odd.
-         */
-        for (let i = 0; i < addrs.length * 2; i++) {
-          if (isOdd(i)) {
-            new_addrs.push("els");
-          } else {
-            cntr++;
-            new_addrs.push(addrs[cntr]);
-          }
-        }
-
-        /**
-         * 3
-         */
-        new_addrs.pop();
-
-        /**
-         * 4.
-         * send final data to store for new stage entry
-         */
-        if (go) {
-          fn(new_addrs);
-          addrs = [];
-          new_addrs = [];
-        }
-      },
-
       open: "",
       isOpen: false,
       opn_opts: [],
@@ -270,25 +155,40 @@ export default {
       }
     },
     openOpt(uid, mode, c) {
+      //@note add feature when a opt window is open then when the user
+      // will click to another element the prev opened window will close
+
       if (mode == true) {
         if (this.opn_opts.includes(uid)) {
-          this.opn_opts.splice(this.opn_opts.indexOf(uid), 1);
+          // this.opn_opts.splice(this.opn_opts.indexOf(uid), 1);
         } else {
+          console.log("pushing!");
+          console.log(uid);
+          console.log(this.opn_opts);
           this.opn_opts.push(uid);
         }
 
         this.mode = false;
       } else {
+        console.log("2nd?");
         this.gg.push(c);
 
         setTimeout(() => {
           if (this.gg[0] === 0) {
+            console.log("2nd - 1");
+
             this.mode = false;
           } else if (this.gg[0] == 1) {
+            console.log("2nd - 2");
+
             this.mode = true;
             if (this.opn_opts.includes(uid)) {
+              console.log("2nd - 3");
+              console.log(this.opn_opts)
               this.opn_opts.splice(this.opn_opts.indexOf(uid), 1);
             } else {
+              console.log("2nd - 4");
+
               this.opn_opts.push(uid);
             }
           }

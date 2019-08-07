@@ -60,7 +60,7 @@
 
 <script>
 export default {
-  props: ["addrs_finder", "uid", "data", "path"],
+  props: ["uid", "data", "path"],
   data() {
     return {
       selected: undefined,
@@ -149,26 +149,28 @@ export default {
         };
       };
 
-      this.addrs_finder({ el, uid }, locator => {
-        this.$store.commit("pages/update_section", {
-          desc: `Added HTML ${el} element to section - addrs: ${locator.join(
-            " > "
-          )}`,
-          locator,
-          tag: el,
-          target_prop: "els",
-          exec_on_prop: function(prop) {
-            prop.push(
-              gots({
-                tag: `html_${el}`
-              })
-            );
-          }
-        });
+      this.$store.dispatch("pages/addrs_finder", {
+        uid,
+        fn: locator => {
+          this.$store.commit("pages/update_section", {
+            desc: `Added HTML ${el} element to section - addrs: ${locator.join(
+              " > "
+            )}`,
+            locator,
+            tag: el,
+            target_prop: "els",
+            exec_on_prop: function(prop) {
+              prop.push(
+                gots({
+                  tag: `html_${el}`
+                })
+              );
+            }
+          });
+        }
       });
-
-      
     },
+
     setStyle(arg) {
       if (arg) {
         return this.theme["page_editor_tile_opt_addChild_tiles_hover_&_active"];
