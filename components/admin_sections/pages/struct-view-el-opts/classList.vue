@@ -127,25 +127,31 @@ export default {
       return true;
     },
     addClass(cl) {
-      //@note to be finish, add fucos to class search box, and auto complete feature
-
       if (!this.cl_list.includes(cl)) {
+        
+        // this classlist push class
         this.cl_list.push(cl);
 
-        this.addrs_finder({el: null, uid: this.uid}, locator => {
-          this.$store.commit("pages/update_section", {
-            desc: `Added new class to HTML element - addrs: ${locator.join(
-              " > "
-            )}`,
-            locator,
-            tag: null,
-            target_prop: "classList",
-            exec_on_prop: function(prop) {
-              prop.push(cl);
-            }
-          });
+        // push new changes to stage
+        this.$store.dispatch("pages/addrs_finder", {
+          uid: this.uid,
+          fn: locator => {
+            this.$store.commit("pages/update_section", {
+              desc: `Added new class to HTML element - addrs: ${locator.join(
+                " > "
+              )}`,
+              locator,
+              tag: null,
+              target_prop: "classList",
+              exec_on_prop: function(prop) {
+                prop.push(cl);
+              }
+            });
+          }
         });
+
       } else {
+        // class is already in the classlist therefore it not goin to be added
         this.$store.commit("modal/set_modal", {
           head: "Alert",
           body: `${cl} class is already in the classlist`,
@@ -157,16 +163,19 @@ export default {
       }
     },
     rem_cl(cl) {
+      //@note it should remove the selected class from the latest stage obj 
+
       this.cl_list.splice(this.cl_list.indexOf(cl), 1);
     }
   },
   mounted() {
     // focus on class search input box
-    document.getElementById("cl_srch").focus()
+    document.getElementById("cl_srch").focus();
 
-    // @note on load construct a id, get the classlist, push to cl_list 
-    // console.log(document.getElementById(this.uid))
-    console.log('test')
+    console.log("class mounted");
+    this.$store.dispatch('pages/addrs_teller',{uid:this.uid}).then((addrs) => {
+      this.cl_list = addrs
+    })
   }
 };
 </script>

@@ -453,5 +453,165 @@ export const actions = {
             addrs = [];
             new_addrs = [];
         }
+    },
+    addrs_teller({state},{uid,obj}) {
+        let addrs = [];
+        let go = false;
+
+        const recor = id => {
+            const x = document.getElementById(`${id}`);
+
+            if (x.parentElement.id == "dq-viz-host") {
+                /**
+                 * split id > push to array
+                 * if the id of the element is equal to dq-viz-host
+                 * trim and split the id discard the character body
+                 * and parse the it to int then push to addrs array
+                 */
+                addrs.push(
+                    parseInt(x.id.split("--")[0]) == NaN
+                        ? x.id.split("--")[0]
+                        : parseInt(x.id.split("--")[0])
+                );
+
+                //
+                go = true;
+            }
+            // if the is is not dq-viz-host
+            else {
+                const x = document.getElementById(`${id}`);
+
+                const gtr = r => {
+                    if (r.parentElement.id != "dq-page-editor-area-c1") {
+                        gtr(r.parentElement);
+
+                        if (r.id) {
+                            addrs.push(parseInt(r.id.split("--")[0]));
+                        }
+                    } else {
+                        // replace the first index value of the addrs array to
+                        // data attribute value, this represents the section
+                        addrs.splice(0, 1, parseInt(r.getAttribute("data")));
+
+                        //
+                        go = true;
+                    }
+                };
+
+                addrs.push(
+                    parseInt(id.split("--")[0]) == NaN
+                        ? id.split("--")[0]
+                        : parseInt(id.split("--")[0])
+                );
+
+                /**
+                 * if the html element has no id, execute the gtr function.
+                 * the gtr function is a recorsive function,
+                 * the gtr function's main purpose is to find the id dq-page-editor-area-c1
+                 * until then the gtr function will kepp on executing on its self
+                 *
+                 * if the current html being examine by each execution of the gtr function
+                 * has an id, that id will be push to addrs array
+                 *
+                 * if the id dq-page-editor-area-c1 found
+                 */
+                if (x.parentElement.id == "") {
+                    const asfd = gtr(x);
+                } else {
+                }
+            }
+        };
+
+        /**
+         * 1. processing starts here! getting the addrs of the element being click
+         * by reading the ID of each element until the parent host id is reach,
+         * constant addrs mutation
+         */
+        recor(uid);
+
+        const isOdd = num => num % 2;
+
+        let cntr = -1;
+        let new_addrs = [];
+
+        /**
+         * Currently the addrs array is an array of numbers which
+         * represents the position index of arrays in the els object
+         * insided the section object of the stage object located in the store.
+         *
+         * ex. current addrs state: [0,0]
+         * ex. addrs after for loop: [0,'els',0,'els']
+         *
+         * 2. push 'els' string to addrs array if index is even,
+         * push addrs value according by index if it is odd.
+         */
+        for (let i = 0; i < addrs.length * 2; i++) {
+            if (isOdd(i)) {
+                new_addrs.push("els");
+            } else {
+                cntr++;
+                new_addrs.push(addrs[cntr]);
+            }
+        }
+
+        /**
+         * 3
+         */
+        new_addrs.pop();
+        
+
+        const locator = new_addrs
+        let final = undefined
+        let temp = undefined
+        const latest_stage_copy = copy(state.stages[state.stages.length - 1])
+
+
+        if(state.stages.length == 0){
+            // copy root
+            const latest_root_copy = copy(state.root)
+
+            let temp = undefined
+
+            for (let i = 0; i < locator.length; i++) {
+                /**
+                 * Routine
+                 * 
+                 * save data to temp then loop to the temp until loop is done
+                 * on the last lopp item, update the prop  
+                 */
+                if (temp == undefined) {
+                    temp = latest_root_copy.sections[locator[i]]
+                } else {
+
+                    temp = temp[locator[i]]
+
+                    if (i == locator.length - 1) {
+                        final = temp['classList']
+                    }
+                }
+            }
+        }else {
+            for (let i = 0; i < locator.length; i++) {
+                /**
+                 * Routine
+                 * 
+                 * save data to temp then loop to the temp until loop is done
+                 * on the last lopp item, update the prop  
+                 */
+                if (temp == undefined) {
+                    temp = latest_stage_copy.obj.sections[locator[i]]
+                } else {
+
+                    temp = temp[locator[i]]
+
+                    if (i == locator.length - 1) {
+                        final = temp['classList']
+                    }
+                }
+            }
+        }
+
+
+        return final
     }
 }
