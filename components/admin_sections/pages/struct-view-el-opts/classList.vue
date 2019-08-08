@@ -5,7 +5,6 @@
       <div class="pad050">
         <span class="margin025">
           <strong>Class list</strong>
-          {{uid}}
         </span>
         <div
           :style="{border: `1px solid ${$store.state.theme.global.border_color}`, height:'150px'}"
@@ -19,12 +18,15 @@
                 v-for="cls in cl_list"
                 :key="`oiq-${cls}`"
               >
-                <span class="padleft025">{{cls}}</span>
-                <span @click="rem_cl(cls)">
-                  <strong class="padright025">
-                    <i class="fa fa-minus"></i>
-                  </strong>
-                </span>
+                <small style="font-weight:600;">
+                  <span class="padleft050">{{cls}}</span>
+
+                  <span @click="rem_cl(cls)">
+                    <span class="padright050 padleft025">
+                      <i style="opacity:0.8" class="fas fa-times-circle"></i>
+                    </span>
+                  </span>
+                </small>
               </span>
             </div>
           </div>
@@ -42,7 +44,11 @@
             <div
               :style="{background:`${$store.state.theme.global.secondary_bg_color}`}"
               class="pad025 padleft050"
-            >CSS File</div>
+            >
+              <small>
+                <strong>CSS File</strong>
+              </small>
+            </div>
             <div class="relative">
               <div class="absolute">
                 <div
@@ -50,7 +56,7 @@
                   class="padtop025 padleft025"
                   v-for="keys in Object.keys($store.state.pages.css_classes)"
                   :key="`qwehrk-${keys}`"
-                >{{keys}}</div>
+                ><small><strong>{{keys}}</strong></small></div>
               </div>
             </div>
           </div>
@@ -62,7 +68,11 @@
               :style="{background:`${$store.state.theme.global.secondary_bg_color}`}"
               class="pad025 padleft050 flex"
             >
-              <div class>Search classes on file:</div>
+              <div>
+                <small>
+                  <strong>Search classes on file:</strong>
+                </small>
+              </div>
               <div class="padleft025 padright025 flex1 flexcenter">
                 <input id="cl_srch" class="fullwidth flex" type="text" />
               </div>
@@ -82,18 +92,24 @@
                     :style="{border: `1px solid ${$store.state.theme.global.border_color}`}"
                     :key="`osw-${classes}`"
                   >
-                    <span @click="sel_class(classes)">{{classes}}</span>
-                    <span @click="addClass(classes)">
+                    <small>
                       <strong>
-                        <i class="padleft025 fas fa-plus"></i>
+                        <span @click="sel_class(classes)">{{classes}}</span>
                       </strong>
-                    </span>
+                      <span @click="addClass(classes)">
+                        <strong>
+                          <i style="opacity:0.8" class="fas fa-plus-circle"></i>
+                        </strong>
+                      </span>
+                    </small>
                   </span>
                 </div>
               </div>
-              <div style="max-width:170px;" class="flex1 aut">
+              <div style="max-width:170px;" class="flex1 aut pad050">
                 <div v-if="!isEmpty($store.state.pages.css_classes[cur_sel])">
-                  <pre>.{{cur_sel_cl}} {{$store.state.pages.css_classes[cur_sel][cur_sel_cl]}}</pre>
+                  <small>
+                    <pre>.{{cur_sel_cl}} {{$store.state.pages.css_classes[cur_sel][cur_sel_cl]}}</pre>
+                  </small>
                 </div>
               </div>
             </div>
@@ -108,7 +124,7 @@
 import { mapGetters } from "vuex";
 
 export default {
-  props: ["uid", "addrs_finder", "travers_data"],
+  props: ["uid", "addrs_finder"],
   data() {
     return {
       cur_sel: undefined,
@@ -219,7 +235,7 @@ export default {
     if (document.getElementById("cl_srch") != null) {
       document.getElementById("cl_srch").focus();
     }
-    
+
     // populates the current class list
     this.$store
       .dispatch("pages/addrs_teller", {
@@ -241,7 +257,7 @@ export default {
   overflow: auto;
 }
 .tc-pn {
-  border-radius: 2px;
+  border-radius: 15px;
 }
 </style>
 

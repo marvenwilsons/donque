@@ -12,7 +12,7 @@
           :style="{background:$store.state.theme.global.secondary_bg_color}"
           @click="openOpt(el.uid,mode, 1)"
         > 
-        <!-- @note add travers event origin highlight element feature -->
+        <!-- add travers event origin highlight element feature -->
           <div class="flex spacebetween flexcol flexwrap">
             <div class="flex1 flex flexcenter spacebetween">
               <div class="padleft025">{{trimTitle(el.tag)}}</div>
