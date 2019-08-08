@@ -42,8 +42,8 @@
         >
           <div class="flex1">
             <div
-              :style="{background:`${$store.state.theme.global.secondary_bg_color}`}"
-              class="pad025 padleft050"
+              :style="{background:`${$store.state.theme.global.secondary_bg_color}`,padding:'4px'}"
+              class="padleft050"
             >
               <small>
                 <strong>CSS File</strong>
@@ -56,7 +56,11 @@
                   class="padtop025 padleft025"
                   v-for="keys in Object.keys($store.state.pages.css_classes)"
                   :key="`qwehrk-${keys}`"
-                ><small><strong>{{keys}}</strong></small></div>
+                >
+                  <small>
+                    <strong>{{keys}}</strong>
+                  </small>
+                </div>
               </div>
             </div>
           </div>
@@ -68,13 +72,21 @@
               :style="{background:`${$store.state.theme.global.secondary_bg_color}`}"
               class="pad025 padleft050 flex"
             >
-              <div>
+              <div class="flex flexcenter">
                 <small>
                   <strong>Search classes on file:</strong>
                 </small>
               </div>
               <div class="padleft025 padright025 flex1 flexcenter">
-                <input id="cl_srch" class="fullwidth flex" type="text" />
+                <small>
+                  <input
+                    v-model="cur_search_value"
+                    id="cl_srch"
+                    class="fullwidth flex pad025"
+                    type="text"
+                    v-on:keyup.enter="submit_sel_cl"
+                  />
+                </small>
               </div>
             </div>
             <div class="relative flex1 flex">
@@ -88,7 +100,7 @@
                 >
                   <span
                     class="pad025 margin025 padleft050 padright050 tc-pn"
-                    v-for="classes in Object.keys($store.state.pages.css_classes[cur_sel])"
+                    v-for="classes in (cur_search_result ? cur_search_result : Object.keys($store.state.pages.css_classes[cur_sel]))"
                     :style="{border: `1px solid ${$store.state.theme.global.border_color}`}"
                     :key="`osw-${classes}`"
                   >
@@ -131,7 +143,10 @@ export default {
       cur_sel_cl: undefined,
       cl_list: [],
 
-      cur_trv_view: undefined
+      cur_trv_view: undefined,
+
+      cur_search_value: undefined,
+      cur_search_result: undefined
     };
   },
   computed: {
@@ -161,6 +176,23 @@ export default {
         .then(addrs => {
           this.cl_list = addrs;
         });
+    },
+    cur_search_value(o, n) {
+      if (this.cur_search_value == "") {
+        this.cur_search_value = undefined;
+      } else {
+        const arr = Object.keys(
+          this.$store.state.pages.css_classes[this.cur_sel]
+        );
+        let cur_res = [];
+        arr.map(cls => {
+          if (cls.search(this.cur_search_value) == 0) {
+            cur_res.push(cls);
+          }
+        });
+
+        this.cur_search_result = cur_res;
+      }
     }
   },
   methods: {
@@ -212,7 +244,6 @@ export default {
     },
     rem_cl(cl) {
       //removes the selected class from the latest stage obj
-
       this.$store.dispatch("pages/addrs_finder", {
         uid: this.uid,
         fn: locator => {
@@ -228,6 +259,9 @@ export default {
           });
         }
       });
+    },
+    submit_sel_cl(){
+      this.addClass(this.cur_search_result[0])
     }
   },
   mounted() {
@@ -245,6 +279,8 @@ export default {
       .then(addrs => {
         this.cl_list = addrs;
       });
+
+    this.cur_sel = "dq-default.css";
   }
 };
 </script>

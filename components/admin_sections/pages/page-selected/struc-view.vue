@@ -173,7 +173,6 @@ export default {
           } else if (this.gg[0] == 1) {
             this.mode = true;
             if (this.opn_opts.includes(uid)) {
-              console.log(this.opn_opts);
               this.opn_opts.splice(this.opn_opts.indexOf(uid), 1);
             } else {
               this.opn_opts.push(uid);
