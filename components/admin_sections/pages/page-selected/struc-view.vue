@@ -11,8 +11,9 @@
         <div
           :style="{background:$store.state.theme.global.secondary_bg_color}"
           @click="openOpt(el.uid,mode, 1)"
-        >
-          <div class="flex spacebetween flexcol flexwrap ">
+        > 
+        <!-- @note add travers event origin highlight element feature -->
+          <div class="flex spacebetween flexcol flexwrap">
             <div class="flex1 flex flexcenter spacebetween">
               <div class="padleft025">{{trimTitle(el.tag)}}</div>
               <i class="fas fa-caret-right padright025"></i>

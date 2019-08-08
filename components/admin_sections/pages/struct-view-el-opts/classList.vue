@@ -144,7 +144,6 @@ export default {
         })
         .then(addrs => {
           this.cl_list = addrs;
-          console.log(this.cl_list);
         });
     }
   },
@@ -220,10 +219,7 @@ export default {
     if (document.getElementById("cl_srch") != null) {
       document.getElementById("cl_srch").focus();
     }
-
-    console.log("travers view");
-    console.log(this.$store.state.pages.travers_view);
-
+    
     // populates the current class list
     this.$store
       .dispatch("pages/addrs_teller", {

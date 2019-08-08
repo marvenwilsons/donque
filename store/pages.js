@@ -203,10 +203,6 @@ export const mutations = {
                     temp = temp[locator[i]]
 
                     if (i == locator.length - 1){
-                        console.log('target_prop')
-                        console.log(target_prop)
-                        console.log(temp)
-
                         exec_on_prop(temp[target_prop])
                         temp = undefined
                     }

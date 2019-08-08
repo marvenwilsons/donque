@@ -376,24 +376,8 @@ export default {
       // options available in every el
       opts: [
         {
-          text: "properties",
-          view: "properties"
-        },
-        {
-          text: "ClassList",
-          view: "classList"
-        },
-        {
-          text: "HTML",
+          text: "Add Child",
           view: "addChild"
-        },
-        {
-          text: "Plugins",
-          view: "plgs"
-        },
-        {
-          text: "Inline Style",
-          view: "ils"
         },
         {
           text: "Desc",

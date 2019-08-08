@@ -324,7 +324,8 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                                 {
                                     role: 'dq-default', 
                                     uid:'dqDefault-872MJUK-sd-3sg0',
-                                    els: []
+                                    els: [],
+                                    classList: []
                                 }
                             ], 
                             data_collection: {}, 
