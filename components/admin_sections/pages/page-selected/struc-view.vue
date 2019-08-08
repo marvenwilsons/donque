@@ -1,6 +1,5 @@
 <template>
   <div>
-    {{addrs_finder}}
     <div
       :style="{color:$store.state.theme.global.secondary_text_color}"
       class="flex"
@@ -13,9 +12,11 @@
           :style="{background:$store.state.theme.global.secondary_bg_color}"
           @click="openOpt(el.uid,mode, 1)"
         >
-          <div class="flex spacebetween flexcenter">
-            <span class="padleft025">{{trimTitle(el.tag)}}</span>
-            <i class="fas fa-caret-right padright025"></i>
+          <div class="flex spacebetween flexcol flexwrap ">
+            <div class="flex1 flex flexcenter spacebetween">
+              <div class="padleft025">{{trimTitle(el.tag)}}</div>
+              <i class="fas fa-caret-right padright025"></i>
+            </div>
           </div>
           <!-- option box -->
           <div
@@ -61,7 +62,6 @@
                 <div class="margin025 fullheight-percent">
                   <div
                     class="fullheight-percent"
-                    :addrs_finder="addrs_finder"
                     :uid="`${el_i}--${el.uid}`"
                     :data="el"
                     :is="view"
@@ -88,7 +88,7 @@ import properties from "../struct-view-el-opts/properties";
 import ils from "../struct-view-el-opts/inlineStyle";
 
 export default {
-  props: ["data", "addrs_finder"],
+  props: ["data"],
   name: "strvw",
   data() {
     return {
@@ -155,40 +155,26 @@ export default {
       }
     },
     openOpt(uid, mode, c) {
-      //@note add feature when a opt window is open then when the user
-      // will click to another element the prev opened window will close
-
       if (mode == true) {
         if (this.opn_opts.includes(uid)) {
           // this.opn_opts.splice(this.opn_opts.indexOf(uid), 1);
         } else {
-          console.log("pushing!");
-          console.log(uid);
-          console.log(this.opn_opts);
           this.opn_opts.push(uid);
         }
 
         this.mode = false;
       } else {
-        console.log("2nd?");
         this.gg.push(c);
 
         setTimeout(() => {
           if (this.gg[0] === 0) {
-            console.log("2nd - 1");
-
             this.mode = false;
           } else if (this.gg[0] == 1) {
-            console.log("2nd - 2");
-
             this.mode = true;
             if (this.opn_opts.includes(uid)) {
-              console.log("2nd - 3");
-              console.log(this.opn_opts)
+              console.log(this.opn_opts);
               this.opn_opts.splice(this.opn_opts.indexOf(uid), 1);
             } else {
-              console.log("2nd - 4");
-
               this.opn_opts.push(uid);
             }
           }

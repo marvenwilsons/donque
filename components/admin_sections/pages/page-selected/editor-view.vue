@@ -49,7 +49,7 @@
             class="pad050 spacebetween flex st-viz-bnnr"
           >
             <div>
-              <strong>dq Page Structure Editor 1.0</strong>
+              <strong>DQ Page Structure & Semantic Editor 1.0</strong>
             </div>
             <div>
               <i
@@ -59,7 +59,7 @@
             </div>
           </div>
 
-          <!-- elements view -->
+          <!-- elements view @stages - html render -->
           <main id="dq-page-editor-area-host" class="flex1 flex relative">
             <div class="pad125 relative flex1 absolute">
               <div
@@ -159,7 +159,8 @@
                 background:`${$store.state.theme.global.secondary_bg_color}`}"
             >
               <div>
-                <strong>Console</strong>
+                <strong class="pointer">Console</strong> |
+                <strong class="pointer">Live View</strong>
                 <!-- <strong>Live-view</strong> -->
               </div>
               <div
@@ -287,21 +288,54 @@ export default {
   computed: {
     sections() {
       if (this.$store.state.pages.root) {
+        this.$store.commit(
+          "pages/set_travers_view",
+          {
+            obj: this.$store.state.pages.root.sections
+          }
+        );
         return this.$store.state.pages.root.sections;
       }
     },
     n_sections() {
       if (this.$store.state.pages.stages.length != 0) {
+        this.$store.commit(
+          "pages/set_travers_view",
+          {
+            obj: this.$store.state.pages.stages[this.stages.length - 1].obj
+          .sections
+          }
+        );
+
         return this.$store.state.pages.stages[this.stages.length - 1].obj
           .sections;
       } else {
+        this.$store.commit(
+          "pages/set_travers_view",
+          {
+            obj: this.$store.state.pages.root.sections
+          }
+        )
         return this.$store.state.pages.root.sections;
       }
     },
     travers_mode() {
       if (this.$store.state.pages.stages.length != 0) {
+        this.$store.commit(
+          "pages/set_travers_view",
+          {
+            obj: this.$store.state.pages.stages[this.pointer].obj.sections,
+            pointer: this.pointer
+          }
+        )
         return this.$store.state.pages.stages[this.pointer].obj.sections;
       } else {
+         this.$store.commit(
+          "pages/set_travers_view",
+          {
+            obj: this.$store.state.pages.root.sections,
+          }
+        )
         return this.$store.state.pages.root.sections;
       }
     },

@@ -1,6 +1,7 @@
 <template>
   <div style="min-width:500px;">
     <main>
+      {{cur_cl_list}}
       <div class="pad050">
         <span class="margin025">
           <strong>Class list</strong>
@@ -104,14 +105,48 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
-  props: ["uid", "addrs_finder"],
+  props: ["uid", "addrs_finder", "travers_data"],
   data() {
     return {
       cur_sel: undefined,
       cur_sel_cl: undefined,
-      cl_list: []
+      cl_list: [],
+
+      cur_trv_view: undefined
     };
+  },
+  computed: {
+    cur_cl_list() {
+      this.$store
+        .dispatch("pages/addrs_teller", {
+          uid: this.uid,
+          target_prop: "classList"
+        })
+        .then(d => {
+          this.cl_list = d;
+        });
+    },
+    ...mapGetters({
+      str_trvers_view_state: "pages/travers_view_state"
+    })
+  },
+  watch: {
+    str_trvers_view_state(o, n) {
+      // a stages travers feature, where it syncs to the current travers pointer in stage array
+      this.$store
+        .dispatch("pages/addrs_teller", {
+          uid: this.uid,
+          target_prop: "classList",
+          stage_pointer: this.$store.state.pages.cur_pointer
+        })
+        .then(addrs => {
+          this.cl_list = addrs;
+          console.log(this.cl_list);
+        });
+    }
   },
   methods: {
     sel_file(key) {
@@ -128,7 +163,6 @@ export default {
     },
     addClass(cl) {
       if (!this.cl_list.includes(cl)) {
-        
         // this classlist push class
         this.cl_list.push(cl);
 
@@ -149,7 +183,6 @@ export default {
             });
           }
         });
-
       } else {
         // class is already in the classlist therefore it not goin to be added
         this.$store.commit("modal/set_modal", {
@@ -163,19 +196,43 @@ export default {
       }
     },
     rem_cl(cl) {
-      //@note it should remove the selected class from the latest stage obj 
+      //removes the selected class from the latest stage obj
 
-      this.cl_list.splice(this.cl_list.indexOf(cl), 1);
+      this.$store.dispatch("pages/addrs_finder", {
+        uid: this.uid,
+        fn: locator => {
+          this.$store.commit("pages/update_section", {
+            desc: `Removed a class in HTML element - addrs: ${locator.join(
+              " > "
+            )}`,
+            locator,
+            target_prop: "classList",
+            exec_on_prop: function(prop) {
+              prop.splice(prop.indexOf(cl), 1);
+            }
+          });
+        }
+      });
     }
   },
   mounted() {
     // focus on class search input box
-    document.getElementById("cl_srch").focus();
+    if (document.getElementById("cl_srch") != null) {
+      document.getElementById("cl_srch").focus();
+    }
 
-    console.log("class mounted");
-    this.$store.dispatch('pages/addrs_teller',{uid:this.uid}).then((addrs) => {
-      this.cl_list = addrs
-    })
+    console.log("travers view");
+    console.log(this.$store.state.pages.travers_view);
+
+    // populates the current class list
+    this.$store
+      .dispatch("pages/addrs_teller", {
+        uid: this.uid,
+        target_prop: "classList"
+      })
+      .then(addrs => {
+        this.cl_list = addrs;
+      });
   }
 };
 </script>
