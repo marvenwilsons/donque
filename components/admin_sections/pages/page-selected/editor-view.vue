@@ -213,7 +213,7 @@
                   <div v-if="pointer != st_k" class style="min-width:8px;"></div>
                   <span
                     :style="{textDecoration: pointer == st_k ?  `underline dotted ${$store.state.theme.global.primary_text_color}` : ''}"
-                  >{{ st.desc}}</span>
+                  ><small><strong>{{st.desc}}</strong></small></span>
                 </div>
               </div>
             </div>

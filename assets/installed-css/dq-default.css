@@ -46,6 +46,9 @@
 .relative {
   position: relative;
 }
+.fixed {
+  position: fixed;
+}
 .absolute {
   position: absolute;
 }
@@ -70,6 +73,9 @@
   height: 40px;
 }
 .borderred {
+  border: 1px solid red;
+}
+.borderblue {
   border: 1px solid red;
 }
 .fullwidth {

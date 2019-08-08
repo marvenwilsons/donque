@@ -1,134 +1,151 @@
 <template>
   <div style="min-width:500px;">
-    <main>
-      {{cur_cl_list}}
-      <div class="pad050">
-        <span class="margin025">
-          <strong>Class list</strong>
-        </span>
-        <div
-          :style="{border: `1px solid ${$store.state.theme.global.border_color}`, height:'150px'}"
-          class="flex pad025 hdn"
-        >
-          <div class="relative fullwidth aut">
-            <div class="absolute flex flexwrap aut">
-              <span
-                class="pad025 margin025 tc-pn"
-                :style="{border: `1px solid ${$store.state.theme.global.border_color}`}"
-                v-for="cls in cl_list"
-                :key="`oiq-${cls}`"
-              >
-                <small style="font-weight:600;">
-                  <span class="padleft050">{{cls}}</span>
-
-                  <span @click="rem_cl(cls)">
-                    <span class="padright050 padleft025">
-                      <i style="opacity:0.8" class="fas fa-times-circle"></i>
-                    </span>
-                  </span>
-                </small>
-              </span>
-            </div>
-          </div>
-        </div>
+    <div
+      :style="{border: `1px solid ${$store.state.theme.global.border_color}`}"
+      class="marginbottom050"
+    >
+      <div
+        :style="{background:`${$store.state.theme.global.secondary_bg_color}`}"
+        class="pad050 spacebetween flex st-viz-bnnr"
+      >
+        <small>
+          <strong>Class list</strong> -
+          <strike>(Width & Height)</strike>
+        </small>
+        <i class="fas fa-angle-down"></i>
       </div>
-      <div class="padleft050 padright050 padbottom050 padtop025">
-        <span class="margin025">
-          <strong>Available Classes</strong>
-        </span>
-        <div
-          :style="{border: `1px solid ${$store.state.theme.global.border_color}`, height:'250px'}"
-          class="borderred flex"
-        >
-          <div class="flex1">
+      <div class="pad050">
+        <main>
+          {{cur_cl_list}}
+          <div class="pad050">
+            <span class="margin025">
+              <strong>Class list</strong>
+            </span>
             <div
-              :style="{background:`${$store.state.theme.global.secondary_bg_color}`,padding:'4px'}"
-              class="padleft050"
+              :style="{border: `1px solid ${$store.state.theme.global.border_color}`, height:'150px'}"
+              class="flex pad025 hdn"
             >
-              <small>
-                <strong>CSS File</strong>
-              </small>
-            </div>
-            <div class="relative">
-              <div class="absolute">
-                <div
-                  @click="sel_file(keys)"
-                  class="padtop025 padleft025"
-                  v-for="keys in Object.keys($store.state.pages.css_classes)"
-                  :key="`qwehrk-${keys}`"
-                >
-                  <small>
-                    <strong>{{keys}}</strong>
-                  </small>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            :style="{borderLeft: `1px solid ${$store.state.theme.global.border_color}`}"
-            class="flex3 flex flexcol hdn"
-          >
-            <div
-              :style="{background:`${$store.state.theme.global.secondary_bg_color}`}"
-              class="pad025 padleft050 flex"
-            >
-              <div class="flex flexcenter">
-                <small>
-                  <strong>Search classes on file:</strong>
-                </small>
-              </div>
-              <div class="padleft025 padright025 flex1 flexcenter">
-                <small>
-                  <input
-                    v-model="cur_search_value"
-                    id="cl_srch"
-                    class="fullwidth flex pad025"
-                    type="text"
-                    v-on:keyup.enter="submit_sel_cl"
-                  />
-                </small>
-              </div>
-            </div>
-            <div class="relative flex1 flex">
-              <div
-                :style="{borderRight: `1px solid ${$store.state.theme.global.border_color}`}"
-                class="flex1 relative aut"
-              >
-                <div
-                  class="flex flexwrap absolute pad025"
-                  v-if="!isEmpty($store.state.pages.css_classes[cur_sel])"
-                >
+              <div class="relative fullwidth aut">
+                <div class="absolute flex flexwrap aut">
                   <span
-                    class="pad025 margin025 padleft050 padright050 tc-pn"
-                    v-for="classes in (cur_search_result ? cur_search_result : Object.keys($store.state.pages.css_classes[cur_sel]))"
+                    class="pad025 margin025 tc-pn"
                     :style="{border: `1px solid ${$store.state.theme.global.border_color}`}"
-                    :key="`osw-${classes}`"
+                    v-for="cls in cl_list"
+                    :key="`oiq-${cls}`"
                   >
-                    <small>
-                      <strong>
-                        <span @click="sel_class(classes)">{{classes}}</span>
-                      </strong>
-                      <span @click="addClass(classes)">
-                        <strong>
-                          <i style="opacity:0.8" class="fas fa-plus-circle"></i>
-                        </strong>
+                    <small style="font-weight:600;">
+                      <span class="padleft050">{{cls}}</span>
+
+                      <span @click="rem_cl(cls)">
+                        <span class="padright050 padleft025">
+                          <i style="opacity:0.8" class="fas fa-times-circle"></i>
+                        </span>
                       </span>
                     </small>
                   </span>
                 </div>
               </div>
-              <div style="max-width:170px;" class="flex1 aut pad050">
-                <div v-if="!isEmpty($store.state.pages.css_classes[cur_sel])">
+            </div>
+          </div>
+          <div class="padleft050 padright050 padbottom050 padtop025">
+            <span class="margin025">
+              <strong>Available Classes</strong>
+            </span>
+            <div
+              :style="{border: `1px solid ${$store.state.theme.global.border_color}`, height:'250px'}"
+              class="borderred flex"
+            >
+              <div class="flex1">
+                <div
+                  :style="{background:`${$store.state.theme.global.secondary_bg_color}`,padding:'4px'}"
+                  class="padleft050"
+                >
                   <small>
-                    <pre>.{{cur_sel_cl}} {{$store.state.pages.css_classes[cur_sel][cur_sel_cl]}}</pre>
+                    <strong>CSS File</strong>
                   </small>
+                </div>
+                <div class="relative">
+                  <div class="absolute">
+                    <div
+                      @click="sel_file(keys)"
+                      class="padtop025 padleft025"
+                      v-for="keys in Object.keys($store.state.pages.css_classes)"
+                      :key="`qwehrk-${keys}`"
+                    >
+                      <small>
+                        <strong>{{keys}}</strong>
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                :style="{borderLeft: `1px solid ${$store.state.theme.global.border_color}`}"
+                class="flex3 flex flexcol hdn"
+              >
+                <div
+                  :style="{background:`${$store.state.theme.global.secondary_bg_color}`}"
+                  class="pad025 padleft050 flex"
+                >
+                  <div class="flex flexcenter">
+                    <small>
+                      <strong>Search classes on file:</strong>
+                    </small>
+                  </div>
+                  <div class="padleft025 padright025 flex1 flexcenter">
+                    <small>
+                      <input
+                        v-model="cur_search_value"
+                        id="cl_srch"
+                        class="fullwidth flex pad025"
+                        type="text"
+                        v-on:keyup.enter="submit_sel_cl"
+                      />
+                    </small>
+                  </div>
+                </div>
+                <div class="relative flex1 flex">
+                  <div
+                    :style="{borderRight: `1px solid ${$store.state.theme.global.border_color}`}"
+                    class="flex1 relative aut"
+                  >
+                    <div
+                      class="flex flexwrap absolute pad025"
+                      v-if="!isEmpty($store.state.pages.css_classes[cur_sel])"
+                    >
+                      <span
+                        class="pad025 margin025 padleft050 padright050 tc-pn"
+                        v-for="classes in (cur_search_result ? cur_search_result : Object.keys($store.state.pages.css_classes[cur_sel]))"
+                        :style="{border: `1px solid ${$store.state.theme.global.border_color}`}"
+                        :key="`osw-${classes}`"
+                      >
+                        <small>
+                          <strong>
+                            <span @click="sel_class(classes)">{{classes}}</span>
+                          </strong>
+                          <span @click="addClass(classes)">
+                            <strong>
+                              <i style="opacity:0.8" class="fas fa-plus-circle"></i>
+                            </strong>
+                          </span>
+                        </small>
+                      </span>
+                    </div>
+                  </div>
+                  <div style="max-width:170px;" class="flex1 aut pad050">
+                    <div v-if="!isEmpty($store.state.pages.css_classes[cur_sel])">
+                      <small>
+                        <pre>.{{cur_sel_cl}} {{$store.state.pages.css_classes[cur_sel][cur_sel_cl]}}</pre>
+                      </small>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </main>
       </div>
-    </main>
+    </div>
   </div>
 </template>
 
@@ -260,8 +277,8 @@ export default {
         }
       });
     },
-    submit_sel_cl(){
-      this.addClass(this.cur_search_result[0])
+    submit_sel_cl() {
+      this.addClass(this.cur_search_result[0]);
     }
   },
   mounted() {
