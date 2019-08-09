@@ -395,6 +395,11 @@ body {
   background-size: 100% var(--ln);
 }
 
+#spreketek{
+  /* background: linear-gradient(to bottom, #ffffff, #ffffff 95%, #bda1a164 100%, #aaaaaa34); */
+  background-size: 100% var(--ln);
+}
+
 ._global {
   width: 800px;
 }
