@@ -1,25 +1,21 @@
 <template>
-  <div style="min-width:500px;">
+  <div class="fullwidth pad050 flex">
     <div
       :style="{border: `1px solid ${$store.state.theme.global.border_color}`}"
-      class="marginbottom050"
+      class="marginbottom050 borderred flex flexcol fullwidth"
     >
       <div
         :style="{background:`${$store.state.theme.global.secondary_bg_color}`}"
         class="pad050 spacebetween flex st-viz-bnnr"
       >
-        <small>
-          <strong>Class list</strong> -
-          <strike>(Width & Height)</strike>
-        </small>
-        <i class="fas fa-angle-down"></i>
+        <strong>Class list</strong>
       </div>
-      <div class="pad050">
-        <main>
+      <div class="pad050 flex fullheight-percent">
+        <main class="flex flexcol flex1">
           {{cur_cl_list}}
           <div class="pad050">
             <span class="margin025">
-              <strong>Class list</strong>
+              <strong>Classes applied</strong>
             </span>
             <div
               :style="{border: `1px solid ${$store.state.theme.global.border_color}`, height:'150px'}"
@@ -47,13 +43,13 @@
               </div>
             </div>
           </div>
-          <div class="padleft050 padright050 padbottom050 padtop025">
+          <div class="padleft050 padright050 padbottom050 padtop025 flex flex1 flexcol">
             <span class="margin025">
               <strong>Available Classes</strong>
             </span>
             <div
-              :style="{border: `1px solid ${$store.state.theme.global.border_color}`, height:'250px'}"
-              class="borderred flex"
+              :style="{border: `1px solid ${$store.state.theme.global.border_color}`}"
+              class="borderred flex1 flex"
             >
               <div class="flex1">
                 <div
@@ -195,6 +191,7 @@ export default {
         });
     },
     cur_search_value(o, n) {
+      // @note fix the bug invalid regular expression, type \ in the search box
       if (this.cur_search_value == "") {
         this.cur_search_value = undefined;
       } else {
@@ -278,7 +275,9 @@ export default {
       });
     },
     submit_sel_cl() {
-      this.addClass(this.cur_search_result[0]);
+      if (this.cur_search_result.length) {
+        this.addClass(this.cur_search_result[0]);
+      }
     }
   },
   mounted() {

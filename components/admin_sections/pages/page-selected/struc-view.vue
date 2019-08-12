@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- {{$store.state.pages.opn_opts}} -->
     <div
       :style="{color:$store.state.theme.global.secondary_text_color}"
       class="flex"
@@ -10,9 +11,9 @@
       <div class="dq-strvw-el">
         <div
           :style="{background:$store.state.theme.global.secondary_bg_color}"
-          @click="openOpt(el.uid,mode, 1)"
-        > 
-        <!-- add travers event origin highlight element feature -->
+          @click="openOpt({uid: el.uid, index: el_i, el})"
+        >
+          <!-- add travers event origin highlight element feature -->
           <div class="flex spacebetween flexcol flexwrap">
             <div class="flex1 flex flexcenter spacebetween">
               <div class="padleft025">{{trimTitle(el.tag)}}</div>
@@ -21,25 +22,25 @@
           </div>
           <!-- option box -->
           <div
-            @click="openOpt(el.uid,mode, 0)"
-            v-if="opn_opts[0] == el.uid"
+            @click="openOpt({uid: el.uid, index: el_i, el})"
+            v-if="$store.state.pages.opn_opts[0] == el.uid"
             class="flex padleft125 relative"
           >
-            <div class="dq-page-el-opt-bx absolute flex relative">
-              <div
-                :style="{
+            <div
+              :style="{
                   boxShadow:`0 0 5px ${$store.state.theme.global.secondary_bg_color}`,
                   border: `1px solid ${$store.state.theme.global.border_color}`
                   }"
-                class="pad050 flex flexcol"
-              >
+              class="dq-page-el-opt-bx absolute flex relative"
+            >
+              <div class="pad050 flex flexcol fullwidth">
                 <!-- option items or the api window of the element -->
                 <span>
                   <div
                     @mouseover="active = `optlpp-html${d.text}`"
                     @mouseleave="cur_actv != `optlpp-html${d.text}` && (active = undefined)"
                     :style="setStyle(active === `optlpp-html${d.text}` || cur_actv == `optlpp-html${d.text}`)"
-                    @click="view = d.view,  cur_actv = `optlpp-html${d.text}`"
+                    @click="set_view({view: d.view, uid: `${el_i}--${el.uid}`, el}),  cur_actv = `optlpp-html${d.text}`"
                     v-for="d in opts"
                     class="pad025"
                     :key="`ihga-${d.text}-aw`"
@@ -51,7 +52,7 @@
                   <div class="pad025">Paste</div>
                 </span>
               </div>
-              <div
+              <!-- <div
                 v-if="view"
                 :style="{
                   boxShadow:`0 0 5px ${$store.state.theme.global.secondary_bg_color}`,
@@ -68,7 +69,7 @@
                     :is="view"
                   ></div>
                 </div>
-              </div>
+              </div>-->
               <div style="bottom:-50px;color:white;" class="absolute">.</div>
             </div>
           </div>
@@ -104,10 +105,6 @@ export default {
       rec: undefined,
       opts: [
         {
-          text: "Desc",
-          view: "dddesc"
-        },
-        {
           text: "AddChild",
           view: "addChild"
         },
@@ -122,10 +119,6 @@ export default {
         {
           text: "Delete",
           view: "dddel"
-        },
-        {
-          text: "Inline Style",
-          view: "ils"
         }
       ]
     };
@@ -155,32 +148,68 @@ export default {
       } else {
       }
     },
-    openOpt(uid, mode, c) {
-      if (mode == true) {
-        if (this.opn_opts.includes(uid)) {
-          // this.opn_opts.splice(this.opn_opts.indexOf(uid), 1);
-        } else {
-          this.opn_opts.push(uid);
+    openOpt({ uid, index, el }) {
+      // User interaction cases
+      // case 1: just loaded, no open options yet. then selected one > open option
+      // case 2: an option is open, user click the option twice > close option > clear all array back to case 1
+      // case 3: an option is open, user click other element while that other option is open > close the prev option >
+      // open the newly selected option
+      let cur_case = undefined;
+
+      // States of application
+      // state 1: true, open, populating open options
+      // state 2: true, open, splicing or closing prev options
+      // state 1: false, close, clearing open options
+
+      this.$store.commit("pages/set_opts", uid);
+      let temp = [];
+      this.$store.state.pages.opn_opts.map(ids => {
+        if (ids.search(uid) == 0) {
+          temp.push(uid);
         }
+      });
 
-        this.mode = false;
-      } else {
-        this.gg.push(c);
-
-        setTimeout(() => {
-          if (this.gg[0] === 0) {
-            this.mode = false;
-          } else if (this.gg[0] == 1) {
-            this.mode = true;
-            if (this.opn_opts.includes(uid)) {
-              this.opn_opts.splice(this.opn_opts.indexOf(uid), 1);
-            } else {
-              this.opn_opts.push(uid);
-            }
-          }
-          this.gg = [];
-        }, 0);
+      if (temp.length == 2) {
+        cur_case = 2;
+      } else if (temp.length == 1) {
+        cur_case = 1;
       }
+
+      // console.log(temp);
+
+      switch (cur_case) {
+        case 1:
+          // push and clear opn_ops array
+          this.$store.commit("pages/clear_opts");
+          this.$store.commit("pages/set_opts", uid);
+          break;
+        case 2:
+          this.$store.commit("pages/clear_opts");
+          temp = [];
+          break;
+      }
+
+      // for case 2
+      // triggers when the user clicks another element while not closing the first selected element,
+      // it will open a new option box with the same selected option, it will close the prev option box
+      if (this.$store.state.pages.case2 && cur_case == 1) {
+        console.log('case 2')
+        console.log(this.$store.state.pages.case2)
+        this.$store.commit("pages/set_api_view", {
+          view: this.$store.state.pages.api_view_que.view,
+          uid: `${index}--${uid}`,
+          el
+        });
+      }
+
+      if (cur_case == 2 && this.$store.state.pages.case2) {
+        console.log('total reset!')
+        this.$store.commit("pages/opts_total_reset");
+        cur_case = undefined
+      } 
+    },
+    set_view({ view, uid, el }) {
+      this.$store.commit("pages/set_api_view", { view, uid, el });
     }
   },
   mounted() {
@@ -203,7 +232,7 @@ export default {
   cursor: pointer;
 }
 .dq-page-el-opt-bx {
-  left: 60px;
+  left: 65px;
   z-index: 900;
   background: white;
   min-width: 100px;

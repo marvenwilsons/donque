@@ -64,15 +64,16 @@ export const state = () => ({
     travers_view: undefined,
     cur_pointer: undefined,
 
+    // open options
+    opn_opts: [],
+    api_view: undefined,
+    api_view_que: undefined,
+    routine_count: 0,
+    case2: false,
+
     //
     css_classes: undefined,
     el_flat_map: [],
-
-    methods: {
-        addrs_finder: ({ el, uid, fn }) => {
-            
-        }
-    }
 })
 
 export const getters = {
@@ -81,6 +82,66 @@ export const getters = {
 }
 
 export const mutations = {
+    // opts
+    set_opts(state,data) {
+        state.routine_count ++
+        // console.log('** opts setting')
+        // console.log(`   routine_count > ${state.routine_count}`)
+        // console.log(`   state.opn_opts > ${state.opn_opts}`)
+
+        if (state.routine_count == 8 && state.api_view_que != undefined){
+            state.api_view = state.api_view_que
+        } 
+
+        state.opn_opts.push(data)
+    },
+    clear_opts(state,data){
+        state.routine_count++
+
+        console.log('** opts clearing')
+        // console.log(`   routine_count > ${state.routine_count}`)
+        // console.log(state.opn_opts[0] == state.opn_opts[1])
+
+        // triggers when the user clicks the element twice, it will close the option box
+        if (state.api_view != undefined && state.routine_count == 10 && state.opn_opts[0] == state.opn_opts[1]){
+            state.api_view = undefined
+            state.routine_count = 0
+
+        }else {
+            // triggers when the user clicks another element while not closing the first selected element,
+            // it will open a new option box with the same selected option, it will close the prev option box
+            if (state.opn_opts.length == 2 && state.routine_count > 7 && state.api_view){
+                console.log('testing')
+                console.log(state.api_view)
+                state.case2 = true
+            }
+        }
+
+        console.log(state.routine_count)
+
+        state.opn_opts = []
+
+    },
+    opts_total_reset(state,data){
+        state.opn_opts = []
+        state.api_view = undefined
+        state.api_view_que = undefined
+        state.routine_count = 0
+        state.case2 = false
+    },
+    set_api_view(state,data){
+        console.log('** api view setting')
+        state.api_view_que = data
+
+        if(state.case2){
+            state.api_view = data
+        }
+    },
+    close_el_api(state){
+        // state.opn_opts = []
+        state.api_view = undefined
+    },
+
     //
     set_travers_view(state,{obj,pointer}) {
         state.travers_view = obj

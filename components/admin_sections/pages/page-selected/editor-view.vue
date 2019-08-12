@@ -61,90 +61,118 @@
 
           <!-- elements view @stages - html render -->
           <main id="dq-page-editor-area-host" class="flex1 flex relative">
-            <div class="pad125 relative flex1 absolute">
-              <div
-                :style="{filter: sec_modal_viz ? 'blur(2px)' : ''}"
-                class="fullwidth flex"
-                id="dq-page-editor-area-c1"
-                v-for="(sections,s_i) in (is_traversing ? travers_mode :  $store.state.pages.stages.length == 0 ? sections : n_sections)"
-                :key="`seccc-${s_i}`"
-              >
-                <div id="dq-viz-host" :data="s_i" class="flex">
-                  <div style="min-width:64px;" class="dq-strvw-el pointer">
-                    <div
-                      @click="sec_modal_viz = true, sec_data = undefined"
-                      :style="{background:theme.global.secondary_bg_color}"
-                      v-if="s_i == 0"
-                    >
-                      wrapper
-                      <i class="fas fa-caret-right"></i>
-                    </div>
-                  </div>
-                  <div :id="`${s_i}--${sections.uid}`" class="dq-strvw-el">
-                    <div
-                      :style="{background:theme.global.secondary_bg_color}"
-                      class="flex flexcenter spacebetween pointer"
-                      @click="openOpt(sections.uid,mode,1)"
-                    >
-                      <span class="padleft025 padright050">
-                        section -
-                        <small>{{sections.role}}</small>
-                      </span>
-                      <i class="fas fa-caret-right"></i>
-                      <!-- option box -->
+            <div class="pad025 flex relative flex1 absolute fullwidth fullheight-percent">
+              <div class="pad050 flex1 aut">
+                <div
+                  :style="{filter: sec_modal_viz ? 'blur(2px)' : ''}"
+                  class="fullwidth flex"
+                  id="dq-page-editor-area-c1"
+                  v-for="(sections,s_i) in (is_traversing ? travers_mode :  $store.state.pages.stages.length == 0 ? sections : n_sections)"
+                  :key="`seccc-${s_i}`"
+                >
+                  <div id="dq-viz-host" :data="s_i" class="flex">
+                    <div style="min-width:64px;" class="dq-strvw-el pointer">
                       <div
-                        @click="openOpt(sections.uid,mode, 0)"
-                        v-if="opn_opts.includes(sections.uid)"
-                        class="relative"
+                        @click="sec_modal_viz = true, sec_data = undefined"
+                        :style="{background:theme.global.secondary_bg_color}"
+                        v-if="s_i == 0"
                       >
+                        wrapper
+                        <i class="fas fa-caret-right"></i>
+                      </div>
+                    </div>
+                    <div :id="`${s_i}--${sections.uid}`" class="dq-strvw-el">
+                      <div
+                        :style="{background:theme.global.secondary_bg_color}"
+                        class="flex flexcenter spacebetween pointer"
+                        @click="openOpt(sections.uid,mode,1)"
+                      >
+                        <span class="padleft025 padright050">
+                          section -
+                          <small>{{sections.role}}</small>
+                        </span>
+                        <i class="fas fa-caret-right"></i>
+                        <!-- option box -->
                         <div
-                          :style="{boxShadow:`0 0 5px ${$store.state.theme.global.secondary_bg_color}`}"
-                          class="dq-page-el-opt-bx-1 absolute flex pad050"
+                          @click="openOpt(sections.uid,mode, 0)"
+                          v-if="opn_opts.includes(sections.uid)"
+                          class="relative"
                         >
-                          <div class="flex flexcol">
-                            <span>
-                              <div
-                                @mouseover="active = `optlpp-html${d.text}`"
-                                @mouseleave="cur_actv != `optlpp-html${d.text}` && (active = undefined)"
-                                :style="setStyle(active === `optlpp-html${d.text}` || cur_actv == `optlpp-html${d.text}`)"
-                                @click="view = d.view,  cur_actv = `optlpp-html${d.text}`"
-                                v-for="d in opts"
-                                class="pad025"
-                                :key="`ihga-${d.text}-aw`"
-                              >{{d.text}}</div>
-                              <!-- option items end -->
-                              <div class="pad025">Cut</div>
-                              <div class="pad025">Paste</div>
-                              <div class="pad025">Move up</div>
-                              <div class="pad025">Move down</div>
-                            </span>
-                          </div>
                           <div
-                            v-if="view"
-                            :style="{
+                            :style="{boxShadow:`0 0 5px ${$store.state.theme.global.secondary_bg_color}`}"
+                            class="dq-page-el-opt-bx-1 absolute flex pad050"
+                          >
+                            <div class="flex flexcol">
+                              <span>
+                                <div
+                                  @mouseover="active = `optlpp-html${d.text}`"
+                                  @mouseleave="cur_actv != `optlpp-html${d.text}` && (active = undefined)"
+                                  :style="setStyle(active === `optlpp-html${d.text}` || cur_actv == `optlpp-html${d.text}`)"
+                                  @click="view = d.view,  cur_actv = `optlpp-html${d.text}`"
+                                  v-for="d in opts"
+                                  class="pad025"
+                                  :key="`ihga-${d.text}-aw`"
+                                >{{d.text}}</div>
+                                <!-- option items end -->
+                                <div class="pad025">Cut</div>
+                                <div class="pad025">Paste</div>
+                                <div class="pad025">Move up</div>
+                                <div class="pad025">Move down</div>
+                              </span>
+                            </div>
+                            <div
+                              v-if="view"
+                              :style="{
                         boxShadow:`0 0 5px ${$store.state.theme.global.secondary_bg_color}`,
                         left:'90px',
                         top: '-1px',
                         border: `1px solid ${$store.state.theme.global.border_color}`,
                         background:'white'}"
-                            class="pad050 absolute dq-page-el-opt-bx-pu"
-                          >
-                            <div class="margin025 fullheight-percent">
-                              <div
-                                class="fullheight-percent"
-                                :path="data"
-                                :data="page_data"
-                                :uid="`${s_i}--${sections.uid}`"
-                                :is="view"
-                              ></div>
+                              class="pad050 absolute dq-page-el-opt-bx-pu"
+                            >
+                              <div class="margin025 fullheight-percent">
+                                <div
+                                  class="fullheight-percent"
+                                  :path="data"
+                                  :data="page_data"
+                                  :uid="`${s_i}--${sections.uid}`"
+                                  :is="view"
+                                ></div>
+                              </div>
                             </div>
                           </div>
                         </div>
+                        <!-- end of option box -->
                       </div>
-                      <!-- end of option box -->
                     </div>
+                    <strvw :data="sections"></strvw>
                   </div>
-                  <strvw :data="sections"></strvw>
+                </div>
+              </div>
+              <div
+                :style="{border: `1px solid ${$store.state.theme.global.border_color}`, maxWidth:'600px'}"
+                class="flex1 relative flex flexcol"
+                v-if="$store.state.pages.api_view"
+              >
+                <div
+                  :style="{background:`${$store.state.theme.global.secondary_bg_color}`}"
+                  class="pad050 spacebetween flex st-viz-bnnr pointer"
+                  @click="$store.commit('pages/close_el_api')"
+                >
+                  <strong>Element API</strong>
+                  <div>
+                    <i class="fas fa-times-circle"></i>
+                  </div>
+                </div>
+                <div class="relative fullheight-percent flex">
+                  <div class="absolute fullwidth fullheight-percent aut flex">
+                    <div
+                      v-if="$store.state.pages.api_view"
+                      :uid="$store.state.pages.api_view.uid"
+                      :is="$store.state.pages.api_view.view"
+                      :data="$store.state.pages.api_view.el"
+                    ></div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -213,7 +241,11 @@
                   <div v-if="pointer != st_k" class style="min-width:8px;"></div>
                   <span
                     :style="{textDecoration: pointer == st_k ?  `underline dotted ${$store.state.theme.global.primary_text_color}` : ''}"
-                  ><small><strong>{{st.desc}}</strong></small></span>
+                  >
+                    <small>
+                      <strong>{{st.desc}}</strong>
+                    </small>
+                  </span>
                 </div>
               </div>
             </div>
@@ -288,54 +320,39 @@ export default {
   computed: {
     sections() {
       if (this.$store.state.pages.root) {
-        this.$store.commit(
-          "pages/set_travers_view",
-          {
-            obj: this.$store.state.pages.root.sections
-          }
-        );
+        this.$store.commit("pages/set_travers_view", {
+          obj: this.$store.state.pages.root.sections
+        });
         return this.$store.state.pages.root.sections;
       }
     },
     n_sections() {
       if (this.$store.state.pages.stages.length != 0) {
-        this.$store.commit(
-          "pages/set_travers_view",
-          {
-            obj: this.$store.state.pages.stages[this.stages.length - 1].obj
-          .sections
-          }
-        );
+        this.$store.commit("pages/set_travers_view", {
+          obj: this.$store.state.pages.stages[this.stages.length - 1].obj
+            .sections
+        });
 
         return this.$store.state.pages.stages[this.stages.length - 1].obj
           .sections;
       } else {
-        this.$store.commit(
-          "pages/set_travers_view",
-          {
-            obj: this.$store.state.pages.root.sections
-          }
-        )
+        this.$store.commit("pages/set_travers_view", {
+          obj: this.$store.state.pages.root.sections
+        });
         return this.$store.state.pages.root.sections;
       }
     },
     travers_mode() {
       if (this.$store.state.pages.stages.length != 0) {
-        this.$store.commit(
-          "pages/set_travers_view",
-          {
-            obj: this.$store.state.pages.stages[this.pointer].obj.sections,
-            pointer: this.pointer
-          }
-        )
+        this.$store.commit("pages/set_travers_view", {
+          obj: this.$store.state.pages.stages[this.pointer].obj.sections,
+          pointer: this.pointer
+        });
         return this.$store.state.pages.stages[this.pointer].obj.sections;
       } else {
-         this.$store.commit(
-          "pages/set_travers_view",
-          {
-            obj: this.$store.state.pages.root.sections,
-          }
-        )
+        this.$store.commit("pages/set_travers_view", {
+          obj: this.$store.state.pages.root.sections
+        });
         return this.$store.state.pages.root.sections;
       }
     },

@@ -1,7 +1,7 @@
 <template>
-  <div style="min-width:500px; height:500px;">
-    <div class="relative fullheight-percent aut">
-      <div class="absolute fullwidth flex flexcol padright050">
+  <div class="flex flex1 fullwidth">
+    <div class="relative fullwidth fullheight-percent aut">
+      <div class="absolute fullwidth flex flexcol pad050">
         <!-- text content -->
         <div
           :style="{border: `1px solid ${$store.state.theme.global.border_color}`}"
@@ -11,9 +11,7 @@
             :style="{background:`${$store.state.theme.global.secondary_bg_color}`}"
             class="pad050 spacebetween flex st-viz-bnnr"
           >
-            <small>
-              <strong>Text Content</strong>
-            </small>
+           <strong>Text Content</strong>
             <div>
               <i class="fas fa-arrow-circle-up"></i>
               <i class="fas fa-angle-down"></i>
@@ -21,10 +19,10 @@
           </div>
           <div class="pad050">
             <textarea
+            v-model="text_content"
               style="resize: vertical"
               name="text_conent"
-              class="pad050 inp-small"
-              cols="63"
+              class="pad050 fullwidth"
               rows="3"
             ></textarea>
           </div>
@@ -39,10 +37,10 @@
             :style="{background:`${$store.state.theme.global.secondary_bg_color}`}"
             class="pad050 spacebetween flex st-viz-bnnr"
           >
-            <small>
+            <div>
               <strong>Spacing</strong> -
               <strike>(Margins & Paddings)</strike>
-            </small>
+            </div>
             <div>
               <i class="fas fa-arrow-circle-up"></i>
               <i class="fas fa-angle-down"></i>
@@ -53,41 +51,44 @@
             <div>
               <div class="pad050">
                 <strong>
-                  <small>Margins</small>
+                  <div>Margins</div>
                 </strong>
                 <i>
-                  <small>(px value and percentage value only)</small>
+                  <div>(px value and percentage value only)</div>
                 </i>
-                <div class="pad050 flex">
+                <div class="pad050 flex  flexwrap">
                   <div class="flex flex1">
                     <div role="margin-input-container" class="flex1">
                       <div role="top-margin-container" class="flex">
-                        <small class="pad025 flex1 flexcenter">
+                        <div class="pad025 flex1 flexcenter ">
                           <strong>top</strong>
-                        </small>
-                        <input class="flex1 margin025 pad025 inp-small" type="text" />
+                        </div>
+                        <input class="flex1 margin025 pad025" type="text" />
                       </div>
                       <div role="bottom-margin-container" class="flex">
-                        <small class="pad025 flex1 flexcenter">
+                        <div class="pad025 flex1 flexcenter">
                           <strong>bottom</strong>
-                        </small>
-                        <input class="flex1 margin025 pad025 inp-small" type="text" name id />
+                        </div>
+                        <input class="flex1 margin025 pad025" type="text" name id />
                       </div>
                     </div>
                   </div>
                   <div class="flex flex1">
                     <div role="margin-input-container" class="flex1">
                       <div role="left-margin-container" class="flex">
-                        <small class="pad025 flex flex1  ">
-                          <strong style="display: flex; align-items:center;" class="padleft050" >left</strong>
-                        </small>
-                        <input class="flex1 margin025 pad025 inp-small" type="text" />
+                        <div class="pad025 flex flex1">
+                          <strong style="display: flex; align-items:center;" class="padleft050">left</strong>
+                        </div>
+                        <input class="flex1 margin025 pad025" type="text" />
                       </div>
                       <div role="right-margin-container" class="flex">
-                        <small class="pad025 flex flex1  ">
-                          <strong style="display: flex; align-items:center;" class="padleft050" >right</strong>
-                        </small>
-                        <input class="flex1 margin025 pad025 inp-small" type="text" name id />
+                        <div class="pad025 flex flex1">
+                          <strong
+                            style="display: flex; align-items:center;"
+                            class="padleft050"
+                          >right</strong>
+                        </div>
+                        <input class="flex1 margin025 pad025" type="text" name id />
                       </div>
                     </div>
                   </div>
@@ -96,41 +97,44 @@
               <!-- @page - elements - properties - paddings -->
               <div class="pad050">
                 <strong>
-                  <small>Paddings</small>
+                  <div>Paddings</div>
                 </strong>
                 <i>
-                  <small>(px value and percentage value only)</small>
+                  <div>(px value and percentage value only)</div>
                 </i>
-                <div class="pad050 flex">
+                <div class="pad050 flex flexwrap">
                   <div class="flex flex1">
                     <div role="padding-input-container" class="flex1">
                       <div role="top-padding-container" class="flex">
-                        <small class="pad025 flex1 flexcenter">
+                        <div class="pad025 flex1 flexcenter">
                           <strong>top</strong>
-                        </small>
-                        <input class="flex1 margin025 pad025 inp-small" type="text" />
+                        </div>
+                        <input class="flex1 margin025 pad025" type="text" />
                       </div>
                       <div role="bottom-padding-container" class="flex">
-                        <small class="pad025 flex1 flexcenter">
+                        <div class="pad025 flex1 flexcenter">
                           <strong>bottom</strong>
-                        </small>
-                        <input class="flex1 margin025 pad025 inp-small" type="text" name id />
+                        </div>
+                        <input class="flex1 margin025 pad025" type="text" name id />
                       </div>
                     </div>
                   </div>
                   <div class="flex flex1">
                     <div role="padding-input-container" class="flex1">
                       <div role="left-padding-container" class="flex">
-                        <small class="pad025 flex flex1  ">
-                          <strong style="display: flex; align-items:center;" class="padleft050" >left</strong>
-                        </small>
-                        <input class="flex1 margin025 pad025 inp-small" type="text" />
+                        <div class="pad025 flex flex1">
+                          <strong style="display: flex; align-items:center;" class="padleft050">left</strong>
+                        </div>
+                        <input class="flex1 margin025 pad025" type="text" />
                       </div>
                       <div role="right-oadding-container" class="flex">
-                        <small class="pad025 flex flex1  ">
-                          <strong style="display: flex; align-items:center;" class="padleft050" >right</strong>
-                        </small>
-                        <input class="flex1 margin025 pad025 inp-small" type="text" name id />
+                        <div class="pad025 flex flex1">
+                          <strong
+                            style="display: flex; align-items:center;"
+                            class="padleft050"
+                          >right</strong>
+                        </div>
+                        <input class="flex1 margin025 pad025" type="text" name id />
                       </div>
                     </div>
                   </div>
@@ -148,10 +152,10 @@
             :style="{background:`${$store.state.theme.global.secondary_bg_color}`}"
             class="pad050 spacebetween flex st-viz-bnnr"
           >
-            <small>
+            <div>
               <strong>Dimensions</strong> -
               <strike>(Height & Width)</strike>
-            </small>
+            </div>
             <div>
               <i class="fas fa-arrow-circle-up"></i>
               <i class="fas fa-angle-down"></i>
@@ -161,78 +165,78 @@
             <div>
               <div class="pad050">
                 <strong>
-                  <small>Absolute dimensions</small>
+                  <div>Absolute dimensions</div>
                 </strong>
                 <i>
-                  <small>(px value and percentage value only)</small>
+                  <div>(px value and percentage value only)</div>
                 </i>
-                <div class="pad025 flex">
+                <div class="pad025 flex flexwrap">
                   <div class="flex1">
                     <div role="bottom-margin-container" class="flex">
-                      <small class="flex1 pad025 flex flexcenter">
+                      <div class="flex1 pad025 flex flexcenter">
                         <strong>width</strong>
-                      </small>
-                      <input class="flex1 margin025 inp-small pad025" type="text" name id />
+                      </div>
+                      <input class="flex1 margin025  pad025" type="text" name id />
                     </div>
                   </div>
                   <div class="flex1">
                     <div role="bottom-margin-container" class="flex">
-                      <small class="flex1 pad025 flexcenter flex">
-                        <strong  >height</strong>
-                      </small>
-                      <input class="flex1 margin025 inp-small pad025" type="text" name id />
+                      <div class="flex1 pad025 flexcenter flex">
+                        <strong>height</strong>
+                      </div>
+                      <input class="flex1 margin025 pad025" type="text" name id />
                     </div>
                   </div>
                 </div>
               </div>
               <div class="pad050">
                 <strong>
-                  <small>Maximum</small>
+                  <div>Maximum</div>
                 </strong>
                 <i>
-                  <small>(px value and percentage value only)</small>
+                  <div>(px value and percentage value only)</div>
                 </i>
-                <div class="pad025 flex">
+                <div class="pad025 flex flexwrap">
                   <div class="flex1">
                     <div role="bottom-margin-container" class="flex">
-                      <small class="flex1 pad025 flex flexcenter">
+                      <div class="flex1 pad025 flex flexcenter">
                         <strong>width</strong>
-                      </small>
-                      <input class="flex1 margin025 inp-small pad025" type="text" name id />
+                      </div>
+                      <input class="flex1 margin025 pad025" type="text" name id />
                     </div>
                   </div>
                   <div class="flex1">
                     <div role="bottom-margin-container" class="flex">
-                      <small class="flex1 pad025 flexcenter flex">
-                        <strong  >height</strong>
-                      </small>
-                      <input class="flex1 margin025 inp-small pad025" type="text" name id />
+                      <div class="flex1 pad025 flexcenter flex">
+                        <strong>height</strong>
+                      </div>
+                      <input class="flex1 margin025 pad025" type="text" name id />
                     </div>
                   </div>
                 </div>
               </div>
               <div class="pad050">
                 <strong>
-                  <small>Minimum</small>
+                  <div>Minimum</div>
                 </strong>
                 <i>
-                  <small>(px value and percentage value only)</small>
+                  <div>(px value and percentage value only)</div>
                 </i>
-                <div class="pad025 flex">
+                <div class="pad025 flex flexwrap">
                   <div class="flex1">
                     <div role="bottom-margin-container" class="flex">
-                      <small class="flex1 pad025 flex flexcenter">
+                      <div class="flex1 pad025 flex flexcenter">
                         <strong>width</strong>
-                      </small>
-                      <input class="flex1 margin025 inp-small pad025" type="text" name id />
+                      </div>
+                      <input class="flex1 margin025 pad025" type="text" name id />
                     </div>
                   </div>
                   <div class="flex1">
                     <div role="bottom-margin-container" class="flex">
-                      <small class="flex1 pad025 flexcenter flex">
-                        <strong  >height</strong>
-                      </small>
-                      <input class="flex1 margin025 inp-small pad025" type="text" name id />
+                      <div class="flex1 pad025 flexcenter flex">
+                        <strong>height</strong>
+                      </div>
+                      <input class="flex1 margin025 pad025" type="text" name id />
                     </div>
                   </div>
                 </div>
@@ -249,18 +253,20 @@
             :style="{background:`${$store.state.theme.global.secondary_bg_color}`}"
             class="pad050 spacebetween flex st-viz-bnnr"
           >
-            <small>
+            <div>
               <strong>Custom Style</strong>
-            </small>
-            <i class="fas fa-angle-down"></i>
+            </div>
+            <div>
+              <i class="fas fa-arrow-circle-up"></i>
+              <i class="fas fa-angle-down"></i>
+            </div>
           </div>
           <div class="pad050">
             <textarea
               style="resize: vertical"
               name="custom_Style"
-              class="pad050 inp-small"
-              cols="63"
-              rows="3"
+              class="pad050 fullwidth"
+              rows="10"
             ></textarea>
           </div>
         </div>
@@ -273,28 +279,28 @@
             :style="{background:`${$store.state.theme.global.secondary_bg_color}`}"
             class="pad050 spacebetween flex st-viz-bnnr"
           >
-            <small>
+            <div>
               <strong>Other Attributes</strong>
-            </small>
+            </div>
             <i class="fas fa-angle-down"></i>
           </div>
           <div class="pad125">
             <div>
               <div class="padbottom050">
                 <strong>
-                  <small>Id</small>
+                  <div>Id</div>
                 </strong>
                 <input type="text" />
               </div>
               <div class="padbottom025">
                 <strong>
-                  <small>role</small>
+                  <div>role</div>
                 </strong>
                 <input type="text" />
               </div>
               <div class="padbottom025">
                 <strong>
-                  <small>data-attr</small>
+                  <div>data-attr</div>
                 </strong>
                 <input type="text" />
               </div>
@@ -310,9 +316,9 @@
             :style="{background:`${$store.state.theme.global.secondary_bg_color}`}"
             class="pad050 spacebetween flex st-viz-bnnr"
           >
-            <small>
+            <div>
               <strong>Stat</strong>
-            </small>
+            </div>
             <i class="fas fa-angle-down"></i>
           </div>
           <div class="pad050">sdaf</div>
@@ -324,8 +330,12 @@
 
 <script>
 export default {
+    // @note rewire all of the inputs
   data() {
     return {
+      // text content
+      text_content: 'hello world!',
+
       // margins model
       margins: {
         top: undefined,
@@ -353,7 +363,4 @@ export default {
 </script>
 
 <style >
-.inp-small {
-  font-size: calc(var(--fontSize) * 0.9);
-}
 </style>
