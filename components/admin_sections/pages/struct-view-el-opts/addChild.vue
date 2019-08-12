@@ -1,10 +1,10 @@
 <template>
-  <div class :style="{color:theme['page_editor_tile_opt_addChild_tiles'].color}">
+  <div class=" fullwidth pad125" :style="{color:theme['page_editor_tile_opt_addChild_tiles'].color, minWidth:'400px'}">
     <strong>Common HTML</strong>
     <span>
       <strike>(can be nested)</strike>
     </span>
-    <div style="width:350px" class="flex relative flexwrap padbottom125">
+    <div class="flex relative flexwrap padbottom125">
       <div
         @click="selected = el, cur_actv = `cmn-html-${el}`"
         :style="setStyle(active === `cmn-html-${el}` || cur_actv == `cmn-html-${el}`)"
@@ -19,7 +19,7 @@
     <span>
       <strike>(cannot be nested)</strike>
     </span>
-    <div style="width:350px" class="flex relative flexwrap padbottom125">
+    <div  class="flex relative flexwrap padbottom125">
       <div
         @click="selected = el, cur_actv = `ractv-html${el}`"
         :style="setStyle(active === `ractv-html${el}` || cur_actv == `ractv-html${el}`)"
@@ -31,7 +31,7 @@
       >{{el}}</div>
     </div>
     <strong>Headings</strong>
-    <div style="width:350px" class="flex relative flexwrap padbottom125">
+    <div  class="flex relative flexwrap padbottom125">
       <div
         @click="selected = el, cur_actv = `html-headings-${el}`"
         :style="setStyle(active === `html-headings-${el}` || cur_actv == `html-headings-${el}`)"
@@ -39,6 +39,18 @@
         @mouseleave="cur_actv != `html-headings-${el}` && (active = undefined)"
         class="dq-el-ac flex flexcenter pad025 margin025 pointer"
         v-for="el in els2"
+        :key="`el2-${el}`"
+      >{{el}}</div>
+    </div>
+    <strong>Plugins</strong>
+    <div  class="flex relative flexwrap padbottom125">
+      <div
+        @click="selected = el, cur_actv = `html-headings-${el}`"
+        :style="setStyle(active === `html-headings-${el}` || cur_actv == `html-headings-${el}`)"
+        @mouseover="active = `html-headings-${el}`"
+        @mouseleave="cur_actv != `html-headings-${el}` && (active = undefined)"
+        class="dq-el-ac flex flexcenter pad025 margin025 pointer"
+        v-for="el in els3"
         :key="`el2-${el}`"
       >{{el}}</div>
     </div>
@@ -81,14 +93,14 @@ export default {
       ],
       els2: ["h1", "h2", "h3", "h4", "h5", "h6"],
       els3: [
-        // "dqFormMaker-free",
-        // "dqTable-free",
-        // "objectify",
-        // "listify",
-        // "collections-free",
-        // "simple-slider",
-        // "simple-tab",
-        // "file-upload"
+        "dqFormMaker-free",
+        "dqTable-free",
+        "objectify",
+        "listify",
+        "collections-free",
+        "simple-slider",
+        "simple-tab",
+        "file-upload"
       ],
       els4: ["button", "img", "audio", "video"]
     };

@@ -330,7 +330,7 @@
 
 <script>
 export default {
-    // @note rewire all of the inputs
+    // @note wire up all of the inputs
   data() {
     return {
       // text content

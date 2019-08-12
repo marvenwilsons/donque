@@ -56,21 +56,21 @@
                   :style="{background:`${$store.state.theme.global.secondary_bg_color}`,padding:'4px'}"
                   class="padleft050"
                 >
-                  <small>
-                    <strong>CSS File</strong>
-                  </small>
+                  <div>
+                    <strong>CSS File(s)</strong>
+                  </div>
                 </div>
                 <div class="relative">
                   <div class="absolute">
                     <div
                       @click="sel_file(keys)"
-                      class="padtop025 padleft025"
+                      class="padtop025 padleft025 pointer"
                       v-for="keys in Object.keys($store.state.pages.css_classes)"
                       :key="`qwehrk-${keys}`"
                     >
-                      <small>
-                        <strong>{{keys}}</strong>
-                      </small>
+                      <div>
+                        <strong :style="{textDecoration: cur_sel == keys ? 'underline' : 'none'}" >{{keys}}</strong>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -84,9 +84,9 @@
                   class="pad025 padleft050 flex"
                 >
                   <div class="flex flexcenter">
-                    <small>
+                    <div>
                       <strong>Search classes on file:</strong>
-                    </small>
+                    </div>
                   </div>
                   <div class="padleft025 padright025 flex1 flexcenter">
                     <small>

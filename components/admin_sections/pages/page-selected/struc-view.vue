@@ -16,7 +16,7 @@
           <!-- add travers event origin highlight element feature -->
           <div class="flex spacebetween flexcol flexwrap">
             <div class="flex1 flex flexcenter spacebetween">
-              <div class="padleft025">{{trimTitle(el.tag)}}</div>
+              <div class="padleft025 padright050">{{trimTitle(el.tag)}}</div>
               <i class="fas fa-caret-right padright025"></i>
             </div>
           </div>
@@ -28,7 +28,7 @@
           >
             <div
               :style="{
-                  boxShadow:`0 0 5px ${$store.state.theme.global.secondary_bg_color}`,
+                  boxShadow:`0 10px 20px ${$store.state.theme.global.secondary_bg_color}`,
                   border: `1px solid ${$store.state.theme.global.border_color}`
                   }"
               class="dq-page-el-opt-bx absolute flex relative"
@@ -232,7 +232,7 @@ export default {
   cursor: pointer;
 }
 .dq-page-el-opt-bx {
-  left: 65px;
+  left: 70px;
   z-index: 900;
   background: white;
   min-width: 100px;
