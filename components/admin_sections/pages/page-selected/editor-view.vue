@@ -5,7 +5,7 @@
         <div
           id="dq-page-editor-area"
           :style="{border: `1px solid ${$store.state.theme.global.border_color}`}"
-          class="flex flex3 relative flexcol fullwidth margin050 borderred"
+          class="flex flex3 relative flexcol fullwidth margin050"
         >
           <!-- section modal -->
           <div
@@ -60,7 +60,109 @@
           </div>
 
           <!-- elements view @stages - html render -->
-          <main id="dq-page-editor-area-host" class="flex1 flex relative">
+          <main
+            @click.right.prevent
+            @mousemove="mv"
+            id="dq-page-editor-area-host"
+            class="flex1 flex relative"
+          >
+            <!-- work -->
+            <div
+              role="option-box"
+              :style="{
+                zIndex:100,
+                minWidth:'200px',
+                left:`${$store.state.pages.opn_opts_pos_left}px`,
+                top:`${$store.state.pages.opn_opts_pos_top}px`,
+                boxShadow:`0 10px 20px ${$store.state.theme.global.secondary_bg_color}`,
+                border: `1px solid ${$store.state.theme.global.border_color}`,
+                borderRadius: '8px',
+                ...$store.state.theme.global.page_modal_background
+                }"
+              class="borderred absolute padtop050 padbottom050"
+              v-if="$store.state.pages.opn_opts"
+            >
+              <ul id="opt-box-ul" style="margin:0; height:0px; overflow:hidden;">
+                <!-- open api -->
+                <li
+                  @mouseover="opts_active = 'opts-opt-open-api'"
+                  @mouseleave="opts_cur_active != `opts-opt-open-api` && (opts_active = undefined)"
+                  :style="setStyle(opts_active === `opts-opt-open-api` || opts_active == `opts-opt-open-api`)"
+                  class="pad025 flex pointer"
+                >
+                  <div class="flex3">
+                    <i class="far fa-edit padleft125"></i>
+                  </div>
+                  <div class="flex7">Open API</div>
+                  <div class="flex4"></div>
+                </li>
+                <!-- add element -->
+                <li
+                  @mouseover="opts_active = 'opts-opt-addelement'"
+                  @mouseleave="opts_cur_active != `opts-opt-addelement` && (opts_active = undefined)"
+                  :style="setStyle(opts_active === `opts-opt-addelement` || opts_active == `opts-opt-addelement`)"
+                  class="pad025 flex pointer"
+                >
+                  <div class="flex3">
+                    <!-- <i class="far fa-edit padleft125"></i> -->
+                  </div>
+                  <div class="flex7">Add Element</div>
+                  <div class="flex4"></div>
+                </li>
+                <!-- cut -->
+                <li
+                  @mouseover="opts_active = 'cut'"
+                  @mouseleave="opts_cur_active != `cut` && (opts_active = undefined)"
+                  :style="setStyle(opts_active === `cut` || opts_active == `cut`)"
+                  class="pad025 flex pointer"
+                >
+                  <div class="flex3">
+                    <i class="fas fa-cut padleft125"></i>
+                  </div>
+                  <div class="flex7">Cut</div>
+                  <div class="flex4"></div>
+                </li>
+                <!-- copy -->
+                <li
+                  @mouseover="opts_active = 'copy'"
+                  @mouseleave="opts_cur_active != `copy` && (opts_active = undefined)"
+                  :style="setStyle(opts_active === `copy` || opts_active == `copy`)"
+                  class="pad025 flex pointer"
+                >
+                  <div class="flex3">
+                    <i class="far fa-copy padleft125"></i>
+                  </div>
+                  <div class="flex7">Copy</div>
+                  <div class="flex4"></div>
+                </li>
+                <!-- paste -->
+                <li
+                  @mouseover="opts_active = 'paste'"
+                  @mouseleave="opts_cur_active != `paste` && (opts_active = undefined)"
+                  :style="setStyle(opts_active === `paste` || opts_active == `paste`)"
+                  class="pad025 flex pointer"
+                >
+                  <div class="flex3">
+                    <!-- <i class="far fa-copy padleft125"></i> -->
+                  </div>
+                  <div class="flex7">Paste</div>
+                  <div class="flex4"></div>
+                </li>
+                <!-- delete -->
+                <li
+                  @mouseover="opts_active = 'del'"
+                  @mouseleave="opts_cur_active != `del` && (opts_active = undefined)"
+                  :style="setStyle(opts_active === `del` || opts_active == `del`)"
+                  class="pad025 flex pointer"
+                >
+                  <div class="flex3">
+                    <i class="far fa-trash-alt padleft125"></i>
+                  </div>
+                  <div class="flex7">Delete</div>
+                  <div class="flex4"></div>
+                </li>
+              </ul>
+            </div>
             <div class="pad025 flex relative flex1 absolute fullwidth fullheight-percent">
               <div class="pad050 flex1 aut">
                 <div
@@ -70,82 +172,31 @@
                   v-for="(sections,s_i) in (is_traversing ? travers_mode :  $store.state.pages.stages.length == 0 ? sections : n_sections)"
                   :key="`seccc-${s_i}`"
                 >
-                  <div id="dq-viz-host" :data="s_i" class="flex">
-                    <div style="min-width:64px;" class="dq-strvw-el pointer">
+                  <div id="dq-viz-host" :data="s_i" :class="[`viz-host-${s_i}`, 'flex']">
+                    <div style="min-width:75px;" class="dq-strvw-el pointer">
                       <div
                         @click="sec_modal_viz = true, sec_data = undefined"
                         :style="{background:theme.global.secondary_bg_color}"
                         v-if="s_i == 0"
                       >
                         wrapper
-                        <i class="fas fa-caret-right"></i>
+                        <i class="fas fa-chess-rook padleft025 padright025"></i>
                       </div>
                     </div>
                     <div :id="`${s_i}--${sections.uid}`" class="dq-strvw-el">
                       <div
                         :style="{background:theme.global.secondary_bg_color}"
                         class="flex flexcenter spacebetween pointer"
-                        @click="openOpt(sections.uid,mode,1)"
+                        @click.right.prevent="openOpt(sections.uid,$event)"
                       >
                         <span class="padleft025 padright050">
-                          section -
-                          <small>{{sections.role}}</small>
+                          section
+                          <!-- <small>{{sections.role}}</small> -->
                         </span>
-                        <i class="fas fa-caret-right"></i>
-                        <!-- option box -->
-                        <div
-                          @click="openOpt(sections.uid,mode, 0)"
-                          v-if="opn_opts.includes(sections.uid)"
-                          class="relative"
-                        >
-                          <div
-                            :style="{boxShadow:`0 0 5px ${$store.state.theme.global.secondary_bg_color}`}"
-                            class="dq-page-el-opt-bx-1 absolute flex pad050"
-                          >
-                            <div class="flex flexcol">
-                              <span>
-                                <div
-                                  @mouseover="active = `optlpp-html${d.text}`"
-                                  @mouseleave="cur_actv != `optlpp-html${d.text}` && (active = undefined)"
-                                  :style="setStyle(active === `optlpp-html${d.text}` || cur_actv == `optlpp-html${d.text}`)"
-                                  @click="view = d.view,  cur_actv = `optlpp-html${d.text}`"
-                                  v-for="d in opts"
-                                  class="pad025"
-                                  :key="`ihga-${d.text}-aw`"
-                                >{{d.text}}</div>
-                                <!-- option items end -->
-                                <div class="pad025">Cut</div>
-                                <div class="pad025">Paste</div>
-                                <div class="pad025">Move up</div>
-                                <div class="pad025">Move down</div>
-                              </span>
-                            </div>
-                            <div
-                              v-if="view"
-                              :style="{
-                        boxShadow:`0 0 5px ${$store.state.theme.global.secondary_bg_color}`,
-                        left:'90px',
-                        top: '-1px',
-                        border: `1px solid ${$store.state.theme.global.border_color}`,
-                        background:'white'}"
-                              class="pad050 absolute dq-page-el-opt-bx-pu"
-                            >
-                              <div class="margin025 fullheight-percent">
-                                <div
-                                  class="fullheight-percent"
-                                  :path="data"
-                                  :data="page_data"
-                                  :uid="`${s_i}--${sections.uid}`"
-                                  :is="view"
-                                ></div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <!-- end of option box -->
+                        <i class="fas fa-layer-group padright025 padleft025"></i>
                       </div>
                     </div>
-                    <strvw :data="sections"></strvw>
+                    <strvw :x="x" :y="y" :data="sections"></strvw>
                   </div>
                 </div>
               </div>
@@ -164,14 +215,18 @@
                     <i class="fas fa-times-circle"></i>
                   </div>
                 </div>
-                <div class="relative fullheight-percent flex">
-                  <div class="absolute fullwidth fullheight-percent aut flex">
-                    <div
-                      v-if="$store.state.pages.api_view"
-                      :uid="$store.state.pages.api_view.uid"
-                      :is="$store.state.pages.api_view.view"
-                      :data="$store.state.pages.api_view.el"
-                    ></div>
+                <!-- Element api container -->
+                <div class="relative fullheight-percent flex flexcol">
+                  <div>ClassList</div>
+                  <div class="flex relative fullheight-percent">
+                    <div class="absolute fullwidth fullheight-percent aut flex">
+                      <div
+                        v-if="$store.state.pages.api_view"
+                        :uid="$store.state.pages.api_view.uid"
+                        :is="$store.state.pages.api_view.view"
+                        :data="$store.state.pages.api_view.el"
+                      ></div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -202,7 +257,7 @@
             </div>
             <div class="relative flex" id="dq-page-edtr-console-host">
               <div class="absolute fullwidth fullheight-percent">
-                <console></console>
+                <dqPageConsole></dqPageConsole>
               </div>
             </div>
           </div>
@@ -303,7 +358,7 @@
 <script>
 import el_box_model from "./el-box-model";
 import struct_view from "./struc-view";
-import console from "./console";
+import dqPageConsole from "./console";
 
 import addChild from "../struct-view-el-opts/addChild";
 import classList from "../struct-view-el-opts/classList";
@@ -362,6 +417,8 @@ export default {
   },
   data() {
     return {
+      x: undefined,
+      y: undefined,
       cur_open: undefined,
       opn_opts: [],
       mode: true,
@@ -374,6 +431,10 @@ export default {
       // mouse and indicator effects
       cur_actv: undefined,
       active: undefined,
+
+      // opts active
+      opts_active: undefined,
+      opts_cur_active: undefined,
 
       // theme related
       theme: this.$store.state.theme,
@@ -393,7 +454,7 @@ export default {
       // options available in every el
       opts: [
         {
-          text: "Add Child",
+          text: "Add Element",
           view: "addChild"
         },
         {
@@ -410,7 +471,7 @@ export default {
   components: {
     boxmodel: el_box_model,
     strvw: struct_view,
-    console,
+    dqPageConsole,
 
     addChild,
     classList,
@@ -556,37 +617,39 @@ export default {
       if (i) {
         return {
           background: this.$store.state.theme.global.selection2.hover_bg_color,
-          color: this.$store.state.theme.global.selection2.active_text_color
+          color: this.$store.state.theme.global.selection2.active_text_color,
+          transition: "0.3s"
         };
-      } else {
       }
     },
-    openOpt(uid, mode, c) {
-      if (mode == true) {
-        if (this.opn_opts.includes(uid)) {
-          this.opn_opts.splice(this.opn_opts.indexOf(uid), 1);
-        } else {
-          this.opn_opts.push(uid);
+    // work
+    mv($event) {
+      const ev_clHeight = $event.clientX - 252 + 5;
+      const ev_clWidth = $event.clientY - 126 + 25;
+
+      this.x = ev_clHeight;
+      this.y = ev_clWidth;
+
+      // console.log($event)
+    },
+    openOpt(uid, $event) {
+      this.$store.commit("pages/set_opts", {
+        uid,
+        top: this.y,
+        left: this.x
+      });
+
+      setTimeout(() => {
+        // console.log(document.getElementById("opt-box-ul"));
+        const n = document.getElementById("opt-box-ul");
+        if (n) {
+          TweenMax.fromTo(n, 0.1, { height: "0" }, { height: "165" });
         }
-
-        this.mode = false;
-      } else {
-        this.gg.push(c);
-
-        setTimeout(() => {
-          if (this.gg[0] === 0) {
-            this.mode = false;
-          } else if (this.gg[0] == 1) {
-            this.mode = true;
-            if (this.opn_opts.includes(uid)) {
-              this.opn_opts.splice(this.opn_opts.indexOf(uid), 1);
-            } else {
-              this.opn_opts.push(uid);
-            }
-          }
-          this.gg = [];
-        }, 0);
-      }
+      }, 0);
+    },
+    closeOpt() {
+      console.log("test");
+      this.$store.commit("pages/clear_opts");
     }
   },
   watch: {
@@ -612,9 +675,9 @@ export default {
   background: white;
   border: 1px solid rgba(128, 128, 128, 0.432);
   border-radius: 2px;
-  top: -13px;
-  left: 6px;
-  min-width: 90px;
+  /* top: -13px; */
+  /* left: 6px; */
+  min-width: 120px;
 }
 #dq-box-model-v {
   min-height: 140px;

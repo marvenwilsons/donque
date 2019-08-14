@@ -28,6 +28,7 @@
 
         "primary_bg_color":"#84a4b2",
         "secondary_bg_color":"#e9eff3",
+        "secondary_bg_color_complementary":"#e1d2c8",
 
         "border_color": "rgba(128, 128, 128, 0.432)",
 
