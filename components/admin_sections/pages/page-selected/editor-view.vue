@@ -61,12 +61,15 @@
 
           <!-- elements view @stages - html render -->
           <main
-            @click.right.prevent
-            @mousemove="mv"
+            @click.right.prevent="tt(true)"
+            @mouseleave="tt(true)"
+            @mousemove.prevent.stop="mv"
             id="dq-page-editor-area-host"
             class="flex1 flex relative"
           >
             <!-- work -->
+            <!-- $store.state.pages.opn_opts_pos_left -->
+            <!-- $store.state.pages.opn_opts_pos_top -->
             <div
               role="option-box"
               :style="{
@@ -79,10 +82,15 @@
                 borderRadius: '8px',
                 ...$store.state.theme.global.page_modal_background
                 }"
-              class="borderred absolute padtop050 padbottom050"
+              class="absolute padtop050 padbottom050 bgblue"
               v-if="$store.state.pages.opn_opts"
             >
-              <ul id="opt-box-ul" style="margin:0; height:0px; overflow:hidden;">
+              <ul
+                @mouseenter="tt(false)"
+                @mouseleave="tt(true)"
+                id="opt-box-ul"
+                style="margin:0; height:0px; overflow:hidden;"
+              >
                 <!-- open api -->
                 <li
                   @mouseover="opts_active = 'opts-opt-open-api'"
@@ -164,10 +172,10 @@
               </ul>
             </div>
             <div class="pad025 flex relative flex1 absolute fullwidth fullheight-percent">
-              <div class="pad050 flex1 aut">
+              <div @click.prevent="closeOpt" @click.right.prevent="closeOpt" class="pad050 flex1 aut">
                 <div
                   :style="{filter: sec_modal_viz ? 'blur(2px)' : ''}"
-                  class="fullwidth flex"
+                  class="fullwidth flex bg"
                   id="dq-page-editor-area-c1"
                   v-for="(sections,s_i) in (is_traversing ? travers_mode :  $store.state.pages.stages.length == 0 ? sections : n_sections)"
                   :key="`seccc-${s_i}`"
@@ -417,8 +425,14 @@ export default {
   },
   data() {
     return {
+      //
       x: undefined,
       y: undefined,
+
+      // offset
+      o_x: undefined,
+      o_y: undefined,
+
       cur_open: undefined,
       opn_opts: [],
       mode: true,
@@ -435,6 +449,7 @@ export default {
       // opts active
       opts_active: undefined,
       opts_cur_active: undefined,
+      can_be_close: false,
 
       // theme related
       theme: this.$store.state.theme,
@@ -624,15 +639,23 @@ export default {
     },
     // work
     mv($event) {
-      const ev_clHeight = $event.clientX - 252 + 5;
-      const ev_clWidth = $event.clientY - 126 + 25;
+      // x refers to the horizontal plain which is left and right
+      // y refers to the vertical plain which is top and bottom
+      if(!this.$store.state.pages.opn_opts){
+        this.can_be_close = false
+      }
 
-      this.x = ev_clHeight;
-      this.y = ev_clWidth;
+      let left = $event.clientX - 265;
+      let top = $event.clientY - 100;
 
-      // console.log($event)
+      let o_left = $event.layerX + 12;
+      let o_top = $event.layerY + 8;
+
+      this.x = o_left;
+      this.y = o_top;
     },
     openOpt(uid, $event) {
+      console.log("open");
       this.$store.commit("pages/set_opts", {
         uid,
         top: this.y,
@@ -640,7 +663,6 @@ export default {
       });
 
       setTimeout(() => {
-        // console.log(document.getElementById("opt-box-ul"));
         const n = document.getElementById("opt-box-ul");
         if (n) {
           TweenMax.fromTo(n, 0.1, { height: "0" }, { height: "165" });
@@ -648,8 +670,12 @@ export default {
       }, 0);
     },
     closeOpt() {
-      console.log("test");
-      this.$store.commit("pages/clear_opts");
+      if (this.can_be_close) {
+        this.$store.commit("pages/clear_opts");
+      }
+    },
+    tt(state) {
+      this.can_be_close = state;
     }
   },
   watch: {

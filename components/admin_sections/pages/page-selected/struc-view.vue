@@ -143,7 +143,6 @@ export default {
       }
     },
     openOpt({ uid, index, el }) {
-      console.log("test");
       this.$store.commit("pages/set_opts", {
         uid,
         top: this.y,
