@@ -67,9 +67,27 @@
             id="dq-page-editor-area-host"
             class="flex1 flex relative"
           >
-            <!-- work -->
-            <!-- $store.state.pages.opn_opts_pos_left -->
-            <!-- $store.state.pages.opn_opts_pos_top -->
+            <!-- hover info box -->
+            <div
+              id="dq-page-el-info-box"
+              v-if="$store.state.pages.info_box_data"
+              :style="{
+              zIndex:200,
+              opacity: 0,
+              left:`${x + 25}px`,
+              top:`${y- 20}px`,
+              minWidth:'200px',
+              maxWidth:'300px',
+              boxShadow:`0 5px 20px ${$store.state.theme.global.secondary_bg_color}`,
+              border: `1px solid ${$store.state.theme.global.border_color}`,
+              borderRadius: '8px',
+              ...$store.state.theme.global.page_modal_background
+              }"
+              class="absolute pad050 bgblue"
+            >{{$store.state.pages.info_box_data}}</div>
+            <!-- end of hover info box -->
+
+            <!-- option box -->
             <div
               role="option-box"
               :style="{
@@ -82,7 +100,7 @@
                 borderRadius: '8px',
                 ...$store.state.theme.global.page_modal_background
                 }"
-              class="absolute padtop050 padbottom050 bgblue"
+              class="absolute padtop050 padbottom050"
               v-if="$store.state.pages.opn_opts"
             >
               <ul
@@ -171,8 +189,13 @@
                 </li>
               </ul>
             </div>
+            <!-- end of option box -->
             <div class="pad025 flex relative flex1 absolute fullwidth fullheight-percent">
-              <div @click.prevent="closeOpt" @click.right.prevent="closeOpt" class="pad050 flex1 aut">
+              <div
+                @click.prevent="closeOpt"
+                @click.right.prevent="closeOpt"
+                class="pad050 flex1 aut"
+              >
                 <div
                   :style="{filter: sec_modal_viz ? 'blur(2px)' : ''}"
                   class="fullwidth flex bg"
@@ -196,11 +219,10 @@
                         :style="{background:theme.global.secondary_bg_color}"
                         class="flex flexcenter spacebetween pointer"
                         @click.right.prevent="openOpt(sections.uid,$event)"
+                        @mouseenter="showInfoBox(sections)"
+                        @mouseleave="resetInfoBox()"
                       >
-                        <span class="padleft025 padright050">
-                          section
-                          <!-- <small>{{sections.role}}</small> -->
-                        </span>
+                        <span class="padleft025 padright050">section</span>
                         <i class="fas fa-layer-group padright025 padleft025"></i>
                       </div>
                     </div>
@@ -641,8 +663,8 @@ export default {
     mv($event) {
       // x refers to the horizontal plain which is left and right
       // y refers to the vertical plain which is top and bottom
-      if(!this.$store.state.pages.opn_opts){
-        this.can_be_close = false
+      if (!this.$store.state.pages.opn_opts) {
+        this.can_be_close = false;
       }
 
       let left = $event.clientX - 265;
@@ -655,7 +677,8 @@ export default {
       this.y = o_top;
     },
     openOpt(uid, $event) {
-      console.log("open");
+      this.$store.commit("pages/reset_info_box");
+
       this.$store.commit("pages/set_opts", {
         uid,
         top: this.y,
@@ -673,6 +696,21 @@ export default {
       if (this.can_be_close) {
         this.$store.commit("pages/clear_opts");
       }
+    },
+    showInfoBox(data) {
+      this.$store.commit("pages/set_info_box", {
+        data
+      });
+
+      setTimeout(() => {
+        const n = document.getElementById("dq-page-el-info-box");
+        if (n) {
+          TweenMax.fromTo(n, 0.3, { opacity: "0" }, { opacity: "1" });
+        }
+      }, 0);
+    },
+    resetInfoBox() {
+      this.$store.commit("pages/reset_info_box");
     },
     tt(state) {
       this.can_be_close = state;

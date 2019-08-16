@@ -14,6 +14,8 @@
     >
       <div class="dq-strvw-el">
         <div
+          @mouseenter="showInfoBox(el)"
+          @mouseleave="resetInfoBox()"
           @click="$store.commit('pages/clear_opts')"
           :style="{
             background: $store.state.pages.opn_opts == el.uid ? $store.state.theme.global.primary_bg_color : $store.state.theme.global.secondary_bg_color, 
@@ -143,13 +145,14 @@ export default {
       }
     },
     openOpt({ uid, index, el }) {
+      this.$store.commit("pages/reset_info_box");
+
       this.$store.commit("pages/set_opts", {
         uid,
         top: this.y,
         left: this.x
       });
       setTimeout(() => {
-        // console.log(document.getElementById("opt-box-ul"));
         const n = document.getElementById("opt-box-ul");
         if (n) {
           TweenMax.fromTo(n, 0.1, { height: "0" }, { height: "165" });
@@ -158,6 +161,21 @@ export default {
     },
     set_view({ view, uid, el }) {
       this.$store.commit("pages/set_api_view", { view, uid, el });
+    },
+    showInfoBox(data) {
+      this.$store.commit("pages/set_info_box", {
+        data
+      });
+
+      setTimeout(() => {
+        const n = document.getElementById("dq-page-el-info-box");
+        if (n) {
+          TweenMax.fromTo(n, 0.3, { opacity: "0" }, { opacity: "1" });
+        }
+      }, 0);
+    },
+    resetInfoBox() {
+      this.$store.commit("pages/reset_info_box");
     }
   },
   mounted() {

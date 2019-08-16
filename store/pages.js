@@ -70,6 +70,9 @@ export const state = () => ({
     opn_opts_pos_top: undefined,
     opn_opts_pos_left: undefined,
 
+    // info box
+    info_box_data: undefined,
+
     //
     css_classes: undefined,
     el_flat_map: [],
@@ -98,6 +101,17 @@ export const mutations = {
     clear_opts(state,data){
         state.opn_opts = undefined
     },
+
+    // info box
+    set_info_box(state,{data}){
+
+        state.info_box_data = data
+    },
+    reset_info_box(state){
+        state.info_box_data = undefined
+    },
+
+    // api view
     set_api_view(state,data){
         console.log('** api view setting')
         state.api_view_que = data
