@@ -67,7 +67,7 @@
             id="dq-page-editor-area-host"
             class="flex1 flex relative"
           >
-            <!-- hover info box -->
+            <!-- info box -->
             <div
               id="dq-page-el-info-box"
               v-if="$store.state.pages.info_box_data"
@@ -76,25 +76,28 @@
               opacity: 0,
               left:`${x + 25}px`,
               top:`${y- 20}px`,
-              minWidth:'200px',
+              minWidth:'300px',
               maxWidth:'300px',
-              boxShadow:`0 5px 20px ${$store.state.theme.global.secondary_bg_color}`,
+              boxShadow:`0 2px 15px ${$store.state.theme.global.secondary_bg_color}`,
               border: `1px solid ${$store.state.theme.global.border_color}`,
               borderRadius: '8px',
               ...$store.state.theme.global.page_modal_background
               }"
               class="absolute pad050 bgblue"
-            >{{$store.state.pages.info_box_data}}</div>
-            <!-- end of hover info box -->
+            >
+              <infoBox :data="$store.state.pages.info_box_data" />
+            </div>
+            <!-- end of info box -->
 
-            <!-- option box -->
+            <!-- context menu -->
+            <!-- @pages > CONTEXT_MENU >  coordinate render -->
             <div
               role="option-box"
               :style="{
                 zIndex:100,
                 minWidth:'200px',
-                left:`${$store.state.pages.opn_opts_pos_left}px`,
-                top:`${$store.state.pages.opn_opts_pos_top}px`,
+                left:`${$store.state.pages.opn_opts_pos_left + 10}px`,
+                top:`${$store.state.pages.opn_opts_pos_top - 5}px`,
                 boxShadow:`0 10px 20px ${$store.state.theme.global.secondary_bg_color}`,
                 border: `1px solid ${$store.state.theme.global.border_color}`,
                 borderRadius: '8px',
@@ -103,93 +106,12 @@
               class="absolute padtop050 padbottom050"
               v-if="$store.state.pages.opn_opts"
             >
-              <ul
-                @mouseenter="tt(false)"
-                @mouseleave="tt(true)"
-                id="opt-box-ul"
-                style="margin:0; height:0px; overflow:hidden;"
-              >
-                <!-- open api -->
-                <li
-                  @mouseover="opts_active = 'opts-opt-open-api'"
-                  @mouseleave="opts_cur_active != `opts-opt-open-api` && (opts_active = undefined)"
-                  :style="setStyle(opts_active === `opts-opt-open-api` || opts_active == `opts-opt-open-api`)"
-                  class="pad025 flex pointer"
-                >
-                  <div class="flex3">
-                    <i class="far fa-edit padleft125"></i>
-                  </div>
-                  <div class="flex7">Open API</div>
-                  <div class="flex4"></div>
-                </li>
-                <!-- add element -->
-                <li
-                  @mouseover="opts_active = 'opts-opt-addelement'"
-                  @mouseleave="opts_cur_active != `opts-opt-addelement` && (opts_active = undefined)"
-                  :style="setStyle(opts_active === `opts-opt-addelement` || opts_active == `opts-opt-addelement`)"
-                  class="pad025 flex pointer"
-                >
-                  <div class="flex3">
-                    <!-- <i class="far fa-edit padleft125"></i> -->
-                  </div>
-                  <div class="flex7">Add Element</div>
-                  <div class="flex4"></div>
-                </li>
-                <!-- cut -->
-                <li
-                  @mouseover="opts_active = 'cut'"
-                  @mouseleave="opts_cur_active != `cut` && (opts_active = undefined)"
-                  :style="setStyle(opts_active === `cut` || opts_active == `cut`)"
-                  class="pad025 flex pointer"
-                >
-                  <div class="flex3">
-                    <i class="fas fa-cut padleft125"></i>
-                  </div>
-                  <div class="flex7">Cut</div>
-                  <div class="flex4"></div>
-                </li>
-                <!-- copy -->
-                <li
-                  @mouseover="opts_active = 'copy'"
-                  @mouseleave="opts_cur_active != `copy` && (opts_active = undefined)"
-                  :style="setStyle(opts_active === `copy` || opts_active == `copy`)"
-                  class="pad025 flex pointer"
-                >
-                  <div class="flex3">
-                    <i class="far fa-copy padleft125"></i>
-                  </div>
-                  <div class="flex7">Copy</div>
-                  <div class="flex4"></div>
-                </li>
-                <!-- paste -->
-                <li
-                  @mouseover="opts_active = 'paste'"
-                  @mouseleave="opts_cur_active != `paste` && (opts_active = undefined)"
-                  :style="setStyle(opts_active === `paste` || opts_active == `paste`)"
-                  class="pad025 flex pointer"
-                >
-                  <div class="flex3">
-                    <!-- <i class="far fa-copy padleft125"></i> -->
-                  </div>
-                  <div class="flex7">Paste</div>
-                  <div class="flex4"></div>
-                </li>
-                <!-- delete -->
-                <li
-                  @mouseover="opts_active = 'del'"
-                  @mouseleave="opts_cur_active != `del` && (opts_active = undefined)"
-                  :style="setStyle(opts_active === `del` || opts_active == `del`)"
-                  class="pad025 flex pointer"
-                >
-                  <div class="flex3">
-                    <i class="far fa-trash-alt padleft125"></i>
-                  </div>
-                  <div class="flex7">Delete</div>
-                  <div class="flex4"></div>
-                </li>
-              </ul>
+              <!-- @pages > CONTEXT_MENU >  mousenenter trigger-->
+              <div @mouseenter="tt(false)" @mouseleave="tt(true)">
+                <contextMenu></contextMenu>
+              </div>
             </div>
-            <!-- end of option box -->
+            <!-- end of context menu -->
             <div class="pad025 flex relative flex1 absolute fullwidth fullheight-percent">
               <div
                 @click.prevent="closeOpt"
@@ -206,6 +128,8 @@
                   <div id="dq-viz-host" :data="s_i" :class="[`viz-host-${s_i}`, 'flex']">
                     <div style="min-width:75px;" class="dq-strvw-el pointer">
                       <div
+                        @mouseenter="showInfoBox({tag:'root_Template-wrapper'})"
+                        @mouseleave="resetInfoBox()"
                         @click="sec_modal_viz = true, sec_data = undefined"
                         :style="{background:theme.global.secondary_bg_color}"
                         v-if="s_i == 0"
@@ -272,9 +196,7 @@
                 background:`${$store.state.theme.global.secondary_bg_color}`}"
             >
               <div>
-                <strong class="pointer">Console</strong> |
-                <strong class="pointer">Live View</strong>
-                <!-- <strong>Live-view</strong> -->
+                <strong class="pointer">Console</strong> 
               </div>
               <div
                 @click="exp_console"
@@ -390,6 +312,9 @@ import el_box_model from "./el-box-model";
 import struct_view from "./struc-view";
 import dqPageConsole from "./console";
 
+import infoBox from "./infobox/infobox";
+import contextMenu from "./context-menu/context";
+
 import addChild from "../struct-view-el-opts/addChild";
 import classList from "../struct-view-el-opts/classList";
 import dddel from "../struct-view-el-opts/delete";
@@ -469,8 +394,6 @@ export default {
       active: undefined,
 
       // opts active
-      opts_active: undefined,
-      opts_cur_active: undefined,
       can_be_close: false,
 
       // theme related
@@ -509,6 +432,8 @@ export default {
     boxmodel: el_box_model,
     strvw: struct_view,
     dqPageConsole,
+    infoBox,
+    contextMenu,
 
     addChild,
     classList,
@@ -559,6 +484,7 @@ export default {
       }, 1);
     },
     exp_console() {
+      // @pages > console > expand feature
       this.console = !this.console;
       const n = document.getElementById("dq-page-edtr-console-host");
 
@@ -650,26 +576,17 @@ export default {
         }
       }
     },
-    setStyle(i) {
-      if (i) {
-        return {
-          background: this.$store.state.theme.global.selection2.hover_bg_color,
-          color: this.$store.state.theme.global.selection2.active_text_color,
-          transition: "0.3s"
-        };
-      }
-    },
-    // work
     mv($event) {
       // x refers to the horizontal plain which is left and right
       // y refers to the vertical plain which is top and bottom
+
+      //
       if (!this.$store.state.pages.opn_opts) {
         this.can_be_close = false;
       }
 
-      let left = $event.clientX - 265;
-      let top = $event.clientY - 100;
-
+      //@pages > CONTEXT_MENU > mouse coordinates handler
+      // computing where the mouse is, giving coordinates
       let o_left = $event.layerX + 12;
       let o_top = $event.layerY + 8;
 
@@ -679,16 +596,22 @@ export default {
     openOpt(uid, $event) {
       this.$store.commit("pages/reset_info_box");
 
+      this.$store.commit("pages/set_context_view",'section');
+
       this.$store.commit("pages/set_opts", {
+        tag: 'section',
         uid,
         top: this.y,
-        left: this.x
+        left: this.x,
+        context_height: '150'
       });
 
       setTimeout(() => {
         const n = document.getElementById("opt-box-ul");
+        //@pages > CONTEXT_MENU > on right_click > height controller
+        // change the height here
         if (n) {
-          TweenMax.fromTo(n, 0.1, { height: "0" }, { height: "165" });
+          TweenMax.fromTo(n, 0.1, { height: "0" }, { height: this.$store.state.pages.context_height });
         }
       }, 0);
     },
@@ -698,6 +621,7 @@ export default {
       }
     },
     showInfoBox(data) {
+      //@pages > INFO_BOX > onmouseenter method
       this.$store.commit("pages/set_info_box", {
         data
       });
@@ -710,6 +634,7 @@ export default {
       }, 0);
     },
     resetInfoBox() {
+      //@pages > INFO_BOX > onmouseleave method
       this.$store.commit("pages/reset_info_box");
     },
     tt(state) {

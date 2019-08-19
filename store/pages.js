@@ -64,11 +64,14 @@ export const state = () => ({
     travers_view: undefined,
     cur_pointer: undefined,
 
-    // open options
+    // context box
     opn_opts: undefined,
     api_view: undefined,
     opn_opts_pos_top: undefined,
     opn_opts_pos_left: undefined,
+    cur_tag: undefined,
+    opt_cur_view: 'section',
+    context_height: undefined,
 
     // info box
     info_box_data: undefined,
@@ -84,22 +87,28 @@ export const getters = {
 }
 
 export const mutations = {
-    // opts
-    set_opts(state,{uid,top,left}) {
+    // context box
+    set_opts(state,{uid,tag, top,left, context_height}) {
         
         if(state.opn_opts){
             state.opn_opts = undefined
             state.opn_opts_pos_top = 0
             state.opn_opts_pos_left = 0
+            state.cur_tag = undefined
+            state.context_height = undefined
         } else {
             state.opn_opts = uid
+            state.cur_tag = tag
             state.opn_opts_pos_top = top
             state.opn_opts_pos_left = left
+            state.context_height = context_height
         }
-
     },
     clear_opts(state,data){
         state.opn_opts = undefined
+    },
+    set_context_view(state,data){
+        state.opt_cur_view = data
     },
 
     // info box

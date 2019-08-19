@@ -20,7 +20,7 @@
           <div v-if="rpassword" class="tc-f-wrap">
             <div class="tc-wrap tc-input flex flexcol">
               <span class="tc-title">Email</span>
-              <input v-mode="email" type="text">
+              <input v-mode="rpassword" type="text">
             </div>
             <div class="tc-b flex">
               <button @click="rp(true)" class="tc-b-inner">Retrieve password</button>
@@ -29,13 +29,13 @@
 
           <!-- login -->
           <div v-if="!rpassword" class="tc-f-wrap">
-            <div class="tc-wrap tc-input flex flexcol">
+            <div class="tc-wrap tc-input  flex flexcol">
               <span class="tc-title">Username</span>
               <input v-model="username" id="dqloginUsername" type="text">
             </div>
             <div class="tc-input flex flexcol">
               <span class="tc-title">Password</span>
-              <input v-model="password" type="password">
+              <input class="pad125" v-model="password" type="password">
             </div>
             <div class="margintop125 padright025 padtop125 padbottom125 flexend flex">
               <button @click="submit" class="tc-b-inner"><strong>Login</strong></button>
@@ -141,6 +141,7 @@ export default {
 
 <style>
 @import url('@/assets/dq-css/dq-theme-default.css');
+@import url('@/assets/dq-css/dq-fw-0.3.css');
 
 #tc-logo-h {
   padding: calc(var(--fontSize) * 1.25);
@@ -202,11 +203,12 @@ export default {
   flex: 4;
 }
 .tc-input > input {
-  padding: calc(var(--fontSize) * 0.5);
-  margin-bottom: calc(var(--fontSize) * 0.25);
+  /* padding: calc(var(--fontSize) * 0.5); */
+  /* margin-bottom: calc(var(--fontSize) * 0.25); */
   color: var(--blue-text-2);
-  font-weight: 600;
-  min-width: calc(var(--fontSize) * 15.25);
+  font-size:  calc(var(--fontSize) * 1.25);
+  /* font-weight: 600; */
+  min-width: 150px;
 }
 .tc-ind {
   flex: 0.5;

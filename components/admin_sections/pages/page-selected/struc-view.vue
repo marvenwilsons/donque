@@ -21,7 +21,7 @@
             background: $store.state.pages.opn_opts == el.uid ? $store.state.theme.global.primary_bg_color : $store.state.theme.global.secondary_bg_color, 
             color: $store.state.pages.opn_opts == el.uid ? 'white' : '', 
             }"
-          @click.right.prevent="openOpt({uid: el.uid, index: el_i, el})"
+          @click.right.prevent="openOpt({uid: el.uid, tag: el.tag, el})"
         >
           <!-- @note add travers event origin highlight element feature -->
           <div class="flex spacebetween flexcol flexwrap">
@@ -35,7 +35,7 @@
           </div>
           <!-- option box -->
           <div
-            @click.right.prevent="openOpt({uid: el.uid, index: el_i, el})"
+            @click.right.prevent="openOpt({uid: el.uid, tag: el.tag, el})"
             v-if="false"
             class="flex padleft125 relative"
           >
@@ -144,18 +144,21 @@ export default {
         };
       }
     },
-    openOpt({ uid, index, el }) {
+    openOpt({ uid, tag, el }) {
       this.$store.commit("pages/reset_info_box");
-
+      this.$store.commit("pages/set_context_view",'html');
       this.$store.commit("pages/set_opts", {
         uid,
+        tag,
         top: this.y,
-        left: this.x
+        left: this.x,
+        context_height: '230'
       });
       setTimeout(() => {
         const n = document.getElementById("opt-box-ul");
+        //@pages > CONTEXT_MENU > on right_click > height controller
         if (n) {
-          TweenMax.fromTo(n, 0.1, { height: "0" }, { height: "165" });
+          TweenMax.fromTo(n, 0.1, { height: "0" }, { height: this.$store.state.pages.context_height });
         }
       }, 0);
     },

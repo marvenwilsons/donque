@@ -271,7 +271,7 @@ export default {
           this.$store.commit("pane_system/alter_pane_config", {
             pane_index: this.my_pane_index,
             alter: {
-              pane_width: "95%"
+              pane_width: "100%"
             }
           });
         }
