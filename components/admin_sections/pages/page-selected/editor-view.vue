@@ -173,7 +173,7 @@
                     <i class="fas fa-times-circle"></i>
                   </div>
                 </div>
-                <!-- Element api container #work -->
+                <!-- Element api container -->
                 <div class="relative fullheight-percent flex flexcol">
                   <div class="flex relative fullheight-percent">
                     <div class="absolute fullwidth fullheight-percent aut flex">
@@ -597,7 +597,6 @@ export default {
       this.y = o_top;
     },
     openOpt(uid, $event) {
-      // #work ed
       if (this.$store.state.pages.info_box_data) {
         this.$store.commit("pages/set_api_view", {
           uid: this.$store.state.pages.info_box_data.uid,

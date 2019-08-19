@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- #work add element -->
     <li
       @mouseover="opts_active = 'opts-opt-addelement'"
       @mouseleave="opts_cur_active != `opts-opt-addelement` && (opts_active = undefined)"

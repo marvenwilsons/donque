@@ -54,7 +54,6 @@ export default {
   props: ['data'],
   methods: {
     setContextView(vname) {
-        // #work
         this.$store.commit('pages/set_api_view',{
             view: vname
         })

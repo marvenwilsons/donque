@@ -112,7 +112,6 @@ export default {
       }
     },
     openOpt({ uid, tag, el }) {
-      // #work
       if (this.$store.state.pages.info_box_data) {
         this.$store.commit("pages/set_api_view", {
           uid,
