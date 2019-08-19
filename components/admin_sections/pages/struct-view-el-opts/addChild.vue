@@ -89,7 +89,9 @@ export default {
         "p",
         "a",
         "nav",
-        "section"
+        "section",
+        "text",
+        "variable"
       ],
       els2: ["h1", "h2", "h3", "h4", "h5", "h6"],
       els3: [
@@ -162,7 +164,7 @@ export default {
       };
 
       this.$store.dispatch("pages/addrs_finder", {
-        uid,
+        uid: `${this.data.index}--${uid}`,
         fn: locator => {
           this.$store.commit("pages/update_section", {
             desc: `Added HTML ${el} element to section - addrs: ${locator.join(

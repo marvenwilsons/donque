@@ -4,6 +4,7 @@
     <li
       @mouseover="opts_active = 'opts-opt-addelement'"
       @mouseleave="opts_cur_active != `opts-opt-addelement` && (opts_active = undefined)"
+      @click="setContextView('addChild')"
       :style="setStyle(opts_active === `opts-opt-addelement` || opts_active == `opts-opt-addelement`)"
       class="pad025 flex pointer"
     >
@@ -51,6 +52,9 @@ export default {
     };
   },
   methods: {
+    setContextView() {
+      this.$store.commit()
+    },
     setStyle(i) {
       if (i) {
         return {

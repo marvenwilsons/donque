@@ -1,9 +1,10 @@
 <template>
   <div>
-    <!-- add element -->
+    <!-- #work add element -->
     <li
       @mouseover="opts_active = 'opts-opt-addelement'"
       @mouseleave="opts_cur_active != `opts-opt-addelement` && (opts_active = undefined)"
+      @click="$store.commit('pages/set_api_view',{view: 'addChild'})"
       :style="setStyle(opts_active === `opts-opt-addelement` || opts_active == `opts-opt-addelement`)"
       class="pad025 flex pointer"
     >

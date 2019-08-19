@@ -46,7 +46,7 @@ export default {
             Attributes: [],
             Events: [],
             // DirectChildren: data.els ? null : data.els.length,
-            Notes: ""
+            Notes: "",
           };
           break;
         case "plugin":
@@ -58,7 +58,7 @@ export default {
           return {
             Role: data.role,
             DirectChildren: data.els.length,
-            Notes: ""
+            Notes: "",
           };
           break;
         case "root":

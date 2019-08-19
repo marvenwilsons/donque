@@ -125,6 +125,10 @@
                   v-for="(sections,s_i) in (is_traversing ? travers_mode :  $store.state.pages.stages.length == 0 ? sections : n_sections)"
                   :key="`seccc-${s_i}`"
                 >
+                <div :style="{
+                  background:theme.global.secondary_bg_color,
+                  borderLeft: `1px solid ${theme.global.border_color}`,
+                  }" class="padright050 padleft050">{{s_i}}</div>
                   <div id="dq-viz-host" :data="s_i" :class="[`viz-host-${s_i}`, 'flex']">
                     <div style="min-width:75px;" class="dq-strvw-el pointer">
                       <div
@@ -143,7 +147,7 @@
                         :style="{background:theme.global.secondary_bg_color}"
                         class="flex flexcenter spacebetween pointer"
                         @click.right.prevent="openOpt(sections.uid,$event)"
-                        @mouseenter="showInfoBox(sections)"
+                        @mouseenter="showInfoBox(sections,s_i)"
                         @mouseleave="resetInfoBox()"
                       >
                         <span class="padleft025 padright050">section</span>
@@ -156,7 +160,7 @@
               </div>
               <div
                 :style="{border: `1px solid ${$store.state.theme.global.border_color}`, maxWidth:'600px'}"
-                class="flex1 relative flex flexcol"
+                class="flex1 relative flex flexcol borderred"
                 v-if="$store.state.pages.api_view"
               >
                 <div
@@ -169,16 +173,15 @@
                     <i class="fas fa-times-circle"></i>
                   </div>
                 </div>
-                <!-- Element api container -->
+                <!-- Element api container #work -->
                 <div class="relative fullheight-percent flex flexcol">
-                  <div>ClassList</div>
                   <div class="flex relative fullheight-percent">
                     <div class="absolute fullwidth fullheight-percent aut flex">
                       <div
                         v-if="$store.state.pages.api_view"
-                        :uid="$store.state.pages.api_view.uid"
-                        :is="$store.state.pages.api_view.view"
-                        :data="$store.state.pages.api_view.el"
+                        :is="$store.state.pages.api_view"
+                        :uid="$store.state.pages.api_view_uid"
+                        :data="$store.state.pages.api_view_el"
                       ></div>
                     </div>
                   </div>
@@ -196,7 +199,7 @@
                 background:`${$store.state.theme.global.secondary_bg_color}`}"
             >
               <div>
-                <strong class="pointer">Console</strong> 
+                <strong class="pointer">Console</strong>
               </div>
               <div
                 @click="exp_console"
@@ -594,16 +597,24 @@ export default {
       this.y = o_top;
     },
     openOpt(uid, $event) {
+      // #work ed
+      if (this.$store.state.pages.info_box_data) {
+        this.$store.commit("pages/set_api_view", {
+          uid: this.$store.state.pages.info_box_data.uid,
+          el: this.$store.state.pages.info_box_data
+        });
+      }
+
       this.$store.commit("pages/reset_info_box");
 
-      this.$store.commit("pages/set_context_view",'section');
+      this.$store.commit("pages/set_context_view", "section");
 
       this.$store.commit("pages/set_opts", {
-        tag: 'section',
+        tag: "section",
         uid,
         top: this.y,
         left: this.x,
-        context_height: '150'
+        context_height: "150"
       });
 
       setTimeout(() => {
@@ -611,19 +622,26 @@ export default {
         //@pages > CONTEXT_MENU > on right_click > height controller
         // change the height here
         if (n) {
-          TweenMax.fromTo(n, 0.1, { height: "0" }, { height: this.$store.state.pages.context_height });
+          TweenMax.fromTo(
+            n,
+            0.1,
+            { height: "0" },
+            { height: this.$store.state.pages.context_height }
+          );
         }
       }, 0);
     },
     closeOpt() {
       if (this.can_be_close) {
+        this.$store.commit("pages/close_api_view");
         this.$store.commit("pages/clear_opts");
       }
     },
-    showInfoBox(data) {
+    showInfoBox(data,index) {
       //@pages > INFO_BOX > onmouseenter method
       this.$store.commit("pages/set_info_box", {
-        data
+        data,
+        index
       });
 
       setTimeout(() => {

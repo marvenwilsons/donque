@@ -66,12 +66,17 @@ export const state = () => ({
 
     // context box
     opn_opts: undefined,
-    api_view: undefined,
     opn_opts_pos_top: undefined,
     opn_opts_pos_left: undefined,
     cur_tag: undefined,
     opt_cur_view: 'section',
     context_height: undefined,
+
+    // element api
+    api_view: undefined,
+    api_view_el: undefined,
+    api_view_uid: undefined,
+    api_view_q: undefined,
 
     // info box
     info_box_data: undefined,
@@ -112,9 +117,11 @@ export const mutations = {
     },
 
     // info box
-    set_info_box(state,{data}){
-
-        state.info_box_data = data
+    set_info_box(state,{data,index}){
+        state.info_box_data = {
+            ...data,
+            index
+        }
     },
     reset_info_box(state){
         state.info_box_data = undefined
@@ -122,16 +129,17 @@ export const mutations = {
 
     // api view
     set_api_view(state,data){
-        console.log('** api view setting')
-        state.api_view_que = data
-
-        if(state.case2){
-            state.api_view = data
+        if(!data.uid && !data.el){
+            state.api_view = data.view
+        }else {
+            state.api_view_el = data.el
+            state.api_view_uid = data.uid
         }
     },
-    close_el_api(state){
-        // state.opn_opts = []
+    close_api_view(state){
         state.api_view = undefined
+        state.api_view_el = undefined
+        state.api_view_uid = undefined
     },
 
     //

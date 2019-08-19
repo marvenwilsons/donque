@@ -14,7 +14,7 @@
     >
       <div class="dq-strvw-el">
         <div
-          @mouseenter="showInfoBox(el)"
+          @mouseenter="showInfoBox(el,el_i)"
           @mouseleave="resetInfoBox()"
           @click="$store.commit('pages/clear_opts')"
           :style="{
@@ -33,39 +33,6 @@
               <i class="fab fa-html5 padright025"></i>
             </div>
           </div>
-          <!-- option box -->
-          <div
-            @click.right.prevent="openOpt({uid: el.uid, tag: el.tag, el})"
-            v-if="false"
-            class="flex padleft125 relative"
-          >
-            <div
-              :style="{
-                  boxShadow:`0 10px 20px ${$store.state.theme.global.secondary_bg_color}`,
-                  border: `1px solid ${$store.state.theme.global.border_color}`
-                  }"
-              class="dq-page-el-opt-bx absolute flex relative"
-            >
-              <div class="pad050 flex flexcol fullwidth">
-                <span>
-                  <div
-                    @mouseover="active = `optlpp-html${d.text}`"
-                    @mouseleave="cur_actv != `optlpp-html${d.text}` && (active = undefined)"
-                    :style="setStyle(active === `optlpp-html${d.text}` || cur_actv == `optlpp-html${d.text}`)"
-                    @click="set_view({view: d.view, uid: `${el_i}--${el.uid}`, el}),  cur_actv = `optlpp-html${d.text}`"
-                    v-for="d in opts"
-                    class="pad025"
-                    :key="`ihga-${d.text}-aw`"
-                  >{{d.text}}</div>
-                  <div class="pad025">Move up</div>
-                  <div class="pad025">Move down</div>
-                  <div class="pad025">Cut</div>
-                  <div class="pad025">Paste</div>
-                </span>
-              </div>
-            </div>
-          </div>
-          <!-- end of option box -->
         </div>
       </div>
       <strvw :x="x" :y="y" :data="el"></strvw>
@@ -145,29 +112,43 @@ export default {
       }
     },
     openOpt({ uid, tag, el }) {
+      // #work
+      if (this.$store.state.pages.info_box_data) {
+        this.$store.commit("pages/set_api_view", {
+          uid,
+          el: this.$store.state.pages.info_box_data
+        });
+      }
+
       this.$store.commit("pages/reset_info_box");
-      this.$store.commit("pages/set_context_view",'html');
+      this.$store.commit("pages/set_context_view", "html");
       this.$store.commit("pages/set_opts", {
         uid,
         tag,
         top: this.y,
         left: this.x,
-        context_height: '230'
+        context_height: "230"
       });
       setTimeout(() => {
         const n = document.getElementById("opt-box-ul");
         //@pages > CONTEXT_MENU > on right_click > height controller
         if (n) {
-          TweenMax.fromTo(n, 0.1, { height: "0" }, { height: this.$store.state.pages.context_height });
+          TweenMax.fromTo(
+            n,
+            0.1,
+            { height: "0" },
+            { height: this.$store.state.pages.context_height }
+          );
         }
       }, 0);
     },
     set_view({ view, uid, el }) {
       this.$store.commit("pages/set_api_view", { view, uid, el });
     },
-    showInfoBox(data) {
+    showInfoBox(data,index) {
       this.$store.commit("pages/set_info_box", {
-        data
+        data,
+        index
       });
 
       setTimeout(() => {
