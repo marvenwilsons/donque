@@ -79,7 +79,7 @@
               minWidth:'300px',
               maxWidth:'300px',
               boxShadow:`0 2px 15px ${$store.state.theme.global.secondary_bg_color}`,
-              border: `1px solid ${$store.state.theme.global.border_color}`,
+              border: `2px solid ${$store.state.theme.global.secondary_border_color}`,
               borderRadius: '8px',
               ...$store.state.theme.global.page_modal_background
               }"
@@ -99,7 +99,7 @@
                 left:`${$store.state.pages.opn_opts_pos_left + 10}px`,
                 top:`${$store.state.pages.opn_opts_pos_top - 5}px`,
                 boxShadow:`0 10px 20px ${$store.state.theme.global.secondary_bg_color}`,
-                border: `1px solid ${$store.state.theme.global.border_color}`,
+                border: `2px solid ${$store.state.theme.global.secondary_border_color}`,
                 borderRadius: '8px',
                 ...$store.state.theme.global.page_modal_background
                 }"
@@ -125,11 +125,14 @@
                   v-for="(sections,s_i) in (is_traversing ? travers_mode :  $store.state.pages.stages.length == 0 ? sections : n_sections)"
                   :key="`seccc-${s_i}`"
                 >
-                <div :style="{
+                  <div
+                    :style="{
                   background:theme.global.secondary_bg_color,
                   borderLeft: `1px solid ${theme.global.border_color}`,
                   width:'20px'
-                  }" class="padright050 padleft050">{{s_i}}</div>
+                  }"
+                    class="padright050 padleft050"
+                  >{{s_i}}</div>
                   <div id="dq-viz-host" :data="s_i" :class="[`viz-host-${s_i}`, 'flex']">
                     <div style="min-width:75px;" class="dq-strvw-el pointer">
                       <div
@@ -162,35 +165,43 @@
 
               <!--  -->
               <div
-                :style="{maxWidth:'550px',boxShadow:'2px 2px 15px 1px #393e4244'}"
-                class="flex1 relative flex flexcol"
+                :style="{width:'0px',boxShadow:'2px 2px 15px 1px #393e4244', overflow:'hidden'}"
+                id="dq-api-view"
+                class="relative flex flexcol fullwidth fullheight-percent"
                 v-if="$store.state.pages.api_view"
               >
-                <div
-                  class="pad125 margintop125  spacebetween flex st-viz-bnnr pointer"
-                  @click="$store.commit('pages/close_el_api')"
+                <span
+                  id="dq-api-el-content"
+                  class="flex flexcol flex1 absolute fullheight-percent fullwidth"
+                  style="left:550px"
                 >
-                  <strong>Element API</strong>
-                  <div>
-                    <i class="fas fa-times-circle"></i>
-                  </div>
-                </div>
-                <!-- Element api container -->
-                <div class="relative fullheight-percent flex flexcol">
-                  <div class="flex relative fullheight-percent aut">
-                    <div class="absolute fullwidth  flex">
-                      <div
-                        v-if="$store.state.pages.api_view"
-                        :is="$store.state.pages.api_view"
-                        :uid="$store.state.pages.api_view_uid"
-                        :data="$store.state.pages.api_view_el"
-                      ></div>
+                  <div
+                    class="pad125 margintop125 spacebetween flex st-viz-bnnr pointer"
+                    style
+                    @click="$store.commit('pages/close_el_api')"
+                  >
+                    <strong>Element API</strong>
+                    <div>
+                      <i class="fas fa-times-circle"></i>
                     </div>
                   </div>
-                </div>
-              <!--  -->
+                  <!-- Element api container -->
 
+                  <div class="relative fullheight-percent flex flexcol flex1">
+                    <div class="flex relative fullheight-percent aut">
+                      <div class="absolute fullwidth flex">
+                        <div
+                          v-if="$store.state.pages.api_view"
+                          :is="$store.state.pages.api_view"
+                          :uid="$store.state.pages.api_view_uid"
+                          :data="$store.state.pages.api_view_el"
+                        ></div>
+                      </div>
+                    </div>
+                  </div>
+                </span>
               </div>
+              <!--  -->
             </div>
           </main>
 
@@ -375,6 +386,9 @@ export default {
     },
     stages() {
       return this.$store.state.pages.stages;
+    },
+    api_view() {
+      return this.$store.state.pages.api_view;
     }
   },
   data() {
@@ -640,7 +654,7 @@ export default {
         this.$store.commit("pages/clear_opts");
       }
     },
-    showInfoBox(data,index) {
+    showInfoBox(data, index) {
       //@pages > INFO_BOX > onmouseenter method
       this.$store.commit("pages/set_info_box", {
         data,
@@ -668,6 +682,27 @@ export default {
 
       this.scrollToEnd();
       this.scrollToEnd();
+    },
+    api_view() {
+      if (this.$store.state.pages.api_view) {
+        console.log("open");
+
+        setTimeout(() => {
+          // dq-api-el-content
+          const n = document.getElementById("dq-api-el-content");
+          if (n) {
+            TweenMax.fromTo(n, 0.2, { left: "550px" }, { left: "0px" });
+          }
+
+          // dq-api-view
+          const n2 = document.getElementById("dq-api-view");
+          if (n2) {
+            TweenMax.fromTo(n2, 0.2, { width: "0px" }, { width: "550px" });
+          }
+        }, 0);
+      } else {
+        console.log("close");
+      }
     }
   }
 };
