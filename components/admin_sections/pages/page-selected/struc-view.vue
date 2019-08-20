@@ -1,7 +1,3 @@
-/**
- * @note 1, fix bug, inconsestent context menu spawn when main window scroll to right
- */
-
 <template>
   <div>
     <!-- {{$store.state.pages.opn_opts}} -->
@@ -29,8 +25,9 @@
               <div
                 :style="{fontWeight: $store.state.pages.opn_opts == el.uid ? 700 : ''}"
                 class="padleft025 padright050"
-              >{{trimTitle(el.tag)}}</div>
-              <i class="fab fa-html5 padright025"></i>
+              >{{trimTitle(el.tag)}}</div> 
+              <i v-if="get_el_type(el.tag) == 'html'" class="fab fa-html5 padright025"></i>
+              <i v-if="get_el_type(el.tag) == 'plugin'" class="fas fa-plug padright025"></i>
             </div>
           </div>
         </div>
@@ -101,6 +98,11 @@ export default {
         return t.split("_").pop();
       } else {
         return t;
+      }
+    },
+    get_el_type(el){
+      if(el){
+        return el.split('_')[0]
       }
     },
     setStyle(i) {

@@ -112,7 +112,7 @@
               </div>
             </div>
             <!-- end of context menu -->
-            <div class="pad025 flex relative flex1 absolute fullwidth fullheight-percent">
+            <div class="flex relative flex1 absolute fullwidth fullheight-percent">
               <div
                 @click.prevent="closeOpt"
                 @click.right.prevent="closeOpt"
@@ -128,6 +128,7 @@
                 <div :style="{
                   background:theme.global.secondary_bg_color,
                   borderLeft: `1px solid ${theme.global.border_color}`,
+                  width:'20px'
                   }" class="padright050 padleft050">{{s_i}}</div>
                   <div id="dq-viz-host" :data="s_i" :class="[`viz-host-${s_i}`, 'flex']">
                     <div style="min-width:75px;" class="dq-strvw-el pointer">
@@ -158,14 +159,15 @@
                   </div>
                 </div>
               </div>
+
+              <!--  -->
               <div
-                :style="{border: `1px solid ${$store.state.theme.global.border_color}`, maxWidth:'600px'}"
-                class="flex1 relative flex flexcol borderred"
+                :style="{maxWidth:'550px',boxShadow:'2px 2px 15px 1px #393e4244'}"
+                class="flex1 relative flex flexcol"
                 v-if="$store.state.pages.api_view"
               >
                 <div
-                  :style="{background:`${$store.state.theme.global.secondary_bg_color}`}"
-                  class="pad050 spacebetween flex st-viz-bnnr pointer"
+                  class="pad125 margintop125  spacebetween flex st-viz-bnnr pointer"
                   @click="$store.commit('pages/close_el_api')"
                 >
                   <strong>Element API</strong>
@@ -175,8 +177,8 @@
                 </div>
                 <!-- Element api container -->
                 <div class="relative fullheight-percent flex flexcol">
-                  <div class="flex relative fullheight-percent">
-                    <div class="absolute fullwidth fullheight-percent aut flex">
+                  <div class="flex relative fullheight-percent aut">
+                    <div class="absolute fullwidth  flex">
                       <div
                         v-if="$store.state.pages.api_view"
                         :is="$store.state.pages.api_view"
@@ -186,6 +188,8 @@
                     </div>
                   </div>
                 </div>
+              <!--  -->
+
               </div>
             </div>
           </main>

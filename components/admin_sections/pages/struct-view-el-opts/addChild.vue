@@ -1,5 +1,14 @@
 <template>
-  <div class=" fullwidth pad125" :style="{color:theme['page_editor_tile_opt_addChild_tiles'].color, minWidth:'400px'}">
+  <div
+    class="fullwidth pad125 margin125"
+    :style="{
+      color:theme['page_editor_tile_opt_addChild_tiles'].color, 
+      minWidth:'400px', 
+      background: theme.global.tertiary_bg_color,
+      border: theme.global.secondary_border_color,
+      borderRadius:'5px'
+      }"
+  >
     <strong>Common HTML</strong>
     <span>
       <strike>(can be nested)</strike>
@@ -19,7 +28,7 @@
     <span>
       <strike>(cannot be nested)</strike>
     </span>
-    <div  class="flex relative flexwrap padbottom125">
+    <div class="flex relative flexwrap padbottom125">
       <div
         @click="selected = el, cur_actv = `ractv-html${el}`"
         :style="setStyle(active === `ractv-html${el}` || cur_actv == `ractv-html${el}`)"
@@ -31,7 +40,7 @@
       >{{el}}</div>
     </div>
     <strong>Headings</strong>
-    <div  class="flex relative flexwrap padbottom125">
+    <div class="flex relative flexwrap padbottom125">
       <div
         @click="selected = el, cur_actv = `html-headings-${el}`"
         :style="setStyle(active === `html-headings-${el}` || cur_actv == `html-headings-${el}`)"
@@ -43,7 +52,7 @@
       >{{el}}</div>
     </div>
     <strong>Plugins</strong>
-    <div  class="flex relative flexwrap padbottom125">
+    <div class="flex relative flexwrap padbottom125">
       <div
         @click="selected = el, cur_actv = `html-headings-${el}`"
         :style="setStyle(active === `html-headings-${el}` || cur_actv == `html-headings-${el}`)"
@@ -173,10 +182,39 @@ export default {
             locator,
             tag: el,
             target_prop: "els",
-            exec_on_prop: function(prop) {
+            exec_on_prop: function(prop, tag) {
               prop.push(
                 gots({
-                  tag: `html_${el}`
+                  tag: `${(() => {
+                    const htm = [
+                      "div",
+                      "span",
+                      "main",
+                      "article",
+                      "footer",
+                      "p",
+                      "a",
+                      "nav",
+                      "section",
+                      "text",
+                      "variable",
+                      "h1",
+                      "h2",
+                      "h3",
+                      "h4",
+                      "h5",
+                      "h6",
+                      "button",
+                      "img",
+                      "audio",
+                      "video"
+                    ];
+                    if (htm.includes(tag)) {
+                      return "html";
+                    } else {
+                      return "plugin";
+                    }
+                  })()}_${el}`
                 })
               );
             }

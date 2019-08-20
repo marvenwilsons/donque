@@ -203,14 +203,14 @@ export const mutations = {
                     temp = latest_root_copy.sections[locator[i]]
 
                     if (locator.length == 1) {
-                        exec_on_prop(temp[target_prop])
+                        exec_on_prop(temp[target_prop],tag)
                     }
                 } else {
 
                     temp = temp[locator[i]]
 
                     if (i == locator.length - 1) {
-                        exec_on_prop(temp[target_prop])
+                        exec_on_prop(temp[target_prop],tag)
                         temp = undefined
                     }
                 }
@@ -257,14 +257,14 @@ export const mutations = {
                     temp = latest_stage_copy.obj.sections[locator[i]]
 
                     if(locator.length == 1){
-                        exec_on_prop(temp[target_prop])
+                        exec_on_prop(temp[target_prop],tag)
                     }
                 } else {
 
                     temp = temp[locator[i]]
 
                     if (i == locator.length - 1){
-                        exec_on_prop(temp[target_prop])
+                        exec_on_prop(temp[target_prop],tag)
                         temp = undefined
                     }
                 }

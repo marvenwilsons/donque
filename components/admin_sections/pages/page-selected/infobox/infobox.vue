@@ -5,7 +5,7 @@
         :style="{
           background: $store.state.theme.global.secondary_bg_color
           }"
-        class="padleft050 padright050"
+        class="padleft050 padright050 padtop025 padbottom025 flex flexcenter"
       >
         <strong>{{data.tag == undefined ? 'section' : trimTitle(data.tag)}}</strong>
       </div>
@@ -36,6 +36,11 @@ export default {
         return t;
       }
     },
+    get_el_type(el) {
+      if (el) {
+        return el.split("_")[0];
+      }
+    },
     setData(data) {
       switch (data.tag ? data.tag.split("_")[0] : "section") {
         case "html":
@@ -46,19 +51,21 @@ export default {
             Attributes: [],
             Events: [],
             // DirectChildren: data.els ? null : data.els.length,
-            Notes: "",
+            Notes: ""
           };
           break;
         case "plugin":
           return {
-            msg: "not handled"
+            msg: "not handled",
+            About: "",
+            Notes: ""
           };
           break;
         case "section":
           return {
             Role: data.role,
             DirectChildren: data.els.length,
-            Notes: "",
+            Notes: ""
           };
           break;
         case "root":
@@ -68,7 +75,7 @@ export default {
             Collection: {},
             onServerLoad: {},
             onClientLoad: {},
-            Notes: ''
+            Notes: ""
           };
           break;
       }
