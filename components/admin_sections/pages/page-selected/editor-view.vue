@@ -59,19 +59,20 @@
             </div>
           </div>
 
-          <!-- elements view @stages - html render -->
-          <main
-            @click.right.prevent="tt(true)"
-            @mouseleave="tt(true)"
-            @mousemove.prevent.stop="mv"
-            id="dq-page-editor-area-host"
-            class="flex1 flex relative"
-          >
-            <!-- info box -->
-            <div
-              id="dq-page-el-info-box"
-              v-if="$store.state.pages.info_box_data"
-              :style="{
+          <section class="flex1 relative flex">
+            <!-- elements view @stages - html render -->
+            <main
+              @click.right.prevent="tt(true)"
+              @mouseleave="tt(true)"
+              @mousemove.prevent.stop="mv"
+              id="dq-page-editor-area-host"
+              class="flex1 flex relative fullheight-percent"
+            >
+              <!-- info box -->
+              <div
+                id="dq-page-el-info-box"
+                v-if="$store.state.pages.info_box_data"
+                :style="{
               zIndex:200,
               opacity: 0,
               left:`${x + 25}px`,
@@ -83,17 +84,17 @@
               borderRadius: '8px',
               ...$store.state.theme.global.page_modal_background
               }"
-              class="absolute pad050 bgblue"
-            >
-              <infoBox :data="$store.state.pages.info_box_data" />
-            </div>
-            <!-- end of info box -->
+                class="absolute pad050 bgblue"
+              >
+                <infoBox :data="$store.state.pages.info_box_data" />
+              </div>
+              <!-- end of info box -->
 
-            <!-- context menu -->
-            <!-- @pages > CONTEXT_MENU >  coordinate render -->
-            <div
-              role="option-box"
-              :style="{
+              <!-- context menu -->
+              <!-- @pages > CONTEXT_MENU >  coordinate render -->
+              <div
+                role="option-box"
+                :style="{
                 zIndex:100,
                 minWidth:'200px',
                 left:`${$store.state.pages.opn_opts_pos_left + 10}px`,
@@ -103,107 +104,109 @@
                 borderRadius: '8px',
                 ...$store.state.theme.global.page_modal_background
                 }"
-              class="absolute padtop050 padbottom050"
-              v-if="$store.state.pages.opn_opts"
-            >
-              <!-- @pages > CONTEXT_MENU >  mousenenter trigger-->
-              <div @mouseenter="tt(false)" @mouseleave="tt(true)">
-                <contextMenu></contextMenu>
-              </div>
-            </div>
-            <!-- end of context menu -->
-            <div class="flex relative flex1 absolute fullwidth fullheight-percent">
-              <div
-                @click.prevent="closeOpt"
-                @click.right.prevent="closeOpt"
-                class="pad050 flex1 aut"
+                class="absolute padtop050 padbottom050"
+                v-if="$store.state.pages.opn_opts"
               >
+                <!-- @pages > CONTEXT_MENU >  mousenenter trigger-->
+                <div @mouseenter="tt(false)" @mouseleave="tt(true)">
+                  <contextMenu></contextMenu>
+                </div>
+              </div>
+              <!-- end of context menu -->
+
+              <div class="flex relative flex1 absolute fullwidth">
                 <div
-                  :style="{filter: sec_modal_viz ? 'blur(2px)' : ''}"
-                  class="fullwidth flex bg"
-                  id="dq-page-editor-area-c1"
-                  v-for="(sections,s_i) in (is_traversing ? travers_mode :  $store.state.pages.stages.length == 0 ? sections : n_sections)"
-                  :key="`seccc-${s_i}`"
+                  @click.prevent="closeOpt"
+                  @click.right.prevent="closeOpt"
+                  class="pad050 flex1"
+                  style="padding-bottom:300px;padding-right:300px;"
                 >
                   <div
-                    :style="{
+                    :style="{filter: sec_modal_viz ? 'blur(2px)' : ''}"
+                    class="fullwidth flex bg"
+                    id="dq-page-editor-area-c1"
+                    v-for="(sections,s_i) in (is_traversing ? travers_mode :  $store.state.pages.stages.length == 0 ? sections : n_sections)"
+                    :key="`seccc-${s_i}`"
+                  >
+                    <div
+                      :style="{
                   background:theme.global.secondary_bg_color,
                   borderLeft: `1px solid ${theme.global.border_color}`,
                   width:'20px'
                   }"
-                    class="padright050 padleft050"
-                  >{{s_i}}</div>
-                  <div id="dq-viz-host" :data="s_i" :class="[`viz-host-${s_i}`, 'flex']">
-                    <div style="min-width:75px;" class="dq-strvw-el pointer">
-                      <div
-                        @mouseenter="showInfoBox({tag:'root_Template-wrapper'})"
-                        @mouseleave="resetInfoBox()"
-                        @click="sec_modal_viz = true, sec_data = undefined"
-                        :style="{background:theme.global.secondary_bg_color}"
-                        v-if="s_i == 0"
-                      >
-                        wrapper
-                        <i class="fas fa-chess-rook padleft025 padright025"></i>
+                      class="padright050 padleft050"
+                    >{{s_i}}</div>
+                    <div id="dq-viz-host" :data="s_i" :class="[`viz-host-${s_i}`, 'flex']">
+                      <div style="min-width:75px;" class="dq-strvw-el pointer">
+                        <div
+                          @mouseenter="showInfoBox({tag:'root_Template-wrapper'})"
+                          @mouseleave="resetInfoBox()"
+                          @click="sec_modal_viz = true, sec_data = undefined"
+                          :style="{background:theme.global.secondary_bg_color}"
+                          v-if="s_i == 0"
+                        >
+                          wrapper
+                          <i class="fas fa-chess-rook padleft025 padright025"></i>
+                        </div>
                       </div>
-                    </div>
-                    <div :id="`${s_i}--${sections.uid}`" class="dq-strvw-el">
-                      <div
-                        :style="{background:theme.global.secondary_bg_color}"
-                        class="flex flexcenter spacebetween pointer"
-                        @click.right.prevent="openOpt(sections.uid,$event)"
-                        @mouseenter="showInfoBox(sections,s_i)"
-                        @mouseleave="resetInfoBox()"
-                      >
-                        <span class="padleft025 padright050">section</span>
-                        <i class="fas fa-layer-group padright025 padleft025"></i>
+                      <div :id="`${s_i}--${sections.uid}`" class="dq-strvw-el">
+                        <div
+                          :style="{background:theme.global.secondary_bg_color}"
+                          class="flex flexcenter spacebetween pointer"
+                          @click.right.prevent="openOpt(sections.uid,$event)"
+                          @mouseenter="showInfoBox(sections,s_i)"
+                          @mouseleave="resetInfoBox()"
+                        >
+                          <span class="padleft025 padright050">section</span>
+                          <i class="fas fa-layer-group padright025 padleft025"></i>
+                        </div>
                       </div>
+                      <strvw :x="x" :y="y" :data="sections"></strvw>
                     </div>
-                    <strvw :x="x" :y="y" :data="sections"></strvw>
                   </div>
                 </div>
               </div>
-
-              <!--  -->
-              <div
-                :style="{width:'0px',boxShadow:'2px 2px 15px 1px #393e4244', overflow:'hidden'}"
-                id="dq-api-view"
-                class="relative flex flexcol fullwidth fullheight-percent"
-                v-if="$store.state.pages.api_view"
+            </main>
+            <!--  -->
+            <div
+              :style="{width:'0px',boxShadow:'2px 2px 15px 1px #393e4244', overflow:'hidden',zIndex:200}"
+              id="dq-api-view"
+              class="relative flex flexcol fullwidth fullheight-percent"
+              v-if="$store.state.pages.api_view"
+            >
+              <span
+                id="dq-api-el-content"
+                class="flex flexcol flex1 absolute fullheight-percent fullwidth"
+                style="left:550px"
               >
-                <span
-                  id="dq-api-el-content"
-                  class="flex flexcol flex1 absolute fullheight-percent fullwidth"
-                  style="left:550px"
+                <div
+                  class="pad125 margintop125 spacebetween flex st-viz-bnnr pointer"
+                  style
+                  @click="$store.commit('pages/close_el_api')"
                 >
-                  <div
-                    class="pad125 margintop125 spacebetween flex st-viz-bnnr pointer"
-                    style
-                    @click="$store.commit('pages/close_el_api')"
-                  >
-                    <strong>Element API</strong>
-                    <div>
-                      <i class="fas fa-times-circle"></i>
-                    </div>
+                  <strong>Element API</strong>
+                  <div>
+                    <i @click="closeOpt" class="fas fa-times-circle"></i>
                   </div>
-                  <!-- Element api container -->
+                </div>
+                <!-- Element api container -->
 
-                  <div class="relative fullheight-percent flex flexcol flex1">
-                    <div class="flex relative fullheight-percent aut">
-                      <div class="absolute fullwidth flex">
-                        <div
-                          v-if="$store.state.pages.api_view"
-                          :is="$store.state.pages.api_view"
-                          :uid="$store.state.pages.api_view_uid"
-                          :data="$store.state.pages.api_view_el"
-                        ></div>
-                      </div>
+                <div class="relative fullheight-percent flex flexcol flex1">
+                  <div class="flex relative fullheight-percent aut">
+                    <div class="absolute fullwidth flex">
+                      <div
+                        v-if="$store.state.pages.api_view"
+                        :is="$store.state.pages.api_view"
+                        :uid="$store.state.pages.api_view_uid"
+                        :data="$store.state.pages.api_view_el"
+                      ></div>
                     </div>
                   </div>
-                </span>
-              </div>
-              <!--  -->
+                </div>
+              </span>
             </div>
-          </main>
+            <!--  -->
+          </section>
 
           <!-- console view -->
           <div>
@@ -636,8 +639,6 @@ export default {
 
       setTimeout(() => {
         const n = document.getElementById("opt-box-ul");
-        //@pages > CONTEXT_MENU > on right_click > height controller
-        // change the height here
         if (n) {
           TweenMax.fromTo(
             n,
@@ -650,8 +651,25 @@ export default {
     },
     closeOpt() {
       if (this.can_be_close) {
-        this.$store.commit("pages/close_api_view");
-        this.$store.commit("pages/clear_opts");
+        // opt-box-ul
+        const n = document.getElementById("opt-box-ul");
+        if (n) {
+          TweenMax.fromTo(
+            n,
+            0.1,
+            { height: this.$store.state.pages.context_height },
+            { height: "0" }
+          );
+        }
+        // dq-api-view
+        const n2 = document.getElementById("dq-api-view");
+        if (n2) {
+          TweenMax.fromTo(n2, 0.2, { width: "550px" }, { width: "0px" });
+        }
+        setTimeout(() => {
+          this.$store.commit("pages/close_api_view");
+          this.$store.commit("pages/clear_opts");
+        }, 100);
       }
     },
     showInfoBox(data, index) {

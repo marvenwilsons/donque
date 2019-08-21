@@ -305,9 +305,6 @@ export default {
 .hdn {
   overflow: hidden;
 }
-.aut {
-  overflow: auto;
-}
 .tc-pn {
   border-radius: 15px;
 }

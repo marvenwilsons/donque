@@ -297,6 +297,13 @@ img {
   margin-left: calc(var(--fontSize) * 0.25);
 }
 
+.overflowhidden {
+  overflow: hidden !important;
+}
+.aut {
+  overflow: auto !important;
+}
+
 /* button reset */
 .buttonreset {
   display: inline-block;
