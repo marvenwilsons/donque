@@ -1,81 +1,80 @@
 <template>
+  <!-- border: theme.global.secondary_border_color, -->
   <div
-    class="fullwidth pad125 margin125"
-    :style="{
-      color:theme['page_editor_tile_opt_addChild_tiles'].color, 
-      minWidth:'400px', 
-      background: theme.global.tertiary_bg_color,
-      border: theme.global.secondary_border_color,
-      borderRadius:'5px'
-      }"
+    class="fullwidth margin125 flex flexcol"
+    :style="{color:theme['page_editor_tile_opt_addChild_tiles'].color,}"
   >
-    <strong>Common HTML</strong>
-    <span>
-      <strike>(can be nested)</strike>
-    </span>
-    <div class="flex relative flexwrap padbottom125">
-      <div
-        @click="selected = el, cur_actv = `cmn-html-${el}`"
-        :style="setStyle(active === `cmn-html-${el}` || cur_actv == `cmn-html-${el}`)"
-        @mouseover="active = `cmn-html-${el}`"
-        @mouseleave="cur_actv != `cmn-html-${el}` && (active = undefined)"
-        class="dq-el-ac flex flexcenter pad025 margin025 pointer"
-        v-for="el in els"
-        :key="`el1-${el}`"
-      >{{el}}</div>
-    </div>
-    <strong>Reactive HTML</strong>
-    <span>
-      <strike>(cannot be nested)</strike>
-    </span>
-    <div class="flex relative flexwrap padbottom125">
-      <div
-        @click="selected = el, cur_actv = `ractv-html${el}`"
-        :style="setStyle(active === `ractv-html${el}` || cur_actv == `ractv-html${el}`)"
-        @mouseover="active = `ractv-html${el}`"
-        @mouseleave="cur_actv != `ractv-html${el}` && (active = undefined)"
-        class="dq-el-ac flex flexcenter pad025 margin025 pointer"
-        v-for="el in els4"
-        :key="`el4-${el}`"
-      >{{el}}</div>
-    </div>
-    <strong>Headings</strong>
-    <div class="flex relative flexwrap padbottom125">
-      <div
-        @click="selected = el, cur_actv = `html-headings-${el}`"
-        :style="setStyle(active === `html-headings-${el}` || cur_actv == `html-headings-${el}`)"
-        @mouseover="active = `html-headings-${el}`"
-        @mouseleave="cur_actv != `html-headings-${el}` && (active = undefined)"
-        class="dq-el-ac flex flexcenter pad025 margin025 pointer"
-        v-for="el in els2"
-        :key="`el2-${el}`"
-      >{{el}}</div>
-    </div>
-    <strong>Plugins</strong>
-    <div class="flex relative flexwrap padbottom125">
-      <div
-        @click="selected = el, cur_actv = `html-headings-${el}`"
-        :style="setStyle(active === `html-headings-${el}` || cur_actv == `html-headings-${el}`)"
-        @mouseover="active = `html-headings-${el}`"
-        @mouseleave="cur_actv != `html-headings-${el}` && (active = undefined)"
-        class="dq-el-ac flex flexcenter pad025 margin025 pointer"
-        v-for="el in els3"
-        :key="`el2-${el}`"
-      >{{el}}</div>
-    </div>
-
-    <div v-if="selected" class="padtop125 flex flexend flexcenter">
-      <span class="padright050">
-        You selected
-        <strong>{{selected}}</strong>
+    <main
+      class="pad125"
+      :style="{background: theme.global.tertiary_bg_color, borderRadius:'5px',  border: theme.global.secondary_border_color}"
+    >
+      <strong>Common HTML</strong>
+      <span>
+        <strike>(can be nested)</strike>
       </span>
-      <span
-        :style="{...theme['page_editor_tile_opt_addChild_tiles_hover_&_active']}"
-        @click="addElemento(selected,uid)"
-        class="padleft050 padright050 padtop025 padbottom025 pointer"
-      >Add Element</span>
-    </div>
-    <div style="bottom:-50px;color:white;" class="absolute">.</div>
+      <div class="flex relative flexwrap padbottom125">
+        <div
+          @click="selected = el, cur_actv = `cmn-html-${el}`"
+          :style="setStyle(active === `cmn-html-${el}` || cur_actv == `cmn-html-${el}`)"
+          @mouseover="active = `cmn-html-${el}`"
+          @mouseleave="cur_actv != `cmn-html-${el}` && (active = undefined)"
+          class="dq-el-ac flex flexcenter pad025 margin025 pointer"
+          v-for="el in els"
+          :key="`el1-${el}`"
+        >{{el}}</div>
+      </div>
+      <strong>Reactive HTML</strong>
+      <span>
+        <strike>(cannot be nested)</strike>
+      </span>
+      <div class="flex relative flexwrap padbottom125">
+        <div
+          @click="selected = el, cur_actv = `ractv-html${el}`"
+          :style="setStyle(active === `ractv-html${el}` || cur_actv == `ractv-html${el}`)"
+          @mouseover="active = `ractv-html${el}`"
+          @mouseleave="cur_actv != `ractv-html${el}` && (active = undefined)"
+          class="dq-el-ac flex flexcenter pad025 margin025 pointer"
+          v-for="el in els4"
+          :key="`el4-${el}`"
+        >{{el}}</div>
+      </div>
+      <strong>Headings</strong>
+      <div class="flex relative flexwrap padbottom125">
+        <div
+          @click="selected = el, cur_actv = `html-headings-${el}`"
+          :style="setStyle(active === `html-headings-${el}` || cur_actv == `html-headings-${el}`)"
+          @mouseover="active = `html-headings-${el}`"
+          @mouseleave="cur_actv != `html-headings-${el}` && (active = undefined)"
+          class="dq-el-ac flex flexcenter pad025 margin025 pointer"
+          v-for="el in els2"
+          :key="`el2-${el}`"
+        >{{el}}</div>
+      </div>
+      <strong>Plugins</strong>
+      <div class="flex relative flexwrap padbottom125">
+        <div
+          @click="selected = el, cur_actv = `html-headings-${el}`"
+          :style="setStyle(active === `html-headings-${el}` || cur_actv == `html-headings-${el}`)"
+          @mouseover="active = `html-headings-${el}`"
+          @mouseleave="cur_actv != `html-headings-${el}` && (active = undefined)"
+          class="dq-el-ac flex flexcenter pad025 margin025 pointer"
+          v-for="el in els3"
+          :key="`el2-${el}`"
+        >{{el}}</div>
+      </div>
+
+      <div v-if="selected" class="padtop125 flex flexend flexcenter">
+        <span class="padright050">
+          You selected
+          <strong>{{selected}}</strong>
+        </span>
+        <span
+          :style="{...theme['page_editor_tile_opt_addChild_tiles_hover_&_active']}"
+          @click="addElemento(selected,uid)"
+          class="padleft050 padright050 padtop025 padbottom025 pointer"
+        >Add Element</span>
+      </div>
+    </main>
   </div>
 </template>
 

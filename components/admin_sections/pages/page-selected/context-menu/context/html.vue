@@ -17,7 +17,8 @@
     <li
       @mouseover="opts_active = 'Class'"
       @mouseleave="opts_cur_active != `Class` && (opts_active = undefined)"
-      :style="setStyle(opts_active === `Class` || opts_active == `Class`)"
+      @click="$store.commit('pages/set_api_view',{view: 'classList'})"
+      :style="setStyle(opts_active === `Class` || opts_active == `Class` || $store.state.pages.api_view == 'classList')"
       class="pad025 flex pointer"
     >
       <div class="flex3">

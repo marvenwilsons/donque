@@ -1,5 +1,5 @@
 <template>
-  <div class="fullwidth pad050 flex">
+  <div class="fullwidth pad050 flex fullheight-percent">
     <div
       :style="{border: `1px solid ${$store.state.theme.global.border_color}`}"
       class="marginbottom050 borderred flex flexcol fullwidth"
@@ -149,7 +149,7 @@
 import { mapGetters } from "vuex";
 
 export default {
-  props: ["uid", "addrs_finder"],
+  props: ["uid", "data"],
   data() {
     return {
       cur_sel: undefined,
@@ -166,7 +166,7 @@ export default {
     cur_cl_list() {
       this.$store
         .dispatch("pages/addrs_teller", {
-          uid: this.uid,
+          uid: `${this.data.index}--${this.uid}`,
           target_prop: "classList"
         })
         .then(d => {
@@ -182,7 +182,7 @@ export default {
       // a stages travers feature, where it syncs to the current travers pointer in stage array
       this.$store
         .dispatch("pages/addrs_teller", {
-          uid: this.uid,
+          uid: `${this.data.index}--${this.uid}`,
           target_prop: "classList",
           stage_pointer: this.$store.state.pages.cur_pointer
         })
@@ -229,7 +229,7 @@ export default {
 
         // push new changes to stage
         this.$store.dispatch("pages/addrs_finder", {
-          uid: this.uid,
+          uid: `${this.data.index}--${this.uid}`,
           fn: locator => {
             this.$store.commit("pages/update_section", {
               desc: `Added new class to HTML element - addrs: ${locator.join(
@@ -259,7 +259,7 @@ export default {
     rem_cl(cl) {
       //removes the selected class from the latest stage obj
       this.$store.dispatch("pages/addrs_finder", {
-        uid: this.uid,
+        uid: `${this.data.index}--${this.uid}`,
         fn: locator => {
           this.$store.commit("pages/update_section", {
             desc: `Removed a class in HTML element - addrs: ${locator.join(
@@ -289,7 +289,7 @@ export default {
     // populates the current class list
     this.$store
       .dispatch("pages/addrs_teller", {
-        uid: this.uid,
+        uid: `${this.data.index}--${this.uid}`,
         target_prop: "classList"
       })
       .then(addrs => {

@@ -221,3 +221,9 @@
 .pointer {
   cursor: pointer;
 }
+.overflowhidden {
+  overflow: hidden !important;
+}
+.aut {
+  overflow: auto !important;
+}

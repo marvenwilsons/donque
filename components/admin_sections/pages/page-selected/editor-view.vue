@@ -192,8 +192,8 @@
                 <!-- Element api container -->
 
                 <div class="relative fullheight-percent flex flexcol flex1">
-                  <div class="flex relative fullheight-percent aut">
-                    <div class="absolute fullwidth flex">
+                  <div class="flex flex1 relative fullheight-percent aut">
+                    <div class="absolute fullwidth flex fullheight-percent flex1">
                       <div
                         v-if="$store.state.pages.api_view"
                         :is="$store.state.pages.api_view"
