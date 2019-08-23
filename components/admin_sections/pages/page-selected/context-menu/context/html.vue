@@ -29,16 +29,16 @@
     </li>
     <!-- Attributes -->
     <li
-      @mouseover="opts_active = 'Attributes'"
-      @mouseleave="opts_cur_active != `Attributes` && (opts_active = undefined)"
-      @click="$store.commit('pages/set_api_view',{view: 'Attributes'})"
-      :style="setStyle(opts_active === `Attributes` || opts_active == `Attributes` || $store.state.pages.api_view == 'Attributes')"
+      @mouseover="opts_active = 'Properties'"
+      @mouseleave="opts_cur_active != `Properties` && (opts_active = undefined)"
+      @click="$store.commit('pages/set_api_view',{view: 'Properties'})"
+      :style="setStyle(opts_active === `Properties` || opts_active == `Properties` || $store.state.pages.api_view == 'Properties')"
       class="pad025 flex pointer"
     >
       <div class="flex3">
         <!-- <i class="far fa-edit padleft125"></i> -->
       </div>
-      <div class="flex7">Attributes</div>
+      <div class="flex7">Properties</div>
       <div class="flex4"></div>
     </li>
     <!-- Events -->

@@ -96,7 +96,7 @@
                 role="option-box"
                 :style="{
                 zIndex:100,
-                minWidth:'200px',
+                minWidth:'220px',
                 left:`${$store.state.pages.opn_opts_pos_left + 10}px`,
                 top:`${$store.state.pages.opn_opts_pos_top - 5}px`,
                 boxShadow:`0 10px 20px ${$store.state.theme.global.secondary_bg_color}`,
@@ -137,12 +137,12 @@
                       class="padright050 padleft050"
                     >{{s_i}}</div>
                     <div id="dq-viz-host" :data="s_i" :class="[`viz-host-${s_i}`, 'flex']">
-                      <div style="min-width:75px;" class="dq-strvw-el pointer">
+                      <div style="min-width:82px;" class="dq-strvw-el pointer">
                         <div
                           @mouseenter="showInfoBox({tag:'root_Template-wrapper'})"
                           @mouseleave="resetInfoBox()"
                           @click="sec_modal_viz = true, sec_data = undefined"
-                          :style="{background:theme.global.secondary_bg_color}"
+                          :style="{background:theme.global.secondary_bg_color, width:'81px'}"
                           v-if="s_i == 0"
                         >
                           wrapper
@@ -343,7 +343,6 @@ import dddesc from "../struct-view-el-opts/desc";
 import properties from "../struct-view-el-opts/properties";
 import ils from "../struct-view-el-opts/inlineStyle";
 import plgs from "../struct-view-el-opts/plugins";
-import attibutes from '../struct-view-el-opts/attrs'
 import events from '../struct-view-el-opts/events'
 import addNote from '../struct-view-el-opts/addnotes'
 
@@ -458,8 +457,8 @@ export default {
   components: {
     boxmodel: el_box_model,
     strvw: struct_view,
-    Attributes: attibutes,
     Events: events,
+    Properties:properties,
     addNote,
     dqPageConsole,
     infoBox,
