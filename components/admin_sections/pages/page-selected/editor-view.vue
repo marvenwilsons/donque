@@ -343,6 +343,9 @@ import dddesc from "../struct-view-el-opts/desc";
 import properties from "../struct-view-el-opts/properties";
 import ils from "../struct-view-el-opts/inlineStyle";
 import plgs from "../struct-view-el-opts/plugins";
+import attibutes from '../struct-view-el-opts/attrs'
+import events from '../struct-view-el-opts/events'
+import addNote from '../struct-view-el-opts/addnotes'
 
 import { TweenMax, TimelineLite, TweenLite } from "gsap";
 
@@ -455,6 +458,9 @@ export default {
   components: {
     boxmodel: el_box_model,
     strvw: struct_view,
+    Attributes: attibutes,
+    Events: events,
+    addNote,
     dqPageConsole,
     infoBox,
     contextMenu,
