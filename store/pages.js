@@ -71,6 +71,7 @@ export const state = () => ({
     cur_tag: undefined,
     opt_cur_view: 'section',
     context_height: undefined,
+    pending_data_to_paste: undefined,
 
     // element api
     api_view: undefined,

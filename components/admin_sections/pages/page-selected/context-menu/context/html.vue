@@ -31,7 +31,8 @@
     <li
       @mouseover="opts_active = 'Attributes'"
       @mouseleave="opts_cur_active != `Attributes` && (opts_active = undefined)"
-      :style="setStyle(opts_active === `Attributes` || opts_active == `Attributes`)"
+      @click="$store.commit('pages/set_api_view',{view: 'Attributes'})"
+      :style="setStyle(opts_active === `Attributes` || opts_active == `Attributes` || $store.state.pages.api_view == 'Attributes')"
       class="pad025 flex pointer"
     >
       <div class="flex3">
@@ -44,7 +45,8 @@
     <li
       @mouseover="opts_active = 'Events'"
       @mouseleave="opts_cur_active != `Events` && (opts_active = undefined)"
-      :style="setStyle(opts_active === `Events` || opts_active == `Events`)"
+      @click="$store.commit('pages/set_api_view',{view: 'Events'})"
+      :style="setStyle(opts_active === `Events` || opts_active == `Events` || $store.state.pages.api_view == 'Events')"
       class="pad025 flex pointer"
     >
       <div class="flex3">
@@ -57,13 +59,14 @@
     <li
       @mouseover="opts_active = 'addNote'"
       @mouseleave="opts_cur_active != `addNote` && (opts_active = undefined)"
-      :style="setStyle(opts_active === `addNote` || opts_active == `addNote`)"
+      @click="$store.commit('pages/set_api_view',{view: 'addNote'})"
+      :style="setStyle(opts_active === `addNote` || opts_active == `addNote` || $store.state.pages.api_view == 'addNote')"
       class="pad025 flex pointer"
     >
       <div class="flex3">
         <!-- <i class="far fa-edit padleft125"></i> -->
       </div>
-      <div class="flex7">Notes</div>
+      <div class="flex7">Add Notes</div>
       <div class="flex4"></div>
     </li>
   </div>
