@@ -10,6 +10,9 @@ const gots = ({ tag, name, role, inlineStyle, innerText, classList, els, path, c
         classList: classList ? classList : [],
         els: els ? els : [],
         data_collection: {},
+        notes: '',
+        properties: {},
+        events: {},
         "stat": {
             lastModified,
             createdOn,

@@ -147,6 +147,9 @@ export default {
           innerText,
           classList: classList ? classList : [],
           els: els ? els : [],
+          notes: "",
+          properties: {},
+          events: {},
           data_collection: {},
           stat: {
             lastModified,
@@ -178,7 +181,7 @@ export default {
         };
       };
 
-      this.$store.dispatch("pages/addrs_finder", {
+      this.$store.dispatch("pages/addrs_finder_mutator", {
         uid: `${this.data.index}--${uid}`,
         fn: locator => {
           this.$store.commit("pages/update_section", {

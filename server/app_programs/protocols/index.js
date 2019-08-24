@@ -328,6 +328,9 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                                     classList: []
                                 }
                             ], 
+                            notes: '',
+                            properties: {},
+                            events: {},
                             data_collection: {}, 
                             commits: [], // { commitMsg, date, madeBy, commitObj <-- a copy of a section  },
                             "stat": {

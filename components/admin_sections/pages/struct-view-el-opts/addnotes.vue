@@ -10,20 +10,36 @@
         <strong>Notes</strong>
       </div>
       <div class="pad125">
-          <textarea
-              style="resize: vertical"
-              name="custom_Style"
-              class="pad050 fullwidth"
-              rows="10"
-            ></textarea>
-            <div class="flex flexend margintop050 pointer">
-                stage changes
-            </div>
+        <textarea
+          v-model="textarea_val"
+          id="dq-page-addnote"
+          style="resize: vertical"
+          name="custom_Style"
+          class="pad050 fullwidth"
+          rows="10"
+        ></textarea>
+        <div @click="save_to_stage" class="flex flexend margintop050 pointer">stage changes</div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      textarea_val: undefined
+    }
+  },
+  props: ['data'],
+  methods: {
+    save_to_stage(){
+      console.log(this.data)
+    }
+  },
+  mounted() {
+    const textarea = document.getElementById("dq-page-addnote");
+    textarea.focus();
+  }
+};
 </script>

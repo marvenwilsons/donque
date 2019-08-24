@@ -228,7 +228,7 @@ export default {
         this.cl_list.push(cl);
 
         // push new changes to stage
-        this.$store.dispatch("pages/addrs_finder", {
+        this.$store.dispatch("pages/addrs_finder_mutator", {
           uid: `${this.data.index}--${this.uid}`,
           fn: locator => {
             this.$store.commit("pages/update_section", {
@@ -258,7 +258,7 @@ export default {
     },
     rem_cl(cl) {
       //removes the selected class from the latest stage obj
-      this.$store.dispatch("pages/addrs_finder", {
+      this.$store.dispatch("pages/addrs_finder_mutator", {
         uid: `${this.data.index}--${this.uid}`,
         fn: locator => {
           this.$store.commit("pages/update_section", {

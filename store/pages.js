@@ -1,39 +1,3 @@
-const gots = ({ tag, name, role, inlineStyle, innerText, classList, els, path, createdOn, createdBy, lastModified }) => {
-    return {
-        tag: tag ? tag : 'html_div',
-        name,
-        role,
-        inlineStyle: inlineStyle ? inlineStyle : {},
-        innerText,
-        classList: classList ? classList : [],
-        els: els ? els : [],
-        data_collection: {},
-        "stat": {
-            lastModified,
-            createdOn,
-            createdBy,
-            type: "",
-            path
-        },
-        "security": {
-            isLokced: false,
-            password: "",
-            allowedAdminsToWrite: [],
-            access_type: 'public',
-            is_under_maintenance: false
-        },
-        commits: [],
-        uid: ((length) => {
-            var result = '';
-            var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-            var charactersLength = characters.length;
-            for (var i = 0; i < length; i++) {
-                result += characters.charAt(Math.floor(Math.random() * charactersLength));
-            }
-            return result;
-        })(5)
-    }
-}
 const copy = (o, uid) => {
     if (o === null) return null;
 
@@ -407,7 +371,7 @@ export const actions = {
                 });
             });
     },
-    addrs_finder({ }, { el, uid, fn }){
+    addrs_finder_mutator({ }, { el, uid, fn }){
         let addrs = [];
         let go = false;
 
