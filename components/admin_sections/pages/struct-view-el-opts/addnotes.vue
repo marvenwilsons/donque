@@ -29,12 +29,26 @@ export default {
   data() {
     return {
       textarea_val: undefined
-    }
+    };
   },
-  props: ['data'],
+  props: ["data"],
   methods: {
-    save_to_stage(){
-      console.log(this.data)
+    save_to_stage() {
+      this.$store.dispatch("pages/addrs_finder_mutator", {
+        uid: `${this.data.index}--${this.data.uid}`,
+        fn: locator => {
+          this.$store.commit("pages/update_section", {
+            desc: `added note to element - addrs: ${locator.join(
+              " > "
+            )}`,
+            locator,
+            scoped_variable: this.textarea_val,
+            exec_on_prop: function(prop,tag,scoped_variable,obj) {
+              obj.notes = scoped_variable
+            }
+          });
+        }
+      });
     }
   },
   mounted() {

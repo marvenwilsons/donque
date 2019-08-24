@@ -51,7 +51,7 @@ export default {
             Attributes: [],
             Events: [],
             // DirectChildren: data.els ? null : data.els.length,
-            Notes: ""
+            Notes: data.notes
           };
           break;
         case "plugin":

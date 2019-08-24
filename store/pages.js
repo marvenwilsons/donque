@@ -144,7 +144,7 @@ export const mutations = {
             }
         })
     },
-    update_section(state, { desc, locator, tag, target_prop, exec_on_prop}) {
+    update_section(state, { desc, locator, tag, target_prop, exec_on_prop, scoped_variable}) {
         // copy the latest stage and push to the stage
 
         if (state.stages.length == 0){
@@ -168,19 +168,19 @@ export const mutations = {
                     temp = latest_root_copy.sections[locator[i]]
 
                     if (locator.length == 1) {
-                        exec_on_prop(temp[target_prop],tag)
+                        exec_on_prop(temp[target_prop], tag, scoped_variable,temp)
                     }
                 } else {
 
                     temp = temp[locator[i]]
 
                     if (i == locator.length - 1) {
-                        exec_on_prop(temp[target_prop],tag)
+                        exec_on_prop(temp[target_prop], tag, scoped_variable,temp)
                         temp = undefined
                     }
                 }
             }
-
+            
             state.stages.push({
                 title: `st-${state.stages.length + 1}`,
                 desc: desc,
@@ -222,14 +222,14 @@ export const mutations = {
                     temp = latest_stage_copy.obj.sections[locator[i]]
 
                     if(locator.length == 1){
-                        exec_on_prop(temp[target_prop],tag)
+                        exec_on_prop(temp[target_prop], tag, scoped_variable,temp)
                     }
                 } else {
 
                     temp = temp[locator[i]]
 
                     if (i == locator.length - 1){
-                        exec_on_prop(temp[target_prop],tag)
+                        exec_on_prop(temp[target_prop], tag, scoped_variable,temp)
                         temp = undefined
                     }
                 }
