@@ -128,13 +128,14 @@
                     v-for="(sections,s_i) in (is_traversing ? travers_mode :  $store.state.pages.stages.length == 0 ? sections : n_sections)"
                     :key="`seccc-${s_i}`"
                   >
+                  <!-- sides -->
                     <div
                       :style="{
                   background:theme.global.secondary_bg_color,
                   borderLeft: `1px solid ${theme.global.border_color}`,
                   width:'20px'
                   }"
-                      class="padright050 padleft050"
+                      class="padright050 padleft050 pointer"
                     >{{s_i}}</div>
                     <div id="dq-viz-host" :data="s_i" :class="[`viz-host-${s_i}`, 'flex']">
                       <div style="min-width:82px;" class="dq-strvw-el pointer">

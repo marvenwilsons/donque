@@ -18,7 +18,10 @@
           class="pad050 fullwidth"
           rows="10"
         ></textarea>
-        <div @click="save_to_stage" class="flex flexend margintop050 pointer">stage changes</div>
+        <div v-if="textarea_val + 1 && isOkay" @click="save_to_stage" class="flex spacebetween margintop050 pointer">
+          <span>{{chars()}} remaining characters</span>
+          <span>stage changes</span>
+        </div>
       </div>
     </div>
   </div>
@@ -28,11 +31,15 @@
 export default {
   data() {
     return {
-      textarea_val: undefined
+      textarea_val: undefined,
+      isOkay: true
     };
   },
   props: ["data"],
   methods: {
+    chars() {
+      return 200 - this.textarea_val.length
+    },
     save_to_stage() {
       this.$store.dispatch("pages/addrs_finder_mutator", {
         uid: `${this.data.index}--${this.data.uid}`,
@@ -54,6 +61,8 @@ export default {
   mounted() {
     const textarea = document.getElementById("dq-page-addnote");
     textarea.focus();
+
+    this.textarea_val = this.data.notes
   }
 };
 </script>
