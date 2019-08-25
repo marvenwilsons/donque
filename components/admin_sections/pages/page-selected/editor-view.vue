@@ -640,7 +640,7 @@ export default {
         uid,
         top: this.y,
         left: this.x,
-        context_height: "150"
+        context_height: "170"
       });
 
       setTimeout(() => {

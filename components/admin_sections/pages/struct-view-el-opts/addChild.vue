@@ -11,7 +11,7 @@
           }"
         class="pad050 spacebetween flex st-viz-bnnr"
       >
-        <strong>Class list</strong>
+        <strong>Add Element</strong>
       </div>
       <main class="pad125">
         <strong>Common HTML</strong>
@@ -27,6 +27,21 @@
             class="dq-el-ac flex flexcenter pad025 margin025 pointer"
             v-for="el in els"
             :key="`el1-${el}`"
+          >{{el}}</div>
+        </div>
+        <strong>List Rendering</strong>
+        <span>
+          <strike>(can be nested)</strike>
+        </span>
+        <div class="flex relative flexwrap padbottom125">
+          <div
+            @click="selected = el, cur_actv = `list-html${el}`"
+            :style="setStyle(active === `list-html${el}` || cur_actv == `list-html${el}`)"
+            @mouseover="active = `list-html${el}`"
+            @mouseleave="cur_actv != `list-html${el}` && (active = undefined)"
+            class="dq-el-ac flex flexcenter pad025 margin025 pointer"
+            v-for="el in els_list"
+            :key="`el4-${el}`"
           >{{el}}</div>
         </div>
         <strong>Reactive HTML</strong>
@@ -101,12 +116,18 @@ export default {
         "main",
         "article",
         "footer",
-        "p",
-        "a",
         "nav",
         "section",
-        "text",
-        "variable"
+        "p",
+        "a",
+        "strong",
+        "em",
+        "i"
+      ],
+      els_list: [
+        'ul',
+        'li',
+        'for-host'
       ],
       els2: ["h1", "h2", "h3", "h4", "h5", "h6"],
       els3: [
@@ -117,7 +138,8 @@ export default {
         "collections-free",
         "simple-slider",
         "simple-tab",
-        "file-upload"
+        "file-upload",
+        "variable"
       ],
       els4: ["button", "img", "audio", "video"]
     };
