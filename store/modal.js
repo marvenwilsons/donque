@@ -19,7 +19,7 @@ export const state = () => ({
  * @param {boolean} config.closable
  * 
  * @example 
- * this.$store.commit("modal/set_modal", { 
+ *  this.$store.commit("modal/set_modal", { 
  *      head: "", // text you want to appear to modal head 
  *      body: 'your msg here', 
  *      config: {  
@@ -45,6 +45,9 @@ export const mutations = {
     },        
     set_modal(state,{body,head,config}){
         const {visibility,closable,head_visibility, ui_type} = config 
+
+        console.log(ui_type)
+        console.log(body)
 
         // setting config
         typeof visibility === 'boolean' ? state.visibility = visibility : state.visibility = true

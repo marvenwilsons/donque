@@ -81,6 +81,9 @@
 import heading from "@/components/admin_root/dq_head/dq_heading.vue";
 import { mapGetters } from "vuex";
 
+//modals installation
+import page_warn_unsaved from '../components/admin_sections/pages/page-selected/modals/warn-unsaved'
+
 export default {
   data() {
     return {
@@ -119,7 +122,10 @@ export default {
     }
   },
   components: {
-    heading
+    heading,
+
+    // modal insatll below
+    page_warn_unsaved
   }
 };
 </script>

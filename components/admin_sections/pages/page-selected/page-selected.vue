@@ -32,7 +32,7 @@ export default {
   data() {
     return {
       comp: "editor",
-      page_data: undefined,
+      page_data: undefined
     };
   },
   components: {

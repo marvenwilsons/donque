@@ -6,7 +6,9 @@ export const state = () => ({
     pane_index_list: [],
     pane_data_obj: {},
     pane_data_index: undefined,
-    root: undefined
+    root: undefined,
+    pane_before_open: undefined,
+    pane_before_open_handler: undefined
 })
 
 export const getters = {
@@ -72,8 +74,7 @@ export const mutations = {
         state.pane_index_config_vault[compName] = state.pane_index_config_list[index]
     },
     config_splice_to_level(state, { compName, startingIndex, numOfComps}) {
-        console.log('| ==> splice config to sync to index list')
-        console.log(numOfComps)
+        // console.log('| ==> splice config to sync to index list')
         // console.log(startingIndex)
 
         // remove
@@ -291,18 +292,17 @@ export const actions = {
          * logic variables
          */
         const s_i_comp_rep = n_comps_mw - 1 // the starting index of the component that needs to be deleted or replace
-
-       
+        
         /**
          * if the numbers of components displaying in the main window
          * is only 1, add one new component to pane index list, or
          * if the click origin + 1 is equavalent to number of components
          * displaying in the main window, add one component.
          */
-        if (n_comps_mw === 1 || i_c_origin + 1 == n_comps_mw){
+        if (n_comps_mw === 1 || i_c_origin + 1 == n_comps_mw) {
             // console.log('** paneSystem case: num of comps in window is only 1 so add one comp')
             commit('pane_push', {
-                compName: component_name, 
+                compName: component_name,
                 data
             })
         }
@@ -313,18 +313,17 @@ export const actions = {
          * it means the component next after the click origin index will be
          * deleted or be replaced 
          */
-        if (n_comps_mw - 1 != i_c_origin){
+        if (n_comps_mw - 1 != i_c_origin) {
             // console.log('** paneSystem case: comp next after click origin will be replaced of del')
             commit('pane_replace_from', {
-                startingIndex: s_i_comp_rep, 
-                clickOrigin: i_c_origin, 
-                compName: component_name, 
+                startingIndex: s_i_comp_rep,
+                clickOrigin: i_c_origin,
+                compName: component_name,
                 numOfComps: s_i_comp_rep,
                 data,
                 data_index
             })
-        }
-        
+        }      
         
         // console.log(n_comps_mw - 1 != i_c_origin)
         // console.log(n_comps_mw === 1)

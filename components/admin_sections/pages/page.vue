@@ -1,7 +1,10 @@
 <template>
   <div v-if="ready" class="flex1 flex flexcol">
     <div class="flex1" v-if="data">
-      <div class="fullheight-percent" v-if="data.ui === 'page_selected' && ui_index === my_pane_index">
+      <div
+        class="fullheight-percent"
+        v-if="data.ui === 'page_selected' && ui_index === my_pane_index"
+      >
         <pageSel :data="$store.state.pane_system.pane_index_config_list[my_pane_index].title"></pageSel>
       </div>
     </div>
@@ -60,7 +63,7 @@
             v-for="(page,p_index) in pages"
             :key="`dq-page-list-${p_index}-${page.name}`"
             :id="`dq-page-${p_index}`"
-            :style="setStyle( active === `dq-page-${p_index}` || cur_actv == `dq-page-${p_index}`)"
+            :style="setStyle(active === `dq-page-${p_index}` || cur_actv == `dq-page-${p_index}`)"
             @mouseover="active = `dq-page-${p_index}`"
             @mouseleave="cur_actv != `dq-page-${p_index}` && (active = undefined)"
           >
@@ -77,14 +80,12 @@
                     $store.dispatch('pane_system/open',{name: 'pages', index: my_pane_index, data: {page,root: p_index, ui: 'page'}, data_index: p_index})"
                   class="underlinehover flex flexend"
                 >sub pages - {{Object.keys(page).length}}</span>
-                <span
+                <!-- <span
                   :class="[cur_actv == `dq-page-${p_index}` && 'underline' , 'underlinehover', 'flex' ,'padleft125' ,'flexend']"
-                >route settings</span>
+                >route settings</span>-->
                 <!-- click -->
                 <span
-                  @click="
-                    cur_actv = `dq-page-${p_index}`,
-                    $store.dispatch('pane_system/open',{name: 'pages', index: my_pane_index, data: {page,root: p_index, ui:'page_selected'}, data_index: p_index})"
+                  @click="open({name: 'pages', index: my_pane_index, data: {page,root: p_index, ui:'page_selected'}, data_index: p_index})"
                   :class="[cur_actv == `dq-page-${p_index}` && 'underline' , 'underlinehover', 'flex' ,'padleft125' ,'flexend']"
                 >open</span>
                 <!--  -->
@@ -118,11 +119,13 @@ export default {
       route_name: undefined,
       hoverBgColor: this.$store.state.theme.notify_tile_body_bg_hover_color,
       heverBgColor2: this.$store.state.theme.heading_bg_color,
-      pages: {}
+      pages: {},
+      isOkay: false,
+      warn_unsaved: this.warn_unsaved
     };
   },
   components: {
-    pageSel: page_sel
+    pageSel: page_sel,
   },
   methods: {
     setStyle(c) {
@@ -187,9 +190,30 @@ export default {
             }
           })
           .catch(err => {
-            alert(err)
+            alert(err);
             console.log(err);
           });
+      }
+    },
+    open({ name, index, data, data_index }) {
+      if (this.$store.state.pages.stages.length == 0) {
+        this.$store.dispatch("pane_system/open", {
+          name,
+          index,
+          data,
+          data_index
+        });
+        this.cur_actv = `dq-page-${data_index}`
+      } else {
+        // modal here
+        this.$store.commit("modal/set_modal", {
+          head: "Unsave changes deteceted",
+          body:'page_warn_unsaved',
+          config: {
+            ui_type: "custom",
+            closable: false
+          }
+        });
       }
     }
   },

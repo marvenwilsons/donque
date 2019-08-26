@@ -728,6 +728,9 @@ export default {
         console.log("close");
       }
     }
+  },
+  mounted() {
+    this.$store.commit('pages/set_cur_path', this.data)
   }
 };
 </script>

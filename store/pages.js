@@ -17,6 +17,7 @@ export const state = () => ({
     route: undefined,
     // route contents
     route_contents: {},
+    cur_path: undefined,
 
     // recur
     recur: 0,
@@ -57,6 +58,10 @@ export const getters = {
 }
 
 export const mutations = {
+    // curpath
+    set_cur_path (state, path) {
+        state.cur_path = path
+    },
     // context box
     set_opts(state,{uid,tag, top,left, context_height}) {
         
