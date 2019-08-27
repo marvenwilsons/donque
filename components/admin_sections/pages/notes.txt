@@ -3,6 +3,3 @@
 
 @page-notes : TODO : Class search field regex bug
     when typing a slash the application will crash
-
-@page-notes : NOTE : About wysywig
-    wysywig will be placed in the collections
