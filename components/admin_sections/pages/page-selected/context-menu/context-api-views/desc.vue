@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import el_box_model from "../page-selected/el-box-model";
+import el_box_model from "../../../page-selected/el-box-model";
 
 
 export default {

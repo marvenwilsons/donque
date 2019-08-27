@@ -42,12 +42,12 @@
  *
  */
 
-import addChild from "../struct-view-el-opts/addChild";
-import classList from "../struct-view-el-opts/classList";
-import dddel from "../struct-view-el-opts/delete";
-import dddesc from "../struct-view-el-opts/desc";
-import properties from "../struct-view-el-opts/properties";
-import ils from "../struct-view-el-opts/inlineStyle";
+import addChild from "./context-menu/context-api-views/addChild";
+import classList from "./context-menu/context-api-views/classList";
+import dddel from "./context-menu/context-api-views/delete";
+import dddesc from "./context-menu/context-api-views/desc";
+import properties from "./context-menu/context-api-views/properties";
+import ils from "./context-menu/context-api-views/inlineStyle";
 
 export default {
   props: ["data", "x", "y"],

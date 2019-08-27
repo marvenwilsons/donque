@@ -5,7 +5,7 @@
       @mouseover="opts_active = 'opts-opt-addelement'"
       @mouseleave="opts_cur_active != `opts-opt-addelement` && (opts_active = undefined)"
       @click="setContextView('addChild')"
-      :style="setStyle(opts_active === `opts-opt-addelement` || opts_active == `opts-opt-addelement`)"
+      :style="setStyle(opts_active === `opts-opt-addelement` || opts_active == `opts-opt-addelement` || $store.state.pages.api_view == 'addChild')"
       class="pad025 flex pointer"
     >
       <div class="flex3">
@@ -18,19 +18,21 @@
     <li
       @mouseover="opts_active = 'addNote'"
       @mouseleave="opts_cur_active != `addNote` && (opts_active = undefined)"
-      :style="setStyle(opts_active === `addNote` || opts_active == `addNote`)"
+      @click="$store.commit('pages/set_api_view',{view: 'addNote'})"
+      :style="setStyle(opts_active === `addNote` || opts_active == `addNote` || $store.state.pages.api_view == 'addNote')"
       class="pad025 flex pointer"
     >
       <div class="flex3">
         <!-- <i class="far fa-edit padleft125"></i> -->
       </div>
-      <div class="flex7">Notes</div>
+      <div class="flex7">Add Notes</div>
       <div class="flex4"></div>
     </li>
     <!-- Role -->
     <li
       @mouseover="opts_active = 'EditRole'"
       @mouseleave="opts_cur_active != `EditRole` && (opts_active = undefined)"
+      @click="$store.commit('pages/set_api_view',{view: 'editRole'})"
       :style="setStyle(opts_active === `EditRole` || opts_active == `EditRole`)"
       class="pad025 flex pointer"
     >

@@ -65,7 +65,7 @@ export default {
           return {
             Role: data.role,
             DirectChildren: data.els.length,
-            Notes: ""
+            Notes: data.notes
           };
           break;
         case "root":

@@ -337,15 +337,17 @@ import dqPageConsole from "./console";
 import infoBox from "./infobox/infobox";
 import contextMenu from "./context-menu/context";
 
-import addChild from "../struct-view-el-opts/addChild";
-import classList from "../struct-view-el-opts/classList";
-import dddel from "../struct-view-el-opts/delete";
-import dddesc from "../struct-view-el-opts/desc";
-import properties from "../struct-view-el-opts/properties";
-import ils from "../struct-view-el-opts/inlineStyle";
-import plgs from "../struct-view-el-opts/plugins";
-import events from '../struct-view-el-opts/events'
-import addNote from '../struct-view-el-opts/addnotes'
+// context menu api views imports
+import addChild from "./context-menu/context-api-views/addChild";
+import classList from "./context-menu/context-api-views/classList";
+import dddel from "./context-menu/context-api-views/delete";
+import dddesc from "./context-menu/context-api-views/desc";
+import properties from "./context-menu/context-api-views/properties";
+import ils from "./context-menu/context-api-views/inlineStyle";
+import plgs from "./context-menu/context-api-views/plugins";
+import events from './context-menu/context-api-views/events'
+import addNote from './context-menu/context-api-views/addnotes'
+import editRole from './context-menu/context-api-views/editRole'
 
 import { TweenMax, TimelineLite, TweenLite } from "gsap";
 
@@ -458,20 +460,21 @@ export default {
   components: {
     boxmodel: el_box_model,
     strvw: struct_view,
+    dqPageConsole,
+    infoBox,
+    
+    // context menu api views installation
     Events: events,
     Properties:properties,
     addNote,
-    dqPageConsole,
-    infoBox,
     contextMenu,
-
     addChild,
     classList,
     dddel,
     dddesc,
-    properties,
     ils,
-    plgs
+    plgs,
+    editRole
   },
   methods: {
     uidGen() {

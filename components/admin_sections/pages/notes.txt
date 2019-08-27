@@ -1,5 +1,4 @@
-@page-notes : TODO : Section ContextMenu is not Bind
-    finish binding the views in section for context menu
-
 @page-notes : TODO : Class search field regex bug
     when typing a slash the application will crash
+
+@page-notes : TODO : Emplement cut, copy, delete context menu
