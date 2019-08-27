@@ -15,7 +15,7 @@
                 Field name: Property Name
                 Field name: Property Type
                     Type 1: Any
-                    Type 2: Markup / (wysywig)
+                    Type 2: Article / (wysywig) / (mark-up)
                     Type 3: Number
                     Type 4: String
                     Type 5: Boolean
