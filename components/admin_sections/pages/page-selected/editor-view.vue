@@ -731,6 +731,9 @@ export default {
   },
   mounted() {
     this.$store.commit('pages/set_cur_path', this.data)
+  },
+  beforeDestroy() {
+    this.closeOpt()
   }
 };
 </script>

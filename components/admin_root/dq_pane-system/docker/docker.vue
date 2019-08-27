@@ -14,7 +14,7 @@
           v-for="(items,item_index) in menu_items"
           :key="`docker-item-${item_index}`"
           :id="`dqdi_${item_index}_${items}`"
-          @click="$store.dispatch('pane_system/start',items), cur_actv = item_index"
+          @click="start(items,item_index)"
           :style="{
               background: active === item_index || cur_actv == item_index ? hoverBgColor : '', 
               color: active == item_index || cur_actv == item_index ? hoverColor : '' 
@@ -57,6 +57,26 @@ export default {
       hoverBgColor: this.$store.state.theme.docker_hover_menu_item_bg_color,
       hoverColor: this.$store.state.theme.docker_hover_text_color
     };
+  },
+  methods: {
+    start(items,item_index) {
+      // $store.dispatch('pane_system/start',items)
+      // cur_actv = item_index
+      if (this.$store.state.pages.stages.length == 0) {
+        this.$store.dispatch('pane_system/start',items)
+        this.cur_actv = item_index
+      } else {
+        // modal here
+        this.$store.commit("modal/set_modal", {
+          head: "Unsave changes deteceted",
+          body: "page_warn_unsaved",
+          config: {
+            ui_type: "custom",
+            closable: false
+          }
+        });
+      }
+    }
   },
   computed: {
     ...mapGetters({

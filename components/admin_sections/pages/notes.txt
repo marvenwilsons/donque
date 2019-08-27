@@ -1,12 +1,3 @@
-@page-notes : TODO : Transition Bug
-    there is a transition bug, the context menu is still showing
-    when transitioning to another pane, it should not be visible.
-
-    also the stage array should be cleared when transitioning to another pane,
-    before transition it should scan the page statge array if it there are unsave chagnes,
-    there should be a modal that say, "unsaved changes detected" and 2 buttons 
-    "discard changes and continue" "save changes"
-
 @page-notes : TODO : Section ContextMenu is not Bind
     finish binding the views in section for context menu
 
