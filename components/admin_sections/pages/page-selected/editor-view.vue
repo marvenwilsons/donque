@@ -22,7 +22,7 @@
                   <strong>Section Role</strong>
                 </span>
                 <input v-model="sec_data" class="margintop025 fullwidth pad025" type="text" />
-                <strike class="err" v-if="sec_err">{{sec_err}}</strike>
+                <div class="err bordererr backgrounderr pad025 margintop050" v-if="sec_err">{{sec_err}}</div>
               </div>
               <div class="flex flexend padright125 padbottom125">
                 <span
@@ -183,7 +183,6 @@
                 <div
                   class="pad125 margintop125 spacebetween flex st-viz-bnnr pointer"
                   style
-                  @click="$store.commit('pages/close_el_api')"
                 >
                   <strong>Element API</strong>
                   <div>
@@ -643,7 +642,7 @@ export default {
         uid,
         top: this.y,
         left: this.x,
-        context_height: "170"
+        context_height: "200"
       });
 
       setTimeout(() => {
@@ -712,7 +711,6 @@ export default {
     },
     api_view() {
       if (this.$store.state.pages.api_view) {
-        console.log("open");
 
         setTimeout(() => {
           // dq-api-el-content
@@ -727,8 +725,6 @@ export default {
             TweenMax.fromTo(n2, 0.2, { width: "0px" }, { width: "550px" });
           }
         }, 0);
-      } else {
-        console.log("close");
       }
     }
   },
@@ -742,9 +738,6 @@ export default {
 </script>
 
 <style scoped>
-.err {
-  color: var(--err);
-}
 .dq-edtr-sd-pane {
   overflow-x: hidden;
 }

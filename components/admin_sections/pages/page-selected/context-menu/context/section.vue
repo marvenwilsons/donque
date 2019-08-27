@@ -42,6 +42,34 @@
       <div class="flex7">Edit Role</div>
       <div class="flex4"></div>
     </li>
+    <!-- Move up -->
+    <li
+      @mouseover="opts_active = 'moveUp'"
+      @mouseleave="opts_cur_active != `moveUp` && (opts_active = undefined)"
+      @click="moveUp"
+      :style="setStyle(opts_active === `moveUp` || opts_active == `moveUp`)"
+      class="pad025 flex pointer"
+    >
+      <div class="flex3">
+        <i class="fas fa-long-arrow-alt-up padleft125"></i>
+      </div>
+      <div class="flex7">Move up</div>
+      <div class="flex4"></div>
+    </li>
+    <!-- Move down -->
+    <li
+      @mouseover="opts_active = 'moveDown'"
+      @mouseleave="opts_cur_active != `moveDown` && (opts_active = undefined)"
+      @click="moveDown"
+      :style="setStyle(opts_active === `moveDown` || opts_active == `moveDown`)"
+      class="pad025 flex pointer"
+    >
+      <div class="flex3">
+        <i class="fas fa-long-arrow-alt-down padleft125"></i>
+      </div>
+      <div class="flex7">Move down</div>
+      <div class="flex4"></div>
+    </li>
   </div>
 </template>
 
@@ -68,6 +96,12 @@ export default {
           transition: "0.3s"
         };
       }
+    },
+    moveUp(){
+
+    },
+    moveDown(){
+
     }
   }
 };

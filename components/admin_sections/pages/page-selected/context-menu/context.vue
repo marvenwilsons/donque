@@ -20,6 +20,7 @@
     <!-- ++++++++++++++++++++++++++++++++++++++ END +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
     <!-- cut -->
     <li
+    v-if="$store.state.pages.opt_cur_view != 'section'"
       @mouseover="opts_active = 'cut'"
       @mouseleave="opts_cur_active != `cut` && (opts_active = undefined)"
       @click="cut_copy_delete('cut')"

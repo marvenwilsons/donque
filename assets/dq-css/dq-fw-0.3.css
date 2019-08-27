@@ -321,6 +321,16 @@ img {
   cursor: pointer;
 }
 
+.err {
+  color: var(--err);
+}
+.bordererr {
+  border: 1px solid #ae11002c;
+}
+.backgrounderr {
+  background: #ae11001a;
+}
+
 /* My Own Style ( dq framework 0.2 )
      ============================================================================*/
 :root {
