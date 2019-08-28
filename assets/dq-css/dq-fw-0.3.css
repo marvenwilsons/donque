@@ -291,10 +291,10 @@ img {
   margin-left: calc(var(--fontSize) * 0.25);
 }
 .marginleft050 {
-  margin-left: calc(var(--fontSize) * 0.25);
+  margin-left: calc(var(--fontSize) * 0.50);
 }
 .marginleft125 {
-  margin-left: calc(var(--fontSize) * 0.25);
+  margin-left: calc(var(--fontSize) * 1.25);
 }
 
 .overflowhidden {

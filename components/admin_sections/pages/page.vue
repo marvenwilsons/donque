@@ -41,25 +41,29 @@
         </div>
       </div>
       <!--  -->
-      <div class="pad125">
-        <div class="flex flexcenter padtop125 padbottom125">
-          <div class="flex1 padright025">
-            <strong>search:</strong>
+      <div class="pad125 flex">
+        <div class="flex flexcenter flex1">
+          <div
+            :style="{border:`1px solid ${$store.state.theme.global.border_color}`}"
+            class="flex flexcenter pad025 fullwidth"
+          >
+            <i class="fas fa-search padleft025 padright025 pointer"></i>
+            <input class="h-input pad025 flex fullwidth" type="text" />
           </div>
-          <div class="flex7">
-            <input class="pad025 flex fullwidth" type="text" />
-          </div>
-          <div class="flex1">
-            <i class="fas fa-search padleft025 pointer"></i>
-            <i @click="create_route = true" class="fas fa-plus pointer"></i>
-          </div>
+        </div>
+        <div
+          @click="create_route = true"
+          :style="{border:`1px solid ${$store.state.theme.global.border_color}`,height:'32px',maxWidth:'32px'}"
+          class="pad025 marginleft125 flex flex1 borderred fullheight-percent flexcenter pointer"
+        >
+          <i class="fas fa-plus "></i>
         </div>
       </div>
       <div class="fullheight-percent relative" style="overflow:auto;">
         <div class="absolute fullwidth fullheight-percent">
           <!-- loop -->
           <div
-            class="pointer margin050 pad050 flex dq-page-item-host"
+            class="pointer marginleft050 marginright050 pad050 marginbottom050 flex dq-page-item-host"
             v-for="(page,p_index) in pages"
             :key="`dq-page-list-${p_index}-${page.name}`"
             :id="`dq-page-${p_index}`"
@@ -69,16 +73,16 @@
           >
             <!-- data -->
             <div class="flex1">
-              <small class="flex spacebetween">
-                <span class="flex1">
-                  <Strong>{{p_index}}</Strong>
+              <div class="flex spacebetween">
+                <span :style="{fontWeight:(active === `dq-page-${p_index}` || cur_actv == `dq-page-${p_index}`) ? 700 : 100 }" class="flex1 pad025">
+                  {{p_index}}
                 </span>
                 <!-- click -->
                 <span
                   @click="
                     cur_actv = `dq-page-${p_index}`,
                     $store.dispatch('pane_system/open',{name: 'pages', index: my_pane_index, data: {page,root: p_index, ui: 'page'}, data_index: p_index})"
-                  class="underlinehover flex flexend"
+                  class="underlinehover flex flexend flexcenter"
                 >sub pages - {{Object.keys(page).length}}</span>
                 <!-- <span
                   :class="[cur_actv == `dq-page-${p_index}` && 'underline' , 'underlinehover', 'flex' ,'padleft125' ,'flexend']"
@@ -86,10 +90,10 @@
                 <!-- click -->
                 <span
                   @click="open({name: 'pages', index: my_pane_index, data: {page,root: p_index, ui:'page_selected'}, data_index: p_index})"
-                  :class="[cur_actv == `dq-page-${p_index}` && 'underline' , 'underlinehover', 'flex' ,'padleft125' ,'flexend']"
+                  :class="[cur_actv == `dq-page-${p_index}` && 'underline' , 'underlinehover', 'flex' ,'padleft125' ,'flexend','flexcenter']"
                 >open</span>
                 <!--  -->
-              </small>
+              </div>
             </div>
           </div>
           <!-- end -->
@@ -125,20 +129,20 @@ export default {
     };
   },
   components: {
-    pageSel: page_sel,
+    pageSel: page_sel
   },
   methods: {
     setStyle(c) {
       if (c) {
         return {
           background: this.$store.state.theme.notify_tile_body_bg_hover_color,
+          border: `1px solid ${this.$store.state.theme.global.secondary_border_color}`,
           borderLeft: `2px solid ${this.$store.state.theme.heading_bg_color}`,
-          border: "2px solid whitesmoke"
         };
       } else {
         return {
           background: this.$store.state.theme.notify_tile_body_bg_color,
-          border: "2px solid whitesmoke"
+          border: `1px solid ${this.$store.state.theme.global.secondary_border_color}`
         };
       }
     },
@@ -203,12 +207,12 @@ export default {
           data,
           data_index
         });
-        this.cur_actv = `dq-page-${data_index}`
+        this.cur_actv = `dq-page-${data_index}`;
       } else {
         // modal here
         this.$store.commit("modal/set_modal", {
           head: "Unsave changes deteceted",
-          body:'page_warn_unsaved',
+          body: "page_warn_unsaved",
           config: {
             ui_type: "custom",
             closable: false
@@ -275,7 +279,7 @@ export default {
     this.$store.dispatch("theme/set_class_css_defaults", {
       class: ["dq-page-item-host"],
       css_keys: ["transition"],
-      css_values: ["0.2s"]
+      css_values: ["0.3s"]
     });
 
     // fetch pages on the selectedRoute
@@ -365,5 +369,9 @@ export default {
 }
 .underline {
   text-decoration: underline;
+}
+.h-input {
+  border: none;
+  outline: none;
 }
 </style>
