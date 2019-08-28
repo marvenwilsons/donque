@@ -149,6 +149,31 @@ export const mutations = {
             }
         })
     },
+    update_section_move_sections(state, { arr, origin, dist}){
+        function array_move(arr, old_index, new_index) {
+            if (new_index >= arr.length) {
+                var k = new_index - arr.length + 1;
+                while (k--) {
+                    arr.push(undefined);
+                }
+            }
+            arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
+            return arr
+        }
+
+        const latest_root_copy = copy(arr)
+
+        array_move(latest_root_copy, origin, dist)
+
+        state.stages.push({
+            title: `st-${state.stages.length + 1}`,
+            desc: `move section from index ${origin} to ${dist}`,
+            obj: {
+                sections: latest_root_copy
+            }
+        })
+        
+    },
     update_section(state, { desc, locator, tag, target_prop, exec_on_prop, scoped_variable}) {
         // copy the latest stage and push to the stage
 

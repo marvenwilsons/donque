@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- {{$store.state.pages.root.sections.length}} -->
     <!-- add element -->
     <li
       @mouseover="opts_active = 'opts-opt-addelement'"
@@ -46,9 +47,14 @@
     <li
       @mouseover="opts_active = 'moveUp'"
       @mouseleave="opts_cur_active != `moveUp` && (opts_active = undefined)"
-      @click="moveUp"
-      :style="setStyle(opts_active === `moveUp` || opts_active == `moveUp`)"
-      class="pad025 flex pointer"
+      @click="api_v.index != 0 && moveUp(api_v.index)"
+      :style="{
+        ...setStyle(opts_active === `moveUp` && 
+        api_v.index != 0 || 
+        opts_active == `moveUp` 
+        && api_v.index != 0), 
+        color: api_v && api_v.index != 0 ? '' : 'lightgray' }"
+      :class="[api_v && api_v.index != 0 ? 'pointer' : '', 'pad025' ,'flex']"
     >
       <div class="flex3">
         <i class="fas fa-long-arrow-alt-up padleft125"></i>
@@ -60,9 +66,11 @@
     <li
       @mouseover="opts_active = 'moveDown'"
       @mouseleave="opts_cur_active != `moveDown` && (opts_active = undefined)"
-      @click="moveDown"
-      :style="setStyle(opts_active === `moveDown` || opts_active == `moveDown`)"
-      class="pad025 flex pointer"
+      @click="api_v.index != stage_len - 1 && moveDown(api_v.index)"
+      :style="{...setStyle(opts_active === `moveDown` && api_v.index != stage_len - 1 || opts_active == `moveDown` &&  api_v.index != stage_len - 1),
+      color: api_v && api_v.index != stage_len - 1 ? '' : 'lightgray'
+      }"
+      :class="[api_v && api_v.index != stage_len - 1 ? 'pointer' : '', 'pad025' ,'flex']"
     >
       <div class="flex3">
         <i class="fas fa-long-arrow-alt-down padleft125"></i>
@@ -78,15 +86,36 @@ export default {
   data() {
     return {
       opts_active: undefined,
-      opts_cur_active: undefined
+      opts_cur_active: undefined,
+      api_v: this.$store.state.pages.api_view_el
     };
   },
-  props: ['data'],
+  computed: {
+    stage_len() {
+      if (this.$store.state.pages.stages.length == 0) {
+        return this.$store.state.pages.root.sections.length;
+      } else {
+        return this.$store.state.pages.stages[
+          this.$store.state.pages.stages.length - 1
+        ].obj.sections.length;
+      }
+    },
+    latest_arr() {
+      if (this.$store.state.pages.stages.length == 0) {
+        return this.$store.state.pages.root.sections;
+      } else {
+        return this.$store.state.pages.stages[
+          this.$store.state.pages.stages.length - 1
+        ].obj.sections;
+      }
+    }
+  },
+  props: ["data"],
   methods: {
     setContextView(vname) {
-        this.$store.commit('pages/set_api_view',{
-            view: vname
-        })
+      this.$store.commit("pages/set_api_view", {
+        view: vname
+      });
     },
     setStyle(i) {
       if (i) {
@@ -97,11 +126,29 @@ export default {
         };
       }
     },
-    moveUp(){
+    moveUp(index_origin) {
+      this.$store.commit("pages/clear_opts");
 
+      const index_dist = index_origin - 1;
+
+      // update_section_move_items
+      this.$store.commit("pages/update_section_move_sections", {
+        arr: this.latest_arr,
+        origin: index_origin,
+        dist: index_dist
+      });
     },
-    moveDown(){
+    moveDown(index_origin) {
+      this.$store.commit("pages/clear_opts");
 
+      const index_dist = index_origin + 1;
+
+      // update_section_move_items
+      this.$store.commit("pages/update_section_move_sections", {
+        arr: this.latest_arr,
+        origin: index_origin,
+        dist: index_dist
+      });
     }
   }
 };
