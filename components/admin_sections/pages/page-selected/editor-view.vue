@@ -59,7 +59,7 @@
             </div>
           </div>
 
-          <section class="flex1 relative flex">
+          <section class=" relative flex flex1">
             <!-- elements view @stages - html render -->
             <main
               @click.right.prevent="tt(true)"
@@ -642,7 +642,7 @@ export default {
         uid,
         top: this.y,
         left: this.x,
-        context_height: "200"
+        context_height: "170"
       });
 
       setTimeout(() => {

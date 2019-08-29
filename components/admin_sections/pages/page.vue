@@ -54,7 +54,7 @@
         <div
           @click="create_route = true"
           :style="{border:`1px solid ${$store.state.theme.global.border_color}`,height:'32px',maxWidth:'32px'}"
-          class="pad025 marginleft125 flex flex1 borderred fullheight-percent flexcenter pointer"
+          class="pad025 marginleft050 flex flex1 borderred fullheight-percent flexcenter pointer"
         >
           <i class="fas fa-plus "></i>
         </div>

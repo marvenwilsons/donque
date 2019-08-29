@@ -34,12 +34,12 @@
               <div v-if="$store.state.modal.ui_type === 'custom'">
                 <div :is="$store.state.modal.body"></div>
               </div>
-              <div v-if="$store.state.modal.ui_type != 'custom'" class="pad025">
+              <div style="max-width:500px; min-width:300px;" v-if="$store.state.modal.ui_type != 'custom'">
                 <div
                   :style="{color: $store.state.modal.ui_type == 'err' ? '#ae1100' : ''}"
-                  class="pad125"
+                  :class="[$store.state.modal.ui_type == 'err' ? ['pad025','margintop050','err' ,'bordererr' ,'backgrounderr'] : 'pad125']"
                 >{{$store.state.modal.body}}</div>
-                <div class="pad025 flex flexend pointer">
+                <div class="padtop050 flex flexend pointer">
                   <div
                     @click="$store.commit('nextAction')"
                     :style="{...$store.state.theme.modal_button_style}"

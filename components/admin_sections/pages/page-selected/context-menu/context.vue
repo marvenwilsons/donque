@@ -20,7 +20,7 @@
     <!-- ++++++++++++++++++++++++++++++++++++++ END +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
     <!-- cut -->
     <li
-    v-if="$store.state.pages.opt_cur_view != 'section'"
+      v-if="$store.state.pages.opt_cur_view != 'section'"
       @mouseover="opts_active = 'cut'"
       @mouseleave="opts_cur_active != `cut` && (opts_active = undefined)"
       @click="cut_copy_delete('cut')"
@@ -35,6 +35,7 @@
     </li>
     <!-- copy -->
     <li
+      v-if="$store.state.pages.opt_cur_view != 'section'"
       @mouseover="opts_active = 'copy'"
       @mouseleave="opts_cur_active != `copy` && (opts_active = undefined)"
       @click="cut_copy_delete('copy')"
@@ -96,6 +97,17 @@ export default {
     cnsection: context_section,
     cnplugin: context_plugin
   },
+  computed: {
+    latest_root() {
+      if (this.$store.state.pages.stages.length == 0) {
+        return this.$store.state.pages.root.sections;
+      } else {
+        return this.$store.state.pages.stages[
+          this.$store.state.pages.stages.length - 1
+        ].obj.sections;
+      }
+    }
+  },
   methods: {
     setStyle(i) {
       if (i) {
@@ -106,42 +118,84 @@ export default {
         };
       }
     },
-    cut(){
+    cut() {
       // 1. finding the selected element
       // get the uid, then use the addrs_finder to get the object being selected
       // save the object selected in pages store states named pending_data_to_paste
-
       // 2. deleting the element
       // get the parent of the selected element
       // empty the els property of that parent element by mutating the els property to
       // an empty object.
     },
-    copy(){
+    copy() {
       // 1. finding the selected element
       // get the uid, then use the addrs_finder to get the object being selected
       // save the object selected in pages store states named pending_data_to_paste
-
+      this.$store.commit("pages/set_copy", this.$store.state.pages.api_view_el);
     },
-    paste(){
+    paste() {
       // 1. get the object saved in pages store states named pending_data_to_paste
-      
       // 2. using the addrs_finder and uid, find then mutate the els property of the selected
       // element, mutate the els property into the value found in pending_data_to_paste
-
       // 3. muatate pending_data_to_paste into undefined
     },
-    delete(){
+    delete() {
       // 1. using the addrs_finder and uid, find then mutate the els property of the selected
-      // element, mutate the els property into empty object 
+      // element, mutate the els property into empty object
+      let element_type = undefined;
+
+      Object.keys(this.$store.state.pages.api_view_el).length == 4 ||
+        Object.keys(this.$store.state.pages.api_view_el).length == 6;
+      this.$store.state.pages.api_view_el.role != undefined
+        ? (element_type = "section")
+        : (element_type = "html/plugin");
+
+      if (element_type == "section") {
+        // splice section
+        this.$store.commit("pages/update_section_delete_section", {
+          index: this.$store.state.pages.api_view_el.index,
+          root: this.latest_root
+        });
+      } else if (element_type == "html/plugin") {
+        // find and splice
+        this.$store.dispatch("pages/addrs_finder_mutator", {
+          uid: `${this.$store.state.pages.api_view_el.index}--${this.$store.state.pages.api_view_el.uid}`,
+          fn: locator => {
+            // pop the last item so that I can move backward target the parent
+            // and then locate the selected to delete element using index
+            locator.pop();
+
+            this.$store.commit("pages/update_section", {
+              desc: `remove element - addrs: ${locator.join(" > ")}`,
+              locator: locator,
+              scoped_variable: this.$store.state.pages.api_view_el.index,
+              exec_on_prop: function(prop, tag, scoped_variable, obj) {
+                obj.splice(scoped_variable, 1)
+              }
+            });
+          }
+        });
+      } else if (element_type == undefined) {
+        // if the structure of the element is changed manually in the source code.
+        this.$store.commit("modal/set_modal", {
+          head: "Fatal System Error",
+          body:
+            "Fatal System Error! un recognized element type after performing 'before delete' hook. ",
+          config: {
+            ui_type: "err",
+            closable: false
+          }
+        });
+      }
     },
     cut_copy_delete(arg) {
       if (this.$store.state.pages.api_view) {
         this.$store.commit("pages/close_api_view");
         this.$store.commit("pages/clear_opts");
-        this[arg]()
+        this[arg]();
       } else {
         this.$store.commit("pages/clear_opts");
-        this[arg]()
+        this[arg]();
       }
     }
   }

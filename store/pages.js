@@ -37,6 +37,7 @@ export const state = () => ({
     opt_cur_view: 'section',
     context_height: undefined,
     pending_data_to_paste: undefined,
+    copy_temp: undefined,
 
     // element api
     api_view: undefined,
@@ -58,6 +59,10 @@ export const getters = {
 }
 
 export const mutations = {
+    // copy
+    set_copy(state,data) {
+        state.copy_temp = data
+    },
     // curpath
     set_cur_path (state, path) {
         state.cur_path = path
@@ -149,31 +154,7 @@ export const mutations = {
             }
         })
     },
-    update_section_move_sections(state, { arr, origin, dist}){
-        function array_move(arr, old_index, new_index) {
-            if (new_index >= arr.length) {
-                var k = new_index - arr.length + 1;
-                while (k--) {
-                    arr.push(undefined);
-                }
-            }
-            arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
-            return arr
-        }
-
-        const latest_root_copy = copy(arr)
-
-        array_move(latest_root_copy, origin, dist)
-
-        state.stages.push({
-            title: `st-${state.stages.length + 1}`,
-            desc: `move section from index ${origin} to ${dist}`,
-            obj: {
-                sections: latest_root_copy
-            }
-        })
-        
-    },
+    
     update_section(state, { desc, locator, tag, target_prop, exec_on_prop, scoped_variable}) {
         // copy the latest stage and push to the stage
 
@@ -269,6 +250,48 @@ export const mutations = {
             
             state.stages.push(latest_stage_copy)
         }
+    },
+    update_section_move_sections(state, { arr, origin, dist }) {
+        function array_move(arr, old_index, new_index) {
+            if (new_index >= arr.length) {
+                var k = new_index - arr.length + 1;
+                while (k--) {
+                    arr.push(undefined);
+                }
+            }
+            arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
+            return arr
+        }
+
+        const latest_root_copy = copy(arr)
+
+        array_move(latest_root_copy, origin, dist)
+
+        state.stages.push({
+            title: `st-${state.stages.length + 1}`,
+            desc: `move section from index ${origin} to ${dist}`,
+            obj: {
+                sections: latest_root_copy
+            }
+        })
+
+    },
+    update_section_delete_section(state, {index,root}){
+        const latest_root_copy = copy(root)
+
+        if (latest_root_copy.length == 1){
+            latest_root_copy[0].els = []
+        }else {
+            latest_root_copy.splice(index, 1)
+        }
+
+        state.stages.push({
+            title: `st-${state.stages.length + 1}`,
+            desc: `delete section index ${index}`,
+            obj: {
+                sections: latest_root_copy
+            }
+        })
     },
     clear_stage(state){
         state.stages = []
