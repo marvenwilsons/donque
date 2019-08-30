@@ -2,8 +2,10 @@ export const state = () => ({
     // config
     visibility: false,
     closable: false,
-    head_visibility: false,
+    head_visibility: true,
     ui_type: undefined, // err, msg, success, custom
+    width: '350px',
+    height: '150px',
 
     // content
     body: undefined,
@@ -44,15 +46,14 @@ export const mutations = {
         state.visibility = value
     },        
     set_modal(state,{body,head,config}){
-        const {visibility,closable,head_visibility, ui_type} = config 
-
-        console.log(ui_type)
-        console.log(body)
+        const {visibility,closable,head_visibility, ui_type, height, width} = config 
 
         // setting config
         typeof visibility === 'boolean' ? state.visibility = visibility : state.visibility = true
         typeof closable === 'boolean' ? state.closable = closable : state.closable = true
-        typeof head_visibility === 'boolean' ? state.head_visibility = head_visibility : state.head_visibility = head_visibility
+        typeof head_visibility === 'boolean' ? state.head_visibility = head_visibility : state.head_visibility = true
+        height && (state.height = height)
+        width && (state.width = width)
 
         // required each call to have ui_type passed in config object
         state.ui_type = ui_type

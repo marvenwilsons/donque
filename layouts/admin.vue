@@ -14,40 +14,62 @@
         <div
           v-if="$store.state.modal.body && $store.state.modal.head"
           style="z-index:100;top: 200px;"
+          class="flex fullwidth fullheight-percent"
         >
-          <div :style="{minWidth:200+'px', ...$store.state.theme.modal_host_style}">
-            <div :style="{...$store.state.theme.modal_head_style}" class="flex spacebetween pad025">
+          <div class="flex1 fullwidth fullheight-percent flex flexcol flexcenter">
+            <main
+              class="flex flexcol"
+              :style="{...$store.state.theme.modal_host_style, minWidth: $store.state.modal.width, minHeight: $store.state.modal.height}"
+            >
               <div
-                :style="{...$store.state.theme.modal_head_title_style}"
-                class="flex10 padleft025"
+                :style="{...$store.state.theme.modal_head_style}"
+                class="flex spacebetween pad025"
+                v-if="$store.state.modal.head_visibility"
               >
-                <strong>{{$store.state.modal.head}}</strong>
-              </div>
-              <div
-                :style="{...$store.state.theme.modal_head_close_btn_style}"
-                class="flex1 flex flexend pad025 pointer"
-              >
-                <i v-if="$store.state.modal.closable" @click="$store.commit('nextAction')" class="fas fa-times"></i>
-              </div>
-            </div>
-            <div :style="{...$store.state.theme.modal_body_style}">
-              <div v-if="$store.state.modal.ui_type === 'custom'">
-                <div :is="$store.state.modal.body"></div>
-              </div>
-              <div style="max-width:500px; min-width:300px;" v-if="$store.state.modal.ui_type != 'custom'">
                 <div
-                  :style="{color: $store.state.modal.ui_type == 'err' ? '#ae1100' : ''}"
-                  :class="[$store.state.modal.ui_type == 'err' ? ['pad025','margintop050','err' ,'bordererr' ,'backgrounderr'] : 'pad125']"
-                >{{$store.state.modal.body}}</div>
-                <div class="padtop050 flex flexend pointer">
-                  <div
+                  :style="{...$store.state.theme.modal_head_title_style}"
+                  class="flex10 padleft025"
+                >
+                  <strong>{{$store.state.modal.head}}</strong>
+                </div>
+                <div
+                  :style="{...$store.state.theme.modal_head_close_btn_style}"
+                  class="flex1 flex flexend pad025 pointer"
+                >
+                  <i
+                    v-if="$store.state.modal.closable"
                     @click="$store.commit('nextAction')"
-                    :style="{...$store.state.theme.modal_button_style}"
-                    class="pad025 padleft050 padright050"
-                  ><strong>Okay</strong></div>
+                    class="fas fa-times"
+                  ></i>
                 </div>
               </div>
-            </div>
+              <div
+                class="flex fullheight-percent"
+                :style="{...$store.state.theme.modal_body_style}"
+              >
+                <div class="fullwidth" v-if="$store.state.modal.ui_type === 'custom'">
+                  <div :is="$store.state.modal.body"></div>
+                </div>
+                <div
+                  style="max-width:500px; min-width:300px;"
+                  v-if="$store.state.modal.ui_type != 'custom'"
+                >
+                  <div
+                    :style="{color: $store.state.modal.ui_type == 'err' ? '#ae1100' : ''}"
+                    :class="[$store.state.modal.ui_type == 'err' ? ['pad025','margintop050','err' ,'bordererr' ,'backgrounderr'] : 'pad125']"
+                  >{{$store.state.modal.body}}</div>
+                  <div class="padtop050 flex flexend pointer">
+                    <div
+                      @click="$store.commit('nextAction')"
+                      :style="{...$store.state.theme.modal_button_style}"
+                      class="pad025 padleft050 padright050"
+                    >
+                      <strong>Okay</strong>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </main>
           </div>
         </div>
       </div>
@@ -70,7 +92,7 @@
         :style="{flex:1, filter: $store.state.modal.visibility ? 'blur(2px)' : ''}"
         class="flex fullwidth"
       >
-        <nuxt/>
+        <nuxt />
       </div>
       <!--  -->
     </div>
@@ -82,7 +104,8 @@ import heading from "@/components/admin_root/dq_head/dq_heading.vue";
 import { mapGetters } from "vuex";
 
 //modals installation
-import page_warn_unsaved from '../components/admin_sections/pages/page-selected/modals/warn-unsaved'
+import page_warn_unsaved from "../components/admin_sections/pages/page-selected/modals/warn-unsaved";
+import dq_page_max_editor from "../components/admin_sections/pages/page-selected/modals/dq-page-max-editor";
 
 export default {
   data() {
@@ -125,7 +148,8 @@ export default {
     heading,
 
     // modal insatll below
-    page_warn_unsaved
+    page_warn_unsaved,
+    dq_page_max_editor
   }
 };
 </script>

@@ -56,6 +56,7 @@
                 @click="$store.commit('pages/save_stage',{path: data})"
                 class="fas fa-save pointer padright025"
               ></i>
+              <i @click="maximize" class="far fa-window-maximize pointer"></i>
             </div>
           </div>
 
@@ -476,6 +477,19 @@ export default {
     editRole
   },
   methods: {
+    maximize() {
+      this.$store.commit("modal/set_modal", {
+        head: "testing", 
+        body: "dq_page_max_editor",
+        config: {
+          ui_type: "custom",
+          closable: false,
+          height: '100%',
+          width: '100%',
+          head_visibility: false
+        }
+      });
+    },
     uidGen() {
       return (length => {
         var result = "";
