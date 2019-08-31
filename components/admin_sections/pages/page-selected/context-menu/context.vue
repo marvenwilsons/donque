@@ -118,6 +118,7 @@ export default {
         };
       }
     },
+    getObjMap() {},
     cut() {
       // 1. finding the selected element
       // get the uid, then use the addrs_finder to get the object being selected
@@ -126,18 +127,79 @@ export default {
       // get the parent of the selected element
       // empty the els property of that parent element by mutating the els property to
       // an empty object.
+      this.$store.commit("pages/set_copy", this.$store.state.pages.api_view_el);
+      this.delete();
     },
     copy() {
       // 1. finding the selected element
       // get the uid, then use the addrs_finder to get the object being selected
       // save the object selected in pages store states named pending_data_to_paste
-      this.$store.commit("pages/set_copy", this.$store.state.pages.api_view_el);
+
+      // copy because vuex wont let me mutate its state outside of its scope
+      const copy = o => {
+        if (o === null) return null;
+
+        var output, v, key;
+        output = Array.isArray(o) ? [] : {};
+        for (key in o) {
+          v = o[key];
+          output[key] = typeof v === "object" ? copy(v) : v;
+        }
+
+        return output;
+      };
+
+      const api_v_copy = copy(this.$store.state.pages.api_view_el);
+
+      const mutate_uid = o => {
+        if (o === null) return null;
+
+        var output, v, key;
+        output = Array.isArray(o) ? [] : {};
+        for (key in o) {
+          o.uid = (length => {
+            var result = "";
+            var characters =
+              "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            var charactersLength = characters.length;
+            for (var i = 0; i < length; i++) {
+              result += characters.charAt(
+                Math.floor(Math.random() * charactersLength)
+              );
+            }
+            return result;
+          })(20);
+
+          v = o[key];
+          output[key] = typeof v === "object" ? mutate_uid(v) : v;
+        }
+
+        return output;
+      };
+
+      const customCopy = mutate_uid(api_v_copy);
+      this.$store.commit("pages/set_copy", customCopy);
     },
     paste() {
       // 1. get the object saved in pages store states named pending_data_to_paste
       // 2. using the addrs_finder and uid, find then mutate the els property of the selected
       // element, mutate the els property into the value found in pending_data_to_paste
-      // 3. muatate pending_data_to_paste into undefined
+
+      this.$store.dispatch("pages/addrs_finder_mutator", {
+        uid: `${this.$store.state.pages.api_view_el.index}--${this.$store.state.pages.api_view_el.uid}`,
+        fn: locator => {
+          this.$store.commit("pages/update_section", {
+            desc: `paste element - addrs: ${locator.join(" > ")}`,
+            locator: locator,
+            scoped_variable: this.$store.state.pages.pending_data_to_paste,
+            exec_on_prop: function(prop, tag, scoped_variable, obj) {
+              obj.els.push(scoped_variable);
+            }
+          });
+        }
+      });
+
+      this.$store.commit("pages/clear_copy_state");
     },
     delete() {
       // 1. using the addrs_finder and uid, find then mutate the els property of the selected
@@ -170,7 +232,7 @@ export default {
               locator: locator,
               scoped_variable: this.$store.state.pages.api_view_el.index,
               exec_on_prop: function(prop, tag, scoped_variable, obj) {
-                obj.splice(scoped_variable, 1)
+                obj.splice(scoped_variable, 1);
               }
             });
           }

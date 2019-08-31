@@ -1,4 +1,4 @@
-const copy = (o, uid) => {
+const copy = (o) => {
     if (o === null) return null;
 
     var output, v, key;
@@ -37,7 +37,6 @@ export const state = () => ({
     opt_cur_view: 'section',
     context_height: undefined,
     pending_data_to_paste: undefined,
-    copy_temp: undefined,
 
     // element api
     api_view: undefined,
@@ -61,7 +60,10 @@ export const getters = {
 export const mutations = {
     // copy
     set_copy(state,data) {
-        state.copy_temp = data
+        state.pending_data_to_paste = data
+    },
+    clear_copy_state(state) {
+        state.pending_data_to_paste = undefined
     },
     // curpath
     set_cur_path (state, path) {

@@ -128,7 +128,7 @@ export default {
         tag,
         top: this.y,
         left: this.x,
-        context_height: "230"
+        context_height: this.$store.state.pages.pending_data_to_paste ? "260" : "230"
       });
       setTimeout(() => {
         const n = document.getElementById("opt-box-ul");
