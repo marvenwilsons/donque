@@ -4,7 +4,7 @@
   <div id="dq-init-parent-wrapper" class="flex flexwrap relative">
     <div class="fullwidth flex absolute abs">
       <div class="flex flexcenter" v-if="!ready">
-        <spinner/>
+        <spinner />
       </div>
       <div v-if="ready" id="dq-init-wrapper" class="flex flexwrap flexcenter flexcol">
         <div id="tc-logo-h" class="flex fullwidth flexcenter">
@@ -20,7 +20,7 @@
           <div v-if="rpassword" class="tc-f-wrap">
             <div class="tc-wrap tc-input flex flexcol">
               <span class="tc-title">Email</span>
-              <input v-mode="rpassword" type="text">
+              <input v-mode="rpassword" type="text" />
             </div>
             <div class="tc-b flex">
               <button @click="rp(true)" class="tc-b-inner">Retrieve password</button>
@@ -29,16 +29,27 @@
 
           <!-- login -->
           <div v-if="!rpassword" class="tc-f-wrap">
-            <div class="tc-wrap tc-input  flex flexcol">
-              <span class="tc-title">Username</span>
-              <input v-model="username" id="dqloginUsername" type="text">
+            <div class="tc-wrap tc-input flex flexcol">
+              <span class="tc-title padbottom025">Username</span>
+              <div style="min-width:250px;">
+                <input
+                  class="pad050 fullwidth inp-log rt"
+                  v-model="username"
+                  id="userf"
+                  type="text"
+                />
+              </div>
             </div>
             <div class="tc-input flex flexcol">
-              <span class="tc-title">Password</span>
-              <input class="pad125" v-model="password" type="password">
+              <span class="tc-title padbottom025">Password</span>
+              <div>
+                <input class="pad050 fullwidth inp-log" v-model="password" type="password" />
+              </div>
             </div>
             <div class="margintop125 padright025 padtop125 padbottom125 flexend flex">
-              <button @click="submit" class="tc-b-inner"><strong>Login</strong></button>
+              <button @click="submit" class="tc-b-inner">
+                <strong>Login</strong>
+              </button>
             </div>
           </div>
         </div>
@@ -54,7 +65,6 @@
 </template>
 
 <script>
-
 export default {
   data() {
     return {
@@ -86,15 +96,14 @@ export default {
         })
         .then(response => {
           const { status, data } = response;
-          console.log("this is data");
           //   console.log(data.actions);
-          this.$store.commit('setActions',data.actions)
+          this.$store.commit("setActions", data.actions);
 
           if (status) {
             // set localstorage
             localStorage.setItem("auth", data.actions[0].content.token);
             localStorage.setItem("username", data.actions[0].content.username);
-            console.log(localStorage.getItem("auth"));
+            // console.log(localStorage.getItem("auth"));
             if (localStorage.getItem("auth")) {
               location.href = "admin";
             }
@@ -126,9 +135,12 @@ export default {
       })
       .then(res => {
         // store to state
-        console.log(res);
+        // console.log(res);
         setTimeout(() => {
           this.ready = true;
+          setTimeout(() => {
+            document.getElementById("userf").focus()
+          }, 0);
         }, 500);
       })
       .catch(err => {
@@ -140,8 +152,8 @@ export default {
 </script>
 
 <style>
-@import url('@/assets/dq-css/dq-theme-default.css');
-@import url('@/assets/dq-css/dq-fw-0.3.css');
+@import url("@/assets/dq-css/dq-theme-default.css");
+@import url("@/assets/dq-css/dq-fw-0.3.css");
 
 #tc-logo-h {
   padding: calc(var(--fontSize) * 1.25);
@@ -199,16 +211,24 @@ export default {
   flex: 1;
   /* font-weight: 600; */
 }
-.tc-input {
-  flex: 4;
-}
-.tc-input > input {
-  /* padding: calc(var(--fontSize) * 0.5); */
+.tc-input > div > input {
+  /* padding: calc(var(--fontSize) * 1.25); */
   /* margin-bottom: calc(var(--fontSize) * 0.25); */
   color: var(--blue-text-2);
-  font-size:  calc(var(--fontSize) * 1.25);
-  /* font-weight: 600; */
-  min-width: 150px;
+  font-size: calc(var(--fontSize) * 1.25);
+  font-weight: 700;
+  border: none;
+  border: 1px solid #4a697611;
+  border-radius: 2px;
+  background: #4a697611;
+}
+.inp-log:focus {
+  border-style: none;
+  outline: none;
+}
+.inp-log:active {
+  border-style: none;
+  outline: none;
 }
 .tc-ind {
   flex: 0.5;
