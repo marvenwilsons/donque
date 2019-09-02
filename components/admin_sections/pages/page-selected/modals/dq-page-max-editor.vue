@@ -11,7 +11,9 @@
         <div class=" flex flex1">
             <div class="flex1 flex flexcol">
                 <div :style="{border: `1px solid ${$store.state.theme.global.primary_bg_color}`}" class="flex1 flex" >
-                    <div class=" fullheight-percent fullwidth" style="max-width:1080px" >top</div>
+                    <div class=" fullheight-percent fullwidth" style="max-width:1080px" >
+                        <!-- {{$store.state.pages.info_box_data.uid}} -->
+                    </div>
                     <div class="flex flex1 ">
                         <div style="background: white;" class="fullwidth flex flex1">
                             <editor/>
