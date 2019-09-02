@@ -5,7 +5,7 @@ export const state = () => ({
     head_visibility: true,
     ui_type: undefined, // err, msg, success, custom
     width: '350px',
-    height: '150px',
+    height: '100px',
 
     // content
     body: undefined,

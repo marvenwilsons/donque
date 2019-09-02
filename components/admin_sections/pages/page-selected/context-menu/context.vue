@@ -65,6 +65,7 @@
     </li>
     <!-- delete -->
     <li
+    v-if="latest_root.length != 1 && latest_root.length != 0"
       @mouseover="opts_active = 'del'"
       @mouseleave="opts_cur_active != `del` && (opts_active = undefined)"
       :style="setStyle(opts_active === `del` || opts_active == `del`)"

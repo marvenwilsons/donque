@@ -1,11 +1,11 @@
 <template>
     <div class="flex spacebetween" :style="{background:bgColor, color:textColor}">
         <div class="dqhead-items fullwidth flex flexcenter flexstart">
-            <strong class="padleft125">dq-studio</strong>
+            <strong class="padleft125">dq-</strong>studio
         </div>
         <div class="dqhead-items fullwidth">
             <div class="flex flexend headcur fullheight-percent flex flexcenter">
-            <div class="name-title "> <strong>{{adminName}}</strong> </div>
+            <div class="name-title padright050"> {{adminName}} </div>
                 <i class="fas fa-user-circle pointer padright025 marginright125" @click="$store.commit('notification_pane/set_state', true)"></i>
             </div>
         </div>

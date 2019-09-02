@@ -51,14 +51,14 @@
                   <div :is="$store.state.modal.body"></div>
                 </div>
                 <div
-                  style="max-width:500px; min-width:300px;"
                   v-if="$store.state.modal.ui_type != 'custom'"
+                  class="fullwidth flex1 fullheight-percent  flex flexcol"
                 >
                   <div
                     :style="{color: $store.state.modal.ui_type == 'err' ? '#ae1100' : ''}"
-                    :class="[$store.state.modal.ui_type == 'err' ? ['pad025','margintop050','err' ,'bordererr' ,'backgrounderr'] : 'pad125']"
+                    :class="[$store.state.modal.ui_type == 'err' ? ['pad025','margintop050','err' ,'bordererr' ,'backgrounderr'] : ['pad125','fullwidth', 'flex1', '']]"
                   >{{$store.state.modal.body}}</div>
-                  <div class="padtop050 flex flexend pointer">
+                  <div class=" flex flexend pointer">
                     <div
                       @click="$store.commit('nextAction')"
                       :style="{...$store.state.theme.modal_button_style}"
@@ -83,7 +83,7 @@
         v-if="$store.state.dashboard_data.dashboard_ready"
       >
         <heading
-          :bgColor="$store.state.theme.heading_bg_color"
+          :bgColor="$store.state.theme.global.primary_bg_color"
           :textColor="$store.state.theme.heading_text_color"
           :adminName="$store.state.dashboard_data.admin_name"
         />

@@ -60,7 +60,7 @@
         </div>
       </div>
       <div class="fullheight-percent relative" style="overflow:auto;">
-        <div class="absolute fullwidth fullheight-percent">
+        <div class="absolute fullwidth fullheight-percent  padleft050 padright050">
           <!-- loop -->
           <div
             class="pointer marginleft050 marginright050 pad050 marginbottom050 flex dq-page-item-host"

@@ -43,6 +43,7 @@ export const state = () => ({
     api_view_el: undefined,
     api_view_uid: undefined,
     api_view_q: undefined,
+    isMaximized: false,
 
     // info box
     info_box_data: undefined,
@@ -64,6 +65,12 @@ export const mutations = {
     },
     clear_copy_state(state) {
         state.pending_data_to_paste = undefined
+    },
+    // maximize
+    maximized_editor(state,payload) {
+        console.log('max')
+        state.isMaximized = payload
+
     },
     // curpath
     set_cur_path (state, path) {
@@ -336,7 +343,9 @@ export const mutations = {
                         body: "Changes were saved successfully.",
                         config: {
                             ui_type: "msg",
-                            closable: false
+                            closable: false,
+                            width:'320px',
+                            height: '100px'
                         }
                     });
 

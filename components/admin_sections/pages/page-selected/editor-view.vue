@@ -1,5 +1,5 @@
 <template>
-  <div id="dq-page-editor" class="flex relative">
+  <div :style="{color:$store.state.theme.global.secondary_text_color}" id="dq-page-editor" class="flex relative fullwidth">
     <main class="flex fullwidth">
       <div class="fullwidth flex">
         <div
@@ -22,7 +22,10 @@
                   <strong>Section Role</strong>
                 </span>
                 <input v-model="sec_data" class="margintop025 fullwidth pad025" type="text" />
-                <div class="err bordererr backgrounderr pad025 margintop050" v-if="sec_err">{{sec_err}}</div>
+                <div
+                  class="err bordererr backgrounderr pad025 margintop050"
+                  v-if="sec_err"
+                >{{sec_err}}</div>
               </div>
               <div class="flex flexend padright125 padbottom125">
                 <span
@@ -49,18 +52,18 @@
             class="pad050 spacebetween flex st-viz-bnnr"
           >
             <div>
-              <strong>DQ Page Structure & Semantic Editor 1.0</strong>
+              DQ Page Structure & Semantic Editor 1.0
             </div>
             <div>
               <i
                 @click="$store.commit('pages/save_stage',{path: data})"
                 class="fas fa-save pointer padright025"
               ></i>
-              <i @click="maximize" class="far fa-window-maximize pointer"></i>
+              <i v-if="!$store.state.pages.isMaximized" @click="maximize" class="far fa-window-maximize pointer"></i>
             </div>
           </div>
 
-          <section class=" relative flex flex1">
+          <section class="relative flex flex1">
             <!-- elements view @stages - html render -->
             <main
               @click.right.prevent="tt(true)"
@@ -129,16 +132,16 @@
                     v-for="(sections,s_i) in (is_traversing ? travers_mode :  $store.state.pages.stages.length == 0 ? sections : n_sections)"
                     :key="`seccc-${s_i}`"
                   >
-                  <!-- sides -->
+                    <!-- sides -->
                     <div
                       :style="{
                   background:theme.global.secondary_bg_color,
                   borderLeft: `1px solid ${theme.global.border_color}`,
-                  width:'20px'
+                  width:'20px',
                   }"
                       class="padright050 padleft050 pointer"
                     >{{s_i}}</div>
-                    <div id="dq-viz-host" :data="s_i" :class="[`viz-host-${s_i}`, 'flex']">
+                    <div id="dq-viz-host"  :data="s_i" :class="[`viz-host-${s_i}`, 'flex']">
                       <div style="min-width:82px;" class="dq-strvw-el pointer">
                         <div
                           @mouseenter="showInfoBox({tag:'root_Template-wrapper'})"
@@ -181,10 +184,7 @@
                 class="flex flexcol flex1 absolute fullheight-percent fullwidth"
                 style="left:550px"
               >
-                <div
-                  class="pad125 margintop125 spacebetween flex st-viz-bnnr pointer"
-                  style
-                >
+                <div class="pad125 margintop125 spacebetween flex st-viz-bnnr pointer" style>
                   <strong>Element API</strong>
                   <div>
                     <i @click="closeOpt" class="fas fa-times-circle"></i>
@@ -238,7 +238,11 @@
         </div>
 
         <!-- side boxes -->
-        <div id="dq-opts-indc-bxs" class="flex flexcol">
+        <div
+          v-if="$store.state.pages.isMaximized == false"
+          id="dq-opts-indc-bxs"
+          class="flex flexcol"
+        >
           <div
             :style="{border:`1px solid ${$store.state.theme.global.border_color}`, borderTop:`1px solid ${$store.state.theme.global.border_color}`}"
             class="flex2 flex flexcol margintop050 marginright050"
@@ -345,9 +349,9 @@ import dddesc from "./context-menu/context-api-views/desc";
 import properties from "./context-menu/context-api-views/properties";
 import ils from "./context-menu/context-api-views/inlineStyle";
 import plgs from "./context-menu/context-api-views/plugins";
-import events from './context-menu/context-api-views/events'
-import addNote from './context-menu/context-api-views/addnotes'
-import editRole from './context-menu/context-api-views/editRole'
+import events from "./context-menu/context-api-views/events";
+import addNote from "./context-menu/context-api-views/addnotes";
+import editRole from "./context-menu/context-api-views/editRole";
 
 import { TweenMax, TimelineLite, TweenLite } from "gsap";
 
@@ -462,10 +466,10 @@ export default {
     strvw: struct_view,
     dqPageConsole,
     infoBox,
-    
+
     // context menu api views installation
     Events: events,
-    Properties:properties,
+    Properties: properties,
     addNote,
     contextMenu,
     addChild,
@@ -479,16 +483,18 @@ export default {
   methods: {
     maximize() {
       this.$store.commit("modal/set_modal", {
-        head: "testing", 
+        head: "testing",
         body: "dq_page_max_editor",
         config: {
           ui_type: "custom",
           closable: false,
-          height: '100%',
-          width: '100%',
+          height: "100%",
+          width: "100%",
           head_visibility: false
         }
       });
+
+      this.$store.commit("pages/maximized_editor", true);
     },
     uidGen() {
       return (length => {
@@ -526,7 +532,9 @@ export default {
     scrollToEnd: function() {
       setTimeout(() => {
         var container = this.$el.querySelector("#dq-edtr-sd-pane-h");
-        container.scrollTop = container.scrollHeight;
+        if (container) {
+          container.scrollTop = container.scrollHeight;
+        }
       }, 1);
     },
     exp_console() {
@@ -725,7 +733,6 @@ export default {
     },
     api_view() {
       if (this.$store.state.pages.api_view) {
-
         setTimeout(() => {
           // dq-api-el-content
           const n = document.getElementById("dq-api-el-content");
@@ -743,10 +750,10 @@ export default {
     }
   },
   mounted() {
-    this.$store.commit('pages/set_cur_path', this.data)
+    this.$store.commit("pages/set_cur_path", this.data);
   },
   beforeDestroy() {
-    this.closeOpt()
+    this.closeOpt();
   }
 };
 </script>
