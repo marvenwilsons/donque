@@ -14,9 +14,22 @@
       :style="{border: `1px solid ${this.$store.state.theme.global.secondary_bg_color}`}"
       class="flex"
     >
-      <div @click="comp = 'editor'" class="pad050 pointer">Editor</div>
-      <div @click="comp = 'rs'" class="pad050 pointer">Route settings</div>
-      <div @click="comp = 'props'" class="pad050 pointer">Properties</div>
+      <div
+        :style="{background: comp == 'editor' ? $store.state.theme.global.secondary_bg_color : ''}"
+        @click="comp = 'editor'"
+        class="pad050 pointer"
+      >Editor</div>
+      <div
+        :style="{background: comp == 'rs' ? $store.state.theme.global.secondary_bg_color : ''}"
+        @click="comp = 'rs'"
+        class="pad050 pointer"
+      >Route settings</div>
+      <div
+        :style="{background: comp == 'props' ? $store.state.theme.global.secondary_bg_color : ''}"
+        @click="comp = 'props'"
+        class="pad050 pointer"
+      >Properties</div>
+      <div :style="{background: comp == 'globals' ? $store.state.theme.global.secondary_bg_color : ''}" @click="comp = 'globals'" class="pad050 pointer">Globals</div>
     </div>
   </div>
 </template>
@@ -26,6 +39,7 @@
 import editor from "./editor-view";
 import route_settings from "./route-settings-view";
 import properties from "./props-view";
+import globals from "./globals";
 
 export default {
   props: ["data", "my_pane_index"],
@@ -38,7 +52,8 @@ export default {
   components: {
     editor,
     rs: route_settings,
-    props: properties
+    props: properties,
+    globals
   },
   created() {
     console.log("fetching page contents");
