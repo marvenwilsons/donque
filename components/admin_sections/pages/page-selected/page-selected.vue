@@ -17,19 +17,23 @@
       <div
         :style="{background: comp == 'editor' ? $store.state.theme.global.secondary_bg_color : ''}"
         @click="comp = 'editor'"
-        class="pad050 pointer"
+        class="pad025 pointer margin025 padleft050 padright050"
       >Editor</div>
       <div
         :style="{background: comp == 'rs' ? $store.state.theme.global.secondary_bg_color : ''}"
         @click="comp = 'rs'"
-        class="pad050 pointer"
+        class="pad025 pointer margin025 padleft050 padright050"
       >Route settings</div>
       <div
         :style="{background: comp == 'props' ? $store.state.theme.global.secondary_bg_color : ''}"
         @click="comp = 'props'"
-        class="pad050 pointer"
+        class="pad025 pointer margin025 padleft050 padright050"
       >Properties</div>
-      <div :style="{background: comp == 'globals' ? $store.state.theme.global.secondary_bg_color : ''}" @click="comp = 'globals'" class="pad050 pointer">Globals</div>
+      <div
+        :style="{background: comp == 'globals' ? $store.state.theme.global.secondary_bg_color : ''}"
+        @click="comp = 'globals'"
+        class="pad025 pointer margin025 padleft050 padright050"
+      >Globals</div>
     </div>
   </div>
 </template>

@@ -270,7 +270,7 @@
             class="pad050 spacebetween flex st-viz-bnnr"
           >
             <div>
-              <strong>Custom Style</strong>
+              <strong>Custom Inline Style</strong>
             </div>
              <div class="flex flexcenter">
               <div class="marginright050 pointer padleft025 padright025">
@@ -299,6 +299,48 @@
           >
             <div>
               <strong>Other Attributes</strong>
+            </div>
+             <div class="flex flexcenter">
+              <div class="marginright050 pointer padleft025 padright025">
+                save to stage
+              </div>
+              <i class="fas fa-angle-down"></i>
+            </div>
+          </div>
+          <div class="pad125">
+            <div>
+              <div class="padbottom050">
+                <strong>
+                  <div>Id</div>
+                </strong>
+                <input type="text" />
+              </div>
+              <div class="padbottom025">
+                <strong>
+                  <div>role</div>
+                </strong>
+                <input type="text" />
+              </div>
+              <div class="padbottom025">
+                <strong>
+                  <div>data-attr</div>
+                </strong>
+                <input type="text" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- transform -->
+        <div
+          :style="{border: `1px solid ${$store.state.theme.global.border_color}`}"
+          class="marginbottom050"
+        >
+          <div
+            :style="{background:`${$store.state.theme.global.secondary_bg_color}`}"
+            class="pad050 spacebetween flex st-viz-bnnr"
+          >
+            <div>
+              <strong>Transform</strong>
             </div>
              <div class="flex flexcenter">
               <div class="marginright050 pointer padleft025 padright025">

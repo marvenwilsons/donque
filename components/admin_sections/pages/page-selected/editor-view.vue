@@ -482,6 +482,7 @@ export default {
   },
   methods: {
     maximize() {
+      this.closeOpt()
       this.$store.commit("modal/set_modal", {
         head: "testing",
         body: "dq_page_max_editor",
