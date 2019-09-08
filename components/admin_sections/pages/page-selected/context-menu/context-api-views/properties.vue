@@ -20,13 +20,13 @@
             </div>
           </div>
           <div class="pad050">
-            <!-- <textarea
+            <textarea
               v-model="text_content"
               style="resize: vertical"
               name="text_conent"
               class="pad050 fullwidth"
               rows="3"
-            ></textarea> -->
+            ></textarea>
           </div>
         </div>
 
@@ -50,12 +50,13 @@
             </div>
           </div>
           <div class="pad050">
-            <textarea
+            <!-- <textarea
               style="resize: vertical"
               name="custom_Style"
               class="pad050 fullwidth"
               rows="10"
-            ></textarea>
+            ></textarea> -->
+            <monaco></monaco>
           </div>
         </div>
         <!-- Other attributes -->
@@ -169,36 +170,17 @@
 </template>
 
 <script>
+import monaco from './monaco'
+
 export default {
   // @note wire up all of the inputs
-  data() {
-    return {
-      // text content
+  data: () => ({
       text_content: "hello world!",
 
-      // margins model
-      margins: {
-        top: undefined,
-        bottom: undefined,
-        left: undefined,
-        right: undefined
-      },
-
-      // paddings model
-      paddings: {
-        top: undefined,
-        bottom: undefined,
-        left: undefined,
-        right: undefined
-      },
-
-      // Dimensions
-      dimensions: {
-        width: undefined,
-        height: undefined
-      }
-    };
-  }
+  }),
+  components: {
+    monaco
+  },
 };
 </script>
 

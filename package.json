@@ -17,8 +17,10 @@
     "gsap": "^2.0.2",
     "jsonwebtoken": "^8.4.0",
     "moment": "^2.23.0",
+    "monaco-editor-webpack-plugin": "^1.7.0",
     "mongodb": "^3.1.13",
     "nuxt": "^2.7.1",
+    "vue-monaco": "^1.1.0",
     "vue-socket.io": "^3.0.4",
     "ws": "^6.1.2"
   },

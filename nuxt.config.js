@@ -1,5 +1,7 @@
 const pkg = require('./package')
 const bodyParser = require('body-parser')
+const MonacoEditorPlugin = require('monaco-editor-webpack-plugin')
+const webpack = require('webpack');
 
 
 module.exports = {
@@ -62,8 +64,15 @@ module.exports = {
     /*
     ** You can extend webpack config here
     */
+    // vendor: ['monaco-editor'],
     extend(config, ctx) {
-    }
+      config.plugins.push(
+        new MonacoEditorPlugin(webpack)
+      )
+      // if (ctx.isClient) {
+      //   config.target = 'electron-renderer'
+      // }
+    },
   },
   serverMiddleware: [
     bodyParser.json(),
