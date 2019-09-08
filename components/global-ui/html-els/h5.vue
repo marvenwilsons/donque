@@ -8,7 +8,7 @@
         :els="html_el.els"
         :style="html_el.inlineStyle"
         :class="html_el.classList"
-        >{{html_el.innerText}}</div>
+        >{{html_el.properties.text_content}}</div>
     </h5>
 </template>
 
