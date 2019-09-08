@@ -9,7 +9,7 @@
       :els="el.els"
       :style="el.inlineStyle"
       :class="el.classList"
-      >{{el.innerText}} </div>
+      >{{el.properties.text_content}} </div>
     </section>
   </div>
 </template>

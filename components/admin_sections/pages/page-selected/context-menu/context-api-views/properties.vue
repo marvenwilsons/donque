@@ -13,9 +13,10 @@
           >
             <strong>Text Content</strong>
             <div class="flex flexcenter">
-              <div class="marginright050 pointer padleft025 padright025">
-                save to stage
-              </div>
+              <div
+                @click="stageChanges(text_content)"
+                class="marginright050 pointer padleft025 padright025"
+              >save to stage</div>
               <i class="fas fa-angle-down"></i>
             </div>
           </div>
@@ -42,21 +43,16 @@
             <div>
               <strong>Custom Inline Style</strong>
             </div>
-             <div class="flex flexcenter">
-              <div class="marginright050 pointer padleft025 padright025">
-                save to stage
-              </div>
+            <div class="flex flexcenter">
+              <div
+                @click="stateMonacoChanges()"
+                class="marginright050 pointer padleft025 padright025"
+              >save to stage</div>
               <i class="fas fa-angle-down"></i>
             </div>
           </div>
           <div class="pad050">
-            <!-- <textarea
-              style="resize: vertical"
-              name="custom_Style"
-              class="pad050 fullwidth"
-              rows="10"
-            ></textarea> -->
-            <monaco></monaco>
+            <monaco :trigger="monaco_trigger"></monaco>
           </div>
         </div>
         <!-- Other attributes -->
@@ -71,10 +67,8 @@
             <div>
               <strong>Other Attributes</strong>
             </div>
-             <div class="flex flexcenter">
-              <div class="marginright050 pointer padleft025 padright025">
-                save to stage
-              </div>
+            <div class="flex flexcenter">
+              <div class="marginright050 pointer padleft025 padright025">save to stage</div>
               <i class="fas fa-angle-down"></i>
             </div>
           </div>
@@ -113,10 +107,8 @@
             <div>
               <strong>Transform</strong>
             </div>
-             <div class="flex flexcenter">
-              <div class="marginright050 pointer padleft025 padright025">
-                save to stage
-              </div>
+            <div class="flex flexcenter">
+              <div class="marginright050 pointer padleft025 padright025">save to stage</div>
               <i class="fas fa-angle-down"></i>
             </div>
           </div>
@@ -155,10 +147,8 @@
             <div>
               <strong>Stat</strong>
             </div>
-             <div class="flex flexcenter">
-              <div class="marginright050 pointer padleft025 padright025">
-                save to stage
-              </div>
+            <div class="flex flexcenter">
+              <div class="marginright050 pointer padleft025 padright025">save to stage</div>
               <i class="fas fa-angle-down"></i>
             </div>
           </div>
@@ -170,23 +160,46 @@
 </template>
 
 <script>
-import monaco from './monaco'
+import monaco from "./monaco";
 
 export default {
-  // @note wire up all of the inputs
-  data: () => ({
-      text_content: "",
+  props: ["data"],
 
+  data: () => ({
+    text_content: "",
+    monaco_trigger: false
   }),
 
   methods: {
-    
+    stageChanges(val) {
+      this.$store.dispatch("pages/addrs_finder_mutator", {
+        uid: `${this.data.index}--${this.data.uid}`,
+        fn: locator => {
+          this.$store.commit("pages/update_section", {
+            desc: `Added Text Content to ${locator}`,
+            locator,
+            scoped_variable: this.text_content,
+            exec_on_prop(prop, tag, scoped_variable, obj) {
+              console.log(obj);
+              obj.properties["text_content"] = scoped_variable;
+            }
+          });
+        }
+      });
+    },
+
+    stateMonacoChanges() {
+      this.monaco_trigger = true;
+    }
   },
 
+  mounted() {
+    this.text_content = this.data.properties.text_content;
+  },
 
   components: {
     monaco
-  },
+  }
 };
 </script>
 

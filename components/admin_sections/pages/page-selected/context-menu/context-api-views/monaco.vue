@@ -19,6 +19,8 @@ import MonacoEditor from "vue-monaco";
 
 
 export default {
+  props: ['trigger'],
+
   components: {
     MonacoEditor
   },
@@ -29,19 +31,24 @@ export default {
       width: "100%",
       ready: false,
       show: false,
-      options: {}
+      options: {},
+      final_value: undefined
     };
   },
 
   methods: {
     onChange(value) {
-      console.log(value);
+      this.final_value = value
     },
   },
 
-  mounted() {
-console.log(MonacoEditor)
+  watch: {
+    trigger() {
+      alert(this.final_value)
+    }
+  },
 
+  mounted() {
       // for some reason the width of the editor wont get to 100%
       // if I dont refresh the editor 2 times.
     setTimeout(() => {
