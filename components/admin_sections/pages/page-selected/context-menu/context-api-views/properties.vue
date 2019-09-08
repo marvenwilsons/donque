@@ -175,9 +175,15 @@ import monaco from './monaco'
 export default {
   // @note wire up all of the inputs
   data: () => ({
-      text_content: "hello world!",
+      text_content: "",
 
   }),
+
+  methods: {
+    
+  },
+
+
   components: {
     monaco
   },

@@ -3,10 +3,9 @@
     <MonacoEditor
       v-if="ready"
       v-show="show"
-      theme="vs-dark"
       class="mo-editor"
       v-model="code"
-      language="javascript"
+      language="css"
       editorMounted="e_mounted"
       :options="options"
       @change="onChange"
@@ -26,7 +25,7 @@ export default {
 
   data() {
     return {
-      code: `// Write Custom inline style inside the object \n// use camel case, DO NOT USE dashes \n\n{}`,
+      code: `customInlineStyle{\n\t\n}`,
       width: "100%",
       ready: false,
       show: false,
