@@ -62,24 +62,29 @@ export default {
             }
           });
 
-
         this.$store.dispatch("pages/addrs_finder_mutator", {
           uid: `${this.data.index}--${this.data.uid}`,
           fn: locator => {
             this.$store.commit("pages/update_section", {
               desc: `Added Inline style ${locator}`,
               locator,
-              scoped_variable: {final_obj, code: this.final_value},
+              scoped_variable: { final_obj, code: this.final_value },
               exec_on_prop(prop, tag, scoped_variable, obj) {
-                obj.inlineStyle = scoped_variable.final_obj
-                obj.inlineCode = scoped_variable.code
+                obj.inlineStyle = scoped_variable.final_obj;
+                obj.inlineCode = scoped_variable.code;
               }
             });
           }
         });
-        
       } else {
-        // handle undefined value
+        this.$store.commit("modal/set_modal", {
+          head: "dqPageLogicError",
+          body: "There is currently nothing to save",
+          config: {
+            ui_type: "err",
+            closable: false
+          }
+        });
       }
     }
   },
@@ -97,8 +102,8 @@ export default {
         this.ready = true;
         this.show = true;
 
-        if(this.data.inlineCode){
-          this.code = this.data.inlineCode
+        if (this.data.inlineCode) {
+          this.code = this.data.inlineCode;
         }
       }, 200);
     }, 0);
