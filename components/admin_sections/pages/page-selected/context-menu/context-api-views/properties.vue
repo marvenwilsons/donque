@@ -52,7 +52,7 @@
             </div>
           </div>
           <div class="pad050">
-            <monaco :trigger="monaco_trigger"></monaco>
+            <monaco :data="data" :trigger="monaco_trigger"></monaco>
           </div>
         </div>
         <!-- Other attributes -->
@@ -180,7 +180,6 @@ export default {
             locator,
             scoped_variable: this.text_content,
             exec_on_prop(prop, tag, scoped_variable, obj) {
-              console.log(obj);
               obj.properties["text_content"] = scoped_variable;
             }
           });
@@ -189,7 +188,7 @@ export default {
     },
 
     stateMonacoChanges() {
-      this.monaco_trigger = true;
+      this.monaco_trigger = !this.monaco_trigger;
     }
   },
 

@@ -17,9 +17,8 @@
 //https://www.npmjs.com/package/monaco-editor-vue
 import MonacoEditor from "vue-monaco";
 
-
 export default {
-  props: ['trigger'],
+  props: ["trigger", "data"],
 
   components: {
     MonacoEditor
@@ -38,19 +37,56 @@ export default {
 
   methods: {
     onChange(value) {
-      this.final_value = value
-    },
+      this.final_value = value;
+    }
   },
 
   watch: {
     trigger() {
-      alert(this.final_value)
+      // alert(this.final_value)
+      if (this.final_value) {
+        let final_obj = {};
+        const customInlineValue = this.final_value.split(
+          "customInlineStyle"
+        )[1];
+        const trimmed = customInlineValue
+          .replace(/\r?\n|\r/g, "")
+          .replace(/\s/g, "")
+          .replace(/;/g, "_")
+          .replace(/[{-}]/g, "")
+          .split("_")
+          .map(e => {
+            const every_e = e.replace(":", " ").split(" ");
+            if (every_e[0] != "") {
+              final_obj[`${every_e[0]}`] = every_e[1];
+            }
+          });
+
+
+        this.$store.dispatch("pages/addrs_finder_mutator", {
+          uid: `${this.data.index}--${this.data.uid}`,
+          fn: locator => {
+            this.$store.commit("pages/update_section", {
+              desc: `Added Inline style ${locator}`,
+              locator,
+              scoped_variable: {final_obj, code: this.final_value},
+              exec_on_prop(prop, tag, scoped_variable, obj) {
+                obj.inlineStyle = scoped_variable.final_obj
+                obj.inlineCode = scoped_variable.code
+              }
+            });
+          }
+        });
+        
+      } else {
+        // handle undefined value
+      }
     }
   },
 
   mounted() {
-      // for some reason the width of the editor wont get to 100%
-      // if I dont refresh the editor 2 times.
+    // for some reason the width of the editor wont get to 100%
+    // if I dont refresh the editor 2 times.
     setTimeout(() => {
       this.ready = true;
       setTimeout(() => {
@@ -60,6 +96,10 @@ export default {
       setTimeout(() => {
         this.ready = true;
         this.show = true;
+
+        if(this.data.inlineCode){
+          this.code = this.data.inlineCode
+        }
       }, 200);
     }, 0);
   }
