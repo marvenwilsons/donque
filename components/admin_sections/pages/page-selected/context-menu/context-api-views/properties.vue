@@ -51,8 +51,32 @@
               <i class="fas fa-angle-down"></i>
             </div>
           </div>
-          <div class="pad050">
-            <monaco :data="data" :trigger="monaco_trigger"></monaco>
+          <div>
+            <dqTab
+              :tabs="['inline styles', 'editor']"
+              :default="0"
+              :options="{
+                borderColor: $store.state.theme.global.border_color,
+                activeColor: $store.state.theme.global.secondary_bg_color,
+                activeTextColor: 'inherit'
+              }"
+            >
+              <div class="pad125" slot="inline styles">
+                <objectifyFlatSettings
+                  @onChange="attrChange"
+                  @onError="err"
+                  operation="r"
+                  :inputData="attr"
+                  :title="'Inline Style'"
+                  :options="{
+                borderColor: $store.state.theme.global.border_color
+              }"
+                ></objectifyFlatSettings>
+              </div>
+              <div slot="editor">
+                <monacoInlineStyle :data="data" :trigger="monaco_trigger"></monacoInlineStyle>
+              </div>
+            </dqTab>
           </div>
         </div>
         <!-- Other attributes -->
@@ -65,34 +89,36 @@
             class="pad050 spacebetween flex st-viz-bnnr"
           >
             <div>
-              <strong>Other Attributes</strong>
+              <strong>Attributes</strong>
             </div>
             <div class="flex flexcenter">
               <div class="marginright050 pointer padleft025 padright025">save to stage</div>
               <i class="fas fa-angle-down"></i>
             </div>
           </div>
-          <div class="pad125">
-            <div>
-              <div class="padbottom050">
-                <strong>
-                  <div>Id</div>
-                </strong>
-                <input type="text" />
+          <div>
+            <dqTab
+              :tabs="['Global Attributes', 'Native Attributes']"
+              :default="0"
+              :options="{
+                borderColor: $store.state.theme.global.border_color,
+                activeColor: $store.state.theme.global.secondary_bg_color,
+                activeTextColor: 'inherit'
+              }"
+            >
+              <div class="pad125" slot="Global Attributes" >
+                <objectifyFlatSettings
+                  @onChange="attrChange"
+                  @onError="err"
+                  operation="rw"
+                  :inputData="attr"
+                  :title="'Global Attributes'"
+                  :options="{
+                borderColor: $store.state.theme.global.border_color
+              }"
+                ></objectifyFlatSettings>
               </div>
-              <div class="padbottom025">
-                <strong>
-                  <div>role</div>
-                </strong>
-                <input type="text" />
-              </div>
-              <div class="padbottom025">
-                <strong>
-                  <div>data-attr</div>
-                </strong>
-                <input type="text" />
-              </div>
-            </div>
+            </dqTab>
           </div>
         </div>
         <!-- transform -->
@@ -113,26 +139,16 @@
             </div>
           </div>
           <div class="pad125">
-            <div>
-              <div class="padbottom050">
-                <strong>
-                  <div>Id</div>
-                </strong>
-                <input type="text" />
-              </div>
-              <div class="padbottom025">
-                <strong>
-                  <div>role</div>
-                </strong>
-                <input type="text" />
-              </div>
-              <div class="padbottom025">
-                <strong>
-                  <div>data-attr</div>
-                </strong>
-                <input type="text" />
-              </div>
-            </div>
+            <objectifyFlatSettings
+              @onChange="attrChange"
+              @onError="err"
+              operation="rw"
+              :inputData="transform"
+              :title="'Transform'"
+              :options="{
+                borderColor: $store.state.theme.global.border_color
+              }"
+            ></objectifyFlatSettings>
           </div>
         </div>
         <!-- Stat -->
@@ -160,17 +176,126 @@
 </template>
 
 <script>
-import monaco from "./monaco";
+import monaco_inlineStyle from "./monaco_inline";
 
 export default {
   props: ["data"],
 
   data: () => ({
     text_content: "",
-    monaco_trigger: false
+    monaco_trigger: false,
+    attr: {
+      id: {
+        type: "string",
+        minChar: 10,
+        maxChar: 15,
+        allowSpecialChars: false,
+        allowWhiteSpace: false,
+        default: null
+      },
+      name: {
+        type: "string",
+        minChar: 10,
+        maxChar: 15,
+        allowSpecialChars: false,
+        allowWhiteSpace: false,
+        default: null
+      },
+      lang: {
+        type: "string",
+        minChar: 10,
+        maxChar: 15,
+        allowSpecialChars: false,
+        allowWhiteSpace: false,
+        default: null
+      },
+      tabindex: {
+        type: "number",
+        min: 0,
+        max: 999,
+        step: 1,
+        default: null
+      },
+      draggable: {
+        type: "select",
+        options: [true, false],
+        default: 1
+      },
+      dropzone: {
+        type: "select",
+        options: [true, false],
+        default: 1
+      },
+      contenteditable: {
+        type: "select",
+        options: [true, false],
+        default: 1
+      },
+      dir: {
+        type: "select",
+        options: [null, "ltr", "rtl", "auto"],
+        default: 0
+      }
+    },
+    transform: {
+      transformOriginX: {
+        type: "select",
+        options: [null, "top", "center", "bottom"],
+        default: 0
+      },
+      transformOriginY: {
+        type: "select",
+        options: [null, "left", "center", "right"],
+        default: 0
+      },
+      perspective: {
+        type: "number",
+        min: 0,
+        max: 999,
+        step: 1,
+        default: null
+      },
+      rotateX: {
+        type: "number",
+        min: -180,
+        max: 180,
+        step: 1,
+        default: 0
+      },
+      rotateY: {
+        type: "number",
+        min: -180,
+        max: 180,
+        step: 1,
+        default: 0
+      },
+      rotateZ: {
+        type: "number",
+        min: -360,
+        max: 360,
+        step: 1,
+        default: 0
+      },
+      translateZ: {
+        type: "number",
+        min: -360,
+        max: 360,
+        step: 1,
+        default: 0
+      }
+    }
   }),
 
   methods: {
+    // Objectify
+    err(err) {
+      console.log(err);
+    },
+    attrChange(val) {
+      console.log(val);
+    },
+
+    //
     stageChanges(val) {
       this.$store.dispatch("pages/addrs_finder_mutator", {
         uid: `${this.data.index}--${this.data.uid}`,
@@ -197,7 +322,7 @@ export default {
   },
 
   components: {
-    monaco
+    monacoInlineStyle: monaco_inlineStyle
   }
 };
 </script>

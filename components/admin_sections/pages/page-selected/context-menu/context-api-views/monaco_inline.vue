@@ -113,6 +113,6 @@ export default {
 
 <style>
 .mo-editor {
-  height: 300px;
+  height: 200px;
 }
 </style>

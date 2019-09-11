@@ -29,7 +29,7 @@ export default {
       cur_actv: undefined,
       active: undefined,
       hoverBgColor: this.$store.state.theme.notify_tile_body_bg_hover_color,
-      opts: ["Page Components", "Globals", "Navigation", "404 Page"]
+      opts: ["Page Components", "Globals", "Navigation", "Modal Views", "404 Page"]
     };
   },
   beforeCreate() {
