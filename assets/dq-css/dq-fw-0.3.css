@@ -316,9 +316,16 @@ img {
   -webkit-appearance: none;
   -moz-appearance: none;
 }
+.canceldef {
+  border-style: none;
+  outline: none;
+}
 
 .pointer {
   cursor: pointer;
+}
+.colorinherit {
+  color: inherit;
 }
 
 .err {

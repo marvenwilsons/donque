@@ -218,6 +218,13 @@
   -webkit-appearance: none;
   -moz-appearance: none;
 }
+.canceldef {
+  border-style: none;
+  outline: none;
+}
+.colorinherit{
+  color: inherit;
+}
 .pointer {
   cursor: pointer;
 }
