@@ -1,11 +1,12 @@
 <template>
   <div>
     <div>{{title}}</div>
-    <span v-if="validation_err" class="err">
-      <strong>Error:</strong>
-      {{validation_err}}
-    </span>
-    {{options_defaults.padding}}
+    <div class="marginbottom050">
+      <span v-if="validation_err" class="err backgrounderr bordererr">
+        <strong>Error:</strong>
+        {{validation_err}}
+      </span>
+    </div>
     <div
       :style="{borderTop:`1px solid ${options_defaults.borderColor}`, borderLeft:`1px solid ${options_defaults.borderColor}`, borderRight:`1px solid ${options_defaults.borderColor}`}"
     >
@@ -22,7 +23,7 @@
         <div
           :style="{borderBottom:`1px solid ${options_defaults.borderColor}`,  borderLeft:`1px solid ${options_defaults.borderColor}`}"
           v-if="operation == 'r'"
-          class="flex2 padleft025"
+          :class="['flex2' ,'padleft025', options_defaults.padding]"
         >{{objData}}</div>
         <div
           :style="{borderBottom:`1px solid ${options_defaults.borderColor}`,  borderLeft:`1px solid ${options_defaults.borderColor}`}"
@@ -36,7 +37,11 @@
               style="border:none; background:white; color:inherit"
               class="borderred fullwidth canceldef pointer"
             >
-              <option v-for="opts in inputData[objIndex].options" :key="opts">{{opts}}</option>
+              <option
+                :class="[options_defaults.padding]"
+                v-for="opts in inputData[objIndex].options"
+                :key="opts"
+              >{{opts}}</option>
             </select>
           </div>
           <div :class="[options_defaults.padding]" v-if="inputData[objIndex].type == 'string'">
@@ -158,8 +163,7 @@ export default {
               } else {
                 return {
                   status: false,
-                  msg:
-                    "Character length is lesser than the defined minimum character required"
+                  msg: `Character length is lesser than the defined minimum of ${arg.minChar} characters required`
                 };
               }
             },
@@ -264,7 +268,7 @@ export default {
           break;
       }
     }
-    this.options_defaults.borderColor = this.options.borderColor
+    this.options_defaults.borderColor = this.options.borderColor;
     this.initial_object_data = render_obj;
   }
 };

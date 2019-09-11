@@ -69,8 +69,9 @@
                   :inputData="attr"
                   :title="'Inline Style'"
                   :options="{
-                borderColor: $store.state.theme.global.border_color
-              }"
+                    borderColor: $store.state.theme.global.border_color,
+                    padding: 's'
+                  }"
                 ></objectifyFlatSettings>
               </div>
               <div slot="editor">
@@ -106,7 +107,7 @@
                 activeTextColor: 'inherit'
               }"
             >
-              <div class="pad125" slot="Global Attributes" >
+              <div class="pad125" slot="Global Attributes">
                 <objectifyFlatSettings
                   @onChange="attrChange"
                   @onError="err"
@@ -114,8 +115,22 @@
                   :inputData="attr"
                   :title="'Global Attributes'"
                   :options="{
-                borderColor: $store.state.theme.global.border_color
-              }"
+                      padding: 's',
+                      borderColor: $store.state.theme.global.border_color
+                    }"
+                ></objectifyFlatSettings>
+              </div>
+              <div class="pad125" slot="Native Attributes">
+                <objectifyFlatSettings
+                  @onChange="attrChange"
+                  @onError="err"
+                  operation="rw"
+                  :inputData="attr"
+                  :title="'Native Attributes'"
+                  :options="{
+                    borderColor: $store.state.theme.global.border_color,
+                    padding: 's'
+                  }"
                 ></objectifyFlatSettings>
               </div>
             </dqTab>
@@ -146,7 +161,8 @@
               :inputData="transform"
               :title="'Transform'"
               :options="{
-                borderColor: $store.state.theme.global.border_color
+                borderColor: $store.state.theme.global.border_color,
+                padding: 's'
               }"
             ></objectifyFlatSettings>
           </div>
