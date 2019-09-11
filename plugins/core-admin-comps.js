@@ -16,6 +16,8 @@ import html_main from "@/components/global-ui/html-els/main.vue";
 import html_nav from "@/components/global-ui/html-els/nav.vue";
 import html_span from "@/components/global-ui/html-els/span.vue";
 
+import objectifyFlatSettings from "@/components/global-ui/objectify/objectify-flat-settings.vue";
+
 
 Vue.component('spinner', spinner)
 Vue.component('html_p', html_p)
@@ -32,3 +34,5 @@ Vue.component('html_h6', html_h6)
 Vue.component('html_main', html_main)
 Vue.component('html_nav', html_nav)
 Vue.component('html_span', html_span)
+
+Vue.component('objectifyFlatSettings', objectifyFlatSettings)
