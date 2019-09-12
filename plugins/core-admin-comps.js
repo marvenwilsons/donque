@@ -18,6 +18,7 @@ import html_span from "@/components/global-ui/html-els/span.vue";
 
 import objectifyFlatSettings from "@/components/global-ui/objectify/objectify-flat-settings.vue";
 import dqTab from "@/components/global-ui/tabs/dq-tab.vue";
+import saveToStagePane from "@/components/global-ui/dq-page/panes/stage-pane.vue";
 
 
 Vue.component('spinner', spinner)
@@ -38,3 +39,4 @@ Vue.component('html_span', html_span)
 
 Vue.component('objectifyFlatSettings', objectifyFlatSettings)
 Vue.component('dqTab', dqTab)
+Vue.component('saveToStagePane', saveToStagePane)
