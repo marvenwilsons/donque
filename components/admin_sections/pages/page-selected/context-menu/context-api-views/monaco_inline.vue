@@ -6,6 +6,7 @@
       class="mo-editor"
       v-model="code"
       language="css"
+      height="100px"
       editorMounted="e_mounted"
       :options="options"
       @change="onChange"
