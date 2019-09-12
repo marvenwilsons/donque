@@ -14,8 +14,9 @@
 ></objectifyFlatSettings>
 
 ## Events      
-    onChange
-    onError
+    Event Name      Carried Value Type      Props
+    onChange        -                       -
+    onError         Object                  [ Msg, Obj, Valid, App, onMethod ]
 
 ## Input props         Type        Required
     inputData           object      yes
