@@ -28,7 +28,7 @@
               >
                 <div
                   :style="{...$store.state.theme.modal_head_title_style}"
-                  class="flex10 padleft025"
+                  class="flex10 padleft025 padbottom025"
                 >
                   <strong>{{$store.state.modal.head}}</strong>
                 </div>
@@ -62,7 +62,7 @@
                     <div
                       @click="$store.commit('nextAction')"
                       :style="{...$store.state.theme.modal_button_style}"
-                      class="pad025 padleft050 padright050"
+                      class="pad025 padleft050 padright050 margintop050"
                     >
                       <strong>Okay</strong>
                     </div>
