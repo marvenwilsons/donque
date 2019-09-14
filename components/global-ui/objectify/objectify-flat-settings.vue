@@ -1,8 +1,8 @@
 <template>
   <div>
     <div>{{title}}</div>
-    <div class="marginbottom050">
-      <span v-if="validation_err" class="err backgrounderr bordererr">
+    <div v-if="validation_err" class="marginbottom050">
+      <span class="err backgrounderr bordererr">
         <strong>Error:</strong>
         {{validation_err}}
       </span>
@@ -155,24 +155,34 @@ export default {
           const copy = this.inputData;
 
           const stringValidation = {
-            minChar(val, arg) {
+            minChar(val, arg, err) {
               if (val.length > arg.minChar) {
                 return {
                   status: true
                 };
               } else {
+                err({
+                  Msg: `Character length is lesser than the defined minimum of ${arg.minChar} characters required`,
+                  App: "objectfySingle",
+                  onMethod: "change"
+                });
                 return {
                   status: false,
                   msg: `Character length is lesser than the defined minimum of ${arg.minChar} characters required`
                 };
               }
             },
-            maxChar(val, arg) {
+            maxChar(val, arg, err) {
               if (val.length < arg.maxChar) {
                 return {
                   status: true
                 };
               } else {
+                err({
+                  Msg: `Character length is greater than the defined maximum character required`,
+                  App: "objectfySingle",
+                  onMethod: "change"
+                });
                 return {
                   status: false,
                   msg:
@@ -180,10 +190,15 @@ export default {
                 };
               }
             },
-            allowSpecialChars(val, arg) {
+            allowSpecialChars(val, arg, err) {
               if (!arg.allowSpecialChars) {
                 const regex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/gim;
                 if (regex.exec(val) != null) {
+                  err({
+                    Msg: `Special character detected`,
+                    App: "objectfySingle",
+                    onMethod: "change"
+                  });
                   return {
                     status: false,
                     msg: "Special character detected"
@@ -195,9 +210,14 @@ export default {
                 }
               }
             },
-            allowWhiteSpace(val, arg) {
+            allowWhiteSpace(val, arg, err) {
               if (!arg.allowWhiteSpace) {
                 if (val.indexOf(" ") != -1) {
+                  err({
+                    Msg: `White space detected`,
+                    App: "objectfySingle",
+                    onMethod: "change"
+                  });
                   return {
                     status: false,
                     msg: "White space detected"
@@ -213,7 +233,9 @@ export default {
 
           const final = Object.keys(this.inputData[key]).map(e => {
             if (validationSet.has(e)) {
-              const exec = stringValidation[e](val, this.inputData[key]);
+              const exec = stringValidation[e](val, this.inputData[key], err =>
+                this.$emit("onError", err)
+              );
               if (!exec.status) {
                 this.validation_target = key;
                 return (this.validation_err = exec.msg);
@@ -269,7 +291,12 @@ export default {
       }
     }
     this.options_defaults.borderColor = this.options.borderColor;
-    this.initial_object_data = render_obj;
+
+    if (this.operation == "r") {
+      this.initial_object_data = this.inputData;
+    } else {
+      this.initial_object_data = render_obj;
+    }
   }
 };
 </script>
