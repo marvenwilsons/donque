@@ -1,5 +1,9 @@
 <template>
-  <div :style="{color:$store.state.theme.global.secondary_text_color}" id="dq-page-editor" class="flex relative fullwidth">
+  <div
+    :style="{color:$store.state.theme.global.secondary_text_color}"
+    id="dq-page-editor"
+    class="flex relative fullwidth"
+  >
     <main class="flex fullwidth">
       <div class="fullwidth flex">
         <div
@@ -51,15 +55,17 @@
             :style="{filter: sec_modal_viz ? 'blur(2px)' : '', background:`${$store.state.theme.global.secondary_bg_color}`}"
             class="pad050 spacebetween flex st-viz-bnnr"
           >
-            <div>
-              DQ Page Structure & Semantic Editor 1.0
-            </div>
+            <div>DQ Page Structure & Semantic Editor 1.0</div>
             <div>
               <i
                 @click="$store.commit('pages/save_stage',{path: data})"
                 class="fas fa-save pointer padright025"
               ></i>
-              <i v-if="!$store.state.pages.isMaximized" @click="maximize" class="far fa-window-maximize pointer"></i>
+              <i
+                v-if="!$store.state.pages.isMaximized"
+                @click="maximize"
+                class="far fa-window-maximize pointer"
+              ></i>
             </div>
           </div>
 
@@ -141,7 +147,7 @@
                         }"
                       class="padright025 padleft050 pointer padtop025"
                     >{{s_i}}</div>
-                    <div id="dq-viz-host"  :data="s_i" :class="[`viz-host-${s_i}`, 'flex']">
+                    <div id="dq-viz-host" :data="s_i" :class="[`viz-host-${s_i}`, 'flex']">
                       <div style="min-width:82px;" class="dq-strvw-el pointer">
                         <div
                           @mouseenter="showInfoBox({tag:'root_Template-wrapper'})"
@@ -354,6 +360,7 @@ import addNote from "./context-menu/context-api-views/addnotes";
 import editRole from "./context-menu/context-api-views/editRole";
 
 import { TweenMax, TimelineLite, TweenLite } from "gsap";
+import { mapGetters } from "vuex";
 
 export default {
   props: ["page_data", "data"],
@@ -401,7 +408,13 @@ export default {
     },
     api_view() {
       return this.$store.state.pages.api_view;
-    }
+    },
+    api_view_el() {
+      return this.$store.state.pages.api_view_el;
+    },
+    ...mapGetters({
+      root_: "pages/get_root"
+    })
   },
   data() {
     return {
@@ -482,7 +495,7 @@ export default {
   },
   methods: {
     maximize() {
-      this.closeOpt()
+      this.closeOpt();
       this.$store.commit("modal/set_modal", {
         head: "testing",
         body: "dq_page_max_editor",
@@ -731,6 +744,43 @@ export default {
 
       this.scrollToEnd();
       this.scrollToEnd();
+    },
+    root_(n, o) {
+      /**
+       * every after save, and after every re fitch,
+       * the stages array gets cleared and the root prop gets updated
+       */
+      if (n) {
+        let final = undefined;
+        const findObj = (o, id) => {
+          if (o === null) return null;
+
+          var output, v, key;
+          output = Array.isArray(o) ? [] : {};
+          for (key in o) {
+            if (o.uid == id) {
+              final = o;
+              return;
+            }
+
+            v = o[key];
+            output[key] = typeof v === "object" ? findObj(v, id) : v;
+          }
+        };
+
+        if (this.$store.state.pages.temp_id) {
+          findObj(n.sections, this.$store.state.pages.temp_id.uid);
+
+          const cur_obj = {
+            index: this.$store.state.pages.temp_id.index,
+            ...final
+          };
+          this.$store.commit("pages/set_api_view", {
+            uid: this.$store.state.pages.temp_id.uid,
+            el: cur_obj
+          });
+        }
+      }
     },
     api_view() {
       if (this.$store.state.pages.api_view) {

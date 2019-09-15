@@ -44,6 +44,7 @@ export const state = () => ({
     api_view_uid: undefined,
     api_view_q: undefined,
     isMaximized: false,
+    temp_id: undefined,
 
     // info box
     info_box_data: undefined,
@@ -55,7 +56,10 @@ export const state = () => ({
 
 export const getters = {
     routes: state => state.route,
-    travers_view_state: state => state.travers_view
+    travers_view_state: state => state.travers_view,
+    get_root (state) {
+        return state.root
+    }
 }
 
 export const mutations = {
@@ -124,6 +128,9 @@ export const mutations = {
         state.api_view = undefined
         state.api_view_el = undefined
         state.api_view_uid = undefined
+    },
+    set_temp_id(state,id) {
+        state.temp_id = id
     },
 
     //

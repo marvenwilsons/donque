@@ -18,7 +18,17 @@
       :key="`--slots-${tab_i}}`"
       class="fullwidth"
     >
-      <slot v-if="active == tab" :name="tab"></slot>
+      <div v-if="toggleMode == 'showhide'" v-show="active === tab">
+        <slot :name="tab"></slot>
+      </div>
+
+      <div v-if="toggleMode == 'rerender' && active === tab">
+        <slot :name="tab"></slot>
+      </div>
+
+      <div v-if="toggleMode == 'opacity'"  :style="{opacity: active === tab ? 1 : 0}" :class="[active === tab ? 'block' : 'absolute']" >
+        <slot :name="tab"></slot>
+      </div>
     </div>
   </div>
 </template>
@@ -27,14 +37,15 @@
 import { TweenMax, TimelineLite, TweenLite } from "gsap";
 
 export default {
-  props: ["tabs", "options", "default"],
+  props: ["tabs", "options", "default", "toggleMode"],
   data: () => ({
     active: undefined,
     options_default: {
       borderColor: "gray",
       activeColor: "gray",
       activeTextColor: "white",
-      textColor: "inherit"
+      textColor: "inherit",
+      _toggleMode:'render'
     }
   }),
   watch: {
@@ -42,12 +53,16 @@ export default {
       if (this.active) {
         setTimeout(() => {
           const n = document.getElementById(this.active.replace(" ", ""));
-          TweenMax.fromTo(n, 0.5, { opacity: "0" }, { opacity: "1" });
+          // TweenMax.fromTo(n, 0.5, { opacity: "0" }, { opacity: "1" });
         }, 0);
       }
     }
   },
   mounted() {
+    if(this.toggleMode){
+      this._toggleMode = this.toggleMode
+    }
+
     this.active = this.tabs[this.default];
     if (this.options) {
       if (this.options.borderColor) {

@@ -38,6 +38,7 @@ export default {
 
   methods: {
     onChange(value) {
+      this.$emit('codeChange')
       this.final_value = value;
     }
   },
@@ -63,6 +64,7 @@ export default {
             }
           });
 
+
         this.$store.dispatch("pages/addrs_finder_mutator", {
           uid: `${this.data.index}--${this.data.uid}`,
           fn: locator => {
@@ -77,6 +79,11 @@ export default {
             });
           }
         });
+
+        this.$store.commit('pages/set_temp_id', {
+          uid: this.data.uid,
+          index: this.data.index
+        })
       } else {
         this.$store.commit("modal/set_modal", {
           head: "dqPageLogicError",
