@@ -1,12 +1,15 @@
 <template>
   <div>
     <div>{{title}}</div>
+    <!-- error -->
     <div v-if="validation_err" class="marginbottom050">
       <span class="err backgrounderr bordererr">
         <strong>Error:</strong>
         {{validation_err}}
       </span>
     </div>
+
+    <!-- main -->
     <div
       :style="{borderTop:`1px solid ${options_defaults.borderColor}`, borderLeft:`1px solid ${options_defaults.borderColor}`, borderRight:`1px solid ${options_defaults.borderColor}`}"
     >
@@ -17,8 +20,29 @@
         >
           <!-- key -->
           <div
+            @mousemove="mv"
+            @mouseenter="hoverKey = objIndex"
+            @mouseleave="hoverKey = undefined"
             :class="[validation_target == objIndex ? 'err' : 'flex', options_defaults.padding,'flexwrap']"
-          >{{objIndex}}</div>
+          >
+            <span class="pointer">{{objIndex}}</span>
+            <!-- hover container -->
+            <div class="relative">
+              <div
+                v-if="hoverKey == objIndex && inputData[objIndex].hoverInfo"
+                :style="{
+                  zIndex:100,
+                  left:`${x - 20}px`,minWidth:'300px',
+              maxWidth:'300px',
+              boxShadow:`0 2px 15px ${$store.state.theme.global.secondary_bg_color}`,
+              border: `2px solid ${$store.state.theme.global.secondary_border_color}`,
+              borderRadius: '8px',
+              ...$store.state.theme.global.page_modal_background
+                }"
+                class="absolute pad025 padleft050 padright050"
+              >{{inputData[objIndex].hoverInfo}}</div>
+            </div>
+          </div>
         </div>
         <div
           :style="{borderBottom:`1px solid ${options_defaults.borderColor}`,  borderLeft:`1px solid ${options_defaults.borderColor}`}"
@@ -91,8 +115,56 @@ export default {
     text_change: undefined,
 
     validation_err: "",
-    validation_target: undefined
+    validation_target: undefined,
+
+    x: undefined,
+    y: undefined,
+
+    hoverKey: undefined
   }),
+  watch: {
+    inputData() {
+      // stage related, when traversing into stages
+      this.$emit("onMounted", {
+        options: this.options,
+        initial: this.initial_object_data,
+        data_passed: {
+          data: this.inputData,
+          options: this.options
+        }
+      });
+      const render_obj = this.render({
+        data: this.inputData,
+        options: this.options,
+        operation: this.operation,
+        scoped_variables: {
+          types: this.types,
+          operations: this.operations
+        }
+      });
+
+      if (this.options.padding) {
+        switch (this.options.padding) {
+          case "m":
+            this.options_defaults.padding = "pad050";
+            break;
+          case "s":
+            this.options_defaults.padding = "pad025";
+            break;
+          case "l":
+            this.options_defaults.padding = "pad125";
+            break;
+        }
+      }
+      this.options_defaults.borderColor = this.options.borderColor;
+
+      if (this.operation == "r") {
+        this.initial_object_data = this.inputData;
+      } else {
+        this.initial_object_data = render_obj;
+      }
+    }
+  },
   methods: {
     render({ data, options, operation, scoped_variables }) {
       const keys = Object.keys(data);
@@ -236,9 +308,11 @@ export default {
               const exec = stringValidation[e](val, this.inputData[key], err =>
                 this.$emit("onError", err)
               );
-              if (!exec.status) {
-                this.validation_target = key;
-                return (this.validation_err = exec.msg);
+              if (exec) {
+                if (!exec.status) {
+                  this.validation_target = key;
+                  return (this.validation_err = exec.msg);
+                }
               }
             }
           });
@@ -253,6 +327,13 @@ export default {
           this.$emit("onChange", output_data);
           break;
       }
+    },
+    mv($event) {
+      let o_left = $event.layerX;
+      let o_top = $event.layerY;
+
+      this.x = o_left;
+      this.y = o_top;
     }
   },
   created() {
