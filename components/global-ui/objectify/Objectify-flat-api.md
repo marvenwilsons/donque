@@ -7,7 +7,7 @@
     :inputData="sample"
     :title="'Sample Title'"
     :options="{
-        padding: 'small', // small med big
+        padding: 's', // s m b
         textColor: '',
         borderColor: 'gray'
     }"
@@ -55,4 +55,5 @@
     }
 
 ## AddOns
+renderCondition
 converter.js

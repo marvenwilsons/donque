@@ -135,6 +135,7 @@ export const mutations = {
 
     //
     set_travers_view(state,{obj,pointer}) {
+        // activates when there is an item in stage array
         state.travers_view = obj
         state.cur_pointer = pointer
     },

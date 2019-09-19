@@ -51,6 +51,7 @@ export default {
   watch: {
     active() {
       if (this.active) {
+        this.$emit('onTabChange', this.active)
         setTimeout(() => {
           const n = document.getElementById(this.active.replace(" ", ""));
           // TweenMax.fromTo(n, 0.5, { opacity: "0" }, { opacity: "1" });

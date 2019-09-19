@@ -14,12 +14,14 @@
 </dqTab>
 
 ## Events
-    none
+    onTabChange
 
 ## Input props          Type        Required
     tabs                array       yes
     default             number      yes
     options             object      optional
+    toggleMode
+    hideInSingleTab
 
 ## Options              Type        Options             Default     Required
     borderColor         string      -                   gray        optional

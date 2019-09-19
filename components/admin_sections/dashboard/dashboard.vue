@@ -1,7 +1,8 @@
 <template>
   <div class="fullheight-percent">
     <div class="fullheight-percent">
-        Dashboard widgets here!
+        Dashboard widgets here!,
+        Monitoring - page vist monitoring
     </div>
   </div>
 </template>
