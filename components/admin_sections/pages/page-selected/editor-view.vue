@@ -206,6 +206,7 @@
                         :is="$store.state.pages.api_view"
                         :uid="$store.state.pages.api_view_uid"
                         :data="$store.state.pages.api_view_el"
+                        :stageData="is_traversing ? travers_mode :  $store.state.pages.stages.length == 0 ? sections : n_sections"
                       ></div>
                     </div>
                   </div>
@@ -741,7 +742,6 @@ export default {
   watch: {
     stages() {
       this.pointer = this.stages.length - 1;
-
       this.scrollToEnd();
       this.scrollToEnd();
     },
