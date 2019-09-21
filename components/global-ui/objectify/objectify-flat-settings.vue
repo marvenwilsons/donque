@@ -124,6 +124,7 @@ export default {
   }),
   watch: {
     inputData() {
+      console.log('it changed!')
       // stage related, when traversing into stages
       this.$emit("onMounted", {
         options: this.options,
@@ -158,6 +159,7 @@ export default {
       }
       this.options_defaults.borderColor = this.options.borderColor;
 
+      console.log(this.operation)
       if (this.operation == "r") {
         this.initial_object_data = this.inputData;
       } else {
@@ -340,6 +342,7 @@ export default {
     this.s_operation = this.operation;
   },
   mounted() {
+    console.log('mounted')
     this.$emit("onMounted", {
       options: this.options,
       initial: this.initial_object_data,

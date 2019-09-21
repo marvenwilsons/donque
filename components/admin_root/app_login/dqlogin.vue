@@ -1,12 +1,21 @@
 // init dq form v.01
 // author: marven wilson donque
 <template>
-  <div id="dq-init-parent-wrapper" class="flex flexwrap relative">
+  <div
+    :style="{backgroundImage: `url(${bg})`}"
+    id="dq-init-parent-wrapper"
+    class="flex flexwrap relative"
+  >
     <div class="fullwidth flex absolute abs">
       <div class="flex flexcenter" v-if="!ready">
         <spinner />
       </div>
-      <div v-if="ready" id="dq-init-wrapper" class="flex flexwrap flexcenter flexcol">
+      <div
+        v-if="ready"
+        :style="{opacity: 0}"
+        id="dq-init-wrapper"
+        class="flex flexwrap flexcenter flexcol absolute"
+      >
         <div id="tc-logo-h" class="flex fullwidth flexcenter">
           <h1>dq</h1>
         </div>
@@ -65,6 +74,8 @@
 </template>
 
 <script>
+import { TweenMax, TimelineLite, TweenLite } from "gsap";
+
 export default {
   data() {
     return {
@@ -73,7 +84,8 @@ export default {
       rpassword: false,
       email: undefined,
       username: undefined,
-      password: undefined
+      password: undefined,
+      bg: undefined
     };
   },
   methods: {
@@ -84,6 +96,9 @@ export default {
       } else {
         this.rpassword = true;
       }
+    },
+    setBg() {
+      return `/dq-login-wallpapers/0${Math.floor(Math.random() * 9 + 1)}.jpeg`;
     },
     submit() {
       // this.err = true;
@@ -118,6 +133,8 @@ export default {
   },
   mounted() {
     //
+    this.bg = `/dq-login-wallpapers/0${Math.floor(Math.random() * 9 + 1)}.jpeg`;
+    //
     if (location.pathname != "/dqlogin") {
       location.href = "dqlogin";
     }
@@ -139,7 +156,13 @@ export default {
         setTimeout(() => {
           this.ready = true;
           setTimeout(() => {
-            document.getElementById("userf").focus()
+            const n = document.getElementById("dq-init-wrapper");
+            TweenMax.fromTo(n, 0.3, { opacity: "0" }, { opacity: "1" });
+            setTimeout(() => {
+              TweenMax.fromTo(n, 0.4, { marginTop: "150px" }, { top: "1" });
+            }, 200);
+
+            document.getElementById("userf").focus();
           }, 0);
         }, 500);
       })
@@ -194,7 +217,7 @@ export default {
 #dq-init-parent-wrapper {
   /* background: var(--blue-1); */
   /* background: #45dcfb; */
-  background-image: url("/thomas-lefebvre-5691-unsplash.jpg");
+  /* background-image: url("/thomas-lefebvre-5691-unsplash.jpg"); */
   background-size: cover;
   min-height: 100vh;
 }

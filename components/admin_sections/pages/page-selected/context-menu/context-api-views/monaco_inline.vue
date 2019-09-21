@@ -19,7 +19,7 @@
 import MonacoEditor from "vue-monaco";
 
 export default {
-  props: ["trigger", "data"],
+  props: ["trigger", "data", "inlineCode"],
 
   components: {
     MonacoEditor
@@ -44,7 +44,7 @@ export default {
   },
 
   watch: {
-    data() {
+    inlineCode() {
       setTimeout(() => {
         this.ready = true;
         setTimeout(() => {
@@ -55,8 +55,8 @@ export default {
           this.ready = true;
           this.show = true;
 
-          if (this.data.inlineCode) {
-            this.code = this.data.inlineCode;
+          if (this.inlineCode) {
+            this.code = this.inlineCode;
           }
         }, 200);
       }, 0);
@@ -125,8 +125,8 @@ export default {
         this.ready = true;
         this.show = true;
 
-        if (this.data.inlineCode) {
-          this.code = this.data.inlineCode;
+        if (this.inlineCode) {
+          this.code = this.inlineCode;
         }
       }, 200);
     }, 0);
