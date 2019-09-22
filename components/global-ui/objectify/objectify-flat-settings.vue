@@ -159,7 +159,6 @@ export default {
       }
       this.options_defaults.borderColor = this.options.borderColor;
 
-      console.log(this.operation)
       if (this.operation == "r") {
         this.initial_object_data = this.inputData;
       } else {

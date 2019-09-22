@@ -148,7 +148,7 @@
               ></objectifyFlatSettings>
             </div>
           </saveToStagePane>
-        </div> -->
+        </div>-->
       </div>
     </div>
   </div>
@@ -162,18 +162,22 @@ export default {
   props: ["data", "stageData"],
 
   data: () => ({
+    // General purpose Model
     stage_data: undefined,
     text_content: "",
     monaco_trigger: false,
     hasErr: false,
     ready: true,
-    monacoInlineToggleMode: "rerender",
 
+    // Model of Attr tab
     current_attribute_tab: undefined,
 
+    // Model of inline style view and the inline code view
     inlineStyle: undefined,
     inlineCode: undefined,
+    monacoInlineToggleMode: "rerender",
 
+    // Model of Global Attributes HTML view
     attrNewValue: undefined,
     attr: {
       id: {
@@ -222,10 +226,13 @@ export default {
     },
     attr_render: true,
     attrToggleMode: undefined,
+    attr_has_changed: false,
 
+    // Model of Native Atrributes HTML view
     nativeAttrNewValue: undefined,
     nativeAttr: undefined,
     nativeAttr_render: true,
+    native_attr_has_changed: false,
 
     transformNewValue: undefined,
     transform: {
@@ -530,10 +537,11 @@ export default {
       //
       this.attrToggleMode = "rerender";
     },
+    // Controller of Stages, when user changes the stage pointer
     stageData(o, n) {
       if (n) {
         let final = undefined;
-        let old = undefined
+        let old = undefined;
         const findObj = (o, id) => {
           if (o === null) return null;
 
@@ -552,48 +560,64 @@ export default {
 
         if (this.$store.state.pages.temp_id) {
           findObj(n, this.$store.state.pages.temp_id.uid);
-          old = findObj(o,this.$store.state.pages.temp_id.uid)
+          old = findObj(o, this.$store.state.pages.temp_id.uid);
           this.stage_data = final;
 
           // hot update mutation
-          
+
           // text conent hot update
 
           // inline style hot update
-          if(JSON.stringify(final.inlineStyle) != JSON.stringify(this.inlineStyle)){
-            this.inlineStyle = final.inlineStyle
+          if (
+            JSON.stringify(final.inlineStyle) !=
+            JSON.stringify(this.inlineStyle)
+          ) {
+            this.inlineStyle = final.inlineStyle;
           }
 
           // inline code hot update
-          if(JSON.stringify(final.inlineCode) != JSON.stringify(this.inlineCode)){
-            this.inlineCode = final.inlineCode
+          if (
+            JSON.stringify(final.inlineCode) != JSON.stringify(this.inlineCode)
+          ) {
+            this.inlineCode = final.inlineCode;
           }
 
           // global attr hot update
-          if(JSON.stringify(final.properties.attributes) != JSON.stringify(this.attr)){
-            this.attr = objtifyConverter(this.attr,final.properties.attributes)
-            this.attr_render = false
+          if (
+            JSON.stringify(final.properties.attributes) !=
+            JSON.stringify(this.attr)
+          ) {
+            this.attr = objtifyConverter(
+              this.attr,
+              final.properties.attributes
+            );
+            this.attr_render = false;
             setTimeout(() => {
-              this.attr_render = true
+              this.attr_render = true;
             }, 0);
           }
 
           // native attr hot update
-          if(JSON.stringify(final.properties.native_attributes) != JSON.stringify(this.nativeAttr)){
-            this.nativeAttr = objtifyConverter(this.nativeAttr,final.properties.native_attributes)
-            this.nativeAttr_render = false
+          if (
+            JSON.stringify(final.properties.native_attributes) !=
+            JSON.stringify(this.nativeAttr)
+          ) {
+            this.nativeAttr = objtifyConverter(
+              this.nativeAttr,
+              final.properties.native_attributes
+            );
+            this.nativeAttr_render = false;
             setTimeout(() => {
-              this.nativeAttr_render = true
+              this.nativeAttr_render = true;
             }, 0);
           }
-
         }
       }
     }
   },
 
   methods: {
-    //
+    // static method copy
     copy(o) {
       if (o === null) return null;
 
@@ -606,7 +630,7 @@ export default {
 
       return output;
     },
-    // Objectify error
+    // Controller of modal, spwans modal display
     err(err) {
       if (err.onMethod == "change") {
         this.hasErr = true;
@@ -622,15 +646,16 @@ export default {
       }
     },
 
-    // tab related
+    // Controller of dqtab components
     tab_change(tab_name) {
       this.current_attribute_tab = tab_name;
     },
 
-    // Attribute Handler
+    // Controller of Global Attribute, manipulates global attributes model
     onAttrChange(val) {
       this.hasErr = false;
       this.attrNewValue = val;
+      this.attr_has_changed = true;
     },
     attrHandler() {
       if (this.hasErr) {
@@ -643,8 +668,17 @@ export default {
             closable: false
           }
         });
+      } else if (!this.attr_has_changed) {
+        this.$store.commit("modal/set_modal", {
+          head: "dqPageLogicError",
+          body: "There is currently nothing to save",
+          config: {
+            ui_type: "err",
+            closable: false
+          }
+        });
       } else {
-        const copy = (o) => {
+        const copy = o => {
           if (o === null) return null;
 
           var output, v, key;
@@ -676,10 +710,11 @@ export default {
         });
       }
     },
-    // Native attr handler
+    // Controller of Native Attributes, manipulates the native attribute model
     onNativeAttrChange(val) {
       this.hasErr = false;
       this.nativeAttrNewValue = val;
+      this.native_attr_has_changed = true;
     },
     nativeAttrHandler() {
       if (this.hasErr) {
@@ -692,8 +727,17 @@ export default {
             closable: false
           }
         });
+      } else if (!this.attr_has_changed) {
+        this.$store.commit("modal/set_modal", {
+          head: "dqPageLogicError",
+          body: "There is currently nothing to save",
+          config: {
+            ui_type: "err",
+            closable: false
+          }
+        });
       } else {
-        const copy = (o) => {
+        const copy = o => {
           if (o === null) return null;
 
           var output, v, key;
@@ -726,7 +770,7 @@ export default {
         });
       }
     },
-    // save to stage trigger of attr
+    // Controller of saveToStargePane component 
     attr_save_to_stage() {
       if (this.current_attribute_tab == "Native Attributes") {
         this.nativeAttrHandler();
@@ -734,7 +778,7 @@ export default {
         this.attrHandler();
       }
     },
-    // Transform handler
+    // Controller of Transform handler
     transformHandler() {
       this.$store.dispatch("pages/addrs_finder_mutator", {
         uid: `${this.data.index}--${this.data.uid}`,
@@ -757,7 +801,7 @@ export default {
     onTransformChange(val) {
       this.transformNewValue = val;
     },
-    //
+    // Controller of text content
     textContentChange(val) {
       this.$store.dispatch("pages/addrs_finder_mutator", {
         uid: `${this.data.index}--${this.data.uid}`,
@@ -777,7 +821,7 @@ export default {
         index: this.data.index
       });
     },
-    // custom inline style handler
+    // Controller of custom inline style
     stateMonacoChanges() {
       this.monaco_trigger = !this.monaco_trigger;
     },
@@ -793,10 +837,10 @@ export default {
     this.text_content = this.data.properties.text_content;
 
     // inline style default value assignment
-    this.inlineStyle = this.data.inlineStyle
+    this.inlineStyle = this.data.inlineStyle;
 
     // inline code default value assignment
-    this.inlineCode = this.data.inlineCode
+    this.inlineCode = this.data.inlineCode;
 
     // global attribute default value assignment
     const attr_parsedVanilaObj = objtifyConverter(
@@ -820,7 +864,6 @@ export default {
     setTimeout(() => {
       this.attrToggleMode = "showhide";
     }, 0);
-
   }
 };
 </script>

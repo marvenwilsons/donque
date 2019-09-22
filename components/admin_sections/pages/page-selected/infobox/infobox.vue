@@ -70,11 +70,11 @@ export default {
           break;
         case "root":
           return {
-            Data: {},
-            Methods: {},
-            Collection: {},
-            onServerLoad: {},
-            onClientLoad: {},
+            Models: {},
+            "Controller Methods": {},
+            "Server Collections": 'fn()',
+            onServerLoad: 'fn()',
+            onClientLoad: 'fn()',
             Notes: ""
           };
           break;

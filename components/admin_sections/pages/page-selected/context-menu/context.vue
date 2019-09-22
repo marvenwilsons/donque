@@ -24,8 +24,8 @@
       @mouseover="opts_active = 'cut'"
       @mouseleave="opts_cur_active != `cut` && (opts_active = undefined)"
       @click="cut_copy_delete('cut')"
-      :style="setStyle(opts_active === `cut` || opts_active == `cut`)"
-      class="pad025 flex pointer"
+      :style="{...setStyle(opts_active === `cut` || opts_active == `cut`), color: element_view_is_open ? 'lightgray' : ''}"
+      :class="['pad025', 'flex' , element_view_is_open ? '' : 'pointer']"
     >
       <div class="flex3">
         <i class="fas fa-cut padleft125"></i>
@@ -39,8 +39,8 @@
       @mouseover="opts_active = 'copy'"
       @mouseleave="opts_cur_active != `copy` && (opts_active = undefined)"
       @click="cut_copy_delete('copy')"
-      :style="setStyle(opts_active === `copy` || opts_active == `copy`)"
-      class="pad025 flex pointer"
+      :style="{...setStyle(opts_active === `copy` || opts_active == `copy`), color: element_view_is_open ? 'lightgray' : ''}"
+      :class="['pad025', 'flex' , element_view_is_open ? '' : 'pointer']"      
     >
       <div class="flex3">
         <i class="far fa-copy padleft125"></i>
@@ -54,8 +54,8 @@
       @mouseover="opts_active = 'paste'"
       @mouseleave="opts_cur_active != `paste` && (opts_active = undefined)"
       @click="cut_copy_delete('paste')"
-      :style="setStyle(opts_active === `paste` || opts_active == `paste`)"
-      class="pad025 flex pointer"
+      :style="{...setStyle(opts_active === `paste` || opts_active == `paste`), color: element_view_is_open ? 'lightgray' : ''}"
+      :class="['pad025', 'flex' , element_view_is_open ? '' : 'pointer']"
     >
       <div class="flex3">
         <!-- <i class="far fa-copy padleft125"></i> -->
@@ -65,12 +65,12 @@
     </li>
     <!-- delete -->
     <li
-    v-if="latest_root.length != 1 && latest_root.length != 0"
+      v-if="latest_root.length != 1 && latest_root.length != 0"
       @mouseover="opts_active = 'del'"
       @mouseleave="opts_cur_active != `del` && (opts_active = undefined)"
-      :style="setStyle(opts_active === `del` || opts_active == `del`)"
+      :style="{...setStyle(opts_active === `del` || opts_active == `del`), color: element_view_is_open ? 'lightgray' : ''}"
       @click="cut_copy_delete('delete')"
-      class="pad025 flex pointer"
+      :class="['pad025', 'flex' , element_view_is_open ? '' : 'pointer']"
     >
       <div class="flex3">
         <i class="far fa-trash-alt padleft125"></i>
@@ -107,19 +107,38 @@ export default {
           this.$store.state.pages.stages.length - 1
         ].obj.sections;
       }
+    },
+    element_view_is_open() {
+      if (this.$store.state.pages.api_view) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  },
+  watch: {
+    element_view_is_open() {
+      console.log("is open!");
     }
   },
   methods: {
     setStyle(i) {
       if (i) {
-        return {
-          background: this.$store.state.theme.global.selection2.hover_bg_color,
-          color: this.$store.state.theme.global.selection2.active_text_color,
-          transition: "0.3s"
-        };
+        if (this.element_view_is_open) {
+          return {
+            color: this.$store.state.theme.global.selection2.active_text_color,
+            transition: "0.3s"
+          };
+        } else {
+          return {
+            background: this.$store.state.theme.global.selection2
+              .hover_bg_color,
+            color: this.$store.state.theme.global.selection2.active_text_color,
+            transition: "0.3s"
+          };
+        }
       }
     },
-    getObjMap() {},
     cut() {
       // 1. finding the selected element
       // get the uid, then use the addrs_finder to get the object being selected
@@ -252,13 +271,15 @@ export default {
       }
     },
     cut_copy_delete(arg) {
-      if (this.$store.state.pages.api_view) {
-        this.$store.commit("pages/close_api_view");
-        this.$store.commit("pages/clear_opts");
-        this[arg]();
-      } else {
-        this.$store.commit("pages/clear_opts");
-        this[arg]();
+      if (!this.element_view_is_open) {
+        if (this.$store.state.pages.api_view) {
+          this.$store.commit("pages/close_api_view");
+          this.$store.commit("pages/clear_opts");
+          this[arg]();
+        } else {
+          this.$store.commit("pages/clear_opts");
+          this[arg]();
+        }
       }
     }
   }
