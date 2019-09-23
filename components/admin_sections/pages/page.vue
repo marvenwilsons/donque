@@ -26,7 +26,12 @@
           <div class="fullwidth pad125">
             <strong>Name of the new page:</strong>
             <div>
-              <input v-model="route_name" class="fullwidth pad025" type="text" />
+              <input
+                id="dq-create-new-page"
+                v-model="route_name"
+                class="fullwidth pad025"
+                type="text"
+              />
             </div>
             <div v-if="err" style="color:#ae1100" class="pad025">{{err}}</div>
             <div class="padtop125 flex flexend pointer">
@@ -56,11 +61,11 @@
           :style="{border:`1px solid ${$store.state.theme.global.border_color}`,height:'32px',maxWidth:'32px'}"
           class="pad025 marginleft050 flex flex1 borderred fullheight-percent flexcenter pointer"
         >
-          <i class="fas fa-plus "></i>
+          <i class="fas fa-plus"></i>
         </div>
       </div>
       <div class="fullheight-percent relative" style="overflow:auto;">
-        <div class="absolute fullwidth fullheight-percent  padleft050 padright050">
+        <div class="absolute fullwidth fullheight-percent padleft050 padright050">
           <!-- loop -->
           <div
             class="pointer marginleft050 marginright050 pad050 marginbottom050 flex dq-page-item-host"
@@ -74,9 +79,10 @@
             <!-- data -->
             <div class="flex1">
               <div class="flex spacebetween">
-                <span :style="{fontWeight:(active === `dq-page-${p_index}` || cur_actv == `dq-page-${p_index}`) ? 700 : 100 }" class="flex1 pad025">
-                  {{p_index}}
-                </span>
+                <span
+                  :style="{fontWeight:(active === `dq-page-${p_index}` || cur_actv == `dq-page-${p_index}`) ? 700 : 100 }"
+                  class="flex1 pad025"
+                >{{p_index}}</span>
                 <!-- click -->
                 <span
                   @click="
@@ -137,7 +143,7 @@ export default {
         return {
           background: this.$store.state.theme.notify_tile_body_bg_hover_color,
           border: `1px solid ${this.$store.state.theme.global.secondary_border_color}`,
-          borderLeft: `2px solid ${this.$store.state.theme.heading_bg_color}`,
+          borderLeft: `2px solid ${this.$store.state.theme.heading_bg_color}`
         };
       } else {
         return {
@@ -235,6 +241,14 @@ export default {
     })
   },
   watch: {
+    create_route(n, o) {
+      if (n) {
+        setTimeout(() => {
+          const new_page_modal = document.getElementById("dq-create-new-page");
+          new_page_modal.focus();
+        }, 20);
+      }
+    },
     pageGetter(n, o) {
       if (
         this.$store.state.pane_system.pane_index_config_list[this.my_pane_index]

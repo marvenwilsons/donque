@@ -17,10 +17,11 @@
     <div v-if="$store.state.pages.opt_cur_view === 'html'" :is="'cnhtml'"></div>
     <div v-if="$store.state.pages.opt_cur_view === 'section'" :is="'cnsection'"></div>
     <div v-if="$store.state.pages.opt_cur_view === 'plugin'" :is="'cnplugin'"></div>
+    <div v-if="$store.state.pages.opt_cur_view === 'wrapper'" :is="'cnwrapper'"></div>
     <!-- ++++++++++++++++++++++++++++++++++++++ END +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
     <!-- cut -->
     <li
-      v-if="$store.state.pages.opt_cur_view != 'section'"
+      v-if="$store.state.pages.opt_cur_view != 'section' && $store.state.pages.opt_cur_view != 'wrapper'"
       @mouseover="opts_active = 'cut'"
       @mouseleave="opts_cur_active != `cut` && (opts_active = undefined)"
       @click="cut_copy_delete('cut')"
@@ -35,7 +36,7 @@
     </li>
     <!-- copy -->
     <li
-      v-if="$store.state.pages.opt_cur_view != 'section'"
+      v-if="$store.state.pages.opt_cur_view != 'section' && $store.state.pages.opt_cur_view != 'wrapper'"
       @mouseover="opts_active = 'copy'"
       @mouseleave="opts_cur_active != `copy` && (opts_active = undefined)"
       @click="cut_copy_delete('copy')"
@@ -65,7 +66,7 @@
     </li>
     <!-- delete -->
     <li
-      v-if="latest_root.length != 1 && latest_root.length != 0"
+      v-if="latest_root.length != 1 && latest_root.length != 0 && $store.state.pages.opt_cur_view != 'wrapper'"
       @mouseover="opts_active = 'del'"
       @mouseleave="opts_cur_active != `del` && (opts_active = undefined)"
       :style="{...setStyle(opts_active === `del` || opts_active == `del`), color: element_view_is_open ? 'lightgray' : ''}"
@@ -85,6 +86,7 @@
 import context_html from "./context/html";
 import context_section from "./context/section";
 import context_plugin from "./context/plugin";
+import context_wrapper from "./context/wrapper"
 
 export default {
   data() {
@@ -96,7 +98,8 @@ export default {
   components: {
     cnhtml: context_html,
     cnsection: context_section,
-    cnplugin: context_plugin
+    cnplugin: context_plugin,
+    cnwrapper: context_wrapper
   },
   computed: {
     latest_root() {

@@ -153,6 +153,7 @@
                           @mouseenter="showInfoBox({tag:'root_Template-wrapper'})"
                           @mouseleave="resetInfoBox()"
                           @click="sec_modal_viz = true, sec_data = undefined"
+                          @click.right.prevent="openOpt(sections.uid,$event)"
                           :style="{background:theme.global.secondary_bg_color, width:'81px'}"
                           v-if="s_i == 0"
                         >
@@ -662,7 +663,7 @@ export default {
       this.x = o_left;
       this.y = o_top;
     },
-    openOpt(uid, $event) {
+    openOpt(uid, $event, mode) {
       if (this.$store.state.pages.info_box_data) {
         this.$store.commit("pages/set_api_view", {
           uid: this.$store.state.pages.info_box_data.uid,
@@ -672,15 +673,25 @@ export default {
 
       this.$store.commit("pages/reset_info_box");
 
-      this.$store.commit("pages/set_context_view", "section");
-
-      this.$store.commit("pages/set_opts", {
-        tag: "section",
-        uid,
-        top: this.y,
-        left: this.x,
-        context_height: "170"
-      });
+      if (mode == "section") {
+        this.$store.commit("pages/set_context_view", "section");
+        this.$store.commit("pages/set_opts", {
+          tag: "section",
+          uid,
+          top: this.y,
+          left: this.x,
+          context_height: "170"
+        });
+      } else {
+        this.$store.commit("pages/set_context_view", "wrapper");
+        this.$store.commit("pages/set_opts", {
+          tag: "wrapper",
+          uid,
+          top: this.y,
+          left: this.x,
+          context_height: "170"
+        });
+      }
 
       setTimeout(() => {
         const n = document.getElementById("opt-box-ul");
