@@ -2,7 +2,7 @@
   <div id="dqhead-wrapper" class="flex">
     <div>
       <div class="dqhead-items">
-        <strong>dq-studio / {{siteTitle}}</strong>
+        <strong>dq-studio /  </strong>
       </div>
     </div>
     <div class="flex flexcenter">

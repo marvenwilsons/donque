@@ -6,7 +6,7 @@
         flex:1, 
         minWidth:180+'px',
         maxWidth:180+'px',
-        background:$store.state.theme.docker_bg_color,
+        background:$store.state.theme.global.primary_bg_color,
         color: $store.state.theme.docker_text_color
         }"
     ><docker/></div>

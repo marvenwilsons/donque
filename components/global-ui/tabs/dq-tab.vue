@@ -1,7 +1,10 @@
 <template>
   <div id="dq-tabs" class="fullwidth">
     <div
-      :style="{borderTop: `1px solid ${options_default.borderColor}`, borderBottom: `1px solid ${options_default.borderColor}`}"
+      :style="{
+        borderTop: `1px solid ${options_default.borderColor}`, 
+        borderBottom: `1px solid ${options_default.borderColor}`,
+        background: options_default.bg}"
       class="pad025 flex fullwidth pointer"
     >
       <div
@@ -17,6 +20,7 @@
       v-for="(tab,tab_i) in tabs"
       :key="`--slots-${tab_i}}`"
       class="fullwidth"
+      :style="{background: options_default.bg}"
     >
       <div v-if="toggleMode == 'showhide'" v-show="active === tab">
         <slot :name="tab"></slot>
@@ -45,6 +49,7 @@ export default {
       activeColor: "gray",
       activeTextColor: "white",
       textColor: "inherit",
+      bg: 'white',
       _toggleMode:'render'
     }
   }),

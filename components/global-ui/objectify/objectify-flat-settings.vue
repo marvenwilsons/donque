@@ -11,7 +11,12 @@
 
     <!-- main -->
     <div
-      :style="{borderTop:`1px solid ${options_defaults.borderColor}`, borderLeft:`1px solid ${options_defaults.borderColor}`, borderRight:`1px solid ${options_defaults.borderColor}`}"
+      :style="{
+        borderTop:`1px solid ${options_defaults.borderColor}`, 
+        borderLeft:`1px solid ${options_defaults.borderColor}`, 
+        borderRight:`1px solid ${options_defaults.borderColor}`,
+        background: options.bg
+        }"
     >
       <div class="flex" v-for="(objData,objIndex) in initial_object_data" :key="`--${objIndex}--}`">
         <div
@@ -96,7 +101,7 @@
 
 <script>
 export default {
-  props: ["inputData", "title", "options", "operation"],
+  props: ["inputData", "title", "options", "operation", "bg"],
   data: () => ({
     initial_object_data: {},
 

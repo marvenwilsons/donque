@@ -101,7 +101,8 @@
                     :title="'Global Attributes'"
                     :options="{
                       padding: 's',
-                      borderColor: $store.state.theme.global.border_color
+                      borderColor: $store.state.theme.global.border_color,
+                      bg: 'white'
                     }"
                   ></objectifyFlatSettings>
                 </div>

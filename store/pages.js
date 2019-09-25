@@ -38,6 +38,9 @@ export const state = () => ({
     context_height: undefined,
     pending_data_to_paste: undefined,
 
+    // page editor modal
+    page_editor_modal: false,
+
     // element api
     api_view: undefined,
     api_view_el: undefined,
@@ -63,6 +66,13 @@ export const getters = {
 }
 
 export const mutations = {
+    // page editor modal
+    open_page_editor_modal(state) {
+        state.page_editor_modal = true
+    },
+    close_page_editor_modal(state) {
+        state.page_editor_modal = false
+    },
     // copy
     set_copy(state,data) {
         state.pending_data_to_paste = data

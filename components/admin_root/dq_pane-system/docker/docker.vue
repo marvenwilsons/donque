@@ -1,5 +1,5 @@
 <template>
-  <div class="fullheight-percent flex flexcol" style="border-right: 2px solid whitesmoke">
+  <div class="fullheight-percent flex flexcol">
     <div class="flex1 flex flexcenter">
       <div class="flex flexcenter">
         <div class="dq-fav-con flex flexcenter">
@@ -16,8 +16,8 @@
           :id="`dqdi_${item_index}_${items}`"
           @click="start(items,item_index)"
           :style="{
-              background: active === item_index || cur_actv == item_index ? hoverBgColor : '', 
-              color: active == item_index || cur_actv == item_index ? hoverColor : '' 
+              background: active === item_index || cur_actv == item_index ? $store.state.theme.global.tertiary_bg_color  : '', 
+              color: active == item_index || cur_actv == item_index ? '' : $store.state.theme.global.tertiary_bg_color 
             }"
           @mouseover="active = item_index"
           @mouseleave="cur_actv != item_index && (active = undefined)"
@@ -119,7 +119,6 @@ export default {
 <style scoped>
 .fas.padright025,
 .fab.padright025 {
-  /* border: 1px solid red; */
   width: 20px;
 }
 .dq-fav-con {

@@ -25,7 +25,7 @@
                 <span class="padright025">
                   <strong>Section Role</strong>
                 </span>
-                <input v-model="sec_data" class="margintop025 fullwidth pad025" type="text" />
+                <input id="dq-ad-n-sec-t-page" v-model="sec_data" class="margintop025 fullwidth pad025" type="text" />
                 <div
                   class="err bordererr backgrounderr pad025 margintop050"
                   v-if="sec_err"
@@ -33,7 +33,7 @@
               </div>
               <div class="flex flexend padright125 padbottom125">
                 <span
-                  @click="sec_modal_viz = false, sec_err = undefined"
+                  @click="sec_modal_viz = false, sec_err = undefined, $store.commit('pages/close_page_editor_modal')"
                   :style="{...theme.modal_button_style}"
                   class="pointer margintop125 marginright050 pad025 padleft050 padright050"
                 >
@@ -90,9 +90,9 @@
               minWidth:'300px',
               maxWidth:'300px',
               boxShadow:`0 2px 15px ${$store.state.theme.global.secondary_bg_color}`,
-              border: `2px solid ${$store.state.theme.global.secondary_border_color}`,
-              borderRadius: '8px',
-              ...$store.state.theme.global.page_modal_background
+              border: `1px solid ${$store.state.theme.global.border_color}`,
+              borderRadius: '2px',
+              background:`${$store.state.theme.global.tertiary_bg_color}`
               }"
                 class="absolute pad050 bgblue"
               >
@@ -110,9 +110,9 @@
                 left:`${$store.state.pages.opn_opts_pos_left + 10}px`,
                 top:`${$store.state.pages.opn_opts_pos_top - 5}px`,
                 boxShadow:`0 10px 20px ${$store.state.theme.global.secondary_bg_color}`,
-                border: `2px solid ${$store.state.theme.global.secondary_border_color}`,
-                borderRadius: '8px',
-                ...$store.state.theme.global.page_modal_background
+                border: `1px solid ${$store.state.theme.global.border_color}`,
+                borderRadius: '2px',
+                background:`${$store.state.theme.global.tertiary_bg_color}`
                 }"
                 class="absolute padtop050 padbottom050"
                 v-if="$store.state.pages.opn_opts"
@@ -153,7 +153,7 @@
                           @mouseenter="showInfoBox({tag:'root_Template-wrapper'})"
                           @mouseleave="resetInfoBox()"
                           @click="sec_modal_viz = true, sec_data = undefined"
-                          @click.right.prevent="openOpt(sections.uid,$event)"
+                          @click.right.prevent="openOpt(sections.uid,$event,'wrapper')"
                           :style="{background:theme.global.secondary_bg_color, width:'81px'}"
                           v-if="s_i == 0"
                         >
@@ -165,7 +165,7 @@
                         <div
                           :style="{background:theme.global.secondary_bg_color}"
                           class="flex flexcenter spacebetween pointer"
-                          @click.right.prevent="openOpt(sections.uid,$event)"
+                          @click.right.prevent="openOpt(sections.uid,$event,'section')"
                           @mouseenter="showInfoBox(sections,s_i)"
                           @mouseleave="resetInfoBox()"
                         >
@@ -181,7 +181,14 @@
             </main>
             <!--  -->
             <div
-              :style="{width:'0px',boxShadow:'2px 2px 15px 1px #393e4244', overflow:'hidden',zIndex:200}"
+              :style="{
+                width:'0px',
+                boxShadow:'2px 2px 15px 1px #393e4244', 
+                overflow:'hidden',
+                zIndex:100, 
+                background:`${$store.state.theme.global.tertiary_bg_color}`,
+                border: `1px solid ${$store.state.theme.global.border_color}`,
+                }"
               id="dq-api-view"
               class="relative flex flexcol fullwidth fullheight-percent"
               v-if="$store.state.pages.api_view"
@@ -191,9 +198,12 @@
                 class="flex flexcol flex1 absolute fullheight-percent fullwidth"
                 style="left:550px"
               >
-                <div class="pad125 margintop125 spacebetween flex st-viz-bnnr pointer" style>
-                  <strong>Element API</strong>
-                  <div>
+                <div
+                  class="padleft050 padright050 margintop050 spacebetween flex st-viz-bnnr pointer"
+                  style
+                >
+                  <strong class="flex flexcenter padleft025">Element API</strong>
+                  <div class="padright025 margintop025 marginbottom050">
                     <i @click="closeOpt" class="fas fa-times-circle"></i>
                   </div>
                 </div>
@@ -416,7 +426,10 @@ export default {
     },
     ...mapGetters({
       root_: "pages/get_root"
-    })
+    }),
+    page_editor_modal() {
+      return this.$store.state.pages.page_editor_modal;
+    }
   },
   data() {
     return {
@@ -611,6 +624,7 @@ export default {
           });
 
           this.sec_modal_viz = false;
+          this.$store.commit('pages/close_page_editor_modal')
         } else {
           // get all contents from stages and sections
           // make a new array
@@ -643,6 +657,7 @@ export default {
           });
 
           this.sec_modal_viz = false;
+          this.$store.commit('pages/close_page_editor_modal')
         }
       }
     },
@@ -674,6 +689,7 @@ export default {
       this.$store.commit("pages/reset_info_box");
 
       if (mode == "section") {
+        console.log("this!");
         this.$store.commit("pages/set_context_view", "section");
         this.$store.commit("pages/set_opts", {
           tag: "section",
@@ -682,7 +698,7 @@ export default {
           left: this.x,
           context_height: "170"
         });
-      } else {
+      } else if (mode == "wrapper") {
         this.$store.commit("pages/set_context_view", "wrapper");
         this.$store.commit("pages/set_opts", {
           tag: "wrapper",
@@ -809,6 +825,18 @@ export default {
           }
         }, 0);
       }
+    },
+    page_editor_modal(current, prev) {
+      if (current) {
+        this.$store.commit("pages/close_api_view");
+        this.$store.commit("pages/clear_opts");
+        setTimeout(() => {
+          this.sec_modal_viz = current;
+          setTimeout(() => {
+            document.getElementById("dq-ad-n-sec-t-page").focus()
+          }, 0);
+        }, 0);
+      }
     }
   },
   mounted() {
@@ -818,6 +846,25 @@ export default {
     this.closeOpt();
   }
 };
+
+/**
+ * On this component
+ * 
+ * Views
+ *    + section modal
+ *    + structure vizualizer
+ *    + info box
+ *    + context menu
+ *    + element api
+ * 
+ * About
+ *    + section modal
+ *      | a view for the user to add a new section to the page
+ *    + structure vizualizer
+ *      | responsible for rendering a tree like view of html
+ *    + info box
+ *      | responsilbe for displaying information of each elements data when hover
+ */
 </script>
 
 <style scoped>

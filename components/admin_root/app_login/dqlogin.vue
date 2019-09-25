@@ -6,7 +6,7 @@
     id="dq-init-parent-wrapper"
     class="flex flexwrap relative"
   >
-    <div class="fullwidth flex absolute abs">
+    <div class="fullwidth flex absolute overflowhidden abs">
       <div class="flex flexcenter" v-if="!ready">
         <spinner />
       </div>
@@ -14,13 +14,13 @@
         v-if="ready"
         :style="{opacity: 0}"
         id="dq-init-wrapper"
-        class="flex flexwrap flexcenter flexcol absolute"
+        :class="['flex' ,'flexwrap' ,'flexcenter' ,'flexcol' ,'absolute', err ? 'shake_err' : '']"
       >
         <div id="tc-logo-h" class="flex fullwidth flexcenter">
           <h1>dq</h1>
         </div>
 
-        <div id="tc-wrap-parent" class>
+        <div id="tc-wrap-parent">
           <div v-if="err && !rpassword" id="tc-err-wrap">
             <div id="tc-err" class="tc-title flex flexcenter">Username or password is incorect</div>
           </div>
@@ -88,6 +88,14 @@ export default {
       bg: undefined
     };
   },
+  watch: {
+    username() {
+      this.err = false
+    },
+    password() {
+      this.err = false
+    }
+  },
   methods: {
     rp(state) {
       if (state) {
@@ -124,6 +132,7 @@ export default {
             }
           } else {
             this.err = true;
+            // add error class
           }
         })
         .catch(err => {
@@ -298,5 +307,31 @@ export default {
 }
 hr {
   color: #4a6976;
+}
+
+/* err shake effect */
+.shake_err {
+  animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+  }
 }
 </style>

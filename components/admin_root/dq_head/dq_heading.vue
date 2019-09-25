@@ -1,7 +1,7 @@
 <template>
     <div class="flex spacebetween" :style="{background:bgColor, color:textColor}">
         <div class="dqhead-items fullwidth flex flexcenter flexstart">
-            <strong class="padleft125">dq-</strong>studio
+            <strong class="padleft125">dq</strong>studio <strong>Enterprise</strong>
         </div>
         <div class="dqhead-items fullwidth">
             <div class="flex flexend headcur fullheight-percent flex flexcenter">
