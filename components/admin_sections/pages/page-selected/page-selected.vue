@@ -1,18 +1,18 @@
-<template>
-  <div class="flex flexcol fullheight-percent">
-    <div class="flex1 flex">
-      <div
-        class="fullwidth"
-        :pane_index="my_pane_index"
-        :data="data"
-        :page_data="page_data"
-        :is="comp"
-      ></div>
+<template>        
+  <div id="dq-page-sel-content" class="flex flexcol fullheight-percent flexcenter">
+    <div class="flex1 flex fullwidth">
+        <div
+          class="fullwidth"
+          :pane_index="my_pane_index"
+          :data="data"
+          :page_data="page_data"
+          :is="comp"
+        ></div>
     </div>
     <div
       id="dq-sel-page-pane"
       :style="{border: `1px solid ${this.$store.state.theme.global.secondary_bg_color}`}"
-      class="flex"
+      class="flex fullwidth"
     >
       <div
         :style="{background: comp == 'editor' ? $store.state.theme.global.secondary_bg_color : ''}"
@@ -44,6 +44,7 @@ import editor from "./editor-view";
 import route_settings from "./route-settings-view";
 import properties from "./props-view";
 import globals from "./globals";
+import { TweenMax, TimelineLite, TweenLite } from "gsap";
 
 export default {
   props: ["data", "my_pane_index"],
@@ -58,6 +59,13 @@ export default {
     rs: route_settings,
     props: properties,
     globals
+  },
+  mounted() {
+    const el = document.getElementById('dq-page-sel-content')
+
+    TweenMax.fromTo(el, 1, {opacity: 0} , {opacity: 1})
+    TweenMax.fromTo(el, 0.2, {width: 0} , {width: '100%', ease: Power2.easeInOut})
+    TweenMax.fromTo(el, 0.2, {height: 0} , {height: '100%', ease: Power2.easeInOut})
   },
   created() {
     console.log("fetching page contents");
