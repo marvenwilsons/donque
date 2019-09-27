@@ -371,6 +371,14 @@ import events from "./context-menu/context-api-views/events";
 import addNote from "./context-menu/context-api-views/addnotes";
 import editRole from "./context-menu/context-api-views/editRole";
 
+// context menu api view for wrapper
+import clientload from "./context-menu/context-wrapper-views/clientload";
+import colls from "./context-menu/context-wrapper-views/collections";
+import controllers from "./context-menu/context-wrapper-views/controllers";
+import models from "./context-menu/context-wrapper-views/models";
+import serverload from "./context-menu/context-wrapper-views/serverload";
+
+
 import { TweenMax, TimelineLite, TweenLite } from "gsap";
 import { mapGetters } from "vuex";
 
@@ -506,7 +514,14 @@ export default {
     dddesc,
     ils,
     plgs,
-    editRole
+    editRole,
+
+    // context menu api views for wrapper
+    clientload,
+    collections: colls,
+    controllers,
+    models,
+    serverload
   },
   methods: {
     maximize() {

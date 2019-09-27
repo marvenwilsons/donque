@@ -2,4 +2,7 @@
     when typing a slash the application will crash
 
 @page-notes : TODO : Emplement wire up properties
+@page-notes : TODO : FInish objectify new features
+@page-notes : TODO : Make listify
+@page-notes : TODO : Make tablefy
 @page-notes : TODO : Emplement events

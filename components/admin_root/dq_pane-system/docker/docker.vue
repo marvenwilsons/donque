@@ -4,6 +4,7 @@
       <div class="flex flexcenter">
         <div class="dq-fav-con flex flexcenter">
           <!-- fav icon here -->
+          <img style="height:50px; width:50px;" src="favicon.ico" alt="">
         </div>
       </div>
     </div>
