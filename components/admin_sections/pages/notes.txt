@@ -1,8 +1,8 @@
-@page-notes : TODO : Class search field regex bug
-    when typing a slash the application will crash
-
-@page-notes : TODO : Emplement wire up properties
-@page-notes : TODO : FInish objectify new features
-@page-notes : TODO : Make listify
+@page-notes : TODO : Emplement wire up properties in the public end 
+@page-notes : TODO : Finish objectify new features
+@page-notes : TODO : Build listify
+    desc: is ann array of any type, it only renders first level list
+    no schema but can limit items by telling what is the allowed type
 @page-notes : TODO : Make tablefy
+    desc: schema based table view.
 @page-notes : TODO : Emplement events

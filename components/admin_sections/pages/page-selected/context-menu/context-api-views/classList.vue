@@ -69,7 +69,9 @@
                       :key="`qwehrk-${keys}`"
                     >
                       <div>
-                        <strong :style="{textDecoration: cur_sel == keys ? 'underline' : 'none'}" >{{keys}}</strong>
+                        <strong
+                          :style="{textDecoration: cur_sel == keys ? 'underline' : 'none'}"
+                        >{{keys}}</strong>
                       </div>
                     </div>
                   </div>
@@ -115,7 +117,7 @@
                         :style="{border: `1px solid ${$store.state.theme.global.border_color}`}"
                         :key="`osw-${classes}`"
                       >
-                        <small>
+                        <small class="pointer">
                           <strong>
                             <span @click="sel_class(classes)">{{classes}}</span>
                           </strong>
@@ -190,22 +192,25 @@ export default {
           this.cl_list = addrs;
         });
     },
-    cur_search_value(o, n) {
-      // @note fix the bug invalid regular expression, type \ in the search box
-      if (this.cur_search_value == "") {
-        this.cur_search_value = undefined;
+    cur_search_value(current, prev) {
+      const regex = /[\\]/gim;
+      if (!regex.exec(current)) {
+        if (this.cur_search_value == "") {
+          this.cur_search_value = undefined;
+        } else {
+          const arr = Object.keys(
+            this.$store.state.pages.css_classes[this.cur_sel]
+          );
+          let cur_res = [];
+          arr.map(cls => {
+            if (cls.search(this.cur_search_value) == 0) {
+              cur_res.push(cls);
+            }
+          });
+          this.cur_search_result = cur_res;
+        }
       } else {
-        const arr = Object.keys(
-          this.$store.state.pages.css_classes[this.cur_sel]
-        );
-        let cur_res = [];
-        arr.map(cls => {
-          if (cls.search(this.cur_search_value) == 0) {
-            cur_res.push(cls);
-          }
-        });
-
-        this.cur_search_result = cur_res;
+        this.cur_search_result = []
       }
     }
   },
