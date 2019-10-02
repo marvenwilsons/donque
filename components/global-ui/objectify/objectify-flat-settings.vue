@@ -18,24 +18,29 @@
         background: options.bg
         }"
     >
-      <div class="flex" v-for="(objData,objIndex) in initial_object_data" :key="`--${objIndex}--}`">
+      <div v-for="(objData,objIndex) in initial_object_data" :key="`--${objIndex}--}`">
         <div
-          :style="{borderBottom:`1px solid ${options_defaults.borderColor}`}"
-          class="flex1 padleft025 flex"
+          v-if="typeof renderProp == 'object' ? !renderProp.includes(objIndex) : true"
+          :id="deleteSpace(objIndex)"
+          class="flex"
         >
-          <!-- key -->
           <div
-            @mousemove="mv"
-            @mouseenter="hoverKey = objIndex"
-            @mouseleave="hoverKey = undefined"
-            :class="[validation_target == objIndex ? 'err' : 'flex', options_defaults.padding,'flexwrap']"
+            :style="{borderBottom:`1px solid ${options_defaults.borderColor}`}"
+            class="flex1 padleft025 flex"
           >
-            <span class="pointer">{{objIndex}}</span>
-            <!-- hover container -->
-            <div class="relative">
-              <div
-                v-if="hoverKey == objIndex && inputData[objIndex].hoverInfo"
-                :style="{
+            <!-- key -->
+            <div
+              @mousemove="mv"
+              @mouseenter="hoverKey = objIndex"
+              @mouseleave="hoverKey = undefined"
+              :class="[validation_target == objIndex ? 'err' : 'flex', options_defaults.padding,'flexwrap']"
+            >
+              <span class="pointer">{{objIndex}}</span>
+              <!-- hover container -->
+              <div class="relative">
+                <div
+                  v-if="hoverKey == objIndex && inputData[objIndex].hoverInfo"
+                  :style="{
                   zIndex:100,
                   left:`${x - 20}px`,minWidth:'300px',
               maxWidth:'300px',
@@ -44,54 +49,55 @@
               borderRadius: '8px',
               ...$store.state.theme.global.page_modal_background
                 }"
-                class="absolute pad025 padleft050 padright050"
-              >{{inputData[objIndex].hoverInfo}}</div>
+                  class="absolute pad025 padleft050 padright050"
+                >{{inputData[objIndex].hoverInfo}}</div>
+              </div>
             </div>
           </div>
-        </div>
-        <div
-          :style="{borderBottom:`1px solid ${options_defaults.borderColor}`,  borderLeft:`1px solid ${options_defaults.borderColor}`}"
-          v-if="operation == 'r'"
-          :class="['flex2' ,'padleft025', options_defaults.padding]"
-        >{{objData}}</div>
-        <div
-          :style="{borderBottom:`1px solid ${options_defaults.borderColor}`,  borderLeft:`1px solid ${options_defaults.borderColor}`}"
-          v-if="operation == 'rw'"
-          class="flex2 padleft025"
-        >
-          <div :class="[options_defaults.padding]" v-if="inputData[objIndex].type == 'select'">
-            <select
-              v-on:change="change(initial_object_data[objIndex],objIndex)"
-              v-model="initial_object_data[objIndex]"
-              style="border:none; background:white; color:inherit"
-              class="borderred fullwidth canceldef pointer"
-            >
-              <option
-                :class="[options_defaults.padding]"
-                v-for="opts in inputData[objIndex].options"
-                :key="opts"
-              >{{opts}}</option>
-            </select>
-          </div>
-          <div :class="[options_defaults.padding]" v-if="inputData[objIndex].type == 'string'">
-            <input
-              style="border:none;"
-              v-on:change="change(initial_object_data[objIndex],objIndex)"
-              v-model="initial_object_data[objIndex]"
-              type="text"
-              :class="[validation_target == objIndex ? 'err' : 'colorinherit', 'fullwidth','canceldef']"
-            />
-          </div>
+          <div
+            :style="{borderBottom:`1px solid ${options_defaults.borderColor}`,  borderLeft:`1px solid ${options_defaults.borderColor}`}"
+            v-if="operation == 'r'"
+            :class="['flex2' ,'padleft025', options_defaults.padding]"
+          >{{objData}}</div>
+          <div
+            :style="{borderBottom:`1px solid ${options_defaults.borderColor}`,  borderLeft:`1px solid ${options_defaults.borderColor}`}"
+            v-if="operation == 'rw'"
+            class="flex2 padleft025"
+          >
+            <div :class="[options_defaults.padding]" v-if="inputData[objIndex].type == 'select'">
+              <select
+                v-on:change="change(initial_object_data[objIndex],objIndex)"
+                v-model="initial_object_data[objIndex]"
+                style="border:none; background:white; color:inherit"
+                class="borderred fullwidth canceldef pointer"
+              >
+                <option
+                  :class="[options_defaults.padding]"
+                  v-for="opts in inputData[objIndex].options"
+                  :key="opts"
+                >{{opts}}</option>
+              </select>
+            </div>
+            <div :class="[options_defaults.padding]" v-if="inputData[objIndex].type == 'string'">
+              <input
+                style="border:none;"
+                v-on:change="change(initial_object_data[objIndex],objIndex)"
+                v-model="initial_object_data[objIndex]"
+                type="text"
+                :class="[validation_target == objIndex ? 'err' : 'colorinherit', 'fullwidth','canceldef']"
+              />
+            </div>
 
-          <div :class="[options_defaults.padding]" v-if="inputData[objIndex].type == 'number'">
-            <input
-              style="border:none;"
-              v-on:change="change(initial_object_data[objIndex],objIndex)"
-              v-model="initial_object_data[objIndex]"
-              :step="inputData[objIndex].step"
-              type="number"
-              :class="[validation_target == objIndex ? 'err' : 'colorinherit', 'fullwidth','canceldef']"
-            />
+            <div :class="[options_defaults.padding]" v-if="inputData[objIndex].type == 'number'">
+              <input
+                style="border:none;"
+                v-on:change="change(initial_object_data[objIndex],objIndex)"
+                v-model="initial_object_data[objIndex]"
+                :step="inputData[objIndex].step"
+                type="number"
+                :class="[validation_target == objIndex ? 'err' : 'colorinherit', 'fullwidth','canceldef']"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -100,6 +106,8 @@
 </template>
 
 <script>
+import { TweenMax, TimelineLite, TweenLite } from "gsap";
+
 export default {
   props: ["inputData", "title", "options", "operation", "bg"],
   data: () => ({
@@ -125,11 +133,17 @@ export default {
     x: undefined,
     y: undefined,
 
-    hoverKey: undefined
+    hoverKey: undefined,
+
+    has_render_condition: false,
+    tobe_render: [],
+    tobe_render_read_only: [],
+    tobe_splice: undefined,
+    tobe_render_old: [],
+    render_controllers: []
   }),
   watch: {
     inputData() {
-      console.log('it changed!')
       // stage related, when traversing into stages
       this.$emit("onMounted", {
         options: this.options,
@@ -169,6 +183,21 @@ export default {
       } else {
         this.initial_object_data = render_obj;
       }
+    },
+    tobe_splice(current, prev) {
+      this.tobe_render_old = current;
+
+      this.tobe_render.splice(this.tobe_render.indexOf(current), 1);
+    }
+  },
+  computed: {
+    renderProp() {
+      if (this.tobe_render.length) {
+        // return !this.tobe_render.includes(propkey)
+        return this.tobe_render;
+      } else {
+        return true;
+      }
     }
   },
   methods: {
@@ -188,6 +217,15 @@ export default {
       }
 
       keys.map(key => {
+        // render condition
+        if (data[key].renderCondition) {
+          if (!data[key].renderCondition.method(data)) {
+            this.tobe_render.push(key);
+            this.tobe_render_read_only.push(key);
+            this.render_controllers = data[key].renderCondition.controllers;
+          }
+        }
+
         if (!types.includes(data[key].type)) {
           return this.$emit("onError", {
             Msg: `Unrecognize type found "${data[key].type}" on object key ${key}`,
@@ -203,8 +241,13 @@ export default {
               : data[key].default;
         }
       });
-
       return final_obj;
+    },
+    deleteSpace(str) {
+      return str
+        .split(" ")
+        .join()
+        .replace(" ", "");
     },
     change(val, key) {
       const output_data = this.initial_object_data;
@@ -330,6 +373,116 @@ export default {
           }
           break;
         case "select":
+          const current_items_not_being_rendered = this.tobe_render_read_only; // ['fromaction']
+          const controllers_for_items_not_yet_rendered = this
+            .render_controllers; // ['type','formtarget']
+
+          const check_render_condition = (
+            full_schema,
+            hidden_prop,
+            current_selected_value
+          ) => {
+            let response;
+
+            // 1. locate prop from schema and extract controllers
+            const controllers_array =
+              full_schema[hidden_prop].renderCondition.controllers;
+
+            // 2.   controllers are just a property of the fullschema
+            // 2.a  mutate the controllers default value by the passed current_selected_value
+            // 2.b  run renderCondition if it satisfies the condition return true else return false
+            if (controllers_array) {
+              controllers_array.map(controller => {
+                if (
+                  full_schema[controller].options.includes(
+                    current_selected_value
+                  )
+                ) {
+
+                  // mutate
+                  full_schema[controller].default = full_schema[
+                    controller
+                  ].options.indexOf(current_selected_value);
+
+                  // run render condition
+                  response = full_schema[hidden_prop].renderCondition.method(
+                    full_schema
+                  );
+                }
+              });
+            } else {
+              return {
+                status: "err",
+                Msg: `Cannot find controllers`,
+                App: "objectfySingle",
+                onMethod: "renderCondition"
+              };
+            }
+
+            //
+            return response;
+          };
+
+          // routine, always executes the renderCondition method each time select value changed
+          // each time the renderCondition method executes it mutates the current
+          if (this.tobe_render_read_only.length != 0) {
+            // console.log(controllers_for_items_not_yet_rendered)
+            current_items_not_being_rendered.map((prop_name, prop_index) => {
+              const res = check_render_condition(this.inputData, prop_name, val)
+              if (typeof res == 'boolean' && res === true) {
+                // splice
+                this.tobe_render.splice(this.tobe_render.indexOf(prop_name), 1);
+                const el = prop_name
+                  .split(" ")
+                  .join()
+                  .replace(" ", "");
+
+                // animation bg
+                setTimeout(() => {
+                  const n = document.getElementById(el);
+                  TweenMax.fromTo(
+                    n,
+                    1.5,
+                    { backgroundColor: "#FFBF00", ease: Power1.easeIn },
+                    { backgroundColor: "auto", delay: 1, ease: Power1.easeIn }
+                  );
+                }, 0);
+              } else if(res === false) {
+                // check if prop_name exist then push the prop name
+                // this makes the prop hidded
+                if (!this.tobe_render.includes(prop_name)) {
+                  this.tobe_render.push(prop_name);
+                }
+              }
+            });
+          } else {
+
+            // get click origin and condition origin
+            let click_origin
+            let render_con_origin
+            for(let objkey in this.inputData) {
+              const prop_has_renderCondition = this.inputData[objkey].renderCondition
+              if(prop_has_renderCondition){
+                render_con_origin = objkey
+                prop_has_renderCondition.controllers.map(cntrls => {
+                  if(this.inputData[cntrls].options.indexOf(val) != -1){
+                    click_origin = cntrls
+                  }
+                })
+              }
+            }
+
+            // mutate
+            this.inputData[click_origin].default = this.inputData[click_origin].options.indexOf(val)
+            let renderCondition_res = this.inputData[render_con_origin].renderCondition.method(this.inputData)
+            if(typeof renderCondition_res == 'boolean' && renderCondition_res == false) {
+              if(!this.tobe_render.includes(render_con_origin)){
+                this.tobe_render.push(render_con_origin)
+                this.tobe_render_read_only.push(render_con_origin)
+              }
+            }
+          }
+
           this.$emit("onChange", output_data);
           break;
       }
@@ -346,7 +499,6 @@ export default {
     this.s_operation = this.operation;
   },
   mounted() {
-    console.log('mounted')
     this.$emit("onMounted", {
       options: this.options,
       initial: this.initial_object_data,

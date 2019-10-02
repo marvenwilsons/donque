@@ -119,11 +119,6 @@ export default {
       }
     }
   },
-  watch: {
-    element_view_is_open() {
-      console.log("is open!");
-    }
-  },
   methods: {
     setStyle(i) {
       if (i) {

@@ -455,12 +455,9 @@ export default {
             allowWhiteSpace: false,
             default: null,
             hoverInfo: `Specifies where to send the form-data when a form is submitted. Only for type="submit"`,
-            renderCondition: schema => {
-              if (schema.type.onChangeValue == "submit") {
-                return true;
-              } else {
-                return false;
-              }
+            renderCondition: {
+              controllers: ['type'],
+              method: schema => schema.type.default == 3
             }
           },
           formenctype: {
@@ -728,7 +725,7 @@ export default {
             closable: false
           }
         });
-      } else if (!this.attr_has_changed) {
+      } else if (!this.native_attr_has_changed) {
         this.$store.commit("modal/set_modal", {
           head: "dqPageLogicError",
           body: "There is currently nothing to save",
@@ -771,7 +768,7 @@ export default {
         });
       }
     },
-    // Controller of saveToStargePane component 
+    // Controller of saveToStargePane component
     attr_save_to_stage() {
       if (this.current_attribute_tab == "Native Attributes") {
         this.nativeAttrHandler();
