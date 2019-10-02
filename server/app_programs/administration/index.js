@@ -166,9 +166,7 @@ adminMethods.adminLogout = {
                     }
                 }
             ).then(data => {
-                console.log('logout data')
-                console.log(data)
-
+                console.log('** finishing log out')
                 return true
             })
 

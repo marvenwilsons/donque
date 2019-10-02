@@ -45,7 +45,7 @@ const myTest = [
         after: err => {
             setTimeout(() => {
                 err(false)
-            }, 100)
+            }, 400)
         },
         data(data) {
             // set the value of username and token from the return value
@@ -75,7 +75,11 @@ const myTest = [
             }
         },
         before: err => err(false),
-        after: err => err(false),
+        after: err => {
+            setTimeout(() => {
+                err(hasErr)
+            }, 500)
+        },
         data(data){
             myTest[2].input.token = data[0].data.actions[0].content.token
             myTest[2].input.username = data[0].data.actions[0].content.username
@@ -96,7 +100,11 @@ const myTest = [
             }
         },
         before: err => err(false),
-        after: err => err(false),
+        after: err => {
+            setTimeout(() => {
+                err(hasErr)
+            }, 500)
+        },
         data(data){            
             const d = data[2].data.content
 
@@ -123,7 +131,11 @@ const myTest = [
         },
         b4val: false,
         before: err => err(hasErr),
-        after: err => err(hasErr),
+        after: err => {
+            setTimeout(() => {
+                err(hasErr)
+            }, 500)
+        },
         data(data) {
             myTest[4].input.token = data[0].data.actions[0].content.token
             myTest[4].input.username = data[0].data.actions[0].content.username
@@ -142,7 +154,11 @@ const myTest = [
             command: 'deleteAppAdmin',
         },
         before: err => err(hasErr),
-        after: err => err(hasErr),
+        after: err => {
+            setTimeout(() => {
+                err(hasErr)
+            }, 500)
+        },
         data(data) {
             myTest[5].input.token = data[0].data.actions[0].content.token
             myTest[5].input.username = data[0].data.actions[0].content.username
@@ -164,7 +180,11 @@ const myTest = [
             }
         },
         before: err => err(hasErr),
-        after: err => err(hasErr),
+        after: err => {
+            setTimeout(() => {
+                err(hasErr)
+            }, 500)
+        },
         data(data) {
             myTest[6].input.token = data[0].data.actions[0].content.token
             myTest[6].input.username = data[0].data.actions[0].content.username
@@ -189,7 +209,11 @@ const myTest = [
             },
         },
         before: err => err(hasErr),
-        after: err => err(hasErr),
+        after: err => {
+            setTimeout(() => {
+                err(hasErr)
+            }, 500)
+        },
         data(data) {
             myTest[7].input.token = data[0].data.actions[0].content.token
         }
@@ -206,7 +230,11 @@ const myTest = [
             command: 'adminLogout'
         },
         before: err => err(false),
-        after: err => err(false)        
+        after: err => {
+            setTimeout(() => {
+                err(false)
+            }, 500)
+        },       
     },
     //@test4 index 9 make illegal api call
     {

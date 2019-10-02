@@ -78,7 +78,11 @@ const routine_a = [
         expectedMsg:'init required',
         input: {},
         before: err => err(false),
-        after: err => err(false)
+        after: err => {
+            setTimeout(() => {
+                err(false)
+            }, 500)
+        },
     },
     //@test1 index 2 attempt to initialized app with db server running but with invalid username
     {
@@ -98,7 +102,11 @@ const routine_a = [
             section: 'dqapp'
         },
         before: err => err(false),
-        after: err => err(false)
+        after: err => {
+            setTimeout(() => {
+                err(false)
+            }, 500)
+        },
     },
     //@test1 index 3 attempt to initialized app with db server running but with invalid password
     {
@@ -118,7 +126,11 @@ const routine_a = [
             section: 'dqapp'
         },
         before: err => err(false),
-        after: err => err(false)
+        after: err => {
+            setTimeout(() => {
+                err(false)
+            }, 500)
+        },
     },
     //@test1 index 4 attempt to login without initializing the application
     {
@@ -132,7 +144,11 @@ const routine_a = [
             section: 'adminMethods'
         },
         before: err => err(false),
-        after: err => err(false)
+        after: err => {
+            setTimeout(() => {
+                err(false)
+            }, 500)
+        },
     },
     //@test1 index 5 attempt to reach cardinal system without casting a command or specifying a section is expected to fail
     {
@@ -150,7 +166,11 @@ const routine_a = [
             },
         },
         before: err => err(false),
-        after: err => err(false)
+        after: err => {
+            setTimeout(() => {
+                err(false)
+            }, 500)
+        },
     },
     //@test1 index 6 attempt to reach cardinal system without specifying a section is expected to fail
     {
@@ -161,7 +181,11 @@ const routine_a = [
             command: 'test'
         },
         before: err => err(false),
-        after: err => err(false)
+        after: err => {
+            setTimeout(() => {
+                err(false)
+            }, 500)
+        },
     },
     //test1 index 7 attempt to reach cardinal system without specifying a command is expected to fail
     {
@@ -172,7 +196,11 @@ const routine_a = [
             section: 'foo'
         },
         before: err => err(false),
-        after: err => err(false)
+        after: err => {
+            setTimeout(() => {
+                err(false)
+            }, 500)
+        },
     },
     //@test1 index 8 attempt to reach a section that didnt exist in the registry is expected to fail
     {
@@ -184,7 +212,11 @@ const routine_a = [
             command: 'foo'
         },
         before: err => err(false),
-        after: err => err(false)
+        after: err => {
+            setTimeout(() => {
+                err(false)
+            }, 500)
+        },
     },
     //@test1 index 9 attempt to reach a command that didnt exist in the registy is expected to fail
     {
@@ -196,7 +228,11 @@ const routine_a = [
             command: 'foo'
         },
         before: err => err(false),
-        after: err => err(false)
+        after: err => {
+            setTimeout(() => {
+                err(false)
+            }, 500)
+        },
     },
     //@test1 index 10 initialize the app with correct set of data, with server is running, all is green is expected to succeed
     {
@@ -216,7 +252,11 @@ const routine_a = [
             command: 'dqinitapp'
         },
         before: err => err(false),
-        after: err => err(false)
+        after: err => {
+            setTimeout(() => {
+                err(false)
+            }, 500)
+        },
     },
     //@test1 index 11 get current app state should be owner login required
     {
@@ -225,7 +265,11 @@ const routine_a = [
         expectedMsg:'owner login required',
         input: {},
         before: err => err(false),
-        after: err => err(false)
+        after: err => {
+            setTimeout(() => {
+                err(false)
+            }, 500)
+        },
     },
     //@test1 index 12 initialized dashboard without instantiating the connection to database credentials
     {
@@ -239,7 +283,11 @@ const routine_a = [
             section:'adminMethods'
         },
         before: err => err(false),
-        after: err => err(false)
+        after: err => {
+            setTimeout(() => {
+                err(false)
+            }, 500)
+        },
     },
     //@test1 index 13 login as the owner
     {

@@ -59,7 +59,11 @@ const myTests = [
         expectedMsg: null,
         input: {},
         before: err => err(false),
-        after: err => err(false),
+        after: err => {
+            setTimeout(() => {
+                err(false)
+            }, 500)
+        },
     },
     //@test2 index 2 test initiate dashboard
     {
@@ -73,7 +77,11 @@ const myTests = [
             command:'initActorsDashboard'
         },
         before: err => err(false),
-        after: err => err(false),
+        after: err => {
+            setTimeout(() => {
+                err(false)
+            }, 500)
+        },
         data(data){
             console.log(data)
             myTests[3].input.token = data[0].data.actions[0].content.token            
@@ -91,7 +99,11 @@ const myTests = [
             command: 'adminLogout'
         },
         before: err => err(false),
-        after: err => err(false),
+        after: err => {
+            setTimeout(() => {
+                err(false)
+            }, 500)
+        },
     },
     //@test2 index 4 test get app state
     {
@@ -100,7 +112,11 @@ const myTests = [
         expectedMsg: null,
         input: {},
         before: err => err(false),
-        after: err => err(false),
+        after: err => {
+            setTimeout(() => {
+                err(false)
+            }, 500)
+        },
     },
     //@test2 index 5 attempt to initialize dashboard without logging in should fail
     {
@@ -114,7 +130,11 @@ const myTests = [
             command:'initActorsDashboard'
         },
         before: err => err(false),
-        after: err => err(false),
+        after: err => {
+            setTimeout(() => {
+                err(false)
+            }, 500)
+        },
     },
     //@test2 index 6 test get app state
     {
@@ -123,7 +143,11 @@ const myTests = [
         expectedMsg: null,
         input: {},
         before: err => err(false),
-        after: err => err(false),
+        after: err => {
+            setTimeout(() => {
+                err(false)
+            }, 500)
+        },
     },
     //@test2 index 7 test admin login
     {
@@ -137,7 +161,11 @@ const myTests = [
             command:'adminlogin'
         },
         before: err => err(false),
-        after: err => err(false),
+        after: err => {
+            setTimeout(() => {
+                err(false)
+            }, 500)
+        },
         data(data){
             // set the value of username and token from the return value
             // of this test, this simulates getting the data from the client
@@ -165,7 +193,11 @@ const myTests = [
             },
         },
         before: err => err(false),
-        after: err => err(false),
+        after: err => {
+            setTimeout(() => {
+                err(false)
+            }, 500)
+        },
         data(data){
             myTests[9].input.token = data[0].data.actions[0].content.token
             myTests[9].input.username = data[0].data.actions[0].content.username
@@ -186,7 +218,7 @@ const myTests = [
             err(false)
             setTimeout(() => {
                 testRunner('test3.js')
-            }, 100)
+            }, 600)
         }
     }
 ]

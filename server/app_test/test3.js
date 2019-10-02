@@ -85,7 +85,11 @@ const myTest = [
             command: 'adminLogout'
         },
         before: err => err(false),
-        after: err => err(false),
+        after: err => {
+            setTimeout(() => {
+                err(false)
+            }, 600);
+        },
     },
     //@test3 index 3 get roles list while logout, expected to fail 
     {
@@ -93,13 +97,17 @@ const myTest = [
         expected: false,
         expectedMsg: 'Illegal api call detected request is not permitted',
         input: {
-            token: undefined,
+            token: 'test',
             username: 'jannyann',
             section: 'adminMethods',
             command: 'getRoles'
         },
         before: err => err(false),
-        after: err => err(false),
+        after: err => {
+            setTimeout(() => {
+                err(false)
+            }, 600);
+        },
         data(data) {
             myTest[2].input.token = data[0].data.actions[0].content.token
             myTest[2].input.username = data[0].data.actions[0].content.username
@@ -182,7 +190,7 @@ const myTest = [
 
             setTimeout(() => {
                 testRunner('test4.js')
-            }, 100)
+            }, 600)
         },
         data(data) {
         }
