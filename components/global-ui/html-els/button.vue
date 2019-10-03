@@ -1,5 +1,5 @@
-<template v-dq-prop>
-  <div>
+<template>
+  <button>
     <slot></slot>
     <div
       v-for="(html_el,html_el_i) in els"
@@ -9,12 +9,12 @@
       :style="html_el.inlineStyle"
       v-dq-prop="html_el"
     >{{html_el.properties.text_content}}</div>
-  </div>
+  </button>
 </template>
 
 <script>
 export default {
-  name: "html_div",
+  name: "html_button",
   props: ["els"]
 };
 </script>

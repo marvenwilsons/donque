@@ -8,7 +8,7 @@
       
       :els="el.els"
       :style="el.inlineStyle"
-      :class="el.classList"
+      v-dq-prop="el"
       >{{el.properties.text_content}} </div>
     </section>
   </div>

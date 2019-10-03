@@ -15,6 +15,7 @@ import html_h6 from "@/components/global-ui/html-els/h6.vue";
 import html_main from "@/components/global-ui/html-els/main.vue";
 import html_nav from "@/components/global-ui/html-els/nav.vue";
 import html_span from "@/components/global-ui/html-els/span.vue";
+import html_button from "@/components/global-ui/html-els/button.vue"
 
 import objectifyFlatSettings from "@/components/global-ui/objectify/objectify-flat-settings.vue";
 import dqTab from "@/components/global-ui/tabs/dq-tab.vue";
@@ -36,6 +37,7 @@ Vue.component('html_h6', html_h6)
 Vue.component('html_main', html_main)
 Vue.component('html_nav', html_nav)
 Vue.component('html_span', html_span)
+Vue.component('html_button', html_button)
 
 Vue.component('objectifyFlatSettings', objectifyFlatSettings)
 Vue.component('dqTab', dqTab)
