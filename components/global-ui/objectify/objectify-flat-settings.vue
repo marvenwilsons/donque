@@ -398,7 +398,6 @@ export default {
                     current_selected_value
                   )
                 ) {
-
                   // mutate
                   full_schema[controller].default = full_schema[
                     controller
@@ -428,8 +427,12 @@ export default {
           if (this.tobe_render_read_only.length != 0) {
             // console.log(controllers_for_items_not_yet_rendered)
             current_items_not_being_rendered.map((prop_name, prop_index) => {
-              const res = check_render_condition(this.inputData, prop_name, val)
-              if (typeof res == 'boolean' && res === true) {
+              const res = check_render_condition(
+                this.inputData,
+                prop_name,
+                val
+              );
+              if (typeof res == "boolean" && res === true) {
                 // splice
                 this.tobe_render.splice(this.tobe_render.indexOf(prop_name), 1);
                 const el = prop_name
@@ -447,7 +450,7 @@ export default {
                     { backgroundColor: "auto", delay: 1, ease: Power1.easeIn }
                   );
                 }, 0);
-              } else if(res === false) {
+              } else if (res === false) {
                 // check if prop_name exist then push the prop name
                 // this makes the prop hidded
                 if (!this.tobe_render.includes(prop_name)) {
@@ -456,31 +459,43 @@ export default {
               }
             });
           } else {
-
             // get click origin and condition origin
-            let click_origin
-            let render_con_origin
-            for(let objkey in this.inputData) {
-              const prop_has_renderCondition = this.inputData[objkey].renderCondition
-              if(prop_has_renderCondition){
-                render_con_origin = objkey
+            let click_origin;
+            let render_con_origin = [];
+            for (let objkey in this.inputData) {
+              const prop_has_renderCondition = this.inputData[objkey]
+                .renderCondition;
+              if (prop_has_renderCondition) {
+                render_con_origin.push(objkey);
                 prop_has_renderCondition.controllers.map(cntrls => {
-                  if(this.inputData[cntrls].options.indexOf(val) != -1){
-                    click_origin = cntrls
+                  if (this.inputData[cntrls].options.indexOf(val) != -1) {
+                    click_origin = cntrls;
                   }
-                })
+                });
               }
             }
 
             // mutate
-            this.inputData[click_origin].default = this.inputData[click_origin].options.indexOf(val)
-            let renderCondition_res = this.inputData[render_con_origin].renderCondition.method(this.inputData)
-            if(typeof renderCondition_res == 'boolean' && renderCondition_res == false) {
-              if(!this.tobe_render.includes(render_con_origin)){
-                this.tobe_render.push(render_con_origin)
-                this.tobe_render_read_only.push(render_con_origin)
+            this.inputData[click_origin].default = this.inputData[
+              click_origin
+            ].options.indexOf(val);
+
+            render_con_origin.map(names => {
+              // console.log(this.inputData[names].renderCondition.method(this.inputData) )
+              let renderCondition_res = this.inputData[
+                names
+              ].renderCondition.method(this.inputData);
+
+              if (
+                typeof renderCondition_res == "boolean" &&
+                renderCondition_res == false
+              ) {
+                if (!this.tobe_render.includes(names)) {
+                  this.tobe_render.push(names);
+                  this.tobe_render_read_only.push(names);
+                }
               }
-            }
+            });
           }
 
           this.$emit("onChange", output_data);
