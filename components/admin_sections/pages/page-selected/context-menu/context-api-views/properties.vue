@@ -79,9 +79,10 @@
             @onSaveToStage="attr_save_to_stage"
           >
             <div>
+              <!-- $store.state.pages.temp_id ? $store.state.pages.temp_id.scoped_variable :0 -->
               <dqTab
                 :tabs="_attribute_tabs"
-                :default="$store.state.pages.temp_id ? $store.state.pages.temp_id.scoped_variable : 0"
+                :default="0"
                 :toggleMode="attrToggleMode"
                 :hideInSingleTab="true"
                 @onTabChange="tab_change"
@@ -203,27 +204,27 @@ export default {
         max: 999,
         step: 1,
         default: null
-      },
-      draggable: {
-        type: "select",
-        options: [true, false],
-        default: 1
-      },
-      dropzone: {
-        type: "select",
-        options: [true, false],
-        default: 1
-      },
-      contenteditable: {
-        type: "select",
-        options: [true, false],
-        default: 1
-      },
-      dir: {
-        type: "select",
-        options: [null, "ltr", "rtl", "auto"],
-        default: 0
       }
+      // draggable: {
+      //   type: "select",
+      //   options: [true, false],
+      //   default: 1
+      // },
+      // dropzone: {
+      //   type: "select",
+      //   options: [true, false],
+      //   default: 1
+      // },
+      // contenteditable: {
+      //   type: "select",
+      //   options: [true, false],
+      //   default: 1
+      // },
+      // dir: {
+      //   type: "select",
+      //   options: [null, "ltr", "rtl", "auto"],
+      //   default: 0
+      // }
     },
     attr_render: true,
     attrToggleMode: undefined,
@@ -456,7 +457,7 @@ export default {
             default: null,
             hoverInfo: `Specifies where to send the form-data when a form is submitted. Only for type="submit"`,
             renderCondition: {
-              controllers: ['type'],
+              controllers: ["type"],
               method: schema => schema.type.default == 3
             }
           },
@@ -468,25 +469,41 @@ export default {
               "multipart/form-data",
               "text/plain"
             ],
-            hoverInfo: `Specifies how form-data should be encoded before sending it to a server. Only for type="submit"`
+            hoverInfo: `Specifies how form-data should be encoded before sending it to a server. Only for type="submit"`,
+            renderCondition: {
+              controllers: ["type"],
+              method: schema => schema.type.default == 3
+            }
           },
           formmethod: {
             type: "select",
             options: [null, "get", "post"],
             default: 0,
-            hoverInfo: `Specifies how to send the form-data (which HTTP method to use). Only for type="submit"`
+            hoverInfo: `Specifies how to send the form-data (which HTTP method to use). Only for type="submit"`,
+            renderCondition: {
+              controllers: ["type"],
+              method: schema => schema.type.default == 3
+            }
           },
           formnovalidate: {
             type: "select",
             options: [null, "formnovalidate"],
             default: 0,
-            hoverInfo: `Specifies that the form-data should not be validated on submission. Only for type="submit" `
+            hoverInfo: `Specifies that the form-data should not be validated on submission. Only for type="submit" `,
+            renderCondition: {
+              controllers: ["type"],
+              method: schema => schema.type.default == 3
+            }
           },
           formtarget: {
             type: "select",
             options: [null, "_blank", "_self", "_parent", "top"],
             default: 0,
-            hoverInfo: `Specifies where to display the response after submitting the form. Only for type="submit"`
+            hoverInfo: `Specifies where to display the response after submitting the form. Only for type="submit"`,
+            renderCondition: {
+              controllers: ["type"],
+              method: schema => schema.type.default == 3
+            }
           },
           type: {
             type: "select",
