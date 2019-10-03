@@ -476,26 +476,28 @@ export default {
             }
 
             // mutate
-            this.inputData[click_origin].default = this.inputData[
-              click_origin
-            ].options.indexOf(val);
+            if (this.inputData[click_origin]) {
+              this.inputData[click_origin].default = this.inputData[
+                click_origin
+              ].options.indexOf(val);
 
-            render_con_origin.map(names => {
-              // console.log(this.inputData[names].renderCondition.method(this.inputData) )
-              let renderCondition_res = this.inputData[
-                names
-              ].renderCondition.method(this.inputData);
+              render_con_origin.map(names => {
+                // console.log(this.inputData[names].renderCondition.method(this.inputData) )
+                let renderCondition_res = this.inputData[
+                  names
+                ].renderCondition.method(this.inputData);
 
-              if (
-                typeof renderCondition_res == "boolean" &&
-                renderCondition_res == false
-              ) {
-                if (!this.tobe_render.includes(names)) {
-                  this.tobe_render.push(names);
-                  this.tobe_render_read_only.push(names);
+                if (
+                  typeof renderCondition_res == "boolean" &&
+                  renderCondition_res == false
+                ) {
+                  if (!this.tobe_render.includes(names)) {
+                    this.tobe_render.push(names);
+                    this.tobe_render_read_only.push(names);
+                  }
                 }
-              }
-            });
+              });
+            }
           }
 
           this.$emit("onChange", output_data);
