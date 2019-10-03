@@ -1,7 +1,12 @@
-@page-notes : TODO : Emplement wire up properties in the public end 
+Page Features
+@page-notes : 50% : Emplement wire up properties in the public end 
+@page-notes : TODO : Emplement Add Element(s) disabling on certain tags
+@page-notes : TODO : Emplement events
+
+
+Essential components
 @page-notes : TODO : Build listify
     desc: is ann array of any type, it only renders first level list
     no schema but can limit items by telling what is the allowed type
 @page-notes : TODO : Make tablefy
     desc: schema based table view.
-@page-notes : TODO : Emplement events

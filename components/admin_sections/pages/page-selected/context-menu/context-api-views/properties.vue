@@ -92,6 +92,7 @@
                     activeTextColor: 'inherit'
                   }"
               >
+              {{nativeAttr}}
                 <div class="pad125" slot="Global Attributes">
                   <objectifyFlatSettings
                     @onChange="onAttrChange"
@@ -290,12 +291,15 @@ export default {
     _root() {
       return this.$store.state.pages.root;
     },
+
+    // install native attributes here
     _attribute_tabs() {
       const TagHaveNativeAttrs = new Set([
         "html_audio",
         "html_video",
         "html_img",
-        "html_button"
+        "html_button",
+        "html_a"
       ]);
 
       if (TagHaveNativeAttrs.has(this.data.tag)) {
@@ -517,6 +521,36 @@ export default {
             maxChar: 500,
             default: null,
             hoverInfo: `Specifies an initial value for the button`
+          }
+        };
+      } else if (this.data.tag == "html_a") {
+        return {
+          target: {
+            type: "select",
+            options: [null, "_blank ", "_parent", "_self", "_top"],
+            default: 0,
+            hoverInfo: `Specifies the context in which the linked resource will open.`
+          },
+          title: {
+            type: "string",
+            minChar: 1,
+            maxChar: 500,
+            default: null,
+            hoverInfo: `Defines the title of a link, which appears to the user as a tooltip.`
+          },
+          href: {
+            type: "string",
+            minChar: 1,
+            maxChar: 500,
+            allowWhiteSpace: false,
+            default: null,
+            hoverInfo: `Specifies the linked document, resource, or location.`
+          },
+          download: {
+            type: "select",
+            options: [null, true],
+            default: 0,
+            hoverInfo: `Directs the browser to download the linked resource rather than opening it.`
           }
         };
       }

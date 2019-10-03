@@ -1,4 +1,4 @@
-<template v-dq-prop>
+<template>
   <div>
     <slot></slot>
     <div

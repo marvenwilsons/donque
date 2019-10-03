@@ -37,6 +37,8 @@ export const state = () => ({
     opt_cur_view: 'section',
     context_height: undefined,
     pending_data_to_paste: undefined,
+    cannot_be_nested_html_els: ['html_button','html_a'],
+    cannot_be_nested_els: ['plugin'],
 
     // page editor modal
     page_editor_modal: false,
