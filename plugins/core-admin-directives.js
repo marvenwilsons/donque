@@ -126,6 +126,23 @@ Vue.directive("dq-prop", {
            * Img
            */
           if (el.tagName === "IMG") {
+            // alt
+            value.properties.native_attributes.alt && setNativeAttr("alt");
+            // crossorigin
+            value.properties.native_attributes.crossorigin &&
+              setNativeAttr("crossorigin");            
+            // height
+            value.properties.native_attributes.height &&
+              setNativeAttr("height");
+            // width
+            value.properties.native_attributes.width && setNativeAttr("width");
+            // ismap
+            value.properties.native_attributes.ismap && setNativeAttr("ismap");
+            // longdesc
+            value.properties.native_attributes.longdesc &&
+              setNativeAttr("longdesc");
+            // src
+            el.dataset.img = value.properties.native_attributes.src;
           }
         }
       }

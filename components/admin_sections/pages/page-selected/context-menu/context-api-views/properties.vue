@@ -193,10 +193,8 @@ export default {
       },
       name: {
         type: "string",
-        minChar: 10,
-        maxChar: 15,
-        allowSpecialChars: false,
-        allowWhiteSpace: false,
+        minChar: 1,
+        maxChar: 100,
         default: null
       },
       tabindex: {
@@ -405,7 +403,7 @@ export default {
           },
           height: {
             type: "string",
-            minChar: 3,
+            minChar: 1,
             maxChar: 500,
             allowWhiteSpace: false,
             default: null
@@ -424,14 +422,13 @@ export default {
           },
           src: {
             type: "string",
-            minChar: 3,
+            minChar: 1,
             maxChar: 500,
-            allowWhiteSpace: false,
             default: null
           },
           width: {
             type: "string",
-            minChar: 3,
+            minChar: 1,
             maxChar: 500,
             allowWhiteSpace: false,
             default: null

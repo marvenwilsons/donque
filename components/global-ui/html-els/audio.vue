@@ -1,5 +1,5 @@
 <template>
-  <audio :src="aud === undefined ? '#' : require(`@/public/media/audio/${aud}`)"></audio>
+  <audio :src="aud === undefined ? '#' : require(`@/static/media/audio/${aud}`)"></audio>
 </template>
 
 <script>

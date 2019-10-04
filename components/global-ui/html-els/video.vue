@@ -1,5 +1,5 @@
 <template>
-  <video :src="vid == undefined ? '#' : require(`@/public/media/video/${vid}`)"></video>
+  <video :src="vid == undefined ? '#' : require(`@/static/media/video/${vid}`)"></video>
 </template>
 
 <script>

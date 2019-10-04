@@ -60,7 +60,7 @@
               <i
                 @click="$store.commit('pages/save_stage',{path: data})"
                 class="fas fa-save pointer padright025"
-              ></i>
+              > <span class="padleft025 padright050">commit</span></i>
               <i
                 v-if="!$store.state.pages.isMaximized"
                 @click="maximize"
