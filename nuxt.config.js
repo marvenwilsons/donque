@@ -70,10 +70,15 @@ module.exports = {
       config.plugins.push(
         new MonacoEditorPlugin(webpack)
       )
-      // if (ctx.isClient) {
-      //   config.target = 'electron-renderer'
-      // }
+      config.module.rules.push({
+        test: /\.(ogg|mp3|wav|mpe?g)$/i,
+        loader: "file-loader",
+        options: {
+          name: "[path][name].[ext]"
+        }
+      });
     },
+    
   },
   serverMiddleware: [
     bodyParser.json(),

@@ -92,7 +92,7 @@
                     activeTextColor: 'inherit'
                   }"
               >
-              {{nativeAttr}}
+                {{nativeAttr}}
                 <div class="pad125" slot="Global Attributes">
                   <objectifyFlatSettings
                     @onChange="onAttrChange"
@@ -313,29 +313,28 @@ export default {
         return {
           autoplay: {
             type: "select",
-            options: [true, false],
-            default: 1
+            options: [null, "autoplay"],
+            default: 0
           },
           controls: {
             type: "select",
-            options: [true, false],
-            default: 1
+            options: [null, "controls"],
+            default: 0
           },
           loop: {
             type: "select",
-            options: [true, false],
-            default: 1
+            options: [null, "loop"],
+            default: 0
           },
           muted: {
             type: "select",
-            options: [true, false],
-            default: 1
+            options: [null, "muted"],
+            default: 0
           },
           src: {
             type: "string",
             minChar: 3,
             maxChar: 500,
-            allowWhiteSpace: false,
             default: null
           }
         };
@@ -540,10 +539,8 @@ export default {
           },
           href: {
             type: "string",
-            minChar: 1,
-            maxChar: 500,
             allowWhiteSpace: false,
-            default: null,
+            default: "#",
             hoverInfo: `Specifies the linked document, resource, or location.`
           },
           download: {
