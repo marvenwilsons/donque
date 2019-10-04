@@ -347,17 +347,17 @@ export default {
           },
           controls: {
             type: "select",
-            options: [true, false],
-            default: 1
+            options: [null, true],
+            default: 0
           },
           loop: {
             type: "select",
-            options: [true, false],
+            options: [null, true],
             default: 1
           },
           muted: {
             type: "select",
-            options: [true, false],
+            options: [null, true],
             default: 1
           },
           src: {

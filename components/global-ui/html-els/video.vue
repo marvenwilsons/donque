@@ -1,16 +1,16 @@
 <template>
-  <video :src="require(`@/public/media/audio/${vid}`)"></video>
+  <video :src="vid == undefined ? '#' : require(`@/public/media/video/${vid}`)"></video>
 </template>
 
 <script>
 export default {
   data: () => ({
-    vid: "_.mp4"
+    vid: undefined
   }),
   mounted() {
-    var audiolist = document.getElementsByTagName("video");
-    for (let audio of audiolist) {
-      this.aud = audio.getAttribute("data-vid");
+    var videolist = document.getElementsByTagName("video");
+    for (let video of videolist) {
+      this.vid = video.getAttribute("data-vid");
     }
   }
 };
