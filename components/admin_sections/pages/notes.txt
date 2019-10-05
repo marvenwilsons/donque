@@ -1,7 +1,5 @@
 Page Features
-@page-notes : TODO : Emplement Add Element(s) disabling on certain tags
 @page-notes : TODO : Emplement events
-
 
 Essential components
 @page-notes : TODO : Build listify
@@ -9,3 +7,7 @@ Essential components
     no schema but can limit items by telling what is the allowed type
 @page-notes : TODO : Make tablefy
     desc: schema based table view.
+
+
+Page Features future plan emplementations
+-- search element prop

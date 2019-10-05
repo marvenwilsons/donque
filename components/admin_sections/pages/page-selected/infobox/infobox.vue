@@ -44,13 +44,12 @@ export default {
     setData(data) {
       switch (data.tag ? data.tag.split("_")[0] : "section") {
         case "html":
+          console.log('data id')
           return {
-            id: "",
+            ...data.properties,
             ClassList: data.classList,
             "Inline Style": data.inlineStyle,
-            Attributes: [],
             Events: [],
-            // DirectChildren: data.els ? null : data.els.length,
             Notes: data.notes
           };
           break;
