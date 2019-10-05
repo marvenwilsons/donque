@@ -39,6 +39,7 @@
                 :tabs="['inline styles', 'editor']"
                 :default="0"
                 :toggleMode="monacoInlineToggleMode"
+                @onTabChange="monacoTabChange"
                 :options="{
                 borderColor: $store.state.theme.global.border_color,
                 activeColor: $store.state.theme.global.secondary_bg_color,
@@ -57,7 +58,6 @@
                   ></objectifyFlatSettings>
                 </div>
                 <monacoInlineStyle
-                  @codeChange="monacoInlineCodeChange"
                   slot="editor"
                   :inlineCode="inlineCode"
                   :data="data"
@@ -179,6 +179,7 @@ export default {
     inlineStyle: undefined,
     inlineCode: undefined,
     monacoInlineToggleMode: "rerender",
+    monaco_tab_counter: 0,
 
     // Model of Global Attributes HTML view
     attrNewValue: undefined,
@@ -865,11 +866,16 @@ export default {
       });
     },
     // Controller of custom inline style
+    monacoTabChange() {
+      this.monaco_tab_counter++;
+      if (this.monaco_tab_counter == 2) {
+        this.monacoInlineToggleMode = "opacity";
+      } else if (this.monaco_tab_counter > 2) {
+        this.monaco_tab_counter = 1;
+      }
+    },
     stateMonacoChanges() {
       this.monaco_trigger = !this.monaco_trigger;
-    },
-    monacoInlineCodeChange() {
-      this.monacoInlineToggleMode = "opacity";
     }
   },
   components: {

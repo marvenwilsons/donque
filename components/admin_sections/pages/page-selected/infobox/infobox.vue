@@ -44,7 +44,6 @@ export default {
     setData(data) {
       switch (data.tag ? data.tag.split("_")[0] : "section") {
         case "html":
-          console.log('data id')
           return {
             ...data.properties,
             ClassList: data.classList,
