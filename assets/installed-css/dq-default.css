@@ -228,6 +228,9 @@
 .pointer {
   cursor: pointer;
 }
+.notallowed {
+  cursor:  not-allowed;
+}
 .overflowhidden {
   overflow: hidden !important;
 }

@@ -1,5 +1,4 @@
 Page Features
-@page-notes : 90% : Emplement wire up properties in the public end 
 @page-notes : TODO : Emplement Add Element(s) disabling on certain tags
 @page-notes : TODO : Emplement events
 

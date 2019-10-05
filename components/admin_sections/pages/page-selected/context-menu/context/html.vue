@@ -3,9 +3,13 @@
     <li
       @mouseover="opts_active = 'opts-opt-addelement'"
       @mouseleave="opts_cur_active != `opts-opt-addelement` && (opts_active = undefined)"
-      @click="$store.commit('pages/set_api_view',{view: 'addChild'})"
-      :style="setStyle(opts_active === `opts-opt-addelement` || opts_active == `opts-opt-addelement` || $store.state.pages.api_view == 'addChild')"
-      class="pad025 flex pointer"
+      @click="!$store.state.pages.cannot_be_nested_html_els.includes($store.state.pages.api_view_el.tag) && $store.commit('pages/set_api_view',{view: 'addChild'})"
+      :style="{...setStyle(opts_active === `opts-opt-addelement` || 
+          opts_active == `opts-opt-addelement` || 
+          $store.state.pages.api_view == 'addChild'),
+          color: $store.state.pages.cannot_be_nested_html_els.includes($store.state.pages.api_view_el.tag) ? 'lightgray' : ''
+      }"
+      :class="[!$store.state.pages.cannot_be_nested_html_els.includes($store.state.pages.api_view_el.tag) ?  'pointer' : 'notallowed', 'pad025' ,'flex' ]"
     >
       <div class="flex3">
         <!-- <i class="far fa-edit padleft125"></i> -->
@@ -83,11 +87,23 @@ export default {
   methods: {
     setStyle(i) {
       if (i) {
-        return {
-          background: this.$store.state.theme.global.selection2.hover_bg_color,
-          color: this.$store.state.theme.global.selection2.active_text_color,
-          transition: "0.3s"
-        };
+        if (
+          this.$store.state.pages.cannot_be_nested_html_els.includes(
+            this.$store.state.pages.api_view_el.tag
+          )
+        ) {
+          return {
+            color: this.$store.state.theme.global.selection2.active_text_color,
+            transition: "0.3s"
+          };
+        } else {
+          return {
+            background: this.$store.state.theme.global.selection2
+              .hover_bg_color,
+            color: this.$store.state.theme.global.selection2.active_text_color,
+            transition: "0.3s"
+          };
+        }
       }
     }
   }

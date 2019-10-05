@@ -26,7 +26,7 @@
       @mouseleave="opts_cur_active != `cut` && (opts_active = undefined)"
       @click="cut_copy_delete('cut')"
       :style="{...setStyle(opts_active === `cut` || opts_active == `cut`), color: element_view_is_open ? 'lightgray' : ''}"
-      :class="['pad025', 'flex' , element_view_is_open ? '' : 'pointer']"
+      :class="['pad025', 'flex' , element_view_is_open ? 'notallowed' : 'pointer']"
     >
       <div class="flex3">
         <i class="fas fa-cut padleft125"></i>
@@ -41,7 +41,7 @@
       @mouseleave="opts_cur_active != `copy` && (opts_active = undefined)"
       @click="cut_copy_delete('copy')"
       :style="{...setStyle(opts_active === `copy` || opts_active == `copy`), color: element_view_is_open ? 'lightgray' : ''}"
-      :class="['pad025', 'flex' , element_view_is_open ? '' : 'pointer']"      
+      :class="['pad025', 'flex' , element_view_is_open ? 'notallowed' : 'pointer']"      
     >
       <div class="flex3">
         <i class="far fa-copy padleft125"></i>
@@ -56,7 +56,7 @@
       @mouseleave="opts_cur_active != `paste` && (opts_active = undefined)"
       @click="cut_copy_delete('paste')"
       :style="{...setStyle(opts_active === `paste` || opts_active == `paste`), color: element_view_is_open ? 'lightgray' : ''}"
-      :class="['pad025', 'flex' , element_view_is_open ? '' : 'pointer']"
+      :class="['pad025', 'flex' , element_view_is_open ? 'notallowed' : 'pointer']"
     >
       <div class="flex3">
         <!-- <i class="far fa-copy padleft125"></i> -->
@@ -73,7 +73,7 @@
       @mouseleave="opts_cur_active != `del` && (opts_active = undefined)"
       :style="{...setStyle(opts_active === `del` || opts_active == `del`), color: element_view_is_open ? 'lightgray' : ''}"
       @click="cut_copy_delete('delete')"
-      :class="['pad025', 'flex' , element_view_is_open ? '' : 'pointer']"
+      :class="['pad025', 'flex' , element_view_is_open ? 'notallowed' : 'pointer']"
     >
       <div class="flex3">
         <i class="far fa-trash-alt padleft125"></i>
