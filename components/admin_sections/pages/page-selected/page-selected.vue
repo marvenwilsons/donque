@@ -25,10 +25,10 @@
         class="pad025 pointer margin025 padleft050 padright050"
       >Route settings</div>
       <div
-        :style="{background: comp == 'props' ? $store.state.theme.global.secondary_bg_color : ''}"
-        @click="comp = 'props'"
+        :style="{background: comp == 'mystylesheet' ? $store.state.theme.global.secondary_bg_color : ''}"
+        @click="comp = 'mystylesheet'"
         class="pad025 pointer margin025 padleft050 padright050"
-      >Properties</div>
+      >My Style sheet</div>
       <div
         :style="{background: comp == 'globals' ? $store.state.theme.global.secondary_bg_color : ''}"
         @click="comp = 'globals'"
@@ -42,7 +42,7 @@
 // import { mapGetters } from "vuex";
 import editor from "./editor-view";
 import route_settings from "./route-settings-view";
-import properties from "./props-view";
+import mystylesheet from "./mystylesheet.vue";
 import globals from "./globals";
 import { TweenMax, TimelineLite, TweenLite } from "gsap";
 
@@ -57,7 +57,7 @@ export default {
   components: {
     editor,
     rs: route_settings,
-    props: properties,
+    mystylesheet,
     globals
   },
   mounted() {

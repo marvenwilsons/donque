@@ -216,6 +216,7 @@ export default {
   },
   methods: {
     sel_file(key) {
+      console.log('selecting css')
       this.cur_sel = key;
     },
     sel_class(cl) {
@@ -287,6 +288,7 @@ export default {
   },
   mounted() {
     // focus on class search input box
+    console.log('class mounting')
     if (document.getElementById("cl_srch") != null) {
       document.getElementById("cl_srch").focus();
     }

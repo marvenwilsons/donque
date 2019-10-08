@@ -385,6 +385,80 @@ pageMethods.getPage = {
         })
     }
 }
+pageMethods.getMyCustomStyleSheet = {
+    get prop() {
+        return {
+          funcIsDestructive: false
+        };
+    },
+    getMyCustomStyleSheet() {
+        console.log("** Fetching custom style sheet")
+        
+        const path = require("path");
+        const fs = require("fs");
+
+        const my_custom_css = path.join(__dirname, '../../../assets/installed-css/my-custom.css')
+        const file_content = fs.readFileSync(my_custom_css).toString();
+
+        return new Promise((resolve,reject) => {
+            resolve({
+              status: true,
+              data: {
+                actions: [],
+                msg: null,
+                payload: file_content
+              }
+            });
+        })
+    }
+}
+pageMethods.updateCustomStyleSheet = {
+    get prop() {
+        return {
+        funcIsDestructive: false
+        };
+    },
+    updateCustomStyleSheet({ dep, data }) {
+        console.log("** Updating custom stlye sheet");
+        
+        const path = require("path")
+        const fs = require("fs");
+        const my_custom_css = path.join(
+        __dirname,
+        "../../../assets/installed-css/my-custom.css"
+        );
+
+        let hasErr = undefined
+        fs.writeFile(my_custom_css, data, err => {
+            if (err) {
+                hasErr = err
+            }
+        })
+
+        return new Promise(async (resolve, reject) => {
+            if(hasErr) {
+                reject({
+                    status: false,
+                    data: {
+                        actions: [{
+                            title: 'prompt_err',
+                            msg: hasErr
+                        }]
+                    }
+                })
+            } else {
+                resolve({
+                  status: true,
+                  data: {
+                    actions: [],
+                    msg: null,
+                  }
+                });
+            }
+        });
+
+    }
+};
 pageMethods.getCss = {
     get prop() {
         return {

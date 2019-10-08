@@ -1,6 +1,7 @@
 Page Features
+@page-notes : TODO : Emplement styesheet view
+@page-notes : TODO : Emplement live view
 @page-notes : TODO : Emplement events
-@page-notes : TODO : Bug, fix monaco on mount refresh
 
 Essential components
 @page-notes : TODO : Build listify

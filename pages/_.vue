@@ -194,4 +194,5 @@ export default {
 <style>
 @import url("@/assets/dq-css/dq-fw-0.3.css");
 @import url("@/assets/dq-css/normalize.css");
+@import url("@/assets/installed-css/my-custom.css");
 </style>

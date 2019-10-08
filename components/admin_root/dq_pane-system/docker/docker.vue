@@ -17,8 +17,8 @@
           :id="`dqdi_${item_index}_${items}`"
           @click="start(items,item_index)"
           :style="{
-              background: active === item_index || cur_actv == item_index ? $store.state.theme.global.tertiary_bg_color  : '', 
-              color: active == item_index || cur_actv == item_index ? '' : $store.state.theme.global.tertiary_bg_color 
+              background: active === item_index || cur_actv == item_index ? $store.state.theme.global.light_text_color  : '', 
+              color: active == item_index || cur_actv == item_index ? '' : $store.state.theme.global.light_text_color
             }"
           @mouseover="active = item_index"
           @mouseleave="cur_actv != item_index && (active = undefined)"

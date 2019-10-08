@@ -1,0 +1,13 @@
+.global_width {
+    min-width: 960px;
+}
+
+.text {
+    color: blue;
+    font-weight: 700
+}
+
+.textDesign2 {
+    color: blue;
+    font-weight: 700
+}

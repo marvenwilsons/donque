@@ -15,7 +15,6 @@
 </template>
 
 <script>
-//https://www.npmjs.com/package/monaco-editor-vue
 import MonacoEditor from "vue-monaco";
 
 export default {
@@ -115,7 +114,6 @@ export default {
   mounted() {
     // for some reason the width of the editor wont get to 100%
     // if I dont refresh the editor 2 times.
-    console.log('mounting monaco')
     setTimeout(() => {
       this.ready = true;
       setTimeout(() => {
