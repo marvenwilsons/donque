@@ -1,5 +1,5 @@
 Page Features
-@page-notes : TODO : Emplement styesheet view
+@page-notes : TODO : Build listify
 @page-notes : TODO : Emplement live view
 @page-notes : TODO : Emplement events
 

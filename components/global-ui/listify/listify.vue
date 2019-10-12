@@ -1,0 +1,541 @@
+<template>
+  <div
+    @click.right.prevent
+    :style="{border: `1px solid ${appearance.borderColor}`, color: appearance.textColor, height: appearance.height, width: appearance.width }"
+    class="flex fullwidth flexcol relative"
+  >
+    <div>
+      <!-- search bar here -->
+      <div
+        :style="{background: appearance.searchBarBgColor, color: appearance.searchBarTextColor, ...appearance.searchBarCustomStyle}"
+        class="flex pad050 padtop125 flexcol"
+        v-if="config.search"
+      >
+        <div
+          :style="{border: `1px solid ${appearance.searchBoxBorderColor}`,borderRadius:'2px'}"
+          class="flex fullwidth"
+        >
+          <div class="padleft050 flex" style="background:white;  color:#2A2F2E;">
+            <div
+              :style="{borderRight: `1px solid ${appearance.searchBoxBorderColor}`}"
+              class="padtop025 padbottom025 padright050 flex1"
+            >
+              <span>
+                <small>Search by:</small>
+              </span>
+              <span @click="showSelect()" class="pointer">
+                <strong>
+                  <small>
+                    {{selectedSearchOption}}
+                    <i class="fas fa-angle-down"></i>
+                  </small>
+                </strong>
+              </span>
+            </div>
+          </div>
+          <!-- filter -->
+          <div
+            :style="{
+            background:'white',
+            borderRight: `1px solid ${appearance.searchBoxBorderColor}`
+            }"
+            v-if="config.showFilter && prop_is_number"
+            class="flex flexcenter padtop025 padbottom025 padright050 padleft050 relative"
+          >
+            <small>Filter by:</small>
+            <span @click="showFilter()" class="pointer">
+              <small class="pad025">
+                <strong>
+                  {{selectedSearchFilter}}
+                  <i class="fas fa-angle-down"></i>
+                </strong>
+              </small>
+            </span>
+            <div
+              v-if="showSearchFilter"
+              style="top:32px;width:90px;height:150px;z-index:900"
+              class="absolute"
+            >
+              <!-- listify -->
+              <listify
+                @onSelect="filterSelect"
+                :inputData="filters"
+                :config="{
+                    title: 'filters',
+                    isNumbered: false, // detemines if the list show numbered list
+                    propDisplay: 'filter', // detemines the display value of each list
+                    search: false, // shows the search functionality if true,
+                    showModal:false,
+                    defaultSelected: selectedSearchFilter,
+                }"
+                :appearance="{
+                  // dimensions
+                  height: '100%', // required 
+                  width: '100%', // required
+
+                  // text
+                  textColor: appearance.textColor,
+
+                  // border colors
+                  borderColor: appearance.borderColor,
+                  listBorderColor: appearance.listBorderColor,
+
+                  // backgrounds
+                  bodyBg:appearance.bodyBg,
+                  searchBarBgColor: appearance.searchBarBgColor,
+                  searchBarTextColor: appearance.searchBarTextColor,
+                  odds: appearance.odds, // background of odd index item in the list
+                  evens: appearance.evens, // background of even index item in the list
+
+                  // hovers
+                  hoverTextColor: appearance.hoverTextColor,
+                  hoverBgColor: appearance.hoverBgColor,
+                  hoverCustomStyle: appearance.hoverCustomStyle,
+
+                  // active
+                  activeTextColor: appearance.activeTextColor,
+                  activeBgColor: appearance.activeBgColor,
+              }"
+              ></listify>
+            </div>
+          </div>
+          <!-- search input -->
+          <input
+            :placeholder="config.searchBarPlaceHolder"
+            class="h-input pad025 flex1"
+            type="text"
+            v-model="searchVal"
+          />
+          <div
+            @click="addItem"
+            :style="{borderLeft: `1px solid ${appearance.searchBoxBorderColor}`,borderRadius:'2px'}"
+            class="flex flexcenter pad050 pointer"
+          >
+            <i class="fas fa-plus"></i>
+          </div>
+        </div>
+        <!--  -->
+        <div class="flex flexend margintop050">50 {{config.title}}</div>
+        <!-- listify  -->
+        <div
+          v-if="showSearchBySelect"
+          style="top:50px;width:200px;height:150px;z-index:500;boxShadow:2px 2px 7px 1px #393e4244"
+          class="absolute flex"
+        >
+          <listify
+            @onSelect="propSelect"
+            :inputData="prop_names"
+            :config="{
+                title: 'pages',
+                isNumbered: false, // detemines if the list show numbered list
+                propDisplay: 'prop', // detemines the display value of each list
+                showModal:false,
+                defaultSelected: selectedSearchOption
+            }"
+            :appearance="{
+              // dimensions
+              height: '100%', // required 
+              width: '100%', // required
+
+              // text
+              textColor: appearance.textColor,
+
+              // border colors
+              borderColor: appearance.borderColor,
+              listBorderColor: appearance.listBorderColor,
+
+              // backgrounds
+              bodyBg:appearance.bodyBg,
+              searchBarBgColor: appearance.searchBarBgColor,
+              searchBarTextColor: appearance.searchBarTextColor,
+              odds: appearance.odds, // background of odd index item in the list
+              evens: appearance.evens, // background of even index item in the list
+
+              // hovers
+              hoverTextColor: appearance.hoverTextColor,
+              hoverBgColor: appearance.hoverBgColor,
+              hoverCustomStyle: appearance.hoverCustomStyle,
+
+              // active
+              activeTextColor: appearance.activeTextColor,
+              activeBgColor: appearance.activeBgColor,
+          }"
+          ></listify>
+        </div>
+      </div>
+    </div>
+    <div>
+      <!-- top -->
+      <slot name="top"></slot>
+    </div>
+    <div>
+      <!-- render here -->
+    </div>
+    <div v-if="err">
+      <div class="backgrounderr">
+        <strong class="err">ERROR: {{errmsg}}</strong>
+      </div>
+    </div>
+    <div class="relative fullheight-percent" v-if="!err">
+      <!-- render -->
+      <div
+        style="z-index:1;"
+        class="absolute flex flexcenter err background fullwidth fullheight-percent"
+        v-if="searchNoMatch"
+      >
+        <span class="backgrounderr pad025 padleft050 padright050">
+          <h5 class="err padleft125 padright125">No Match Found</h5>
+        </span>
+      </div>
+      <div
+        v-if="config.showModal"
+        style="z-index:1;"
+        class="absolute fullwidth fullheight-percent flex relative"
+      >
+        <div
+          :style="{background:`${appearance.modalBgOverlay}`,opacity:'0.5', zIndex:'-100'}"
+          class="absolute fullwidth fullheight-percent"
+        ></div>
+        <!-- modal here -->
+        <div style="height:50%" class="fullwidth fullheight-percent flex flexcenter relative">
+          <slot name="modal"></slot>
+        </div>
+      </div>
+      <div
+        :style="{overflow: 'auto',background:appearance.bodyBg}"
+        class="fullwidth relative fullheight-percent"
+      >
+        <div v-show="!searchNoMatch" class="absolute fullwidth">
+          <div
+            class="pad025 pointer"
+            v-for="(items,item_index) in searchByResult.length ? searchByResult : inputData"
+            :key="`dq-listify-${item_index}`"
+            :style="{
+                background: isOdd(item_index) ? appearance.odds : appearance.evens,
+                ...setHoverStyle(items[config.propDisplay],item_index), 
+                ...activeStyle(items[config.propDisplay]),
+                borderBottom: `1px solid ${appearance.listBorderColor}`
+                }"
+            @mouseover="hover = items[config.propDisplay], onHover(items)"
+            @mouseleave="hover = undefined"
+            @click="
+              setActive(items[config.propDisplay]), 
+              hover = undefined,
+              showOnCLickExpand_animate(`${items[config.propDisplay]}`),
+              select(items[config.propDisplay],true)"
+          >
+            <!-- config -->
+            <div v-if="config" class="flex pad025 fullwidth flexcol">
+              <div class="flex fullwidth flex1">
+                <div v-if="config ? config.isNumbered : true" class="padright125">{{item_index}}</div>
+                <div class="padright050">
+                  <slot name="item-icon"></slot>
+                </div>
+                <div class="flex spacebetween fullwidth">
+                  <div>{{items[config.propDisplay] ? items[config.propDisplay] : dispErr(`config propDisplay ${config.propDisplay} does not exist`)}}</div>
+                  <div v-if="config.contextStyle == 'showOnCLickExpand'">
+                    <i v-if="active != items[config.propDisplay]" class="fas fa-angle-down"></i>
+                    <i v-if="active == items[config.propDisplay]" class="fas fa-angle-left"></i>
+                  </div>
+                </div>
+              </div>
+              <!-- context actions if showOnCLickExpand -->
+              <div
+                :id="`${items[config.propDisplay]}`"
+                v-if="config.contextStyle == 'showOnCLickExpand' && context_state === items[config.propDisplay]"
+                style="opacity: 0;"
+                class="flex flex1 flexend marginleft125 marginright125"
+              >
+                <div
+                  @mouseover="context_hover = true"
+                  @mouseleave="context_hover = false"
+                  class="marginleft125 showOnCLickExpand_items"
+                  v-for="context_actions in config.contextActions"
+                  :key="`context-key-${context_actions}`"
+                  @click="contextAction(context_actions,items)"
+                  :style="{textDecoration: context_actions == selected_action ? 'underline' : 'none'}"
+                >{{context_actions}}</div>
+              </div>
+            </div>
+            <!-- config -->
+            <div v-if="!config">
+              <div class="backgrounderr">
+                <span class="err">Cannot dipsplay list without configuration object</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <!-- bottom -->
+      <slot name="bottom"></slot>
+    </div>
+  </div>
+</template>
+
+<script>
+import { TweenMax, TimelineLite, TweenLite } from "gsap";
+
+export default {
+  name: "listify",
+  props: {
+    inputData: Array,
+    config: Object,
+    appearance: Object
+  },
+  data: () => ({
+    err: false,
+    errmsg: undefined,
+
+    hover: undefined,
+    active: undefined,
+
+    searchVal: undefined,
+    searchByResult: [],
+
+    context_state: undefined,
+    context_action: undefined,
+    context_hover: false,
+    selected_action: undefined,
+
+    showSearchBySelect: false,
+    showSearchFilter: false,
+    selectedSearchOption: undefined,
+    selectedSearchFilter: undefined,
+    filters: [
+      {
+        filter: "==" // equal to
+      },
+      {
+        filter: ">" // greter than
+      },
+      {
+        filter: "<" // less than
+      }
+    ]
+  }),
+  watch: {
+    searchVal(current, prev) {
+      let final = [];
+      if (this.prop_is_number) {
+        // get filter
+        switch (this.selectedSearchFilter) {
+          case "==":
+            this.inputData.map(e => {
+              if (e[this.selectedSearchOption] == current) {
+                final.push(e);
+              }
+            });
+            break;
+          case "<":
+            this.inputData.map(e => {
+              if (e[this.selectedSearchOption] < current) {
+                final.push(e);
+              }
+            });
+            break;
+          case ">":
+            this.inputData.map(e => {
+              if (e[this.selectedSearchOption] > current) {
+                final.push(e);
+              }
+            });
+            break;
+        }
+      } else {
+        // its a string
+        // deafult filter to equality
+        this.inputData.map(e => {
+          if (e[this.selectedSearchOption].indexOf(current) == 0) {
+            final.push(e);
+          }
+        });
+      }
+      this.searchByResult = final;
+    }
+  },
+  computed: {
+    input_data_keys() {
+      return Object.keys(this.inputData[0]);
+    },
+    prop_names() {
+      let prop_names = [];
+      let search_by_options = [];
+
+      this.inputData.map(obj => {
+        Object.keys(obj).map(names => {
+          if (!prop_names.includes(names)) {
+            prop_names.push(names);
+          }
+        });
+      });
+
+      prop_names.map(prop_names => {
+        search_by_options.push({
+          prop: prop_names
+        });
+      });
+
+      return search_by_options;
+    },
+    prop_is_number() {
+      return typeof this.inputData[0][this.selectedSearchOption] == "number";
+    },
+    searchNoMatch() {
+      let hasNoMatch = false;
+
+      if (this.searchVal && this.searchByResult.length === 0) {
+        hasNoMatch = true;
+      } else {
+        hasNoMatch = false;
+      }
+
+      return hasNoMatch;
+    }
+  },
+  methods: {
+    dispErr(msg) {
+      this.err = true;
+      this.errmsg = msg;
+    },
+    select(val, mode) {
+      this.$emit("onSelect", val);
+      if (
+        this.config.contextStyle == "showOnCLickExpand" &&
+        this.context_hover == false
+      ) {
+        if (this.context_state === val) {
+          this.context_state = undefined;
+          this.context_action = undefined;
+          this.selected_action = undefined;
+        } else {
+          this.context_action = undefined;
+          this.context_state = val;
+        }
+      }
+    },
+    onHover(val) {
+      this.$emit("onActiveHover", val);
+    },
+    isOdd(num) {
+      return num % 2;
+    },
+    //
+    contextAction(actionName, entity) {
+      this.context_action = actionName;
+      this.selected_action = actionName;
+      this.$emit("onContextAction", {
+        actionName,
+        actionCastOn: entity
+      });
+    },
+    addItem() {
+      this.$emit("onAddItem");
+    },
+    //
+    showOnCLickExpand_animate(id) {
+      setTimeout(() => {
+        const n = document.getElementById(id);
+        if (n) {
+          if (!this.context_action) {
+            TweenMax.fromTo(n, 0.2, { opacity: 0 }, { opacity: 1 });
+          } else {
+            n.style.opacity = 1;
+          }
+        }
+      }, 0);
+    },
+    // set the clicked item id
+    setActive(id) {
+      if (this.active === id) {
+        if (this.context_hover == false) {
+          this.active = undefined;
+        }
+      } else {
+        this.active = id;
+        // this.activeStyle = this.appearance.acitveCustomStyle
+      }
+    },
+    // provides dynamic style to items
+    activeStyle(id) {
+      if (this.active === id) {
+        const custom = this.appearance.acitveCustomStyle;
+
+        return {
+          ...custom,
+          background:
+            this.acitve === id
+              ? this.appearance.activeBgColor
+              : this.appearance.hoverBgColor,
+          transition: "0.3s",
+          color:
+            this.acitve === id
+              ? this.appearance.activeTextColor
+              : this.appearance.hoverTextColor
+        };
+      }
+    },
+    // set hover style
+    setHoverStyle(id, index) {
+      if (id === this.hover || this.acitve === id) {
+        let customStyle = this.appearance.hoverCustomStylefined;
+
+        return {
+          ...customStyle,
+          background:
+            this.acitve === id
+              ? this.appearance.activeBgColor
+              : this.appearance.hoverBgColor,
+          transition: "0.3s",
+          color:
+            this.acitve === id
+              ? this.appearance.activeTextColor
+              : this.appearance.hoverTextColor
+        };
+      }
+    },
+    //
+    showSelect() {
+      this.showSearchBySelect = !this.showSearchBySelect;
+
+      if (this.showSearchBySelect) {
+        this.showSearchFilter = false;
+      }
+    },
+    //
+    showFilter() {
+      this.showSearchFilter = !this.showSearchFilter;
+
+      if (this.showSearchFilter) {
+        this.showSearchBySelect = false;
+      }
+    },
+    propSelect(val) {
+      this.showSearchBySelect = false;
+      this.selectedSearchOption = val;
+    },
+    filterSelect(val) {
+      this.showSearchFilter = false;
+      this.selectedSearchFilter = val;
+    }
+  },
+  mounted() {
+    this.selectedSearchOption = this.config.propDisplay;
+    this.selectedSearchFilter = "==";
+    // set default selected
+    this.active = this.config.defaultSelected;
+  }
+};
+</script>
+
+<style>
+.showOnCLickExpand_items {
+  font-weight: 100;
+}
+.showOnCLickExpand_items:hover {
+  transition: 0.3s;
+  text-decoration: underline;
+}
+</style>
+

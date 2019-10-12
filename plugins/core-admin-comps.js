@@ -23,6 +23,7 @@ import html_img from "@/components/global-ui/html-els/img.vue";
 import objectifyFlatSettings from "@/components/global-ui/objectify/objectify-flat-settings.vue";
 import dqTab from "@/components/global-ui/tabs/dq-tab.vue";
 import saveToStagePane from "@/components/global-ui/dq-page/panes/stage-pane.vue";
+import listify from "@/components/global-ui/listify/listify.vue";
 
 Vue.component("spinner", spinner);
 Vue.component("html_p", html_p);
@@ -47,3 +48,5 @@ Vue.component("html_img", html_img);
 Vue.component("objectifyFlatSettings", objectifyFlatSettings);
 Vue.component("dqTab", dqTab);
 Vue.component("saveToStagePane", saveToStagePane);
+Vue.component("listify", listify);
+
