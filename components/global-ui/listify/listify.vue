@@ -11,49 +11,102 @@
         class="flex pad050 padtop125 flexcol"
         v-if="config.search"
       >
-        <div
-          :style="{border: `1px solid ${appearance.searchBoxBorderColor}`,borderRadius:'2px'}"
-          class="flex fullwidth"
-        >
-          <div class="padleft050 flex" style="background:white;  color:#2A2F2E;">
-            <div
-              :style="{borderRight: `1px solid ${appearance.searchBoxBorderColor}`}"
-              class="padtop025 padbottom025 padright050 flex1"
-            >
-              <span>
-                <small>Search by:</small>
-              </span>
+        <!-- :style="{border: `1px solid ${appearance.searchBoxBorderColor}`,borderRadius:'2px'}" -->
+        <div class="flex fullwidth flexwrap">
+          <!-- search by -->
+          <div
+            name="search by container"
+            class="flex margin025"
+            :style="{background:'white',  color:'#2A2F2E', border: `1px solid ${appearance.borderColor}`}"
+          >
+            <div class="flex flexcenter padleft050 padright050 padtop025 padbottom025">
+              <div class="padright050">Search by:</div>
               <span @click="showSelect()" class="pointer">
-                <strong>
-                  <small>
-                    {{selectedSearchOption}}
-                    <i class="fas fa-angle-down"></i>
-                  </small>
-                </strong>
+                <div>
+                  <span class="padright025">{{selectedSearchOption}}</span>
+                  <i class="fas fa-angle-down padright025"></i>
+                </div>
               </span>
+            </div>
+          </div>
+          <!-- sort -->
+          <div
+            :style="{
+              background:'white',
+              border: `1px solid ${appearance.borderColor}`
+            }"
+            class="flex flexcenter margin025 padright050 padleft050"
+          >
+            <span class="pointer" @click="sortToggle">
+              Sort by: {{sortIs}}
+              <i class="fas fa-angle-down padleft025 padright025"></i>
+            </span>
+            <div
+              class="absolute"
+              style="top:60px;width:100px;height:150px;z-index:900;boxShadow:2px 2px 7px 1px #393e4244"
+              v-if="isShowSort"
+            >
+              <listify
+                @onSelect="sortSelect"
+                :inputData="getSort"
+                :config="{
+                    title: 'sort',
+                    isNumbered: false, // detemines if the list show numbered list
+                    propDisplay: 'sort', // detemines the display value of each list
+                    search: false, // shows the search functionality if true,
+                    showModal:false,
+                    defaultSelected: sortIs,
+                }"
+                :appearance="{
+                  // dimensions
+                  height: '100%', // required 
+                  width: '100%', // required
+
+                  // text
+                  textColor: appearance.textColor,
+
+                  // border colors
+                  borderColor: appearance.borderColor,
+                  listBorderColor: appearance.listBorderColor,
+
+                  // backgrounds
+                  bodyBg:appearance.bodyBg,
+                  searchBarBgColor: appearance.searchBarBgColor,
+                  searchBarTextColor: appearance.searchBarTextColor,
+                  odds: appearance.odds, // background of odd index item in the list
+                  evens: appearance.evens, // background of even index item in the list
+
+                  // hovers
+                  hoverTextColor: appearance.hoverTextColor,
+                  hoverBgColor: appearance.hoverBgColor,
+                  hoverCustomStyle: appearance.hoverCustomStyle,
+
+                  // active
+                  activeTextColor: appearance.activeTextColor,
+                  activeBgColor: appearance.activeBgColor,
+              }"
+              ></listify>
             </div>
           </div>
           <!-- filter -->
           <div
             :style="{
-            background:'white',
-            borderRight: `1px solid ${appearance.searchBoxBorderColor}`
+              background:'white',
+              border: `1px solid ${appearance.borderColor}`
             }"
             v-if="config.showFilter && prop_is_number"
-            class="flex flexcenter padtop025 padbottom025 padright050 padleft050 relative"
+            class="flex flexcenter padtop025 padbottom025 padright050 padleft050 relative margin025"
           >
-            <small>Filter by:</small>
+            <div class="padright050">Filter by:</div>
             <span @click="showFilter()" class="pointer">
-              <small class="pad025">
-                <strong>
-                  {{selectedSearchFilter}}
-                  <i class="fas fa-angle-down"></i>
-                </strong>
-              </small>
+              <div class>
+                <span class="padright025">{{selectedSearchFilter}}</span>
+                <i class="fas fa-angle-down"></i>
+              </div>
             </span>
             <div
               v-if="showSearchFilter"
-              style="top:32px;width:90px;height:150px;z-index:900"
+              style="top:35px;width:100px;height:150px;z-index:900;boxShadow:2px 2px 7px 1px #393e4244"
               class="absolute"
             >
               <!-- listify -->
@@ -100,26 +153,39 @@
             </div>
           </div>
           <!-- search input -->
-          <input
-            :placeholder="config.searchBarPlaceHolder"
-            class="h-input pad025 flex1"
-            type="text"
-            v-model="searchVal"
-          />
+          <div
+            :style="{
+              border: `1px solid ${appearance.borderColor}`
+            }"
+            class="flex flex1 margin025"
+          >
+            <input
+              :placeholder="config.searchBarPlaceHolder"
+              style="min-width:300px;"
+              class="h-input pad050 flex1"
+              type="text"
+              v-model="searchVal"
+            />
+          </div>
           <div
             @click="addItem"
-            :style="{borderLeft: `1px solid ${appearance.searchBoxBorderColor}`,borderRadius:'2px'}"
-            class="flex flexcenter pad050 pointer"
+            :style="{borderRadius:'2px',background:'white', width: '30px', border: `1px solid ${appearance.borderColor}`, fontWeight:'100'}"
+            class="flex flexcenter pad050 pointer margin025"
           >
             <i class="fas fa-plus"></i>
           </div>
         </div>
         <!--  -->
-        <div class="flex flexend margintop050">50 {{config.title}}</div>
+        <div class="flex flexend margintop050">
+          <span
+            :style="{borderRadius:'3px',color:appearance.textColor}"
+            class="padleft050 padright050"
+          >{{searchByResult.length ? searchByResult.length : inputData.length}} {{config.title}}</span>
+        </div>
         <!-- listify  -->
         <div
           v-if="showSearchBySelect"
-          style="top:50px;width:200px;height:150px;z-index:500;boxShadow:2px 2px 7px 1px #393e4244"
+          style="top:60px;width:200px;height:150px;z-index:500;boxShadow:2px 2px 7px 1px #393e4244"
           class="absolute flex"
         >
           <listify
@@ -184,7 +250,7 @@
         v-if="searchNoMatch"
       >
         <span class="backgrounderr pad025 padleft050 padright050">
-          <h5 class="err padleft125 padright125">No Match Found</h5>
+          <h6 style="opacity:0.5;" class="err padleft125 padright125">No Match Found</h6>
         </span>
       </div>
       <div
@@ -231,7 +297,7 @@
                 <div class="padright050">
                   <slot name="item-icon"></slot>
                 </div>
-                <div class="flex spacebetween fullwidth">
+                <div class="flex spacebetween fullwidth pad025">
                   <div>{{items[config.propDisplay] ? items[config.propDisplay] : dispErr(`config propDisplay ${config.propDisplay} does not exist`)}}</div>
                   <div v-if="config.contextStyle == 'showOnCLickExpand'">
                     <i v-if="active != items[config.propDisplay]" class="fas fa-angle-down"></i>
@@ -299,6 +365,9 @@ export default {
     context_hover: false,
     selected_action: undefined,
 
+    isShowSort: false,
+    sortIs: undefined,
+
     showSearchBySelect: false,
     showSearchFilter: false,
     selectedSearchOption: undefined,
@@ -316,6 +385,9 @@ export default {
     ]
   }),
   watch: {
+    selectedSearchOption() {
+      this.sortIs = undefined
+    },
     searchVal(current, prev) {
       let final = [];
       if (this.prop_is_number) {
@@ -392,6 +464,27 @@ export default {
       }
 
       return hasNoMatch;
+    },
+    getSort() {
+      if (this.prop_is_number) {
+        return [
+          {
+            sort: "High - Low"
+          },
+          {
+            sort: "Low - High"
+          }
+        ];
+      } else {
+        return [
+          {
+            sort: "A - Z"
+          },
+          {
+            sort: "Z - A"
+          }
+        ];
+      }
     }
   },
   methods: {
@@ -499,19 +592,36 @@ export default {
     showSelect() {
       this.showSearchBySelect = !this.showSearchBySelect;
 
-      if (this.showSearchBySelect) {
+      if (this.showSearchBySelect || this.isShowSort) {
         this.showSearchFilter = false;
+        this.isShowSort = false;
       }
     },
     //
     showFilter() {
       this.showSearchFilter = !this.showSearchFilter;
 
-      if (this.showSearchFilter) {
+      if (this.showSearchFilter || this.isShowSort) {
         this.showSearchBySelect = false;
+        this.isShowSort = false;
+
       }
     },
+    sortToggle() {
+      this.isShowSort = !this.isShowSort;
+
+      if (this.showSearchFilter || this.showSearchBySelect) {
+        this.showSearchBySelect = false;
+        this.showSearchFilter = false;
+
+      }
+    },
+    sortSelect(val) {
+      this.sortIs = val
+      this.isShowSort = false
+    },
     propSelect(val) {
+      this.isShowSort = false
       this.showSearchBySelect = false;
       this.selectedSearchOption = val;
     },

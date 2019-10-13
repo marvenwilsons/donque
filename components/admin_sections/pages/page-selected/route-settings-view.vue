@@ -23,13 +23,13 @@
       :appearance="{
            // dimensions
            height: '100%', // required 
-           width: '40%', // required
+           width: '50%', // required
 
            // text
            textColor: '#196ADD',
 
            // border colors
-           borderColor: 'lightgray',
+           borderColor: '#F1F8FF',
            listBorderColor: '#e8f4f8',
            searchBoxBorderColor: 'lightgray',
 
@@ -53,7 +53,7 @@
            activeBgColor: 'lightblue',
            acitveCustomStyle: {
                fontWeight: 700,
-               padding:'20px',
+               padding:'15px',
            }
 
        }"
