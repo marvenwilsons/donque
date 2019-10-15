@@ -275,7 +275,8 @@
         :style="{overflow: 'auto',background:appearance.bodyBg}"
         class="fullwidth relative fullheight-percent"
       >
-        <div v-show="!searchNoMatch" class="absolute fullwidth">
+        <!-- list here -->
+        <div v-show="!searchNoMatch" :class="['absolute' ,'fullwidth' ,appearance.listContainerPadding ? 'pad125' : '']">
           <div
             class="pad025 pointer"
             v-for="(items,item_index) in searchByResult.length ? searchByResult : inputData"
@@ -294,14 +295,19 @@
               showOnCLickExpand_animate(`${items[config.propDisplay]}`),
               select(items[config.propDisplay],true)"
           >
-            <!-- config -->
+            <!-- list config -->
             <div v-if="config" class="flex pad025 fullwidth flexcol">
               <div class="flex fullwidth flex1">
-                <div v-if="config ? config.isNumbered : true" class="padright125">{{item_index}}</div>
-                <div class="padright050">
+                <div
+                  v-if="config ? config.isNumbered : true"
+                  :class="['padright125', appearance.listPadding == 's' && '', appearance.listPadding == 'm' && 'pad025', appearance.listPadding == 'l' && 'pad050']"
+                >{{item_index + 1}}</div>
+                <div :class="['padright125', appearance.listPadding == 's' && '', appearance.listPadding == 'm' && 'pad025', appearance.listPadding == 'l' && 'pad050']">
                   <slot name="item-icon"></slot>
                 </div>
-                <div class="flex spacebetween fullwidth pad025">
+                <div
+                  :class="['flex' ,'spacebetween', 'fullwidth', 'padright125', appearance.listPadding == 's' && '', appearance.listPadding == 'm' && 'pad025', appearance.listPadding == 'l' && 'pad050']"
+                >
                   <div>{{items[config.propDisplay] ? items[config.propDisplay] : dispErr(`config propDisplay ${config.propDisplay} does not exist`)}}</div>
                   <div v-if="config.contextStyle == 'showOnCLickExpand'">
                     <i v-if="active != items[config.propDisplay]" class="fas fa-angle-down"></i>
@@ -323,7 +329,7 @@
                   v-for="context_actions in config.contextActions"
                   :key="`context-key-${context_actions}`"
                   @click="contextAction(context_actions,items)"
-                  :style="{textDecoration: context_actions == selected_action ? 'underline' : 'none'}"
+                  :style="{textDecoration: context_actions == selected_action && context_state == items[config.propDisplay] ? 'underline' : 'none'}"
                 >{{context_actions}}</div>
               </div>
             </div>
@@ -347,21 +353,26 @@
 <script>
 import { TweenMax, TimelineLite, TweenLite } from "gsap";
 
-function globalSort(searchByResult, selectedSearchOption, inputData,mode, type) {
+function globalSort(
+  searchByResult,
+  selectedSearchOption,
+  inputData,
+  mode,
+  type
+) {
   const items = searchByResult.length ? searchByResult : inputData;
   // sort by name
   items.sort((a, b) => {
-    var i1 = undefined
-    var i2 = undefined
+    var i1 = undefined;
+    var i2 = undefined;
 
-    if(type === 'string') {
+    if (type === "string") {
       i1 = a[selectedSearchOption].toUpperCase();
       i2 = b[selectedSearchOption].toUpperCase();
-    } else if(type === 'number') {
-      i1 = a[selectedSearchOption]
-      i2 = b[selectedSearchOption]
+    } else if (type === "number") {
+      i1 = a[selectedSearchOption];
+      i2 = b[selectedSearchOption];
     }
-
 
     if (mode === "asc") {
       if (i1 < i2) {
@@ -476,8 +487,8 @@ export default {
               this.searchByResult,
               this.selectedSearchOption,
               this.inputData,
-              'asc',
-              'string'
+              "asc",
+              "string"
             );
             break;
           case "Z - A":
@@ -485,8 +496,8 @@ export default {
               this.searchByResult,
               this.selectedSearchOption,
               this.inputData,
-              'dec',
-              'string'
+              "dec",
+              "string"
             );
             break;
           case "High - Low":
@@ -494,8 +505,8 @@ export default {
               this.searchByResult,
               this.selectedSearchOption,
               this.inputData,
-              'asc',
-              'number'
+              "asc",
+              "number"
             );
             break;
           case "Low - High":
@@ -503,8 +514,8 @@ export default {
               this.searchByResult,
               this.selectedSearchOption,
               this.inputData,
-              'dec',
-              'number'
+              "dec",
+              "number"
             );
             break;
         }
@@ -631,7 +642,6 @@ export default {
         }
       } else {
         this.active = id;
-        // this.activeStyle = this.appearance.acitveCustomStyle
       }
     },
     // provides dynamic style to items

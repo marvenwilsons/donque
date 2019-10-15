@@ -16,14 +16,14 @@
            search: true, // shows the search functionality if true,
            searchBarPlaceHolder: 'Search items',
            contextActions: ['View','Add to playlist','Edit','Delete'],
-           contextStyle: 'showOnCLickExpand', // showOnTheSide, showOnCLickExpand, showOnRightClick
+           contextStyle: 'showOnTheSide', // showOnTheSide, showOnCLickExpand, showOnRightClick
            showModal:modalState,
            showFilter: true,
        }"
       :appearance="{
            // dimensions
            height: '100%', // required 
-           width: '50%', // required
+           width: '30%', // required
 
            // text
            textColor: '#196ADD',
@@ -43,10 +43,14 @@
 
            // hovers
            hoverTextColor: '#196ADD',
-           hoverBgColor: '#F6F8FA',
+           hoverBgColor: '#F1F8FF',
            hoverCustomStyle: {
                fontWeight: 700,
            },
+
+           // list padding
+           listPadding: 'l', // s m l
+           listContainerPadding: true, // true false
 
            // active
            activeTextColor: 'white',
@@ -121,81 +125,81 @@ export default {
         age: 10,
         height: "5.2cm"
       },
-      // {
-      //   name: "ann",
-      //   age: 28,
-      //   height: "2,0cm"
-      // },
-      // {
-      //   name: "anthony",
-      //   age: 28,
-      //   height: "5.4cm"
-      // },
-      // {
-      //   name: "neil",
-      //   age: 28,
-      //   height: "5.2cm"
-      // },
-      // {
-      //   name: "chefy",
-      //   age: 28,
-      //   height: "2,0cm"
-      // },
-      // {
-      //   name: "adan",
-      //   age: 28,
-      //   height: "5.4cm"
-      // },
-      // {
-      //   name: "trump",
-      //   age: 28,
-      //   height: "5.2cm"
-      // },
-      // {
-      //   name: "person",
-      //   age: 28,
-      //   height: "2,0cm"
-      // },
-      // {
-      //   name: "donal",
-      //   age: 28,
-      //   height: "5.4cm"
-      // },
-      // {
-      //   name: "test",
-      //   age: 28,
-      //   height: "5.2cm"
-      // },
-      // {
-      //   name: "hello",
-      //   age: 28,
-      //   height: "2,0cm"
-      // },
-      // {
-      //   name: "shella",
-      //   age: 28,
-      //   height: "5.4cm"
-      // },
-      // {
-      //   name: "rust",
-      //   age: 28,
-      //   height: "5.2cm"
-      // },
-      // {
-      //   name: "ford",
-      //   age: 28,
-      //   height: "2,0cm"
-      // },
-      // {
-      //   name: "tellf",
-      //   age: 28,
-      //   height: "5.4cm"
-      // },
-      // {
-      //   name: "quin",
-      //   age: 28,
-      //   height: "5.2cm"
-      // }
+      {
+        name: "ann",
+        age: 28,
+        height: "2,0cm"
+      },
+      {
+        name: "anthony",
+        age: 28,
+        height: "5.4cm"
+      },
+      {
+        name: "neil",
+        age: 28,
+        height: "5.2cm"
+      },
+      {
+        name: "chefy",
+        age: 28,
+        height: "2,0cm"
+      },
+      {
+        name: "adan",
+        age: 28,
+        height: "5.4cm"
+      },
+      {
+        name: "trump",
+        age: 28,
+        height: "5.2cm"
+      },
+      {
+        name: "person",
+        age: 28,
+        height: "2,0cm"
+      },
+      {
+        name: "donal",
+        age: 28,
+        height: "5.4cm"
+      },
+      {
+        name: "test",
+        age: 28,
+        height: "5.2cm"
+      },
+      {
+        name: "hello",
+        age: 28,
+        height: "2,0cm"
+      },
+      {
+        name: "shella",
+        age: 28,
+        height: "5.4cm"
+      },
+      {
+        name: "rust",
+        age: 28,
+        height: "5.2cm"
+      },
+      {
+        name: "ford",
+        age: 28,
+        height: "2,0cm"
+      },
+      {
+        name: "tellf",
+        age: 28,
+        height: "5.4cm"
+      },
+      {
+        name: "quin",
+        age: 28,
+        height: "5.2cm"
+      }
     ]
   }),
   methods: {
