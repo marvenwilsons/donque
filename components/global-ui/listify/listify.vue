@@ -43,7 +43,11 @@
             </span>
             <div
               class="absolute"
-              style="top:60px;width:100px;height:150px;z-index:900;boxShadow:2px 2px 7px 1px #393e4244"
+              :style="{
+                top:'55px', 
+                width:prop_is_number && sortIs == 'Low - High' || sortIs == 'High - Low' ? '156px' : '85px' 
+                && !prop_is_number && sortIs == 'A - Z' || sortIs == 'Z - A'  ? '115px' : '85px' , 
+                height:'150px', zIndex:'900', boxShadow:'2px 2px 7px 1px #393e4244'}"
               v-if="isShowSort"
             >
               <listify
@@ -106,7 +110,7 @@
             </span>
             <div
               v-if="showSearchFilter"
-              style="top:35px;width:100px;height:150px;z-index:900;boxShadow:2px 2px 7px 1px #393e4244"
+              style="top:35px;width:110px;height:150px;z-index:900;boxShadow:2px 2px 7px 1px #393e4244"
               class="absolute"
             >
               <!-- listify -->
@@ -185,7 +189,7 @@
         <!-- listify  -->
         <div
           v-if="showSearchBySelect"
-          style="top:60px;width:200px;height:150px;z-index:500;boxShadow:2px 2px 7px 1px #393e4244"
+          style="top:55px;width:150px;height:150px;z-index:500;boxShadow:2px 2px 7px 1px #393e4244"
           class="absolute flex"
         >
           <listify
@@ -343,6 +347,43 @@
 <script>
 import { TweenMax, TimelineLite, TweenLite } from "gsap";
 
+function globalSort(searchByResult, selectedSearchOption, inputData,mode, type) {
+  const items = searchByResult.length ? searchByResult : inputData;
+  // sort by name
+  items.sort((a, b) => {
+    var i1 = undefined
+    var i2 = undefined
+
+    if(type === 'string') {
+      i1 = a[selectedSearchOption].toUpperCase();
+      i2 = b[selectedSearchOption].toUpperCase();
+    } else if(type === 'number') {
+      i1 = a[selectedSearchOption]
+      i2 = b[selectedSearchOption]
+    }
+
+
+    if (mode === "asc") {
+      if (i1 < i2) {
+        return -1;
+      }
+      if (i1 > i2) {
+        return 1;
+      }
+    } else if (mode === "dec") {
+      if (i1 > i2) {
+        return -1;
+      }
+      if (i1 < i2) {
+        return 1;
+      }
+    }
+
+    // names must be equal
+    return 0;
+  });
+}
+
 export default {
   name: "listify",
   props: {
@@ -386,7 +427,7 @@ export default {
   }),
   watch: {
     selectedSearchOption() {
-      this.sortIs = undefined
+      this.sortIs = undefined;
     },
     searchVal(current, prev) {
       let final = [];
@@ -425,6 +466,49 @@ export default {
         });
       }
       this.searchByResult = final;
+    },
+    sortIs(current, prev) {
+      let final = undefined;
+      if (current) {
+        switch (current) {
+          case "A - Z":
+            globalSort(
+              this.searchByResult,
+              this.selectedSearchOption,
+              this.inputData,
+              'asc',
+              'string'
+            );
+            break;
+          case "Z - A":
+            globalSort(
+              this.searchByResult,
+              this.selectedSearchOption,
+              this.inputData,
+              'dec',
+              'string'
+            );
+            break;
+          case "High - Low":
+            globalSort(
+              this.searchByResult,
+              this.selectedSearchOption,
+              this.inputData,
+              'asc',
+              'number'
+            );
+            break;
+          case "Low - High":
+            globalSort(
+              this.searchByResult,
+              this.selectedSearchOption,
+              this.inputData,
+              'dec',
+              'number'
+            );
+            break;
+        }
+      }
     }
   },
   computed: {
@@ -604,7 +688,6 @@ export default {
       if (this.showSearchFilter || this.isShowSort) {
         this.showSearchBySelect = false;
         this.isShowSort = false;
-
       }
     },
     sortToggle() {
@@ -613,15 +696,14 @@ export default {
       if (this.showSearchFilter || this.showSearchBySelect) {
         this.showSearchBySelect = false;
         this.showSearchFilter = false;
-
       }
     },
     sortSelect(val) {
-      this.sortIs = val
-      this.isShowSort = false
+      this.sortIs = val;
+      this.isShowSort = false;
     },
     propSelect(val) {
-      this.isShowSort = false
+      this.isShowSort = false;
       this.showSearchBySelect = false;
       this.selectedSearchOption = val;
     },
