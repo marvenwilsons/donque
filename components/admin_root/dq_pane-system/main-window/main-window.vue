@@ -1,15 +1,17 @@
 <template>
-  <div class="fullheight-percent fullwidth relative flex">
-    <div v-if="isReady" id="dq-main-w" class="absolute fullwidth flex fullheight-percent">
+  <div class="fullheight-percent fullwidth relative flex flexcenter">
+    <div v-if="isReady" id="dq-main-w" class="absolute fullwidth flex fullheight-percent pad125">
       <div
         v-for="(panes,pane_index) in $store.state.pane_system.pane_index_list"
         :key="`p-${pane_index}`"
         role="pane-host"
-        class="fullheight-percent"
-        :style="{ minWidth: width_handler(config != undefined,config,pane_index), maxWidth: width_handler(config != undefined,config,pane_index), ...$store.state.theme.pane_host_style}"
+        class="fullheight-percent  flex"
+        :style="{minWidth: width_handler(config != undefined,config,pane_index), maxWidth: width_handler(config != undefined,config,pane_index)}"
       >
         <!-- pane -->
-        <div :id="`pane-${pane_index}-${panes}`" class="fullheight-percent flex flexcol flex1">
+        <div
+        :style="{boxShadow:'0px 0px 1px 1px lightgray',borderRadius: '5px',...$store.state.theme.pane_host_style}"
+         :id="`pane-${pane_index}-${panes}`" class="fullheight-percent flex flexcol flex1">
           {{ani(`pane-${pane_index}-${panes}`)}}
           <!-- pane head -->
           <div v-if="isReady">
@@ -20,10 +22,10 @@
               <!-- {{config[pane_index]}} -->
               <div
                 v-if="config[pane_index].head_visibility"
-                :style="{background:config[pane_index].pane_head_bg_color}"
-                class="flex spacebetween fullwidth pad025"
+                :style="{background:config[pane_index].pane_head_bg_color, borderRadius: '5px 5px 0px 0px'}"
+                class="flex spacebetween fullwidth pad050"
               >
-                <div class="fullwidth relative" :style="{ color:config[pane_index].pane_head_title_color}">
+                <div class="fullwidth relative padleft050" :style="{ color:config[pane_index].pane_head_title_color}">
                   <strong style="word-wrap: break-word">{{config[pane_index].title}}</strong>
                 </div>
                 <div>
@@ -54,6 +56,7 @@
             ></div>
           </div>
         </div>
+        <div class="pad050"></div>
       </div>
     </div>
   </div>

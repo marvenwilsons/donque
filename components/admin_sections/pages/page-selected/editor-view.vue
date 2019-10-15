@@ -183,11 +183,10 @@
             <div
               :style="{
                 width:'0px',
-                boxShadow:'2px 2px 15px 1px #393e4244', 
+                boxShadow:'0px 0px 10px 5px #EEEEEF', 
                 overflow:'hidden',
                 zIndex:100, 
                 background:`${$store.state.theme.global.tertiary_bg_color}`,
-                border: `1px solid ${$store.state.theme.global.border_color}`,
                 }"
               id="dq-api-view"
               class="relative flex flexcol fullwidth fullheight-percent"
@@ -196,7 +195,7 @@
               <span
                 id="dq-api-el-content"
                 class="flex flexcol flex1 absolute fullheight-percent fullwidth"
-                style="left:550px"
+                style="left:550px;opacity: 0"
               >
                 <div
                   class="padleft050 padright050 margintop050 spacebetween flex st-viz-bnnr pointer"
@@ -752,6 +751,7 @@ export default {
         const n2 = document.getElementById("dq-api-view");
         if (n2) {
           TweenMax.fromTo(n2, 0.2, { width: "550px" }, { width: "0px" });
+          TweenMax.fromTo(n2, 1, { opacity: "0" }, { opacity: "1" });
         }
         setTimeout(() => {
           this.$store.commit("pages/close_api_view");
@@ -831,12 +831,15 @@ export default {
           const n = document.getElementById("dq-api-el-content");
           if (n) {
             TweenMax.fromTo(n, 0.2, { left: "550px" }, { left: "0px" });
+            TweenMax.fromTo(n, 1, { opacity: 0 }, { opacity: 1 });
           }
 
           // dq-api-view
           const n2 = document.getElementById("dq-api-view");
           if (n2) {
             TweenMax.fromTo(n2, 0.2, { width: "0px" }, { width: "550px" });
+            TweenMax.fromTo(n, 1, { opacity: 0 }, { opacity: 1 });
+
           }
         }, 0);
       }
