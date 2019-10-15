@@ -1,5 +1,5 @@
 <template>
-  <div class="fullwidth flex flexcol">
+  <div class="fullwidth flex flexcol pad125">
     <div class="fullheight-percent">
       <MonacoEditor
         v-if="ready"
@@ -8,7 +8,7 @@
         language="css"
         class="dq_mystylesheet_ed fullheight-percent"
         editorMounted="e_mounted"
-        theme="vs_dark"
+        theme="vs-dark"
         :options="options"
         @change="onChange"
       />
