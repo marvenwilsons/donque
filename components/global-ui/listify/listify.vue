@@ -47,7 +47,7 @@
                 top:'55px', 
                 width:prop_is_number && sortIs == 'Low - High' || sortIs == 'High - Low' ? '156px' : '85px' 
                 && !prop_is_number && sortIs == 'A - Z' || sortIs == 'Z - A'  ? '115px' : '85px' , 
-                height:'150px', zIndex:'900', boxShadow:'2px 2px 7px 1px #393e4244'}"
+                height:'150px', zIndex:'900', boxShadow:'0px 0px 10px 5px #EEEEEF'}"
               v-if="isShowSort"
             >
               <listify
@@ -110,7 +110,7 @@
             </span>
             <div
               v-if="showSearchFilter"
-              style="top:35px;width:110px;height:150px;z-index:900;boxShadow:2px 2px 7px 1px #393e4244"
+              style="top:35px;width:110px;height:150px;z-index:900;boxShadow:0px 0px 10px 5px #EEEEEF;"
               class="absolute"
             >
               <!-- listify -->
@@ -189,7 +189,7 @@
         <!-- listify  -->
         <div
           v-if="showSearchBySelect"
-          style="top:55px;width:150px;height:150px;z-index:500;boxShadow:2px 2px 7px 1px #393e4244"
+          style="top:55px;width:150px;height:150px;z-index:500;boxShadow:0px 0px 10px 5px #EEEEEF;"
           class="absolute flex"
         >
           <listify
@@ -258,7 +258,7 @@
         </span>
       </div>
       <div
-        v-if="config.showModal"
+        v-if="modalFinalState"
         style="z-index:1;"
         class="absolute fullwidth fullheight-percent flex relative"
       >
@@ -267,7 +267,11 @@
           class="absolute fullwidth fullheight-percent"
         ></div>
         <!-- modal here -->
-        <div style="height:50%" class="fullwidth fullheight-percent flex flexcenter relative">
+        <div
+          id="dq-listify-modal"
+          style="height:50%;opacity: 0;"
+          class="fullwidth fullheight-percent flex flexcenter relative"
+        >
           <slot name="modal"></slot>
         </div>
       </div>
@@ -276,7 +280,10 @@
         class="fullwidth relative fullheight-percent"
       >
         <!-- list here -->
-        <div v-show="!searchNoMatch" :class="['absolute' ,'fullwidth' ,appearance.listContainerPadding ? 'pad125' : '']">
+        <div
+          v-show="!searchNoMatch"
+          :class="['absolute' ,'fullwidth' ,appearance.listContainerPadding ? 'pad125' : '']"
+        >
           <div
             class="pad025 pointer"
             v-for="(items,item_index) in searchByResult.length ? searchByResult : inputData"
@@ -290,9 +297,9 @@
             @mouseover="hover = items[config.propDisplay], onHover(items)"
             @mouseleave="hover = undefined"
             @click="
-              setActive(items[config.propDisplay]), 
+              config.contextStyle == 'showOnCLickExpand' && setActive(items[config.propDisplay]), 
               hover = undefined,
-              showOnCLickExpand_animate(`${items[config.propDisplay]}`),
+              config.contextStyle == 'showOnCLickExpand' && showOnCLickExpand_animate(`${items[config.propDisplay]}`),
               select(items[config.propDisplay],true)"
           >
             <!-- list config -->
@@ -302,7 +309,9 @@
                   v-if="config ? config.isNumbered : true"
                   :class="['padright125', appearance.listPadding == 's' && '', appearance.listPadding == 'm' && 'pad025', appearance.listPadding == 'l' && 'pad050']"
                 >{{item_index + 1}}</div>
-                <div :class="['padright125', appearance.listPadding == 's' && '', appearance.listPadding == 'm' && 'pad025', appearance.listPadding == 'l' && 'pad050']">
+                <div
+                  :class="['padright125', appearance.listPadding == 's' && '', appearance.listPadding == 'm' && 'pad025', appearance.listPadding == 'l' && 'pad050']"
+                >
                   <slot name="item-icon"></slot>
                 </div>
                 <div
@@ -331,6 +340,20 @@
                   @click="contextAction(context_actions,items)"
                   :style="{textDecoration: context_actions == selected_action && context_state == items[config.propDisplay] ? 'underline' : 'none'}"
                 >{{context_actions}}</div>
+              </div>
+              <!-- context if showOnTheSide -->
+              <div v-if="config.contextStyle == 'showOnTheSide'">
+                <div class="flex flex1 flexend marginleft125 marginright125">
+                  <div
+                    @mouseover="context_hover = true"
+                    @mouseleave="context_hover = false"
+                    v-for="context_actions in config.contextActions"
+                    :key="`context-key-${context_actions}`"
+                    class="marginleft125"
+                    @click="contextAction(context_actions,items), context_state = items[config.propDisplay], setActive(items[config.propDisplay])"
+                    :style="{textDecoration: context_actions == selected_action && context_state == items[config.propDisplay] ? 'underline' : 'none'}"
+                  >{{context_actions}}</div>
+                </div>
               </div>
             </div>
             <!-- config -->
@@ -405,6 +428,7 @@ export default {
   data: () => ({
     err: false,
     errmsg: undefined,
+    modalFinalState: undefined,
 
     hover: undefined,
     active: undefined,
@@ -520,6 +544,36 @@ export default {
             break;
         }
       }
+    },
+    modalState(current, prev) {
+      if (current) {
+        this.modalFinalState = true;
+        setTimeout(() => {
+          const el = document.getElementById("dq-listify-modal");
+          TweenMax.fromTo(
+            el,
+            0.5,
+            { opacity: 0, marginTop: "20px" },
+            { opacity: 1, marginTop: "0px" }
+          );
+        }, 0);
+      } else {
+        setTimeout(() => {
+          const el = document.getElementById("dq-listify-modal");
+          TweenMax.fromTo(
+            el,
+            0.3,
+            { opacity: 1, marginTop: "0px" },
+            { opacity: 0, marginTop: "20px" }
+          );
+
+          
+        }, 0);
+
+        setTimeout(() => {
+            this.modalFinalState = false;
+          }, 350);
+      }
     }
   },
   computed: {
@@ -580,6 +634,9 @@ export default {
           }
         ];
       }
+    },
+    modalState() {
+      return this.config.showModal;
     }
   },
   methods: {
@@ -635,7 +692,7 @@ export default {
       }, 0);
     },
     // set the clicked item id
-    setActive(id) {
+    setActive(id, mode) {
       if (this.active === id) {
         if (this.context_hover == false) {
           this.active = undefined;
@@ -646,21 +703,23 @@ export default {
     },
     // provides dynamic style to items
     activeStyle(id) {
-      if (this.active === id) {
-        const custom = this.appearance.acitveCustomStyle;
+      if (id) {
+        if (this.active === id) {
+          const custom = this.appearance.acitveCustomStyle;
 
-        return {
-          ...custom,
-          background:
-            this.acitve === id
-              ? this.appearance.activeBgColor
-              : this.appearance.hoverBgColor,
-          transition: "0.3s",
-          color:
-            this.acitve === id
-              ? this.appearance.activeTextColor
-              : this.appearance.hoverTextColor
-        };
+          return {
+            ...custom,
+            background:
+              this.acitve === id
+                ? this.appearance.activeBgColor
+                : this.appearance.hoverBgColor,
+            transition: "0.3s",
+            color:
+              this.acitve === id
+                ? this.appearance.activeTextColor
+                : this.appearance.hoverTextColor
+          };
+        }
       }
     },
     // set hover style

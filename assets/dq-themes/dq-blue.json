@@ -22,6 +22,14 @@
         "color": "#4a6976"
     },
 
+    
+    "heading": {},
+    "docker": {},
+    "notification": {},
+    "work_area": {},
+    "pane_system":{},
+    "panes": {},
+
     "global": {
         "primary_text_color": "#2d4247",
         "secondary_text_color": "#4a6976",
