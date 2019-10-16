@@ -1,6 +1,8 @@
 {
   "heading": {
-    "background": "",
+    "background": {
+      "$ref": "#/palette/primary_color"
+    },
     "color": ""
   },
   "docker": {
@@ -51,16 +53,21 @@
       "color": ""
     }
   },
-  "globals": {
-    "primary": "#0086c0",
-    "secondary": "",
-    "tertiary": "",
-    "quaternary": "",
-    "quinary": "",
-    "senary": "",
-    "septenary": "",
-    "octonary": "",
-    "nonary": "",
-    "denary": ""
+  "buttons": {
+    "style1": {}
+  },
+
+  "palette": {
+    "name": "dq-blue",
+
+    "primary_color": "#0086c0",
+    "secondary_color": "#F1F8FF",
+
+    "primary_light": "white",
+    "secondary_light": "lightgray",
+
+    "primary_text": "#196ADD",
+    "secondary_text": "#33383c",
+    "light_text": "#f4f7f9"
   }
 }

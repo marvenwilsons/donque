@@ -64,6 +64,7 @@ export const actions = {
 
         setTimeout(() => {
             commit('set_admin_data', sdata)
+            console.log(sdata)
             this.commit('theme/load_theme', sdata)
         },100)
     }
