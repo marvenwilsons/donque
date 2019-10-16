@@ -1,4 +1,5 @@
 export const state = () => ({
+    content: undefined,
     // heading
     heading_bg_color: undefined,
     heading_text_color: undefined,
@@ -51,6 +52,7 @@ export const state = () => ({
 
 export const mutations = {
     load_theme(state,{theme,theme_content}) {
+        state.content = theme_content
         state.heading_bg_color          = theme_content.heading_bg_color
         state.heading_text_color        = theme_content.heading_text_color
         state.docker_bg_color           = theme_content.docker_bg_color
