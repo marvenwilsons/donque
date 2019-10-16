@@ -17,7 +17,7 @@
           :id="`dqdi_${item_index}_${items}`"
           @click="start(items,item_index)"
           v-dq-hover:docker
-          v-dq-active:docker="active == item_index || cur_actv == item_index"
+          v-dq-active:docker
         >
           <strong :id="`dqdi_title_${item_index}_${items}`">
             <i v-if="items === 'Administration'" class="fas fa-user-alt padleft025 padright025"></i>
@@ -51,8 +51,6 @@ export default {
     return {
       cur_actv: undefined,
       active: undefined,
-      hoverBgColor: this.$store.state.theme.docker_hover_menu_item_bg_color,
-      hoverColor: this.$store.state.theme.docker_hover_text_color
     };
   },
   methods: {

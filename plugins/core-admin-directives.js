@@ -21,7 +21,6 @@ function get_ref_val(reference_val, theme_object) {
   return ref_temp;
 }
 
-
 Vue.directive("dq-prop", {
   bind(el, { value }, vnode) {
     if (value) {
@@ -194,7 +193,7 @@ Vue.directive("dq-theme", {
         const reference_val = selected_section_of_theme[keys]["$ref"];
         if (reference_val) {
           // set style
-          el.style[keys] = get_ref_val(reference_val,theme_object);
+          el.style[keys] = get_ref_val(reference_val, theme_object);
         } else {
           el.style[keys] = selected_section_of_theme[keys];
         }
@@ -242,6 +241,8 @@ Vue.directive("dq-active", {
     console.log("** active");
 
     els.push(el);
+    const theme_object = vnode.context.$store.state.theme.content;
+    const selected_section_of_theme = theme_object[arg]["on_active"];
 
     el.onclick = () => {
       if (el.getAttribute("data") != "active") {
@@ -253,7 +254,18 @@ Vue.directive("dq-active", {
         });
 
         //
-        el.style.background = "red";
+        if (selected_section_of_theme) {
+          const on_active_keys = Object.keys(selected_section_of_theme);
+
+          on_active_keys.map(keys => {
+            const reference_val = selected_section_of_theme[keys]["$ref"];
+
+            if(reference_val){
+              el.style[keys] = get_ref_val(reference_val,theme_object)
+            }
+          });
+        }
+
         el.setAttribute("data", "active");
       }
     };

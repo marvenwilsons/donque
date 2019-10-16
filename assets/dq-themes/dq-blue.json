@@ -3,12 +3,6 @@
     "heading_bg_color" : "#0086c0",
     "heading_text_color": "white",
 
-    "docker_bg_color": "#e9eff3",
-    "docker_text_color": "#4a6976",
-    "docker_hover_text_color": "#f6f8fa",
-    "docker_hover_menu_item_bg_color":"#84a4b2",
-    "docker_hover_transition": "0s",
-
     "main_bg_color":"#f6f8fa",
 
     "pane_head_title_color": "#4a6976",
@@ -32,11 +26,19 @@
             "$ref": "#/palette/dark_primary"
         },
         "color": {
-          "$ref": "#/palette/primary_text"
+          "$ref": "#/palette/dark_secondary"
         },
         "on_hover": {
             "background": {
-              "$ref": "#/palette/secondary_color"
+              "$ref": "#/palette/dark_tertiary"
+            }
+        },
+        "on_active": {
+            "background": {
+                "$ref": "#/palette/dark_tertiary"
+            },
+            "color": {
+                "$ref": "#/palette/primary_text"
             }
         }
     },
@@ -77,6 +79,8 @@
         "secondary_color": "#F1F8FF",
 
         "dark_primary": "#303340",
+        "dark_secondary": "#888ea6",
+        "dark_tertiary": "#1B1D23",
 
         "primary_light": "white",
         "secondary_light": "lightgray",
