@@ -1,0 +1,66 @@
+{
+  "heading": {
+    "background": "",
+    "color": ""
+  },
+  "docker": {
+    "background": "",
+    "color": ""
+  },
+  "notification": {
+    "background": ""
+  },
+  "pane_system": {
+    "pane_host": {
+      "border": ""
+    },
+    "pane_head": {
+      "background": "",
+      "color": ""
+    },
+    "pane_body": {
+      "background": "",
+      "color": ""
+    }
+  },
+  "panes": {
+    "pane_host": {
+      "border": ""
+    },
+    "pane_head": {
+      "background": "",
+      "color": ""
+    },
+    "pane_body": {
+      "background": "",
+      "color": ""
+    }
+  },
+  "list": {
+    "border": "",
+    "background": "",
+    "color": "",
+    "on_active": {
+      "border": "",
+      "background": "",
+      "color": ""
+    },
+    "on_hover": {
+      "border": "",
+      "background": "",
+      "color": ""
+    }
+  },
+  "globals": {
+    "primary": "#0086c0",
+    "secondary": "",
+    "tertiary": "",
+    "quaternary": "",
+    "quinary": "",
+    "senary": "",
+    "septenary": "",
+    "octonary": "",
+    "nonary": "",
+    "denary": ""
+  }
+}

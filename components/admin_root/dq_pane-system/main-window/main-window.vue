@@ -1,17 +1,19 @@
 <template>
-  <div class="fullheight-percent fullwidth relative flex flexcenter">
+  <div id="dq-main" class="fullheight-percent fullwidth relative flex flexcenter">
     <div v-if="isReady" id="dq-main-w" class="absolute fullwidth flex fullheight-percent pad125">
       <div
         v-for="(panes,pane_index) in $store.state.pane_system.pane_index_list"
         :key="`p-${pane_index}`"
         role="pane-host"
-        class="fullheight-percent  flex"
+        class="fullheight-percent flex"
         :style="{minWidth: width_handler(config != undefined,config,pane_index), maxWidth: width_handler(config != undefined,config,pane_index)}"
       >
         <!-- pane -->
         <div
-        :style="{boxShadow:'0px 0px 1px 1px lightgray',borderRadius: '5px',...$store.state.theme.pane_host_style}"
-         :id="`pane-${pane_index}-${panes}`" class="fullheight-percent flex flexcol flex1">
+          :style="{boxShadow:'0px 0px 1px 1px lightgray',borderRadius: '5px',...$store.state.theme.pane_host_style}"
+          :id="`pane-${pane_index}-${panes}`"
+          class="fullheight-percent flex flexcol flex1"
+        >
           {{ani(`pane-${pane_index}-${panes}`)}}
           <!-- pane head -->
           <div v-if="isReady">
@@ -25,7 +27,10 @@
                 :style="{background:config[pane_index].pane_head_bg_color, borderRadius: '5px 5px 0px 0px'}"
                 class="flex spacebetween fullwidth pad050"
               >
-                <div class="fullwidth relative padleft050" :style="{ color:config[pane_index].pane_head_title_color}">
+                <div
+                  class="fullwidth relative padleft050"
+                  :style="{ color:config[pane_index].pane_head_title_color}"
+                >
                   <strong style="word-wrap: break-word">{{config[pane_index].title}}</strong>
                 </div>
                 <div>
@@ -108,7 +113,10 @@ export default {
     return {
       isReady: false,
       config_copy: undefined,
-      comps: {}
+      comps: {},
+      scroll_val: 0,
+      scroll_val_temp: 0,
+      main_w: undefined
     };
   },
   methods: {
@@ -174,18 +182,59 @@ export default {
     }),
     config() {
       return this.config_copy;
+    },
+    get_horizontal_scrolling() {
+      return this.$store.state.pane_system.horizontal_scrolling;
+    },
+    get_scroll_val() {
+      return this.scroll_val;
     }
   },
   watch: {
     config_state(n, o) {
       this.isReady = true;
+    },
+    get_scroll_val(current, old) {
+      if (this.get_horizontal_scrolling) {
+        if (current >= 350) {
+          if (this.scroll_val_temp) {
+            this.scroll_val = this.scroll_val_temp;
+            this.scroll_val_temp = 0
+          } else {
+            this.scroll_val = 350;
+          }
+        } else if (current < 20) {
+          if (this.scroll_val_temp) {
+            this.scroll_val = this.scroll_val_temp;
+            this.scroll_val_temp = 0
+          } else {
+            this.scroll_val = 0;
+          }
+        }
+        this.main_w.scrollLeft = current;
+      } else {
+        this.scroll_val_temp = current;
+      }
     }
+  },
+  mounted() {
+    window.addEventListener("wheel", e => {
+      if (e.deltaY > 0) {
+        this.scroll_val += 70;
+      } else {
+        this.scroll_val -= 70;
+      }
+    });
+
+    setTimeout(() => {
+      this.main_w = document.getElementById("dq-main-w");
+    }, 0);
   }
 };
 </script>
 
 <style>
 #dq-main-w {
-  overflow-y: hidden;
+  overflow: scroll hidden;
 }
 </style>

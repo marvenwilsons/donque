@@ -23,12 +23,46 @@
     },
 
     
-    "heading": {},
-    "docker": {},
+    "heading": {
+        "background": "",
+        "color":""
+    },
+    "docker": {
+        "background":"",
+        "color":"",
+        "on_active": {
+            "color": "",
+            "background": ""
+        }
+    },
     "notification": {},
     "work_area": {},
-    "pane_system":{},
-    "panes": {},
+    "pane_system":{
+        "pane_host": {
+            "border": ""
+        },
+        "pane_head": {
+            "background": "",
+            "color": ""
+        },
+        "pane_body": {
+            "background": "",
+            "color": ""
+        }
+    },
+    "panes": {
+        "pane_host": {
+            "border": ""
+        },
+        "pane_head": {
+            "background":"",
+            "color": ""
+        },
+        "pane_body": {
+            "background": "",
+            "color": ""
+        }
+    },
 
     "global": {
         "primary_text_color": "#2d4247",

@@ -8,18 +8,20 @@ export const state = () => ({
     pane_data_index: undefined,
     root: undefined,
     pane_before_open: undefined,
-    pane_before_open_handler: undefined
+    pane_before_open_handler: undefined,
+    horizontal_scrolling: true
 })
 
 export const getters = {
     config_state: state => state.pane_index_config_list,
     list_state: state => {
+        
         const host = document.getElementById('dq-main-w')
         if (host){
             // console.log('SHOULD SCROLL')
             setTimeout(() => {
-                host.scrollTo(host.offsetWidth, 0);
-            },50)
+                // host.scrollTo(host.offsetWidth, 0);
+            },200)
         }
         return state.pane_index_list
     },
@@ -29,6 +31,9 @@ export const getters = {
 
 
 export const mutations = {
+    set_horizontal_scrolling(state,payload) {
+        state.horizontal_scrolling = payload
+    },
     /**
      * when user clicks the menu on the side bar
      * this function executes
