@@ -6,13 +6,14 @@
         flex:1, 
         minWidth:180+'px',
         maxWidth:180+'px',
+        zIndex:2
         }"
         v-dq-theme:docker="['background','color']"
     ><docker/></div>
 
     <!-- main window -->
     <div
-      :style="{flex: 15, background: $store.state.theme.main_bg_color}"
+      :style="{flex: 15, background: ''}"
       class="relative"
     >
       <mainWindow/>

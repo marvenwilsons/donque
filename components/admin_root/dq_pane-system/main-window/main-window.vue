@@ -10,9 +10,9 @@
       >
         <!-- pane -->
         <div
-          :style="{boxShadow:'0px 0px 1px 1px lightgray',borderRadius: '5px',...$store.state.theme.pane_host_style}"
+          :style="{boxShadow:'0px 0px 10px 1px gray',borderRadius: '5px',background:'rgb(233, 239, 243)'}"
           :id="`pane-${pane_index}-${panes}`"
-          class="fullheight-percent flex flexcol flex1"
+          class="fullheight-percent flex flexcol flex1 "
         >
           {{ani(`pane-${pane_index}-${panes}`)}}
           <!-- pane head -->
@@ -24,7 +24,7 @@
               <!-- {{config[pane_index]}} -->
               <div
                 v-if="config[pane_index].head_visibility"
-                :style="{background:config[pane_index].pane_head_bg_color, borderRadius: '5px 5px 0px 0px'}"
+                :style="{background:config[pane_index].pane_head_bg_color, borderRadius: '5px'}"
                 class="flex spacebetween fullwidth pad050"
               >
                 <div
@@ -51,7 +51,7 @@
             </div>
           </div>
           <!-- pane body -->
-          <div class="fullheight-percent flex flexcol">
+          <div style="background:white;" class="fullheight-percent flex flexcol ">
             <div
               :data="$store.state.pane_system.pane_data_obj[panes]"
               :theme="$store.state.theme"
@@ -236,5 +236,6 @@ export default {
 <style>
 #dq-main-w {
   overflow: scroll hidden;
+  scroll-behavior: smooth;
 }
 </style>

@@ -11,7 +11,6 @@
 export default {
   beforeCreate() {
     this.$store.commit("pane_system/set_pane_config", {
-      head_visibility: false,
       title: "Dashboard",
       pane_Width:"100%"
     });

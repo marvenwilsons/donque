@@ -1,13 +1,19 @@
 <template>
-    <div class="flex spacebetween" :style="{background:bgColor, color:textColor}">
+    <div v-dq-theme:heading="['color']" class="flex spacebetween relative">
         <div class="dqhead-items fullwidth flex flexcenter flexstart">
-            <strong class="padleft125">dq</strong>studio <strong>Enterprise</strong>
+            <div  v-dq-theme:heading_logo="['background','color']" style="width:180px; z-index:2;" class="fullhight-percent padtop050 padbottom050">
+                <span><strong class="padleft125">dq</strong>studio <strong>Enterprise</strong></span>
+            </div>
         </div>
-        <div class="dqhead-items fullwidth">
+        <div style="z-index:100" class="dqhead-items fullwidth  padtop025 padbottom025">
             <div class="flex flexend headcur fullheight-percent flex flexcenter">
             <div class="name-title padright050"> {{adminName}} </div>
                 <i class="fas fa-user-circle pointer padright025 marginright125" @click="$store.commit('notification_pane/set_state', true)"></i>
             </div>
+        </div>
+        <div class="absolute  fullwidth bd-style flex relative" style="height:600px;">
+            <div class=" flex1 absolute fullwidth fullheight-percent">asdf</div>
+            <div class=" flex1">asdf</div>
         </div>
     </div>
 </template>
@@ -19,11 +25,6 @@ export default {
 </script>
 
 <style>
-.dqhead-items {
-  padding-top: calc(var(--fontSize) * 0.5);
-  padding-bottom: calc(var(--fontSize) * 0.5);
-  /* padding-left: calc(var(--fontSize) * 0.25); */
-}
 .fas.fa-user-circle{
     font-size: calc(var(--fontSize) * 2.00);
 }
@@ -32,5 +33,16 @@ export default {
 }
 .name-title{
     margin-right: calc(var(--fontSize) * 0.25);
+}
+.bd-style {
+    /* border-radius: 0% 0% 170% 30%; */
+}
+.bd-style > div:nth-child(1){
+    border-radius: 0% 0% 40% 140%;
+    background: #2299ddb2;
+}
+.bd-style > div:nth-child(2){
+    border-radius: 0% 0% 100% 60%;
+    background: #2299dd8e;
 }
 </style>

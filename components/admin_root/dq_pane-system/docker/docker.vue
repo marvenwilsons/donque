@@ -1,5 +1,5 @@
 <template>
-  <div class="fullheight-percent flex flexcol">
+  <div  class="fullheight-percent flex flexcol">
     <div class="flex1 flex flexcenter">
       <div class="flex flexcenter">
         <div class="dq-fav-con flex flexcenter">

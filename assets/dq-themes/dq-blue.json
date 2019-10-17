@@ -18,8 +18,14 @@
 
     
     "heading": {
-        "background": "",
-        "color":""
+        "background": "#adb1c2",
+        "color": "white"
+    },
+    "heading_logo": {
+        "background": {
+            "$ref": "#/palette/dark_primary"
+        },
+        "color": "white"
     },
     "docker": {
         "background":{
