@@ -17,7 +17,7 @@
           :id="`dqdi_${item_index}_${items}`"
           @click="start(items,item_index)"
           v-dq-hover:docker
-          v-dq-active:docker
+          v-dq-active:docker.default="'Dashboard'"
         >
           <strong :id="`dqdi_title_${item_index}_${items}`">
             <i v-if="items === 'Administration'" class="fas fa-user-alt padleft025 padright025"></i>

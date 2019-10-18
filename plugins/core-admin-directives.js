@@ -239,10 +239,26 @@ const els = [];
 Vue.directive("dq-active", {
   bind(el, { value, modifiers, arg }, vnode) {
     console.log("** active");
-
     els.push(el);
+
     const theme_object = vnode.context.$store.state.theme.content;
     const selected_section_of_theme = theme_object[arg]["on_active"];
+
+    if (modifiers["default"]) {
+      if (el.innerText.trim() === value) {
+        const theme_obj_on_active = theme_object[arg]["on_active"];
+        if (theme_obj_on_active) {
+          Object.keys(theme_obj_on_active).map(keys => {
+            el.style[keys] = get_ref_val(
+              theme_obj_on_active[keys][["$ref"]],
+              theme_object
+            );
+          });
+
+          el.setAttribute("data", "active");
+        }
+      }
+    }
 
     el.onclick = () => {
       if (el.getAttribute("data") != "active") {
@@ -260,8 +276,8 @@ Vue.directive("dq-active", {
           on_active_keys.map(keys => {
             const reference_val = selected_section_of_theme[keys]["$ref"];
 
-            if(reference_val){
-              el.style[keys] = get_ref_val(reference_val,theme_object)
+            if (reference_val) {
+              el.style[keys] = get_ref_val(reference_val, theme_object);
             }
           });
         }
