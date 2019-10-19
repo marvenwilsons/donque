@@ -34,9 +34,6 @@ export default {
 .name-title{
     margin-right: calc(var(--fontSize) * 0.25);
 }
-.bd-style {
-    /* border-radius: 0% 0% 170% 30%; */
-}
 .bd-style > div:nth-child(1){
     border-radius: 0% 0% 40% 140%;
     background: #2299ddb2;

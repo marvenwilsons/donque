@@ -244,6 +244,7 @@ Vue.directive("dq-active", {
     const theme_object = vnode.context.$store.state.theme.content;
     const selected_section_of_theme = theme_object[arg]["on_active"];
 
+    // fires on first load
     if (modifiers["default"]) {
       if (el.innerText.trim() === value) {
         const theme_obj_on_active = theme_object[arg]["on_active"];
@@ -258,7 +259,36 @@ Vue.directive("dq-active", {
           el.setAttribute("data", "active");
         }
       }
-    }
+    } 
+    
+    // if (modifiers["reset"]) {
+    //   vnode.context.$store._actions["pane_system/close"].push(() => {
+    //     els.map(e => {
+    //       if (e.getAttribute("data") == "active") {
+    //         e.removeAttribute("data");
+    //         e.style = "";
+    //       }
+    //       if (e.innerText.trim() == value) {
+    //         const theme_obj_on_active = theme_object[arg]["on_active"];
+
+    //         Object.keys(theme_obj_on_active).map(keys => {
+    //           e.style[keys] = get_ref_val(
+    //             theme_obj_on_active[keys][["$ref"]],
+    //             theme_object
+    //           );
+    //         });
+    //         // e.setAttribute("data", "active");
+    //         // if (e.getAttribute("data") != "active") {
+    //         //   e.setAttribute("data", "active");
+    //         // }
+
+    //         // 
+    //       }
+          
+
+    //     });
+    //   });
+    // }
 
     el.onclick = () => {
       if (el.getAttribute("data") != "active") {
