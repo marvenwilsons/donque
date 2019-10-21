@@ -1,7 +1,5 @@
 {
     "name": "dq-blue",
-    "heading_bg_color" : "#0086c0",
-    "heading_text_color": "white",
 
     "main_bg_color":"#f6f8fa",
 
@@ -16,44 +14,42 @@
         "color": "#4a6976"
     },
 
-    
+    "start": {},
     "heading": {
-        "background": "#adb1c2",
+        "background": "",
         "color": "white"
     },
     "heading_logo": {
         "background": {
-            "$ref": "#/palette/dark_primary"
+            "$ref": "#/palette/dark_pallete/dark_primary"
         },
         "color": "white"
     },
+    "_main_bg": {},
     "docker": {
         "background":{
-            "$ref": "#/palette/dark_primary"
+            "$ref": "#/palette/dark_pallete/dark_primary"
         },
         "color": {
-          "$ref": "#/palette/dark_secondary"
+          "$ref": "#/palette/dark_pallete/dark_secondary"
         },
         "on_hover": {
             "background": {
-              "$ref": "#/palette/dark_tertiary"
+              "$ref": "#/palette/dark_pallete/dark_tertiary"
             }
         },
         "on_active": {
             "background": {
-                "$ref": "#/palette/dark_tertiary"
+                "$ref": "#/palette/dark_pallete/dark_tertiary"
             },
             "color": {
                 "$ref": "#/palette/primary_text"
             }
         }
     },
-
-
-
     "notification": {},
     "work_area": {},
-    "pane_system":{
+    "pane_system": {
         "pane_host": {
             "border": ""
         },
@@ -71,7 +67,7 @@
             "border": ""
         },
         "pane_head": {
-            "background":"",
+            "background": "",
             "color": ""
         },
         "pane_body": {
@@ -79,14 +75,27 @@
             "color": ""
         }
     },
+    "end":{},
 
+
+
+    
     "palette": {
-        "primary_color": "#0086c0",
-        "secondary_color": "#F1F8FF",
+        "dark_pallete": {
+            "dark_primary": "#303340",
+            "dark_secondary": "#888ea6",
+            "dark_tertiary": "#1B1D23",
+            "dark_text": ""
+        },
+        "blue_pallete": {
+            "blue_text": ""
+        },
+        "light_blue_pallete": {
+            "light_blue_text": ""
+        },
 
-        "dark_primary": "#303340",
-        "dark_secondary": "#888ea6",
-        "dark_tertiary": "#1B1D23",
+        "primary_color": "#0086c0",
+        "secondary_color": "#F1F8FF",        
 
         "primary_light": "white",
         "secondary_light": "lightgray",
@@ -165,19 +174,5 @@
     "notify_tile_close_btn_color": "#4a6976",
     "notify_tile_close_btn_hover_color": "",
     "notify_tile_border_color": "whitesmoke",
-    "notify_tile_border_radios":"3px"
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
+    "notify_tile_border_radios":"3px"    
 }

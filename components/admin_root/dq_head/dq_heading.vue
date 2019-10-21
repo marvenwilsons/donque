@@ -1,5 +1,5 @@
 <template>
-    <div v-dq-theme:heading="['color']" class="flex spacebetween relative">
+    <div v-dq-theme:heading="['color','background']" class="flex spacebetween relative">
         <div class="dqhead-items fullwidth flex flexcenter flexstart">
             <div  v-dq-theme:heading_logo="['background','color']" style="width:180px; z-index:2;" class="fullhight-percent padtop050 padbottom050">
                 <span><strong class="padleft125">dq</strong>studio <strong>Enterprise</strong></span>
@@ -11,9 +11,10 @@
                 <i class="fas fa-user-circle pointer padright025 marginright125" @click="$store.commit('notification_pane/set_state', true)"></i>
             </div>
         </div>
-        <div class="absolute  fullwidth bd-style flex relative" style="height:600px;">
-            <div class=" flex1 absolute fullwidth fullheight-percent">asdf</div>
-            <div class=" flex1">asdf</div>
+        <div class="absolute fullwidth" style="height:100vh;"></div>
+        <div class="absolute  fullwidth bd-style flex relative fullheight-percent" style="height:600px;">
+            <div class=" flex1 absolute fullwidth fullheight-percent"></div>
+            <div class=" flex1"></div>
         </div>
     </div>
 </template>
