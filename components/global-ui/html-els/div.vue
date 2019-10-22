@@ -7,6 +7,7 @@
       :is="html_el.tag"
       :els="html_el.els"
       :style="html_el.inlineStyle"
+      v-dq-event-handler
       v-dq-prop="html_el"
     >{{html_el.properties.text_content}}</div>
   </div>

@@ -317,3 +317,6 @@ Vue.directive("dq-active", {
     };
   }
 });
+Vue.directive("dq-event-handler", {
+  
+})

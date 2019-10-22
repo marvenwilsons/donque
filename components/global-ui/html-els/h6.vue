@@ -8,6 +8,7 @@
         :els="html_el.els"
         :style="html_el.inlineStyle"
         :class="html_el.classList"
+        v-dq-event-handler
         >{{html_el.properties.text_content}}</div>
     </h6>
 </template>
