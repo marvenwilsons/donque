@@ -280,6 +280,9 @@ export const actions = {
     start({ commit }, context) {
         commit('pane_reset', context)
     },
+    resetting_pane_to_default({commit}, context) {
+        // this.commit('pane_system/resetting_pane_to_default');
+    },
     // only executes on non zero index items
     open({ commit, state }, {index,name,data, data_index}) {
         /**
@@ -340,6 +343,7 @@ export const actions = {
         // return to dashboard
         if (state.pane_index_list.length === 1){
             commit('pane_reset', 'Dashboard')
+            this.dispatch("pane_system/resetting_pane_to_default");
         }else {
             commit('pane_close',context)
         }

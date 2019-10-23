@@ -234,7 +234,7 @@ Vue.directive("dq-hover", {
   }
 });
 const els = [];
-Vue.directive("dq-active", {
+Vue.directive("dq-active-style-for-click-list", {
   bind(el, { value, modifiers, arg }, vnode) {
     console.log("** active");
     els.push(el);
@@ -243,7 +243,7 @@ Vue.directive("dq-active", {
     const selected_section_of_theme = theme_object[arg]["on_active"];
 
     // fires on first load
-    if (modifiers["default"]) {
+    const set_def = () => {
       if (el.innerText.trim() === value) {
         const theme_obj_on_active = theme_object[arg]["on_active"];
         if (theme_obj_on_active) {
@@ -258,7 +258,11 @@ Vue.directive("dq-active", {
         }
       }
     }
+    if (modifiers["default"]) {
+      set_def()
+    }
 
+    // fires on items click
     el.onclick = () => {
       if (el.getAttribute("data") != "active") {
         els.map(element => {
@@ -284,6 +288,32 @@ Vue.directive("dq-active", {
         el.setAttribute("data", "active");
       }
     };
+
+    // fires on pane close
+    const default_docker_active_item = 'Dashboard'
+    if(els.length == 1) {
+      // push an action to the store to be executed when pane close
+      vnode.context.$store._actions[
+        "pane_system/resetting_pane_to_default"
+      ].push(() => {
+        // responsible for applying hightlight to the default docker item
+        set_def()
+
+        // responsible for removing the prev active docker item highlight
+        els.map(element => {
+          if (
+            element.getAttribute("data") == "active" &&
+            element.innerText.trim() != default_docker_active_item
+          ) {
+            element.removeAttribute("data");
+            element.style = "";
+          }
+        });
+
+
+      });
+    }
+    
   }
 });
 Vue.directive("dq-event-handler", {
