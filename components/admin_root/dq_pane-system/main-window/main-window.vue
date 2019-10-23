@@ -12,7 +12,7 @@
         <div
           :style="{boxShadow:'0px 0px 10px 1px gray',borderRadius: '5px',background:'rgb(233, 239, 243)'}"
           :id="`pane-${pane_index}-${panes}`"
-          class="fullheight-percent flex flexcol flex1 "
+          class="fullheight-percent flex flexcol flex1"
         >
           {{ani(`pane-${pane_index}-${panes}`)}}
           <!-- pane head -->
@@ -51,7 +51,7 @@
             </div>
           </div>
           <!-- pane body -->
-          <div style="background:white;" class="fullheight-percent flex flexcol ">
+          <div style="background:white;" class="fullheight-percent flex flexcol">
             <div
               :data="$store.state.pane_system.pane_data_obj[panes]"
               :theme="$store.state.theme"
@@ -116,7 +116,8 @@ export default {
       comps: {},
       scroll_val: 0,
       scroll_val_temp: 0,
-      main_w: undefined
+      main_w: undefined,
+      max_scroll: 333
     };
   },
   methods: {
@@ -196,17 +197,17 @@ export default {
     },
     get_scroll_val(current, old) {
       if (this.get_horizontal_scrolling) {
-        if (current >= 350) {
+        if (current >= this.max_scroll) {
           if (this.scroll_val_temp) {
             this.scroll_val = this.scroll_val_temp;
-            this.scroll_val_temp = 0
+            this.scroll_val_temp = 0;
           } else {
-            this.scroll_val = 350;
+            this.scroll_val = this.max_scroll;
           }
         } else if (current < 20) {
           if (this.scroll_val_temp) {
             this.scroll_val = this.scroll_val_temp;
-            this.scroll_val_temp = 0
+            this.scroll_val_temp = 0;
           } else {
             this.scroll_val = 0;
           }
@@ -215,6 +216,14 @@ export default {
       } else {
         this.scroll_val_temp = current;
       }
+    }
+  },
+  updated() {
+    const element = document.getElementById("dq-main-w");
+
+    const max_scroll = element.scrollWidth - element.clientWidth;
+    if(max_scroll){
+      this.max_scroll = max_scroll
     }
   },
   mounted() {
@@ -236,6 +245,5 @@ export default {
 <style>
 #dq-main-w {
   overflow: scroll hidden;
-  scroll-behavior: smooth;
 }
 </style>
