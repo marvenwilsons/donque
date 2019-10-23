@@ -2,7 +2,7 @@
   <div id="dq-page-sel-content" class="flex flexcol fullheight-percent flexcenter">
     <div class="flex1 flex fullwidth">
         <div
-          class="fullwidth"
+          class="fullwidth flex"
           :pane_index="my_pane_index"
           :data="data"
           :page_data="page_data"

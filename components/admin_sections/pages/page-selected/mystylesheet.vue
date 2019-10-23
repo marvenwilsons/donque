@@ -1,6 +1,6 @@
 <template>
   <div class="fullwidth flex flexcol pad125">
-    <div class="fullheight-percent">
+    <div v-dq-disable-horizontal-scrolling class="fullheight-percent">
       <MonacoEditor
         v-if="ready"
         v-show="show"

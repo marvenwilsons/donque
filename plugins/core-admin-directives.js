@@ -172,7 +172,6 @@ Vue.directive("dq-prop", {
     }
   }
 });
-
 Vue.directive("dq-theme", {
   bind(el, { value, modifiers, arg }, vnode) {
     // console.log("** theme");
@@ -201,7 +200,6 @@ Vue.directive("dq-theme", {
     }
   }
 });
-
 Vue.directive("dq-hover", {
   bind(el, { value, modifiers, arg }, vnode) {
     // console.log("** hover");
@@ -259,36 +257,7 @@ Vue.directive("dq-active", {
           el.setAttribute("data", "active");
         }
       }
-    } 
-    
-    // if (modifiers["reset"]) {
-    //   vnode.context.$store._actions["pane_system/close"].push(() => {
-    //     els.map(e => {
-    //       if (e.getAttribute("data") == "active") {
-    //         e.removeAttribute("data");
-    //         e.style = "";
-    //       }
-    //       if (e.innerText.trim() == value) {
-    //         const theme_obj_on_active = theme_object[arg]["on_active"];
-
-    //         Object.keys(theme_obj_on_active).map(keys => {
-    //           e.style[keys] = get_ref_val(
-    //             theme_obj_on_active[keys][["$ref"]],
-    //             theme_object
-    //           );
-    //         });
-    //         // e.setAttribute("data", "active");
-    //         // if (e.getAttribute("data") != "active") {
-    //         //   e.setAttribute("data", "active");
-    //         // }
-
-    //         // 
-    //       }
-          
-
-    //     });
-    //   });
-    // }
+    }
 
     el.onclick = () => {
       if (el.getAttribute("data") != "active") {
@@ -319,4 +288,20 @@ Vue.directive("dq-active", {
 });
 Vue.directive("dq-event-handler", {
   
+})
+Vue.directive("dq-disable-horizontal-scrolling", {
+  bind(el, { value, modifiers, arg }, vnode) {
+    el.onmouseover = () => {
+      vnode.context.$store.commit(
+        "pane_system/set_horizontal_scrolling",
+        false
+      );
+    };
+    el.onmouseleave = () => {
+      vnode.context.$store.commit(
+        "pane_system/set_horizontal_scrolling",
+        true
+      );
+    }
+  }
 })

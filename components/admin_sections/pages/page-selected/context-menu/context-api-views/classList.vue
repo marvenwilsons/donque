@@ -108,8 +108,7 @@
                     class="flex1 relative aut"
                   >
                     <div
-                      @mouseover="$store.commit('pane_system/set_horizontal_scrolling', false)"
-                      @mouseleave="$store.commit('pane_system/set_horizontal_scrolling', true)"
+                      v-dq-disable-horizontal-scrolling
                       class="flex flexwrap absolute pad025"
                       v-if="!isEmpty($store.state.pages.css_classes[cur_sel])"
                     >
