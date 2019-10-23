@@ -393,8 +393,7 @@ export default {
             // 2.b  run renderCondition if it satisfies the condition return true else return false
             if (controllers_array) {
               controllers_array.map(controller => {
-               
-               current_selected_value =
+                current_selected_value =
                   current_selected_value == "true"
                     ? true
                     : current_selected_value;
@@ -418,8 +417,6 @@ export default {
                   response = full_schema[hidden_prop].renderCondition.method(
                     full_schema
                   );
-                } else {
-                  throw "Error Objectfy Component: Cannot find current selected value in controllers option"
                 }
               });
             } else {
@@ -430,7 +427,6 @@ export default {
                 onMethod: "renderCondition"
               };
             }
-
             //
             return response;
           };
@@ -438,12 +434,11 @@ export default {
           // routine, always executes the renderCondition method each time select value changed
           // each time the renderCondition method executes it mutates the current
           if (this.tobe_render_read_only.length != 0) {
-            // console.log(controllers_for_items_not_yet_rendered)
             current_items_not_being_rendered.map((prop_name, prop_index) => {
               const res = check_render_condition(
                 this.inputData,
                 prop_name,
-                val
+                val,
               );
               if (typeof res == "boolean" && res === true) {
                 // splice
@@ -495,7 +490,6 @@ export default {
               ].options.indexOf(val);
 
               render_con_origin.map(names => {
-                // console.log(this.inputData[names].renderCondition.method(this.inputData) )
                 let renderCondition_res = this.inputData[
                   names
                 ].renderCondition.method(this.inputData);
