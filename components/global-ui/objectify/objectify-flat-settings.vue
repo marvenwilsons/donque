@@ -393,6 +393,17 @@ export default {
             // 2.b  run renderCondition if it satisfies the condition return true else return false
             if (controllers_array) {
               controllers_array.map(controller => {
+               
+               current_selected_value =
+                  current_selected_value == "true"
+                    ? true
+                    : current_selected_value;
+
+                current_selected_value =
+                  current_selected_value == "false"
+                    ? false
+                    : current_selected_value;
+
                 if (
                   full_schema[controller].options.includes(
                     current_selected_value
@@ -407,6 +418,8 @@ export default {
                   response = full_schema[hidden_prop].renderCondition.method(
                     full_schema
                   );
+                } else {
+                  throw "Error Objectfy Component: Cannot find current selected value in controllers option"
                 }
               });
             } else {
