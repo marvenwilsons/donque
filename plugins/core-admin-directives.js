@@ -21,6 +21,11 @@ function get_ref_val(reference_val, theme_object) {
   return ref_temp;
 }
 
+/**
+ * dq-prop
+ * used in global ui html elements for adding attributes and propertes
+ * dynamically
+ */
 Vue.directive("dq-prop", {
   bind(el, { value }, vnode) {
     if (value) {
@@ -172,6 +177,12 @@ Vue.directive("dq-prop", {
     }
   }
 });
+
+/**
+ * dq-theme
+ * used in dq admin, handles the theme for the admin area, responsible for
+ * applying initial style on page load
+ */
 Vue.directive("dq-theme", {
   bind(el, { value, modifiers, arg }, vnode) {
     // console.log("** theme");
@@ -200,6 +211,12 @@ Vue.directive("dq-theme", {
     }
   }
 });
+
+/**
+ * dq-hover
+ * mostly use in dq admin area, for dynamic list, responsilbe for applying style
+ * at hovered item list using the selected theme data
+ */
 Vue.directive("dq-hover", {
   bind(el, { value, modifiers, arg }, vnode) {
     // console.log("** hover");
@@ -233,6 +250,14 @@ Vue.directive("dq-hover", {
     }
   }
 });
+
+/**
+ * dq-active-style-for-click-list
+ * mostly use in dq admin area, for dynamic list
+ * 1. responsilbe for applying style at clicked item list using the selected theme data
+ * 2. responsilbe for removing style at prev click item list
+ * 3. responsilbe for resetting the default active style when on first inde pane close
+ */
 const els = [];
 Vue.directive("dq-active-style-for-click-list", {
   bind(el, { value, modifiers, arg }, vnode) {
@@ -316,9 +341,13 @@ Vue.directive("dq-active-style-for-click-list", {
     
   }
 });
-Vue.directive("dq-event-handler", {
-  
-})
+
+/**
+ * dq-disable-horizontal-scrolling
+ * mostyle used in dq amin area
+ * responsible for disabling horizontal scrolling when on hover at a
+ * vertical scrolling container
+ */
 Vue.directive("dq-disable-horizontal-scrolling", {
   bind(el, { value, modifiers, arg }, vnode) {
     el.onmouseover = () => {
@@ -328,10 +357,15 @@ Vue.directive("dq-disable-horizontal-scrolling", {
       );
     };
     el.onmouseleave = () => {
-      vnode.context.$store.commit(
-        "pane_system/set_horizontal_scrolling",
-        true
-      );
-    }
+      vnode.context.$store.commit("pane_system/set_horizontal_scrolling", true);
+    };
   }
+});
+
+/**
+ * 
+ */
+Vue.directive("dq-event-handler", {
+  
 })
+
