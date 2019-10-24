@@ -250,6 +250,7 @@ export default {
         .replace(" ", "");
     },
     change(val, key) {
+      // console.log('chnaged!')
       const output_data = this.initial_object_data;
 
       switch (this.inputData[key].type) {
@@ -393,6 +394,7 @@ export default {
             // 2.b  run renderCondition if it satisfies the condition return true else return false
             if (controllers_array) {
               controllers_array.map(controller => {
+                //
                 current_selected_value =
                   current_selected_value == "true"
                     ? true
@@ -403,20 +405,13 @@ export default {
                     ? false
                     : current_selected_value;
 
-                if (
-                  full_schema[controller].options.includes(
-                    current_selected_value
-                  )
-                ) {
-                  // mutate
-                  full_schema[controller].default = full_schema[
-                    controller
-                  ].options.indexOf(current_selected_value);
+                //
+                if (full_schema[controller].options.includes(current_selected_value)) {
+                  // mutating full schma default value
+                  full_schema[controller].default = full_schema[controller].options.indexOf(current_selected_value);
 
                   // run render condition
-                  response = full_schema[hidden_prop].renderCondition.method(
-                    full_schema
-                  );
+                  response = full_schema[hidden_prop].renderCondition.method(full_schema);
                 }
               });
             } else {
@@ -434,7 +429,9 @@ export default {
           // routine, always executes the renderCondition method each time select value changed
           // each time the renderCondition method executes it mutates the current
           if (this.tobe_render_read_only.length != 0) {
+            // console.log('this', '')
             current_items_not_being_rendered.map((prop_name, prop_index) => {
+              console.log('one')
               const res = check_render_condition(
                 this.inputData,
                 prop_name,
@@ -461,6 +458,8 @@ export default {
               } else if (res === false) {
                 // check if prop_name exist then push the prop name
                 // this makes the prop hidded
+                console.log(prop_name, '-- prop_name')
+                console.log(this.tobe_render)
                 if (!this.tobe_render.includes(prop_name)) {
                   this.tobe_render.push(prop_name);
                 }
@@ -482,6 +481,8 @@ export default {
                 });
               }
             }
+
+        
 
             // mutate
             if (this.inputData[click_origin]) {

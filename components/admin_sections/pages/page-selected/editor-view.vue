@@ -208,7 +208,7 @@
                 </div>
                 <!-- Element api container -->
 
-                <div class="relative fullheight-percent flex flexcol flex1">
+                <div v-dq-disable-horizontal-scrolling class="relative fullheight-percent flex flexcol flex1">
                   <div class="flex flex1 relative fullheight-percent aut">
                     <div class="absolute fullwidth flex fullheight-percent flex1">
                       <div

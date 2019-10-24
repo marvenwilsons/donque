@@ -41,7 +41,7 @@
       @mouseleave="opts_cur_active != `copy` && (opts_active = undefined)"
       @click="cut_copy_delete('copy')"
       :style="{...setStyle(opts_active === `copy` || opts_active == `copy`), color: element_view_is_open ? 'lightgray' : ''}"
-      :class="['pad025', 'flex' , element_view_is_open ? 'notallowed' : 'pointer']"      
+      :class="['pad025', 'flex' , element_view_is_open ? 'notallowed' : 'pointer']"
     >
       <div class="flex3">
         <i class="far fa-copy padleft125"></i>
@@ -66,9 +66,15 @@
     </li>
     <!-- delete -->
     <!-- {{latest_root.length != 1 && latest_root.length != 0}} -->
-    <!-- {{latest_root}} -->
+    <!-- {{  latest_root.length != 1 && $store.state.pages.opt_cur_view == 'section'}} -->
+    <!-- latest_root.length == 1 && $store.state.pages.opt_cur_view == 'html' : false -->
     <li
-      v-if="$store.state.pages.opt_cur_view != 'wrapper' && (latest_root.length == 1 ? $store.state.pages.opt_cur_view == 'html' : false)"
+      v-if="
+        $store.state.pages.opt_cur_view != 'wrapper' && 
+        latest_root.length != 1 && 
+        $store.state.pages.opt_cur_view == 'section' || 
+        $store.state.pages.opt_cur_view == 'html'
+        "
       @mouseover="opts_active = 'del'"
       @mouseleave="opts_cur_active != `del` && (opts_active = undefined)"
       :style="{...setStyle(opts_active === `del` || opts_active == `del`), color: element_view_is_open ? 'lightgray' : ''}"
@@ -88,7 +94,7 @@
 import context_html from "./context/html";
 import context_section from "./context/section";
 import context_plugin from "./context/plugin";
-import context_wrapper from "./context/wrapper"
+import context_wrapper from "./context/wrapper";
 
 export default {
   data() {

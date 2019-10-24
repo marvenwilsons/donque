@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="$store.state.pages.api_view_el">
     <li
       @mouseover="opts_active = 'opts-opt-addelement'"
       @mouseleave="opts_cur_active != `opts-opt-addelement` && (opts_active = undefined)"

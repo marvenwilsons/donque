@@ -204,7 +204,14 @@ export default {
         max: 999,
         step: 1,
         default: null
+      },
+      isAList: {
+        type: "select",
+        options: ["Yes", "No"],
+        default: 1,
+        hoverInfo: "dq-studio global attribute: re renders element repeatedly"
       }
+
       // draggable: {
       //   type: "select",
       //   options: [true, false],
@@ -865,6 +872,9 @@ export default {
         index: this.data.index
       });
     },
+    /**
+     * Monaco
+     */
     // Controller of custom inline style
     monacoTabChange() {
       this.monaco_tab_counter++;
@@ -876,7 +886,7 @@ export default {
     },
     stateMonacoChanges() {
       this.monaco_trigger = !this.monaco_trigger;
-    }
+    },
   },
   components: {
     monacoInlineStyle: monaco_inlineStyle
