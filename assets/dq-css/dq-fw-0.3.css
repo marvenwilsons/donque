@@ -315,6 +315,19 @@ img {
   -webkit-appearance: none;
   -moz-appearance: none;
 }
+.dq-button {
+  display: inline-block;
+  border: none;
+  margin: 0;
+  text-decoration: none;
+  cursor: pointer;
+  text-align: center;
+  transition: background 250ms ease-in-out, transform 150ms ease;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding: calc(var(--fontSize) * 0.5);
+  outline: none;
+}
 .canceldef {
   border-style: none;
   outline: none;
