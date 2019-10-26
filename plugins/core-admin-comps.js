@@ -25,6 +25,9 @@ import dqTab from "@/components/global-ui/tabs/dq-tab.vue";
 import saveToStagePane from "@/components/global-ui/dq-page/panes/stage-pane.vue";
 import listify from "@/components/global-ui/listify/listify.vue";
 
+import debug from "@/components/global-ui/debug/debug.vue";
+Vue.component("debug", debug);
+
 Vue.component("spinner", spinner);
 Vue.component("html_p", html_p);
 Vue.component("html_div", html_div);
