@@ -1,6 +1,14 @@
 <template>
-  <div>
-    <debug :data="{entries_with_render_conditions,final_model,hidden_entries,raw_data_set}"></debug>
+  <div class="relative">
+    <!-- <debug :data="{entries_with_render_conditions,final_model,final_vanilla,hidden_entries,raw_data_set}"></debug> -->
+
+    <!-- modal -->
+    <div v-if="config.show_modal"  class="absolute fullwidth fullheight-percent flex flexcenter">
+      <div :style="{background:`${appearance.modal_overlay_bg}`,opacity:'0.5'}" class="absolute fullwidth fullheight-percent"></div>
+      <div style="z-index:100" class="flex1 fullheight-percent flex flexcenter" >
+        <slot name="modal"></slot>
+      </div>
+    </div>
 
     <!-- view start here -->
   <div>
@@ -43,6 +51,11 @@
                 @onChange="data_change"
                 :_key="obj_index"
                 :data="obj_key"
+                :appearance="{
+                  background: 'white',
+                  color: 'black',
+                  background_selected: 'lightgray'
+                }"
                 v-if="obj_key.type == 'select'"
                 :is="'sel'"
               ></div>
@@ -121,6 +134,21 @@ export default {
       }
 
       return r;
+    },
+    // final vanilla 
+    final_vanilla() {
+      let f = {}
+
+      for(let key in this.final_model) {
+        const t = this.final_model[key].type
+        if(t == 'string' || t == 'number') {
+          f[key] = this.final_model[key].default
+        } else if(t == 'select') {
+          f[key] = this.final_model[key].options[this.final_model[key].default]
+        } 
+      }
+
+      return f
     }
   },
   data: () => ({
