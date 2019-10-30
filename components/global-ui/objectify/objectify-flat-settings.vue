@@ -149,11 +149,6 @@ export default {
     },
     data_change({ err, data, key }) {
       if (!err) {
-        const positive_entry = this.find_key_controllers_on_entries(
-          key,
-          this.raw_data_set
-        );
-
         // change default value to final model
         this.final_model[key].default = data;
 
@@ -170,6 +165,13 @@ export default {
           document
             .getElementById(`objectify-${key}`)
             .classList.remove("backgrounderr");
+
+        //
+        this.$emit('onSucess', {
+          key: this._key,
+          data: this.data
+        })
+
       } else {
         // show err
         if (this.has_initial_input) {
@@ -178,8 +180,11 @@ export default {
             .getElementById(`objectify-${key}`)
             .classList.add("backgrounderr");
 
+          // triggers the real time error infomation to show the error
           this.err = err;
           this.err_key = key;
+
+          // emit on error event
           this.$emit('onError', {
             err,
             key,
