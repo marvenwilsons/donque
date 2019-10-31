@@ -363,7 +363,7 @@ import addChild from "./context-menu/context-api-views/addChild";
 import classList from "./context-menu/context-api-views/classList";
 import dddel from "./context-menu/context-api-views/delete";
 import dddesc from "./context-menu/context-api-views/desc";
-import properties from "./context-menu/context-api-views/properties";
+import properties from "./context-menu/context-api-views/properties/properties.vue";
 import ils from "./context-menu/context-api-views/inlineStyle";
 import plgs from "./context-menu/context-api-views/plugins";
 import events from "./context-menu/context-api-views/events";

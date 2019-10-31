@@ -196,7 +196,7 @@ export default {
         type: "string",
         minChar: 1,
         maxChar: 100,
-        default: null
+        default: null,
       },
       tabindex: {
         type: "number",
