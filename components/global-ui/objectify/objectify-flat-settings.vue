@@ -12,8 +12,8 @@
 
     <!-- view start here -->
   <div>
-    <h6 :style="{color: appearance.title_text_color}">{{config.title}}</h6>
-    <p :style="{color: appearance.sub_title_description_text_color}" >{{config.sub_title_description_text}}</p>
+    <h6 v-if="config.title" :style="{color: appearance.title_text_color}">{{config.title}}</h6>
+    <p v-if="config.sub_title_description_text" :style="{color: appearance.sub_title_description_text_color}" >{{config.sub_title_description_text}}</p>
   </div>
 
     <div :style="{border: `1px solid ${appearance.wrap_around_border_color}`}">
@@ -35,6 +35,9 @@
             <div :style="{borderRight: `1px solid ${appearance.divider_border_color}`}" ></div>
             <!-- value -->
             <div  :style="get_value_style"  role="display object value" class="flex3  flex flexcenter">
+              <div :style="{color: get_value_style.color}" class="fullwidth padleft025" v-if="config.operation == 'r'">
+                {{obj_key}}
+              </div>
               <div
                 class="fullwidth"
                 @onChange="data_change"
@@ -61,7 +64,7 @@
                 :appearance="{
                   background: 'white',
                   color: 'black',
-                  background_selected: 'lightgray',
+                  background_selected: appearance.background_selected,
                   select_arrow_down_color: appearance.select_arrow_down_color
                 }"
                 v-if="obj_key.type == 'select'"

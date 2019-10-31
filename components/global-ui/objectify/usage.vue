@@ -33,6 +33,8 @@
           button_bg_color: 'blue',
           button_text_color: 'white',
 
+          background_selected: '',
+
           modal_overlay_bg: 'black'         
         }"
       >
