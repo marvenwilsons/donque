@@ -1,5 +1,5 @@
 <template>
-  <div :style="{border: `1px solid ${borderColor}`}" class="fullwidth">
+  <div :style="{border: `1px solid ${borderColor}`, background: background}" class="fullwidth">
     <div :style="{background:`${paneBg}`}" class="pad050 spacebetween flex st-viz-bnnr">
       <strong>{{paneTitle}}</strong>
       <div class="flex flexcenter">
@@ -23,7 +23,14 @@
 import { TweenMax, TimelineLite, TweenLite } from "gsap";
 
 export default {
-  props: ["paneTitle", "paneBg", "borderColor", "collapse", "saveToStage"],
+  props: [
+    "paneTitle",
+    "paneBg",
+    "borderColor",
+    "collapse",
+    "saveToStage",
+    "background"
+  ],
   data: () => ({
     toggleState: true,
     h: 0
@@ -35,18 +42,18 @@ export default {
       );
       this.toggleState = !this.toggleState;
 
-      if(this.h == 0){
-          this.h = n.children[0].offsetHeight
+      if (this.h == 0) {
+        this.h = n.children[0].offsetHeight;
       }
 
       if (this.toggleState) {
         TweenMax.fromTo(n, 0.2, { opacity: "0" }, { opacity: "1" });
         TweenMax.fromTo(n, 0.3, { height: "0px" }, { height: `${this.h}px` });
-        TweenMax.fromTo(n, 0.3, { display: "none" }, { display: 'block' });
+        TweenMax.fromTo(n, 0.3, { display: "none" }, { display: "block" });
       } else {
         TweenMax.fromTo(n, 0.5, { opacity: "1" }, { opacity: "0" });
-        TweenMax.fromTo(n, 0.3, { height: `${this.h}px` }, { height: '0px' });
-        TweenMax.fromTo(n, 0.3, { display: "block" }, { display: 'none' });
+        TweenMax.fromTo(n, 0.3, { height: `${this.h}px` }, { height: "0px" });
+        TweenMax.fromTo(n, 0.3, { display: "block" }, { display: "none" });
       }
     },
     rem_ws(s) {
