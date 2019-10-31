@@ -1,21 +1,21 @@
 <template>
   <div class="">
     <input
-      style="border:none;outline:none;"
+      :style="{border:'none',outline:'none', color:color.color}"
       v-model="text_input_model"
-      class="fullwidth pad025"
+      class="fullwidth pad025 dq-inp-objtfy"
       type="text"
-      name
-      id
+      :placeholder="text_placehoder"
     />
   </div>
 </template>
 
 <script>
 export default {
-  props: ["data", "_key"],
+  props: ["data", "_key", "color"],
   data: () => ({
     text_input_model: undefined,
+    text_placehoder: undefined,
     string_validation: {
       minChar(val, arg, err) {
         if (val.length > arg.minChar) {
@@ -148,6 +148,19 @@ export default {
         })
       }
     }
+  },
+  mounted() {
+    if(!this.data.default){
+      this.text_placehoder = 'none'
+    } else {
+      this.text_input_model = this.data.default
+    }
   }
 };
 </script>
+
+<style>
+.dq-inp-objtfy {
+  background: transparent;
+}
+</style>

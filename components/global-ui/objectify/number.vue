@@ -1,14 +1,15 @@
 <template>
     <div>
-        <input v-model="number_v_model" style="border:none;outline:none;" class="fullwidth pad025" type="number" />
+        <input :placeholder="number_placeholder" v-model="number_v_model" :style="{border:'none',outline:'none', color: color.color}" class="fullwidth pad025 dq-inp-objtfy" type="number" />
     </div>
 </template>
 
 <script>
     export default {
-        props: ["data", "_key"],
+        props: ["data", "_key", "color"],
         data: () => ({
-            number_v_model: undefined
+            number_v_model: undefined,
+            number_placeholder: undefined
         }),
         watch: {
             number_v_model(current_input,prev_input){
@@ -31,6 +32,13 @@
                         key: this._key
                     })
                 }
+            }
+        },
+        mounted() {
+            if(this.data.default){
+                this.number_v_model = this.data.default
+            } else {
+                this.number_placeholder = 'none'
             }
         }
     }

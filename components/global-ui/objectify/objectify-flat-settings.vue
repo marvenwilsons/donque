@@ -12,11 +12,11 @@
 
     <!-- view start here -->
   <div>
-    <h6>{{config.title}}</h6>
-    <p>{{config.sub_title_description_text}}</p>
+    <h6 :style="{color: appearance.title_text_color}">{{config.title}}</h6>
+    <p :style="{color: appearance.sub_title_description_text_color}" >{{config.sub_title_description_text}}</p>
   </div>
 
-    <div class="bordergray">
+    <div :style="{border: `1px solid ${appearance.wrap_around_border_color}`}">
       <div>
         <div
           class="flex flexcol"
@@ -24,12 +24,17 @@
           :key="`-o-${obj_index}`"
         >
           <div class="flex">
+            <!-- keys -->
             <div
               :id="`objectify-${obj_index}`"
               role="display object index"
-              class="flex1 bordergray flexcenter pad025 pointer flexwrap"
+              class="flex1  flexcenter pad025 pointer flexwrap"
+              :style="get_keys_style"
+              :title="obj_key.hoverInfo"
             >{{obj_index}}</div>
-            <div role="display object value" class="flex3 bordergray flex flexcenter">
+            <div :style="{borderRight: `1px solid ${appearance.divider_border_color}`}" ></div>
+            <!-- value -->
+            <div  :style="get_value_style"  role="display object value" class="flex3  flex flexcenter">
               <div
                 class="fullwidth"
                 @onChange="data_change"
@@ -37,6 +42,7 @@
                 :data="obj_key"
                 v-if="obj_key.type == 'string'"
                 :is="'str'"
+                :color="get_value_style"
               ></div>
               <div
                 class="fullwidth"
@@ -45,6 +51,7 @@
                 :data="obj_key"
                 v-if="obj_key.type == 'number'"
                 :is="'num'"
+                :color="get_value_style"
               ></div>
               <div
                 class="fullwidth"
@@ -54,7 +61,8 @@
                 :appearance="{
                   background: 'white',
                   color: 'black',
-                  background_selected: 'lightgray'
+                  background_selected: 'lightgray',
+                  select_arrow_down_color: appearance.select_arrow_down_color
                 }"
                 v-if="obj_key.type == 'select'"
                 :is="'sel'"
@@ -67,8 +75,8 @@
         </div>
       </div>
     </div>
-    <div v-if="config.submit_button" class="margintop125 flex flexend">
-      <button class="dq-button">{{config.submit_button}}</button>
+    <div v-if="config.submit_button && change_occurs" class="margintop125 flex flexend">
+      <button :style="get_button_style" @click="submit" class="dq-button">{{config.submit_button}}</button>
     </div>
   </div>
 </template>
@@ -149,13 +157,41 @@ export default {
       }
 
       return f
+    },
+    
+    // button style
+    get_button_style() {
+      return {
+        background: this.appearance.button_bg_color,
+        color: this.appearance.button_text_color
+      }
+    },
+
+    // keys style
+    get_keys_style() {
+      return {
+        borderBottom: `1px solid ${this.appearance.divider_border_color}`,
+        minWidth: '140px',
+        background:this.appearance.keys_bg_color,
+        color: this.appearance.keys_text_color
+      }
+    },
+
+    // value style
+    get_value_style() {
+      return {
+        borderBottom: `1px solid ${this.appearance.divider_border_color}`,
+        background: this.appearance.values_bg_color,
+        color: this.appearance.values_text_color
+      }
     }
   },
   data: () => ({
     raw_data_set: undefined,
     has_initial_input: false,
     err: undefined,
-    err_key: undefined
+    err_key: undefined,
+    change_occurs: false
   }),
 
   methods: {
@@ -176,6 +212,12 @@ export default {
       return entry;
     },
     data_change({ err, data, key }) {
+      if(!this.change_occurs){
+        this.change_occurs = true
+      }
+
+      this.$emit('onChange',  this.final_vanilla)
+
       if (!err) {
         // change default value to final model
         this.final_model[key].default = data;
@@ -195,10 +237,6 @@ export default {
             .classList.remove("backgrounderr");
 
         //
-        this.$emit('onSucess', {
-          key: this._key,
-          data: this.data
-        })
 
       } else {
         // show err
@@ -220,6 +258,9 @@ export default {
           })
         }
       }
+    },
+    submit() {
+      this.$emit('onSubmit', this.final_vanilla)
     }
   },
   mounted() {
