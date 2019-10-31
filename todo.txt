@@ -1,3 +1,0 @@
-1. fix init data of admin and application (done)
-2. fix myActionState make sure modal is reacting correctly
-3. fix pane system
