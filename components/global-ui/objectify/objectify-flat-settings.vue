@@ -196,7 +196,12 @@ export default {
     err_key: undefined,
     change_occurs: false
   }),
-
+  watch: {
+    final_vanilla(current,prev) {
+      //
+      this.$emit('onChange',  current)
+    }
+  },
   methods: {
     find_key_controllers_on_entries(key, data_set) {
       let entry = [];
@@ -219,7 +224,6 @@ export default {
         this.change_occurs = true
       }
 
-      this.$emit('onChange',  this.final_vanilla)
 
       if (!err) {
         // change default value to final model
@@ -238,8 +242,6 @@ export default {
           document
             .getElementById(`objectify-${key}`)
             .classList.remove("backgrounderr");
-
-        //
 
       } else {
         // show err
