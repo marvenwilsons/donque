@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div>
     <input
       :style="{border:'none',outline:'none', color:color.color}"
       v-model="text_input_model"
