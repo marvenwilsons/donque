@@ -194,7 +194,7 @@ export default {
               data: `use ${input.class} ${input.firstArg} ${input.secondArg}`,
               token: this.token
           })
-          .the(res => {
+          .then(res => {
               this.e_command_response_handler(res.response);
           })
           .catch(err => {

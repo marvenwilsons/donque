@@ -34,6 +34,19 @@ export default {
               hoverInfo: "dq-studio global attribute: re renders element repeatedly",
             },
             /**
+             * 
+             */
+            "Fetch On": {
+              type: "select",
+              options: ["Server Side", "Client Side"],
+              default: 1,
+              hoverInfo: "dq-studio global attribute: re renders element repeatedly",
+              renderCondition: {
+                controllers: ['isAList'],
+                method: schema => schema.isAList.default == 0
+              }
+            },
+            /**
              * list origin from depends on isAList value
              */
             "list origin from": {

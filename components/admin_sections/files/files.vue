@@ -1,6 +1,8 @@
 <template>
   <div>
-    files
+    <div class="margin125 borderred">1</div>
+    <div class="margin125 borderred">2</div>
+    <div class="margin125 borderred">3</div>
   </div>
 </template>
 
