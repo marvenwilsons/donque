@@ -94,6 +94,9 @@ import PageSelected from "@/components/admin_sections/pages/page-selected/page-s
 import Dashboard from "@/components/admin_sections/dashboard/dashboard.vue";
 import Components from "@/components/admin_sections/components/components.vue";
 import Collections from "@/components/admin_sections/collections/collections.vue";
+import CollectionsAddEntry from "@/components/admin_sections/collections/add_entry.vue"
+import CollectionsViewAll from "@/components/admin_sections/collections/view_all.vue"
+import CollectionsCategories from "@/components/admin_sections/collections/categories.vue"
 import Messages from "@/components/admin_sections/messages/messages.vue";
 import Todos from "@/components/admin_sections/todos/todos.vue";
 import Profile from "@/components/admin_sections/profile/profile.vue";
@@ -166,6 +169,9 @@ export default {
     //
     Components,
     Collections,
+    CollectionsAddEntry,
+    CollectionsViewAll,
+    CollectionsCategories,
     Messages,
     Todos,
     Profile,

@@ -47,7 +47,7 @@
       <div class="err backgrounderr pad050">{{Err}}</div>
     </div>
     <div class="flex">
-      <input v-model="SchemaModel_TextInput" placeholder="key name" class="pad025" type="text" />
+      <input id="ANC_inp" v-model="SchemaModel_TextInput" placeholder="key name" class="pad025" type="text" />
       <select v-model="SchemaModel_SelectInput" class="fullwidth">
         <option>Any</option>
         <option>String</option>
@@ -58,11 +58,11 @@
         <option>file_sys_ref</option>
       </select>
       <button  @click="SchemaModel_AddSchema_Property">
-        <i class="fas fa-plus pointer pad050 buttonBlue"></i>
+        <i class="fas fa-plus pointer pad050"></i>
       </button>
     </div>
     <div v-if="Show_Objectify && !SchemaModel_SelectInput && !SchemaModel_TextInput" class="margintop125 flex flexend">
-      <button @click="Create_Collection" class="buttonreset pad050 buttonBlue">Create collection</button>
+      <button @click="Create_Collection" class="buttonreset pad050 buttonBlue"><strong>Create collection</strong></button>
     </div>
   </div>
 </template>
@@ -89,6 +89,9 @@ export default {
         this.Show_Objectify = true;
       }, 0);
     }
+  },
+  mounted() {
+    document.getElementById('ANC_inp').focus()
   },
   methods: {
     SchemaModel_AddSchema_Property() {
