@@ -348,12 +348,12 @@
                   <div
                     @mouseover="context_hover = true"
                     @mouseleave="context_hover = false"
-                    v-for="context_actions in config.contextActions"
+                    v-for="(context_actions) in config.contextActions"
                     :key="`context-key-${context_actions}`"
                     class="marginleft125"
                     @click="contextAction(context_actions,items), context_state = items[config.propDisplay], setActive(items[config.propDisplay])"
                     :style="{textDecoration: context_actions == selected_action && context_state == items[config.propDisplay] ? 'underline' : 'none'}"
-                  >{{context_actions}}</div>
+                  >{{config.dynamiContextActionTitles ? getDynamicContextTitle(context_actions,item_index) : context_actions}}</div>
                 </div>
               </div>
             </div>
@@ -640,6 +640,19 @@ export default {
     }
   },
   methods: {
+    getDynamicContextTitle(text, index) {
+      const d = text.split("|");
+      if (d.length === 1) {
+        return "Divider required";
+      } else {
+        const dynamicText = d[1].split(",")[index];
+        if (text.split("|")[1] == "false") {
+          return text.split("|")[0];
+        } else {
+          return `${text.split("|")[0]} ${dynamicText}`;
+        }
+      }
+    },
     dispErr(msg) {
       this.err = true;
       this.errmsg = msg;
@@ -670,10 +683,17 @@ export default {
     contextAction(actionName, entity) {
       this.context_action = actionName;
       this.selected_action = actionName;
-      this.$emit("onContextAction", {
-        actionName,
-        actionCastOn: entity
-      });
+      if (this.config.dynamiContextActionTitles) {
+        this.$emit("onContextAction", {
+          actionName: actionName.split("|")[0].trim(),
+          actionCastOn: entity
+        });
+      } else {
+        this.$emit("onContextAction", {
+          actionName,
+          actionCastOn: entity
+        });
+      }
     },
     addItem() {
       this.$emit("onAddItem");
