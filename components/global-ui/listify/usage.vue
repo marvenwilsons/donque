@@ -1,5 +1,6 @@
 <template>
   <div class="smscr flex">
+    <!-- @listify usage -->
     <listify
       @onActiveHover="onActiveHover"
       @onSelect="select"

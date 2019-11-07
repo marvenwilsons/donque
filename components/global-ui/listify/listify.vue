@@ -1,4 +1,5 @@
 <template>
+<!-- @listify html -->
   <div
     @click.right.prevent
     :style="{border: `1px solid ${appearance.borderColor}`, color: appearance.textColor, height: appearance.height, width: appearance.width }"
@@ -374,6 +375,7 @@
 </template>
 
 <script>
+// @listify JS
 import { TweenMax, TimelineLite, TweenLite } from "gsap";
 
 function globalSort(
