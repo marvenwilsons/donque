@@ -1,4 +1,5 @@
 <template>
+<!-- @Objectify usage -->
   <div class="pad125" style="width:500px">
     <div>
       <!-- Usage of Objectify -->

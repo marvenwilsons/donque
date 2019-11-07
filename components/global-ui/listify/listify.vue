@@ -1,5 +1,5 @@
 <template>
-<!-- @listify html -->
+  <!-- @listify html -->
   <div
     @click.right.prevent
     :style="{border: `1px solid ${appearance.borderColor}`, color: appearance.textColor, height: appearance.height, width: appearance.width }"
@@ -308,10 +308,10 @@
               <div class="flex fullwidth flex1">
                 <div
                   v-if="config ? config.isNumbered : true"
-                  :class="['padright125', appearance.listPadding == 's' && '', appearance.listPadding == 'm' && 'pad025', appearance.listPadding == 'l' && 'pad050']"
+                  :class="['padright025', appearance.listPadding == 's' && '', appearance.listPadding == 'm' && 'pad025', appearance.listPadding == 'l' && 'pad050']"
                 >{{item_index + 1}}</div>
                 <div
-                  :class="['padright125', appearance.listPadding == 's' && '', appearance.listPadding == 'm' && 'pad025', appearance.listPadding == 'l' && 'pad050']"
+                  :class="['padright025', appearance.listPadding == 's' && '', appearance.listPadding == 'm' && 'pad025', appearance.listPadding == 'l' && 'pad050']"
                 >
                   <slot name="item-icon"></slot>
                 </div>
@@ -568,13 +568,11 @@ export default {
             { opacity: 1, marginTop: "0px" },
             { opacity: 0, marginTop: "20px" }
           );
-
-          
         }, 0);
 
         setTimeout(() => {
-            this.modalFinalState = false;
-          }, 350);
+          this.modalFinalState = false;
+        }, 350);
       }
     }
   },

@@ -1,4 +1,5 @@
 <template>
+<!-- @Objectify html -->
   <div class="relative">
     <!-- <debug :data="{entries_with_render_conditions,final_model,final_vanilla,hidden_entries,raw_data_set}"></debug> -->
 
@@ -56,6 +57,7 @@
                 :is="'num'"
                 :color="get_value_style"
               ></div>
+              <!-- @Objectify select usage -->
               <div
                 class="fullwidth"
                 @onChange="data_change"
@@ -85,6 +87,8 @@
 </template>
 
 <script>
+// @Objectify JS
+
 import num from "./number.vue";
 import str from "./string.vue";
 import sel from "./select.vue";
