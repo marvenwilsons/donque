@@ -26,7 +26,8 @@ export default {
   props: ["els"],
   data: () => ({
     new_Els: undefined,
-    el_data: undefined
+    el_data: undefined,
+    isInit: false
   }),
   computed: {
     latest_el_data() {
@@ -34,199 +35,211 @@ export default {
     }
   },
   created() {
-    this.el_data = undefined;
-    setTimeout(() => {
-      this.el_data = [
-        {
-          "First Name": "Aidan Anthony",
-          "Last Name": "Suficiencia"
-        },
-        {
-          "First Name": "Alec Brent",
-          "Last Name": "Manzanilla"
-        },
-        {
-          "First Name": "Althea Grace",
-          "Last Name": "Villa Bergundo"
-        },
-        {
-          "First Name": "Anais Nabintu",
-          "Last Name": "Baderha"
-        },
-        {
-          "First Name": "Aquileia Alejandra",
-          "Last Name": "Geanga"
-        },
-        {
-          "First Name": "Aram",
-          "Last Name": "Farah"
-        },
-        {
-          "First Name": "Chase Xander",
-          "Last Name": "Paz"
-        },
-        {
-          "First Name": "Chimkemka David",
-          "Last Name": "Iyoke"
-        },
-        {
-          "First Name": "Christine Marijke",
-          "Last Name": "Bacudio"
-        },
-        {
-          "First Name": "Cristina Lyn",
-          "Last Name": "Lagat"
-        },
-        {
-          "First Name": "Easton Janjic",
-          "Last Name": "Clarke"
-        },
-        {
-          "First Name": "Elija Angelito",
-          "Last Name": "Mendoza-Dela Rosa"
-        },
-        {
-          "First Name": "Gabriel Riley",
-          "Last Name": "Garvida"
-        },
-        {
-          "First Name": "Gabriella",
-          "Last Name": "Kasule"
-        },
-        {
-          "First Name": "George",
-          "Last Name": "Farah"
-        },
-        {
-          "First Name": "Greyson Ian",
-          "Last Name": "Espejo"
-        },
-        {
-          "First Name": "Heriberto",
-          "Last Name": "Affonso"
-        },
-        {
-          "First Name": "Isaiah",
-          "Last Name": "Grant"
-        },
-        {
-          "First Name": "Jacob Calvin",
-          "Last Name": "Gatus"
-        },
-        {
-          "First Name": "Jamie Rodel",
-          "Last Name": "Tacay"
-        },
-        {
-          "First Name": "Jason Nyanga",
-          "Last Name": "Tabika"
-        },
-        {
-          "First Name": "Jenno",
-          "Last Name": "Sanna"
-        },
-        {
-          "First Name": "Jeshana Mary",
-          "Last Name": "Antony"
-        },
-        {
-          "First Name": "Jessie Rayne",
-          "Last Name": "Vasquez"
-        },
-        {
-          "First Name": "Jonathan Vahan",
-          "Last Name": "Bashori"
-        },
-        {
-          "First Name": "Joseph kal-El",
-          "Last Name": "Rachiele"
-        },
-        {
-          "First Name": "Jouzef",
-          "Last Name": "Albdewi"
-        },
-        {
-          "First Name": "Julia Emma",
-          "Last Name": "Stanescu"
-        },
-        {
-          "First Name": "Kevn",
-          "Last Name": "Abdulnour"
-        },
-        {
-          "First Name": "Kinley Kelliher",
-          "Last Name": "Carrabs"
-        },
-        {
-          "First Name": "Liam Dylan",
-          "Last Name": "Dizon"
-        },
-        {
-          "First Name": "Lucas Noel",
-          "Last Name": "Antonio"
-        },
-        {
-          "First Name": "Madison Rose",
-          "Last Name": "Prendegast"
-        },
-        {
-          "First Name": "Manuel",
-          "Last Name": "Tarabay"
-        },
-        {
-          "First Name": "Marica Magdalena",
-          "Last Name": "Katic"
-        },
-        {
-          "First Name": "Matthew Restrepo",
-          "Last Name": "Vergara"
-        },
-        {
-          "First Name": "Mia Isabelle",
-          "Last Name": "San Juan"
-        },
-        {
-          "First Name": "Michaella",
-          "Last Name": "Kasule"
-        },
-        {
-          "First Name": "Nia Lorrain",
-          "Last Name": "Reyes"
-        },
-        {
-          "First Name": "Oliver Paul",
-          "Last Name": "Crifo"
-        },
-        {
-          "First Name": "Raphael",
-          "Last Name": "Kasule"
-        },
-        {
-          "First Name": "Samantha",
-          "Last Name": "Balaga"
-        },
-        {
-          "First Name": "Samara",
-          "Last Name": "Alfarero"
-        },
-        {
-          "First Name": "Sebastian",
-          "Last Name": "Eduardo"
-        },
-        {
-          "First Name": "Sham Samer",
-          "Last Name": "Khazal"
-        },
-        {
-          "First Name": "Yasmin Rosaria",
-          "Last Name": "Beekmeyer-Anton"
-        },
-        {
-          "First Name": "Zoe Mae",
-          "Last Name": "Lacorte"
-        }
-      ];
-    }, 1000);
+    // get collection pass
+    // this.$store
+    //   .dispatch("systemCall", {
+    //     command: "getCss",
+    //     section: "pageMethods",
+    //     method: "get"
+    //   })
+    //   .then(({ status, data }) => {
+    //     if (status) {
+    //       // data here
+    //     } else {
+    //       // error while getting collection data
+    //     }
+    //   });
+
+    this.el_data = [
+      {
+        "First Name": "Aidan Anthony",
+        "Last Name": "Suficiencia"
+      },
+      {
+        "First Name": "Alec Brent",
+        "Last Name": "Manzanilla"
+      },
+      {
+        "First Name": "Althea Grace",
+        "Last Name": "Villa Bergundo"
+      },
+      {
+        "First Name": "Anais Nabintu",
+        "Last Name": "Baderha"
+      },
+      {
+        "First Name": "Aquileia Alejandra",
+        "Last Name": "Geanga"
+      },
+      {
+        "First Name": "Aram",
+        "Last Name": "Farah"
+      },
+      {
+        "First Name": "Chase Xander",
+        "Last Name": "Paz"
+      },
+      {
+        "First Name": "Chimkemka David",
+        "Last Name": "Iyoke"
+      },
+      {
+        "First Name": "Christine Marijke",
+        "Last Name": "Bacudio"
+      },
+      {
+        "First Name": "Cristina Lyn",
+        "Last Name": "Lagat"
+      },
+      {
+        "First Name": "Easton Janjic",
+        "Last Name": "Clarke"
+      },
+      {
+        "First Name": "Elija Angelito",
+        "Last Name": "Mendoza-Dela Rosa"
+      },
+      {
+        "First Name": "Gabriel Riley",
+        "Last Name": "Garvida"
+      },
+      {
+        "First Name": "Gabriella",
+        "Last Name": "Kasule"
+      },
+      {
+        "First Name": "George",
+        "Last Name": "Farah"
+      },
+      {
+        "First Name": "Greyson Ian",
+        "Last Name": "Espejo"
+      },
+      {
+        "First Name": "Heriberto",
+        "Last Name": "Affonso"
+      },
+      {
+        "First Name": "Isaiah",
+        "Last Name": "Grant"
+      },
+      {
+        "First Name": "Jacob Calvin",
+        "Last Name": "Gatus"
+      },
+      {
+        "First Name": "Jamie Rodel",
+        "Last Name": "Tacay"
+      },
+      {
+        "First Name": "Jason Nyanga",
+        "Last Name": "Tabika"
+      },
+      {
+        "First Name": "Jenno",
+        "Last Name": "Sanna"
+      },
+      {
+        "First Name": "Jeshana Mary",
+        "Last Name": "Antony"
+      },
+      {
+        "First Name": "Jessie Rayne",
+        "Last Name": "Vasquez"
+      },
+      {
+        "First Name": "Jonathan Vahan",
+        "Last Name": "Bashori"
+      },
+      {
+        "First Name": "Joseph kal-El",
+        "Last Name": "Rachiele"
+      },
+      {
+        "First Name": "Jouzef",
+        "Last Name": "Albdewi"
+      },
+      {
+        "First Name": "Julia Emma",
+        "Last Name": "Stanescu"
+      },
+      {
+        "First Name": "Kevn",
+        "Last Name": "Abdulnour"
+      },
+      {
+        "First Name": "Kinley Kelliher",
+        "Last Name": "Carrabs"
+      },
+      {
+        "First Name": "Liam Dylan",
+        "Last Name": "Dizon"
+      },
+      {
+        "First Name": "Lucas Noel",
+        "Last Name": "Antonio"
+      },
+      {
+        "First Name": "Madison Rose",
+        "Last Name": "Prendegast"
+      },
+      {
+        "First Name": "Manuel",
+        "Last Name": "Tarabay"
+      },
+      {
+        "First Name": "Marica Magdalena",
+        "Last Name": "Katic"
+      },
+      {
+        "First Name": "Matthew Restrepo",
+        "Last Name": "Vergara"
+      },
+      {
+        "First Name": "Mia Isabelle",
+        "Last Name": "San Juan"
+      },
+      {
+        "First Name": "Michaella",
+        "Last Name": "Kasule"
+      },
+      {
+        "First Name": "Nia Lorrain",
+        "Last Name": "Reyes"
+      },
+      {
+        "First Name": "Oliver Paul",
+        "Last Name": "Crifo"
+      },
+      {
+        "First Name": "Raphael",
+        "Last Name": "Kasule"
+      },
+      {
+        "First Name": "Samantha",
+        "Last Name": "Balaga"
+      },
+      {
+        "First Name": "Samara",
+        "Last Name": "Alfarero"
+      },
+      {
+        "First Name": "Sebastian",
+        "Last Name": "Eduardo"
+      },
+      {
+        "First Name": "Sham Samer",
+        "Last Name": "Khazal"
+      },
+      {
+        "First Name": "Yasmin Rosaria",
+        "Last Name": "Beekmeyer-Anton"
+      },
+      {
+        "First Name": "Zoe Mae",
+        "Last Name": "Lacorte"
+      }
+    ];
   },
   methods: {
     is_dynamic(text) {

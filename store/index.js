@@ -7,6 +7,7 @@ export const state = () => ({
     actionPointer: undefined,
     fromServer: false,
     current_page: undefined,
+    collection_data: [],
     is404: false,
 })
 
@@ -33,6 +34,15 @@ export const mutations = {
         //
         if (serverData.data.public){
             state.current_page = serverData.data.public.sections
+            
+            // @collections store
+            // fetch collections
+            // loop through the current page data, find if there is an object
+            // that isAlist, then get the address of the list use it to fetch the collection
+            // assign the value to the collection_data
+            // this.dispatch('systemCall', {
+
+            // })
         }
     },
     set404(state,val) {
