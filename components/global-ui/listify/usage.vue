@@ -20,6 +20,14 @@
            contextStyle: 'showOnTheSide', // showOnTheSide, showOnCLickExpand
            showModal:modalState,
            showFilter: true,
+
+            // for  dynamic contex Actions
+           contextActions: [  // @listify usage - dynamiContextActionTitles
+            `Add New |${dynamic_ContextTitle_entry}`,
+            `View All |${dynamic_ContextTitle_entry}`,
+            'Categories |false','Delete |false',
+            'Edit Schema |false'],
+           dynamiContextActionTitles: true,
        }"
       :appearance="{
            // dimensions
