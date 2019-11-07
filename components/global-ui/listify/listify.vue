@@ -555,7 +555,7 @@ export default {
           TweenMax.fromTo(
             el,
             0.5,
-            { opacity: 0, marginTop: "20px" },
+            { opacity: 0, marginTop: "40px" },
             { opacity: 1, marginTop: "0px" }
           );
         }, 0);
@@ -566,7 +566,7 @@ export default {
             el,
             0.3,
             { opacity: 1, marginTop: "0px" },
-            { opacity: 0, marginTop: "20px" }
+            { opacity: 0, marginTop: "-40px" }
           );
         }, 0);
 
