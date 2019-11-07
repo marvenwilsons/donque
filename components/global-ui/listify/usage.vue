@@ -23,8 +23,8 @@
 
             // for  dynamic contex Actions
            contextActions: [  // @listify usage - dynamiContextActionTitles
-            `Add New |${dynamic_ContextTitle_entry}`,
-            `View All |${dynamic_ContextTitle_entry}`,
+            `Add New |${[ ]}`,  // array
+            `View All |${[] }`, // array
             'Categories |false','Delete |false',
             'Edit Schema |false'],
            dynamiContextActionTitles: true,
