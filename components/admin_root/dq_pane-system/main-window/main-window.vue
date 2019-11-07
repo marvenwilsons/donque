@@ -24,7 +24,7 @@
               <!-- {{config[pane_index]}} -->
               <div
                 v-if="config[pane_index].head_visibility"
-                :style="{background:config[pane_index].pane_head_bg_color, borderRadius: '5px'}"
+                :style="{background:config[pane_index].pane_head_bg_color, borderTopLeftRadius: '5px',borderTopRightRadius: '5px'}"
                 class="flex spacebetween fullwidth pad050"
               >
                 <div
