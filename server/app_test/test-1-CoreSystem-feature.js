@@ -308,7 +308,7 @@ const routine_a = [
                 execFile('mongod', ['--dbpath', '/home/marven/Desktop/database/Data', '--shutdown'], (error, stdout, stderr) => {
                 });
                 setTimeout(() => {
-                    testRunner('test2.js')
+                    testRunner('test-2-AdminLogin-feature.js')
 
                 },1000)
             }, 2000)

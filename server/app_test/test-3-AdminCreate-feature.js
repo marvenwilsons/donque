@@ -189,7 +189,7 @@ const myTest = [
             const testRunner = require('./testrunner')
 
             setTimeout(() => {
-                testRunner('test4.js')
+                testRunner('test-4-AppAdmin-feature.js')
             }, 600)
         },
         data(data) {

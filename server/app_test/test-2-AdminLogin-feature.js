@@ -217,7 +217,7 @@ const myTests = [
         after: err => {
             err(false)
             setTimeout(() => {
-                testRunner('test3.js')
+                testRunner('test-3-AdminCreate-feature.js')
             }, 600)
         }
     }
