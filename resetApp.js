@@ -29,7 +29,7 @@ execFile('mongod', ['--dbpath', '/home/marven/Desktop/database/Data', '--shutdow
         dqfs.mkdir(path.join(__dirname, 'server/app_manifest'))
         setTimeout(() => {
             execSync(
-                `node ./server/app_test/test1.js`,
+                `node ./server/app_test/test-1-CoreSystem-feature.js`,
                 { stdio: 'inherit' }
             );
         },500)
