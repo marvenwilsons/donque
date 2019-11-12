@@ -27,6 +27,7 @@ module.exports = {
       { href: 'https://fonts.googleapis.com/css?family=Cuprum', rel: 'stylesheet' },
       { href: 'https://fonts.googleapis.com/css?family=Cuprum|Open+Sans:300i', rel: 'stylesheet' },
       { href: 'https://fonts.googleapis.com/css?family=Arimo&display=swap', rel: 'stylesheet' },
+      { href: 'https://fonts.googleapis.com/css?family=Open+Sans&display=swap', rel: 'stylesheet' },
       { href: 'https://cdnjs.cloudflare.com/ajax/libs/gsap/2.0.2/TweenMax.min.js' },
       { rel: 'stylesheet', type: 'text/css', href: 'https://use.fontawesome.com/releases/v5.8.1/css/all.css' }
     ]
