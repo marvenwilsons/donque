@@ -154,7 +154,7 @@
                           @mouseleave="resetInfoBox()"
                           @click="sec_modal_viz = true, sec_data = undefined"
                           @click.right.prevent="openOpt(sections.uid,$event,'wrapper')"
-                          :style="{background:theme.global.secondary_bg_color, width:'81px'}"
+                          :style="{background:theme.global.secondary_bg_color, width:'85px'}"
                           v-if="s_i == 0"
                         >
                           wrapper
