@@ -1,7 +1,8 @@
 <template>
-<!-- Can be use also on Edit Schema -->
-  <div class="margintop125 flex flexcol">
-    <div class="relative" style="height:200px;border:1px solid lightgray;overflow:auto;">
+  <!-- Can be use also on Edit Schema -->
+  <div class="margintop125 relative flex flexcol">
+    <div v-if="isLoading"  class="absolute fullwidth fullheight-percent flex flexcenter"><strong>loading...</strong></div>
+    <div v-if="!isLoading" class="relative" style="height:200px;border:1px solid lightgray;overflow:auto;">
       <div class="absolute fullwidth">
         <div v-if="Show_Objectify" class="flex">
           <div class="flex1">Key</div>
@@ -46,8 +47,25 @@
     <div v-if="Err">
       <div class="err backgrounderr pad050">{{Err}}</div>
     </div>
-    <div class="flex">
-      <input id="ANC_inp" v-model="SchemaModel_TextInput" placeholder="key name" class="pad025" type="text" />
+    <div>
+      <div>
+        <input
+          id="ANC_inp_cn"
+          v-model="Model_Collection_Name"
+          placeholder="Collection Name"
+          class="pad025 fullwidth"
+          type="text"
+        />
+      </div>
+    </div>
+    <div v-if="Model_Collection_Name" class="flex">
+      <input
+        id="ANC_inp"
+        v-model="SchemaModel_TextInput"
+        placeholder="key name"
+        class="pad025"
+        type="text"
+      />
       <select v-model="SchemaModel_SelectInput" class="fullwidth">
         <option>Any</option>
         <option>String</option>
@@ -57,12 +75,17 @@
         <option>Article</option>
         <option>file_sys_ref</option>
       </select>
-      <button  @click="SchemaModel_AddSchema_Property">
+      <button @click="SchemaModel_AddSchema_Property">
         <i class="fas fa-plus pointer pad050"></i>
       </button>
     </div>
-    <div v-if="Show_Objectify && !SchemaModel_SelectInput && !SchemaModel_TextInput" class="margintop125 flex flexend">
-      <button @click="Create_Collection" class="buttonreset pad050 buttonBlue"><strong>Create collection</strong></button>
+    <div
+      v-if="Show_Objectify && !SchemaModel_SelectInput && !SchemaModel_TextInput"
+      class="margintop125 flex flexend"
+    >
+      <button @click="Create_Collection" class="buttonreset pad050 buttonBlue">
+        <strong>Create collection</strong>
+      </button>
     </div>
   </div>
 </template>
@@ -73,9 +96,10 @@ export default {
     SchemaModel: undefined,
     SchemaModel_TextInput: undefined,
     SchemaModel_SelectInput: undefined,
-
+    Model_Collection_Name: undefined,
     Show_Objectify: false,
-    Err: false
+    Err: false,
+    isLoading: false,
   }),
   computed: {
     Latest_SchemaModel() {
@@ -91,7 +115,7 @@ export default {
     }
   },
   mounted() {
-    document.getElementById('ANC_inp').focus()
+    document.getElementById("ANC_inp_cn").focus();
   },
   methods: {
     SchemaModel_AddSchema_Property() {
@@ -100,7 +124,7 @@ export default {
       } else if (!this.SchemaModel_TextInput) {
         this.Err = "Key name cannot be undefined";
       } else {
-        this.Err = false
+        this.Err = false;
         let x = { ...this.SchemaModel };
         x[this.SchemaModel_TextInput] = this.SchemaModel_SelectInput;
 
@@ -110,9 +134,32 @@ export default {
       }
     },
     Create_Collection() {
-        this.$emit('onCreateCollectionDone')
-        // SystemCall create new collection
+      this.isLoading = true
+      this.$emit("onCreateCollectionDone");
+      // SystemCall create new collection
+      this.$store
+        .dispatch("systemCall", {
+          command: "addCollection",
+          section: "collectionMethods",
+          data: {
+            collection_name: this.Model_Collection_Name,
+            schema: this.Latest_SchemaModel
+          },
+          method: "post"
+        })
+        .then(({ data, status }) => {
+          if (status) {
+            this.isLoading = false
+            this.$emit('onCollectionCreated')
+          } else {
+            this.isLoading = false
+            this.Err = data.actions[0].msg;
+          }
+        })
+        .catch(err => {
+          alert(err);
+        });
     }
-  },
+  }
 };
 </script>

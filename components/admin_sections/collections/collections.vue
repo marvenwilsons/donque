@@ -24,47 +24,7 @@
            showModal:modal_State,
            showFilter: true,
        }"
-      :appearance="{
-           // dimensions
-           height: '100%', // required 
-           width: '100%', // required
-
-           // text
-           textColor: '#196ADD',
-
-           // border colors
-           borderColor: '#F1F8FF',
-           listBorderColor: '#e8f4f8',
-           searchBoxBorderColor: 'lightgray',
-
-           // backgrounds
-           bodyBg:'white',
-           searchBarBgColor: '#F1F8FF',
-           searchBarTextColor: '#24292E',
-           modalBgOverlay: 'white',
-           odds: 'white', // background of odd index item in the list
-           evens: 'white', // background of even index item in the list
-
-           // hovers
-           hoverTextColor: '#196ADD',
-           hoverBgColor: '#F1F8FF',
-           hoverCustomStyle: {
-               fontWeight: 700,
-           },
-
-           // list padding
-           listPadding: 'm', // s m l
-           listContainerPadding: true, // true false
-
-           // active
-           activeTextColor: 'white',
-           activeBgColor: 'lightblue',
-           acitveCustomStyle: {
-              // fontWeight: 700,
-              // padding:'5px',
-           }
-
-       }"
+      :appearance="listify_Appearance"
     >
       <div slot="item-icon">
         <!-- icon that will show on each list item -->
@@ -82,7 +42,7 @@
             <i @click="modal_State = false" class="fas fa-times padright025 pointer"></i>
           </div>
           <div v-if="modal_Content == 'Create Collection'" class="pad125">
-            <modalAddCollection :data="null"></modalAddCollection>
+            <modalAddCollection @onCollectionCreated="onCollectionCreated" :data="null"></modalAddCollection>
           </div>
           <div v-if="modal_Content == 'Edit Schema'" class="pad125">
             <modalAddCollection :data="null"></modalAddCollection>
@@ -96,7 +56,9 @@
                 will be lost forever.
               </div>
               <div class="margintop050 flex flexend">
-                <button class="buttonreset pad050">Yes Delete {{modal_ContentObject['Collection Name']}}</button>
+                <button
+                  class="buttonreset pad050"
+                >Yes Delete {{modal_ContentObject['Collection Name']}}</button>
                 <span class="pad025"></span>
                 <button @click="modal_State = false" class="buttonreset pad050">Cancel</button>
               </div>
@@ -118,26 +80,66 @@ export default {
     modal_State: false,
     modal_Content: undefined,
     modal_ContentObject: undefined,
+    listify_Appearance: {
+      // dimensions
+      height: "100%", // required
+      width: "100%", // required
+
+      // text
+      textColor: "#196ADD",
+
+      // border colors
+      borderColor: "#F1F8FF",
+      listBorderColor: "#e8f4f8",
+      searchBoxBorderColor: "rgba(48, 51, 64, 0.521)",
+
+      // backgrounds
+      bodyBg: "white",
+      searchBarBgColor: "#F1F8FF",
+      searchBarTextColor: "#24292E",
+      modalBgOverlay: "white",
+      odds: "white", // background of odd index item in the list
+      evens: "white", // background of even index item in the list
+
+      // hovers
+      hoverTextColor: "#196ADD",
+      hoverBgColor: "#F1F8FF",
+      hoverCustomStyle: {
+        fontWeight: 700
+      },
+
+      // list padding
+      listPadding: "m", // s m l
+      listContainerPadding: true, // true false
+
+      // active
+      activeTextColor: "white",
+      activeBgColor: "lightblue",
+      acitveCustomStyle: {
+        // fontWeight: 700,
+        // padding:'5px',
+      }
+    },
     sample_input_data: [
       {
         "Collection Name": "Books",
-        age: 28,
+        age: 28
       },
       {
         "Collection Name": "Staff",
-        age: 10,
+        age: 10
       },
       {
         "Collection Name": "Products",
-        age: 5,
+        age: 5
       },
       {
         "Collection Name": "Portfolio",
-        age: 38,
+        age: 38
       },
       {
         "Collection Name": "q3te",
-        age: 28,
+        age: 28
       }
       // {
       //   name: "qwetdfsb",
@@ -234,7 +236,7 @@ export default {
   beforeCreate() {
     this.$store.commit("pane_system/set_pane_config", {
       title: "Data Collections",
-      pane_width: "600px",
+      pane_width: "650px",
       pane_head_bg_color: "rgb(48, 51, 64)",
       pane_head_title_color: "white"
     });
@@ -246,6 +248,9 @@ export default {
     addNewCollection() {
       this.modal_State = true;
       this.modal_Content = "Create Collection";
+    },
+    onCollectionCreated() {
+      this.modal_State = false
     },
     contextAction(val) {
       if (val.actionName == "Edit Schema") {
