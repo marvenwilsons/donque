@@ -83,7 +83,6 @@ export default {
     actionPointer(n, o) {
       console.log('** Executing action pointer')
       const action = this.$store.state.actions[n];
-      console.log('   ')
 
       //
       if (n != undefined) {
@@ -126,11 +125,10 @@ export default {
             case "prompt_password":
               // prompt modal for password
               this.$store.commit("modal/set_modal", {
-                head: "Alert",
-                body:
-                  "Prompt password is not yet coded by marven! code it madafaka!!",
+                head: "Password is needed for this operation",
+                body:"prompt_password",
                 config: {
-                  ui_type: "msg",
+                  ui_type: "custom",
                   closable: false
                 }
               });

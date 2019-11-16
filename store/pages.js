@@ -359,10 +359,13 @@ export const mutations = {
             }).then((res) => {
                 if(res.status){
                     this.commit("modal/set_modal", {
-                        head: "Saved",
-                        body: "Changes were saved successfully.",
+                        head: "Command response",
+                        body: {
+                            text: "Changes were saved successfully.",
+                            ui: "success"
+                        },
                         config: {
-                            ui_type: "msg",
+                            ui_type: "custom",
                             closable: false,
                             width:'320px',
                             height: '100px'

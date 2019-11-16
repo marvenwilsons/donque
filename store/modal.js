@@ -1,3 +1,5 @@
+import { TweenMax, TimelineLite, TweenLite } from "gsap";
+
 export const state = () => ({
     // config
     visibility: false,
@@ -43,13 +45,23 @@ export const state = () => ({
 export const mutations = {
     // when call it will show a spinner into a screen
     set_visibility(state,value) {
-        state.visibility = value
-    },        
+        this.commit('modal/set_modal', {
+            head: null,
+            body: null,
+            config: {
+              visibility: value
+            }
+        })
+    },
+    reset_modal() {
+        state.body = undefined
+        state.head = undefined
+    },     
     set_modal(state,{body,head,config}){
         const {visibility,closable,head_visibility, ui_type, height, width} = config 
 
         // setting config
-        typeof visibility === 'boolean' ? state.visibility = visibility : state.visibility = true
+        // typeof visibility === 'boolean' ? state.visibility = visibility : state.visibility = true
         typeof closable === 'boolean' ? state.closable = closable : state.closable = true
         typeof head_visibility === 'boolean' ? state.head_visibility = head_visibility : state.head_visibility = true
         height && (state.height = height)
@@ -61,6 +73,31 @@ export const mutations = {
         // content
         state.body = body
         state.head = head
+
+        console.log('setting vesibi')
+
+
+        if(visibility == false) {
+            // animate first before setting to visibility false
+            state.visibility = false           
+
+
+        } else {
+            state.visibility = true           
+            
+            setTimeout(() => {
+                const el = document.getElementById('dq-modal-host')
+                if(el) {
+                    TweenMax.fromTo(
+                    el,
+                    0.3,
+                    { opacity: 0, marginTop: "40px", ease: Power2.easeInOut },
+                    { opacity: 1, marginTop: "0px", ease: Power2.easeInOut }
+                  );
+                }
+                
+            }, 0);
+        }
     },
 
     exec_after_hook(state) {

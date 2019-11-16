@@ -146,12 +146,12 @@
 
     "modal_host_style" : {
         "boxShadow":"2px 2px 15px 1px #393e4244",
-        "border": "4px solid #e9eff3",
-        "borderRadius": "5px"
+        "background":"rgba(48, 51, 64, 0.911)",
+        "borderRadius":"5px 5px 0px 0px"    
     },
     "modal_head_style" : {
         "color": "#f6f8fa",
-        "background": "#4a6976",
+        "background": "rgba(48, 51, 64, 0.911)",
         "borderRadius":"5px 5px 0px 0px"    
     },
     "modal_button_style": {
@@ -164,7 +164,7 @@
     "modal_head_close_btn_style": {
     },
     "modal_body_style": {
-        "background": "#e9eff3"
+        "background": "white"
     },
 
     "notify_bg_color": "white",

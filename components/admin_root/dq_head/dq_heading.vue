@@ -2,7 +2,7 @@
     <div v-dq-theme:heading="['color','background']" class="flex spacebetween relative">
         <div class="dqhead-items fullwidth flex flexcenter flexstart">
             <div  v-dq-theme:heading_logo="['background','color']" style="width:180px; z-index:2;" class="fullhight-percent padtop050 padbottom050">
-                <span><strong class="padleft125">dq</strong>studio <strong>Enterprise</strong></span>
+                <span><strong class="padleft125">dq</strong>studio <strong>Vanilla</strong></span>
             </div>
         </div>
         <div style="z-index:100" class="dqhead-items fullwidth  padtop025 padbottom025">

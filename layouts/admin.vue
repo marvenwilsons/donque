@@ -18,17 +18,18 @@
         >
           <div class="flex1 fullwidth fullheight-percent flex flexcol flexcenter">
             <main
+              id="dq-modal-host"
               class="flex flexcol"
-              :style="{...$store.state.theme.modal_host_style, minWidth: $store.state.modal.width, minHeight: $store.state.modal.height}"
+              :style="{...$store.state.theme.modal_host_style, minWidth: $store.state.modal.width, minHeight: $store.state.modal.height, opacity: 0}"
             >
               <div
                 :style="{...$store.state.theme.modal_head_style}"
-                class="flex spacebetween pad025"
+                class="flex spacebetween pad050"
                 v-if="$store.state.modal.head_visibility"
               >
                 <div
                   :style="{...$store.state.theme.modal_head_title_style}"
-                  class="flex10 padleft025 padbottom025"
+                  class="flex10 padleft050 padbottom025"
                 >
                   <strong>{{$store.state.modal.head}}</strong>
                 </div>
@@ -48,7 +49,7 @@
                 :style="{...$store.state.theme.modal_body_style}"
               >
                 <div class="fullwidth" v-if="$store.state.modal.ui_type === 'custom'">
-                  <div :is="$store.state.modal.body"></div>
+                  <umd :disp="$store.state.modal.body"></umd>
                 </div>
                 <div
                   v-if="$store.state.modal.ui_type != 'custom'"
@@ -106,6 +107,7 @@ import { mapGetters } from "vuex";
 //modals installation
 import page_warn_unsaved from "../components/admin_sections/pages/page-selected/modals/warn-unsaved";
 import dq_page_max_editor from "../components/admin_sections/pages/page-selected/modals/dq-page-max-editor";
+import universal_modal_display from '../components/admin_root/app_modal/universal_modal_disp'
 
 export default {
   data() {
@@ -117,7 +119,10 @@ export default {
   computed: {
     ...mapGetters({
       dashboard_ready: "dashboard_data/dashboard_ready"
-    })
+    }),
+    modalBody() {
+      return this.$store.state.modal.body
+    }
   },
   watch: {
     dashboard_ready(n, o) {
@@ -149,7 +154,8 @@ export default {
 
     // modal insatll below
     page_warn_unsaved,
-    dq_page_max_editor
+    dq_page_max_editor,
+    umd: universal_modal_display
   }
 };
 </script>

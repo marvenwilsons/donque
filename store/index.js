@@ -13,7 +13,6 @@ export const state = () => ({
 
 export const getters = {
     actionState: state => {
-        console.log('store action state')
         return state.actions
     },
     actionPointer: state => state.actionPointer,
@@ -74,6 +73,7 @@ export const mutations = {
             state.actionPointer = undefined
             state.modal.visibility = false
             state.fromServer = false
+            this.commit('modal/reset_modal')
         }
         
         if (state.actions.length - 1 != state.actionPointer){

@@ -1,41 +1,48 @@
 <template>
-  <div>
-    <!-- prompt_err -->
-    <div
-      v-if="$store.state.current_action_title == 'prompt_err'"
-      class="fullwidth fullheight-percent flex flexcol "
-    >
-      <div class="fullheight-percent flex msgbox flex flexcenter ">
-        <span class="dialog fullwidth dia-err">{{$store.state.message}}</span>
+  <div style="width:400px;">
+    <!-- prompt password -->
+    <div v-if="disp == 'prompt_password'" class="pad125">
+      <div class="backgroundinfo pad050 borderRad4">
+        <span><strong>Notice:</strong> for distructive operations, like deleting a resource into the database, password is required to continue.</span>
       </div>
-      <div class="btn-okay flex">
-        <span @click="closeModal">Okay</span>
+      <div class="margintop050">
+        <strong><form ><input autocomplete="off" id="dq-pp-mdl" type="password" placeholder="password" class="pad050 fullwidth"></form></strong>
       </div>
-    </div>
-    <!-- prompt_msg -->
-    <div
-      v-if="$store.state.current_action_title == 'prompt_msg'"
-      class="fullwidth fullheight-percent flex flexcol"
-    >
-      <div class="fullheight-percent flex msgbox">
-        <span class="dialog fullwidth dia-succ">{{$store.state.message}}</span>
-      </div>
-      <div class="btn-okay flex">
-        <span @click="closeModal">Okay</span>
+      <div class="flex flexend margintop050">
+        <div class="marginright050">
+          <button class="buttonreset pad050 darkprimary borderRad4">Continue</button>
+        </div>
+        <button @click="closeModal" class="buttonreset pad050 darkprimary borderRad4">Cancel</button>
       </div>
     </div>
-    <!-- maximize -->
-    <!-- prompt_password -->
-    <!-- prompt_credentials -->
+    <!-- page warn -->
+    <pwu v-if="disp === 'page_warn_unsaved'" ></pwu>
+    <!-- success -->
+    <div class="pad050" v-if="disp.ui === 'success'">
+      <div class="backgroundinfo pad125">{{disp.text}}</div>
+      <div class="margintop050 flex flexend"><button @click="closeModal" class="buttonreset pad050 darkprimary borderRad4">Okay</button></div>
+    </div>
   </div>
 </template>
 
 <script>
+import page_warn_unsaved from "@/components/admin_sections/pages/page-selected/modals/warn-unsaved";
+
 export default {
+  props: ['disp'],
   methods: {
     closeModal() {
-      this.$store.state.modal.commit('set_visibility', false);
+      this.$store.commit('nextAction')
+      this.$store.commit('modal/set_visibility', false);
     }
+  },
+  mounted() {
+    setTimeout(() => {
+      document.getElementById('dq-pp-mdl').focus()
+    }, 0);
+  },
+  components: {
+    pwu: page_warn_unsaved
   }
 };
 </script>
@@ -76,5 +83,11 @@ export default {
   border-radius: 5px;
   border: 2px dashed #e1fcee;
   color: #038203;
+}
+.backgroundinfo{
+  background: #D8E4EB;
+  border: 1px solid rgba(16, 136, 206, 0.082);
+  color: #1087CE;
+  border-left: 5px solid rgba(16, 136, 206, 0.596);
 }
 </style>
