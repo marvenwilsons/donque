@@ -1,4 +1,5 @@
 <template>
+<!-- @modal - custom universal modal disp -->
   <div style="width:400px;">
     <!-- prompt password -->
     <div v-if="disp == 'prompt_password'" class="pad125">
@@ -19,7 +20,7 @@
     <pwu v-if="disp === 'page_warn_unsaved'" ></pwu>
     <!-- success -->
     <div class="pad050" v-if="disp.ui === 'success'">
-      <div class="backgroundinfo pad125">{{disp.text}}</div>
+      <div class="backgroundinfo pad125 borderRad4">{{disp.text}}</div>
       <div class="margintop050 flex flexend"><button @click="closeModal" class="buttonreset pad050 darkprimary borderRad4">Okay</button></div>
     </div>
   </div>
