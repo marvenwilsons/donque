@@ -15,7 +15,7 @@ module.exports = {
 
         // shema type validation
         console.log('[Collection]'.bold.green,'----> Validating Collection types')
-        let types = ['Any','String','Number','Boolean','Date','Article','file_sys_ref']
+        let types = ['Any','Long String','Short String','Number','Boolean','Date','Article','file_sys_ref']
         for (let [key, value] of Object.entries(schema)) {
             if(types.includes(value) == false){
                 console.log('[Collection]'.bold.red,`----> Invalid type "${value}" detected`.red)
@@ -91,10 +91,15 @@ module.exports = {
                 } else {
                     db.collection('dq_collections_schema').insertOne(
                         {[collection_name]: {
-                            ...schema,
-                            createdOn: moment().format("MMM Do YY"),
-                            lastModified: moment().format("MMM Do YY"),
-                            createdBy: user.adminNam
+                            schema,
+                            info: {
+                                "_$Collection Name": collection_name,
+                                createdOn: moment().format("MMM Do YY"),
+                                categories: [],
+                                lastModified: moment().format("MMM Do YY"),
+                                createdBy: user.adminName
+                            }
+                            
                         }}
                     ).then(res => {
                         console.log('[Collection]'.bold.green,`----> Sucessfuly created collection ${collection_name}`)
