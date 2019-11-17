@@ -2,16 +2,19 @@
 <!-- @modal - custom universal modal disp -->
   <div style="width:400px;">
     <!-- prompt password -->
-    <div v-if="disp == 'prompt_password'" class="pad125">
+    <div v-if="disp.ui == 'prompt_password'" class="pad125">
       <div class="backgroundinfo pad050 borderRad4">
-        <span><strong>Notice:</strong> for distructive operations, like deleting a resource into the database, password is required to continue.</span>
+        <span><strong>Notice:</strong> for distructive operations, like removing a resource into the database, password is required to continue.</span>
+      </div>
+      <div class="backgrounderr margintop050 pad050 err borderRad4" v-if="err">
+        {{err}}
       </div>
       <div class="margintop050">
-        <strong><form ><input autocomplete="off" id="dq-pp-mdl" type="password" placeholder="password" class="pad050 fullwidth"></form></strong>
+        <strong><form ><input v-model="password" autocomplete="off" id="dq-pp-mdl" type="password" placeholder="password" class="pad050 fullwidth"></form></strong>
       </div>
       <div class="flex flexend margintop050">
         <div class="marginright050">
-          <button class="buttonreset pad050 darkprimary borderRad4">Continue</button>
+          <button @click="confirm_continue(disp.data.cmd)" class="buttonreset pad050 darkprimary borderRad4">Continue</button>
         </div>
         <button @click="closeModal" class="buttonreset pad050 darkprimary borderRad4">Cancel</button>
       </div>
@@ -31,7 +34,35 @@ import page_warn_unsaved from "@/components/admin_sections/pages/page-selected/m
 
 export default {
   props: ['disp'],
+  data: () => ({
+    password: undefined,
+    err: undefined
+  }),
   methods: {
+    confirm_continue({section,command}) {   
+      console.log('confirm continue')   
+      this.$store
+        .dispatch("systemCall", {
+          password: this.password,
+          command,
+          section,
+          data: {},
+          method: "post"
+        })
+        .then(({ data, status }) => {
+          if (status) {
+            console.log('server response')
+            this.err = undefined
+            this.closeModal()
+          } else {
+            console.log('server response')
+            this.err = data.msg
+          }
+        })
+        .catch(err => {
+          alert(err);
+        });
+    },
     closeModal() {
       this.$store.commit('nextAction')
       this.$store.commit('modal/set_visibility', false);

@@ -74,14 +74,9 @@ export const mutations = {
         state.body = body
         state.head = head
 
-        console.log('setting vesibi')
-
-
         if(visibility == false) {
             // animate first before setting to visibility false
-            state.visibility = false           
-
-
+            state.visibility = false 
         } else {
             state.visibility = true           
             

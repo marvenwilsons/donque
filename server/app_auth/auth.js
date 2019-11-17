@@ -65,7 +65,11 @@ module.exports = async ({ dep, selectedCommand, username, password, token, comma
                     isDestructive: selectedCommand.prop.funcIsDestructive,
                     userData: user_does_ex.data.user,
                     pwd: password,
-                    username
+                    username,
+                    cmd: {
+                        section,
+                        command
+                    }
                 })
 
                 fn_handler_res != true && (hasErr = fn_handler_res)
@@ -140,7 +144,11 @@ module.exports = async ({ dep, selectedCommand, username, password, token, comma
                         isDestructive: selectedCommand.prop.funcIsDestructive,
                         userData: user_does_ex.data.user,
                         pwd: password,
-                        username
+                        username,
+                        cmd: {
+                            section,
+                            command
+                        }
                     })
 
                     if(typeof fn_handler_res === 'boolean'){
