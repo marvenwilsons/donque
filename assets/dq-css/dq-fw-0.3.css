@@ -430,6 +430,12 @@ h6 {
   margin-bottom: calc(var(--ln) * 0.85);
 }
 
+.backgroundsuc{
+  background: #dff0d8;
+  color: #417946;
+  border-left: 5px solid #41794683;
+}
+
 body {
   /* background: linear-gradient(to bottom, #ffffff, #ffffff 95%, #bda1a164 100%, #aaaaaa34); */
   background-size: 100% var(--ln);

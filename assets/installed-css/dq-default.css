@@ -421,6 +421,12 @@ img {
 
 }
 
+.backgroundsuc{
+  background: #dff0d8;
+  color: #417946;
+  border-left: 5px solid #41794683;
+}
+
 /* My Own Style ( dq framework 0.2 )
      ============================================================================*/
 :root {
