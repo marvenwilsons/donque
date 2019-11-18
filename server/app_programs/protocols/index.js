@@ -355,6 +355,9 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                 colName: 'dq_collections', data: {}
             },
             {
+                colName: 'dq_collections_schema', data: {}
+            },
+            {
                 colName: 'dq_admins', data: {
                     adminName,
                     username,
@@ -482,7 +485,13 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                     client
                         .db(dbName)
                         .collection('dq_collections')
-                        .findOneAndDelete({})    
+                        .findOneAndDelete({})
+                    
+                    //
+                    client
+                        .db(dbName)
+                        .collection('dq_collections_schema')
+                        .findOneAndDelete({})      
 
                     // creating user 
                     console.log('creating admin')

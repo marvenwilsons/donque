@@ -1,8 +1,14 @@
 <template>
   <!-- Can be use also on Edit Schema -->
   <div class="margintop125 relative flex flexcol">
-    <div v-if="isLoading"  class="absolute fullwidth fullheight-percent flex flexcenter"><strong>loading...</strong></div>
-    <div v-if="!isLoading" class="relative" style="height:200px;border:1px solid lightgray;overflow:auto;">
+    <div v-if="isLoading" class="absolute fullwidth fullheight-percent flex flexcenter">
+      <strong>loading...</strong>
+    </div>
+    <div
+      v-if="!isLoading"
+      class="relative"
+      style="height:200px;border:1px solid lightgray;overflow:auto;"
+    >
       <div class="absolute fullwidth">
         <div v-if="Show_Objectify" class="flex">
           <div class="flex1">Key</div>
@@ -68,7 +74,8 @@
       />
       <select v-model="SchemaModel_SelectInput" class="fullwidth">
         <option>Any</option>
-        <option>String</option>
+        <option>Short String</option>
+        <option>Long String</option>
         <option>Number</option>
         <option>Boolean</option>
         <option>Date</option>
@@ -83,8 +90,11 @@
       v-if="Show_Objectify && !SchemaModel_SelectInput && !SchemaModel_TextInput"
       class="margintop125 flex flexend"
     >
-      <button @click="Create_Collection" class="buttonreset pad050 buttonBlue">
+      <button v-if="mode == 'Add Collection'" @click="Create_Collection" class="buttonreset pad050 buttonBlue">
         <strong>Create collection</strong>
+      </button>
+       <button v-if="mode == 'Edit Collection'" @click="Edit_Collection" class="buttonreset pad050 buttonBlue">
+        <strong>Apply Changes</strong>
       </button>
     </div>
   </div>
@@ -92,6 +102,7 @@
 
 <script>
 export default {
+  props: ["data"],
   data: () => ({
     SchemaModel: undefined,
     SchemaModel_TextInput: undefined,
@@ -100,6 +111,7 @@ export default {
     Show_Objectify: false,
     Err: false,
     isLoading: false,
+    mode: undefined
   }),
   computed: {
     Latest_SchemaModel() {
@@ -116,8 +128,19 @@ export default {
   },
   mounted() {
     document.getElementById("ANC_inp_cn").focus();
+    if (this.data) {
+      console.log('Edit collection')
+      this.Model_Collection_Name = this.data["Collection Name"];
+      this.SchemaModel = this.data.schema;
+      this.mode = 'Edit Collection'
+    } else {
+      this.mode = 'Add Collection'
+    }
   },
   methods: {
+    Edit_Collection() {
+      console.log('edit collection')
+    },
     SchemaModel_AddSchema_Property() {
       if (!this.SchemaModel_SelectInput) {
         this.Err = "Type cannot be undfined";
@@ -134,7 +157,6 @@ export default {
       }
     },
     Create_Collection() {
-      this.isLoading = true
       this.$emit("onCreateCollectionDone");
       // SystemCall create new collection
       this.$store
@@ -149,10 +171,8 @@ export default {
         })
         .then(({ data, status }) => {
           if (status) {
-            this.isLoading = false
-            this.$emit('onCollectionCreated')
+            this.$emit("onCollectionCreated");
           } else {
-            this.isLoading = false
             this.Err = data.actions[0].msg;
           }
         })

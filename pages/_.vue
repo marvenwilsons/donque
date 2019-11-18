@@ -126,7 +126,10 @@ export default {
               // prompt modal for password
               this.$store.commit("modal/set_modal", {
                 head: "Password is needed for this operation",
-                body:"prompt_password",
+                body:{
+                  ui: "prompt_password",
+                  data: action
+                },
                 config: {
                   ui_type: "custom",
                   closable: false

@@ -1,6 +1,6 @@
 <template>
   <div>Add Entry
-    <pre>{{this.data}}</pre>
+    <pre>{{this.data.schema}}</pre>
   </div>
 </template>
 

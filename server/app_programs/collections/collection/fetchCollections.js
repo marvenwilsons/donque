@@ -18,16 +18,13 @@ module.exports = {
             await col_cursor.forEach((doc,err) => {
                 return cursor_collections.push(doc)
             }).then(() => {
-                cursor_collections.map(col => {
-                    return collections.push(col[Object.keys(col)[1]])
-                })                
                 resolve({
                     status: true,
                     data: {
                         msg: null,
                         actions: [{
                             title: null,
-                            contents: collections 
+                            contents: cursor_collections 
                         }]
                     }
                 })

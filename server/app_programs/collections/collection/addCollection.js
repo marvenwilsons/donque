@@ -60,7 +60,7 @@ module.exports = {
         // existance check
         console.log('[Collection]'.bold.green,'----> Validating collection existance')
         const collectionName_exist = db.collection('dq_collections_schema').findOne({
-            [collection_name] : {$exists: true}
+            'collection_name' : {$eq: collection_name}
         }).then(data => {
             if (data !== null){
                 return true
@@ -90,7 +90,8 @@ module.exports = {
                     return;
                 } else {
                     db.collection('dq_collections_schema').insertOne(
-                        {[collection_name]: {
+                        {
+                            collection_name: collection_name,
                             schema,
                             info: {
                                 "_$Collection Name": collection_name,
@@ -99,8 +100,7 @@ module.exports = {
                                 lastModified: moment().format("MMM Do YY"),
                                 createdBy: user.adminName
                             }
-                            
-                        }}
+                        }
                     ).then(res => {
                         console.log('[Collection]'.bold.green,`----> Sucessfuly created collection ${collection_name}`)
                         resolve({

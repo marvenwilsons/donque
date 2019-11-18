@@ -67,8 +67,8 @@ const myTest = [
             data: {
                 collection_name: 'Book',
                 schema: {
-                    "First Name" : 'String',
-                    "Last Name" : 'String',
+                    "First Name" : 'Short String',
+                    "Last Name" : 'Short String',
                     "Age" : 'Number'
                 }
             }
@@ -79,7 +79,7 @@ const myTest = [
         after(err) {
             setTimeout(() => {
                 err(hasErr)
-            }, 1500)
+            }, 100)
         },
         data(data) {
             myTest[2].input.token = data[0].data.actions[0].content.token
@@ -97,8 +97,8 @@ const myTest = [
             data: {
                 collection_name: 'Book',
                 schema: {
-                    "First Name" : 'String',
-                    "Last Name" : 'String',
+                    "First Name" : 'Short String',
+                    "Last Name" : 'Short String',
                     "Age" : 'Number'
                 }
             }
@@ -109,7 +109,7 @@ const myTest = [
         after(err) {
             setTimeout(() => {
                 err(hasErr)
-            }, 1500)
+            }, 100)
         },
         data(data) {
             myTest[3].input.token = data[0].data.actions[0].content.token
@@ -127,7 +127,7 @@ const myTest = [
             data: {
                 collection_name: 'Test',
                 schema: {
-                    "First Name" : 'String',
+                    "First Name" : 'Short String',
                     "Last Name" : 'Stringss',
                     "Age" : 'Number'
                 }
@@ -139,7 +139,7 @@ const myTest = [
         after(err) {
             setTimeout(() => {
                 err(hasErr)
-            }, 1500)
+            }, 100)
         },
         data(data) {
             myTest[4].input.token = data[0].data.actions[0].content.token
@@ -185,19 +185,139 @@ const myTest = [
         after(err) {
             setTimeout(() => {
                 err(hasErr)
-            }, 1500)
+            }, 100)
         },
         data(data) {
-            myTest[2].input.token = data[0].data.actions[0].content.token
-            myTest[2].input.username = data[0].data.actions[0].content.username
         }        
+    },
+
+    /**
+     * Fetch collection
+     */
+    // login
+    {
+        desc: 'owner admin login expected to succeed',
+        expected: true,
+        expectedMsg: 'Auth Ok',
+        input: {
+            username: 'jannyann',
+            password: 'password123@',
+            section: 'adminMethods',
+            command: 'adminlogin'
+        },
+        before(err) {
+            err(false)
+        },
+        after: err => {
+            setTimeout(() => {
+                err(false)
+            }, 400)
+        },
+        data(data) {
+            myTest[7].input.token = data[0].data.actions[0].content.token
+            myTest[7].input.username = data[0].data.actions[0].content.username
+        }
+    },
+    // fetch collection
+    {
+        desc: 'Fetch Collection',
+        expected: true,
+        expectedMsg: null,
+        input: {
+            section: 'collectionMethods',
+            command: 'fetchCollections',
+            data: {}
+        },
+        before(err) {
+            err(false)
+        },
+        after(err) {
+            setTimeout(() => {
+                err(hasErr)
+            }, 100)
+        },
+        data(data) {
+            myTest[8].input.token = data[0].data.actions[0].content.token
+            myTest[8].input.username = data[0].data.actions[0].content.username
+        } 
     },
 
     /**
      * Delete
      */
-    // Delete a collection
-    // Delete a collection that has been deleted already
+    {
+        desc: 'Delete Collection without password passed, should fail, and prompt for password',
+        expected: false,
+        expectedMsg: 'Password required',
+        input: {
+            section: 'collectionMethods',
+            command: 'deleteCollection',
+            password: '',
+            data: {}
+        },
+        before(err) {
+            err(false)
+        },
+        after(err) {
+            setTimeout(() => {
+                err(hasErr)
+            }, 100)
+        },
+        data(data) {
+            myTest[9].input.token = data[0].data.actions[0].content.token
+            myTest[9].input.username = data[0].data.actions[0].content.username
+        } 
+    },
+    // Delete a collection with wrong password passed
+    {
+        desc: 'Delete Collection while passing wrong password, should fail',
+        expected: false,
+        expectedMsg: 'Authentication failed',
+        input: {
+            section: 'collectionMethods',
+            command: 'deleteCollection',
+            password: 'asdfasdf',
+            data: {}
+        },
+        before(err) {
+            err(false)
+        },
+        after(err) {
+            setTimeout(() => {
+                err(hasErr)
+            }, 100)
+        },
+        data(data) {
+            myTest[10].input.token = data[0].data.actions[0].content.token
+            myTest[10].input.username = data[0].data.actions[0].content.username
+        } 
+    },
+    // Delete a collection with correct credentials
+    {
+        desc: 'Delete Collection with correct credentials',
+        expected: true,
+        expectedMsg: null,
+        input: {
+            section: 'collectionMethods',
+            command: 'deleteCollection',
+            password: 'password123@',
+            data: {
+                'Collection Name' : 'Book'
+            }
+        },
+        before(err) {
+            err(false)
+        },
+        after(err) {
+            setTimeout(() => {
+                err(hasErr)
+            }, 100)
+        },
+        data(data) {
+            myTest[10].input.token = data[0].data.actions[0].content.token
+            myTest[10].input.username = data[0].data.actions[0].content.username
+        } 
+    },
     // Create a collection back
     // logout application
     // done

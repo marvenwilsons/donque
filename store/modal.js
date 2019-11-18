@@ -12,7 +12,10 @@ export const state = () => ({
     // content
     body: undefined,
     head: undefined,
-    exec_after_msg: []
+    exec_after_msg: [],
+
+    // temp
+    temp_Cmd: undefined
 })
 
 /**
@@ -43,6 +46,13 @@ export const state = () => ({
  */
 
 export const mutations = {
+    // set temp cmd
+    set_tempCmd(state,value) {
+        state.temp_Cmd = value
+    },
+    reset_tempCmd(state,value) {
+        state.temp_Cmd = undefined
+    },
     // when call it will show a spinner into a screen
     set_visibility(state,value) {
         this.commit('modal/set_modal', {

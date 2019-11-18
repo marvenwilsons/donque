@@ -16,6 +16,7 @@
         <div class="flex fullwidth flexwrap">
           <!-- search by -->
           <div
+            v-if="config.allowFilterSearch"
             name="search by container"
             class="flex margin025"
             :style="{background:'white',  color:'#2A2F2E', border: `1px solid ${appearance.borderColor}`}"
@@ -181,7 +182,7 @@
           </div>
         </div>
         <!--  -->
-        <div class="flex flexend margintop050">
+        <div v-if="inputData" class="flex flexend margintop050">
           <span
             :style="{borderRadius:'3px',color:appearance.textColor}"
             class="padleft050 padright050"
@@ -243,10 +244,11 @@
       <!-- render here -->
     </div>
     <div v-if="err">
-      <div class="backgrounderr">
+      <div class="backgrounderr pad125">
         <strong class="err">ERROR: {{errmsg}}</strong>
       </div>
     </div>
+    <!--  -->
     <div class="relative fullheight-percent" v-if="!err">
       <!-- render -->
       <div
@@ -554,9 +556,9 @@ export default {
           const el = document.getElementById("dq-listify-modal");
           TweenMax.fromTo(
             el,
-            0.5,
-            { opacity: 0, marginTop: "40px" },
-            { opacity: 1, marginTop: "0px" }
+            0.3,
+            { opacity: 0, marginTop: "40px", ease: Power2.easeInOut },
+            { opacity: 1, marginTop: "0px", ease: Power2.easeInOut }
           );
         }, 0);
       } else {
@@ -565,8 +567,8 @@ export default {
           TweenMax.fromTo(
             el,
             0.3,
-            { opacity: 1, marginTop: "0px" },
-            { opacity: 0, marginTop: "-40px" }
+            { opacity: 1, marginTop: "0px", ease: Power2.easeInOut },
+            { opacity: 0, marginTop: "-40px", ease: Power2.easeInOut }
           );
         }, 0);
 
@@ -601,15 +603,20 @@ export default {
       return search_by_options;
     },
     prop_is_number() {
-      return typeof this.inputData[0][this.selectedSearchOption] == "number";
+      if (this.inputData) {
+        if(this.inputData.length) {
+          return typeof this.inputData[0][this.selectedSearchOption] == "number";
+        }
+      }
     },
     searchNoMatch() {
       let hasNoMatch = false;
-
-      if (this.searchVal && this.searchByResult.length === 0) {
-        hasNoMatch = true;
-      } else {
-        hasNoMatch = false;
+      if (this.searchByResult) {
+        if (this.searchVal && this.searchByResult.length === 0) {
+          hasNoMatch = true;
+        } else {
+          hasNoMatch = false;
+        }
       }
 
       return hasNoMatch;

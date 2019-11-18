@@ -4,7 +4,7 @@
     <listify
       @onAddItem="addNewCollection"
       @onContextAction="contextAction"
-      :inputData="sample_input_data"
+      :inputData="get_CollectionNames"
       :config="{
            title: 'Collections total',
            isNumbered: false, // detemines if the list show numbered list
@@ -12,7 +12,7 @@
            defaultSelected: null, // default selected option on load
            allowFilterSearch: false,
            search: true, // shows the search functionality if true,
-           searchBarPlaceHolder: 'Search items',
+           searchBarPlaceHolder: 'Search Collection',
            contextActions: [  // @listify usage - dynamiContextActionTitles
             `Add New Entry`,
             `View All`,
@@ -45,22 +45,28 @@
             <modalAddCollection @onCollectionCreated="onCollectionCreated" :data="null"></modalAddCollection>
           </div>
           <div v-if="modal_Content == 'Edit Schema'" class="pad125">
-            <modalAddCollection :data="null"></modalAddCollection>
+            <modalAddCollection :data="edit_schema_data"></modalAddCollection>
           </div>
           <div v-if="modal_Content == 'Delete A Collection'" class="pad125">
             <div>
               <strong>Are you sure you want to delete collection "{{modal_ContentObject['Collection Name']}}"?</strong>
               <br />
               <div class="pad050 margintop050 backgrounderr">
-                Notice: Once deleted all of the data connected to {{modal_ContentObject['Collection Name']}} collection
+                <span style="font-weight:700;">Notice:</span>
+                Once deleted all of the data connected to {{modal_ContentObject['Collection Name']}} collection
                 will be lost forever.
               </div>
-              <div class="margintop050 flex flexend">
+              <div class="margintop125 flex flexend">
+                <!-- editLater - class darkprimary and borderRad4 attr in button -->
                 <button
-                  class="buttonreset pad050"
+                  @click="delete_Collection"
+                  class="buttonreset pad050 darkprimary borderRad4"
                 >Yes Delete {{modal_ContentObject['Collection Name']}}</button>
                 <span class="pad025"></span>
-                <button @click="modal_State = false" class="buttonreset pad050">Cancel</button>
+                <button
+                  @click="modal_State = false"
+                  class="buttonreset pad050 darkprimary borderRad4"
+                >Cancel</button>
               </div>
             </div>
           </div>
@@ -80,6 +86,7 @@ export default {
     modal_State: false,
     modal_Content: undefined,
     modal_ContentObject: undefined,
+    raw_server_data: undefined,
     listify_Appearance: {
       // dimensions
       height: "100%", // required
@@ -120,118 +127,8 @@ export default {
         // padding:'5px',
       }
     },
-    sample_input_data: [
-      {
-        "Collection Name": "Books",
-        age: 28
-      },
-      {
-        "Collection Name": "Staff",
-        age: 10
-      },
-      {
-        "Collection Name": "Products",
-        age: 5
-      },
-      {
-        "Collection Name": "Portfolio",
-        age: 38
-      },
-      {
-        "Collection Name": "q3te",
-        age: 28
-      }
-      // {
-      //   name: "qwetdfsb",
-      //   age: 30,
-      //   height: "2,0cm"
-      // },
-      // {
-      //   name: "asd2ry",
-      //   age: 2,
-      //   height: "5.4cm"
-      // },
-      // {
-      //   name: "kiven",
-      //   age: 10,
-      //   height: "5.2cm"
-      // },
-      // {
-      //   name: "ann",
-      //   age: 28,
-      //   height: "2,0cm"
-      // },
-      // {
-      //   name: "anthony",
-      //   age: 28,
-      //   height: "5.4cm"
-      // },
-      // {
-      //   name: "neil",
-      //   age: 28,
-      //   height: "5.2cm"
-      // },
-      // {
-      //   name: "chefy",
-      //   age: 28,
-      //   height: "2,0cm"
-      // },
-      // {
-      //   name: "adan",
-      //   age: 28,
-      //   height: "5.4cm"
-      // },
-      // {
-      //   name: "trump",
-      //   age: 28,
-      //   height: "5.2cm"
-      // },
-      // {
-      //   name: "person",
-      //   age: 28,
-      //   height: "2,0cm"
-      // },
-      // {
-      //   name: "donal",
-      //   age: 28,
-      //   height: "5.4cm"
-      // },
-      // {
-      //   name: "test",
-      //   age: 28,
-      //   height: "5.2cm"
-      // },
-      // {
-      //   name: "hello",
-      //   age: 28,
-      //   height: "2,0cm"
-      // },
-      // {
-      //   name: "shella",
-      //   age: 28,
-      //   height: "5.4cm"
-      // },
-      // {
-      //   name: "rust",
-      //   age: 28,
-      //   height: "5.2cm"
-      // },
-      // {
-      //   name: "ford",
-      //   age: 28,
-      //   height: "2,0cm"
-      // },
-      // {
-      //   name: "tellf",
-      //   age: 28,
-      //   height: "5.4cm"
-      // },
-      // {
-      //   name: "quin",
-      //   age: 28,
-      //   height: "5.2cm"
-      // }
-    ]
+    edit_schema_data: undefined,
+    delete_collection_data: undefined
   }),
   beforeCreate() {
     this.$store.commit("pane_system/set_pane_config", {
@@ -244,29 +141,142 @@ export default {
   components: {
     modalAddCollection: modal_AddCollection
   },
+  computed: {
+    get_CollectionNames() {
+      if (this.raw_server_data) {
+        const colNames = this.raw_server_data.map(e => {
+          return { "Collection Name": e.collection_name };
+        });
+
+        return colNames;
+      }
+    },
+    get_Schemas() {
+      if (this.raw_server_data) {
+        const schemas = {};
+        this.raw_server_data.map(e => {
+          return (schemas[e.collection_name] = e.schema);
+        });
+
+        return schemas;
+      }
+    },
+    get_tempCmd() {
+      return this.$store.state.modal.temp_Cmd;
+    }
+  },
+  watch: {
+    get_tempCmd(current, prev) {
+      if (current == "deleteCollection") {
+        this.$store
+          .dispatch("systemCall", {
+            command: "fetchCollections",
+            section: "collectionMethods",
+            data: {},
+            method: "post"
+          })
+          .then(({ data, status }) => {
+            if (status) {
+              console.log(data);
+              this.raw_server_data = data.actions[0].contents;
+              this.$store.commit('modal/reset_tempCmd')
+            }
+          })
+          .catch(err => {
+            alert(err);
+          });
+      }
+    }
+  },
+  created() {
+    this.$store
+      .dispatch("systemCall", {
+        command: "fetchCollections",
+        section: "collectionMethods",
+        data: {},
+        method: "post"
+      })
+      .then(({ data, status }) => {
+        if (status) {
+          console.log(data);
+          this.raw_server_data = data.actions[0].contents;
+        }
+      })
+      .catch(err => {
+        alert(err);
+      });
+  },
   methods: {
     addNewCollection() {
       this.modal_State = true;
       this.modal_Content = "Create Collection";
     },
+    delete_Collection() {
+      setTimeout(() => {
+        this.modal_State = false;
+      }, 100);
+      this.$store
+        .dispatch("systemCall", {
+          command: "deleteCollection",
+          section: "collectionMethods",
+          data: this.delete_collection_data,
+          method: "post"
+        })
+        .then(({ data, status }) => {
+          if (status) {
+            console.log("collection deleted!");
+            // this.modal_State = false;
+            // this.raw_server_data = data.actions[0].contents;
+          }
+        })
+        .catch(err => {
+          alert(err);
+        });
+    },
     onCollectionCreated() {
-      this.modal_State = false
+      this.$store
+        .dispatch("systemCall", {
+          command: "fetchCollections",
+          section: "collectionMethods",
+          data: {},
+          method: "post"
+        })
+        .then(({ data, status }) => {
+          if (status) {
+            this.modal_State = false;
+            this.raw_server_data = data.actions[0].contents;
+          }
+        })
+        .catch(err => {
+          alert(err);
+        });
     },
     contextAction(val) {
       if (val.actionName == "Edit Schema") {
         this.modal_State = true;
         this.modal_Content = "Edit Schema";
+        this.edit_schema_data = {
+          "Collection Name": val.actionCastOn["Collection Name"],
+          schema: this.get_Schemas[val.actionCastOn["Collection Name"]]
+        };
       }
       if (val.actionName == "Delete") {
         this.modal_State = true;
         this.modal_ContentObject = val.actionCastOn;
         this.modal_Content = "Delete A Collection";
+        this.delete_collection_data = {
+          "Collection Name": val.actionCastOn["Collection Name"],
+          schema: this.get_Schemas[val.actionCastOn["Collection Name"]]
+        };
       }
       if (val.actionName == "Add New Entry") {
         this.$store.dispatch("pane_system/open", {
           name: "CollectionsAddEntry",
           index: this.my_pane_index,
-          data: val.actionCastOn
+          data: {
+            "Collection Name": val.actionCastOn["Collection Name"],
+            schema: this.get_Schemas[val.actionCastOn["Collection Name"]]
+          }
         });
       }
       if (val.actionName == "View All") {
@@ -293,5 +303,13 @@ export default {
 .buttonBlue {
   background: #0086c0;
   color: white;
+}
+.darkprimary {
+  background: rgba(48, 51, 64, 0.911);
+  color: white;
+  font-weight: 600;
+}
+.borderRad4 {
+  border-radius: 4px;
 }
 </style>

@@ -2,7 +2,7 @@ module.exports = {
     // Collections
     addCollection: require('./collection/addCollection'),
     deleteCollection: require('./collection/deleteCollection'),
-    fetchCollection: require('./collection/fetchCollections'),
+    fetchCollections: require('./collection/fetchCollections'),
     updateCollection: require('./collection/updateCollection'),
     
     // Categories
