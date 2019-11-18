@@ -57,7 +57,7 @@ module.exports = async (user, pwd) => {
      * Check database server connection
      */
     const db = await MongoClient
-        .connect(`mongodb://@localhost:27017`, { useNewUrlParser: true })
+        .connect(`mongodb://@localhost:27017`, { useNewUrlParser: true, "useUnifiedTopology": true })
         .then((client) => {
             client.close()
             return 'db connected'

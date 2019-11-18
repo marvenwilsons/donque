@@ -68,7 +68,8 @@ module.exports = async ({ dep, selectedCommand, username, password, token, comma
                     username,
                     cmd: {
                         section,
-                        command
+                        command,
+                        data
                     }
                 })
 
@@ -147,7 +148,8 @@ module.exports = async ({ dep, selectedCommand, username, password, token, comma
                         username,
                         cmd: {
                             section,
-                            command
+                            command,
+                            data
                         }
                     })
 
@@ -157,15 +159,15 @@ module.exports = async ({ dep, selectedCommand, username, password, token, comma
                             data: user_does_ex.data
                         })
                     }else {
-                        console.log('handler response')
-                        console.log({
-                            status: false,
-                            data: {
-                                command,
-                                section,
-                                ...fn_handler_res
-                            }
-                        })
+                        // console.log('handler response')
+                        // console.log({
+                        //     status: false,
+                        //     data: {
+                        //         command,
+                        //         section,
+                        //         ...fn_handler_res
+                        //     }
+                        // })
                         callback({
                             status: false,
                             data: {

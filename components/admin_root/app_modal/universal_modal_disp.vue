@@ -4,7 +4,7 @@
     <!-- prompt password -->
     <div v-if="disp.ui == 'prompt_password'" class="pad125">
       <div class="backgroundinfo pad050 borderRad4">
-        <span><strong>Notice:</strong> for distructive operations, like removing a resource into the database, password is required to continue.</span>
+        <span><strong>Notice:</strong> A command is attempting to perform an action that requries privileges. Authentication is required to perform this action</span>
       </div>
       <div class="backgrounderr margintop050 pad050 err borderRad4" v-if="err">
         {{err}}
@@ -23,7 +23,7 @@
     <pwu v-if="disp === 'page_warn_unsaved'" ></pwu>
     <!-- success -->
     <div class="pad050" v-if="disp.ui === 'success'">
-      <div class="backgroundinfo pad125 borderRad4">{{disp.text}}</div>
+      <div class="backgroundsuc pad125 borderRad4">{{disp.text}}</div>
       <div class="margintop050 flex flexend"><button @click="closeModal" class="buttonreset pad050 darkprimary borderRad4">Okay</button></div>
     </div>
   </div>
@@ -39,19 +39,21 @@ export default {
     err: undefined
   }),
   methods: {
-    confirm_continue({section,command}) {   
+    confirm_continue({section,command,data}) {   
       console.log('confirm continue')   
       this.$store
         .dispatch("systemCall", {
           password: this.password,
           command,
           section,
-          data: {},
+          data: {
+            'Collection Name': data['Collection Name']
+          },
           method: "post"
         })
         .then(({ data, status }) => {
           if (status) {
-            console.log('server response')
+            this.$store.commit('modal/set_tempCmd', command)
             this.err = undefined
             this.closeModal()
           } else {
