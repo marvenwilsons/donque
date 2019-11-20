@@ -45,7 +45,7 @@
             <modalAddCollection @onCollectionCreated="onCollectionCreated" :data="null"></modalAddCollection>
           </div>
           <div v-if="modal_Content == 'Edit Schema'" class="pad125">
-            <modalAddCollection :data="edit_schema_data"></modalAddCollection>
+            <modalAddCollection @onEditSchemaDone="onCollectionCreated" :data="edit_schema_data"></modalAddCollection>
           </div>
           <div v-if="modal_Content == 'Delete A Collection'" class="pad125">
             <div>

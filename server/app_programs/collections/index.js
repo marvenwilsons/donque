@@ -3,7 +3,7 @@ module.exports = {
     addCollection: require('./collection/addCollection'),
     deleteCollection: require('./collection/deleteCollection'),
     fetchCollections: require('./collection/fetchCollections'),
-    updateCollection: require('./collection/updateCollection'),
+    updateCollectionSchema: require('./collection/updateCollectionSchema'),
     
     // Categories
     addCategory : require('./category/addCategory'),

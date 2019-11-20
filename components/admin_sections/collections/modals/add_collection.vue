@@ -4,6 +4,36 @@
     <div v-if="isLoading" class="absolute fullwidth fullheight-percent flex flexcenter">
       <strong>loading...</strong>
     </div>
+    <div>
+      <div class="flex flexcol">
+        <transition name="fade" appear mode="out-in">
+          <span
+            v-if="shouldUpdate_CollectionName"
+            class="marginbottom050 backgroundinfo pad050 borderRad4 flex spacebetween"
+          >
+            <span>Collection name has changed</span>
+            <span
+              @click="undo(initial_CollectionName,'collectionName')"
+              style="border-bottom: 1px dashed #1087CE"
+              class="pointer"
+            >undo</span>
+          </span>
+        </transition>
+        <transition name="fade" appear mode="out-in">
+          <span
+            v-if="shouldUpdate_Schema"
+            class="marginbottom050 backgroundinfo pad050 borderRad4 flex spacebetween"
+          >
+            <span>Collection schema has changed</span>
+            <span
+              @click="undo(initial_Schema,'schema')"
+              style="border-bottom: 1px dashed #1087CE"
+              class="pointer"
+            >undo</span>
+          </span>
+        </transition>
+      </div>
+    </div>
     <div
       v-if="!isLoading"
       class="relative"
@@ -18,13 +48,16 @@
         </div>
         <objectifyFlatSettings
           v-if="Show_Objectify"
+          @onRemoveProp="onRemoveProp"
+          @onData="onData"
           :config="{
             title: null, // string
             sub_title_description_text: null,
             data: Latest_SchemaModel ? Latest_SchemaModel : {}, // object a schema
             operation:'r', // rw , r
             submit_button: null, // string: if supplied the button will appear
-            show_modal: false
+            show_modal: false,
+            allowRemoveProp: true
             }"
           :appearance="{
             title_text_color: 'gray',
@@ -59,7 +92,7 @@
           id="ANC_inp_cn"
           v-model="Model_Collection_Name"
           placeholder="Collection Name"
-          class="pad025 fullwidth"
+          class="pad050 fullwidth"
           type="text"
         />
       </div>
@@ -90,12 +123,22 @@
       v-if="Show_Objectify && !SchemaModel_SelectInput && !SchemaModel_TextInput"
       class="margintop125 flex flexend"
     >
-      <button v-if="mode == 'Add Collection'" @click="Create_Collection" class="buttonreset pad050 buttonBlue">
+      <button
+        v-if="mode == 'Add Collection'"
+        @click="Create_Collection"
+        class="buttonreset pad050 buttonBlue"
+      >
         <strong>Create collection</strong>
       </button>
-       <button v-if="mode == 'Edit Collection'" @click="Edit_Collection" class="buttonreset pad050 buttonBlue">
-        <strong>Apply Changes</strong>
-      </button>
+      <div v-if="mode == 'Edit Collection'">
+        <button
+          v-if="shouldUpdate_Schema || shouldUpdate_CollectionName"
+          @click="Edit_Collection"
+          class="buttonreset pad050 buttonBlue borderRad4"
+        >
+          <strong>Apply Changes</strong>
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -111,7 +154,11 @@ export default {
     Show_Objectify: false,
     Err: false,
     isLoading: false,
-    mode: undefined
+    mode: undefined,
+    shouldUpdate_Schema: false,
+    shouldUpdate_CollectionName: false,
+    initial_Schema: undefined,
+    initial_CollectionName: undefined
   }),
   computed: {
     Latest_SchemaModel() {
@@ -124,22 +171,85 @@ export default {
       setTimeout(() => {
         this.Show_Objectify = true;
       }, 0);
+    },
+    SchemaModel(current, prev) {
+      this.shouldUpdate_Schema = prev != undefined;
+    },
+    Model_Collection_Name(current, prev) {
+      this.shouldUpdate_CollectionName = prev != undefined;
     }
   },
   mounted() {
     document.getElementById("ANC_inp_cn").focus();
     if (this.data) {
-      console.log('Edit collection')
+      console.log("Edit collection");
       this.Model_Collection_Name = this.data["Collection Name"];
       this.SchemaModel = this.data.schema;
-      this.mode = 'Edit Collection'
+      this.mode = "Edit Collection";
+
+      const copy = o => {
+        if (o === null) return null;
+
+        var output, v, key;
+        output = Array.isArray(o) ? [] : {};
+        for (key in o) {
+          v = o[key];
+          output[key] = typeof v === "object" ? copy(v) : v;
+        }
+
+        return output;
+      };
+      const nschema = copy(this.data.schema);
+      this.initial_Schema = nschema;
+      this.initial_CollectionName = this.data["Collection Name"];
     } else {
-      this.mode = 'Add Collection'
+      this.mode = "Add Collection";
     }
   },
   methods: {
     Edit_Collection() {
-      console.log('edit collection')
+      this.$store
+        .dispatch("systemCall", {
+          command: "updateCollectionSchema",
+          section: "collectionMethods",
+          data: {
+            old_collection_name: this.initial_CollectionName,
+            new_collection_name: this.shouldUpdate_CollectionName
+              ? this.Model_Collection_Name
+              : null,
+            new_schema: this.shouldUpdate_Schema ? this.SchemaModel : null,
+            current_collectionName: this.Model_Collection_Name
+          },
+          method: "post"
+        })
+        .then(({ data, status }) => {
+          // console.log(data.payload)
+
+          this.$emit("onEditSchemaDone");
+          if (status) {
+            this.$emit("onCollectionCreated");
+          } else {
+            this.Err = data.actions[0].msg;
+          }
+        })
+        .catch(err => {
+          alert(err);
+        });
+    },
+    undo(data, to_update) {
+      if (to_update === "collectionName") {
+        this.shouldUpdate_CollectionName = false;
+        setTimeout(() => {
+          this.shouldUpdate_CollectionName = false;
+        }, 0);
+        this.Model_Collection_Name = data;
+      } else if (to_update === "schema") {
+        this.SchemaModel = data;
+        this.shouldUpdate_Schema = false;
+        setTimeout(() => {
+          this.shouldUpdate_Schema = false;
+        }, 0);
+      }
     },
     SchemaModel_AddSchema_Property() {
       if (!this.SchemaModel_SelectInput) {
@@ -155,6 +265,12 @@ export default {
         this.SchemaModel_TextInput = undefined;
         this.SchemaModel_SelectInput = undefined;
       }
+    },
+    onRemoveProp(val) {
+      this.SchemaModel = val;
+    },
+    onData(val) {
+      this.SchemaModel = val;
     },
     Create_Collection() {
       this.$emit("onCreateCollectionDone");
@@ -183,3 +299,26 @@ export default {
   }
 };
 </script>
+
+<style>
+#ANC_inp_cn {
+  border-top: none;
+  border-bottom: none;
+  border-left: 1px solid lightgray;
+  border-right: 1px solid lightgray;
+}
+.cb {
+  border: 1px solid lightgray;
+}
+
+.fade-enter {
+  opacity: 0;
+}
+.fade-enter-active {
+  transition: opacity 0.3s ease;
+}
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+  opacity: 0;
+}
+</style>
