@@ -57,6 +57,7 @@
               :theme="$store.state.theme"
               :store="$store.state"
               :my_pane_index="pane_index"
+              :my_pane="config[pane_index]"
               :is="panes"
             ></div>
           </div>

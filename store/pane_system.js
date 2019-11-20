@@ -20,7 +20,7 @@ export const getters = {
         if (host){
             // console.log('SHOULD SCROLL')
             setTimeout(() => {
-                // host.scrollTo(host.offsetWidth, 0);
+                host.scrollTo({ top: 0, left: host.offsetWidth, behavior: 'smooth' })
             },200)
         }
         return state.pane_index_list
