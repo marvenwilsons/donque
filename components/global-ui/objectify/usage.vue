@@ -1,20 +1,22 @@
 <template>
 <!-- @Objectify usage -->
-  <div class="pad125" style="width:500px">
+  <div class="pad125">
     <div>
       <!-- Usage of Objectify -->
       <objectifyFlatSettings
         @onChange="change"
         @onError="err"
         @onSubmit="submit"
+        @onEmpty="onEmpty"
+        @onRemoveProp="onRemoveProp"
+        @onData="onData"
 
         :config="{
-          title: 'Testing Demo', // string
-          sub_title_description_text: 'This a demo form for objectify, please fill the fields below',
-          data: test_data, // object a schema
-          operation:'rw', // rw , r
+          data: r_TestData, // object a schema
+          operation:'r', // rw , r
           submit_button: 'DEMO SUBMIT', // string: if supplied the button will appear
-          show_modal: modal_state
+          show_modal: modal_state,
+          allowRemoveProp: true, // only in read only operations
         }"
         
         :appearance="{
@@ -58,7 +60,14 @@ export default {
   data: () => ({
     submit_data: undefined,
     modal_state: false,
-    test_data: {
+    r_TestData: {
+      BookName:'String',
+      BookAuthor: 'String',
+      YearMade: 'String',
+      Sale: 'Number',
+      Publishing: 'String'
+    },
+    rw_TestData: {
       // Normal
       id: {
         type: "string",
@@ -166,6 +175,22 @@ export default {
       // console.log(val)
       this.submit_data = val
       this.modal_state = true
+    },
+
+    // triggers on empty 
+    onEmpty() {
+      console.log('its not empty!')
+    },
+
+    // triggers on prop delete
+    onRemoveProp(value) {
+      // console.log('prop removed')
+      // console.log(value)
+    },
+
+    // triggers on every mount
+    onData(value) {
+
     }
   }
 };

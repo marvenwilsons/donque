@@ -1,21 +1,27 @@
 <template>
-<!-- @Objectify html -->
+  <!-- @Objectify html -->
   <div class="relative">
     <!-- <debug :data="{entries_with_render_conditions,final_model,final_vanilla,hidden_entries,raw_data_set}"></debug> -->
 
     <!-- modal -->
-    <div v-if="config.show_modal"  class="absolute fullwidth fullheight-percent flex flexcenter">
-      <div :style="{background:`${appearance.modal_overlay_bg}`,opacity:'0.5'}" class="absolute fullwidth fullheight-percent"></div>
-      <div style="z-index:100" class="flex1 fullheight-percent flex flexcenter" >
+    <div v-if="config.show_modal" class="absolute fullwidth fullheight-percent flex flexcenter">
+      <div
+        :style="{background:`${appearance.modal_overlay_bg}`,opacity:'0.5'}"
+        class="absolute fullwidth fullheight-percent"
+      ></div>
+      <div style="z-index:100" class="flex1 fullheight-percent flex flexcenter">
         <slot name="modal"></slot>
       </div>
     </div>
 
     <!-- view start here -->
-  <div>
-    <h6 v-if="config.title" :style="{color: appearance.title_text_color}">{{config.title}}</h6>
-    <p v-if="config.sub_title_description_text" :style="{color: appearance.sub_title_description_text_color}" >{{config.sub_title_description_text}}</p>
-  </div>
+    <div>
+      <h6 v-if="config.title" :style="{color: appearance.title_text_color}">{{config.title}}</h6>
+      <p
+        v-if="config.sub_title_description_text"
+        :style="{color: appearance.sub_title_description_text_color}"
+      >{{config.sub_title_description_text}}</p>
+    </div>
 
     <div :style="{border: `1px solid ${appearance.wrap_around_border_color}`}">
       <div>
@@ -29,22 +35,32 @@
             <div
               :id="`objectify-${obj_index}`"
               role="display object index"
-              class="flex1  flexcenter pad025 pointer flexwrap"
+              class="flex1 flexcenter pad025 pointer flexwrap"
               :style="get_keys_style"
               :title="obj_key.hoverInfo"
             >{{obj_index}}</div>
-            <div :style="{borderRight: `1px solid ${appearance.divider_border_color}`}" ></div>
+            <div :style="{borderRight: `1px solid ${appearance.divider_border_color}`}"></div>
             <!-- value -->
-            <div  :style="get_value_style"  role="display object value" class="flex3  flex flexcenter">
-              <div :style="{color: get_value_style.color}" class="fullwidth padleft025" v-if="config.operation == 'r'">
-                {{obj_key}}
+            <div :style="get_value_style" role="display object value" class="flex3 flex flexcenter">
+              <div
+                :style="{color: get_value_style.color}"
+                class="fullwidth padleft025 flex spacebetween"
+                v-if="config.operation === 'r'"
+              >
+                <div>{{obj_key}}</div>
+                <div
+                  @click="removeProp(obj_index)"
+                  v-if="config.allowRemoveProp"
+                  :style="{background: appearance.divider_border_color}"
+                  class="padleft025 padright025 pointer marginright025 borderRad4"
+                >&#10134;</div>
               </div>
               <div
                 class="fullwidth"
                 @onChange="data_change"
                 :_key="obj_index"
                 :data="obj_key"
-                v-if="obj_key.type == 'string'"
+                v-if="obj_key.type == 'string' && config.operation === 'rw'"
                 :is="'str'"
                 :color="get_value_style"
               ></div>
@@ -53,7 +69,7 @@
                 @onChange="data_change"
                 :_key="obj_index"
                 :data="obj_key"
-                v-if="obj_key.type == 'number'"
+                v-if="obj_key.type == 'number' && config.operation === 'rw'"
                 :is="'num'"
                 :color="get_value_style"
               ></div>
@@ -69,7 +85,7 @@
                   background_selected: appearance.background_selected,
                   select_arrow_down_color: appearance.select_arrow_down_color
                 }"
-                v-if="obj_key.type == 'select'"
+                v-if="obj_key.type == 'select' && config.operation === 'rw'"
                 :is="'sel'"
               ></div>
             </div>
@@ -150,38 +166,38 @@ export default {
 
       return r;
     },
-    // final vanilla 
+    // final vanilla
     final_vanilla() {
-      let f = {}
+      let f = {};
 
-      for(let key in this.final_model) {
-        const t = this.final_model[key].type
-        if(t == 'string' || t == 'number') {
-          f[key] = this.final_model[key].default
-        } else if(t == 'select') {
-          f[key] = this.final_model[key].options[this.final_model[key].default]
-        } 
+      for (let key in this.final_model) {
+        const t = this.final_model[key].type;
+        if (t == "string" || t == "number") {
+          f[key] = this.final_model[key].default;
+        } else if (t == "select") {
+          f[key] = this.final_model[key].options[this.final_model[key].default];
+        }
       }
 
-      return f
+      return f;
     },
-    
+
     // button style
     get_button_style() {
       return {
         background: this.appearance.button_bg_color,
         color: this.appearance.button_text_color
-      }
+      };
     },
 
     // keys style
     get_keys_style() {
       return {
         borderBottom: `1px solid ${this.appearance.divider_border_color}`,
-        minWidth: '140px',
-        background:this.appearance.keys_bg_color,
+        minWidth: "140px",
+        background: this.appearance.keys_bg_color,
         color: this.appearance.keys_text_color
-      }
+      };
     },
 
     // value style
@@ -190,7 +206,7 @@ export default {
         borderBottom: `1px solid ${this.appearance.divider_border_color}`,
         background: this.appearance.values_bg_color,
         color: this.appearance.values_text_color
-      }
+      };
     }
   },
   data: () => ({
@@ -198,13 +214,13 @@ export default {
     has_initial_input: false,
     err: undefined,
     err_key: undefined,
-    change_occurs: false
+    change_occurs: false,
   }),
   watch: {
-    final_vanilla(current,prev) {
+    final_vanilla(current, prev) {
       //
-      this.$emit('onChange',  current)
-    }
+      this.$emit("onChange", current);
+    },
   },
   methods: {
     find_key_controllers_on_entries(key, data_set) {
@@ -224,10 +240,9 @@ export default {
       return entry;
     },
     data_change({ err, data, key }) {
-      if(!this.change_occurs){
-        this.change_occurs = true
+      if (!this.change_occurs) {
+        this.change_occurs = true;
       }
-
 
       if (!err) {
         // change default value to final model
@@ -243,10 +258,9 @@ export default {
         this.err_key = undefined;
 
         document.getElementById(`objectify-${key}`).classList.remove("err");
-          document
-            .getElementById(`objectify-${key}`)
-            .classList.remove("backgrounderr");
-
+        document
+          .getElementById(`objectify-${key}`)
+          .classList.remove("backgrounderr");
       } else {
         // show err
         if (this.has_initial_input) {
@@ -260,20 +274,29 @@ export default {
           this.err_key = key;
 
           // emit on error event
-          this.$emit('onError', {
+          this.$emit("onError", {
             err,
             key,
             data
-          })
+          });
         }
       }
     },
     submit() {
-      this.$emit('onSubmit', this.final_vanilla)
+      this.$emit("onSubmit", this.final_vanilla);
+    },
+    removeProp(prop_name) {
+      this.$delete(this.raw_data_set,prop_name)
+      if(Object.keys(this.raw_data_set).length == 0){
+        this.$emit('onEmpty')
+      }
+
+      this.$emit('onRemoveProp',this.raw_data_set)
     }
   },
   mounted() {
     this.raw_data_set = this.config.data;
+    this.$emit('onData',this.raw_data_set)
   }
 };
 </script>
