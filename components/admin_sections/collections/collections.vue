@@ -47,6 +47,9 @@
           <div v-if="modal_Content == 'Edit Schema'" class="pad125">
             <modalAddCollection @onEditSchemaDone="onCollectionCreated" :data="edit_schema_data"></modalAddCollection>
           </div>
+          <div v-if="!modal_Content" class="pad125">
+            <div><strong>Fetching data ...</strong></div>
+          </div>
           <div v-if="modal_Content == 'Delete A Collection'" class="pad125">
             <div>
               <strong>Are you sure you want to delete collection "{{modal_ContentObject['Collection Name']}}"?</strong>
@@ -148,6 +151,8 @@ export default {
           return { "Collection Name": e.collection_name };
         });
 
+        this.modal_State = false
+
         return colNames;
       }
     },
@@ -177,7 +182,6 @@ export default {
           })
           .then(({ data, status }) => {
             if (status) {
-              console.log(data);
               this.raw_server_data = data.actions[0].contents;
               this.$store.commit('modal/reset_tempCmd')
             }
@@ -187,6 +191,9 @@ export default {
           });
       }
     }
+  },
+  mounted() {
+    this.modal_State = true
   },
   created() {
     this.$store
@@ -198,7 +205,6 @@ export default {
       })
       .then(({ data, status }) => {
         if (status) {
-          console.log(data);
           this.raw_server_data = data.actions[0].contents;
         }
       })
@@ -287,10 +293,11 @@ export default {
         });
       }
       if (val.actionName == "Categories") {
+        val.categories = this.raw_server_data[val.index].categories
         this.$store.dispatch("pane_system/open", {
           name: "CollectionsCategories",
           index: this.my_pane_index,
-          data: val.actionCastOn
+          data: val
         });
       }
     }

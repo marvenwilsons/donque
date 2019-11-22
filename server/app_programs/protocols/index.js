@@ -148,7 +148,7 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
         /**
          * Connect and create dq database
          */
-        const db = () => MongoClient.connect(`mongodb://localhost:27017/${dbName}`, { useNewUrlParser: true })
+        const db = () => MongoClient.connect(`mongodb://localhost:27017/${dbName}`, { useNewUrlParser: true, "useUnifiedTopology": true })
         db().then(async (client) => {
 
             /**

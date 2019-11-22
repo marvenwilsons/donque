@@ -5,7 +5,7 @@
       <strong>loading...</strong>
     </div>
     <div>
-      <div class="flex flexcol">
+      <div v-if="mode == 'Edit Collection'" class="flex flexcol">
         <transition name="fade" appear mode="out-in">
           <span
             v-if="shouldUpdate_CollectionName"

@@ -1,6 +1,7 @@
 <template>
   <div id="dq-main" class="fullheight-percent fullwidth relative flex flexcenter">
-    <div v-if="isReady" id="dq-main-w" class="absolute fullwidth flex fullheight-percent pad125">
+    <transition name="fade">
+      <div v-if="isReady" id="dq-main-w" class="absolute fullwidth flex fullheight-percent pad125">
       <div
         v-for="(panes,pane_index) in $store.state.pane_system.pane_index_list"
         :key="`p-${pane_index}`"
@@ -65,6 +66,7 @@
         <div class="pad050"></div>
       </div>
     </div>
+    </transition>
   </div>
 </template>
 

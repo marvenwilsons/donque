@@ -338,9 +338,9 @@
                   @mouseover="context_hover = true"
                   @mouseleave="context_hover = false"
                   class="marginleft125 showOnCLickExpand_items"
-                  v-for="context_actions in config.contextActions"
+                  v-for="(context_actions) in config.contextActions"
                   :key="`context-key-${context_actions}`"
-                  @click="contextAction(context_actions,items)"
+                  @click="contextAction(context_actions,items,item_index)"
                   :style="{textDecoration: context_actions == selected_action && context_state == items[config.propDisplay] ? 'underline' : 'none'}"
                 >{{context_actions}}</div>
               </div>
@@ -353,7 +353,7 @@
                     v-for="(context_actions) in config.contextActions"
                     :key="`context-key-${context_actions}`"
                     class="marginleft125"
-                    @click="contextAction(context_actions,items), context_state = items[config.propDisplay], setActive(items[config.propDisplay])"
+                    @click="contextAction(context_actions,items,item_index), context_state = items[config.propDisplay], setActive(items[config.propDisplay])"
                     :style="{textDecoration: context_actions == selected_action && context_state == items[config.propDisplay] ? 'underline' : 'none'}"
                   >{{config.dynamiContextActionTitles ? getDynamicContextTitle(context_actions,item_index) : context_actions}}</div>
                 </div>
@@ -687,18 +687,20 @@ export default {
       return num % 2;
     },
     //
-    contextAction(actionName, entity) {
+    contextAction(actionName, entity,index) {
       this.context_action = actionName;
       this.selected_action = actionName;
       if (this.config.dynamiContextActionTitles) {
         this.$emit("onContextAction", {
           actionName: actionName.split("|")[0].trim(),
-          actionCastOn: entity
+          actionCastOn: entity,
+          index
         });
       } else {
         this.$emit("onContextAction", {
           actionName,
-          actionCastOn: entity
+          actionCastOn: entity,
+          index
         });
       }
     },

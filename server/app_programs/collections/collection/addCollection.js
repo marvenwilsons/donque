@@ -96,10 +96,13 @@ module.exports = {
                             info: {
                                 "_$Collection Name": collection_name,
                                 createdOn: moment().format("MMM Do YY"),
-                                categories: [],
                                 lastModified: moment().format("MMM Do YY"),
                                 createdBy: user.adminName
-                            }
+                            },
+                            categories: [] // array of string
+                            // horror
+                            // horror/childHoror
+                            // horror/adultHorror
                         }
                     ).then(res => {
                         console.log('[Collection]'.bold.green,`----> Sucessfuly created collection ${collection_name}`)
