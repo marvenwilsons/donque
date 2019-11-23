@@ -66,11 +66,6 @@ export default {
     }
   },
   methods: {
-    test() {
-      console.log("hello");
-      this.$emit("onLoading", false);
-      console.log(this);
-    },
     submit_NewCategory() {
       // validations
       if (this.catName_model == undefined) {
@@ -87,17 +82,16 @@ export default {
         const parent_category = this.data.actionCastOn["Category Name"];
         let new_category_name = undefined;
         if (this.my_pane_index == 1 || this.my_pane_index > 1) {
+          console.log(parent_category)
           new_category_name = parent_category + "/" + this.catName_model;
         } else if (this.my_pane_index < 1) {
           new_category_name = this.catName_model;
         }
 
         //
-        this.$emit("onWritingData", true);
+        this.$emit("onWritingData", "Category");
 
-        setTimeout(() => {
-          this.$emit("onWritingData", false);
-        }, 500);
+        // console.log(new_category_name)
 
         // send
         this.$store
@@ -113,12 +107,11 @@ export default {
           })
           .then(({ data, status }) => {
             if (status) {
-              console.log("should have closed!");
               //
               this.payload = data.payload.categories;
-              this.$emit("onRefreshCat", data.payload.categorie);
-
-              this.test();
+              this.$emit("onRefreshCat", data.payload);
+              // triggers loading
+              this.$emit("onWritingData", undefined);
             }
           })
           .catch(err => {
@@ -129,7 +122,6 @@ export default {
   },
   mounted() {
     document.getElementById("dq-category-m-inp").focus();
-    console.log(this.categories);
   }
 };
 </script>

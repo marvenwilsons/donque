@@ -102,6 +102,7 @@ import Collections from "@/components/admin_sections/collections/collections.vue
 import CollectionsAddEntry from "@/components/admin_sections/collections/add_entry.vue"
 import CollectionsViewAll from "@/components/admin_sections/collections/view_all.vue"
 import CollectionsCategories from "@/components/admin_sections/collections/categories.vue"
+import CollectionsSubCategories from "@/components/admin_sections/collections/sub_categories.vue"
 import ViewCatItems from '@/components/admin_sections/collections/categories/view_cat_items.vue'
 
 //
@@ -182,6 +183,7 @@ export default {
     CollectionsAddEntry,
     CollectionsViewAll,
     CollectionsCategories,
+    CollectionsSubCategories,
     ViewCatItems,
 
 
