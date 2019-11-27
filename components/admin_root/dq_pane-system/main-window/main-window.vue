@@ -11,18 +11,18 @@
       >
         <!-- pane -->
         <div
-          :style="{boxShadow:'0px 0px 10px 1px gray',borderRadius: '5px',background:'rgb(233, 239, 243)'}"
-          :id="`pane-${pane_index}-${panes}`"
+          :style="{boxShadow:'0px 0px 10px 1px gray',borderRadius: '5px',background:'rgb(233, 239, 243)', opacity: 0}"
+          :id="`${panes}`"
           class="fullheight-percent flex flexcol flex1"
         >
-          {{ani(`pane-${pane_index}-${panes}`)}}
+          {{ani(`pane-${pane_index}-${panes} `)}} <!-- id use to be: pane-${pane_index}-${panes} -->
+          <!-- <debug :data="{config_state,paneSytem:$store.state.pane_system}"></debug> -->
+
           <!-- pane head -->
           <div v-if="isReady">
             {{init_head($store.state.pane_system.pane_index_config_list)}}
             <!-- pane head and controls -->
             <div v-if="config[pane_index]" class="flex fullwidth flexcol">
-              <!-- {{config[pane_index].title}} -->
-              <!-- {{config[pane_index]}} -->
               <div
                 v-if="config[pane_index].head_visibility"
                 :style="{background:config[pane_index].pane_head_bg_color, borderTopLeftRadius: '5px',borderTopRightRadius: '5px'}"
@@ -119,6 +119,8 @@ import Task from "@/components/admin_sections/task/task.vue";
 
 //
 import { mapGetters } from "vuex";
+import { TweenMax, TimelineLite, TweenLite } from "gsap";
+
 
 export default {
   data() {
@@ -129,7 +131,8 @@ export default {
       scroll_val: 0,
       scroll_val_temp: 0,
       main_w: undefined,
-      max_scroll: 333
+      max_scroll: 333,
+      latest_id: undefined
     };
   },
   methods: {
@@ -148,7 +151,6 @@ export default {
       }
     },
     ani(id) {
-      // console.log(id)
     }
   },
   components: {
@@ -200,7 +202,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      config_state: "pane_system/config_state"
+      config_state: "pane_system/config_state",
+      pane_list_state: "pane_system/list_state"
     }),
     config() {
       return this.config_copy;
@@ -237,6 +240,15 @@ export default {
       } else {
         this.scroll_val_temp = current;
       }
+    },
+    pane_list_state(current,old) {
+      setTimeout(() => {
+        const latest_pane = current[current.length - 1]
+        const n = document.getElementById(latest_pane)
+        if(n) {
+          TweenMax.fromTo(n, 0.5, { opacity: "0" }, { opacity: "1" });
+        }
+      }, 0);
     }
   },
   updated() {
