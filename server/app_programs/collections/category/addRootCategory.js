@@ -4,7 +4,7 @@ module.exports = {
             funcIsDestructive: false
         }
     },
-    async addCategory({dep,data}) {
+    async addRootCategory({dep,data}) {
         console.log('hello world there!')
         const {db,moment,user} = dep
         const {category_name,is_root,from_collection} = data

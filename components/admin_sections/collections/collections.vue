@@ -1,10 +1,15 @@
 <template>
   <!-- @collections html -->
   <div class="fullheight-percent">
+    <!-- <debug
+      :data="{
+      'Raw Data':$store.state.collections.rawData_fromServer,
+      'Get All Collections': Collections,}"
+    ></debug> -->
     <listify
       @onAddItem="addNewCollection"
       @onContextAction="contextAction"
-      :inputData="get_CollectionNames"
+      :inputData="Collections"
       :config="{
            title: 'Collections total',
            isNumbered: false, // detemines if the list show numbered list
@@ -48,7 +53,9 @@
             <modalAddCollection @onEditSchemaDone="onCollectionCreated" :data="edit_schema_data"></modalAddCollection>
           </div>
           <div v-if="!modal_Content" class="pad125">
-            <div><strong>Fetching data ...</strong></div>
+            <div>
+              <strong>Fetching data ...</strong>
+            </div>
           </div>
           <div v-if="modal_Content == 'Delete A Collection'" class="pad125">
             <div>
@@ -81,6 +88,7 @@
 
 <script>
 import modal_AddCollection from "./modals/add_collection";
+import { mapGetters } from "vuex";
 
 export default {
   props: ["my_pane_index"],
@@ -131,7 +139,10 @@ export default {
       }
     },
     edit_schema_data: undefined,
-    delete_collection_data: undefined
+    delete_collection_data: undefined,
+
+    //
+    Collections: undefined
   }),
   beforeCreate() {
     this.$store.commit("pane_system/set_pane_config", {
@@ -145,72 +156,35 @@ export default {
     modalAddCollection: modal_AddCollection
   },
   computed: {
-    get_CollectionNames() {
-      if (this.raw_server_data) {
-        const colNames = this.raw_server_data.map(e => {
-          return { "Collection Name": e.collection_name };
-        });
-
-        this.modal_State = false
-
-        return colNames;
-      }
-    },
-    get_Schemas() {
-      if (this.raw_server_data) {
-        const schemas = {};
-        this.raw_server_data.map(e => {
-          return (schemas[e.collection_name] = e.schema);
-        });
-
-        return schemas;
-      }
-    },
+    ...mapGetters({
+      _collections: "collections/getAllCollections",
+      _getCollection: "collections/getCollection",
+      _getAllCategoriesFromCollection:
+        "collections/getAllCategoriesFromCollection"
+    }),
     get_tempCmd() {
-      return this.$store.state.modal.temp_Cmd;
+      // after confirming desctrutive function
+      return this.$store.state.modal.temp_Cmd; // <- String, name of the fuction that is destructive
     }
   },
   watch: {
+    _collections(current, prev) {
+      this.Collections = current;
+    },
     get_tempCmd(current, prev) {
       if (current == "deleteCollection") {
-        this.$store
-          .dispatch("systemCall", {
-            command: "fetchCollections",
-            section: "collectionMethods",
-            data: {},
-            method: "post"
-          })
-          .then(({ data, status }) => {
-            if (status) {
-              this.raw_server_data = data.actions[0].contents;
-              this.$store.commit('modal/reset_tempCmd')
-            }
-          })
-          .catch(err => {
-            alert(err);
-          });
+        this.$store.dispatch("collections/getCollectionDataFromServer");
       }
     }
   },
   mounted() {
-    this.modal_State = true
+    this.modal_State = true;
+    if (this._collections) {
+      this.modal_State = false;
+    }
   },
   created() {
-    this.$store
-      .dispatch("systemCall", {
-        command: "fetchCollections",
-        section: "collectionMethods",
-        data: {},
-        method: "post"
-      })
-      .then(({ data, status }) => {
-        if (status) {
-          this.raw_server_data = data.actions[0].contents;
-        }
-      })
-      .catch(err => {
-        alert(err);
-      });
+    this.$store.dispatch("collections/getCollectionDataFromServer");
   },
   methods: {
     addNewCollection() {
@@ -231,8 +205,7 @@ export default {
         .then(({ data, status }) => {
           if (status) {
             console.log("collection deleted!");
-            // this.modal_State = false;
-            // this.raw_server_data = data.actions[0].contents;
+            this.$store.dispatch("collections/getCollectionDataFromServer");
           }
         })
         .catch(err => {
@@ -240,48 +213,51 @@ export default {
         });
     },
     onCollectionCreated() {
-      this.$store
-        .dispatch("systemCall", {
-          command: "fetchCollections",
-          section: "collectionMethods",
-          data: {},
-          method: "post"
-        })
-        .then(({ data, status }) => {
-          if (status) {
-            this.modal_State = false;
-            this.raw_server_data = data.actions[0].contents;
-          }
-        })
-        .catch(err => {
-          alert(err);
-        });
+      this.modal_State = false;
     },
     contextAction(val) {
       if (val.actionName == "Edit Schema") {
+        //
+        const CollectionName = val.actionCastOn["Collection Name"];
+        const Schema = this._getCollection(CollectionName).schema;
+
+        //
         this.modal_State = true;
         this.modal_Content = "Edit Schema";
+
+        //
         this.edit_schema_data = {
-          "Collection Name": val.actionCastOn["Collection Name"],
-          schema: this.get_Schemas[val.actionCastOn["Collection Name"]]
+          "Collection Name": CollectionName,
+          schema: Schema
         };
       }
       if (val.actionName == "Delete") {
+        //
+        const CollectionName = val.actionCastOn["Collection Name"];
+        const Schema = this._getCollection(CollectionName).schema;
+
+        //
         this.modal_State = true;
         this.modal_ContentObject = val.actionCastOn;
         this.modal_Content = "Delete A Collection";
+
+        //
         this.delete_collection_data = {
-          "Collection Name": val.actionCastOn["Collection Name"],
-          schema: this.get_Schemas[val.actionCastOn["Collection Name"]]
+          "Collection Name": CollectionName,
+          schema: Schema
         };
       }
       if (val.actionName == "Add New Entry") {
+        //
+        const CollectionName = val.actionCastOn["Collection Name"];
+
+        //
         this.$store.dispatch("pane_system/open", {
           name: "CollectionsAddEntry",
           index: this.my_pane_index,
           data: {
-            "Collection Name": val.actionCastOn["Collection Name"],
-            schema: this.get_Schemas[val.actionCastOn["Collection Name"]]
+            "Collection Name": CollectionName,
+            schema: this._getCollection(CollectionName).schema
           }
         });
       }
@@ -293,11 +269,31 @@ export default {
         });
       }
       if (val.actionName == "Categories") {
-        val.categories = this.raw_server_data[val.index].categories
+        const CollectionName = val.actionCastOn['Collection Name']
+        this.$store.commit('collections/mutate_Category_being_opened',CollectionName)
+
+        //
+        function getCollectionIndex (collection,name) {
+          let index = 0
+          collection.map((e,i) => {
+            if(e['Collection Name'] == name) {
+              index = i
+            }
+          })
+
+          return index
+        } 
+
+        //
         this.$store.dispatch("pane_system/open", {
           name: "CollectionsCategories",
           index: this.my_pane_index,
-          data: val
+          pane_width: "600px",
+          pane_head_bg_color: "rgb(48, 51, 64)",
+          renderOnce: true,
+          data: {
+            indexOfCollection: getCollectionIndex(this._collections,CollectionName)
+          }
         });
       }
     }

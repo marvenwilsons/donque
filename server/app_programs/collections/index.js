@@ -6,7 +6,7 @@ module.exports = {
     updateCollectionSchema: require('./collection/updateCollectionSchema'),
     
     // Categories
-    addCategory : require('./category/addCategory'),
+    addRootCategory : require('./category/addRootCategory'),
     deleteCategory : require('./category/deleteCategory'),
     updateCategory : require('./category/updateCategory')
 }

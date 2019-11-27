@@ -1,5 +1,8 @@
 <template>
   <div>
+    <debug
+      :data="{$data:{catName_model,err,payload,$computed:{get_FinalCategoryName,get_CollectionName}},$props:{data,categories,my_pane_index}}"
+    ></debug>
     <div class="marginbottom050">
       Category Name
       <input
@@ -42,6 +45,14 @@ export default {
     info: undefined,
     payload: undefined
   }),
+  computed: {
+    get_FinalCategoryName() {
+      return `${this.data.actionCastOn["Category Name"]}/${this.catName_model}`;
+    },
+    get_CollectionName() {
+      return this.data.actionCastOn["Collection Name"];
+    }
+  },
   watch: {
     catName_model(current, prev) {
       // not allow special characters
@@ -66,6 +77,29 @@ export default {
     }
   },
   methods: {
+    filter_Categories(expect_for, all_Categories) {
+      /**
+       * filters the raw array of categories
+       * it will only return the set of strings that has
+       * the value of "expect_for" in it
+       */
+      let final = []
+
+      // start
+      all_Categories.map(categories => {
+        if(categories.includes(`${expect_for}/`)) {
+          /**
+           * I have to push it because if I return it from here
+           * it will include a null to the final array
+           */ 
+          
+          final.push(categories)
+        }
+      })
+
+      // fire away!
+      return final
+    },
     submit_NewCategory() {
       // validations
       if (this.catName_model == undefined) {
@@ -78,17 +112,6 @@ export default {
 
       // send to server
       if (!this.err) {
-        // construct category name
-        const parent_category = this.data.actionCastOn["Category Name"];
-        let new_category_name = undefined;
-        if (this.my_pane_index == 1 || this.my_pane_index > 1) {
-          console.log(parent_category)
-          new_category_name = parent_category + "/" + this.catName_model;
-        } else if (this.my_pane_index < 1) {
-          new_category_name = this.catName_model;
-        }
-
-        //
         this.$emit("onWritingData", "Category");
 
         // console.log(new_category_name)
@@ -99,16 +122,16 @@ export default {
             command: "addCategory",
             section: "collectionMethods",
             data: {
-              category_name: new_category_name,
-              is_root: this.my_pane_index == 0 ? true : false,
-              from_collection: this.data.actionCastOn["Collection Name"]
+              category_name: this.get_FinalCategoryName,
+              from_collection: this.get_CollectionName
             },
             method: "post"
           })
           .then(({ data, status }) => {
             if (status) {
               //
-              this.payload = data.payload.categories;
+              const root_category = this.data.actionCastOn['Category Name']
+              this.payload = this.filter_Categories(root_category,data.payload.categories);
               this.$emit("onRefreshCat", data.payload);
               // triggers loading
               this.$emit("onWritingData", undefined);

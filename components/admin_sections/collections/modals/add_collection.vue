@@ -228,6 +228,7 @@ export default {
           this.$emit("onEditSchemaDone");
           if (status) {
             this.$emit("onCollectionCreated");
+            this.$store.dispatch("collections/getCollectionDataFromServer");
           } else {
             this.Err = data.actions[0].msg;
           }
@@ -287,7 +288,7 @@ export default {
         })
         .then(({ data, status }) => {
           if (status) {
-            this.$emit("onCollectionCreated");
+            this.$store.dispatch("collections/getCollectionDataFromServer");
           } else {
             this.Err = data.actions[0].msg;
           }

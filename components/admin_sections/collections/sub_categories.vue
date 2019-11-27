@@ -1,12 +1,17 @@
 <template>
   <!-- Sub categories -->
   <div v-dq-disable-horizontal-scrolling class="fullheight-percent">
-    <debug :data="{data}"></debug>
+    <debug :data="{
+        data, 
+        $data:{modal_State,raw_Data,modal_Content,modal_ContentObject,cats},
+        $computed: {get_RootCategory,get_SubCategories},
+      }"></debug>
+      <!-- dubug end -->
     <div class="fullheight-percent">
       <listify
         @onContextAction="contextAction"
         @onAddItem="addSubCategory"
-        :inputData="get_SubCategories"
+        :inputData="cats == undefined ? get_SubCategories : cats"
         :config="{
            title: 'Categories found',
            isNumbered: false, // detemines if the list show numbered list
@@ -76,16 +81,14 @@
           </div>
           <!-- add category -->
           <div class="pad125" v-if="modal_Content == 'Add Category'">
-            <div v-if="loading_Content == 'Category'">Adding Category ...</div>
-            <addCatModal
-              v-show="loading_Content != 'Category'"
+            <addSubCategoryModal
               @onCancel="modal_State = false"
               @onRefreshCat="onRefreshCat"
               @onWritingData="onWritingData"
               :my_pane_index="my_pane_index - 1"
-              :categories="mode == 'collection' ? get_Categories : get_SubCategory"
+              :categories="get_SubCategories"
               :data="data"
-            ></addCatModal>
+            ></addSubCategoryModal>
           </div>
           <!-- rename sub category-->
           <div class="pad125" v-if="modal_Content == 'Rename Category'">
@@ -124,11 +127,17 @@
 </template>
 
 <script>
+import addSubCategoryModal from './categories/modals/add_sub'
+
 export default {
   props: {
     data: Object,
     categories: Array,
-    config: Object
+    config: Object,
+    my_pane_index: Number
+  },
+  components: {
+    addSubCategoryModal
   },
 
   beforeCreate() {
@@ -145,12 +154,22 @@ export default {
     raw_Data: undefined,
     modal_State: false,
     modal_Content: undefined,
-    loading_Content: undefined,
     modal_ContentObject: undefined,
-    mode: undefined
+    cats: undefined,
   }),
 
   computed: {
+    parse_RawCategories(raw_Array_of_Categories) {
+      let parsed_categories = [];
+
+        // start
+        raw_Array_of_Categories.map(raw_category => {
+          parsed_categories.push({ "Category Name": raw_category });
+        });
+
+        // done
+        return parsed_categories;
+    },
     get_RootCategory() {
       return this.data.actionCastOn["Category Name"];
     },
@@ -171,7 +190,7 @@ export default {
       };
 
       // parse and use
-      return parse_RawCategories(this.data.categories)
+      return parse_RawCategories(this.data.categories);
     }
   },
 
@@ -179,16 +198,41 @@ export default {
     get_TransitionCount() {
       this.$store.commit("pane_system/set_pane_config", {
         title: `${this.get_RootCategory}/`,
-        pane_width: "750px",
+        pane_width: "850px",
         pane_head_bg_color: "rgb(48, 51, 64)",
         pane_head_title_color: "white"
       });
+    },
+    modal_State(current,prev) {
+      if(current == false) {
+        this.modal_Content = undefined
+      }
     }
   },
 
   methods: {
-    addSubCategory() {},
-    contextAction() {}
+    addSubCategory() {
+      this.modal_State = true
+      this.modal_Content = 'Add Category'
+    },
+    contextAction() {},
+    onRefreshCat(value) {
+      const parse_RawCategories = raw_Array_of_Categories => {
+        let parsed_categories = [];
+
+        // start
+        raw_Array_of_Categories.map(raw_category => {
+          parsed_categories.push({ "Category Name": raw_category });
+        });
+
+        // done
+        return parsed_categories;
+      };
+      // console.log(value)
+      this.modal_State = false
+      this.data.categories = value
+      this.cats = parse_RawCategories(value.categories)
+    }
   }
 };
 </script>

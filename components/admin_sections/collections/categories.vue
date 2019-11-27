@@ -1,13 +1,21 @@
 <template>
   <div class="fullheight-percent">
-    <!-- {{mode == 'collection' ? get_Categories : get_SubCategory}} -->
-    <!-- {{my_pane}} -->
+    <!-- <debug
+      v-dq-disable-horizontal-scrolling
+      :data="{
+      $store: {
+        _collections
+      },
+      $data: {data,CollectionName,CollectionsRootCategories}
+    }"
+    ></debug> -->
+    <!--  -->
     <div class="fullheight-percent">
       <listify
         v-dq-disable-horizontal-scrolling
         @onContextAction="contextAction"
         @onAddItem="addCategory"
-        :inputData="get_Categories"
+        :inputData="CollectionsRootCategories"
         :config="{
            title: 'Categories found',
            isNumbered: false, // detemines if the list show numbered list
@@ -84,8 +92,8 @@
               @onRefreshCat="onRefreshCat"
               @onWritingData="onWritingData"
               :my_pane_index="my_pane_index - 1"
-              :categories="get_Categories"
-              :data="data"
+              :categories="CollectionsRootCategories"
+              :data="{CollectionName}"
             ></addCatModal>
           </div>
           <!-- rename -->
@@ -125,13 +133,17 @@
 </template>
 
 <script>
-import addCatModal from "./categories/modals/add";
+import addCatModal from "./categories/modals/add_root";
 import subCategory from "./sub_categories";
+import { mapGetters } from "vuex";
 
 export default {
   props: ["my_pane_index", "my_pane", "data"],
   data: () => ({
-    raw_Data: undefined,
+    CollectionName: undefined,
+    CollectionsRootCategories: undefined,
+
+    // old
     modal_State: false,
     modal_Content: undefined,
     loading_Content: undefined,
@@ -149,19 +161,6 @@ export default {
     });
   },
   computed: {
-    get_Categories() {
-      let o = [];
-      if (this.raw_Data) {
-        this.raw_Data.map(cats => {
-          if (cats.split("/").length == 1) {
-            o.push({
-              "Category Name": cats
-            });
-          }
-        });
-      }
-      return o;
-    },
     get_SubCategory() {
       console.log("get_SubCategory");
       let o = [];
@@ -202,6 +201,35 @@ export default {
       }
 
       return f;
+    },
+    ...mapGetters({
+      _collections: "collections/getAllCollections",
+      _getCollection: "collections/getCollection",
+      _getAllCategoriesFromCollection:
+        "collections/getAllCategoriesFromCollection"
+    })
+  },
+  watch: {
+    _collections(current, prev) {
+      /**
+       * Only triggers when there is change in collection object
+       * mutating title of the pane
+       */
+      const indexOfCollection = this.data.indexOfCollection;
+      this.CollectionName = current[indexOfCollection]["Collection Name"];
+      this.$store.commit("pane_system/alter_pane_config", {
+        pane_index: this.my_pane_index,
+        alter: {
+          title: `${this.CollectionName} Categories`
+        }
+      });
+
+      /**
+       * Triggers when
+       */
+      this.CollectionsRootCategories = this.get_RootCategories(
+        current[indexOfCollection].Categories
+      );
     }
   },
   methods: {
@@ -211,22 +239,17 @@ export default {
        * it will only return the set of strings that has
        * the value of "expect_for" in it
        */
-      let final = []
+      let final = [];
 
       // start
       all_Categories.map(categories => {
-        if(categories.includes(`${expect_for}/`)) {
-          /**
-           * I have to push it because if I return it from here
-           * it will include a null to the final array
-           */ 
-          
-          final.push(categories)
+        if (categories.includes(`${expect_for}/`)) {
+          final.push(categories);
         }
-      })
+      });
 
       // fire away!
-      return final
+      return final;
     },
     contextAction(val) {
       if (val.actionName === "View category items") {
@@ -268,8 +291,10 @@ export default {
           val.actionCastOn["Category Name"],
           this.raw_Data
         ); // retunrs  an array of strings
-        // val.categories = this.raw_Data
         val.count = this.count;
+        val.actionCastOn["Collection Name"] = this.data.actionCastOn[
+          "Collection Name"
+        ];
 
         // open pane
         this.$store.dispatch("pane_system/open", {
@@ -286,6 +311,20 @@ export default {
       this.modal_State = true;
       this.modal_Content = "Add Category";
     },
+    get_RootCategories(ArrayOfCategories) {
+      // takes an array of strings (categories), loop over each item (type string), if the item
+      // has slash in it that item will be ignored and that item that doesnt have slash in it will be
+      // push to that "Transformed_ArrayOfCategories" inclosed in an Object with a key of "Category Name"
+      let Transformed_ArrayOfCategories = [];
+      ArrayOfCategories.map(cats => {
+        if (cats.split("/").length == 1) {
+          Transformed_ArrayOfCategories.push({
+            "Category Name": cats
+          });
+        }
+      });
+      return Transformed_ArrayOfCategories;
+    },
     onRefreshCat(val) {
       this.raw_Data = val.categories;
     },
@@ -299,25 +338,40 @@ export default {
       }
     }
   },
-
   components: {
     addCatModal,
     subCategory
   },
   mounted() {
-    // assign default data for listify
-    this.raw_Data = this.data.categories;
+    /**
+     * Assigning Title
+     */
+    const CollectionName = this._collections[this.data.indexOfCollection][
+      "Collection Name"
+    ];
+    this.CollectionName = CollectionName;
+    this.$store.commit("pane_system/alter_pane_config", {
+      pane_index: this.my_pane_index,
+      alter: {
+        title: `${CollectionName} Root Categories`
+      }
+    });
 
-    // responsible for pane configuration
-    if (this.data.actionName == "Categories") {
-      this.mode = "collection";
-      this.$store.commit("pane_system/alter_pane_config", {
-        pane_index: this.my_pane_index,
-        alter: {
-          title: `${this.data.actionCastOn["Collection Name"]} Categories`
-        }
-      });
-    }
+    /**
+     * Assigning Root Categories
+     */
+    const Raw_ChoosenCategory = this._collections[this.data.indexOfCollection]
+      .Categories;
+
+    // assign parsed categories (Array of Objects)
+    this.CollectionsRootCategories = this.get_RootCategories(
+      Raw_ChoosenCategory
+    );
+    setTimeout(() => {
+      if (this.CollectionsRootCategories.length == 0) {
+        this.addCategory()
+      }
+    }, 0);
   }
 };
 </script>
