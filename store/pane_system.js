@@ -4,6 +4,7 @@ export const state = () => ({
     pane_index_config_vault: {},
     pane_got_close: false,
     pane_index_list: [],
+    pane_data_list:[],
     pane_data_obj: {},
     pane_data_index: undefined,
     root: undefined,
@@ -39,17 +40,18 @@ export const mutations = {
      * this function executes
      */
     pane_reset(state,payload) {
-        // console.log('** PANE RESET')
+        console.log('** PANE RESET')
 
         if (state.pane_index_list[0] != payload){
             state.pane_index_config_list = []
             state.pane_index_list = [`${payload}`]
-            state.pane_data_list = []
+            state.pane_data_list = [`${payload}`]
             state.root = payload
         }
         else if (state.pane_index_list.length > 1){
             for (var i = state.pane_index_list.length - 1; i > 0; i--){
                 state.pane_index_list.splice(i,1)
+                state.pane_data_list.splice(i,1)
                 state.pane_index_config_list.splice(i, 1)
             }
             
@@ -60,12 +62,17 @@ export const mutations = {
     /**
      * pane push adds one new pane to the view
      */
-    pane_push(state,{compName,data}) {
-        // console.log('pane_push')
+    pane_push(state,{compName,data,index}) {
+        console.log('pane_push')
         state.pane_index_list.push(compName)
+        state.pane_data_list.push(data)
         
         if (data != undefined){
-            state.pane_data_obj[compName] = data
+            if(Object.keys(state.pane_data_obj).includes(compName)) {
+                state.pane_data_obj[`${compName}_${index + 1}`] = data
+            } else {
+                state.pane_data_obj[compName] = data
+            }
         }
     },
     /**
@@ -128,6 +135,10 @@ export const mutations = {
                     starting_index_to_splice, // number, an index of an item in an array 
                     num_of_comps_needs_to_be_replaced // number, the length of items in an array
                 )
+            state.pane_data_list.splice(
+                    starting_index_to_splice, // number, an index of an item in an array 
+                    num_of_comps_needs_to_be_replaced // number, the length of items in an array
+                )    
             
 
             // replace > index list
@@ -136,6 +147,11 @@ export const mutations = {
                     0, // number of items in array that needs to be removed
                     new_component_replacement // string, the value that will be inserted in the array
                 )
+            state.pane_data_list.splice(
+                    num_of_comps_needs_to_be_replaced, // number, the length of items in an array
+                    0, // number of items in array that needs to be removed
+                    new_component_replacement // string, the value that will be inserted in the array
+                )    
             
             if(clickOrigin + 1 == numOfComps){
                 state.pane_index_config_list.splice(
@@ -174,8 +190,8 @@ export const mutations = {
 
             // removing
             state.pane_index_list.splice(starting_index_to_splice, num_of_comps_needs_to_be_replaced)
+            state.pane_data_list.splice(starting_index_to_splice, num_of_comps_needs_to_be_replaced)
             state.pane_index_config_list.splice(starting_index_to_splice, num_of_comps_needs_to_be_replaced)
-            state.pane_data_list = []
 
 
             // replacing to trigger re render
@@ -205,9 +221,11 @@ export const mutations = {
         // remove one item or component from the index supplied        
         if(compIndex === 0){
             state.pane_index_list.shift()
+            state.pane_data_list.shift()
             state.pane_index_config_list.shift()
         }else{
             state.pane_index_list.splice(compIndex,1)
+            state.pane_data_list.splice(compIndex,1)
             state.pane_index_config_list.splice(compIndex, 1)
         }
 
@@ -228,7 +246,8 @@ export const mutations = {
             closable,
             maximizable,
             head_visibility,
-            renderOnce
+            renderOnce,
+            isAduplicate
         } = payload
 
         /**
@@ -247,6 +266,9 @@ export const mutations = {
         title ? final_conf.title = payload.title : final_conf.title = 'untitled pane'
         // render once
         typeof renderOnce === 'boolean' ? final_conf.renderOnce = payload.renderOnce : final_conf.renderOnce = false
+        // isAduplicate
+        typeof isAduplicate === 'boolean' ? final_conf.isAduplicate = payload.isAduplicate : final_conf.isAduplicate = false
+
 
 
         /**
@@ -311,7 +333,8 @@ export const actions = {
             // console.log('** paneSystem case: num of comps in window is only 1 so add one comp')
             commit('pane_push', {
                 compName: component_name,
-                data
+                data,
+                index
             })
         }
 

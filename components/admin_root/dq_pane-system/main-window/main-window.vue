@@ -1,5 +1,5 @@
 <template>
-  <div id="dq-main" class="fullheight-percent fullwidth relative flex flexcenter">
+  <div v-dq-disable-horizontal-scrolling id="dq-main" class="fullheight-percent fullwidth relative flex flexcenter">
     <transition name="fade">
       <div v-if="isReady" id="dq-main-w" class="absolute fullwidth flex fullheight-percent pad125">
       <div
@@ -11,7 +11,7 @@
       >
         <!-- pane -->
         <div
-          :style="{boxShadow:'0px 0px 10px 1px gray',borderRadius: '5px',background:'rgb(233, 239, 243)', opacity: 0}"
+          :style="{boxShadow:'0px 0px 10px 1px gray',borderRadius: '5px',background:'rgb(233, 239, 243)'}"
           :id="`${panes}`"
           class="fullheight-percent flex flexcol flex1"
         >
@@ -53,8 +53,10 @@
           </div>
           <!-- pane body -->
           <div style="background:white;" class="fullheight-percent flex flexcol">
+            config: {{config_state[pane_index] ? config_state[pane_index].isAduplicate : 'test'}}
+              <!-- :data="$store.state.pane_system.pane_data_obj[panes]" -->
             <div
-              :data="$store.state.pane_system.pane_data_obj[panes]"
+              :data="$store.state.pane_system.pane_data_list[pane_index]"
               :theme="$store.state.theme"
               :store="$store.state"
               :my_pane_index="pane_index"
@@ -246,7 +248,7 @@ export default {
         const latest_pane = current[current.length - 1]
         const n = document.getElementById(latest_pane)
         if(n) {
-          TweenMax.fromTo(n, 0.5, { opacity: "0" }, { opacity: "1" });
+          // TweenMax.fromTo(n, 0.3, { opacity: "0" }, { opacity: "1" });
         }
       }, 0);
     }
