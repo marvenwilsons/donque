@@ -40,9 +40,10 @@ export const mutations = {
      * this function executes
      */
     pane_reset(state,payload) {
-        console.log('** PANE RESET')
+        // console.log('** PANE RESET')
 
         if (state.pane_index_list[0] != payload){
+            // add hook before reset
             state.pane_index_config_list = []
             state.pane_index_list = [`${payload}`]
             state.pane_data_list = [`${payload}`]
@@ -50,6 +51,10 @@ export const mutations = {
         }
         else if (state.pane_index_list.length > 1){
             for (var i = state.pane_index_list.length - 1; i > 0; i--){
+                /**
+                 * Occurs when there are multiple pane open then the root menu on the side bar
+                 * is clicked, 
+                 */
                 state.pane_index_list.splice(i,1)
                 state.pane_data_list.splice(i,1)
                 state.pane_index_config_list.splice(i, 1)
@@ -63,7 +68,7 @@ export const mutations = {
      * pane push adds one new pane to the view
      */
     pane_push(state,{compName,data,index}) {
-        console.log('pane_push')
+        // console.log('pane_push')
         state.pane_index_list.push(compName)
         state.pane_data_list.push(data)
         

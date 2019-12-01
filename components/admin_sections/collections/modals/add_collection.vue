@@ -289,6 +289,7 @@ export default {
         .then(({ data, status }) => {
           if (status) {
             this.$store.dispatch("collections/getCollectionDataFromServer");
+            this.$emit("onCollectionCreated");
           } else {
             this.Err = data.actions[0].msg;
           }

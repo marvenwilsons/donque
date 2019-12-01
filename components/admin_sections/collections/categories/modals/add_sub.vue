@@ -1,10 +1,10 @@
 <template>
   <div>
-    <debug
-      :data="{$data:{catName_model,err,payload,$computed:{get_FinalCategoryName,get_CollectionName}},$props:{data,categories,my_pane_index}}"
-    ></debug>
+    <!-- <debug
+      :data="{$data:{catName_model,err,$computed:{get_FinalCategoryName}},$props:{data,categories,my_pane_index}}"
+    ></debug> -->
     <div class="marginbottom050">
-      Category Name
+      Category name for: <i>{{data.CategoryName}}</i>
       <input
         id="dq-category-m-inp"
         v-model="catName_model"
@@ -30,7 +30,7 @@
             class="buttonreset darkprimary pad050 borderRad4"
           >Add Category</button>
         </div>
-        <button @click="$emit('onCancel')" class="buttonreset darkprimary pad050 borderRad4">Cancel</button>
+        <button v-if="can_cancel" @click="$emit('onCancel')" class="buttonreset darkprimary pad050 borderRad4">Cancel</button>
       </div>
     </transition>
   </div>
@@ -38,21 +38,12 @@
 
 <script>
 export default {
-  props: ["categories", "my_pane_index", "data"],
+  props: ["categories", "my_pane_index", "data","can_cancel"],
   data: () => ({
     catName_model: undefined,
     err: undefined,
     info: undefined,
-    payload: undefined
   }),
-  computed: {
-    get_FinalCategoryName() {
-      return `${this.data.actionCastOn["Category Name"]}/${this.catName_model}`;
-    },
-    get_CollectionName() {
-      return this.data.actionCastOn["Collection Name"];
-    }
-  },
   watch: {
     catName_model(current, prev) {
       // not allow special characters
@@ -77,29 +68,6 @@ export default {
     }
   },
   methods: {
-    filter_Categories(expect_for, all_Categories) {
-      /**
-       * filters the raw array of categories
-       * it will only return the set of strings that has
-       * the value of "expect_for" in it
-       */
-      let final = []
-
-      // start
-      all_Categories.map(categories => {
-        if(categories.includes(`${expect_for}/`)) {
-          /**
-           * I have to push it because if I return it from here
-           * it will include a null to the final array
-           */ 
-          
-          final.push(categories)
-        }
-      })
-
-      // fire away!
-      return final
-    },
     submit_NewCategory() {
       // validations
       if (this.catName_model == undefined) {
@@ -112,39 +80,37 @@ export default {
 
       // send to server
       if (!this.err) {
+        //
         this.$emit("onWritingData", "Category");
-
-        // console.log(new_category_name)
-
         // send
         this.$store
           .dispatch("systemCall", {
-            command: "addCategory",
+            command: "addRootCategory",
             section: "collectionMethods",
             data: {
-              category_name: this.get_FinalCategoryName,
-              from_collection: this.get_CollectionName
+              category_name: `${this.data.CategoryName}/${this.catName_model}`,
+              from_collection: this.data.CollectionName
             },
             method: "post"
           })
           .then(({ data, status }) => {
             if (status) {
+              console.log('success baby!!')
               //
-              const root_category = this.data.actionCastOn['Category Name']
-              this.payload = this.filter_Categories(root_category,data.payload.categories);
-              this.$emit("onRefreshCat", data.payload);
-              // triggers loading
+              this.$store.dispatch("collections/getCollectionDataFromServer");
               this.$emit("onWritingData", undefined);
             }
           })
           .catch(err => {
-            console.log("Add.vue Error!".red, err);
+            alert(err)
           });
       }
     }
   },
   mounted() {
-    document.getElementById("dq-category-m-inp").focus();
+    setTimeout(() => {
+      document.getElementById("dq-category-m-inp").focus();
+    }, 100);
   }
 };
 </script>

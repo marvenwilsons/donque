@@ -53,7 +53,6 @@
           </div>
           <!-- pane body -->
           <div style="background:white;" class="fullheight-percent flex flexcol">
-            config: {{config_state[pane_index] ? config_state[pane_index].isAduplicate : 'test'}}
               <!-- :data="$store.state.pane_system.pane_data_obj[panes]" -->
             <div
               :data="$store.state.pane_system.pane_data_list[pane_index]"

@@ -4,11 +4,13 @@
     <!-- <debug
       :data="{
       'Raw Data':$store.state.collections.rawData_fromServer,
-      'Get All Collections': Collections,}"
-    ></debug> -->
+      'Get All Collections': Collections,
+      get_tempCmd}"
+    ></debug>-->
     <listify
       @onAddItem="addNewCollection"
       @onContextAction="contextAction"
+      @onEmpty="onEmptyCollection"
       :inputData="Collections"
       :config="{
            title: 'Collections total',
@@ -44,7 +46,11 @@
             class="flex spacebetween flexcenter pad050"
           >
             <strong class="padleft050">{{modal_Content}}</strong>
-            <i @click="modal_State = false" class="fas fa-times padright025 pointer"></i>
+            <i
+              v-if="can_be_close"
+              @click="modal_State = false"
+              class="fas fa-times padright025 pointer"
+            ></i>
           </div>
           <div v-if="modal_Content == 'Create Collection'" class="pad125">
             <modalAddCollection @onCollectionCreated="onCollectionCreated" :data="null"></modalAddCollection>
@@ -142,7 +148,8 @@ export default {
     delete_collection_data: undefined,
 
     //
-    Collections: undefined
+    Collections: undefined,
+    can_be_close: false
   }),
   beforeCreate() {
     this.$store.commit("pane_system/set_pane_config", {
@@ -174,13 +181,15 @@ export default {
     get_tempCmd(current, prev) {
       if (current == "deleteCollection") {
         this.$store.dispatch("collections/getCollectionDataFromServer");
+        this.$store.commit("modal/reset_tempCmd");
       }
-    }
-  },
-  mounted() {
-    this.modal_State = true;
-    if (this._collections) {
-      this.modal_State = false;
+    },
+    modal_State(current, prev) {
+      if (current) {
+        if (this._collections.length) {
+          this.can_be_close = true
+        }
+      }
     }
   },
   created() {
@@ -213,6 +222,7 @@ export default {
         });
     },
     onCollectionCreated() {
+      console.log("DONE!");
       this.modal_State = false;
     },
     contextAction(val) {
@@ -269,20 +279,23 @@ export default {
         });
       }
       if (val.actionName == "Categories") {
-        const CollectionName = val.actionCastOn['Collection Name']
-        this.$store.commit('collections/mutate_Category_being_opened',CollectionName)
+        const CollectionName = val.actionCastOn["Collection Name"];
+        this.$store.commit(
+          "collections/mutate_Category_being_opened",
+          CollectionName
+        );
 
         //
-        function getCollectionIndex (collection,name) {
-          let index = 0
-          collection.map((e,i) => {
-            if(e['Collection Name'] == name) {
-              index = i
+        function getCollectionIndex(collection, name) {
+          let index = 0;
+          collection.map((e, i) => {
+            if (e["Collection Name"] == name) {
+              index = i;
             }
-          })
+          });
 
-          return index
-        } 
+          return index;
+        }
 
         //
         this.$store.dispatch("pane_system/open", {
@@ -292,10 +305,18 @@ export default {
           pane_head_bg_color: "rgb(48, 51, 64)",
           renderOnce: true,
           data: {
-            indexOfCollection: getCollectionIndex(this._collections,CollectionName)
+            indexOfCollection: getCollectionIndex(
+              this._collections,
+              CollectionName
+            )
           }
         });
       }
+    },
+    onEmptyCollection() {
+      this.modal_State = true;
+      this.addNewCollection();
+      this.can_be_close = false;
     }
   }
 };

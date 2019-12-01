@@ -161,52 +161,9 @@ export default {
     });
   },
   computed: {
-    get_SubCategory() {
-      console.log("get_SubCategory");
-      let o = [];
-      if (this.my_pane_index - 1 > 0) {
-        if (this.my_pane) {
-          const pane_title = this.my_pane.title.split("sub category")[0].trim();
-          if (this.raw_Data) {
-            // o = [];
-
-            this.raw_Data.map(cats => {
-              if (cats.split("/").length > 1) {
-                if (cats.split("/")[this.my_pane_index - 2] == pane_title) {
-                  const nextCategory = cats.split("/")[this.my_pane_index - 1];
-                  if (!o.includes(nextCategory)) {
-                    o.push(nextCategory);
-                  }
-                }
-              }
-            });
-          }
-        }
-      }
-
-      const f = o.map(cats => {
-        let x = undefined;
-        if (cats != undefined) {
-          x = {
-            "Category Name": `${
-              this.data.actionCastOn["Category Name"]
-            }/${cats}`
-          };
-        }
-        return x;
-      });
-
-      if (f.includes(undefined)) {
-        f.shift();
-      }
-
-      return f;
-    },
     ...mapGetters({
       _collections: "collections/getAllCollections",
       _getCollection: "collections/getCollection",
-      _getAllCategoriesFromCollection:
-        "collections/getAllCategoriesFromCollection"
     })
   },
   watch: {
@@ -224,9 +181,6 @@ export default {
         }
       });
 
-      /**
-       * Triggers when
-       */
       this.CollectionsRootCategories = this.get_RootCategories(
         current[indexOfCollection].Categories
       );
@@ -278,6 +232,7 @@ export default {
       }
 
       if (val.actionName === "Sub Category") {
+        let obj = {}
         // this is a hack just to make the sub_Category component always
         // triggers the vue watch property
         this.count++;
@@ -287,14 +242,15 @@ export default {
         this.$store.dispatch("pane_system/close", this.my_pane_index + 1);
 
         // additional data to pass
-        val.categories = this.filter_Categories(
-          val.actionCastOn["Category Name"],
-          this.raw_Data
-        ); // retunrs  an array of strings
-        val.count = this.count;
-        val.actionCastOn["Collection Name"] = this.data.actionCastOn[
-          "Collection Name"
-        ];
+        // val.categories = this.filter_Categories(
+        //   val.actionCastOn["Category Name"],
+        //   this.raw_Data
+        // ); // retunrs  an array of strings
+
+        obj.count = this.count;
+        obj.CategoryName = val.actionCastOn['Category Name']
+        obj.CollectionName =  this._collections[this.data.indexOfCollection]['Collection Name']
+        obj.IndexOfCollection = this.data.indexOfCollection
 
         // open pane
         this.$store.dispatch("pane_system/open", {
@@ -303,7 +259,7 @@ export default {
           pane_width: "600px",
           pane_head_bg_color: "rgb(48, 51, 64)",
           renderOnce: true,
-          data: val
+          data: obj
         });
       }
     },

@@ -576,7 +576,7 @@ export default {
           this.modalFinalState = false;
         }, 350);
       }
-    }
+    },
   },
   computed: {
     input_data_keys() {
@@ -604,8 +604,10 @@ export default {
     },
     prop_is_number() {
       if (this.inputData) {
-        if(this.inputData.length) {
-          return typeof this.inputData[0][this.selectedSearchOption] == "number";
+        if (this.inputData.length) {
+          return (
+            typeof this.inputData[0][this.selectedSearchOption] == "number"
+          );
         }
       }
     },
@@ -687,7 +689,7 @@ export default {
       return num % 2;
     },
     //
-    contextAction(actionName, entity,index) {
+    contextAction(actionName, entity, index) {
       this.context_action = actionName;
       this.selected_action = actionName;
       if (this.config.dynamiContextActionTitles) {
@@ -810,11 +812,20 @@ export default {
       this.selectedSearchFilter = val;
     }
   },
+  updated() {
+    setTimeout(() => {
+      if (this.inputData.length == 0) {
+        this.$emit("onEmpty");
+      }
+    }, 100);
+  },
   mounted() {
     this.selectedSearchOption = this.config.propDisplay;
     this.selectedSearchFilter = "==";
     // set default selected
     this.active = this.config.defaultSelected;
+
+    
   }
 };
 </script>
