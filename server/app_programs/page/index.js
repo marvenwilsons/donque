@@ -565,35 +565,27 @@ pageMethods.getAllRoutes = {
 
         let routes = {}
 
+        const finalizeRotes = (r) => {
+            return Object.keys(r)
+        }
+
         return new Promise(async (resolve, reject) => {
             const dq_appCursor = await db.collection('dq_app').find()
 
             await dq_appCursor.forEach((doc,err) => {
-                return routes = doc.routes
-            }).then(() => {
-                resolve({
-                    status: true,
-                    data: {
-                        msg: null,
-                        actions: [{
-                            title: null,
-                            contents: routes 
-                        }]
-                    }
-                })
-            }).catch(err => {
-                resolve({
-                    status: false,
-                    data: {
-                        msg: err,
-                        actions: [{
-                            title: 'prompt_err'
-                        }]
-                    }
-                })
+                return routes = doc.routeContents
             })
-            
-            
+
+            resolve({
+                status: true,
+                data: {
+                    msg: null,
+                    actions: [{
+                        title: null,
+                        contents: finalizeRotes(routes)
+                    }]
+                }
+            })            
         })
     }
 }

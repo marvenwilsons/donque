@@ -154,7 +154,11 @@ export const mutations = {
 
     //
     set_route(state,data) {
-        state.route = data
+        let f = []
+        data.map(e => {
+            f.push({PageName: e})
+        })
+        state.route = f
         // console.log('setting route')
     },
     set_el_flat_map(state,data){

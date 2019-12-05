@@ -1,13 +1,13 @@
-<template>        
+<template>
   <div id="dq-page-sel-content" class="flex flexcol fullheight-percent flexcenter">
     <div class="flex1 flex fullwidth">
-        <div
-          class="fullwidth flex"
-          :pane_index="my_pane_index"
-          :data="data"
-          :page_data="page_data"
-          :is="comp"
-        ></div>
+      <div
+        class="fullwidth flex"
+        :pane_index="my_pane_index"
+        :data="data.page"
+        :page_data="page_data"
+        :is="comp"
+      ></div>
     </div>
     <div
       id="dq-sel-page-pane"
@@ -60,21 +60,48 @@ export default {
     mystylesheet,
     globals
   },
+  beforeCreate() {
+    this.$store.commit("pane_system/set_pane_config", {
+      title: null,
+      pane_width: "100%",
+      pane_head_bg_color: "rgb(48, 51, 64)",
+      pane_head_title_color: "white",
+      renderOnce: true,
+      closable: false
+    });
+  },
   mounted() {
-    const el = document.getElementById('dq-page-sel-content')
+    const el = document.getElementById("dq-page-sel-content");
 
-    TweenMax.fromTo(el, 1, {opacity: 0} , {opacity: 1})
-    TweenMax.fromTo(el, 0.2, {width: 0} , {width: '100%', ease: Power2.easeInOut})
-    TweenMax.fromTo(el, 0.2, {height: 0} , {height: '100%', ease: Power2.easeInOut})
+    TweenMax.fromTo(el, 1, { opacity: 0 }, { opacity: 1 });
+    TweenMax.fromTo(
+      el,
+      0.2,
+      { width: 0 },
+      { width: "100%", ease: Power2.easeInOut }
+    );
+    TweenMax.fromTo(
+      el,
+      0.2,
+      { height: 0 },
+      { height: "100%", ease: Power2.easeInOut }
+    );
+
+    this.$store.commit("pane_system/alter_pane_config", {
+      pane_index: this.my_pane_index,
+      alter: {
+        title: `Web Page: ${this.data.page}`
+      }
+    });
   },
   created() {
-    console.log("fetching page contents");
+    // console.log("fetching page contents");
     this.$store
       .dispatch("systemCall", {
         command: "getPage",
         section: "pageMethods",
         data: {
-          path: this.data
+          path: this.data.page
         },
         method: "post"
       })

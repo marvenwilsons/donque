@@ -148,7 +148,7 @@
                       class="padright025 padleft050 pointer padtop025"
                     >{{s_i}}</div>
                     <div id="dq-viz-host" :data="s_i" :class="[`viz-host-${s_i}`, 'flex']">
-                      <div style="min-width:82px;" class="dq-strvw-el pointer">
+                      <div style="min-width:86px;" class="dq-strvw-el pointer">
                         <div
                           @mouseenter="showInfoBox({tag:'root_Template-wrapper'})"
                           @mouseleave="resetInfoBox()"

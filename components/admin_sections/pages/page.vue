@@ -1,202 +1,225 @@
 <template>
-  <div v-if="ready" class="flex1 flex flexcol">
-    <div class="flex1" v-if="data">
+  <div class="flex flex1 flexcol" v-if="listifyInputData">
+    <!-- <debug :data="{$props:{data,listifyInputData}}"></debug> -->
+    <listify
+      v-if="ready"
+      class="borderred"
+      @onContextAction="contextAction"
+      @onAddItem="addPage"
+      :inputData="listifyInputData"
+      :config="listifyConfig"
+      :appearance="listifyAppearance"
+    >
       <div
-        class="fullheight-percent flex flexcenter"
-        v-if="data.ui === 'page_selected' && ui_index === my_pane_index"
+        v-if="modal_Content == 'loading'"
+        style="background:white;width:; height:; box-shadow:0px 0px 10px 5px #EEEEEF;"
+        class="pad050"
+        slot="modal"
       >
-        <pageSel :data="$store.state.pane_system.pane_index_config_list[my_pane_index].title"></pageSel>
+        <strong>Loading resources ...</strong>
       </div>
-    </div>
-    <div v-if="ui === 'page'" class="fullheight-percent relative">
-      <!--  -->
+
       <div
-        v-if="create_route"
-        class="flex flexcol absolute fullwidth fullheight-percent"
-        style="z-index: 100; background:white;"
+        style="min-width:350px;  box-shadow:0px 0px 10px 5px #EEEEEF;"
+        slot="modal"
+        v-if="typeof modal_Content == 'string'"
+        role="modal container"
+        class="borderRad4"
       >
-        <div :style="{...theme.modal_host_style}" class="flex flexcol margin125">
-          <div
-            :style="{background:theme.pane_head_bg_color}"
-            class="pad050 flex flexcenter spacebetween"
-          >
-            <strong>Create new page</strong>
-            <i @click="create_route = false" class="pointer fas fa-times padright025"></i>
-          </div>
-          <div class="fullwidth pad125">
-            <strong>Name of the new page:</strong>
-            <div>
-              <input
-                id="dq-create-new-page"
-                v-model="route_name"
-                class="fullwidth pad025"
-                type="text"
-              />
-            </div>
-            <div v-if="err" style="color:#ae1100" class="pad025">{{err}}</div>
-            <div class="padtop125 flex flexend pointer">
-              <!-- <div class="">Create new page</div> -->
-              <button
-                :style="{...theme.modal_button_style}"
-                @click="sumbit"
-                class="buttonreset pad050"
-              >Create new page</button>
-            </div>
+        <div class="darkprimary pad050 flex spacebetween">
+          <div>{{modal_Content}}</div>
+          <div>
+            <i @click="Mutate_Modal(false)" class="fas fa-times pointer"></i>
           </div>
         </div>
-      </div>
-      <!--  -->
-      <div class="pad125 flex">
-        <div class="flex flexcenter flex1">
-          <div
-            :style="{border:`1px solid ${$store.state.theme.global.border_color}`}"
-            class="flex flexcenter pad025 fullwidth"
-          >
-            <i class="fas fa-search padleft025 padright025 pointer"></i>
-            <input class="h-input pad025 flex fullwidth" type="text" />
-          </div>
-        </div>
-        <div
-          @click="create_route = true"
-          :style="{border:`1px solid ${$store.state.theme.global.border_color}`,height:'32px',maxWidth:'32px'}"
-          class="pad025 marginleft050 flex flex1 borderred fullheight-percent flexcenter pointer"
-        >
-          <i class="fas fa-plus"></i>
-        </div>
-      </div>
-      <div class="fullheight-percent relative" style="overflow:auto;">
-        <div class="absolute fullwidth fullheight-percent padleft050 padright050">
-          <!-- loop -->
-          <div
-            class="pointer marginleft050 marginright050 pad050 marginbottom050 flex dq-page-item-host"
-            v-for="(page,p_index) in pages"
-            :key="`dq-page-list-${p_index}-${page.name}`"
-            :id="`dq-page-${p_index}`"
-            :style="setStyle(active === `dq-page-${p_index}` || cur_actv == `dq-page-${p_index}`)"
-            @mouseover="active = `dq-page-${p_index}`"
-            @mouseleave="cur_actv != `dq-page-${p_index}` && (active = undefined)"
-          >
-            <!-- data -->
-            <div class="flex1">
-              <div class="flex spacebetween">
-                <span
-                  :style="{fontWeight:(active === `dq-page-${p_index}` || cur_actv == `dq-page-${p_index}`) ? 700 : 100 }"
-                  class="flex1 pad025"
-                >{{p_index}}</span>
-                <!-- click -->
-                <span
-                  @click="
-                    cur_actv = `dq-page-${p_index}`,
-                    $store.dispatch('pane_system/open',{name: 'pages', index: my_pane_index, data: {page,root: p_index, ui: 'page'}, data_index: p_index})"
-                  class="underlinehover flex flexend flexcenter"
-                >sub pages - {{Object.keys(page).length}}</span>
-                <!-- <span
-                  :class="[cur_actv == `dq-page-${p_index}` && 'underline' , 'underlinehover', 'flex' ,'padleft125' ,'flexend']"
-                >route settings</span>-->
-                <!-- click -->
-                <span
-                  @click="open({name: 'pages', index: my_pane_index, data: {page,root: p_index, ui:'page_selected'}, data_index: p_index})"
-                  :class="[cur_actv == `dq-page-${p_index}` && 'underline' , 'underlinehover', 'flex' ,'padleft125' ,'flexend','flexcenter']"
-                >open</span>
-                <!--  -->
+        <div role="add page" style="background:white;">
+          <div v-if="modal_Content == 'Add Page'">
+            <div class="fullwidth pad125">
+              <strong>Name of the new page:</strong>
+              <div>
+                <input
+                  id="dq-create-new-page"
+                  v-model="route_name"
+                  class="fullwidth pad025"
+                  type="text"
+                />
+              </div>
+              <div v-if="err" style="color:#ae1100" class="pad025 backgrounderr err">{{err}}</div>
+              <div class="padtop125 flex flexend pointer">
+                <!-- <div class="">Create new page</div> -->
+                <!-- <div class="">Create new page</div> -->
+                <button
+                  @click="sumbitNewPage"
+                  class="buttonreset pad050 borderRad4 darkprimary"
+                >Create new page</button>
               </div>
             </div>
           </div>
-          <!-- end -->
+          <div v-if="modal_Content == 'Rename Page'">
+            <div class="fullwidth pad125">
+              <strong v-if="rename_subject" >Rename page:</strong>
+              <i>{{rename_subject}}</i>
+              <div>
+                <input
+                  id="dq-create-new-page"
+                  v-model="route_name"
+                  class="fullwidth pad025"
+                  type="text"
+                />
+              </div>
+              <transition name="fade">
+                <div v-if="err" class="pad050 backgrounderr err">{{err}}</div>
+              </transition>
+              <div class="padtop125 flex flexend pointer">
+                <button
+                  @click="renamePage"
+                  class="buttonreset pad050 borderRad4 darkprimary"
+                >Rename page</button>
+              </div>
+            </div>
+          </div>
+          <div v-if="modal_Content == 'Delete Page'">delete page</div>
         </div>
       </div>
-    </div>
+
+      <div slot="item-icon">
+        <i class="fas fa-file-alt"></i>
+      </div>
+    </listify>
   </div>
 </template>
 
 <script>
-import page_sel from "./page-selected/page-selected.vue";
 import { mapGetters } from "vuex";
 
 export default {
   props: ["my_pane_index", "data", "theme", "data_index"],
-  data() {
-    return {
-      ui: "page",
-      ready: true,
-      ui_index: undefined,
-      create_route: false,
-      cur_actv: undefined,
-      i_active: undefined,
-      active: undefined,
-      cur_root: undefined,
-      err: false,
-      route_name: undefined,
-      hoverBgColor: this.$store.state.theme.notify_tile_body_bg_hover_color,
-      heverBgColor2: this.$store.state.theme.heading_bg_color,
-      pages: {},
-      isOkay: false,
-      warn_unsaved: this.warn_unsaved
-    };
+  beforeCreate() {
+    this.$store.dispatch("pages/get_routes");
+    this.$store.commit("pane_system/set_pane_config", {
+      title: "Page Route list",
+      pane_width: "600px",
+      pane_head_bg_color: "rgb(48, 51, 64)",
+      pane_head_title_color: "white",
+      renderOnce: true,
+      closable: false
+    });
   },
-  components: {
-    pageSel: page_sel
-  },
-  methods: {
-    setStyle(c) {
-      if (c) {
-        return {
-          background: this.$store.state.theme.notify_tile_body_bg_hover_color,
-          border: `1px solid ${this.$store.state.theme.global.secondary_border_color}`,
-          borderLeft: `2px solid ${this.$store.state.theme.heading_bg_color}`
-        };
-      } else {
-        return {
-          background: this.$store.state.theme.notify_tile_body_bg_color,
-          border: `1px solid ${this.$store.state.theme.global.secondary_border_color}`
-        };
+  data: () => ({
+    listifyConfig: {
+      title: "pages",
+      isNumbered: false, // detemines if the list show numbered list
+      propDisplay: "PageName", // detemines the display value of each list
+      defaultSelected: null, // default selected option on load
+      allowFilterSearch: false,
+      search: true, // shows the search functionality if true,
+      searchBarPlaceHolder: "Search items",
+      contextActions: ["open page", "sub pages", "rename", "delete"],
+      contextStyle: "showOnTheSide", // showOnTheSide, showOnCLickExpand
+      showModal: false,
+      showFilter: true
+    },
+    listifyAppearance: {
+      // dimensions
+      height: "100%", // required
+      width: "100%", // required
+
+      // text
+      textColor: "#196ADD",
+
+      // border colors
+      borderColor: "#F1F8FF",
+      listBorderColor: "#e8f4f8",
+
+      // backgrounds
+      bodyBg: "white",
+      searchBarBgColor: "#F1F8FF",
+      searchBarTextColor: "#24292E",
+      modalBgOverlay: "white",
+      odds: "white", // background of odd index item in the list
+      evens: "white", // background of even index item in the list
+
+      // hovers
+      hoverTextColor: "#196ADD",
+      hoverBgColor: "#F1F8FF",
+      hoverCustomStyle: {
+        fontWeight: 700
+      },
+
+      // list padding
+      listPadding: "l", // s m l
+      listContainerPadding: true, // true false
+
+      // active
+      activeTextColor: "white",
+      activeBgColor: "lightblue",
+      acitveCustomStyle: {
+        // fontWeight: 700,
+        // padding:'5px',
       }
     },
-    sumbit() {
-      if (this.route_name) {
-        if (this.route_name.indexOf(" ") != -1) {
-          this.err = "Error: page name cannot have white spaces";
-        } else {
-          this.err = false;
-        }
-      } else {
-        this.err = "Error: page name is a required";
-      }
+    listifyInputData: undefined,
+    modal_Content: undefined,
+    route_name: undefined,
+    err: undefined,
+    ready: false,
+    rawPages: undefined,
+    rename_subject: undefined
+  }),
+  mounted() {
+    this.listifyInputData = this.$store.state.pages.route;
 
+    setTimeout(() => {
+      this.rawPages = this.listifyInputData.map(({ PageName }) => {
+        return PageName;
+      });
+    }, 100);
+  },
+  computed: {
+    ...mapGetters({
+      _routes: "pages/routes",
+      _getCollection: "collections/getCollection"
+    })
+  },
+  methods: {
+    addPage() {
+      /**
+       * Opens the add page modal
+       */
+      this.Mutate_Modal(true, "Add Page");
+      setTimeout(() => {
+        const new_page_modal = document.getElementById("dq-create-new-page");
+        new_page_modal.focus();
+      }, 20);
+    },
+    renamePage() {},
+    sumbitNewPage() {
       if (this.err == false) {
         this.err = false;
-
+        const parent =
+          this.data.page == undefined
+            ? undefined
+            : (() => {
+                if (this.my_pane_index > 0) {
+                  return this.data.page.split("/").join(".");
+                } else {
+                  return this.data.page;
+                }
+              })();
         this.$store
           .dispatch("systemCall", {
             command: "createPage",
             section: "pageMethods",
             data: {
               name: this.route_name,
-              parent:
-                this.$store.state.pane_system.pane_index_config_list[
-                  this.my_pane_index
-                ].title == "Route list"
-                  ? undefined
-                  : (() => {
-                      if (this.my_pane_index > 1) {
-                        return this.$store.state.pane_system.pane_index_config_list[
-                          this.my_pane_index
-                        ].title
-                          .split("/")
-                          .join(".");
-                      } else {
-                        return this.$store.state.pane_system
-                          .pane_index_config_list[this.my_pane_index].title;
-                      }
-                    })()
+              parent
             },
             method: "post"
           })
           .then(response => {
-            // console.log("this is response");
             if (response.status) {
-              // this.create_route = false
-            } else {
+              this.Mutate_Modal(false);
+              this.$store.dispatch("pages/get_routes");
             }
           })
           .catch(err => {
@@ -205,17 +228,36 @@ export default {
           });
       }
     },
-    open({ name, index, data, data_index }) {
+    Mutate_Modal(state, content) {
+      this.listifyConfig.showModal = state;
+
+      if (state == true) {
+        this.modal_Content = content;
+      } else if (state == false) {
+        setTimeout(() => {
+          this.modal_Content = undefined;
+        }, 200);
+      }
+    },
+    Context_OpenPage(val) {
+      /**
+       * Spawn a new pane window : page-selected.vue
+       */
+      console.log("Context Open Page!");
       if (this.$store.state.pages.stages.length == 0) {
         this.$store.dispatch("pane_system/open", {
-          name,
-          index,
-          data,
-          data_index
+          name: "PageSelected",
+          index: this.my_pane_index,
+          pane_width: "800px",
+          renderOnce: true,
+          pane_head_bg_color: "rgb(48, 51, 64)",
+          data: {
+            page: val.actionCastOn.PageName,
+            root: val.index,
+            ui: "page_selected"
+          }
         });
-        this.cur_actv = `dq-page-${data_index}`;
       } else {
-        // modal here
         this.$store.commit("modal/set_modal", {
           head: "Unsave changes deteceted",
           body: "page_warn_unsaved",
@@ -225,167 +267,114 @@ export default {
           }
         });
       }
-    }
-  },
-  beforeCreate() {
-    this.$store.commit("pane_system/set_pane_config", {
-      title: "Route list",
-      pane_width: "350px",
-      renderOnce: true,
-      closable: false
-    });
-  },
-  computed: {
-    ...mapGetters({
-      pageGetter: "pages/routes"
-    })
-  },
-  watch: {
-    create_route(n, o) {
-      if (n) {
-        setTimeout(() => {
-          const new_page_modal = document.getElementById("dq-create-new-page");
-          new_page_modal.focus();
-        }, 20);
+    },
+    Context_OpenSubPage(val) {
+      /**
+       * Spawn a copy of this pane window
+       */
+      if (this.$store.state.pages.stages.length == 0) {
+        this.$store.dispatch("pane_system/open", {
+          name: "pages",
+          index: this.my_pane_index,
+          pane_width: "800px",
+          renderOnce: true,
+          pane_head_bg_color: "rgb(48, 51, 64)",
+          data: {
+            page: val.actionCastOn.PageName,
+            root: val.index,
+            ui: "page_selected"
+          }
+        });
+      } else {
+        this.$store.commit("modal/set_modal", {
+          head: "Unsave changes deteceted",
+          body: "page_warn_unsaved",
+          config: {
+            ui_type: "custom",
+            closable: false
+          }
+        });
       }
     },
-    pageGetter(n, o) {
-      if (
-        this.$store.state.pane_system.pane_index_config_list[this.my_pane_index]
-          .title == "Route list"
-      ) {
-        this.pages = n;
-      } else {
-        //
-        const paneTitle = this.$store.state.pane_system.pane_index_config_list[
-          this.my_pane_index
-        ].title;
-
-        // dive to prop and update pages view
-        if (paneTitle.indexOf("/") == -1) {
-          this.pages = n[paneTitle];
-        } else {
-          const titles = paneTitle.split("/");
-          let temp = undefined;
-
-          for (var i = 0; i < titles.length; i++) {
-            if (temp == undefined) {
-              temp = n[titles[i]];
-            } else {
-              temp = temp[titles[i]];
-            }
-          }
-
-          this.pages = temp;
-        }
+    Context_RenamePage({actionCastOn}) {
+      /**
+       * Opens the rename modal
+       */
+      this.Mutate_Modal(true, "Rename Page");
+      this.rename_subject = actionCastOn.PageName
+    },
+    Context_DeletePage(actionCastOn) {
+      /**
+       * Opens the delete modal
+       */
+      this.Mutate_Modal(true, "Delete Page");
+    },
+    contextAction(val) {
+      switch (val.actionName) {
+        case "open page":
+          this.Context_OpenPage(val);
+          break;
+        case "sub pages":
+          this.Context_OpenSubPage(val);
+          break;
+        case "rename":
+          this.Context_RenamePage(val);
+          break;
+        case "delete":
+          this.Context_DeletePage(val);
+          break;
       }
     }
   },
-  mounted() {
-    // set up functions to be executed after modal success
-    this.$store.commit("modal/exec_after_msg", () => {
-      this.$store.dispatch("pages/get_routes");
-      this.create_route = false;
-      this.route_name = "";
-    });
-
-    // set class css defaults
-    this.$store.dispatch("theme/set_class_css_defaults", {
-      class: ["dq-page-item-host"],
-      css_keys: ["transition"],
-      css_values: ["0.3s"]
-    });
-
-    // fetch pages on the selectedRoute
-    // systemCall getPageListInRoute, pageMethods
-    if (this.$store.state.pages.route) {
-      // route is not undefined, loacating a sub route
-      // get the data passed, locate the key in the store, feed it into the pages object this.pages
-      // console.log("locating a sub route");
-
-      if (this.data) {
-        // assigning data to sub page
-        this.pages = this.data.page;
-
-        this.ui = this.data.ui;
-        if (this.data.ui === "page_selected") {
-          this.ui_index = this.my_pane_index;
-          this.$store.commit("pane_system/alter_pane_config", {
-            pane_index: this.my_pane_index,
-            alter: {
-              pane_width: "100%"
-            }
-          });
-        }
-
-        // altering pane title
-        if (this.my_pane_index > 0) {
-          let r = [];
-          let z = 0;
-
-          this.$store.state.pane_system.pane_index_config_list.map(
-            (configObject, configIndex) => {
-              if (configIndex > 0 && configIndex != this.my_pane_index) {
-                // console.log(configObject.title);
-                r.push(configObject.title);
-              }
-
-              if (configIndex == this.my_pane_index) {
-                r.push(this.data.root);
-              }
-            }
-          );
-
-          if (this.my_pane_index > 2) {
-            const t = r;
-            r.splice(0, this.my_pane_index - 2);
-          }
-
-          this.cur_root = r.join("/");
-          this.$store.commit("pane_system/alter_pane_config", {
-            pane_index: this.my_pane_index,
-            alter: {
-              title: r.join("/")
-            }
-          });
-        } else {
-          this.$store.commit("pane_system/alter_pane_config", {
-            pane_index: this.my_pane_index,
-            alter: {
-              title: this.data.root
-            }
-          });
-        }
+  watch: {
+    route_name(current, old) {
+      if (current.indexOf(" ") != -1) {
+        this.err = "Error: page name cannot have white spaces";
       } else {
-        // after the store is been initialized, but pages section
-        // somehow got initialized
-        this.pages = this.$store.state.pages.route;
+        this.err = false;
       }
-    } else {
-      // route is undefined fetching all routes
-      this.$store.dispatch("pages/get_routes");
 
-      // simulating request
+      if (this.rawPages.includes(current)) {
+        this.err = `Error: "${current}" already exist`;
+      }
+    },
+    _routes(current, old) {
+      // pane head mutation
+      if (this.my_pane_index > 0) {
+        this.$store.commit("pane_system/alter_pane_config", {
+          pane_index: this.my_pane_index,
+          alter: {
+            title: `Sub Routes of: ${this.data.page}`
+          }
+        });
+      }
+
+      // variables
+      const paneTitle = this.$store.state.pane_system.pane_index_config_list[
+        this.my_pane_index
+      ].title;
+      let PageNameArray = [];
+
+      // logic 1
+      current.map(({ PageName }) => {
+        if (this.my_pane_index + 1 == PageName.split("/").length) {
+          const valid_amount_of_slash = this.my_pane_index;
+          if (paneTitle == `Sub Routes of: ${this.data.page}`) {
+            console.log("test");
+            if (PageName.startsWith(`${this.data.page}/`)) {
+              PageNameArray.push({ PageName });
+            }
+          } else {
+            PageNameArray.push({ PageName });
+          }
+        }
+      });
+      this.listifyInputData = PageNameArray;
+
       setTimeout(() => {
-        this.pages = this.$store.state.pages.route;
-      }, 200);
+        this.ready = true;
+      }, 100);
     }
   }
 };
 </script>
-
-<style>
-.dq-page-item {
-  border-radius: 100%;
-}
-.underlinehover:hover {
-  text-decoration: underline;
-}
-.underline {
-  text-decoration: underline;
-}
-.h-input {
-  border: none;
-  outline: none;
-}
-</style>
