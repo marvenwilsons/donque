@@ -109,6 +109,7 @@
         <option>Any</option>
         <option>Short String</option>
         <option>Long String</option>
+        <option>HTML</option>
         <option>Number</option>
         <option>Boolean</option>
         <option>Date</option>
