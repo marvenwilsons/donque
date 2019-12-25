@@ -286,12 +286,27 @@ export default {
       this.$emit("onSubmit", this.final_vanilla);
     },
     removeProp(prop_name) {
-      this.$delete(this.raw_data_set,prop_name)
-      if(Object.keys(this.raw_data_set).length == 0){
+      const copy = o => {
+        if (o === null) return null;
+
+        var output, v, key;
+        output = Array.isArray(o) ? [] : {};
+        for (key in o) {
+          v = o[key];
+          output[key] = typeof v === "object" ? copy(v) : v;
+        }
+
+        return output;
+      };
+
+      const nc = copy(this.raw_data_set)
+
+      this.$delete(nc,prop_name)
+      if(Object.keys(nc).length == 0){
         this.$emit('onEmpty')
       }
 
-      this.$emit('onRemoveProp',this.raw_data_set)
+      this.$emit('onRemoveProp',nc)
     }
   },
   mounted() {
