@@ -305,7 +305,8 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                 Database: {
                     killDbConnection: true
                 },
-                Console: []
+                Console: [],
+                Office: []
             }
             const CollectionsAndData = [{
                 colName: 'dq_app', data: {
@@ -391,7 +392,8 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                         Settings: app_resource.Settings,
                         Marketplace: app_resource.Marketplace,
                         Database: app_resource.Database,
-                        Console: app_resource.Console
+                        Console: app_resource.Console,
+                        Office: app_resource.Office
                     }
                 }
             }, {
@@ -424,7 +426,8 @@ const initApplicationProtocol = async ({ siteTitle, username, password, email, a
                         Settings: app_resource.Settings,
                         Marketplace: app_resource.Marketplace,
                         Database: app_resource.Database,
-                        Console: app_resource.Console
+                        Console: app_resource.Console,
+                        Office: app_resource.Office
                     }
                 }
             }]

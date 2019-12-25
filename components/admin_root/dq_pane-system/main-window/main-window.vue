@@ -34,13 +34,14 @@
                 >
                   <strong style="word-wrap: break-word">{{config[pane_index].title}}</strong>
                 </div>
-                <div>
+                <div class="flex">
                   <!-- <i
                     :style="{color:config[pane_index].pane_head_title_color}"
                     v-if="config[pane_index].maximizable"
                     class="pointer far fa-window-maximize padright025"
                     @click="$store.dispatch('pane_system/maximize',config[pane_index].comp)"
                   ></i>-->
+                  <i @click="paneSettings" :style="{color:config[pane_index].pane_head_title_color}" class="fas fa-cog padright050 pointer"></i>
                   <i
                     :style="{color:config[pane_index].pane_head_title_color}"
                     v-if="config[pane_index].closable"
@@ -61,7 +62,9 @@
               :my_pane_index="pane_index"
               :my_pane="config[pane_index]"
               :is="panes"
-            ></div>
+              @PaneModal="PaneModalHandler"
+            >
+            </div>
           </div>
         </div>
         <div class="pad050"></div>
@@ -87,6 +90,7 @@ import Createnewteam from "@/components/admin_sections/administration/team-creat
 import Displayallteams from "@/components/admin_sections/administration/team-list/team-list.vue"; // team list
 import Createcustomroles from "@/components/admin_sections/administration/roles-create/roles-create.vue"; // roles create
 import Displayallroles from "@/components/admin_sections/administration/roles-list/roles-list.vue";
+import Office from "@/components/admin_sections/office/office.vue"
 
 /**
  * Pages
@@ -137,6 +141,10 @@ export default {
     };
   },
   methods: {
+    PaneModalHandler(value) {
+      console.log('this is testing',value)
+      this.$emit("insertModal")
+    },
     init_head(arg) {
       this.config_copy = arg;
     },
@@ -152,6 +160,19 @@ export default {
       }
     },
     ani(id) {
+    },
+    paneSettings() {
+      /**
+        * Opens up pane modal, with tabs,
+        * the tabs are --> | Raw Data | VDS | Properties | Change UI-Host
+        * VDS
+        * VDS - Valid Data Structure, explains the correct input in order for the pane to work correctly
+        * VDS - ex. "An array of objects, the object must this properties, a. b. c. d."
+        *
+        * Properties
+        * "Pane Id", "UI-host", "Pane width", "Pane name", "Pane set by"
+        * 
+       */
     }
   },
   components: {
@@ -171,6 +192,7 @@ export default {
     Displayallteams,
     Createcustomroles,
     Displayallroles,
+    Office,
 
     /**
      * pages

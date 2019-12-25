@@ -35,6 +35,7 @@
             <i v-if="items === 'Database'" class="fas fa-database padleft025 padright025"></i>
             <i v-if="items === 'Console'" class="fas fa-terminal padleft025 padright025"></i>
             <i v-if="items === 'Task'" class="fas fa-tasks padleft025 padright025"></i>
+            <i v-if="items === 'Office'" class="fas fa-briefcase padleft025 padright025"></i>
             {{items}}
           </strong>
         </div>
@@ -87,7 +88,7 @@ export default {
         "Profile",
         "Todos",
         "Messages",
-        "Administration"
+        "Administration",
       ];
       let final_obj = [];
       let temp_obj = undefined
