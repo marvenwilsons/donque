@@ -53,8 +53,11 @@
             </div>
           </div>
           <!-- pane body -->
-          <div style="background:white;" class="fullheight-percent flex flexcol">
+          <div style="background:white;" class="fullheight-percent flex flexcol relative">
               <!-- :data="$store.state.pane_system.pane_data_obj[panes]" -->
+              <div class="absolute fullwidth fullheight-percent flex flexcenter">
+                <slot></slot>
+              </div>
             <div
               :data="$store.state.pane_system.pane_data_list[pane_index]"
               :theme="$store.state.theme"
@@ -62,7 +65,8 @@
               :my_pane_index="pane_index"
               :my_pane="config[pane_index]"
               :is="panes"
-              @PaneModal="PaneModalHandler"
+              @SetPaneModal="PaneModalHandler"
+              @UnSetPaneModal="UnSetPaneModal"
             >
             </div>
           </div>
@@ -142,8 +146,10 @@ export default {
   },
   methods: {
     PaneModalHandler(value) {
-      console.log('this is testing',value)
-      this.$emit("insertModal")
+      this.$emit("insertModal",value)
+    },
+    UnSetPaneModal() {
+      this.$emit("UnSetPaneModal")
     },
     init_head(arg) {
       this.config_copy = arg;
