@@ -58,6 +58,7 @@ export default {
     start(items, item_index) {
       // $store.dispatch('pane_system/start',items)
       // cur_actv = item_index
+      this.$emit("UnSetPaneModal");
       if (this.$store.state.pages.stages.length == 0) {
         this.$store.dispatch("pane_system/start", items);
         this.cur_actv = item_index;
@@ -88,19 +89,19 @@ export default {
         "Profile",
         "Todos",
         "Messages",
-        "Administration",
+        "Administration"
       ];
       let final_obj = [];
-      let temp_obj = undefined
+      let temp_obj = undefined;
 
       this.$store.state.dashboard_data.resources &&
-        (temp_obj = Object.keys(this.$store.state.dashboard_data.resources))
+        (temp_obj = Object.keys(this.$store.state.dashboard_data.resources));
 
       temp_obj.map(e => {
-        if(!beta_features.includes(e)){
-          final_obj.push(e)
+        if (!beta_features.includes(e)) {
+          final_obj.push(e);
         }
-      })
+      });
 
       return final_obj;
     }

@@ -26,6 +26,11 @@ export const getters = {
         }
         return state.pane_index_list
     },
+    get_panes(state) {
+        return state.pane_index_config_list.map(e => {
+            return e.title
+        })
+    },
     close_state: state => state.pane_got_close,
     data_list: state => state.pane_data_list
 }
