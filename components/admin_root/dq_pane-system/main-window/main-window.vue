@@ -51,7 +51,7 @@
                     @click="$store.dispatch('pane_system/maximize',config[pane_index].comp)"
                     ></i>-->
                     <i
-                      @click="paneSettings"
+                      @click="paneSettings(pane_index,config[pane_index].title)"
                       :style="{color:config[pane_index].pane_head_title_color}"
                       class="fas fa-cog padright050 pointer"
                     ></i>
@@ -175,6 +175,9 @@ import Console from "@/components/admin_sections/console//view/console.vue";
 import Task from "@/components/admin_sections/task/task.vue";
 
 //
+import PaneSettings from "../pane-settings";
+
+//
 import { mapGetters } from "vuex";
 import { TweenMax, TimelineLite, TweenLite } from "gsap";
 
@@ -213,21 +216,17 @@ export default {
         return "300px";
       }
     },
-    ani(id) {
-      // console.log(document.getElementById(id))
-    },
-    paneSettings() {
-      /**
-       * Opens up pane modal, with tabs,
-       * the tabs are --> | Raw Data | VDS | Properties | Change UI-Host
-       * VDS
-       * VDS - Valid Data Structure, explains the correct input in order for the pane to work correctly
-       * VDS - ex. "An array of objects, the object must this properties, a. b. c. d."
-       *
-       * Properties
-       * "Pane Id", "UI-host", "Pane width", "Pane name", "Pane set by"
-       *
-       */
+    ani(id) {},
+    paneSettings(pane_index, pane_title) {
+      this.PaneModalHandler({
+        pane_index: pane_index,
+        pane_name: pane_title,
+        component: PaneSettings,
+        title: "Pane Settings",
+        width: "500px",
+        CanBeClose: true,
+        header: true
+      });
     }
   },
   components: {
