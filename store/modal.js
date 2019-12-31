@@ -45,6 +45,20 @@ export const state = () => ({
       });
  */
 
+/**
+ * @api_modal pane
+ *    
+ * this.$emit("SetPaneModal", {
+      pane_index: this.my_pane_index,
+      pane_name: 'Dashboard',
+      component: ModalComponent, <-- .vue file import
+      title: "Create Collection",
+      width: "420px",
+      CanBeClose: true,
+      header: true
+    });
+ */
+
 export const mutations = {
     // set temp cmd
     set_tempCmd(state,value) {

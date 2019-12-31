@@ -10,8 +10,12 @@
           v-for="(panes,pane_index) in $store.state.pane_system.pane_index_list"
           :key="`p-${pane_index}`"
           role="pane-host"
+          :id="`${panes}-${pane_index}`"
           class="fullheight-percent flex"
-          :style="{minWidth: width_handler(config != undefined,config,pane_index), maxWidth: width_handler(config != undefined,config,pane_index)}"
+          :style="{
+            opacity: 0,
+            minWidth: width_handler(config != undefined,config,pane_index),
+            maxWidth: width_handler(config != undefined,config,pane_index)}"
         >
           <!-- pane -->
           <div
@@ -19,7 +23,7 @@
             :id="`${panes}`"
             class="fullheight-percent flex flexcol flex1"
           >
-            {{ani(`pane-${pane_index}-${panes} `)}}
+            <!-- {{ani(`${panes}-${pane_index}`)}} -->
             <!-- id use to be: pane-${pane_index}-${panes} -->
             <!-- <debug :data="{config_state,paneSytem:$store.state.pane_system,ModalFn}"></debug> -->
 
@@ -78,7 +82,9 @@
                 v-if="config[pane_index] && ModalFn[pane_index][config[pane_index].title].modal"
                 class="absolute fullwidth fullheight-percent flex flexcenter"
               >
-                <div style="border-top-left-radius:5px;border-top-right-radius:5px;border:1px solid white;">
+                <div
+                  style="border-top-left-radius:5px;border-top-right-radius:5px;border:1px solid white;"
+                >
                   <div
                     class="DqModalContainer"
                     :style="{width: ModalFn[pane_index][config[pane_index].title].width}"
@@ -207,7 +213,9 @@ export default {
         return "300px";
       }
     },
-    ani(id) {},
+    ani(id) {
+      // console.log(document.getElementById(id))
+    },
     paneSettings() {
       /**
        * Opens up pane modal, with tabs,
@@ -311,13 +319,23 @@ export default {
       }
     },
     pane_list_state(current, old) {
-      setTimeout(() => {
-        const latest_pane = current[current.length - 1];
-        const n = document.getElementById(latest_pane);
-        if (n) {
-          // TweenMax.fromTo(n, 0.3, { opacity: "0" }, { opacity: "1" });
-        }
-      }, 0);
+      const oel = document.getElementById(
+        `${current[current.length - 1]}-${current.length - 1}`
+      );
+
+      if (oel == null) {
+        setTimeout(() => {
+          const latest_pane = current[current.length - 1];
+          const n = document.getElementById(
+            `${latest_pane}-${current.length - 1}`
+          );
+          this.list_stage_old = current;
+
+          if (n) {
+            TweenMax.fromTo(n, 0.5, { opacity: "0" }, { opacity: "1" });
+          }
+        }, 0);
+      }
     }
   },
 
