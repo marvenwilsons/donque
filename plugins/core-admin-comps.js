@@ -24,6 +24,7 @@ import objectifyFlatSettings from "@/components/global-ui/objectify/objectify-fl
 import dqTab from "@/components/global-ui/tabs/dq-tab.vue";
 import saveToStagePane from "@/components/global-ui/dq-page/panes/stage-pane.vue";
 import listify from "@/components/global-ui/listify/listify.vue";
+import formMaker from "@/components/global-ui/formMaker/formMaker.vue";
 
 import debug from "@/components/global-ui/debug/debug.vue";
 Vue.component("debug", debug);
@@ -52,4 +53,5 @@ Vue.component("objectifyFlatSettings", objectifyFlatSettings);
 Vue.component("dqTab", dqTab);
 Vue.component("saveToStagePane", saveToStagePane);
 Vue.component("listify", listify);
+Vue.component("formMaker", formMaker);
 

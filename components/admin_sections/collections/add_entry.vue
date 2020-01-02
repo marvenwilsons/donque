@@ -1,20 +1,23 @@
 <template>
   <div class="fullheight-percent pad125">
-    <!-- <pre>{{this.data.schema}}</pre> -->
+    <!-- <pre>{{data.schema}}</pre> -->
     <!-- <pre>{{Create_Objectify_Schema(this.data.schema)}}</pre> -->
-    <div class="pad125" v-if="objectify_Config.data">
-      <objectifyFlatSettings :config="objectify_Config" :appearance="objectify_Appearance">
-        <!-- <div slot="modal" class="pad125 flex flexcenter" style="background:white;">
-          <pre>{{submit_data}}</pre>
-        </div> -->
-      </objectifyFlatSettings>
+    <div
+      class="relative flex fullwidth fullheight-percent"
+      style="overflow-x:hidden;overflow-y:scroll;"
+      v-if="objectify_Config.data"
+    >
+      <div class=" fullwidth flex flex1 pad125 absolute">
+        <div class="flex1">
+          <formMaker :schema="data.schema"></formMaker>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-
-import objtifyConverter from '@/components/global-ui/objectify/converter'
+import objtifyConverter from "@/components/global-ui/objectify/converter";
 import modal_AddCollection from "./modals/add_collection";
 
 export default {
@@ -63,7 +66,7 @@ export default {
 
     //       wrap_around_border_color: this.$store.state.theme.global.border_color,
     //       divider_border_color:this.$store.state.theme.global.border_color,
-                        
+
     //       keys_bg_color: this.$store.state.theme.global.secondary_bg_color,
     //       keys_text_color: 'black',
     //       values_bg_color: 'white',
@@ -76,10 +79,10 @@ export default {
 
     //       background_selected: this.$store.state.theme.global.secondary_bg_color,
 
-    //       modal_overlay_bg: this.$store.state.theme.global.secondary_bg_color 
+    //       modal_overlay_bg: this.$store.state.theme.global.secondary_bg_color
   }),
   mounted() {
-    const ModalComponent = modal_AddCollection
+    const ModalComponent = modal_AddCollection;
     // pane default
     this.$store.commit("pane_system/alter_pane_config", {
       pane_index: this.my_pane_index,
@@ -104,14 +107,14 @@ export default {
         type: "string",
         minChar: 1,
         maxChar: 100,
-        default: null,
+        default: null
       },
       tabindex: {
         type: "number",
         min: 0,
         max: 999,
         step: 1,
-        default: null,
+        default: null
       },
       /**
        * list origin from depends on isAList value
@@ -120,7 +123,7 @@ export default {
         type: "select",
         options: ["models", "collections"],
         default: null,
-        hoverInfo: "dq-studio global attribute: re renders element repeatedly",
+        hoverInfo: "dq-studio global attribute: re renders element repeatedly"
       },
       /**
        * Collections list and Models depends on isAList value and list origin from value
@@ -130,26 +133,26 @@ export default {
         minChar: 1,
         maxChar: 900,
         allowWhiteSpace: false,
-        default: null,
+        default: null
       },
       models: {
         type: "string",
         minChar: 1,
         maxChar: 900,
         allowWhiteSpace: false,
-        default: null,
-      },
-    }
+        default: null
+      }
+    };
   },
   methods: {
     Create_Objectify_Schema(RawSchemaFromSever) {
-      let final_Schema = undefined
+      let final_Schema = undefined;
 
       // logic
-      const ojbKeys = Object.keys(RawSchemaFromSever)
-      final_Schema = ojbKeys
+      const ojbKeys = Object.keys(RawSchemaFromSever);
+      final_Schema = ojbKeys;
 
-      return final_Schema
+      return final_Schema;
     }
   }
 };
