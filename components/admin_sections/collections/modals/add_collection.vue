@@ -291,6 +291,7 @@ export default {
           if (status) {
             this.$store.dispatch("collections/getCollectionDataFromServer");
             this.$emit("onCollectionCreated");
+            this.$emit("UnSetPaneModal");
           } else {
             this.Err = data.actions[0].msg;
           }

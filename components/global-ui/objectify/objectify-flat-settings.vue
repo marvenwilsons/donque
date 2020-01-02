@@ -35,7 +35,7 @@
             <div
               :id="`objectify-${obj_index}`"
               role="display object index"
-              class="flex1 flexcenter pad025 pointer flexwrap"
+              class="flex1 flexcenter pad050 pointer flexwrap"
               :style="get_keys_style"
               :title="obj_key.hoverInfo"
             >{{obj_index}}</div>

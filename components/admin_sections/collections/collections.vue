@@ -187,7 +187,7 @@ export default {
     modal_State(current, prev) {
       if (current) {
         if (this._collections.length) {
-          this.can_be_close = true
+          this.can_be_close = true;
         }
       }
     }
@@ -197,8 +197,17 @@ export default {
   },
   methods: {
     addNewCollection() {
-      this.modal_State = true;
-      this.modal_Content = "Create Collection";
+      // this.modal_State = true;
+      // this.modal_Content = "Create Collection";
+      this.$emit("SetPaneModal", {
+        pane_index: this.my_pane_index,
+        pane_name: 'Data Collections',
+        component: modal_AddCollection,
+        title: "Create Collection",
+        width: "420px",
+        CanBeClose: true,
+        header: true
+      });
     },
     delete_Collection() {
       setTimeout(() => {

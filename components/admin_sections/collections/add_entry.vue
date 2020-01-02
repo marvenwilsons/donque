@@ -1,9 +1,8 @@
 <template>
   <div class="fullheight-percent pad125">
-    Add Entry
     <!-- <pre>{{this.data.schema}}</pre> -->
-    <pre>{{Create_Objectify_Schema(this.data.schema)}}</pre>
-    <div v-if="objectify_Config.data">
+    <!-- <pre>{{Create_Objectify_Schema(this.data.schema)}}</pre> -->
+    <div class="pad125" v-if="objectify_Config.data">
       <objectifyFlatSettings :config="objectify_Config" :appearance="objectify_Appearance">
         <!-- <div slot="modal" class="pad125 flex flexcenter" style="background:white;">
           <pre>{{submit_data}}</pre>
@@ -23,7 +22,7 @@ export default {
   beforeCreate() {
     this.$store.commit("pane_system/set_pane_config", {
       title: null,
-      pane_width: "800px",
+      pane_width: "80%",
       pane_head_bg_color: "rgb(48, 51, 64)",
       renderOnce: true,
       pane_head_title_color: "white"
@@ -41,34 +40,46 @@ export default {
       title_text_color: "gray",
       sub_title_description_text_color: "gray",
 
-      wrap_around_border_color: "lightgray",
-      divider_border_color: "lightgray",
+      wrap_around_border_color: "#B0BEC5",
+      divider_border_color: "#B0BEC5",
 
-      keys_bg_color: "whitesmoke",
-      keys_text_color: "black",
-      values_bg_color: "whitesmoke",
-      values_text_color: "black",
+      keys_bg_color: "#CFD8DC",
+      keys_text_color: "#263238",
+      values_bg_color: "#ECEFF1",
+      values_text_color: "#263238",
 
-      select_arrow_down_color: "black",
+      select_arrow_down_color: "#263238",
 
       button_bg_color: "blue",
       button_text_color: "white",
 
-      background_selected: "",
+      background_selected: "#ECEFF1",
 
-      modal_overlay_bg: "black"
+      modal_overlay_bg: "#263238"
     }
+
+    // title_text_color: 'gray',
+    //       sub_title_description_text_color: 'gray',
+
+    //       wrap_around_border_color: this.$store.state.theme.global.border_color,
+    //       divider_border_color:this.$store.state.theme.global.border_color,
+                        
+    //       keys_bg_color: this.$store.state.theme.global.secondary_bg_color,
+    //       keys_text_color: 'black',
+    //       values_bg_color: 'white',
+    //       values_text_color: 'black',
+
+    //       select_arrow_down_color: 'black',
+
+    //       button_bg_color: 'blue',
+    //       button_text_color: 'white',
+
+    //       background_selected: this.$store.state.theme.global.secondary_bg_color,
+
+    //       modal_overlay_bg: this.$store.state.theme.global.secondary_bg_color 
   }),
   mounted() {
     const ModalComponent = modal_AddCollection
-    this.$emit("SetPaneModal", {
-        component: ModalComponent,
-        title: 'Create Collection',
-        width: '420px',
-        CanBeClose: true,
-        header: true,
-        pane_name:`Add New ${this.data["Collection Name"]}`
-      });
     // pane default
     this.$store.commit("pane_system/alter_pane_config", {
       pane_index: this.my_pane_index,
