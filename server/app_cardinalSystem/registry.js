@@ -3,7 +3,8 @@ module.exports = (() => {
         adminMethods: require('../app_programs/administration/index'),
         dqapp: require('../app_programs/protocols/index'),
         pageMethods: require('../app_programs/page/index'),
-        collectionMethods: require('../app_programs/collections/index')
+        collectionMethods: require('../app_programs/collections/index'),
+        fileSystem: require('../app_programs/file_system/index')
     }
 })()
 
