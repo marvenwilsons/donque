@@ -1,11 +1,15 @@
 <template>
-    <div style="height:600px;">
-        select file
+    <div style="height:600px;border:1px solid lightgray;">
+        <fileExplorer :filter="CustomData" />
     </div>
 </template>
 
 <script>
+import fileExplorer from './fileExplorer'
 export default {
-    
+    props: ['CustomData'],
+    components: {
+        fileExplorer
+    }
 }
 </script>
