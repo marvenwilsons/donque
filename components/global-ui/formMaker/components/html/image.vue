@@ -3,40 +3,82 @@
     <transition name="fade">
       <div v-if="isAttrShow" style="background:lightgray" class="bordergray pad050 marginbottom125">
         <!-- Attributes: src, alt, witdth, height, longdesc, id, class -->
-        <div>Image Attributes:</div>
+        <div class="flex">
+          <div
+            :style="{textDecoration: selectedGroup == 'attrs' ? 'underline' : ''}"
+            @click="selectedGroup = 'attrs'"
+            class="marginright125 pointer"
+          >Image Attributes</div>
+          <div
+            :style="{textDecoration: selectedGroup == 'dimensions' ? 'underline' : ''}"
+            @click="selectedGroup = 'dimensions'"
+            class="marginright125 pointer"
+          >Image Dimensions</div>
+          <div
+            :style="{textDecoration: selectedGroup == 'margins' ? 'underline' : ''}"
+            @click="selectedGroup = 'margins'"
+            class="pointer"
+          >Image Margins</div>
+        </div>
         <div class="pad050 flex flexwrap">
-          <div>
-            <i>src:</i>
-            <input class="pad025 margin050" type="text" />
+          <div class="flex flexwrap" v-if="selectedGroup == 'attrs'">
+            <div class="" >
+              <i>src:</i>
+              <input v-model="selectedImg.src" class="pad025 margin050" type="text" />
+              <span @click="$emit('openFileSystem')" class="pointer">open file system</span>
+            </div>
+            <div class="marginleft125">
+              <i>alt:</i>
+              <input v-model="selectedImg.alt" class="pad025 margin050" type="text" />
+            </div>
+            <div>
+              <i>id:</i>
+              <input v-model="selectedImg.id" class="pad025 margin050" type="text" />
+            </div>
+            <div>
+              <i>class:</i>
+              <input v-model="selectedImg.class" class="pad025 margin050" type="text" />
+            </div>
+            <div>
+              <i>longdesc:</i>
+              <input v-model="selectedImg.longdesc" class="pad025 margin050" type="text" />
+            </div>
           </div>
-          <div>
-            <i>alt:</i>
-            <input class="pad025 margin050" type="text" />
+          <div class="flex flexwrap" v-if="selectedGroup == 'dimensions'">
+            <div>
+              <i>width:</i>
+              <input v-model="selectedImg.width" class="pad025 margin050" type="text" />
+            </div>
+            <div>
+              <i>height:</i>
+              <input v-model="selectedImg.height" class="pad025 margin050" type="text" />
+            </div>
           </div>
-          <div>
-            <i>id:</i>
-            <input v-model="selectedImg.id" class="pad025 margin050" type="text" />
-          </div>
-          <div>
-            <i>class:</i>
-            <input class="pad025 margin050" type="text" />
-          </div>
-          <div>
-            <i>width:</i>
-            <input v-model="selectedImg.width" class="pad025 margin050" type="text" />
-          </div>
-          <div>
-            <i>height:</i>
-            <input v-model="selectedImg.height" class="pad025 margin050" type="text" />
-          </div>
-          <div>
-            <i>longdesc:</i>
-            <input class="pad025 margin050" type="text" />
+          <div class="flex flexwrap" v-if="selectedGroup == 'margins'">
+            <div>
+              <i>margin-top:</i>
+              <input v-model="selectedImg.margin.marginTop" class="pad025 margin050" type="text" />
+            </div>
+            <div>
+              <i>margin-bottom:</i>
+              <input v-model="selectedImg.margin.marginBottom" class="pad025 margin050" type="text" />
+            </div>
+            <div>
+              <i>margin-left:</i>
+              <input v-model="selectedImg.margin.marginLeft" class="pad025 margin050" type="text" />
+            </div>
+            <div>
+              <i>margin-right:</i>
+              <input v-model="selectedImg.margin.marginRight" class="pad025 margin050" type="text" />
+            </div>
           </div>
         </div>
       </div>
     </transition>
     <!--  -->
+    <pre>
+      {{finalHtml}}
+    </pre>
     <div>
       <div
         v-for="(imgs, img_index) in imgArray"
@@ -45,8 +87,10 @@
         class="pointer flex flexcenter"
         style="border:1px solid lightgray; height:100px; width:100px;"
       >
-      <span class="fullwidth flex flexcenter" v-if="imgs.src == ''">No Img</span>
-        <img v-if="imgs.src" src alt />
+        <span class="fullwidth flex flexcenter" v-if="imgArray[img_index].src == ''">No Img</span>
+        <transition name="fade">
+          <img v-if="imgs.src" src alt />
+        </transition>
       </div>
     </div>
   </div>
@@ -59,8 +103,74 @@ export default {
     imgArray: [],
     isAttrShow: false,
     selectedImg: undefined,
-    selectedImgIndex: undefined
+    selectedImgIndex: undefined,
+    selectedGroup: undefined,
+    containerId: undefined,
+    margins: undefined
   }),
+  computed: {
+    finalImgHtml() {
+      let ar = [];
+
+      let margins = [];
+      const marginHandler = marginObj => {
+        Object.keys(marginObj).map(e => {
+          if (marginObj[e] != undefined) {
+            if (marginObj[e].trim() != "") {
+              switch (e) {
+                case "marginRight":
+                  margins.push(`margin-right:${marginObj[e]};`);
+                  break;
+                case "marginLeft":
+                  margins.push(`margin-left:${marginObj[e]};`);
+                  break;
+                case "marginTop":
+                  margins.push(`margin-top:${marginObj[e]};`);
+                  break;
+                case "marginBottom":
+                  margins.push(`margin-bottom:${marginObj[e]};`);
+                  break;
+              }
+            }
+          }
+        });
+        if (margins.length) {
+          this.margins = `style="${margins.join(" ")}"`
+          return `style="${margins.join(" ")}"`;
+        } else {
+          return null
+        }
+      };
+
+      for (var i = 0; i < this.imgArray.length; i++) {
+        ar.push(
+          `<img scr="${this.imgArray[i].src}" alt="${this.imgArray[i].alt}" ${
+            this.imgArray[i].class ? `class="${this.imgArray[i].class}"` : ""
+          }${
+            this.imgArray[i].longdesc
+              ? `longdesc="${this.imgArray[i].longdesc}"`
+              : ""
+          } ${marginHandler(this.imgArray[i].margin) ? this.margins : ''} id="${
+            this.imgArray[i].id
+          }" height="${this.imgArray[i].height}" width="${
+            this.imgArray[i].width
+          }" ></img>`
+        );
+      }
+
+      if (ar.length > 1) {
+        return ar.join(" \n\t  ");
+      } else if (ar.length == 1) {
+        return ar.join();
+      }
+    },
+    finalHtml() {
+      return `
+        <div id="${this.containerId}" >
+          ${this.finalImgHtml}
+        </div>`;
+    }
+  },
   methods: {
     makeId(length) {
       var result = "";
@@ -75,18 +185,16 @@ export default {
       return result;
     },
     showAttr(attr, index) {
-      this.selectedImg = attr;
-
-      // this.isAttrShow = true;
-
       if (this.selectedImgIndex === index) {
         this.isAttrShow = false;
         this.selectedImgIndex = undefined;
+        this.selectedImg = undefined;
       } else {
         this.isAttrShow = true;
+        this.selectedImg = attr;
+        this.selectedImgIndex = index;
+        this.selectedGroup = "attrs";
       }
-
-      this.selectedImgIndex = index;
     },
     addImageToimgArray(containerId) {
       this.imgArray.push({
@@ -96,12 +204,18 @@ export default {
         height: "100px",
         longdesc: "",
         id: this.makeId(7),
-        class: ""
+        class: "",
+        margin: {
+          marginTop: undefined,
+          marginBottom: undefined,
+          marginLeft: undefined,
+          marginRight: undefined
+        }
       });
     }
   },
-  watch: {},
   mounted() {
+    this.containerId = this.makeId(8);
     if (this.imgArray.length == 0) {
       this.imgArray.push({
         src: "",
@@ -110,7 +224,13 @@ export default {
         height: "100px",
         longdesc: "",
         id: this.makeId(7),
-        class: ""
+        class: "",
+        margin: {
+          marginTop: undefined,
+          marginBottom: undefined,
+          marginLeft: undefined,
+          marginRight: undefined
+        }
       });
     }
   }

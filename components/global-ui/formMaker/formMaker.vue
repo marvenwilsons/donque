@@ -6,7 +6,7 @@
             <div class="flex1 margintop050">
                 <dqBoolean v-if="schema[items] == 'Boolean'" />
                 <dqDate v-if="schema[items] == 'Date'" />
-                <dqHtml v-if="schema[items] == 'HTML'" />
+                <dqHtml @openFileSystem="$emit('openFileSystem')" v-if="schema[items] == 'HTML'" />
                 <dqNumber :placeholder="items" v-if="schema[items] == 'Number'" />
                 <dqShortString :placeholder="items" v-if="schema[items] == 'Short String'" />
                 <dqLongString :name="items" v-if="schema[items] == 'Long String'" />

@@ -103,6 +103,7 @@
                 <dqAud :data="items" v-if="items[Object.keys(items)[0]].type == 'aud'" />
                 <dqHeading :data="items" v-if="items[Object.keys(items)[0]].type == 'heading'" />
                 <dqImage
+                  @openFileSystem="$emit('openFileSystem')" 
                   ref="dqImage"
                   :data="items"
                   v-if="items[Object.keys(items)[0]].type == 'img'"
@@ -178,6 +179,9 @@ export default {
       if (tag == "img") {
         this.$refs.dqImage[0].addImageToimgArray(containerId);
       }
+    },
+    openFileSystem() {
+
     }
   }
 };

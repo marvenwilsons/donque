@@ -7,9 +7,9 @@
       style="overflow-x:hidden;overflow-y:scroll;"
       v-if="objectify_Config.data"
     >
-      <div class=" fullwidth flex flex1 pad125 absolute">
+      <div class="fullwidth flex flex1 pad125 absolute">
         <div class="flex1">
-          <formMaker :schema="data.schema"></formMaker>
+          <formMaker @openFileSystem="openFileSystem" :schema="data.schema"></formMaker>
         </div>
       </div>
     </div>
@@ -19,6 +19,7 @@
 <script>
 import objtifyConverter from "@/components/global-ui/objectify/converter";
 import modal_AddCollection from "./modals/add_collection";
+import selectFileModal from "../../admin_sections/files/selectFileModal"
 
 export default {
   props: ["my_pane_index", "data"],
@@ -153,6 +154,17 @@ export default {
       final_Schema = ojbKeys;
 
       return final_Schema;
+    },
+    openFileSystem() {
+      this.$emit("SetPaneModal", {
+        pane_index: this.my_pane_index,
+        pane_name: `Add New ${this.data['Collection Name']}`,
+        component: selectFileModal,
+        title: "Select file from file system",
+        width: "1090px",
+        CanBeClose: true,
+        header: true
+      });
     }
   }
 };
