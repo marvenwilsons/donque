@@ -101,6 +101,7 @@ export default {
           this.ModalsPaneNameArray[ModalIndex][Modal.pane_name].background = Modal.background
           this.ModalsPaneNameArray[ModalIndex][Modal.pane_name].header = Modal.header
           this.ModalsPaneNameArray[ModalIndex][Modal.pane_name].CanBeClose = Modal.CanBeClose
+          this.ModalsPaneNameArray[ModalIndex][Modal.pane_name].CustomData = Modal.CustomData
 
           this.OpenModal(ModalIndex);
         }, 50);

@@ -112,7 +112,7 @@
                       :style="{background: ModalFn[pane_index][config[pane_index].title].background ? ModalFn[pane_index][config[pane_index].title].background : 'white'}"
                       class="pad125"
                     >
-                      <div :is="ModalFn[pane_index][config[pane_index].title].modal"></div>
+                      <div :CustomData="ModalFn[pane_index][config[pane_index].title].CustomData" :is="ModalFn[pane_index][config[pane_index].title].modal"></div>
                     </div>
                   </div>
                 </div>
