@@ -1,5 +1,5 @@
 <template>
-    <div style="height:600px;border:1px solid lightgray;">
+    <div style="height:700px;border:1px solid lightgray;">
         <fileExplorer :filter="CustomData" />
     </div>
 </template>

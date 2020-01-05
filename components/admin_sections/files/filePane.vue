@@ -11,11 +11,15 @@
             <i v-if="contents.type == 'dir'" class="fas fa-folder marginleft025 dir"></i>
             <i
               v-if="contents.type == 'file' && getFileIcon(contents.name) == 'img'"
-              class="fas fa-file-image marginleft025 fio"
+              class="far fa-image marginleft025 fio"
             ></i>
             <i
               v-if="contents.type == 'file' && getFileIcon(contents.name) == 'video'"
-              class="fas fa-file-video marginleft025 fio"
+              class="fas fa-video marginleft025 fio"
+            ></i>
+            <i
+              v-if="contents.type == 'file' && getFileIcon(contents.name) == 'audio'"
+              class="fas fa-music marginleft025 fio"
             ></i>
             <span class="marginleft025">{{contents.name}}</span>
           </div>
@@ -35,17 +39,30 @@
       v-if="Array.isArray(files) == false"
     >
       <div>
-        <div style="border:5px solid lightgray; height:250px;width:350px;" v-if="getFileIcon(files.name) == 'img'" >
-          <img src="" alt="">
+        <div
+          style=" height:250px;width:350px;"
+          v-if="getFileIcon(files.name) == 'img'"
+        >
+          <img style="border:2px solid lightgray;"  height="22" width="150px" :src="`/${pathHandler(files.publicPath)}`" />
         </div>
-        <i
-          style="font-size:50px;"
-          v-if="getFileIcon(files.name) == 'video'"
-          class="fas fa-file-video marginleft025 fio"
-        ></i>
       </div>
       <div>
-        <h5 style="color:gray;">{{files.name}}</h5>
+        <h5 class="flex flexcol" style="color:gray;">
+          <div class="flex flexcenter pad125">
+            <i v-if="getFileIcon(files.name) == 'video'" class="fas fa-file-video fio thumic"></i>
+            <i v-if="getFileIcon(files.name) == 'audio'" class="fas fa-music fio thumic"></i>
+            <i v-if="getFileIcon(files.name) == 'img'" class="far fa-image fio thumic"></i>
+          </div>
+          <span>{{files.name}}</span>
+        </h5>
+      </div>
+      <div>
+        <div v-for="(prop,prop_index) in files" :key="prop">
+          <div style="margin-left:55px;color:gray;" class="flex flexcenter  padleft125 ">
+           <div v-if="prop_index != 'pane_index'"  class="flex1 flexend flex  marginright025 pad025" > <strong>{{prop_index}}:</strong></div>
+            <div v-if="prop_index != 'pane_index'" class="flex2 pad025" >{{prop}}</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -53,15 +70,20 @@
 
 <script>
 export default {
-  props: ["files","pane_index"],
+  props: ["files", "pane_index"],
   data: () => ({
     panes: [],
     selected: undefined
   }),
   methods: {
+    pathHandler(path) {
+      path = path.replace('static/','')
+      return path
+    },
     getFileIcon(fileName) {
       const imgs = [".jpg", ".jpeg", ".png", ".gif", ".bmp"];
       const video = [".mp4", ".mov"];
+      const audio = [".mp3"];
       const doc = [".txt"];
 
       const ext = `.${fileName.split(".")[1]}`;
@@ -74,13 +96,15 @@ export default {
         fileIs = "video";
       } else if (doc.includes(ext.toLowerCase())) {
         fileIs = "doc";
+      } else if (audio.includes(ext.toLowerCase())) {
+        fileIs = "audio";
       }
 
       return fileIs;
     },
     select(contents) {
-      contents.pane_index = this.pane_index
-      this.$emit('select', contents)
+      contents.pane_index = this.pane_index;
+      this.$emit("select", contents);
     }
   },
   mounted() {
@@ -110,5 +134,8 @@ export default {
 }
 .indvfls:hover {
   background: rgba(211, 211, 211, 0.397);
+}
+.thumic {
+  font-size: 50px;
 }
 </style>

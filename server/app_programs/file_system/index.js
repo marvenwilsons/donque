@@ -3,7 +3,7 @@ module.exports = {
     createDir: require('./dir/createDir'),
     renameDir: require('./dir/renameDir'),
     deleteDir: require('./dir/deleteDir'),
-    getDirContent: require('./dir/getDirContent'),
+    getDirContents: require('./dir/getDirContent'),
     
     // file
     createFile : require('./file/createFile'),

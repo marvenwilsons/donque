@@ -163,7 +163,8 @@ export default {
         title: "Select file from file system",
         width: "1090px",
         CanBeClose: true,
-        header: true
+        header: true,
+        CustomData: 'img'
       });
     }
   }
