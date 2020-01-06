@@ -83,7 +83,7 @@
           style="color:white;"
           class="buttonreset pad050 darkprimary"
         >
-          <strong>Select This Image</strong>
+          <strong @click="$store.dispatch('file_system/setTempData',files), closeModal()" >Select This Image</strong>
         </button>
         <button
           v-if="filter == 'video' && filterBtnHandler(files.name,filter)"
@@ -120,7 +120,7 @@ import modalCreateFile from "./modals/create-file";
 import modalCreateFolder from "./modals/create-folder";
 
 export default {
-  props: ["files", "pane_index", "filter"],
+  props: ["files", "pane_index", "filter", 'UnsetPaneModal'],
   data: () => ({
     panes: [],
     selected: undefined
@@ -129,6 +129,9 @@ export default {
     pathHandler(path) {
       path = path.replace("static/", "");
       return path;
+    },
+    closeModal() {
+      this.UnsetPaneModal()
     },
     getFileIcon(fileName) {
       const imgs = [".jpg", ".jpeg", ".png", ".gif", ".bmp"];

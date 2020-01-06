@@ -1,13 +1,13 @@
 <template>
-    <div style="height:700px;border:1px solid lightgray;">
-        <fileExplorer :filter="CustomData" />
+    <div style="border:1px solid lightgray;">
+        <fileExplorer :UnsetPaneModal="UnsetPaneModal" :filter="CustomData" />
     </div>
 </template>
 
 <script>
 import fileExplorer from './fileExplorer'
 export default {
-    props: ['CustomData'],
+    props: ['CustomData', 'UnsetPaneModal'],
     components: {
         fileExplorer
     }

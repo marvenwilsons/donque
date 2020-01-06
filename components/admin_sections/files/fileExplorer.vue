@@ -16,6 +16,7 @@
           :pane_index="fp_index"
           :files="panes[fp_index]"
           :filter="filter"
+          :UnsetPaneModal="UnsetPaneModal"
           
         ></div>
       </div>
@@ -31,7 +32,7 @@ import paneSystem from "./pane-system-mixin";
 
 export default {
   mixins: [scrollMixIn, paneSystem],
-  props: ["filter"],
+  props: ["filter", 'UnsetPaneModal'],
   data: () => ({}),
   components: {
     filePane

@@ -161,7 +161,8 @@ export default {
         pane_name: `Add New ${this.data['Collection Name']}`,
         component: selectFileModal,
         title: "Select file from file system",
-        width: "1090px",
+        width: "80%",
+        height: "70%",
         CanBeClose: true,
         header: true,
         CustomData: 'img'

@@ -22,7 +22,8 @@
         </div>
         <div class="pad050 flex flexwrap">
           <div class="flex flexwrap" v-if="selectedGroup == 'attrs'">
-            <div class="" >
+            <div>
+              <!-- native attr -->
               <i>src:</i>
               <input v-model="selectedImg.src" class="pad025 margin050" type="text" />
               <span @click="$emit('openFileSystem')" class="pointer">open file system</span>
@@ -44,6 +45,7 @@
               <input v-model="selectedImg.longdesc" class="pad025 margin050" type="text" />
             </div>
           </div>
+          <!-- dimensions -->
           <div class="flex flexwrap" v-if="selectedGroup == 'dimensions'">
             <div>
               <i>width:</i>
@@ -54,6 +56,7 @@
               <input v-model="selectedImg.height" class="pad025 margin050" type="text" />
             </div>
           </div>
+          <!-- margins -->
           <div class="flex flexwrap" v-if="selectedGroup == 'margins'">
             <div>
               <i>margin-top:</i>
@@ -79,24 +82,26 @@
     <pre>
       {{finalHtml}}
     </pre>
-    <div>
+    <div  >
       <div
         v-for="(imgs, img_index) in imgArray"
         :key="img_index"
         @click="showAttr(imgs,img_index)"
         class="pointer flex flexcenter"
-        style="border:1px solid lightgray; height:100px; width:100px;"
+        :style="{border:'1px solid lightgray', height:imgs.height, width: imgs.width}"
       >
         <span class="fullwidth flex flexcenter" v-if="imgArray[img_index].src == ''">No Img</span>
         <transition name="fade">
-          <img v-if="imgs.src" src alt />
+          <img v-if="imgs.src"  :src="imgs.src" :height="imgs.height" :width="imgs.width"/>
         </transition>
       </div>
     </div>
+    <!-- <span v-html="finalHtml" ></span> -->
   </div>
 </template>
 
 <script>
+
 export default {
   props: ["data", "addImage"],
   data: () => ({
@@ -106,7 +111,8 @@ export default {
     selectedImgIndex: undefined,
     selectedGroup: undefined,
     containerId: undefined,
-    margins: undefined
+    margins: undefined,
+    scr: undefined,
   }),
   computed: {
     finalImgHtml() {
@@ -144,7 +150,7 @@ export default {
 
       for (var i = 0; i < this.imgArray.length; i++) {
         ar.push(
-          `<img scr="${this.imgArray[i].src}" alt="${this.imgArray[i].alt}" ${
+          `<img scr="static${this.imgArray[i].src}" alt="${this.imgArray[i].alt}" ${
             this.imgArray[i].class ? `class="${this.imgArray[i].class}"` : ""
           }${
             this.imgArray[i].longdesc
@@ -169,6 +175,31 @@ export default {
         <div id="${this.containerId}" >
           ${this.finalImgHtml}
         </div>`;
+    },
+    fileSysTempData() {
+      return this.$store.state.file_system.tempData
+    },
+    getSelectedImg() {
+      return this.selectedImg
+    }
+  },
+  watch: {
+    fileSysTempData(current,old) {
+      if(current) {
+        this.imgArray[this.selectedImgIndex].src = current.publicPath.replace('static','')
+        
+      }
+    },
+    getSelectedImg : {
+      handler: function (current,old) {
+        this.imgArray[this.selectedImgIndex] = current
+        // this.ready = false
+
+        // setTimeout(() => {
+        //   this.ready = true
+        // }, 0);
+      },
+      deep: true
     }
   },
   methods: {

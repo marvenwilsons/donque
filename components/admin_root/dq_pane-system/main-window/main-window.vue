@@ -82,15 +82,9 @@
                 v-if="config[pane_index] && ModalFn[pane_index][config[pane_index].title].modal"
                 class="absolute fullwidth fullheight-percent flex flexcenter"
               >
-                <div
-                  style="border-top-left-radius:5px;border-top-right-radius:5px;border:1px solid white;"
-                >
-                  <div
-                    class="DqModalContainer"
-                    :style="{width: ModalFn[pane_index][config[pane_index].title].width}"
-                    :id="`DqModalContainer-${pane_index}`"
-                  >
-                    <!-- modal head -->
+                <div :style="{width: ModalFn[pane_index][config[pane_index].title].width, height: ModalFn[pane_index][config[pane_index].title].height}">
+                  <div class="DqModalContainer fullheight-percent" :id="`DqModalContainer-${pane_index}`">
+                    <!-- modal heading -->
                     <div
                       v-if="ModalFn[pane_index][config[pane_index].title].header"
                       style="background: rgb(48, 51, 64);color:white;border-top-left-radius:5px;border-top-right-radius:5px;"
@@ -110,9 +104,23 @@
                     </div>
                     <div
                       :style="{background: ModalFn[pane_index][config[pane_index].title].background ? ModalFn[pane_index][config[pane_index].title].background : 'white'}"
-                      class="pad125"
+                      class="pad125 fullheight-percent"
                     >
-                      <div :CustomData="ModalFn[pane_index][config[pane_index].title].CustomData" :is="ModalFn[pane_index][config[pane_index].title].modal"></div>
+                    <!-- modal dynamic component from the modal caller, the component used in this modal ":is" cannot be found in this
+                    component "main-window.vue" because it is not registered here -->
+                      <div
+                        class="fullheight-percent"
+                        :UnsetPaneModal="() => {
+                          // UsSetPaneModal is a function that closed the modal, it is passed down as a prop, to a component that spawns the modal
+                          // thas is not direct child to the pane. Components that is not direct child to the pane cannot close the modal pane directly
+                          // it needs the emit an event and the parent needs to catch the event, and event bubbling can be long depending on the level
+                          // of nesting of components, so instead of doing that, passing the close modal function by default to its child is more 
+                          // effecient compared to bubble event.
+                          $emit('UnSetPaneModal', {pane_index, pane_name: config[pane_index].title})
+                        }"
+                        :CustomData="ModalFn[pane_index][config[pane_index].title].CustomData"
+                        :is="ModalFn[pane_index][config[pane_index].title].modal"
+                      ></div>
                     </div>
                   </div>
                 </div>
@@ -192,7 +200,8 @@ export default {
       scroll_val_temp: 0,
       main_w: undefined,
       max_scroll: 333,
-      latest_id: undefined
+      latest_id: undefined,
+      close_modal_method: undefined
     };
   },
   methods: {
@@ -358,6 +367,8 @@ export default {
     setTimeout(() => {
       this.main_w = document.getElementById("dq-main-w");
     }, 0);
+
+    this.close_modal_method = this.UnSetPaneModal
   }
 };
 </script>
@@ -374,5 +385,10 @@ export default {
   z-index: 999;
   background-color: rgba(91, 95, 110, 0.034);
   border-radius: 5px;
+}
+#dq-pane-modal-host > div {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border: 1px solid white;
 }
 </style>

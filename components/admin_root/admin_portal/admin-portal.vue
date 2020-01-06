@@ -97,6 +97,7 @@ export default {
 
           this.ModalsPaneNameArray[ModalIndex][Modal.pane_name].modal = Modal.component
           this.ModalsPaneNameArray[ModalIndex][Modal.pane_name].width = Modal.width
+          this.ModalsPaneNameArray[ModalIndex][Modal.pane_name].height = Modal.height
           this.ModalsPaneNameArray[ModalIndex][Modal.pane_name].title = Modal.title
           this.ModalsPaneNameArray[ModalIndex][Modal.pane_name].background = Modal.background
           this.ModalsPaneNameArray[ModalIndex][Modal.pane_name].header = Modal.header
