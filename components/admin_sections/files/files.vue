@@ -1,6 +1,6 @@
 <template>
   <div class="fullheight-percent">
-    <fileExplorer />
+    <fileExplorer @SetPaneModal="SetPaneModal" />
   </div>
 </template>
 
@@ -23,6 +23,10 @@ export default {
 
   data: () => ({}),
 
-  methods: {}
+  methods: {
+    SetPaneModal(val) {
+      this.$emit('SetPaneModal',val)
+    },
+  }
 };
 </script>

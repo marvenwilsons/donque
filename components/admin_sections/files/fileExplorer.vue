@@ -11,9 +11,12 @@
         <div
           style="overflow-y: scroll;"
           @select="select"
+          @SetPaneModal="SetPaneModal"
           :is="'filePane'"
           :pane_index="fp_index"
           :files="panes[fp_index]"
+          :filter="filter"
+          
         ></div>
       </div>
       <!--  -->
@@ -28,12 +31,15 @@ import paneSystem from "./pane-system-mixin";
 
 export default {
   mixins: [scrollMixIn, paneSystem],
-  props: ["mode"],
+  props: ["filter"],
   data: () => ({}),
   components: {
     filePane
   },
   methods: {
+    SetPaneModal(val) {
+      this.$emit('SetPaneModal',val)
+    },
     select(val) {
       if (val.type == "file") {
         this.pane_start(val, val.pane_index);
