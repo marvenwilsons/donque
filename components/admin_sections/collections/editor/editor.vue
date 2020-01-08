@@ -1,10 +1,13 @@
 <template>
   <div class="fullwidth fullheight-percent flex">
     <!-- stage area -->
-    <div style="background:#f5fbfd;" class="flex1">
-      <div class="fullheight-percent relative pad125 fullheight-percent" style="overflow-y:scroll;">
+    <div style="background:#f5fbfd;" class="flex1 flex">
+      <div
+        class="fullheight-percent relative pad125 fullheight-percent flex1"
+        style="overflow-y:scroll;"
+      >
         <div
-          class="fullheight-percent"
+          class
           style="max-width:1080px;background:white;box-shadow: 1px 1px 10px 1px #393e4210;"
         >
           <div v-for="(item,item_index) in stage_array" :key="`${item}-${item_index}`">
@@ -20,11 +23,31 @@
       </div>
     </div>
     <!-- options panel -->
-    <div style="width:21%;background:#dceffa;" class="relative flex flexcol">
+    <div style="min-width:21%;max-width:21%;background:#dceffa;" class="relative flex flexcol">
       <!-- save and publish -->
-      <div class="flex flexend pad125">
-        <button class="buttonreset pad050 borderRad4 editorBtn">Save and publish</button>
+      <div
+        style="background:#f8fcfe; border-bottom:5px solid #e1e6e8;"
+        class="flex spacebetween flexwrap"
+      >
+        <div class="pointer dq-editor-els-text-color   flex1 pad050  flex flexcenter">
+          <strong>Components</strong>
+        </div>
+        <div
+          :style="{background: selected_opt == 'con' ? '#dceffa' : '' }"
+          class="pointer dq-editor-els-text-color   flex1 pad050 flex flexcenter"
+        >
+          <strong>Container</strong>
+        </div>
+        <div
+          :style="{background: selected_opt == 'prop' ? '#dceffa' : '' }"
+          class="pointer dq-editor-els-text-color flex1 pad050 flex flexcenter"
+        >
+          <strong>Element</strong>
+        </div>
       </div>
+      <!-- <div class="flex flexend pad125">
+        <button class="buttonreset pad050 borderRad4 editorBtn">Save and publish</button>
+      </div>-->
       <!-- dynamic options sections -->
       <div style="overflow-y:scroll;" class="flex1 relative">
         <!-- strong -->
@@ -52,13 +75,9 @@
       </div>
       <!-- dynamic buttons section -->
       {{$store.state.editor.currentClicked}}
-      <div class="flex flexend pad125 relative">
+      <div style="border-top:5px solid #e1e6e8;" class="flex flexend pad050 relative">
         <transition name="fade">
-          <button
-            @click="addElement"
-            v-if="selected_el"
-            class="buttonreset pad050 borderRad4 editorBtn"
-          >Add Element</button>
+          <button @click="addElement" class="buttonreset pad050 borderRad4 editorBtn">Save & Publish</button>
         </transition>
       </div>
     </div>

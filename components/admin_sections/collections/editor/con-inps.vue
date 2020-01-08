@@ -23,7 +23,7 @@ export default {
 
 <style scoped >
 .borderNone {
-  border: 1px solid rgba(135, 206, 250, 0.411);
+  border: 1px solid rgba(135, 206, 250, 0.329);
 }
 .borderNone:active {
   outline: none;

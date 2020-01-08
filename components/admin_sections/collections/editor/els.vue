@@ -21,12 +21,8 @@ export default {
 .dq-editor-els-el {
   background: #f8fcfe;
   box-shadow: 1px 1px 10px 1px #393e4210;
-  border: 2px solid #b6def4;
+  border: 2px solid #b6def4af;
 }
-/* #dq-editor-els-el:hover {
-  box-shadow: 1px 1px 10px 1px #393e4244;
-  transition: 0.3s;
-} */
 .dq-editor-els-el-active {
   box-shadow: 1px 1px 10px 1px #393e4281;
 }
