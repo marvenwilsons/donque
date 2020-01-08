@@ -9,7 +9,7 @@
     >
       <div class="fullwidth flex flex1 pad125 absolute">
         <div class="flex1">
-          <formMaker @openFileSystem="openFileSystem" :schema="data.schema"></formMaker>
+          <formMaker @SetPaneModal="SetPaneModal" @openFileSystem="openFileSystem" :schema="data.schema"></formMaker>
         </div>
       </div>
     </div>
@@ -26,7 +26,7 @@ export default {
   beforeCreate() {
     this.$store.commit("pane_system/set_pane_config", {
       title: null,
-      pane_width: "80%",
+      pane_width: "40%",
       pane_head_bg_color: "rgb(48, 51, 64)",
       renderOnce: true,
       pane_head_title_color: "white"
@@ -167,6 +167,9 @@ export default {
         header: true,
         CustomData: 'img'
       });
+    },
+    SetPaneModal(val) {
+      this.$emit('SetPaneModal',val)
     }
   }
 };

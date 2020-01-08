@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flexcol">
+  <div @click="showAttr('con', null)" class="flex flexcol pointer stage-el-hover">
     <transition name="fade">
       <div v-if="isAttrShow" style="background:lightgray" class="bordergray pad050 marginbottom125">
         <!-- Attributes: src, alt, witdth, height, longdesc, id, class -->
@@ -87,7 +87,7 @@
       <div
         v-for="(imgs, img_index) in imgArray"
         :key="img_index"
-        @click="showAttr(imgs,img_index)"
+        @click.stop="showAttr('prop',imgs)"
         class="pointer flex flexcenter"
         :style="{height:imgs.height, width: imgs.width}"
       >
@@ -95,10 +95,12 @@
         {{margins}}
         <transition name="fade">
           <img
-            :style="{border: selectedImgIndex == img_index ? '2px dashed lightskyblue' : '2px dashed lightgray', ...imgs.margin}"
+            :style="{border: selectedImgIndex == img_index ? '1px solid lightskyblue--' : '1px solid lightgray--', ...imgs.margin}"
             :src="imgs.src"
             :height="imgs.height"
             :width="imgs.width"
+            class="stage-el-hover"
+            @click="currentClicked = 'img'"
           />
         </transition>
       </div>
@@ -108,7 +110,10 @@
 </template>
 
 <script>
+import OptionsPanelElementsMixin from "../mixin-elements";
+
 export default {
+  mixins: ["OptionsPanelElementsMixin"],
   props: ["data", "addImage"],
   data: () => ({
     imgArray: [],
@@ -118,7 +123,10 @@ export default {
     selectedGroup: undefined,
     containerId: undefined,
     margins: undefined,
-    scr: undefined
+    scr: undefined,
+
+    clicked: [],
+    exec_counter: 0
   }),
   computed: {
     finalImgHtml() {
@@ -187,6 +195,9 @@ export default {
     },
     getSelectedImg() {
       return this.selectedImg;
+    },
+    getClicked() {
+      return this.$store.state.editor.currentClicked;
     }
   },
   watch: {
@@ -206,7 +217,6 @@ export default {
         // setTimeout(() => {
         //   this.ready = true
         // }, 0);
-
       },
       deep: true
     },
@@ -224,17 +234,11 @@ export default {
       }
       return result;
     },
-    showAttr(attr, index) {
-      if (this.selectedImgIndex === index) {
-        this.isAttrShow = false;
-        this.selectedImgIndex = undefined;
-        this.selectedImg = undefined;
-      } else {
-        this.isAttrShow = true;
-        this.selectedImg = attr;
-        this.selectedImgIndex = index;
-        this.selectedGroup = "attrs";
-      }
+    showAttr(SelectedOption, data) {
+      this.$emit('onSelectOption',{
+        selectedOpt: SelectedOption,
+        ...data
+      })
     },
     addImageToimgArray(containerId) {
       this.imgArray.push({

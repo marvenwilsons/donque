@@ -23,6 +23,7 @@
            contextActions: [  // @listify usage - dynamiContextActionTitles
             `Add New Entry`,
             `View All`,
+            'Add thumbnail',
             'Categories',
             'Delete',
             'Edit Schema'],
@@ -154,7 +155,7 @@ export default {
   beforeCreate() {
     this.$store.commit("pane_system/set_pane_config", {
       title: "Data Collections",
-      pane_width: "650px",
+      pane_width: "700px",
       pane_head_bg_color: "rgb(48, 51, 64)",
       pane_head_title_color: "white"
     });

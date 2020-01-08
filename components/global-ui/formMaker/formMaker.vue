@@ -6,7 +6,10 @@
             <div class="flex1 margintop050">
                 <dqBoolean v-if="schema[items] == 'Boolean'" />
                 <dqDate v-if="schema[items] == 'Date'" />
-                <dqHtml @openFileSystem="$emit('openFileSystem')" v-if="schema[items] == 'HTML'" />
+                <!-- <dqHtml @openFileSystem="$emit('openFileSystem')" v-if="schema[items] == 'HTML'" /> -->
+                <div v-if="schema[items] == 'HTML'" >
+                    <button @click="openEditor" class="buttonreset pad050 darkprimary" >Open Editor</button>
+                </div>
                 <dqNumber :placeholder="items" v-if="schema[items] == 'Number'" />
                 <dqShortString :placeholder="items" v-if="schema[items] == 'Short String'" />
                 <dqLongString :name="items" v-if="schema[items] == 'Long String'" />
@@ -42,6 +45,19 @@ export default {
         dqNumber,
         dqShortString,
         dqFileSysRef
+    },
+    methods: {
+        openEditor() {
+            this.$store.dispatch("pane_system/open", {
+                name: "CollectionEntryEditor",
+                index: 1,
+                // title: "Files",
+                head_visibility: false,
+                pane_width: "95%",
+                // pane_head_bg_color: "rgb(48, 51, 64)",
+                // pane_head_title_color: "white"
+            });
+        }
     }
 }
 </script>

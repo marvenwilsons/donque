@@ -169,6 +169,7 @@ import CollectionsViewAll from "@/components/admin_sections/collections/view_all
 import CollectionsCategories from "@/components/admin_sections/collections/categories.vue";
 import CollectionsSubCategories from "@/components/admin_sections/collections/sub_categories.vue";
 import ViewCatItems from "@/components/admin_sections/collections/categories/view_cat_items.vue";
+import CollectionEntryEditor from "@/components/admin_sections/collections/editor/editor.vue"
 
 //
 import Messages from "@/components/admin_sections/messages/messages.vue";
@@ -273,6 +274,7 @@ export default {
     CollectionsCategories,
     CollectionsSubCategories,
     ViewCatItems,
+    CollectionEntryEditor,
 
     Messages,
     Todos,

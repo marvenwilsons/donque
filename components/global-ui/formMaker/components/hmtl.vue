@@ -5,7 +5,7 @@
     <!-- view here -->
     <dqTab
       :tabs="['Editor', 'Preview','HTML']"
-      :toggleMode="'rerender'"
+      :toggleMode="'opacity'"
       :default="0"
       :options="{
                   borderColor: $store.state.theme.global.border_color,
@@ -199,6 +199,6 @@ export default {
 .bordergray {
   border: 1px solid lightgrey;
   border-radius: 4px;
-  background: whitesmoke;
+  /* background: whitesmoke; */
 }
 </style>
