@@ -436,6 +436,30 @@ h6 {
   border-left: 5px solid #41794683;
 }
 
+/* dq input normalize */
+.dqinp {
+  border: 1px solid #a9a9a9;
+  color: rgba(0, 0, 0, 0.89);
+}
+.dqinp:active {
+  outline: none;
+}
+.dqinp:focus {
+  outline: none;
+}
+.dqinplabel {
+  color:rgba(0, 0, 0, 0.89);
+}
+
+/* btn */
+.dqbtnbg {
+  color: #727272;
+}
+.dqbtnbg:hover {
+  transition: 0.3s;
+  color: rgba(0, 0, 0, 0.89);
+}
+
 body {
   /* background: linear-gradient(to bottom, #ffffff, #ffffff 95%, #bda1a164 100%, #aaaaaa34); */
   background-size: 100% var(--ln);

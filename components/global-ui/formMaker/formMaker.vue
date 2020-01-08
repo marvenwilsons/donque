@@ -2,13 +2,13 @@
     <div>
         <!-- {{schema}} -->
         <div class="flex flexcol marginbottom125" v-for="(items, item_index) in getSchemaKeys" :key="`${items}-${item_index}`">
-            <div><strong>{{items}}</strong></div>
+            <div class="dqinplabel" >{{items}}</div>
             <div class="flex1 margintop050">
                 <dqBoolean v-if="schema[items] == 'Boolean'" />
                 <dqDate v-if="schema[items] == 'Date'" />
                 <!-- <dqHtml @openFileSystem="$emit('openFileSystem')" v-if="schema[items] == 'HTML'" /> -->
                 <div v-if="schema[items] == 'HTML'" >
-                    <button @click="openEditor" class="buttonreset pad050 darkprimary" >Open Editor</button>
+                    <button @click="openEditor" class="buttonreset pad050 dqbtnbg borderRad4" >Open Editor</button>
                 </div>
                 <dqNumber :placeholder="items" v-if="schema[items] == 'Number'" />
                 <dqShortString :placeholder="items" v-if="schema[items] == 'Short String'" />

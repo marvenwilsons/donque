@@ -1,9 +1,9 @@
 <template>
-  <div class="fullheight-percent pad125">
+  <div class="fullheight-percent flex flexcol">
     <!-- <pre>{{data.schema}}</pre> -->
     <!-- <pre>{{Create_Objectify_Schema(this.data.schema)}}</pre> -->
     <div
-      class="relative flex fullwidth fullheight-percent"
+      class="relative flex flex1 fullwidth "
       style="overflow-x:hidden;overflow-y:scroll;"
       v-if="objectify_Config.data"
     >
@@ -12,6 +12,9 @@
           <formMaker @SetPaneModal="SetPaneModal" @openFileSystem="openFileSystem" :schema="data.schema"></formMaker>
         </div>
       </div>
+    </div>
+    <div style="background: whitesmoke;" class="flex flexend pad050">
+      <button class="pad050 buttonreset darkprimary pointer borderRad4" >Add new entry</button>
     </div>
   </div>
 </template>

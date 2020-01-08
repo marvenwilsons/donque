@@ -1,6 +1,6 @@
 <template>
     <div>
-        <input :placeholder="`Enter ${placeholder}`" class="pad050 fullwidth" type="text">
+        <input :placeholder="`Enter ${placeholder}`" class="pad050 fullwidth borderRad4 dqinp" type="text">
     </div>
 </template>
 

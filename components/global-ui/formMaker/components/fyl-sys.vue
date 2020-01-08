@@ -11,11 +11,11 @@
         <div>users/photos/john doe/12523451nhdf2.jpg</div>
         <div> <i class="fa fa-times marginright050"></i></div>
       </div>
-      <div class="flex flexcenter" v-if="files.length == 0">No {{name}}(s) yet</div>
+      <div class="flex flexcenter dqbtnbg" v-if="files.length == 0">No {{name}}(s) yet</div>
     </div>
     <!-- add files -->
     <div class="flex flexcenter margintop050">
-      <button class="buttonreset pad050">Add new {{name}}</button>
+      <button class="buttonreset pad050 dqbtnbg borderRad4">Add new {{name}}</button>
     </div>
   </div>
 </template>
