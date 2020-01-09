@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- files added -->
-    <div class="pad050 marginbottom025" style="border:1px dashed lightgray;border-radius:4px;">
+    <div class="pad050 marginbottom025" style="border:1px solid lightgray;border-radius:4px;">
       <div
         v-for="(files,file_index) in 0"
         :key="file_index"
@@ -14,8 +14,8 @@
       <div class="flex flexcenter dqbtnbg" v-if="files.length == 0">No {{name}}(s) yet</div>
     </div>
     <!-- add files -->
-    <div class="flex flexcenter margintop050">
-      <button class="buttonreset pad050 dqbtnbg borderRad4">Add new {{name}}</button>
+    <div class="flex flexcenter margintop125 padtop125">
+      <button class="buttonreset pad050 btntr padleft125 padright125 borderRad4">Add new {{name}}</button>
     </div>
   </div>
 </template>

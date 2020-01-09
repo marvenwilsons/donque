@@ -1,5 +1,5 @@
 <template>
-  <div class="fullheight-percent flex flexcol">
+  <div style="background: #FAFAFA;"  class="fullheight-percent flex flexcol">
     <!-- <pre>{{data.schema}}</pre> -->
     <!-- <pre>{{Create_Objectify_Schema(this.data.schema)}}</pre> -->
     <div
@@ -14,7 +14,7 @@
       </div>
     </div>
     <div style="background: whitesmoke;" class="flex flexend pad050">
-      <button class="pad050 buttonreset darkprimary pointer borderRad4" >Add new entry</button>
+      <button class="pad050 padleft125 padright125 buttonreset pointer btnblue" >Add Entry</button>
     </div>
   </div>
 </template>
@@ -29,7 +29,7 @@ export default {
   beforeCreate() {
     this.$store.commit("pane_system/set_pane_config", {
       title: null,
-      pane_width: "40%",
+      pane_width: "850px",
       pane_head_bg_color: "rgb(48, 51, 64)",
       renderOnce: true,
       pane_head_title_color: "white"

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <textarea :name="name" class="pad050 dqinp" id="" cols="60" rows="3"></textarea>
+        <textarea :name="name" class="pad050 dqinp" id="" cols="91" rows="2"></textarea>
     </div>
 </template>
 
