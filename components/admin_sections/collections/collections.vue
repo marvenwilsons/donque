@@ -26,6 +26,7 @@
             'Add thumbnail',
             'Categories',
             'Delete',
+            'Validation',
             'Edit Schema'],
            dynamiContextActionTitles: false,
            contextStyle: 'showOnTheSide', // showOnTheSide, showOnCLickExpand
@@ -155,7 +156,7 @@ export default {
   beforeCreate() {
     this.$store.commit("pane_system/set_pane_config", {
       title: "Data Collections",
-      pane_width: "700px",
+      pane_width: "750px",
       pane_head_bg_color: "rgb(48, 51, 64)",
       pane_head_title_color: "white"
     });
