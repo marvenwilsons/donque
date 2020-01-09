@@ -8,16 +8,16 @@
     >
       <div class="dqinplabel">{{items}}</div>
       <div class="flex1 margintop050 padbottom125 padtop050">
-        <dqBoolean v-if="schema[items] == 'Boolean'" />
-        <dqDate v-if="schema[items] == 'Date'" />
+        <dqBoolean :propkey="items" @onInput="onInput" v-if="schema[items] == 'Boolean'" />
+        <dqDate :propkey="items" @onInput="onInput"  v-if="schema[items] == 'Date'" />
         <!-- <dqHtml @openFileSystem="$emit('openFileSystem')" v-if="schema[items] == 'HTML'" /> -->
         <div v-if="schema[items] == 'HTML'">
           <button @click="openEditor" class="buttonreset pad050 btntr padleft125 padright125 borderRad4">Open Editor</button>
         </div>
-        <dqNumber :placeholder="items" v-if="schema[items] == 'Number'" />
-        <dqShortString :placeholder="items" v-if="schema[items] == 'Short String'" />
-        <dqLongString :name="items" v-if="schema[items] == 'Long String'" />
-        <dqFileSysRef :name="items" v-if="schema[items] == 'file_sys_ref'" />
+        <dqNumber :propkey="items" @onInput="onInput" :placeholder="items" v-if="schema[items] == 'Number'" />
+        <dqShortString  :propkey="items" @onInput="onInput" :placeholder="items" v-if="schema[items] == 'Short String'" />
+        <dqLongString :propkey="items" @onInput="onInput" :name="items" v-if="schema[items] == 'Long String'" />
+        <dqFileSysRef :propkey="items" @onInput="onInput" :name="items" v-if="schema[items] == 'file_sys_ref'" />
       </div>
     </div>
   </div>
@@ -36,6 +36,9 @@ export default {
   props: {
     schema: Object
   },
+  data: () => ({
+      finalObj: {}
+  }),
   computed: {
     getSchemaKeys() {
       return Object.keys(this.schema);
@@ -61,6 +64,9 @@ export default {
         // pane_head_bg_color: "rgb(48, 51, 64)",
         // pane_head_title_color: "white"
       });
+    },
+    onInput(val) {
+        this.finalObj[Object.keys(val)[0]] = val[Object.keys(val)[0]]
     }
   }
 };

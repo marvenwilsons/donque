@@ -1,17 +1,22 @@
 <template>
     <div>
-        <input :placeholder="`Enter ${placeholder}`" class="pad050 fullwidth borderRad4 dqinp" type="text">
+        <input v-model="text" :placeholder="`Enter ${placeholder}`" class="pad050 fullwidth borderRad4 dqinp" type="text">
     </div>
 </template>
 
 <script>
 export default {
     props: {
-        placeholder: String
+        placeholder: String,
+        propkey: String
+    },
+    data: () => ({
+        text: undefined
+    }),
+    watch: {
+        text() {
+            this.$emit('onInput', {[this.propkey] : this.text})
+        }
     }
 }
 </script>
-
-<style scoped>
-
-</style>
