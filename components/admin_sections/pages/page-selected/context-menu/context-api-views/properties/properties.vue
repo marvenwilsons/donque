@@ -139,7 +139,7 @@ import schema_mixin from './mixins/schema_mixin'
 import monaco_inlineStyle from "./../monaco_inline";
 
 export default {
-    props: ["data", "stageData"],
+    props: ["data", "stageData", 'pageName'],
     mixins: [shared_mixin,text_content_mixin,custom_style_mixin,attr_mixin,schema_mixin],
     data: () => ({
         text_content_model: undefined,
