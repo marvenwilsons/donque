@@ -45,7 +45,7 @@
                 </div>
               </div>
               <div
-                class="flex fullheight-percent"
+                class="flex fullheight-percent pad050"
                 :style="{...$store.state.theme.modal_body_style}"
               >
                 <div class="fullwidth" v-if="$store.state.modal.ui_type === 'custom'">

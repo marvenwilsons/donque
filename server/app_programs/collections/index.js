@@ -8,5 +8,12 @@ module.exports = {
     // Categories
     addRootCategory : require('./category/addRootCategory'),
     deleteCategory : require('./category/deleteCategory'),
-    updateCategory : require('./category/updateCategory')
+    updateCategory : require('./category/updateCategory'),
+
+    // Entries
+    addEntry: require('./collection-entry/addEntry'),
+    deleteEntry: require('./collection-entry/deleteEntry'),
+    getEntries: require('./collection-entry/getEntries'),
+    getEntry: require('./collection-entry/getEntry'),
+    updateEntry: require('./collection-entry/updateEntry')
 }

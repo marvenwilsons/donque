@@ -1,20 +1,28 @@
 <template>
-  <div style="background: #FAFAFA;"  class="fullheight-percent flex flexcol">
+  <div style="background: #FAFAFA;" class="fullheight-percent flex flexcol">
     <!-- <pre>{{data.schema}}</pre> -->
     <!-- <pre>{{Create_Objectify_Schema(this.data.schema)}}</pre> -->
     <div
-      class="relative flex flex1 fullwidth "
+      class="relative flex flex1 fullwidth"
       style="overflow-x:hidden;overflow-y:scroll;"
       v-if="objectify_Config.data"
     >
       <div class="fullwidth flex flex1 pad125 absolute">
         <div class="flex1">
-          <formMaker @SetPaneModal="SetPaneModal" @openFileSystem="openFileSystem" :schema="data.schema"></formMaker>
+          <formMaker
+            ref="dqCollectionsformMaker"
+            @SetPaneModal="SetPaneModal"
+            @openFileSystem="openFileSystem"
+            :schema="data.schema"
+          ></formMaker>
         </div>
       </div>
     </div>
     <div style="background: whitesmoke;" class="flex flexend pad050">
-      <button class="pad050 padleft125 padright125 buttonreset pointer btnblue" >Add Entry</button>
+      <button
+        @click="addEntry"
+        class="pad050 padleft125 padright125 buttonreset pointer btnblue"
+      >Add Entry</button>
     </div>
   </div>
 </template>
@@ -22,7 +30,7 @@
 <script>
 import objtifyConverter from "@/components/global-ui/objectify/converter";
 import modal_AddCollection from "./modals/add_collection";
-import selectFileModal from "../../admin_sections/files/selectFileModal"
+import selectFileModal from "../../admin_sections/files/selectFileModal";
 
 export default {
   props: ["my_pane_index", "data"],
@@ -161,18 +169,53 @@ export default {
     openFileSystem() {
       this.$emit("SetPaneModal", {
         pane_index: this.my_pane_index,
-        pane_name: `Add New ${this.data['Collection Name']}`,
+        pane_name: `Add New ${this.data["Collection Name"]}`,
         component: selectFileModal,
         title: "Select file from file system",
         width: "80%",
         height: "70%",
         CanBeClose: true,
         header: true,
-        CustomData: 'img'
+        CustomData: "img"
       });
     },
     SetPaneModal(val) {
-      this.$emit('SetPaneModal',val)
+      this.$emit("SetPaneModal", val);
+    },
+    addEntry() {
+      const data = {
+        collectionName: this.data["Collection Name"],
+        entry: this.$refs.dqCollectionsformMaker.finalObj
+      };
+
+      // system call
+      this.$store
+        .dispatch("systemCall", {
+          command: "addEntry",
+          section: "collectionMethods",
+          data,
+          method: "post"
+        })
+        .then(({ status }) => {
+          if (status) {
+            this.$refs.dqCollectionsformMaker.clearInput()
+            this.$store.commit("modal/set_modal", {
+              head: "Command response",
+              body: {
+                text: `Entry was successfully added to ${
+                  this.data["Collection Name"]
+                } collections`,
+                ui: "success"
+              },
+              config: {
+                ui_type: "custom",
+                closable: false,
+                width: "320px",
+                height: "100px"
+              }
+            });
+          }
+        });
     }
   }
 };

@@ -72,7 +72,10 @@ export default {
   },
   mounted() {
     setTimeout(() => {
-      document.getElementById('dq-pp-mdl').focus()
+      const el = document.getElementById('dq-pp-mdl')
+      if(el) {
+        document.getElementById('dq-pp-mdl').focus()
+      }
     }, 0);
   },
   components: {

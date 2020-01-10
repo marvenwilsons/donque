@@ -8,16 +8,16 @@
     >
       <div class="dqinplabel">{{items}}</div>
       <div class="flex1 margintop050 padbottom125 padtop050">
-        <dqBoolean :propkey="items" @onInput="onInput" v-if="schema[items] == 'Boolean'" />
-        <dqDate :propkey="items" @onInput="onInput"  v-if="schema[items] == 'Date'" />
+        <dqBoolean ref="fminp" :propkey="items" @onInput="onInput" v-if="schema[items] == 'Boolean'" />
+        <dqDate ref="fminp" :propkey="items" @onInput="onInput"  v-if="schema[items] == 'Date'" />
         <!-- <dqHtml @openFileSystem="$emit('openFileSystem')" v-if="schema[items] == 'HTML'" /> -->
         <div v-if="schema[items] == 'HTML'">
           <button @click="openEditor" class="buttonreset pad050 btntr padleft125 padright125 borderRad4">Open Editor</button>
         </div>
-        <dqNumber :propkey="items" @onInput="onInput" :placeholder="items" v-if="schema[items] == 'Number'" />
-        <dqShortString  :propkey="items" @onInput="onInput" :placeholder="items" v-if="schema[items] == 'Short String'" />
-        <dqLongString :propkey="items" @onInput="onInput" :name="items" v-if="schema[items] == 'Long String'" />
-        <dqFileSysRef :propkey="items" @onInput="onInput" :name="items" v-if="schema[items] == 'file_sys_ref'" />
+        <dqNumber ref="fminp" :propkey="items" @onInput="onInput" :placeholder="items" v-if="schema[items] == 'Number'" />
+        <dqShortString ref="fminp" :propkey="items" @onInput="onInput" :placeholder="items" v-if="schema[items] == 'Short String'" />
+        <dqLongString ref="fminp" :propkey="items" @onInput="onInput" :name="items" v-if="schema[items] == 'Long String'" />
+        <dqFileSysRef ref="'fminp" :propkey="items" @onInput="onInput" :name="items" v-if="schema[items] == 'file_sys_ref'" />
       </div>
     </div>
   </div>
@@ -58,12 +58,14 @@ export default {
       this.$store.dispatch("pane_system/open", {
         name: "CollectionEntryEditor",
         index: 1,
-        // title: "Files",
         head_visibility: false,
         pane_width: "95%"
-        // pane_head_bg_color: "rgb(48, 51, 64)",
-        // pane_head_title_color: "white"
       });
+    },
+    clearInput() {
+        this.$refs.fminp.map(e => {
+            e.text = undefined
+        })
     },
     onInput(val) {
         this.finalObj[Object.keys(val)[0]] = val[Object.keys(val)[0]]
