@@ -172,7 +172,7 @@ export default {
           notes: "",
           properties: {},
           events: {},
-          data_collection: {},
+          data_collection: [],
           stat: {
             lastModified,
             createdOn,

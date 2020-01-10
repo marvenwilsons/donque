@@ -21,7 +21,7 @@ const routeContents = {
     "home": {
         layout: {}, // the choosen layout for this page
         sections: {}, // sections of the pages
-        data_collection: {}, // points to the database collection, ! only if type is dynamic else it is undefined
+        data_collection: [], // points to the database collection, ! only if type is dynamic else it is undefined
 
         "stat": {
             name: "home",

@@ -62,7 +62,7 @@ export default {
             /**
              * Collections list and Models depends on isAList value and list origin from value
              */
-            "collections list": {
+            "collection name": {
               type: "string",
               minChar: 1,
               maxChar: 900,

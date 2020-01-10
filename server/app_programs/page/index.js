@@ -9,7 +9,7 @@ const gots = ({ tag, name, role, inlineStyle, innerText, classList, els, path, c
         innerText,
         classList: classList ? classList : [],
         els: els ? els : [],
-        data_collection: {},
+        data_collection: [],
         notes: '',
         properties: {},
         events: {},
@@ -219,7 +219,7 @@ pageMethods.createPage = {
                                     createdOn: moment().format("MMM Do YY")
                                 })
                             ],
-                            data_collection: {},
+                            data_collection: [],
                             "stat": {
                                 lastModified: moment().format("MMM Do YY"),
                                 createdOn: moment().format("MMM Do YY"),
