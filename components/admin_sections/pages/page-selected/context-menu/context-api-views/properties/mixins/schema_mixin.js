@@ -30,7 +30,7 @@ export default {
             isAList: {
               type: "select",
               options: ["Yes", "No"],
-              default: 1,
+              default: null,
               hoverInfo: "dq-studio global attribute: re renders element repeatedly",
             },
             /**

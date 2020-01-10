@@ -822,4 +822,37 @@ pageMethods.deletePage = {
     }
 }
 
+pageMethods.updateDataCollection = {
+    get prop() {
+        return {
+            funcIsDestructive: false
+        }
+    },
+    updateDataCollection({dep,data}) {
+        console.log('updating data colletion')
+        
+        const {pageName, collectionName, action} = data
+        const {db} = dep
+        
+        db.collection('dq_app').findOneAndUpdate(
+            {},
+            {
+                [`$${action}`]: {
+                    [`routeContents.${pageName}.data_collection` ] : collectionName
+                }
+            }
+        )
+
+        return new Promise((resolve,reject) => {
+            resolve({
+                status: true,
+                data: {
+                    msg: null,
+                    actions: []
+                }
+            })
+        })
+    }
+}
+
 module.exports = pageMethods

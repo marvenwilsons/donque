@@ -57,6 +57,9 @@ export const state = () => ({
     //
     css_classes: undefined,
     el_flat_map: [],
+
+    //
+    exec_on_commit: []
 })
 
 export const getters = {
@@ -68,6 +71,14 @@ export const getters = {
 }
 
 export const mutations = {
+    update_exec_on_commit(state,payload) {
+        state.exec_on_commit.push(payload)
+    },
+    clear_exec_on_commit() {
+        console.log('clearing exec on commit')
+        state.exec_on_commit = []
+    },
+
     // page editor modal
     open_page_editor_modal(state) {
         state.page_editor_modal = true
@@ -399,6 +410,15 @@ export const mutations = {
                                 });
                             }
                         })
+                    
+                    // isAList
+                    if( state.exec_on_commit.length) {
+                        state.exec_on_commit.map(item => {
+                            this.dispatch("systemCall",item).then(() => {
+                                this.commit('pages/clear_exec_on_commit')
+                            }) 
+                        })
+                    } 
                 }
                 this.commit('pages/clear_stage')
             })

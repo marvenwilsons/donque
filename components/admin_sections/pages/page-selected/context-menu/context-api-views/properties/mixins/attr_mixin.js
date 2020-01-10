@@ -20,6 +20,40 @@ export default {
                   v = o[key];
                   output[key] = typeof v === "object" ? copy(v) : v;
                 }
+                
+                // isAList
+                if(output.isAList == 'Yes') {
+                  if(output['collection name'] != undefined) {
+                    this.$store.commit('pages/update_exec_on_commit',{
+                      command: 'updateDataCollection',
+                      section: 'pageMethods',
+                      method: 'post',
+                      data: {
+                        pageName: this.pageName,
+                        collectionName: output['collection name'],
+                        action: 'push'
+                      }
+                    })
+                  }else {
+                    alert('Collection name cannot be undefined')
+                  }                  
+                } else {
+                  if(output.isAList == 'No') {
+                    // check server data_collection array if the collection name exist in that array
+                    // if it does pull it from the array, if cant find the collectionName do nothing
+                    this.$store.commit('pages/update_exec_on_commit',{
+                      command: 'updateDataCollection',
+                      section: 'pageMethods',
+                      method: 'post',
+                      data: {
+                        pageName: this.pageName,
+                        collectionName: output['collection name'],
+                        action: 'pull'
+                      }
+                    })
+
+                  }
+                }
       
                 return output;
               };
@@ -31,7 +65,7 @@ export default {
                     desc: `Updated Attributes ${locator}`,
                     locator,
                     scoped_variable: nattr,
-                    exec_on_prop(prop, tag, scoped_variable, obj) {
+                    exec_on_prop(prop, tag, scoped_variable, obj) {                      
                       obj.properties["attributes"] = scoped_variable;
                     }
                   });
