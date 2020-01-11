@@ -308,17 +308,53 @@ pageMethods.getPageContents = {
             
             //
             if (content[path]){
-                return resolve({
-                    status: true,
-                    data: {
-                        msg: null,
-                        actions: [{}],
-                        public: {
-                            layout: content[path].layout,
-                            sections: content[path].sections
+                const data_collections = content[path].data_collection
+                let cols = []
+                
+                if(data_collections.length) {
+                    const prs = data_collections.map(collectionName => {
+                        return db.collection('dq_collections').findOne({
+                            [collectionName] : {$exists: true}
+                        }).then(r => {
+                            delete r._id
+                            return r
+                        })
+                    })
+
+                    Promise.all(prs).then((res) => {
+                        return resolve({
+                            status: true,
+                            data: {
+                                msg: null,
+                                actions: [{}],
+                                public: {
+                                    layout: content[path].layout,
+                                    sections: content[path].sections,
+                                    collections: res
+                                }
+                            }
+                        })
+                    })
+
+                    
+
+                } else {
+                    return resolve({
+                        status: true,
+                        data: {
+                            msg: null,
+                            actions: [{}],
+                            public: {
+                                layout: content[path].layout,
+                                sections: content[path].sections,
+                                collections: null
+                            }
                         }
-                    }
-                })
+                    })
+                }
+
+
+                
             }else {
                 reject({
                     status: false,
