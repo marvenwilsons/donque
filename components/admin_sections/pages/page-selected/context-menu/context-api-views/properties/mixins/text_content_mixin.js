@@ -8,6 +8,7 @@ export default {
         }
     },
     methods: {
+      // @saveToStage sample
         tcm_SaveToStage: function () {
             this.$store.dispatch("pages/addrs_finder_mutator", {
                 uid: `${this.data.index}--${this.data.uid}`,

@@ -1,5 +1,14 @@
+Element API PANE
+
+This Component render
+  This component shows when the user click the add "Add Element(s)" option
+  from the context, on right click on an element.
+
+Component Responsibility
+  This component is responsible for displaying
+  1. list of elelements that can be added to the working area 
+
 <template>
-  <!-- border: theme.global.secondary_border_color, -->
   <div
     class="fullwidth margin125 flex flexcol"
     :style="{color:theme['page_editor_tile_opt_addChild_tiles'].color,}"
@@ -14,6 +23,7 @@
         <strong>Add Element</strong>
       </div>
       <main class="pad125">
+        <!--  -->
         <strong>Common HTML</strong>
         <span>
           <strike>(can be nested)</strike>
@@ -29,6 +39,18 @@
             :key="`el1-${el}`"
           >{{el}}</div>
         </div>
+        <!--  -->
+        <strong>Page Direct Link</strong>
+        <div class="flex relative flexwrap padbottom125">
+          <div
+            @click="selected = `page-direct`, cur_actv = `page-direct`"
+            :style="setStyle(active === `page-direct` || cur_actv == `page-direct`)"
+            @mouseover="active = `page-direct`"
+            @mouseleave="cur_actv != `page-direct` && (active = undefined)"
+            class="dq-el-ac flex flexcenter pad025 margin025 pointer"
+          >page direct</div>
+        </div>
+        <!--  -->
         <strong>List Rendering</strong>
         <span>
           <strike>(can be nested)</strike>
@@ -44,6 +66,7 @@
             :key="`el4-${el}`"
           >{{el}}</div>
         </div>
+        <!--  -->
         <strong>Reactive HTML</strong>
         <span>
           <strike>(cannot be nested)</strike>
@@ -59,6 +82,7 @@
             :key="`el4-${el}`"
           >{{el}}</div>
         </div>
+        <!--  -->
         <strong>Headings</strong>
         <div class="flex relative flexwrap padbottom125">
           <div
@@ -71,6 +95,7 @@
             :key="`el2-${el}`"
           >{{el}}</div>
         </div>
+        <!--  -->
         <strong>Plugins</strong>
         <div class="flex relative flexwrap padbottom125">
           <div

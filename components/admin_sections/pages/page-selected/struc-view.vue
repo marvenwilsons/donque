@@ -25,7 +25,7 @@
               <div
                 :style="{fontWeight: $store.state.pages.opn_opts == el.uid ? 700 : ''}"
                 class="padleft025 padright050"
-              >{{trimTitle(el.tag)}}</div> 
+              >{{trimTitle(el.tag)}}</div>
               <i v-if="get_el_type(el.tag) == 'html'" class="fab fa-html5 padright025"></i>
               <i v-if="get_el_type(el.tag) == 'plugin'" class="fas fa-plug padright025"></i>
             </div>
@@ -100,9 +100,9 @@ export default {
         return t;
       }
     },
-    get_el_type(el){
-      if(el){
-        return el.split('_')[0]
+    get_el_type(el) {
+      if (el) {
+        return el.split("_")[0];
       }
     },
     setStyle(i) {
@@ -113,6 +113,9 @@ export default {
         };
       }
     },
+    tagHandler(tag) {
+      return tag.split("_")[0];
+    },
     openOpt({ uid, tag, el }) {
       if (this.$store.state.pages.info_box_data) {
         this.$store.commit("pages/set_api_view", {
@@ -121,15 +124,39 @@ export default {
         });
       }
 
+      //
       this.$store.commit("pages/reset_info_box");
-      this.$store.commit("pages/set_context_view", "html");
-      this.$store.commit("pages/set_opts", {
-        uid,
-        tag,
-        top: this.y,
-        left: this.x,
-        context_height: this.$store.state.pages.pending_data_to_paste ? "260" : "230"
-      });
+
+      //
+      const t = this.tagHandler(tag);
+      if (t == "html") {
+        this.$store.commit("pages/set_context_view", "html");
+        // context size
+        this.$store.commit("pages/set_opts", {
+          uid,
+          tag,
+          top: this.y,
+          left: this.x,
+          context_height: this.$store.state.pages.pending_data_to_paste
+            ? "260"
+            : "230"
+        });
+      } else if (t == "plugin") {
+        console.log('this is it')
+        this.$store.commit("pages/set_context_view", "plugin");
+        this.$store.commit("pages/set_opts", {
+          uid,
+          tag,
+          top: this.y,
+          left: this.x,
+          context_height: this.$store.state.pages.pending_data_to_paste
+            ? "150"
+            : "150"
+        });
+      }
+
+      //
+
       setTimeout(() => {
         const n = document.getElementById("opt-box-ul");
         //@pages > CONTEXT_MENU > on right_click > height controller
@@ -146,7 +173,7 @@ export default {
     set_view({ view, uid, el }) {
       this.$store.commit("pages/set_api_view", { view, uid, el });
     },
-    showInfoBox(data,index) {
+    showInfoBox(data, index) {
       this.$store.commit("pages/set_info_box", {
         data,
         index

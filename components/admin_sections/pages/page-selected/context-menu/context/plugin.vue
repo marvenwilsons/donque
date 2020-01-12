@@ -4,7 +4,7 @@
     <li
       @mouseover="opts_active = 'opts-opt-addelement'"
       @mouseleave="opts_cur_active != `opts-opt-addelement` && (opts_active = undefined)"
-      @click="setContextView('addChild')"
+      @click="$store.commit('pages/set_api_view',{view: 'pluginAPI'})"
       :style="setStyle(opts_active === `opts-opt-addelement` || opts_active == `opts-opt-addelement`)"
       class="pad025 flex pointer"
     >
@@ -27,19 +27,6 @@
       <div class="flex7">Notes</div>
       <div class="flex4"></div>
     </li>
-    <!-- Role -->
-    <li
-      @mouseover="opts_active = 'EditRole'"
-      @mouseleave="opts_cur_active != `EditRole` && (opts_active = undefined)"
-      :style="setStyle(opts_active === `EditRole` || opts_active == `EditRole`)"
-      class="pad025 flex pointer"
-    >
-      <div class="flex3">
-        <!-- <i class="far fa-edit padleft125"></i> -->
-      </div>
-      <div class="flex7">About</div>
-      <div class="flex4"></div>
-    </li>
   </div>
 </template>
 
@@ -52,8 +39,10 @@ export default {
     };
   },
   methods: {
-    setContextView() {
-      this.$store.commit()
+    setContextView(vname) {
+      this.$store.commit('pages/set_api_view',{
+        vname
+      })
     },
     setStyle(i) {
       if (i) {
