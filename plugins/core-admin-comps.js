@@ -20,6 +20,8 @@ import html_audio from "@/components/global-ui/html-els/audio.vue";
 import html_video from "@/components/global-ui/html-els/video.vue";
 import html_img from "@/components/global-ui/html-els/img.vue";
 
+import plugin_pagedirect from "@/components/global-ui/plugins/page-direct/page-direct.vue"
+
 import objectifyFlatSettings from "@/components/global-ui/objectify/objectify-flat-settings.vue";
 import dqTab from "@/components/global-ui/tabs/dq-tab.vue";
 import saveToStagePane from "@/components/global-ui/dq-page/panes/stage-pane.vue";
@@ -54,4 +56,6 @@ Vue.component("dqTab", dqTab);
 Vue.component("saveToStagePane", saveToStagePane);
 Vue.component("listify", listify);
 Vue.component("formMaker", formMaker);
+
+Vue.component('plugin_page-direct',plugin_pagedirect)
 

@@ -49,6 +49,7 @@ module.exports = {
   */
   plugins: [
     '@/plugins/core-admin-comps.js',
+    '@/plugins/core-admin-plugin.js',
     '@/plugins/core-admin-directives.js'
   ],
 
