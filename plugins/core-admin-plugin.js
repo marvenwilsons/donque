@@ -4,8 +4,8 @@
 
 import Vue from "vue";
 
-import plugin_pageDirect from "@/components/global-ui/plugins/page-direct/api.vue";
+import plugin_pageDirectApi from "@/components/global-ui/plugins/page-direct/api.vue";
 
-Vue.component("plugin_page-direct", plugin_pageDirect);
+Vue.component("plugin_page-direct-api", plugin_pageDirectApi);
 
 

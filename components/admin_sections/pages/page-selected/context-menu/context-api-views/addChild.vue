@@ -155,16 +155,14 @@ export default {
         'for-host'
       ],
       els2: ["h1", "h2", "h3", "h4", "h5", "h6"],
-      els3: [
+      els3: [ // @ElementApiPluginsArray
         "dqFormMaker-free",
         "dqTable-free",
         "objectify",
         "listify",
-        "collections-free",
         "simple-slider",
         "simple-tab",
         "file-upload",
-        "variable"
       ],
       els4: ["button", "img", "audio", "video"]
     };
