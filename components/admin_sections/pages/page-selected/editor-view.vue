@@ -25,7 +25,12 @@
                 <span class="padright025">
                   <strong>Section Role</strong>
                 </span>
-                <input id="dq-ad-n-sec-t-page" v-model="sec_data" class="margintop025 fullwidth pad025" type="text" />
+                <input
+                  id="dq-ad-n-sec-t-page"
+                  v-model="sec_data"
+                  class="margintop025 fullwidth pad025"
+                  type="text"
+                />
                 <div
                   class="err bordererr backgrounderr pad025 margintop050"
                   v-if="sec_err"
@@ -60,7 +65,9 @@
               <i
                 @click="$store.commit('pages/save_stage',{path: data})"
                 class="fas fa-save pointer padright025"
-              > <span class="padleft025 padright050">commit</span></i>
+              >
+                <span class="padleft025 padright050">commit</span>
+              </i>
               <i
                 v-if="!$store.state.pages.isMaximized"
                 @click="maximize"
@@ -105,14 +112,14 @@
               <div
                 role="option-box"
                 :style="{
-                zIndex:100,
-                minWidth:'220px',
-                left:`${$store.state.pages.opn_opts_pos_left + 10}px`,
-                top:`${$store.state.pages.opn_opts_pos_top - 5}px`,
-                boxShadow:`0 10px 20px ${$store.state.theme.global.secondary_bg_color}`,
-                border: `1px solid ${$store.state.theme.global.border_color}`,
-                borderRadius: '2px',
-                background:`${$store.state.theme.global.tertiary_bg_color}`
+                  zIndex:100,
+                  minWidth:'220px',
+                  left:`${$store.state.pages.opn_opts_pos_left + 10}px`,
+                  top:`${$store.state.pages.opn_opts_pos_top - 5}px`,
+                  boxShadow:`0 10px 20px ${$store.state.theme.global.secondary_bg_color}`,
+                  border: `1px solid ${$store.state.theme.global.border_color}`,
+                  borderRadius: '2px',
+                  background:`${$store.state.theme.global.tertiary_bg_color}`
                 }"
                 class="absolute padtop050 padbottom050"
                 v-if="$store.state.pages.opn_opts"
@@ -179,7 +186,7 @@
                 </div>
               </div>
             </main>
-            <!--  -->
+            <!-- Element API -->
             <div
               :style="{
                 width:'0px',
@@ -206,8 +213,12 @@
                     <i @click="closeOpt" class="fas fa-times-circle"></i>
                   </div>
                 </div>
+
                 <!-- Element api container -->
-                <div v-dq-disable-horizontal-scrolling class="relative fullheight-percent flex flexcol flex1">
+                <div
+                  v-dq-disable-horizontal-scrolling
+                  class="relative fullheight-percent flex flexcol flex1"
+                >
                   <div class="flex flex1 relative fullheight-percent aut">
                     <div class="absolute fullwidth flex fullheight-percent flex1">
                       <div
@@ -369,6 +380,7 @@ import plgs from "./context-menu/context-api-views/plugins";
 import events from "./context-menu/context-api-views/events";
 import addNote from "./context-menu/context-api-views/addnotes";
 import editRole from "./context-menu/context-api-views/editRole";
+import pluginAPI from './context-menu/context-api-views/plugins'
 
 // context menu api view for wrapper
 import clientload from "./context-menu/context-wrapper-views/clientload";
@@ -376,7 +388,6 @@ import colls from "./context-menu/context-wrapper-views/collections";
 import controllers from "./context-menu/context-wrapper-views/controllers";
 import models from "./context-menu/context-wrapper-views/models";
 import serverload from "./context-menu/context-wrapper-views/serverload";
-
 
 import { TweenMax, TimelineLite, TweenLite } from "gsap";
 import { mapGetters } from "vuex";
@@ -514,6 +525,7 @@ export default {
     ils,
     plgs,
     editRole,
+    pluginAPI,
 
     // context menu api views for wrapper
     clientload,
@@ -638,7 +650,7 @@ export default {
           });
 
           this.sec_modal_viz = false;
-          this.$store.commit('pages/close_page_editor_modal')
+          this.$store.commit("pages/close_page_editor_modal");
         } else {
           // get all contents from stages and sections
           // make a new array
@@ -671,7 +683,7 @@ export default {
           });
 
           this.sec_modal_viz = false;
-          this.$store.commit('pages/close_page_editor_modal')
+          this.$store.commit("pages/close_page_editor_modal");
         }
       }
     },
@@ -703,7 +715,6 @@ export default {
       this.$store.commit("pages/reset_info_box");
 
       if (mode == "section") {
-        console.log("this!");
         this.$store.commit("pages/set_context_view", "section");
         this.$store.commit("pages/set_opts", {
           tag: "section",
@@ -839,7 +850,6 @@ export default {
           if (n2) {
             TweenMax.fromTo(n2, 0.2, { width: "0px" }, { width: "550px" });
             TweenMax.fromTo(n, 1, { opacity: 0 }, { opacity: 1 });
-
           }
         }, 0);
       }
@@ -851,7 +861,7 @@ export default {
         setTimeout(() => {
           this.sec_modal_viz = current;
           setTimeout(() => {
-            document.getElementById("dq-ad-n-sec-t-page").focus()
+            document.getElementById("dq-ad-n-sec-t-page").focus();
           }, 0);
         }, 0);
       }
@@ -867,14 +877,14 @@ export default {
 
 /**
  * On this component
- * 
+ *
  * Views
  *    + section modal
  *    + structure vizualizer
  *    + info box
  *    + context menu
  *    + element api
- * 
+ *
  * About
  *    + section modal
  *      | a view for the user to add a new section to the page
