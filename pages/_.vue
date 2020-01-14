@@ -10,12 +10,12 @@ import admin_portal from "@/components/admin_root/admin_portal/admin-portal.vue"
 import public_portal from "@/components/admin_root/public_portal/public-portal.vue";
 
 import { mapGetters } from "vuex";
-import loopMixn from './loop.mixin'
-import loopMixn1 from "./loop-mixin1"
+import listTextRender from './list-text-render'
+import listRenderer from "./list-render"
 
 
 export default {
-  mixins:[loopMixn1,loopMixn],
+  mixins:[listRenderer,listTextRender],
   data() {
     return {
       siteTitle: "petroff",
@@ -152,6 +152,7 @@ export default {
     }
   },
   mounted() {
+    this.page_data = this.$store.state.current_page
     /**
      * Setting admin data
      */
@@ -188,7 +189,9 @@ export default {
       return (this.view = "admin_portal");
     } 
     else if (this.$store.state.current_page) {
+      console.log(this.$store.state.current_page)
       console.log('public portal')
+      console.log(this.$store.state.app.data.public)
       setTimeout(() => {
         this.ini1()
         setTimeout(() => {

@@ -14,12 +14,7 @@
       v-dq-prop="html_el"
     >
 
-      <!-- {{latest_el_data ? get_prop(html_el.properties,html_el) : ''}} -->
-      {{
-        latest_el_data ?
-        is_dynamic(html_el.properties.text_content) ? html_el.properties.text_content :
-        get_textContent(html_el.properties.text_content,html_el_i,html_el) : ''
-      }}
+      {{html_el.properties.text_content}}
     </div>
   </div>
 </template>

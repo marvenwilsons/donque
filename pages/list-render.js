@@ -1,6 +1,10 @@
 export default {
     methods: {
         ini1() {
+            /**
+             * Responsilbe for rendering the list
+             * according the the lenth of the collection selected
+             */
             if(this.$store.state.app.data.public.collections) {
                 const copy = (o, p) => {
                     if (o === null) return null;
@@ -10,6 +14,7 @@ export default {
                       v = o[key];
                       output[key] = typeof v === "object" ? copy(v) : v;
                     }
+
                     return output;
                   };
               
@@ -17,6 +22,8 @@ export default {
                   if(this.$store.state.current_page) {
                       this.page_data = copy(this.$store.state.current_page)
                   }
+
+
               
                   // recursion
                   let temp = undefined
@@ -29,8 +36,10 @@ export default {
                           }
                       } else {
                           if(Array.isArray(temp)) {
-                              temp.map(e => {
+                              temp.map(e => {                                 
+
                                   if(e.properties && e.properties.attributes == undefined) {
+
                                       temp = e.els
                                       getList(temp,hy)
                                   } else {
@@ -39,19 +48,19 @@ export default {
                                         let SelectedCollection = undefined
                                              
               
-                                      // accessing collection that this page required
-                                      if(this.$store.state.app.data.public.collections) {
-                                        this.$store.state.app.data.public.collections.map(collection => {
-                                            SelectedCollection = collection[CollectionName]
-                                        })
-                                      } 
+                                        // accessing collection that this page required
+                                        if(this.$store.state.app.data.public.collections) {
+                                            this.$store.state.app.data.public.collections.map(collection => {
+                                                SelectedCollection = collection[CollectionName]
+                                            })
+                                        } 
+                                        
+                
+                                        // list is found and render the list
+                                        hy(SelectedCollection,temp,CollectionName)
+                                      }
                                       
-              
-                                      // list is found and render the list
-                                      hy(SelectedCollection,temp,CollectionName)
-                                      }                        
-                    
-                                  }
+                                  } 
                                   // getList(e)
                               })
                           } else if(Array.isArray(temp) == false && typeof temp == 'object') {
@@ -62,14 +71,16 @@ export default {
                           }
                       }
                   }
-              
-                  let exec_count = - 1
-              
-                  getList(this.page_data,(SelectedCollection,temp,CollectionName) => {
-                      for(var i = 0; i < SelectedCollection.length - 1; i++) {
-                          temp.push(temp[0])
+                  this.page_data.map(e => {
+                      if(e.els.length) {
+                        getList(e.els,(SelectedCollection,temp,CollectionName) => {
+                            for(var i = 0; i < SelectedCollection.length - 1; i++) {
+                                temp.push(temp[0])
+                            }
+                        })
                       }
                   })
+                  
             }
         }
     }
