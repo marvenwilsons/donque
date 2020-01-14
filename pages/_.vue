@@ -1,5 +1,5 @@
 <template>
-  <div :data="$store.state.current_page" :is="view"></div>
+  <div :data="page_data" :is="view"></div>
 </template>
 
 <script>
@@ -10,15 +10,19 @@ import admin_portal from "@/components/admin_root/admin_portal/admin-portal.vue"
 import public_portal from "@/components/admin_root/public_portal/public-portal.vue";
 
 import { mapGetters } from "vuex";
+import loopMixn from './loop.mixin'
+import loopMixn1 from "./loop-mixin1"
+
 
 export default {
+  mixins:[loopMixn1,loopMixn],
   data() {
     return {
       siteTitle: "petroff",
       mounted_data: undefined,
       auth: undefined,
       view: undefined,
-      layout: "admin"
+      layout: "admin",
     };
   },
   layout: context => {
@@ -152,8 +156,7 @@ export default {
      * Setting admin data
      */
     console.log("** Mounting _.vue");
-    console.log(location.pathname);
-
+    console.log(location.pathname); 
     /**
      * page routing
      */
@@ -186,6 +189,12 @@ export default {
     } 
     else if (this.$store.state.current_page) {
       console.log('public portal')
+      setTimeout(() => {
+        this.ini1()
+        setTimeout(() => {
+          this.ini2()
+        }, 0);
+      }, 0);
       return (this.view = "public_portal")
     }
   }

@@ -59,7 +59,10 @@ export const state = () => ({
     el_flat_map: [],
 
     //
-    exec_on_commit: []
+    exec_on_commit: [],
+
+    //
+    selected_collection: undefined
 })
 
 export const getters = {
@@ -77,6 +80,9 @@ export const mutations = {
     clear_exec_on_commit() {
         console.log('clearing exec on commit')
         state.exec_on_commit = []
+    },
+    set_selected_collection(state,payload) {
+        state.selected_collection = payload
     },
 
     // page editor modal
