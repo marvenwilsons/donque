@@ -1,8 +1,7 @@
-
 export default {
     data: () => ({
         attr_globalAttr: undefined,
-        attr_nativeAttr: undefined
+        attr_nativeAttr: undefined,
     }),
     methods: {
         // global handler
@@ -10,8 +9,7 @@ export default {
             this.attr_globalAttr = val
         },
         attr_global_saveToStage(){
-
-            const copy = o => {
+              const copy = o => {
                 if (o === null) return null;
       
                 var output, v, key;
@@ -58,19 +56,44 @@ export default {
                 return output;
               };
               const nattr = copy(this.attr_globalAttr);
+
+              //
               this.$store.dispatch("pages/addrs_finder_mutator", {
                 uid: `${this.data.index}--${this.data.uid}`,
                 fn: locator => {
                   this.$store.commit("pages/update_section", {
                     desc: `Updated Attributes ${locator}`,
                     locator,
-                    scoped_variable: nattr,
-                    exec_on_prop(prop, tag, scoped_variable, obj) {                      
-                      obj.properties["attributes"] = scoped_variable;
+                    scoped_variable: {
+                      nattr,
+                      store: this.$store,
+                      pageName: this.pageName
+                    },
+                    exec_on_prop(prop, tag, scoped_variable, obj) {
+                      obj.properties.attributes = scoped_variable.nattr;
+
+                      if(obj.properties.attributes.isAList == 'Yes') {
+
+                        scoped_variable.store.commit('pages/update_exec_on_commit',{
+                          command: 'updateDataCollection',
+                          section: 'pageMethods',
+                          method: 'post',
+                          data: `push/${scoped_variable.pageName}/${obj.parentUid}/${obj.properties.attributes['collection name']}`
+                        })
+                      } else if(obj.properties.attributes.isAList == 'No') {
+                        scoped_variable.store.commit('pages/update_exec_on_commit',{
+                          command: 'updateDataCollection',
+                          section: 'pageMethods',
+                          method: 'post',
+                          data: `pull/${scoped_variable.pageName}/${obj.parentUid}/${obj.properties.attributes['collection name']}`
+                        })
+                      }
                     }
                   });
                 }
               });
+
+              //
               this.$store.commit("pages/set_temp_id", {
                 uid: this.data.uid,
                 index: this.data.index
