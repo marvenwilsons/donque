@@ -74,6 +74,11 @@ export const getters = {
 }
 
 export const mutations = {
+    // util
+    set_any_page_prop(state,{NameOfProp,Operation}) {
+        return Operation(state[NameOfProp])
+    },
+
     update_exec_on_commit(state,payload) {
         state.exec_on_commit.push(payload)
     },
@@ -225,18 +230,19 @@ export const mutations = {
                  * save data to temp then loop to the temp until loop is done
                  * on the last lopp item, update the prop  
                  */
+                const StageData = state
                 if (temp == undefined) {
                     temp = latest_root_copy.sections[locator[i]]
 
                     if (locator.length == 1) {
-                        exec_on_prop(temp[target_prop], tag, scoped_variable,temp)
+                        exec_on_prop(temp[target_prop], tag, scoped_variable,temp,StageData)
                     }
                 } else {
 
                     temp = temp[locator[i]]
 
                     if (i == locator.length - 1) {
-                        exec_on_prop(temp[target_prop], tag, scoped_variable,temp)
+                        exec_on_prop(temp[target_prop], tag, scoped_variable,temp,StageData)
                         temp = undefined
                     }
                 }
@@ -269,6 +275,8 @@ export const mutations = {
             latest_stage_copy.desc = desc
 
             let temp = undefined
+
+            const StageData = state
             
 
             // inserting the new section view object
@@ -283,14 +291,14 @@ export const mutations = {
                     temp = latest_stage_copy.obj.sections[locator[i]]
 
                     if(locator.length == 1){
-                        exec_on_prop(temp[target_prop], tag, scoped_variable,temp)
+                        exec_on_prop(temp[target_prop], tag, scoped_variable,temp,StageData)
                     }
                 } else {
 
                     temp = temp[locator[i]]
 
                     if (i == locator.length - 1){
-                        exec_on_prop(temp[target_prop], tag, scoped_variable,temp)
+                        exec_on_prop(temp[target_prop], tag, scoped_variable,temp,StageData)
                         temp = undefined
                     }
                 }
@@ -379,6 +387,7 @@ export const mutations = {
                 method: "post"
             }).then((res) => {
                 if(res.status){
+                    // success
                     this.commit("modal/set_modal", {
                         head: "Command response",
                         body: {
@@ -393,6 +402,7 @@ export const mutations = {
                         }
                     });
 
+                    // modal
                     this.dispatch("systemCall", {
                         command: "getPage",
                         section: "pageMethods",
