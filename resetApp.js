@@ -13,10 +13,10 @@ execFile('mongod', ['--dbpath', '/home/marven/Desktop/database/Data', '--shutdow
     console.log('** Database shutdown')
 
     console.log('** Clearing database directory')
-    dqfs.rm(path.join(__dirname, '../../Desktop/database/Data/'))
+    dqfs.rm(path.join(__dirname, '../../../Desktop/database/Data/'))
 
     console.log('** Creating Data directory')
-    dqfs.mkdir(path.join(__dirname, '../../Desktop/database/Data'))
+    dqfs.mkdir(path.join(__dirname, '../../../Desktop/database/Data'))
 
     // console.log(fs.readdirSync())
     
