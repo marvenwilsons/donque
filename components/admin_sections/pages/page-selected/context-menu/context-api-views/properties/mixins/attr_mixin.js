@@ -2,7 +2,13 @@ export default {
     data: () => ({
         attr_globalAttr: undefined,
         attr_nativeAttr: undefined,
+        attr_globalIsAListOldVal: undefined
     }),
+    mounted() {
+      setTimeout(() => {
+        this.attr_globalIsAListOldVal = `pull/${this.pageName}/${this.data.parentUid}/${this.schema.global['collection name'].default}`
+      }, 0);
+    },
     methods: {
         // global handler
         attr_globalChange(val) {
@@ -17,40 +23,6 @@ export default {
                 for (key in o) {
                   v = o[key];
                   output[key] = typeof v === "object" ? copy(v) : v;
-                }
-                
-                // isAList
-                if(output.isAList == 'Yes') {
-                  if(output['collection name'] != undefined) {
-                    this.$store.commit('pages/update_exec_on_commit',{
-                      command: 'updateDataCollection',
-                      section: 'pageMethods',
-                      method: 'post',
-                      data: {
-                        pageName: this.pageName,
-                        collectionName: output['collection name'],
-                        action: 'push'
-                      }
-                    })
-                  }else {
-                    alert('Collection name cannot be undefined')
-                  }                  
-                } else {
-                  if(output.isAList == 'No') {
-                    // check server data_collection array if the collection name exist in that array
-                    // if it does pull it from the array, if cant find the collectionName do nothing
-                    this.$store.commit('pages/update_exec_on_commit',{
-                      command: 'updateDataCollection',
-                      section: 'pageMethods',
-                      method: 'post',
-                      data: {
-                        pageName: this.pageName,
-                        collectionName: output['collection name'],
-                        action: 'pull'
-                      }
-                    })
-
-                  }
                 }
       
                 return output;
@@ -67,13 +39,14 @@ export default {
                     scoped_variable: {
                       nattr,
                       store: this.$store,
-                      pageName: this.pageName
+                      pageName: this.pageName,
+                      attrOldVal: this.attr_globalIsAListOldVal
                     },
                     exec_on_prop(prop, tag, scoped_variable, obj) {
                       obj.properties.attributes = scoped_variable.nattr;
 
+                      // isAList push and pull to exec on commit
                       if(obj.properties.attributes.isAList == 'Yes') {
-
                         scoped_variable.store.commit('pages/update_exec_on_commit',{
                           command: 'updateDataCollection',
                           section: 'pageMethods',
@@ -81,11 +54,12 @@ export default {
                           data: `push/${scoped_variable.pageName}/${obj.parentUid}/${obj.properties.attributes['collection name']}`
                         })
                       } else if(obj.properties.attributes.isAList == 'No') {
+                        // locate the entry and pull it from the database "data_collection"
                         scoped_variable.store.commit('pages/update_exec_on_commit',{
                           command: 'updateDataCollection',
                           section: 'pageMethods',
                           method: 'post',
-                          data: `pull/${scoped_variable.pageName}/${obj.parentUid}/${obj.properties.attributes['collection name']}`
+                          data: scoped_variable.attrOldVal
                         })
                       }
                     }
