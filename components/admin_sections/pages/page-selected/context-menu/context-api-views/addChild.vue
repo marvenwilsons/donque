@@ -127,7 +127,7 @@ Component Responsibility
 
 <script>
 export default {
-  props: ["uid", "data", "path"],
+  props: ["uid", "data", "path", "pageName"],
   data() {
     return {
       selected: undefined,
@@ -169,7 +169,7 @@ export default {
   },
   methods: {
     addElemento(el, uid) {
-      const fn = () => {};
+      console.log('adding element')
 
       const gots = ({
         tag,
@@ -193,9 +193,14 @@ export default {
           classList: classList ? classList : [],
           els: els ? els : [],
           notes: "",
-          properties: {},
+          properties: {
+            attributes: {
+            }
+          },
+          parentUid: `${this.pageName}-${this.uid}`,
           events: {},
           data_collection: [],
+          fn:  undefined,
           stat: {
             lastModified,
             createdOn,

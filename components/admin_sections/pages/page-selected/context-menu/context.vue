@@ -256,9 +256,21 @@ export default {
             this.$store.commit("pages/update_section", {
               desc: `remove element - addrs: ${locator.join(" > ")}`,
               locator: locator,
-              scoped_variable: this.$store.state.pages.api_view_el.index,
+              scoped_variable: {
+                el: this.$store.state.pages.api_view_el.index,
+                store: this.$store
+              },
               exec_on_prop: function(prop, tag, scoped_variable, obj) {
-                obj.splice(scoped_variable, 1);
+
+                scoped_variable.store.commit("pages/update_exec_on_commit", {
+                  command: "updateDataCollection",
+                  section: "pageMethods",
+                  method: "post",
+                  data: `pull/${obj[0].parentUid.split('-')[0]}/${obj[0].parentUid}/${obj[0].uid}/${obj[0].properties.attributes['collection name']}`
+                });
+
+                obj.splice(scoped_variable.el, 1);
+                
               }
             });
           }

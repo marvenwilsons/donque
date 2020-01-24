@@ -6,7 +6,7 @@ export default {
     }),
     mounted() {
       setTimeout(() => {
-        this.attr_globalIsAListOldVal = `pull/${this.pageName}/${this.data.parentUid}/${this.schema.global['collection name'].default}`
+        this.attr_globalIsAListOldVal = `pull/${this.pageName}/${this.data.parentUid}/${this.data.uid}/${this.schema.global['collection name'].default}`
       }, 0);
     },
     methods: {
@@ -51,7 +51,7 @@ export default {
                           command: 'updateDataCollection',
                           section: 'pageMethods',
                           method: 'post',
-                          data: `push/${scoped_variable.pageName}/${obj.parentUid}/${obj.properties.attributes['collection name']}`
+                          data: `push/${scoped_variable.pageName}/${obj.parentUid}/${obj.uid}/${obj.properties.attributes['collection name']}`
                         })
                       } else if(obj.properties.attributes.isAList == 'No') {
                         // locate the entry and pull it from the database "data_collection"
