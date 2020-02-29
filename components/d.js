@@ -1,9 +1,13 @@
+import objtifyConverter from "@/components/Utility-Components/Objectify/converter"
+
 export default {
     data: () => ({
         mixin: undefined
     }),
     methods: {
-        // 
+        'Objectify.convert'(Schema,VanillaObject) {
+            return objtifyConverter(Schema,VanillaObject)
+        }
     },
     mounted() {
         this.mixin = {
