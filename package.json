@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.8.0",
+    "colors": "^1.4.0",
     "cross-env": "^5.2.1",
     "express": "^4.17.1",
     "gsap": "^2.0.2",
