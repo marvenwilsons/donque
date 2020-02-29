@@ -1,6 +1,8 @@
-import objtifyConverter from '@/components/global-ui/objectify/converter'
+// import objtifyConverter from '@/components/global-ui/objectify/converter'
+import d from "@/components/d.js";
 
 export default {
+    mixins: [d],
     data: () => ({
         global: {
             // Normal
@@ -402,7 +404,7 @@ export default {
     methods: {
         // convert
         objtifyConverter(schema,vanilla_obj) {
-            return objtifyConverter(schema,vanilla_obj)
+            return this['Objectify.convert'](schema,vanilla_obj)
         },
         get_Schema(tag) {
             if(this.native(tag)) {

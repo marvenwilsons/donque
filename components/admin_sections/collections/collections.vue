@@ -7,7 +7,7 @@
       'Get All Collections': Collections,
       get_tempCmd}"
     ></debug>-->
-    <listify
+    <d-listify
       @onAddItem="addNewCollection"
       @onContextAction="contextAction"
       @onEmpty="onEmptyCollection"
@@ -54,17 +54,17 @@
               class="fas fa-times padright025 pointer"
             ></i>
           </div>
-          <div v-if="modal_Content == 'Create Collection'" class="pad125">
+          <!-- <div v-if="modal_Content == 'Create Collection'" class="pad125">
             <modalAddCollection @onCollectionCreated="onCollectionCreated" :data="null"></modalAddCollection>
-          </div>
+          </div>-->
           <div v-if="modal_Content == 'Edit Schema'" class="pad125">
             <modalAddCollection @onEditSchemaDone="onCollectionCreated" :data="edit_schema_data"></modalAddCollection>
           </div>
-          <div v-if="!modal_Content" class="pad125">
+          <!-- <div v-if="!modal_Content" class="pad125">
             <div>
               <strong>Fetching data ...</strong>
             </div>
-          </div>
+          </div>-->
           <div v-if="modal_Content == 'Delete A Collection'" class="pad125">
             <div>
               <strong>Are you sure you want to delete collection "{{modal_ContentObject['Collection Name']}}"?</strong>
@@ -90,7 +90,7 @@
           </div>
         </div>
       </div>
-    </listify>
+    </d-listify>
   </div>
 </template>
 
@@ -203,7 +203,7 @@ export default {
       // this.modal_Content = "Create Collection";
       this.$emit("SetPaneModal", {
         pane_index: this.my_pane_index,
-        pane_name: 'Data Collections',
+        pane_name: "Data Collections",
         component: modal_AddCollection,
         title: "Create Collection",
         width: "420px",

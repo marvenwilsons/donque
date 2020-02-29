@@ -757,7 +757,7 @@ pageMethods.updatePage = {
     },
     updatePage({dep,data}){
 
-        let { content, path } = data
+        let { content, path, list } = data
         const { db, moment } = dep
 
         path === '/' && (path = '/home')
@@ -865,16 +865,20 @@ pageMethods.updateDataCollection = {
         }
     },
     updateDataCollection({dep,data}) {
-        console.log('updating data colletion')
-        
-        const {pageName, collectionName, action} = data
+        const s = data.split('/')
+        const pageName = s[1]
+        const action = s[0]
+        const ctx = `${s[2]}/${s[3]}/${s[4]}`
         const {db} = dep
+
+        console.log('updateDataCollection', action, ctx)
         
+        // $push or $pull
         db.collection('dq_app').findOneAndUpdate(
             {},
             {
                 [`$${action}`]: {
-                    [`routeContents.${pageName}.data_collection` ] : collectionName
+                    [`routeContents.${pageName}.data_collection` ] : ctx
                 }
             }
         )

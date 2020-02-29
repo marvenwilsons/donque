@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex1 flexcol" v-if="listifyInputData">
-    <!-- <debug :data="{$props:{data,listifyInputData}}"></debug> -->
-    <listify
+    <!-- <debug :data="{$props:{data,listifyInputData},store:$store.state.pages.exec_on_commit}"></debug> -->
+    <d-listify
       v-if="ready"
       class="borderred"
       @onContextAction="contextAction"
@@ -57,7 +57,7 @@
           </div>
           <div v-if="modal_Content == 'Rename Page'">
             <div class="fullwidth pad125">
-              <strong v-if="rename_subject" >Rename page:</strong>
+              <strong v-if="rename_subject">Rename page:</strong>
               <i>{{rename_subject}}</i>
               <div>
                 <input
@@ -85,7 +85,7 @@
       <div slot="item-icon">
         <i class="fas fa-file-alt"></i>
       </div>
-    </listify>
+    </d-listify>
   </div>
 </template>
 
@@ -128,12 +128,12 @@ export default {
       textColor: "#196ADD",
 
       // border colors
-      borderColor: "#F1F8FF",
+      borderColor: "#DFE3E8",
       listBorderColor: "#e8f4f8",
 
       // backgrounds
       bodyBg: "white",
-      searchBarBgColor: "#F1F8FF",
+      searchBarBgColor: "#F9FAFB",
       searchBarTextColor: "#24292E",
       modalBgOverlay: "white",
       odds: "white", // background of odd index item in the list
@@ -296,12 +296,12 @@ export default {
         });
       }
     },
-    Context_RenamePage({actionCastOn}) {
+    Context_RenamePage({ actionCastOn }) {
       /**
        * Opens the rename modal
        */
       this.Mutate_Modal(true, "Rename Page");
-      this.rename_subject = actionCastOn.PageName
+      this.rename_subject = actionCastOn.PageName;
     },
     Context_DeletePage(actionCastOn) {
       /**

@@ -10,7 +10,7 @@
     ></debug>-->
     <!-- dubug end -->
     <div class="fullheight-percent">
-      <listify
+      <d-listify
         @onContextAction="contextAction"
         @onAddItem="addSubCategory"
         :inputData="Selected_Categories"
@@ -127,7 +127,7 @@
             </div>
           </div>
         </div>
-      </listify>
+      </d-listify>
     </div>
   </div>
 </template>

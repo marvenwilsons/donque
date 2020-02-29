@@ -8,10 +8,10 @@
       },
       $data: {data,CollectionName,CollectionsRootCategories}
     }"
-    ></debug> -->
+    ></debug>-->
     <!--  -->
     <div class="fullheight-percent">
-      <listify
+      <d-listify
         v-dq-disable-horizontal-scrolling
         @onContextAction="contextAction"
         @onAddItem="addCategory"
@@ -127,7 +127,7 @@
             </div>
           </div>
         </div>
-      </listify>
+      </d-listify>
     </div>
   </div>
 </template>
@@ -163,7 +163,7 @@ export default {
   computed: {
     ...mapGetters({
       _collections: "collections/getAllCollections",
-      _getCollection: "collections/getCollection",
+      _getCollection: "collections/getCollection"
     })
   },
   watch: {
@@ -232,7 +232,7 @@ export default {
       }
 
       if (val.actionName === "Sub Category") {
-        let obj = {}
+        let obj = {};
         // this is a hack just to make the sub_Category component always
         // triggers the vue watch property
         this.count++;
@@ -248,9 +248,11 @@ export default {
         // ); // retunrs  an array of strings
 
         obj.count = this.count;
-        obj.CategoryName = val.actionCastOn['Category Name']
-        obj.CollectionName =  this._collections[this.data.indexOfCollection]['Collection Name']
-        obj.IndexOfCollection = this.data.indexOfCollection
+        obj.CategoryName = val.actionCastOn["Category Name"];
+        obj.CollectionName = this._collections[this.data.indexOfCollection][
+          "Collection Name"
+        ];
+        obj.IndexOfCollection = this.data.indexOfCollection;
 
         // open pane
         this.$store.dispatch("pane_system/open", {
@@ -325,7 +327,7 @@ export default {
     );
     setTimeout(() => {
       if (this.CollectionsRootCategories.length == 0) {
-        this.addCategory()
+        this.addCategory();
       }
     }, 0);
   }

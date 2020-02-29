@@ -11,11 +11,11 @@
 </template>
 
 <script>
-import my_mixin from "@/components/mixin.js";
+import d from "@/components/d.js";
 
 export default {
   props: ["my_pane_index"],
-  mixins: [my_mixin],
+  mixins: [d],
   beforeCreate() {
     this.$store.commit("pane_system/set_pane_config", {
       title: "Dashboard",

@@ -153,6 +153,7 @@ export default {
   },
   mounted() {
     this.page_data = this.$store.state.current_page
+    // console.log('pagedata', JSON.stringify(this.$store.state.current_page))
     /**
      * Setting admin data
      */
@@ -189,13 +190,11 @@ export default {
       return (this.view = "admin_portal");
     } 
     else if (this.$store.state.current_page) {
-      console.log(this.$store.state.current_page)
       console.log('public portal')
-      console.log(this.$store.state.app.data.public)
       setTimeout(() => {
-        this.ini1()
+        // this.ini1()
         setTimeout(() => {
-          this.ini2()
+          // this.ini2()
         }, 0);
       }, 0);
       return (this.view = "public_portal")

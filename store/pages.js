@@ -426,17 +426,18 @@ export const mutations = {
                                 });
                             }
                         })
-                    
-                    // isAList
-                    if( state.exec_on_commit.length) {
-                        state.exec_on_commit.map(item => {
-                            this.dispatch("systemCall",item).then(() => {
-                                this.commit('pages/clear_exec_on_commit')
-                            }) 
-                        })
-                    } 
                 }
                 this.commit('pages/clear_stage')
+
+                // isAList
+                if( state.exec_on_commit.length) {
+                    state.exec_on_commit.map(item => {
+                        console.log(item)
+                        this.dispatch("systemCall",item).then(() => {
+                            this.commit('pages/clear_exec_on_commit')
+                        }) 
+                    })
+                } 
             })
         }
     },

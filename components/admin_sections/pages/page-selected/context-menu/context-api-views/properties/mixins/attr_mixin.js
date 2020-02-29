@@ -47,6 +47,7 @@ export default {
 
                       // isAList push and pull to exec on commit
                       if(obj.properties.attributes.isAList == 'Yes') {
+                        console.log('Push Exec On Commit --> isAList Yes')
                         scoped_variable.store.commit('pages/update_exec_on_commit',{
                           command: 'updateDataCollection',
                           section: 'pageMethods',
@@ -55,6 +56,8 @@ export default {
                         })
                       } else if(obj.properties.attributes.isAList == 'No') {
                         // locate the entry and pull it from the database "data_collection"
+                        console.log('Push Exec On Commit --> isAList No')
+                        console.log('delete', scoped_variable.attrOldVal)
                         scoped_variable.store.commit('pages/update_exec_on_commit',{
                           command: 'updateDataCollection',
                           section: 'pageMethods',

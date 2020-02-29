@@ -261,7 +261,7 @@ export default {
                 store: this.$store
               },
               exec_on_prop: function(prop, tag, scoped_variable, obj) {
-
+                console.log('to be deleted', obj)
                 scoped_variable.store.commit("pages/update_exec_on_commit", {
                   command: "updateDataCollection",
                   section: "pageMethods",
