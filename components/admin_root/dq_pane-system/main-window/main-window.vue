@@ -120,6 +120,11 @@
                         }"
                         :CustomData="ModalFn[pane_index][config[pane_index].title].CustomData"
                         :is="ModalFn[pane_index][config[pane_index].title].modal"
+                        :paneMethods="true /* 
+                          deep dependency injection .
+                          pass all the methods needed for pane operation, instead of calling the store,
+                          systemCall, the paneModal, stage Methods like alter Metohds.
+                        */"
                       ></div>
                     </div>
                   </div>
