@@ -1,116 +1,130 @@
 <template>
-  <div
-    v-dq-disable-horizontal-scrolling
-    id="dq-main"
-    class="fullheight-percent fullwidth relative flex flexcenter"
-  >
-    <transition name="fade">
-      <div v-if="isReady" id="dq-main-w" class="absolute fullwidth flex fullheight-percent pad125">
-        <div
-          v-for="(panes,pane_index) in $store.state.pane_system.pane_index_list"
-          :key="`p-${pane_index}`"
-          role="pane-host"
-          :id="`${panes}-${pane_index}`"
-          class="fullheight-percent flex"
-          :style="{
+    <div
+        v-dq-disable-horizontal-scrolling
+        id="dq-main"
+        class="fullheight-percent fullwidth relative flex flexcenter"
+    >
+        <transition name="fade">
+            <div
+                v-if="isReady"
+                id="dq-main-w"
+                class="absolute fullwidth flex fullheight-percent pad125"
+            >
+                <div
+                    v-for="(panes,pane_index) in $store.state.pane_system.pane_index_list"
+                    :key="`p-${pane_index}`"
+                    role="pane-host"
+                    :id="`${panes}-${pane_index}`"
+                    class="fullheight-percent flex"
+                    :style="{
             opacity: 0,
             minWidth: width_handler(config != undefined,config,pane_index),
             maxWidth: width_handler(config != undefined,config,pane_index)}"
-        >
-          <!-- pane -->
-          <div
-            :style="{boxShadow:'0px 0px 10px 1px gray',borderRadius: '5px',background:'rgb(233, 239, 243)'}"
-            :id="`${panes}`"
-            class="fullheight-percent flex flexcol flex1"
-          >
-            <!-- {{ani(`${panes}-${pane_index}`)}} -->
-            <!-- id use to be: pane-${pane_index}-${panes} -->
-            <!-- <debug :data="{config_state,paneSytem:$store.state.pane_system,ModalFn}"></debug> -->
-
-            <!-- pane head -->
-            <div v-if="isReady">
-              {{init_head($store.state.pane_system.pane_index_config_list)}}
-              <!-- pane head and controls -->
-              <div v-if="config[pane_index]" class="flex fullwidth flexcol">
-                <div
-                  v-if="config[pane_index].head_visibility"
-                  :style="{background:config[pane_index].pane_head_bg_color, borderTopLeftRadius: '5px',borderTopRightRadius: '5px'}"
-                  class="flex spacebetween fullwidth pad050"
                 >
-                  <div
-                    class="fullwidth relative padleft050"
-                    :style="{ color:config[pane_index].pane_head_title_color}"
-                  >
-                    <strong style="word-wrap: break-word">{{config[pane_index].title}}</strong>
-                  </div>
-                  <div class="flex">
-                    <!-- <i
+                    <!-- pane -->
+                    <div
+                        :style="{borderRadius: '5px',background:'rgb(233, 239, 243)'}"
+                        :id="`${panes}`"
+                        class="fullheight-percent flex flexcol flex1 dqpane"
+                    >
+                        <!-- {{ani(`${panes}-${pane_index}`)}} -->
+                        <!-- id use to be: pane-${pane_index}-${panes} -->
+                        <!-- <debug :data="{config_state,paneSytem:$store.state.pane_system,ModalFn}"></debug> -->
+
+                        <!-- pane head -->
+                        <div v-if="isReady">
+                            {{init_head($store.state.pane_system.pane_index_config_list)}}
+                            <!-- pane head and controls -->
+                            <div v-if="config[pane_index]" class="flex fullwidth flexcol">
+                                <div
+                                    v-if="config[pane_index].head_visibility"
+                                    :style="{background:config[pane_index].pane_head_bg_color, borderTopLeftRadius: '5px',borderTopRightRadius: '5px'}"
+                                    class="flex spacebetween fullwidth pad050"
+                                >
+                                    <div
+                                        class="fullwidth relative padleft050"
+                                        :style="{ color:config[pane_index].pane_head_title_color}"
+                                    >
+                                        <strong
+                                            style="word-wrap: break-word"
+                                        >{{config[pane_index].title}}</strong>
+                                    </div>
+                                    <div class="flex">
+                                        <!-- <i
                     :style="{color:config[pane_index].pane_head_title_color}"
                     v-if="config[pane_index].maximizable"
                     class="pointer far fa-window-maximize padright025"
                     @click="$store.dispatch('pane_system/maximize',config[pane_index].comp)"
-                    ></i>-->
-                    <i
-                      @click="paneSettings(pane_index,config[pane_index].title)"
-                      :style="{color:config[pane_index].pane_head_title_color}"
-                      class="fas fa-cog padright050 pointer"
-                    ></i>
-                    <i
-                      :style="{color:config[pane_index].pane_head_title_color}"
-                      v-if="config[pane_index].closable"
-                      class="pointer fas fa-times padright025"
-                      @click="$store.dispatch('pane_system/close',pane_index)"
-                    ></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- pane body -->
-            <div style="background:white;" class="fullheight-percent flex flexcol relative">
-              <div
-                :data="$store.state.pane_system.pane_data_list[pane_index]"
-                :theme="$store.state.theme"
-                :store="$store.state"
-                :my_pane_index="pane_index"
-                :my_pane="config[pane_index]"
-                :is="panes"
-                @SetPaneModal="PaneModalHandler"
-              ></div>
-              <!-- Pane Modal -->
-              <div
-                id="dq-pane-modal-host"
-                v-if="config[pane_index] && ModalFn[pane_index][config[pane_index].title].modal"
-                class="absolute fullwidth fullheight-percent flex flexcenter"
-              >
-                <div :style="{width: ModalFn[pane_index][config[pane_index].title].width, height: ModalFn[pane_index][config[pane_index].title].height}">
-                  <div class="DqModalContainer fullheight-percent" :id="`DqModalContainer-${pane_index}`">
-                    <!-- modal heading -->
-                    <div
-                      v-if="ModalFn[pane_index][config[pane_index].title].header"
-                      style="background: rgb(48, 51, 64);color:white;border-top-left-radius:5px;border-top-right-radius:5px;"
-                      class="flex spacebetween flexcenter pad050"
-                    >
-                      <strong
-                        class="padleft050"
-                      >{{ModalFn[pane_index][config[pane_index].title].title}}</strong>
-                      <i
-                        v-if="ModalFn[pane_index][config[pane_index].title].CanBeClose"
-                        @click="$emit('UnSetPaneModal',{
+                                        ></i>-->
+                                        <i
+                                            @click="paneSettings(pane_index,config[pane_index].title)"
+                                            :style="{color:config[pane_index].pane_head_title_color}"
+                                            class="fas fa-cog padright050 pointer"
+                                        ></i>
+                                        <i
+                                            :style="{color:config[pane_index].pane_head_title_color}"
+                                            v-if="config[pane_index].closable"
+                                            class="pointer fas fa-times padright025"
+                                            @click="$store.dispatch('pane_system/close',pane_index)"
+                                        ></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- pane body -->
+                        <div
+                            style="background:white;"
+                            class="fullheight-percent flex flexcol relative"
+                        >
+                            <div
+                                :data="$store.state.pane_system.pane_data_list[pane_index]"
+                                :theme="$store.state.theme"
+                                :store="$store.state"
+                                :my_pane_index="pane_index"
+                                :my_pane="config[pane_index]"
+                                :is="panes"
+                                @SetPaneModal="PaneModalHandler"
+                            ></div>
+                            <!-- Pane Modal -->
+                            <div
+                                id="dq-pane-modal-host"
+                                v-if="config[pane_index] && ModalFn[pane_index][config[pane_index].title].modal"
+                                class="absolute fullwidth fullheight-percent flex flexcenter"
+                            >
+                                <div
+                                    :style="{width: ModalFn[pane_index][config[pane_index].title].width, height: ModalFn[pane_index][config[pane_index].title].height}"
+                                >
+                                    <div
+                                        class="DqModalContainer fullheight-percent"
+                                        :id="`DqModalContainer-${pane_index}`"
+                                    >
+                                        <!-- modal heading -->
+                                        <div
+                                            v-if="ModalFn[pane_index][config[pane_index].title].header"
+                                            style="background: rgb(48, 51, 64);color:white;border-top-left-radius:5px;border-top-right-radius:5px;"
+                                            class="flex spacebetween flexcenter pad050"
+                                        >
+                                            <strong
+                                                class="padleft050"
+                                            >{{ModalFn[pane_index][config[pane_index].title].title}}</strong>
+                                            <i
+                                                v-if="ModalFn[pane_index][config[pane_index].title].CanBeClose"
+                                                @click="$emit('UnSetPaneModal',{
                         pane_index,
                         pane_name: config[pane_index].title
                         })"
-                        class="fas fa-times padright025 pointer"
-                      ></i>
-                    </div>
-                    <div
-                      :style="{background: ModalFn[pane_index][config[pane_index].title].background ? ModalFn[pane_index][config[pane_index].title].background : 'white'}"
-                      class="pad125 fullheight-percent"
-                    >
-                    <!-- modal dynamic component from the modal caller, the component used in this modal ":is" cannot be found in this
-                    component "main-window.vue" because it is not registered here -->
-                      <div
-                        class="fullheight-percent"
-                        :UnsetPaneModal="() => {
+                                                class="fas fa-times padright025 pointer"
+                                            ></i>
+                                        </div>
+                                        <div
+                                            :style="{background: ModalFn[pane_index][config[pane_index].title].background ? ModalFn[pane_index][config[pane_index].title].background : 'white'}"
+                                            class="pad125 fullheight-percent"
+                                        >
+                                            <!-- modal dynamic component from the modal caller, the component used in this modal ":is" cannot be found in this
+                                            component "main-window.vue" because it is not registered here-->
+                                            <div
+                                                class="fullheight-percent"
+                                                :UnsetPaneModal="() => {
                           // UsSetPaneModal is a function that closed the modal, it is passed down as a prop, to a component that spawns the modal
                           // thas is not direct child to the pane. Components that is not direct child to the pane cannot close the modal pane directly
                           // it needs the emit an event and the parent needs to catch the event, and event bubbling can be long depending on the level
@@ -118,25 +132,25 @@
                           // effecient compared to bubble event.
                           $emit('UnSetPaneModal', {pane_index, pane_name: config[pane_index].title})
                         }"
-                        :CustomData="ModalFn[pane_index][config[pane_index].title].CustomData"
-                        :is="ModalFn[pane_index][config[pane_index].title].modal"
-                        :paneMethods="true /* 
+                                                :CustomData="ModalFn[pane_index][config[pane_index].title].CustomData"
+                                                :is="ModalFn[pane_index][config[pane_index].title].modal"
+                                                :paneMethods="true /* 
                           deep dependency injection .
                           pass all the methods needed for pane operation, instead of calling the store,
                           systemCall, the paneModal, stage Methods like alter Metohds.
                         */"
-                      ></div>
+                                            ></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                  </div>
+                    <div class="pad050"></div>
                 </div>
-              </div>
             </div>
-          </div>
-          <div class="pad050"></div>
-        </div>
-      </div>
-    </transition>
-  </div>
+        </transition>
+    </div>
 </template>
 
 <script>
@@ -174,7 +188,7 @@ import CollectionsViewAll from "@/components/admin_sections/collections/view_all
 import CollectionsCategories from "@/components/admin_sections/collections/categories.vue";
 import CollectionsSubCategories from "@/components/admin_sections/collections/sub_categories.vue";
 import ViewCatItems from "@/components/admin_sections/collections/categories/view_cat_items.vue";
-import CollectionEntryEditor from "@/components/admin_sections/collections/editor/editor.vue"
+import CollectionEntryEditor from "@/components/admin_sections/collections/editor/editor.vue";
 
 //
 import Messages from "@/components/admin_sections/messages/messages.vue";
@@ -196,206 +210,214 @@ import { mapGetters } from "vuex";
 import { TweenMax, TimelineLite, TweenLite } from "gsap";
 
 export default {
-  props: ["ModalContent", "ModalFn"],
-  data() {
-    return {
-      isReady: false,
-      config_copy: undefined,
-      comps: {},
-      scroll_val: 0,
-      scroll_val_temp: 0,
-      main_w: undefined,
-      max_scroll: 333,
-      latest_id: undefined,
-      close_modal_method: undefined
-    };
-  },
-  methods: {
-    PaneModalHandler(value) {
-      this.$emit("insertModal", value);
+    props: ["ModalContent", "ModalFn"],
+    data() {
+        return {
+            isReady: false,
+            config_copy: undefined,
+            comps: {},
+            scroll_val: 0,
+            scroll_val_temp: 0,
+            main_w: undefined,
+            max_scroll: 333,
+            latest_id: undefined,
+            close_modal_method: undefined
+        };
     },
-    UnSetPaneModal() {
-      this.$emit("UnSetPaneModal");
-    },
-    init_head(arg) {
-      this.config_copy = arg;
-    },
-    width_handler(arg, config, index) {
-      if (arg) {
-        if (config[index] === undefined) {
-          return "300px";
-        } else {
-          return config[index].pane_width;
+    methods: {
+        PaneModalHandler(value) {
+            this.$emit("insertModal", value);
+        },
+        UnSetPaneModal() {
+            this.$emit("UnSetPaneModal");
+        },
+        init_head(arg) {
+            this.config_copy = arg;
+        },
+        width_handler(arg, config, index) {
+            if (arg) {
+                if (config[index] === undefined) {
+                    return "300px";
+                } else {
+                    return config[index].pane_width;
+                }
+            } else {
+                return "300px";
+            }
+        },
+        ani(id) {},
+        paneSettings(pane_index, pane_title) {
+            this.PaneModalHandler({
+                pane_index: pane_index,
+                pane_name: pane_title,
+                component: PaneSettings,
+                title: "Pane Settings",
+                width: "500px",
+                CanBeClose: true,
+                header: true
+            });
         }
-      } else {
-        return "300px";
-      }
     },
-    ani(id) {},
-    paneSettings(pane_index, pane_title) {
-      this.PaneModalHandler({
-        pane_index: pane_index,
-        pane_name: pane_title,
-        component: PaneSettings,
-        title: "Pane Settings",
-        width: "500px",
-        CanBeClose: true,
-        header: true
-      });
-    }
-  },
-  components: {
-    Dashboard,
-    /**
-     * administartion
-     */
-    Administration,
-    Addnewapplicationadmin, // this is a form
-    Addnewdatabaseadmin,
-    Applicationadminlist,
-    Currentliveadmins,
-    Databaseadminlist,
-    Currentblockedadmins,
-    Lostpasswordrequest,
-    Createnewteam,
-    Displayallteams,
-    Createcustomroles,
-    Displayallroles,
-    Office,
+    components: {
+        Dashboard,
+        /**
+         * administartion
+         */
+        Administration,
+        Addnewapplicationadmin, // this is a form
+        Addnewdatabaseadmin,
+        Applicationadminlist,
+        Currentliveadmins,
+        Databaseadminlist,
+        Currentblockedadmins,
+        Lostpasswordrequest,
+        Createnewteam,
+        Displayallteams,
+        Createcustomroles,
+        Displayallroles,
+        Office,
 
-    /**
-     * pages
-     */
-    Pages,
-    PageSelected,
+        /**
+         * pages
+         */
+        Pages,
+        PageSelected,
 
-    //
-    Components,
+        //
+        Components,
 
-    // Collections
-    Collections,
-    CollectionsAddEntry,
-    CollectionsViewAll,
-    CollectionsCategories,
-    CollectionsSubCategories,
-    ViewCatItems,
-    CollectionEntryEditor,
+        // Collections
+        Collections,
+        CollectionsAddEntry,
+        CollectionsViewAll,
+        CollectionsCategories,
+        CollectionsSubCategories,
+        ViewCatItems,
+        CollectionEntryEditor,
 
-    Messages,
-    Todos,
-    Profile,
-    Plugins,
-    Settings,
-    Marketplace,
-    Database,
-    Console,
-    Files,
-    Task
-  },
-  computed: {
-    ...mapGetters({
-      config_state: "pane_system/config_state",
-      pane_list_state: "pane_system/list_state"
-    }),
-    config() {
-      return this.config_copy;
+        Messages,
+        Todos,
+        Profile,
+        Plugins,
+        Settings,
+        Marketplace,
+        Database,
+        Console,
+        Files,
+        Task
     },
-    get_horizontal_scrolling() {
-      return this.$store.state.pane_system.horizontal_scrolling;
-    },
-    get_scroll_val() {
-      return this.scroll_val;
-    }
-  },
-  watch: {
-    config_state(n, o) {
-      this.isReady = true;
-    },
-    get_scroll_val(current, old) {
-      if (this.get_horizontal_scrolling) {
-        if (current >= this.max_scroll) {
-          if (this.scroll_val_temp) {
-            this.scroll_val = this.scroll_val_temp;
-            this.scroll_val_temp = 0;
-          } else {
-            this.scroll_val = this.max_scroll;
-          }
-        } else if (current < 20) {
-          if (this.scroll_val_temp) {
-            this.scroll_val = this.scroll_val_temp;
-            this.scroll_val_temp = 0;
-          } else {
-            this.scroll_val = 0;
-          }
+    computed: {
+        ...mapGetters({
+            config_state: "pane_system/config_state",
+            pane_list_state: "pane_system/list_state"
+        }),
+        config() {
+            return this.config_copy;
+        },
+        get_horizontal_scrolling() {
+            return this.$store.state.pane_system.horizontal_scrolling;
+        },
+        get_scroll_val() {
+            return this.scroll_val;
         }
-        this.main_w.scrollLeft = current;
-      } else {
-        this.scroll_val_temp = current;
-      }
     },
-    pane_list_state(current, old) {
-      const oel = document.getElementById(
-        `${current[current.length - 1]}-${current.length - 1}`
-      );
+    watch: {
+        config_state(n, o) {
+            this.isReady = true;
+        },
+        get_scroll_val(current, old) {
+            if (this.get_horizontal_scrolling) {
+                if (current >= this.max_scroll) {
+                    if (this.scroll_val_temp) {
+                        this.scroll_val = this.scroll_val_temp;
+                        this.scroll_val_temp = 0;
+                    } else {
+                        this.scroll_val = this.max_scroll;
+                    }
+                } else if (current < 20) {
+                    if (this.scroll_val_temp) {
+                        this.scroll_val = this.scroll_val_temp;
+                        this.scroll_val_temp = 0;
+                    } else {
+                        this.scroll_val = 0;
+                    }
+                }
+                this.main_w.scrollLeft = current;
+            } else {
+                this.scroll_val_temp = current;
+            }
+        },
+        pane_list_state(current, old) {
+            const oel = document.getElementById(
+                `${current[current.length - 1]}-${current.length - 1}`
+            );
 
-      if (oel == null) {
+            if (oel == null) {
+                setTimeout(() => {
+                    const latest_pane = current[current.length - 1];
+                    const n = document.getElementById(
+                        `${latest_pane}-${current.length - 1}`
+                    );
+                    this.list_stage_old = current;
+
+                    if (n) {
+                        TweenMax.fromTo(
+                            n,
+                            0.5,
+                            { opacity: "0" },
+                            { opacity: "1" }
+                        );
+                    }
+                }, 0);
+            }
+        }
+    },
+
+    updated() {
+        const element = document.getElementById("dq-main-w");
+
+        const max_scroll = element.scrollWidth - element.clientWidth;
+        if (max_scroll) {
+            this.max_scroll = max_scroll;
+        }
+    },
+    mounted() {
+        window.addEventListener("wheel", e => {
+            if (e.deltaY > 0) {
+                this.scroll_val += 70;
+            } else {
+                this.scroll_val -= 70;
+            }
+        });
+
         setTimeout(() => {
-          const latest_pane = current[current.length - 1];
-          const n = document.getElementById(
-            `${latest_pane}-${current.length - 1}`
-          );
-          this.list_stage_old = current;
-
-          if (n) {
-            TweenMax.fromTo(n, 0.5, { opacity: "0" }, { opacity: "1" });
-          }
+            this.main_w = document.getElementById("dq-main-w");
         }, 0);
-      }
+
+        this.close_modal_method = this.UnSetPaneModal;
     }
-  },
-
-  updated() {
-    const element = document.getElementById("dq-main-w");
-
-    const max_scroll = element.scrollWidth - element.clientWidth;
-    if (max_scroll) {
-      this.max_scroll = max_scroll;
-    }
-  },
-  mounted() {
-    window.addEventListener("wheel", e => {
-      if (e.deltaY > 0) {
-        this.scroll_val += 70;
-      } else {
-        this.scroll_val -= 70;
-      }
-    });
-
-    setTimeout(() => {
-      this.main_w = document.getElementById("dq-main-w");
-    }, 0);
-
-    this.close_modal_method = this.UnSetPaneModal
-  }
 };
 </script>
 
 <style>
 #dq-main-w {
-  overflow: scroll hidden;
+    overflow: scroll hidden;
 }
 .DqModalContainer {
-  box-shadow: 0px 0px 10px 5px rgba(48, 51, 64, 0.144);
-  opacity: 0;
+    box-shadow: 0px 0px 10px 5px rgba(48, 51, 64, 0.144);
+    opacity: 0;
+}
+.dqpane {
+    box-shadow: 7px 7px 14px #4646464f, -7px -7px 14px #3636363d;
 }
 #dq-pane-modal-host {
-  z-index: 999;
-  background-color: rgba(91, 95, 110, 0.034);
-  border-radius: 5px;
+    z-index: 999;
+    background-color: rgba(91, 95, 110, 0.034);
+    border-radius: 5px;
 }
 #dq-pane-modal-host > div {
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-  border: 1px solid white;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border: 1px solid white;
 }
 </style>
