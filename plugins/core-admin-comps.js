@@ -20,17 +20,7 @@ import html_audio from "@/components/global-ui/html-els/audio.vue";
 import html_video from "@/components/global-ui/html-els/video.vue";
 import html_img from "@/components/global-ui/html-els/img.vue";
 
-import plugin_pagedirect from "@/components/global-ui/plugins/page-direct/page-direct.vue"
-
-import objectifyFlatSettings from "@/components/global-ui/objectify/objectify-flat-settings.vue";
-import dqTab from "@/components/global-ui/tabs/dq-tab.vue";
-import saveToStagePane from "@/components/global-ui/dq-page/panes/stage-pane.vue";
-import listify from "@/components/global-ui/listify/listify.vue";
-import formMaker from "@/components/global-ui/formMaker/formMaker.vue";
-
-import debug from "@/components/global-ui/debug/debug.vue";
-Vue.component("debug", debug);
-
+// HTML Components
 Vue.component("spinner", spinner);
 Vue.component("html_p", html_p);
 Vue.component("html_div", html_div);
@@ -51,11 +41,23 @@ Vue.component("html_audio", html_audio);
 Vue.component("html_video", html_video);
 Vue.component("html_img", html_img);
 
-Vue.component("objectifyFlatSettings", objectifyFlatSettings);
+
+// Utility Components
+import plugin_pagedirect from "@/components/global-ui/plugins/page-direct/page-direct.vue"
+import objectify from "@/components/Utility-Components/Objectify/objectify-flat-settings.vue"
+import dqTab from "@/components/global-ui/tabs/dq-tab.vue";
+import saveToStagePane from "@/components/global-ui/dq-page/panes/stage-pane.vue";
+import listify from "@/components/Utility-Components/Listify/listify.vue";
+import formMaker from "@/components/global-ui/formMaker/formMaker.vue";
+import debug from "@/components/Utility-Components/Debug/debug.vue";
+import SystemPane from "@/components/Utility-Components/System-Pane/index"
+
+// Utility Components
+Vue.component("debug", debug);
 Vue.component("dqTab", dqTab);
 Vue.component("saveToStagePane", saveToStagePane);
-Vue.component("listify", listify);
+Vue.component("d-listify", listify);
+Vue.component('d-objectify',objectify)
 Vue.component("formMaker", formMaker);
-
-Vue.component('plugin_page-direct',plugin_pagedirect)
-
+Vue.component('plugin_page-direct', plugin_pagedirect)
+Vue.component('D-SYSTEMPANE', SystemPane)
