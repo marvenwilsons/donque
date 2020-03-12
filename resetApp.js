@@ -7,7 +7,7 @@ console.log('** Reseting application')
 // const files_to_be_deleted = fs.readdirSync(path.join(__dirname, '../../Desktop/database/Data/storage.bson'))
 // console.log(files_to_be_deleted)
 
-const database_location = path.join(__dirname, '../../../Desktop/database/Data')
+const database_location = path.join(__dirname, '../dq-db/Data')
 
 // console.log(fs.readdirSync(database_location))
 // return

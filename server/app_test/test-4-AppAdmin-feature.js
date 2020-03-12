@@ -2,19 +2,21 @@
  * This test simulates the owner editing the an admin's permission
  * and the admin trying to access am unpermitted method
  */
+const dblocation = require('./db.location')
+
 
 const { execFile, exec, execSync, spawn } = require('child_process')
 const cardinalTest = require('./cardinalTest')
 const testRunner = require('./testrunner')
 
-execFile('mongod', ['--dbpath', '/home/marven/Desktop/database/Data', '--shutdown'], (error, stdout, stderr) => {
+execFile('mongod', ['--dbpath', dblocation, '--shutdown'], (error, stdout, stderr) => {
 });
 
 console.log('Starting test 4')
 
 const startDatabaseServer = (callback) => {
     console.log('starting mongo server')
-    const mongod = spawn('mongod', ['--dbpath', '/home/marven/Desktop/database/Data'])
+    const mongod = spawn('mongod', ['--dbpath', dblocation])
     mongod.stdout.on('data', stdout => {
         const myRe = /waiting for connections on port 27017/
         const re = myRe.exec(stdout.toString())

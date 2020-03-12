@@ -2,18 +2,21 @@
 const { execFile, exec, execSync, spawn } = require('child_process')
 const cardinalTest = require('./cardinalTest')
 const testRunner = require('./testrunner')
+const dblocation = require('./db.location')
+
+
 
 
 const username = 'jannyann'
 const password = 'password123@'
 let dbServer = false
 
-execFile('mongod', ['--dbpath', '/home/marven/Desktop/database/Data', '--shutdown'], (error, stdout, stderr) => {
+execFile('mongod', ['--dbpath', dblocation, '--shutdown'], (error, stdout, stderr) => {
 });
 
 const startDatabaseServer = (callback) => {
     console.log('starting mongo server')
-    const mongod = spawn('mongod', ['--dbpath', '/home/marven/Desktop/database/Data'])
+    const mongod = spawn('mongod', ['--dbpath', dblocation])
     mongod.stdout.on('data', stdout => {
         const myRe = /waiting for connections on port 27017/
         const re = myRe.exec(stdout.toString())
@@ -305,13 +308,13 @@ const routine_a = [
             err(false)
            
             setTimeout(() => {
-                execFile('mongod', ['--dbpath', '/home/marven/Desktop/database/Data', '--shutdown'], (error, stdout, stderr) => {
+                execFile('mongod', ['--dbpath', dblocation, '--shutdown'], (error, stdout, stderr) => {
                 });
                 setTimeout(() => {
                     testRunner('test-2-AdminLogin-feature.js')
 
-                },1000)
-            }, 2000)
+                },500)
+            }, 200)
         }
     }
 ]
