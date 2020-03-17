@@ -1,9 +1,11 @@
 const { execFile, exec, execSync, spawn } = require('child_process')
 const cardinalTest = require('./cardinalTest')
+const dblocation = require('./db.location')
+
 
 const startDatabaseServer = (callback) => {
     console.log('starting mongo server')
-    const mongod = spawn('mongod', ['--dbpath', '/home/marven/Desktop/database/Data'])
+    const mongod = spawn('mongod', ['--dbpath', dblocation])
     mongod.stdout.on('data', stdout => {
         const myRe = /waiting for connections on port 27017/
         const re = myRe.exec(stdout.toString())
