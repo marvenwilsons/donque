@@ -17,9 +17,9 @@
                     :id="`${panes}-${pane_index}`"
                     class="fullheight-percent flex"
                     :style="{
-            opacity: 0,
-            minWidth: width_handler(config != undefined,config,pane_index),
-            maxWidth: width_handler(config != undefined,config,pane_index)}"
+                        opacity: 0,
+                        minWidth: width_handler(config != undefined,config,pane_index),
+                        maxWidth: width_handler(config != undefined,config,pane_index)}"
                 >
                     <!-- pane -->
                     <div
@@ -51,10 +51,10 @@
                                     </div>
                                     <div class="flex">
                                         <!-- <i
-                    :style="{color:config[pane_index].pane_head_title_color}"
-                    v-if="config[pane_index].maximizable"
-                    class="pointer far fa-window-maximize padright025"
-                    @click="$store.dispatch('pane_system/maximize',config[pane_index].comp)"
+                                        :style="{color:config[pane_index].pane_head_title_color}"
+                                        v-if="config[pane_index].maximizable"
+                                        class="pointer far fa-window-maximize padright025"
+                                        @click="$store.dispatch('pane_system/maximize',config[pane_index].comp)"
                                         ></i>-->
                                         <i
                                             @click="paneSettings(pane_index,config[pane_index].title)"
