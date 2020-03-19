@@ -35,61 +35,61 @@
        }"
       :appearance="listify_Appearance"
     >
-      <div slot="item-icon">
-        <!-- icon that will show on each list item -->
-        <i class="fas fa-layer-group padright125"></i>
-      </div>
-      <!-- @collection modal -->
-      <div slot="modal">
-        <div class style="background:white; width:420px; box-shadow:0px 0px 10px 5px #EEEEEF;">
-          <!-- editLater - style -->
-          <div
-            style="background: rgb(48, 51, 64);color:white;border-top-left-radius:5px;border-top-right-radius:5px;"
-            class="flex spacebetween flexcenter pad050"
-          >
-            <strong class="padleft050">{{modal_Content}}</strong>
-            <i
-              v-if="can_be_close"
-              @click="modal_State = false"
-              class="fas fa-times padright025 pointer"
-            ></i>
-          </div>
-          <!-- <div v-if="modal_Content == 'Create Collection'" class="pad125">
-            <modalAddCollection @onCollectionCreated="onCollectionCreated" :data="null"></modalAddCollection>
-          </div>-->
-          <div v-if="modal_Content == 'Edit Schema'" class="pad125">
-            <modalAddCollection @onEditSchemaDone="onCollectionCreated" :data="edit_schema_data"></modalAddCollection>
-          </div>
-          <!-- <div v-if="!modal_Content" class="pad125">
-            <div>
-              <strong>Fetching data ...</strong>
-            </div>
-          </div>-->
-          <div v-if="modal_Content == 'Delete A Collection'" class="pad125">
-            <div>
-              <strong>Are you sure you want to delete collection "{{modal_ContentObject['Collection Name']}}"?</strong>
-              <br />
-              <div class="pad050 margintop050 backgrounderr">
-                <span style="font-weight:700;">Notice:</span>
-                Once deleted all of the data connected to {{modal_ContentObject['Collection Name']}} collection
-                will be lost forever.
-              </div>
-              <div class="margintop125 flex flexend">
-                <!-- editLater - class darkprimary and borderRad4 attr in button -->
-                <button
-                  @click="delete_Collection"
-                  class="buttonreset pad050 darkprimary borderRad4"
-                >Yes Delete {{modal_ContentObject['Collection Name']}}</button>
-                <span class="pad025"></span>
-                <button
-                  @click="modal_State = false"
-                  class="buttonreset pad050 darkprimary borderRad4"
-                >Cancel</button>
-              </div>
-            </div>
-          </div>
+        <div slot="item-icon">
+            <!-- icon that will show on each list item -->
+            <i class="fas fa-layer-group padright125"></i>
         </div>
-      </div>
+        <!-- @collection modal -->
+        <div slot="modal">
+            <div class style="background:white; width:420px; box-shadow:0px 0px 10px 5px #EEEEEF;">
+            <!-- editLater - style -->
+            <div
+                style="background: rgb(48, 51, 64);color:white;border-top-left-radius:5px;border-top-right-radius:5px;"
+                class="flex spacebetween flexcenter pad050"
+            >
+                <strong class="padleft050">{{modal_Content}}</strong>
+                <i
+                v-if="can_be_close"
+                @click="modal_State = false"
+                class="fas fa-times padright025 pointer"
+                ></i>
+            </div>
+            <!-- <div v-if="modal_Content == 'Create Collection'" class="pad125">
+                <modalAddCollection @onCollectionCreated="onCollectionCreated" :data="null"></modalAddCollection>
+            </div>-->
+            <div v-if="modal_Content == 'Edit Schema'" class="pad125">
+                <modalAddCollection @onEditSchemaDone="onCollectionCreated" :data="edit_schema_data"></modalAddCollection>
+            </div>
+            <!-- <div v-if="!modal_Content" class="pad125">
+                <div>
+                <strong>Fetching data ...</strong>
+                </div>
+            </div>-->
+            <div v-if="modal_Content == 'Delete A Collection'" class="pad125">
+                <div>
+                <strong>Are you sure you want to delete collection "{{modal_ContentObject['Collection Name']}}"?</strong>
+                <br />
+                <div class="pad050 margintop050 backgrounderr">
+                    <span style="font-weight:700;">Notice:</span>
+                    Once deleted all of the data connected to {{modal_ContentObject['Collection Name']}} collection
+                    will be lost forever.
+                </div>
+                <div class="margintop125 flex flexend">
+                    <!-- editLater - class darkprimary and borderRad4 attr in button -->
+                    <button
+                    @click="delete_Collection"
+                    class="buttonreset pad050 darkprimary borderRad4"
+                    >Yes Delete {{modal_ContentObject['Collection Name']}}</button>
+                    <span class="pad025"></span>
+                    <button
+                    @click="modal_State = false"
+                    class="buttonreset pad050 darkprimary borderRad4"
+                    >Cancel</button>
+                </div>
+                </div>
+            </div>
+            </div>
+        </div>
     </d-listify>
   </div>
 </template>
@@ -178,7 +178,11 @@ export default {
   },
   watch: {
     _collections(current, prev) {
-      this.Collections = current;
+        let c = []
+        current.map(e => {
+            c.push({'Collection Name': e['Collection Name']})
+        })
+        this.Collections = c;
     },
     get_tempCmd(current, prev) {
       if (current == "deleteCollection") {
