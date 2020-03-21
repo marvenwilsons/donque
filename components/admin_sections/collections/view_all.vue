@@ -1,5 +1,6 @@
 <template>
   <div>View All
+    hello
     <pre>{{this.data}}</pre>
   </div>
 </template>
@@ -17,6 +18,24 @@ export default {
     });
   },
   mounted() {
+    console.clear()
+    console.log(this.data)
+    console.log(this.$store.state.collections)
+    this.$store.dispatch("systemCall", {
+        command: "getCollectionContents",
+        section: "collectionMethods",
+        data: {
+            collectionName: this.data['Collection Name']
+        },
+            method: "post"
+    }).then(({ data, status }) => {
+        console.log('success', data)
+    }).catch(err => {
+        console.log('an error', err)
+    })
+
+
+    // fetch collection contents
     this.$store.commit("pane_system/alter_pane_config", {
       pane_index: this.my_pane_index,
       alter: {
