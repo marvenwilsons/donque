@@ -304,6 +304,14 @@ export const mutations = {
         keys.map(key => {
             state.pane_index_config_list[pane_index][key] = alter[key]
         })
+    },
+    alter_next_pane_data(state, {pane_index, alter}) {
+        const keys = Object.keys(alter)
+
+        keys.map(key => {
+            console.log('data list', state.pane_data_list[pane_index + 1])
+            state.pane_data_list[pane_index + 1][key] = alter[key]
+        })
     }
 }
 
