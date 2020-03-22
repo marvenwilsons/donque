@@ -97,8 +97,10 @@
 <script>
 import modal_AddCollection from "./modals/add_collection";
 import { mapGetters } from "vuex";
+import h from '../../h'
 
 export default {
+    mixins: [h],
   props: ["my_pane_index"],
   data: () => ({
     dynamic_ContextTitle_entry: ["Books", "Staff", "Products", "asdfd", "q3te"],
@@ -199,7 +201,8 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch("collections/getCollectionDataFromServer");
+        this.mxn = this
+        this.$store.dispatch("collections/getCollectionDataFromServer");
   },
   methods: {
     addNewCollection() {
@@ -241,92 +244,84 @@ export default {
       this.modal_State = false;
     },
     contextAction(val) {
-      if (val.actionName == "Edit Schema") {
-        //
-        const CollectionName = val.actionCastOn["Collection Name"];
-        const Schema = this._getCollection(CollectionName).schema;
+        switch(val.actionName) {
+            case "Add New Entry":
+                // open add new entery pane
+                this.mxnPaneOpen('CollectionsAddEntry',{
+                    "Collection Name": val.actionCastOn['Collection Name'],
+                    schema: this._getCollection(CollectionName).schema
+                })
+            break
+            case "Edit Schema":
+                //
+                const CollectionName = val.actionCastOn["Collection Name"];
+                const Schema = this._getCollection(CollectionName).schema;
+                //
+                this.modal_State = true;
 
-        //
-        this.modal_State = true;
-        this.modal_Content = "Edit Schema";
-
-        //
-        this.edit_schema_data = {
-          "Collection Name": CollectionName,
-          schema: Schema
-        };
-      }
-      if (val.actionName == "Delete") {
-        //
-        const CollectionName = val.actionCastOn["Collection Name"];
-        const Schema = this._getCollection(CollectionName).schema;
-
-        //
-        this.modal_State = true;
-        this.modal_ContentObject = val.actionCastOn;
-        this.modal_Content = "Delete A Collection";
-
-        //
-        this.delete_collection_data = {
-          "Collection Name": CollectionName,
-          schema: Schema
-        };
-      }
-      if (val.actionName == "Add New Entry") {
-        //
-        const CollectionName = val.actionCastOn["Collection Name"];
-
-        //
-        this.$store.dispatch("pane_system/open", {
-          name: "CollectionsAddEntry",
-          index: this.my_pane_index,
-          data: {
-            "Collection Name": CollectionName,
-            schema: this._getCollection(CollectionName).schema
-          }
-        });
-      }
-      if (val.actionName == "View All") {
-        this.$store.dispatch("pane_system/open", {
-          name: "CollectionsViewAll",
-          index: this.my_pane_index,
-          data: val.actionCastOn
-        });
-      }
-      if (val.actionName == "Categories") {
-        const CollectionName = val.actionCastOn["Collection Name"];
-        this.$store.commit(
-          "collections/mutate_Category_being_opened",
-          CollectionName
-        );
-
-        //
-        function getCollectionIndex(collection, name) {
-          let index = 0;
-          collection.map((e, i) => {
-            if (e["Collection Name"] == name) {
-              index = i;
-            }
-          });
-
-          return index;
+                //
+                this.edit_schema_data = {
+                "Collection Name": CollectionName,
+                schema: Schema
+                };
+            break
+            case "Delete":
+                //
+                this.modal_State = true;
+                this.modal_ContentObject = val.actionCastOn;
+                this.modal_Content = "Delete A Collection";
+                //
+                this.delete_collection_data = {
+                    "Collection Name": val.actionCastOn["Collection Name"],
+                    schema: this._getCollection(CollectionName).schema
+                };
+            break
+            case "View All":
+                // Get collection contents for the next pane
+                this.systemCall('getCollectionContents','collectionMethods','post',{
+                    collectionName: val.actionCastOn['Collection Name']
+                }).then(response => {
+                    this.mxnPaneAlterNextData('contents', response[0].contents[val.actionCastOn['Collection Name']])
+                })
+                // Open collection contents preview
+                this.mxnPaneOpen('CollectionsViewAll',{
+                    "Collection Name": val.actionCastOn['Collection Name'],
+                    contents: undefined
+                })
+            break
+            case "Categories":
+                this.$store.commit(
+                    "collections/mutate_Category_being_opened",
+                    val.actionCastOn["Collection Name"]
+                );
+                //
+                function getCollectionIndex(collection, name) {
+                    let index = 0;
+                    collection.map((e, i) => {
+                        if (e["Collection Name"] == name) {
+                        index = i;
+                        }
+                    });
+                    return index;
+                }
+                // open category open
+                this.mxnPaneOpen('CollectionsCategories',{
+                    indexOfCollection: getCollectionIndex(
+                    this._collections,
+                    CollectionName
+                    )
+                }, {
+                    pane_width: "600px",
+                    pane_head_bg_color: "rgb(48, 51, 64)",
+                    renderOnce: true,
+                })
+                    break
+                    case "Validation":
+                    break
+                    case "Edit Schema":
+                    break
         }
 
-        //
-        this.$store.dispatch("pane_system/open", {
-          name: "CollectionsCategories",
-          index: this.my_pane_index,
-          pane_width: "600px",
-          pane_head_bg_color: "rgb(48, 51, 64)",
-          renderOnce: true,
-          data: {
-            indexOfCollection: getCollectionIndex(
-              this._collections,
-              CollectionName
-            )
-          }
-        });
-      }
     },
     onEmptyCollection() {
       this.modal_State = true;
