@@ -1,6 +1,6 @@
 <template>
     <main v-if="isReady" id="dtable" class="flex">
-        <div v-if="debugIsReady && debug" class="flex1" >
+        <!-- <div v-if="debugIsReady && debug" class="flex1" >
             <debug :data="{
                     log: $refs.actionPane.logs, 
                     filterArray: $refs.actionPane.filterArray,
@@ -10,19 +10,19 @@
                     activeFilters: $refs.actionPane.activeFilters,
                 }"
              />
-        </div>
+        </div> -->
         <div :style="{height:'inherit', width: debug ? '50%' : '100%'}" class="fullwidth relative flex flexcol">
             <div
-                :style="{background:table_headerColor}"
+                :style="{background:'#303340'}"
                 class="pad125 flex flexcenter marginbottom050"
             >
-                <h5
-                    class="flex1 flexcenter flex"
-                    :style="{margin:0,fontWeight:100,color:table_headerTextColor}"
-                >{{table_headTitle}}</h5>
+                <h6
+                    class="flex1 flex"
+                    :style="{margin:0,fontWeight:100,color:'white'}"
+                >{{table_headTitle}}</h6>
                 <div>
                     <button @click="$emit('onAddEntry')" class="tbdshdw buttonreset pad050">
-                       <strong style="color:gray;" > &#65291;</strong>
+                       <strong style="color:balck;" > &#65291;</strong>
                     </button>
                 </div>
             </div>
@@ -58,7 +58,7 @@
                                 >
                                     <!-- head -->
                                     <div
-                                        :style="{position: debug ? 'relative' : 'fixed', left: `-${tHeadleft}px`}"
+                                        :style="{position: 'absolute'}"
                                         v-if="index === 0"
                                         id="tablehead"
                                         :class="['flex','tbdshdw', width > getTableHeadWidth ? 'fullwidth' : '']"
@@ -68,7 +68,9 @@
                                             class="flex1 pad050"
                                             v-if="config['table_isNumbered']"
                                         >
-                                            <h6 style="margin:0;font-weight:100;">#</h6>
+                                            <p style="margin:0;color:#206add">
+                                                #
+                                            </p>
                                         </div>
                                         <div
                                             style="min-width:125px;"
@@ -76,7 +78,9 @@
                                             v-for="key in getKeys"
                                             :key="key"
                                         >
-                                            <h6 style="margin:0;font-weight:100;">{{key}}</h6>
+                                            <p style="margin:0;color:#206add">
+                                                {{key}}
+                                            </p>
                                         </div>
                                     </div>
                                     <!-- entries -->
@@ -91,13 +95,14 @@
                                     >
                                         <div
                                             @click="selectWholeObject(index)"
-                                            :class="['flex1' ,'pad050' ,  selectedRowId == `tb${index}` ? 'wholeSelect__index' : 'numa']"
+                                            :class="['flex1' ,'pad025' ,  selectedRowId == `tb${index}` ? 'wholeSelect__index' : 'numa']"
+                                            style="color:#206add"
                                             v-if="config['table_isNumbered']"
                                         >{{index + 1}}</div>
                                         <div
                                             @click="selected(val, val_index)"
-                                            style="min-width:125px;"
-                                            class="flex4 pad050 tableVal"
+                                            style="min-width:125px;color:#206add;"
+                                            class="flex4 pad025 tableVal"
                                             v-for="(val,val_index) in entry"
                                             :key="`${val}-${val_index}`"
                                         >{{handleChars(val, width - 800)}} </div>
@@ -262,7 +267,7 @@ export default {
         loadedView: undefined,
 
         debugIsReady: false,
-        debug: true
+        debug: false
     }),
     computed: {
         getKeys() {
@@ -444,7 +449,7 @@ tr:nth-child(even) {
     background: rgba(211, 211, 211, 0.534);
 }
 #tablehead {
-    background: #f4f4f4;
+    background: #f1f8ff;
 }
 #tablefoot {
     background: white;
@@ -462,7 +467,7 @@ tr:nth-child(even) {
     background: rgba(211, 211, 211, 0.466);
 }
 .tableValCon:hover > .numa {
-    background: #19d23cff;
+    background: #303340;
 }
 .tableEachVal:hover > .tableVal {
     border: 2px solid rgba(0, 0, 0, 0.575);
@@ -472,7 +477,7 @@ tr:nth-child(even) {
     background: white;
 }
 .tableVal:hover {
-    background: rgba(25, 210, 59, 0.644);
+    background: #303340;
 }
 .tableVal {
     border: 2px solid transparent;
@@ -491,14 +496,14 @@ tr:nth-child(even) {
 
 /* on select class */
 .wholeSelect {
-    border-top: 2px solid #19d23cff;
-    border-bottom: 2px solid #19d23cff;
+    border-top: 2px solid #303340;
+    border-bottom: 2px solid #303340;
 }
 .normal {
     border-bottom: 1px solid lightgray;
 }
 .wholeSelect__index {
     min-width: 50px;
-    background: #19d23cff;
+    background: #303340;
 }
 </style>

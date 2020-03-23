@@ -6,17 +6,17 @@
             <div
                 :style="{...gt_style}"
                 @click="modeSelected == 'greater than' ? modeSelected = false : modeSelected = 'greater than'"
-                class="pad050 mdopt"
+                class="pad025 mdopt borderRad4 fullwidth flex flexcenter"
             >greater than</div>
             <div
                 :style="{...ls_style}"
                 @click="modeSelected == 'lesser than' ? modeSelected = false : modeSelected = 'lesser than'"
-                class="pad050 mdopt"
+                class="pad025 mdopt borderRad4 fullwidth flex flexcenter"
             >lesser than</div>
-            <div :style="{...equal_style}" @click="isEqual = !isEqual" class="pad050 mdopt">equal</div>
+            <div :style="{...equal_style}" @click="isEqual = !isEqual" class="pad025 mdopt borderRad4 padleft050 padright050">equal</div>
         </div>
         <div class="margintop050">
-            <input v-model="query" class="pad050 fullwidth" type="number" />
+            <input v-model="query" class="pad025 fullwidth" type="number" />
         </div>
     </div>
 </template>
@@ -94,7 +94,8 @@ export default {
             let res = undefined;
             if (this.modeSelected === "greater than") {
                 res = {
-                    background: "lightgray"
+                    background: "#303340",
+                    color:'white'
                 };
             }
             return res;
@@ -103,7 +104,8 @@ export default {
             let res = undefined;
             if (this.modeSelected === "lesser than") {
                 res = {
-                    background: "lightgray"
+                    background: "#303340",
+                    color:'white'
                 };
             }
             return res;
@@ -112,7 +114,8 @@ export default {
             let res = undefined;
             if (this.isEqual) {
                 res = {
-                    background: "lightgray"
+                    background: "#303340",
+                    color:'white'
                 };
             }
             return res;

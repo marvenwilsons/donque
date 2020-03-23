@@ -6,13 +6,13 @@
             <div class="flex">
                 <span
                     @click="selectedMode = 'exact match'"
-                    :style="{background: selectedMode == 'exact match' ? 'lightgray' : ''}"
-                    class="marginright050 strmdopt pad050 pointer"
+                    :style="{background: selectedMode == 'exact match' ? '#303340' : '', color:  selectedMode == 'exact match' ? 'white' : 'black'}"
+                    class="strmdopt padleft125 padright125 borderRad4 pad025 pointer "
                 >exact match</span>
                 <span
                     @click="selectedMode = 'includes'"
-                    :style="{background: selectedMode == 'includes' ? 'lightgray' : ''}"
-                    class="marginright050 pad050 pointer strmdopt flex1 flex flexcenter"
+                    :style="{background: selectedMode == 'includes' ? '#303340' : '', color: selectedMode == 'includes' ? 'white' : 'black'}"
+                    class="marginright050 pad025 pointer strmdopt flex1 flex flexcenter borderRad4"
                 >
                     includes | cs:
                     <input
@@ -24,7 +24,7 @@
             </div>
         </div>
         <div class="flex margintop050 marginright050">
-            <input :disabled="!isActive" v-model="query" class="pad050 flex fullwidth" type="text" />
+            <input :disabled="!isActive" v-model="query" class="pad025 flex fullwidth" type="text" />
         </div>
     </div>
 </template>

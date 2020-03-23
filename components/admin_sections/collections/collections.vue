@@ -8,7 +8,7 @@
       get_tempCmd}"
     ></debug>-->
     <d-listify
-      @onAddItem="addNewCollection"
+      @onAddItem="addNewCollection(true)"
       @onContextAction="contextAction"
       @onEmpty="onEmptyCollection"
       :inputData="Collections"
@@ -206,11 +206,11 @@ export default {
         this.$store.dispatch("collections/getCollectionDataFromServer");
   },
   methods: {
-    addNewCollection() {
+    addNewCollection(closable) {
       this.mxnModalLog(modal_AddCollection, {
           title: 'Create Collection',
           width: '420px',
-          closable: true,
+          closable,
           header: true
       })
     },
@@ -289,7 +289,9 @@ export default {
                             collectionName: val.actionCastOn['Collection Name']
                         }
                     },
-                    config: {/** pane configs */}
+                    config: {
+                        // pane_width:'1000px'
+                    }
                 })
             break
             case "Categories":
@@ -320,9 +322,7 @@ export default {
 
     },
     onEmptyCollection() {
-      this.modal_State = true;
-      this.addNewCollection();
-      this.can_be_close = false;
+      this.addNewCollection(false);
     }
   }
 };

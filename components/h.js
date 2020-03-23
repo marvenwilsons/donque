@@ -37,10 +37,11 @@ export default {
         mxnPaneOpenSync(name,title,data,config) {
             this.mxnStore.commit("pane_system/set_pane_config", {
                 title: null,
-                pane_width: "800px",
+                pane_width: "1000px",
                 pane_head_bg_color: "rgb(48, 51, 64)",
                 renderOnce: true,
-                pane_head_title_color: "white"
+                pane_head_title_color: "white",
+                ...config
               });
             setTimeout(() => {
                 this.mxnStore.dispatch("pane_system/open", {
@@ -84,7 +85,7 @@ export default {
                     this.mxnPaneAlterNextData(propertyToMutate,response)
                     // accessing directly the modal methods in main-window.vue
                     this.$parent.UnSetPaneModal(this.mxnPaneIndex + 1,title)
-                }, 500);
+                }, 1000);
             })            
         },
         // mxnPaneAlterNextData()
@@ -145,7 +146,7 @@ export default {
 
             });
         },
-        // mxnInfoLog()
+        // mxnInfoLog() & mxnErrLog()
         // param1: Object
         // Object - field 1: closable - boolean - a modal can be closed or not
         // Object - field 2: msg - string - the message you want to be displayed to the modal

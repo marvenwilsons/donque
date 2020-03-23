@@ -14,7 +14,7 @@ export default {
 
             select_arrow_down_color: 'black',
 
-            button_bg_color: '#3ba2de',
+            button_bg_color: '#303340',
             button_text_color: 'white',
 
             background_selected: '',

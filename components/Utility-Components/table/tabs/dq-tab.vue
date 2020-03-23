@@ -13,7 +13,7 @@
         :key="`--sdf-${tab_i}}`"
         @click="active = tab"
         :style="{
-          background: active == tab ? options_default.activeColor : '',  
+          background: active == tab ? '#1b1d23' : '',  
           color: active == tab ? options_default.activeTextColor : '',
           borderRadius:'4px'}"
       >{{tab}}</div>
@@ -50,7 +50,7 @@ export default {
     options_default: {
       borderColor: "transparent",
       activeColor: "lightgray",
-      activeTextColor: "white",
+      activeTextColor: "whitesmoke",
       textColor: "inherit",
       bg: 'white',
       _toggleMode:'render'

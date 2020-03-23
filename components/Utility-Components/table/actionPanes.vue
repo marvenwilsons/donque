@@ -6,11 +6,11 @@
             :key="e"
         >
             <div
-                :style="{background: activeFilters.includes(e) ? '#19D23CFF' : '#f4f4f4'}"
+                :style="{background: activeFilters.includes(e) ? '#3ea6e1' : '#f1f8ff', color: 'black'}"
                 class="pad025 flex spacebetween"
             >
                 <div>
-                    <h6 style="margin:0;font-weight:100;">{{e}}:{{schema[e].type}}</h6>
+                    <p style="margin:0;font-weight:100;">{{e}}:{{schema[e].type}}</p>
                 </div>
                 <div>
                     <input v-model="activeFilters" type="checkbox" :value="e" />
@@ -283,7 +283,7 @@ export default {
 
 <style scoped>
 .tbbxopt {
-    width: 250px;
+    width: 270px;
     box-shadow: 7px 7px 14px #e0e0e0, -7px -7px 14px #ffffff;
     border: 1px solid #f4f4f4;
 }
