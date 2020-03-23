@@ -132,7 +132,11 @@
                                                     // effecient compared to bubble event.
                                                     $emit('UnSetPaneModal', {pane_index, pane_name: config[pane_index].title})
                                                 }"
-                                                :CustomData="ModalFn[pane_index][config[pane_index].title].CustomData"
+                                                @UnSetPaneModal="$emit('UnSetPaneModal',{
+                                                    pane_index,
+                                                    pane_name: config[pane_index].title
+                                                })"
+                                                :data="ModalFn[pane_index][config[pane_index].title].data"
                                                 :is="ModalFn[pane_index][config[pane_index].title].modal"
                                                 :paneMethods="true /* 
                                                     deep dependency injection .
@@ -228,8 +232,11 @@ export default {
         PaneModalHandler(value) {
             this.$emit("insertModal", value);
         },
-        UnSetPaneModal() {
-            this.$emit("UnSetPaneModal");
+        UnSetPaneModal(pane_index,pane_name) {
+            this.$emit("UnSetPaneModal",{
+                pane_index,
+                pane_name
+            });
         },
         init_head(arg) {
             this.config_copy = arg;

@@ -309,7 +309,7 @@ export const mutations = {
         const keys = Object.keys(alter)
 
         keys.map(key => {
-            console.log('data list', state.pane_data_list[pane_index + 1])
+            // console.log('data list', state.pane_data_list[pane_index + 1])
             state.pane_data_list[pane_index + 1][key] = alter[key]
         })
     }

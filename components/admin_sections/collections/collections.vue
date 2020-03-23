@@ -58,7 +58,8 @@
                 <modalAddCollection @onCollectionCreated="onCollectionCreated" :data="null"></modalAddCollection>
             </div>-->
             <div v-if="modal_Content == 'Edit Schema'" class="pad125">
-                <modalAddCollection @onEditSchemaDone="onCollectionCreated" :data="edit_schema_data"></modalAddCollection>
+                hesy
+                <modalAddCollection @onCollectionCreated="onCollectionCreated" @onEditSchemaDone="onCollectionCreated" :data="edit_schema_data"></modalAddCollection>
             </div>
             <!-- <div v-if="!modal_Content" class="pad125">
                 <div>
@@ -67,7 +68,7 @@
             </div>-->
             <div v-if="modal_Content == 'Delete A Collection'" class="pad125">
                 <div>
-                <strong>Are you sure you want to delete collection "{{modal_ContentObject['Collection Name']}}"?</strong>
+                    <strong>Are you sure you want to delete collection "{{modal_ContentObject['Collection Name']}}"?</strong>
                 <br />
                 <div class="pad050 margintop050 backgrounderr">
                     <span style="font-weight:700;">Notice:</span>
@@ -101,7 +102,7 @@ import h from '../../h'
 
 export default {
     mixins: [h],
-  props: ["my_pane_index"],
+    props: ["my_pane_index"],
   data: () => ({
     dynamic_ContextTitle_entry: ["Books", "Staff", "Products", "asdfd", "q3te"],
     modal_State: false,
@@ -206,17 +207,12 @@ export default {
   },
   methods: {
     addNewCollection() {
-      // this.modal_State = true;
-      // this.modal_Content = "Create Collection";
-      this.$emit("SetPaneModal", {
-        pane_index: this.my_pane_index,
-        pane_name: "Data Collections",
-        component: modal_AddCollection,
-        title: "Create Collection",
-        width: "420px",
-        CanBeClose: true,
-        header: true
-      });
+      this.mxnModalLog(modal_AddCollection, {
+          title: 'Create Collection',
+          width: '420px',
+          closable: true,
+          header: true
+      })
     },
     delete_Collection() {
       setTimeout(() => {
@@ -240,30 +236,30 @@ export default {
         });
     },
     onCollectionCreated() {
-      console.log("DONE!");
-      this.modal_State = false;
+        console.log('done creating collection')
+      this.mxnModalDone()
     },
     contextAction(val) {
         switch(val.actionName) {
             case "Add New Entry":
                 // open add new entery pane
-                this.mxnPaneOpen('CollectionsAddEntry',{
+                this.mxnPaneOpenSync('CollectionsAddEntry',`Add New ${val.actionCastOn['Collection Name']}`,{
                     "Collection Name": val.actionCastOn['Collection Name'],
-                    schema: this._getCollection(CollectionName).schema
+                    schema: this._getCollection(val.actionCastOn['Collection Name']).schema
                 })
             break
             case "Edit Schema":
-                //
-                const CollectionName = val.actionCastOn["Collection Name"];
-                const Schema = this._getCollection(CollectionName).schema;
-                //
-                this.modal_State = true;
-
-                //
-                this.edit_schema_data = {
-                "Collection Name": CollectionName,
-                schema: Schema
-                };
+                // Open Edit Modal Schema
+                this.mxnModalLog(modal_AddCollection, {
+                    title: 'Create Collection',
+                    width: '420px',
+                    closable: true,
+                    header: true,
+                    data:{
+                        "Collection Name": val.actionCastOn["Collection Name"],
+                        schema: this._getCollection(val.actionCastOn["Collection Name"]).schema
+                    }
+                })
             break
             case "Delete":
                 //
@@ -273,20 +269,29 @@ export default {
                 //
                 this.delete_collection_data = {
                     "Collection Name": val.actionCastOn["Collection Name"],
-                    schema: this._getCollection(CollectionName).schema
+                    schema: this._getCollection(val.actionCastOn["Collection Name"]).schema
                 };
             break
             case "View All":
-                // Get collection contents for the next pane
-                this.systemCall('getCollectionContents','collectionMethods','post',{
-                    collectionName: val.actionCastOn['Collection Name']
-                }).then(response => {
-                    this.mxnPaneAlterNextData('contents', response[0].contents[val.actionCastOn['Collection Name']])
-                })
-                // Open collection contents preview
-                this.mxnPaneOpen('CollectionsViewAll',{
-                    "Collection Name": val.actionCastOn['Collection Name'],
-                    contents: undefined
+                const nextPaneTitle = `View All ${val.actionCastOn['Collection Name']}`
+                this.mxnPaneOpenAsync('CollectionsViewAll',{
+                    title: nextPaneTitle,
+                    propertyToMutate: 'contents',
+                    initData: {
+                        "Collection Name": val.actionCastOn['Collection Name'],
+                        contents: undefined
+                    },
+                    systemCall: {
+                        command: 'getCollectionContents',
+                        section: 'collectionMethods',
+                        method: 'post',
+                        data: {
+                            collectionName: val.actionCastOn['Collection Name']
+                        }
+                    },
+                    config: {
+                        wait: true
+                    }
                 })
             break
             case "Categories":
@@ -297,24 +302,17 @@ export default {
                 //
                 function getCollectionIndex(collection, name) {
                     let index = 0;
-                    collection.map((e, i) => {
-                        if (e["Collection Name"] == name) {
-                        index = i;
-                        }
-                    });
+                    collection.map((e, i) => e["Collection Name"] == name && (index = i));
                     return index;
                 }
                 // open category open
-                this.mxnPaneOpen('CollectionsCategories',{
-                    indexOfCollection: getCollectionIndex(
-                    this._collections,
-                    CollectionName
-                    )
-                }, {
-                    pane_width: "600px",
-                    pane_head_bg_color: "rgb(48, 51, 64)",
-                    renderOnce: true,
-                })
+                this.mxnPaneOpenSync('CollectionsCategories',`${val.actionCastOn['Collection Name']} Categories`,{
+                        indexOfCollection: getCollectionIndex(this._collections,CollectionName)
+                    },{
+                        pane_width: "600px",
+                        pane_head_bg_color: "rgb(48, 51, 64)",
+                        renderOnce: true
+                    })
                     break
                     case "Validation":
                     break
