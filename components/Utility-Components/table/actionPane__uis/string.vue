@@ -6,12 +6,12 @@
             <div class="flex">
                 <span
                     @click="selectedMode = 'exact match'"
-                    :style="{background: selectedMode == 'exact match' ? '#303340' : '', color:  selectedMode == 'exact match' ? 'white' : 'black'}"
+                    :style="{background: selectedMode == 'exact match' ? '#629af4' : '', color:  selectedMode == 'exact match' ? 'white' : 'black'}"
                     class="strmdopt padleft125 padright125 borderRad4 pad025 pointer "
                 >exact match</span>
                 <span
                     @click="selectedMode = 'includes'"
-                    :style="{background: selectedMode == 'includes' ? '#303340' : '', color: selectedMode == 'includes' ? 'white' : 'black'}"
+                    :style="{background: selectedMode == 'includes' ? '#629af4' : '', color: selectedMode == 'includes' ? 'white' : 'black'}"
                     class="marginright050 pad025 pointer strmdopt flex1 flex flexcenter borderRad4"
                 >
                     includes | cs:

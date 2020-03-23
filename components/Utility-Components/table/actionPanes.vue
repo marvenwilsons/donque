@@ -6,7 +6,7 @@
             :key="e"
         >
             <div
-                :style="{background: activeFilters.includes(e) ? '#3ea6e1' : '#f1f8ff', color: 'black'}"
+                :style="{background: activeFilters.includes(e) ? '#629af4' : '#f1f8ff', color: activeFilters.includes(e) ? 'white' : 'gray'}"
                 class="pad025 flex spacebetween"
             >
                 <div>

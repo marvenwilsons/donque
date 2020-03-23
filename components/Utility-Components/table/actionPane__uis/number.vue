@@ -104,7 +104,7 @@ export default {
             let res = undefined;
             if (this.modeSelected === "lesser than") {
                 res = {
-                    background: "#303340",
+                    background: "#629af4",
                     color:'white'
                 };
             }
@@ -114,7 +114,7 @@ export default {
             let res = undefined;
             if (this.isEqual) {
                 res = {
-                    background: "#303340",
+                    background: "#629af4",
                     color:'white'
                 };
             }

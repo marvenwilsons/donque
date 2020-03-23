@@ -182,14 +182,16 @@
                             </span>
                         </div>
                         <div style="background:white;" class="flex spacebetween flexcenter" >   
-                            <div class="pad050" >
+                            <div style="color:gray;" class="pad025" >
                                 found {{tableData.length}} items
                             </div>
-                            <div v-if="debugIsReady" class="margin050 flexend flex" >
+                            <div v-if="debugIsReady" class="margin025 flexend flex" >
                                 <span v-if="filterArray.length" class="marginright125" >
-                                    <button @click="modal__type2 = true" class="buttonreset pad050 tbdshdw" >Save current query</button>
+                                    <button @click="modal__type2 = true" 
+                                        style="background:#629af4; color:white;" 
+                                        class="buttonreset pad050   tbdshdw" >Save current query</button>
                                 </span>
-                                <button @click="submitQuery" class="buttonreset pad050 tbdshdw" >Submit query</button>
+                                <button @click="submitQuery" style="background:#629af4; color:white;" class="buttonreset pad050   tbdshdw" >Submit query</button>
                             </div>
                         </div>
                     </div>
@@ -467,7 +469,7 @@ tr:nth-child(even) {
     background: rgba(211, 211, 211, 0.466);
 }
 .tableValCon:hover > .numa {
-    background: #303340;
+    background: #629af4;
 }
 .tableEachVal:hover > .tableVal {
     border: 2px solid rgba(0, 0, 0, 0.575);
@@ -477,7 +479,7 @@ tr:nth-child(even) {
     background: white;
 }
 .tableVal:hover {
-    background: #303340;
+    background: #629af4;
 }
 .tableVal {
     border: 2px solid transparent;
@@ -496,14 +498,14 @@ tr:nth-child(even) {
 
 /* on select class */
 .wholeSelect {
-    border-top: 2px solid #303340;
-    border-bottom: 2px solid #303340;
+    border-top: 2px solid #629af4;
+    border-bottom: 2px solid #629af4;
 }
 .normal {
     border-bottom: 1px solid lightgray;
 }
 .wholeSelect__index {
     min-width: 50px;
-    background: #303340;
+    background: #629af4;
 }
 </style>

@@ -13,8 +13,8 @@
         :key="`--sdf-${tab_i}}`"
         @click="active = tab"
         :style="{
-          background: active == tab ? '#1b1d23' : '',  
-          color: active == tab ? options_default.activeTextColor : '',
+          background: active == tab ? '#629af4' : '',  
+          color: active == tab ? options_default.activeTextColor : 'gray',
           borderRadius:'4px'}"
       >{{tab}}</div>
     </div>

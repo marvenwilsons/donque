@@ -13,10 +13,10 @@
                 Query title cannot be undefined
             </div>
             <div class="flex flexend" >
-                <span class="marginright125" >
-                    <button @click="$emit('onCancel')" class="buttonreset pad050 tbdshdw" >Cancel</button>
+                <span class="marginright025" >
+                    <button @click="$emit('onCancel')" class="buttonreset pad050 tbdshdw padleft125 padright125" >Cancel</button>
                 </span>
-                <button @click="onSaveQuery" class="buttonreset pad050 tbdshdw" >Save query</button>
+                <button @click="onSaveQuery" style="background:#629af4;color:white;" class="buttonreset pad050 padleft125 padright125 tbdshdw" >Save query</button>
             </div>
         </section>
         <section v-if="simErr" >
@@ -24,7 +24,7 @@
                 {{simErr}}
             </div>
             <div class="flex flexend margintop050" >
-                <button @click="$emit('onCancel')" class="buttonreset pad050 tbdshdw" >Okay</button>
+                <button @click="$emit('onCancel')" class="buttonreset pad050 tbdshdw padleft125 padright125" >Okay</button>
             </div>
         </section>
     </div>
