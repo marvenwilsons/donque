@@ -289,9 +289,7 @@ export default {
                             collectionName: val.actionCastOn['Collection Name']
                         }
                     },
-                    config: {
-                        wait: true
-                    }
+                    config: {/** pane configs */}
                 })
             break
             case "Categories":
@@ -307,17 +305,17 @@ export default {
                 }
                 // open category open
                 this.mxnPaneOpenSync('CollectionsCategories',`${val.actionCastOn['Collection Name']} Categories`,{
-                        indexOfCollection: getCollectionIndex(this._collections,CollectionName)
+                        indexOfCollection: getCollectionIndex(this._collections,val.actionCastOn["Collection Name"])
                     },{
                         pane_width: "600px",
                         pane_head_bg_color: "rgb(48, 51, 64)",
                         renderOnce: true
-                    })
-                    break
-                    case "Validation":
-                    break
-                    case "Edit Schema":
-                    break
+                })
+            break
+            case "Validation":
+            break
+            case "Edit Schema":
+            break
         }
 
     },

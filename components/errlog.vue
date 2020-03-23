@@ -2,7 +2,7 @@
     <div >
        <div class="flex flexcenter flexcol" >
             <div class="infolog flex flexwrap flexend borderRad4" >
-                <p class=" borderRad4 backgroundinfo pad050" >{{data.msg}}</p>
+                <p class=" borderRad4 backgrounderr err pad050" >{{data.msg}}</p>
                 <button
                     v-if="data.closable"
                     @click="() => {

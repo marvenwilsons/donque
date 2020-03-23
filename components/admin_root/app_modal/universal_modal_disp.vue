@@ -14,9 +14,9 @@
       </div>
       <div class="flex flexend margintop050">
         <div class="marginright050">
-          <button @click="confirm_continue(disp.data.cmd)" class="buttonreset pad050 darkprimary borderRad4">Continue</button>
+          <button @click="confirm_continue(disp.data.cmd)" class="buttonreset pad050 padleft125 padright125 darkprimary borderRad4">Continue</button>
         </div>
-        <button @click="closeModal" class="buttonreset pad050 darkprimary borderRad4">Cancel</button>
+        <button @click="closeModal" class="buttonreset pad050 darkprimary borderRad4 padleft125 padright125">Cancel</button>
       </div>
     </div>
     <!-- page warn -->
@@ -24,7 +24,7 @@
     <!-- success -->
     <div class="pad050" v-if="disp.ui === 'success'">
       <div class="backgroundsuc pad125 borderRad4">{{disp.text}}</div>
-      <div class="margintop050 flex flexend"><button @click="closeModal" class="buttonreset pad050 darkprimary borderRad4">Okay</button></div>
+      <div class="margintop050 flex flexend"><button @click="closeModal" class="buttonreset pad050 darkprimary borderRad4 padleft125 padright125">Okay</button></div>
     </div>
   </div>
 </template>

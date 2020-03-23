@@ -24,7 +24,10 @@ export default {
         try {
           this.contents = this.data.contents[0].contents[this.data['Collection Name']]
         } catch(err) {
-          this.mxnInfoLog('This collection doesnt have any entries! please add new entry,')
+          this.mxnErrLog({
+            msg: 'This collection doesnt have any entries! please add new entry',
+            closable: false
+          })
         }
       }
     }
