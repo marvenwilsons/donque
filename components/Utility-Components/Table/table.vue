@@ -229,7 +229,7 @@
 
 <script>
 import config from "./config";
-import con from "./con";
+import con from "./mycontainer";
 import actionPanes from "./actionPanes";
 import obv from "./obv";
 import myModal from "./modal/index";
