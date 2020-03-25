@@ -80,7 +80,6 @@ export default {
   methods: {
     insertModal(Modal) {
       if (Modal.component) {
-
         setTimeout(() => {
           this.ModalComponent = Modal.component;
           this.ModalContent = Modal;
@@ -102,7 +101,7 @@ export default {
           this.ModalsPaneNameArray[ModalIndex][Modal.pane_name].background = Modal.background
           this.ModalsPaneNameArray[ModalIndex][Modal.pane_name].header = Modal.header
           this.ModalsPaneNameArray[ModalIndex][Modal.pane_name].CanBeClose = Modal.CanBeClose
-          this.ModalsPaneNameArray[ModalIndex][Modal.pane_name].CustomData = Modal.CustomData
+          this.ModalsPaneNameArray[ModalIndex][Modal.pane_name].data = Modal.data
 
           this.OpenModal(ModalIndex);
         }, 50);

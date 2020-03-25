@@ -80,6 +80,6 @@ dist
 # IDE
 .idea
 
-server/sys/core-apps/app/database/iniConf.json
-server/sys/core-apps/app/database/logs
+# server/sys/core-apps/app/database/iniConf.json
+# server/sys/core-apps/app/database/logs
 server/sys/core-apps/pane-system/docker/docket-items-old.vue

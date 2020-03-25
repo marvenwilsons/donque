@@ -402,18 +402,16 @@
 // @listify JS
 import { TweenMax, TimelineLite, TweenLite } from "gsap";
 
-function globalSort(
-  searchByResult,
-  selectedSearchOption,
-  inputData,
-  mode,
-  type
-) {
+function globalSort(searchByResult,selectedSearchOption,inputData,mode,type) {
   const items = searchByResult.length ? searchByResult : inputData;
+
+  
   // sort by name
   items.sort((a, b) => {
     var i1 = undefined;
     var i2 = undefined;
+
+    
 
     if (type === "string") {
       i1 = a[selectedSearchOption].toUpperCase();

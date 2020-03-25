@@ -151,15 +151,6 @@ export default {
     mode: undefined,
     count: 0
   }),
-  beforeCreate() {
-    this.$store.commit("pane_system/set_pane_config", {
-      title: null,
-      pane_width: "600px",
-      pane_head_bg_color: "rgb(48, 51, 64)",
-      renderOnce: true,
-      pane_head_title_color: "white"
-    });
-  },
   computed: {
     ...mapGetters({
       _collections: "collections/getAllCollections",
@@ -308,12 +299,6 @@ export default {
       "Collection Name"
     ];
     this.CollectionName = CollectionName;
-    this.$store.commit("pane_system/alter_pane_config", {
-      pane_index: this.my_pane_index,
-      alter: {
-        title: `${CollectionName} Root Categories`
-      }
-    });
 
     /**
      * Assigning Root Categories

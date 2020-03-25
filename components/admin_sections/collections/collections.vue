@@ -8,7 +8,7 @@
       get_tempCmd}"
     ></debug>-->
     <d-listify
-      @onAddItem="addNewCollection"
+      @onAddItem="addNewCollection(true)"
       @onContextAction="contextAction"
       @onEmpty="onEmptyCollection"
       :inputData="Collections"
@@ -35,61 +35,62 @@
        }"
       :appearance="listify_Appearance"
     >
-      <div slot="item-icon">
-        <!-- icon that will show on each list item -->
-        <i class="fas fa-layer-group padright125"></i>
-      </div>
-      <!-- @collection modal -->
-      <div slot="modal">
-        <div class style="background:white; width:420px; box-shadow:0px 0px 10px 5px #EEEEEF;">
-          <!-- editLater - style -->
-          <div
-            style="background: rgb(48, 51, 64);color:white;border-top-left-radius:5px;border-top-right-radius:5px;"
-            class="flex spacebetween flexcenter pad050"
-          >
-            <strong class="padleft050">{{modal_Content}}</strong>
-            <i
-              v-if="can_be_close"
-              @click="modal_State = false"
-              class="fas fa-times padright025 pointer"
-            ></i>
-          </div>
-          <!-- <div v-if="modal_Content == 'Create Collection'" class="pad125">
-            <modalAddCollection @onCollectionCreated="onCollectionCreated" :data="null"></modalAddCollection>
-          </div>-->
-          <div v-if="modal_Content == 'Edit Schema'" class="pad125">
-            <modalAddCollection @onEditSchemaDone="onCollectionCreated" :data="edit_schema_data"></modalAddCollection>
-          </div>
-          <!-- <div v-if="!modal_Content" class="pad125">
-            <div>
-              <strong>Fetching data ...</strong>
-            </div>
-          </div>-->
-          <div v-if="modal_Content == 'Delete A Collection'" class="pad125">
-            <div>
-              <strong>Are you sure you want to delete collection "{{modal_ContentObject['Collection Name']}}"?</strong>
-              <br />
-              <div class="pad050 margintop050 backgrounderr">
-                <span style="font-weight:700;">Notice:</span>
-                Once deleted all of the data connected to {{modal_ContentObject['Collection Name']}} collection
-                will be lost forever.
-              </div>
-              <div class="margintop125 flex flexend">
-                <!-- editLater - class darkprimary and borderRad4 attr in button -->
-                <button
-                  @click="delete_Collection"
-                  class="buttonreset pad050 darkprimary borderRad4"
-                >Yes Delete {{modal_ContentObject['Collection Name']}}</button>
-                <span class="pad025"></span>
-                <button
-                  @click="modal_State = false"
-                  class="buttonreset pad050 darkprimary borderRad4"
-                >Cancel</button>
-              </div>
-            </div>
-          </div>
+        <div slot="item-icon">
+            <!-- icon that will show on each list item -->
+            <i class="fas fa-layer-group padright125"></i>
         </div>
-      </div>
+        <!-- @collection modal -->
+        <div slot="modal">
+            <div class style="background:white; width:420px; box-shadow:0px 0px 10px 5px #EEEEEF;">
+            <!-- editLater - style -->
+            <div
+                style="background: rgb(48, 51, 64);color:white;border-top-left-radius:5px;border-top-right-radius:5px;"
+                class="flex spacebetween flexcenter pad050"
+            >
+                <strong class="padleft050">{{modal_Content}}</strong>
+                <i
+                v-if="can_be_close"
+                @click="modal_State = false"
+                class="fas fa-times padright025 pointer"
+                ></i>
+            </div>
+            <!-- <div v-if="modal_Content == 'Create Collection'" class="pad125">
+                <modalAddCollection @onCollectionCreated="onCollectionCreated" :data="null"></modalAddCollection>
+            </div>-->
+            <div v-if="modal_Content == 'Edit Schema'" class="pad125">
+                hesy
+                <modalAddCollection @onCollectionCreated="onCollectionCreated" @onEditSchemaDone="onCollectionCreated" :data="edit_schema_data"></modalAddCollection>
+            </div>
+            <!-- <div v-if="!modal_Content" class="pad125">
+                <div>
+                <strong>Fetching data ...</strong>
+                </div>
+            </div>-->
+            <div v-if="modal_Content == 'Delete A Collection'" class="pad125">
+                <div>
+                    <strong>Are you sure you want to delete collection "{{modal_ContentObject['Collection Name']}}"?</strong>
+                <br />
+                <div class="pad050 margintop050 backgrounderr">
+                    <span style="font-weight:700;">Notice:</span>
+                    Once deleted all of the data connected to {{modal_ContentObject['Collection Name']}} collection
+                    will be lost forever.
+                </div>
+                <div class="margintop125 flex flexend">
+                    <!-- editLater - class darkprimary and borderRad4 attr in button -->
+                    <button
+                    @click="delete_Collection"
+                    class="buttonreset pad050 darkprimary borderRad4"
+                    >Yes Delete {{modal_ContentObject['Collection Name']}}</button>
+                    <span class="pad025"></span>
+                    <button
+                    @click="modal_State = false"
+                    class="buttonreset pad050 darkprimary borderRad4"
+                    >Cancel</button>
+                </div>
+                </div>
+            </div>
+            </div>
+        </div>
     </d-listify>
   </div>
 </template>
@@ -97,9 +98,11 @@
 <script>
 import modal_AddCollection from "./modals/add_collection";
 import { mapGetters } from "vuex";
+import h from '../../h'
 
 export default {
-  props: ["my_pane_index"],
+    mixins: [h],
+    props: ["my_pane_index"],
   data: () => ({
     dynamic_ContextTitle_entry: ["Books", "Staff", "Products", "asdfd", "q3te"],
     modal_State: false,
@@ -178,7 +181,11 @@ export default {
   },
   watch: {
     _collections(current, prev) {
-      this.Collections = current;
+        let c = []
+        current.map(e => {
+            c.push({'Collection Name': e['Collection Name']})
+        })
+        this.Collections = c;
     },
     get_tempCmd(current, prev) {
       if (current == "deleteCollection") {
@@ -195,21 +202,17 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch("collections/getCollectionDataFromServer");
+        this.mxn = this
+        this.$store.dispatch("collections/getCollectionDataFromServer");
   },
   methods: {
-    addNewCollection() {
-      // this.modal_State = true;
-      // this.modal_Content = "Create Collection";
-      this.$emit("SetPaneModal", {
-        pane_index: this.my_pane_index,
-        pane_name: "Data Collections",
-        component: modal_AddCollection,
-        title: "Create Collection",
-        width: "420px",
-        CanBeClose: true,
-        header: true
-      });
+    addNewCollection(closable) {
+      this.mxnModalLog(modal_AddCollection, {
+          title: 'Create Collection',
+          width: '420px',
+          closable,
+          header: true
+      })
     },
     delete_Collection() {
       setTimeout(() => {
@@ -233,101 +236,93 @@ export default {
         });
     },
     onCollectionCreated() {
-      console.log("DONE!");
-      this.modal_State = false;
+        console.log('done creating collection')
+      this.mxnModalDone()
     },
     contextAction(val) {
-      if (val.actionName == "Edit Schema") {
-        //
-        const CollectionName = val.actionCastOn["Collection Name"];
-        const Schema = this._getCollection(CollectionName).schema;
-
-        //
-        this.modal_State = true;
-        this.modal_Content = "Edit Schema";
-
-        //
-        this.edit_schema_data = {
-          "Collection Name": CollectionName,
-          schema: Schema
-        };
-      }
-      if (val.actionName == "Delete") {
-        //
-        const CollectionName = val.actionCastOn["Collection Name"];
-        const Schema = this._getCollection(CollectionName).schema;
-
-        //
-        this.modal_State = true;
-        this.modal_ContentObject = val.actionCastOn;
-        this.modal_Content = "Delete A Collection";
-
-        //
-        this.delete_collection_data = {
-          "Collection Name": CollectionName,
-          schema: Schema
-        };
-      }
-      if (val.actionName == "Add New Entry") {
-        //
-        const CollectionName = val.actionCastOn["Collection Name"];
-
-        //
-        this.$store.dispatch("pane_system/open", {
-          name: "CollectionsAddEntry",
-          index: this.my_pane_index,
-          data: {
-            "Collection Name": CollectionName,
-            schema: this._getCollection(CollectionName).schema
-          }
-        });
-      }
-      if (val.actionName == "View All") {
-        this.$store.dispatch("pane_system/open", {
-          name: "CollectionsViewAll",
-          index: this.my_pane_index,
-          data: val.actionCastOn
-        });
-      }
-      if (val.actionName == "Categories") {
-        const CollectionName = val.actionCastOn["Collection Name"];
-        this.$store.commit(
-          "collections/mutate_Category_being_opened",
-          CollectionName
-        );
-
-        //
-        function getCollectionIndex(collection, name) {
-          let index = 0;
-          collection.map((e, i) => {
-            if (e["Collection Name"] == name) {
-              index = i;
-            }
-          });
-
-          return index;
+        switch(val.actionName) {
+            case "Add New Entry":
+                // open add new entery pane
+                this.mxnPaneOpenSync('CollectionsAddEntry',`Add New ${val.actionCastOn['Collection Name']}`,{
+                    "Collection Name": val.actionCastOn['Collection Name'],
+                    schema: this._getCollection(val.actionCastOn['Collection Name']).schema
+                })
+            break
+            case "Edit Schema":
+                // Open Edit Modal Schema
+                this.mxnModalLog(modal_AddCollection, {
+                    title: 'Create Collection',
+                    width: '420px',
+                    closable: true,
+                    header: true,
+                    data:{
+                        "Collection Name": val.actionCastOn["Collection Name"],
+                        schema: this._getCollection(val.actionCastOn["Collection Name"]).schema
+                    }
+                })
+            break
+            case "Delete":
+                //
+                this.modal_State = true;
+                this.modal_ContentObject = val.actionCastOn;
+                this.modal_Content = "Delete A Collection";
+                //
+                this.delete_collection_data = {
+                    "Collection Name": val.actionCastOn["Collection Name"],
+                    schema: this._getCollection(val.actionCastOn["Collection Name"]).schema
+                };
+            break
+            case "View All":
+                const nextPaneTitle = `View All ${val.actionCastOn['Collection Name']}`
+                this.mxnPaneOpenAsync('CollectionsViewAll',{
+                    title: nextPaneTitle,
+                    propertyToMutate: 'contents',
+                    initData: {
+                        "Collection Name": val.actionCastOn['Collection Name'],
+                        contents: undefined
+                    },
+                    systemCall: {
+                        command: 'getCollectionContents',
+                        section: 'collectionMethods',
+                        method: 'post',
+                        data: {
+                            collectionName: val.actionCastOn['Collection Name']
+                        }
+                    },
+                    config: {
+                        // pane_width:'1000px'
+                    }
+                })
+            break
+            case "Categories":
+                this.$store.commit(
+                    "collections/mutate_Category_being_opened",
+                    val.actionCastOn["Collection Name"]
+                );
+                //
+                function getCollectionIndex(collection, name) {
+                    let index = 0;
+                    collection.map((e, i) => e["Collection Name"] == name && (index = i));
+                    return index;
+                }
+                // open category open
+                this.mxnPaneOpenSync('CollectionsCategories',`${val.actionCastOn['Collection Name']} Categories`,{
+                        indexOfCollection: getCollectionIndex(this._collections,val.actionCastOn["Collection Name"])
+                    },{
+                        pane_width: "600px",
+                        pane_head_bg_color: "rgb(48, 51, 64)",
+                        renderOnce: true
+                })
+            break
+            case "Validation":
+            break
+            case "Edit Schema":
+            break
         }
 
-        //
-        this.$store.dispatch("pane_system/open", {
-          name: "CollectionsCategories",
-          index: this.my_pane_index,
-          pane_width: "600px",
-          pane_head_bg_color: "rgb(48, 51, 64)",
-          renderOnce: true,
-          data: {
-            indexOfCollection: getCollectionIndex(
-              this._collections,
-              CollectionName
-            )
-          }
-        });
-      }
     },
     onEmptyCollection() {
-      this.modal_State = true;
-      this.addNewCollection();
-      this.can_be_close = false;
+      this.addNewCollection(false);
     }
   }
 };

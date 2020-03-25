@@ -4,7 +4,8 @@ module.exports = {
     deleteCollection: require('./collection/deleteCollection'),
     fetchCollections: require('./collection/fetchCollections'),
     updateCollectionSchema: require('./collection/updateCollectionSchema'),
-    
+    getCollectionContents: require('./collection/getCollectionContents'),
+
     // Categories
     addRootCategory : require('./category/addRootCategory'),
     deleteCategory : require('./category/deleteCategory'),

@@ -110,9 +110,9 @@
                                             <i
                                                 v-if="ModalFn[pane_index][config[pane_index].title].CanBeClose"
                                                 @click="$emit('UnSetPaneModal',{
-                        pane_index,
-                        pane_name: config[pane_index].title
-                        })"
+                                                    pane_index,
+                                                    pane_name: config[pane_index].title
+                                                })"
                                                 class="fas fa-times padright025 pointer"
                                             ></i>
                                         </div>
@@ -125,20 +125,24 @@
                                             <div
                                                 class="fullheight-percent"
                                                 :UnsetPaneModal="() => {
-                          // UsSetPaneModal is a function that closed the modal, it is passed down as a prop, to a component that spawns the modal
-                          // thas is not direct child to the pane. Components that is not direct child to the pane cannot close the modal pane directly
-                          // it needs the emit an event and the parent needs to catch the event, and event bubbling can be long depending on the level
-                          // of nesting of components, so instead of doing that, passing the close modal function by default to its child is more 
-                          // effecient compared to bubble event.
-                          $emit('UnSetPaneModal', {pane_index, pane_name: config[pane_index].title})
-                        }"
-                                                :CustomData="ModalFn[pane_index][config[pane_index].title].CustomData"
+                                                    // UsSetPaneModal is a function that closed the modal, it is passed down as a prop, to a component that spawns the modal
+                                                    // thas is not direct child to the pane. Components that is not direct child to the pane cannot close the modal pane directly
+                                                    // it needs the emit an event and the parent needs to catch the event, and event bubbling can be long depending on the level
+                                                    // of nesting of components, so instead of doing that, passing the close modal function by default to its child is more 
+                                                    // effecient compared to bubble event.
+                                                    $emit('UnSetPaneModal', {pane_index, pane_name: config[pane_index].title})
+                                                }"
+                                                @UnSetPaneModal="$emit('UnSetPaneModal',{
+                                                    pane_index,
+                                                    pane_name: config[pane_index].title
+                                                })"
+                                                :data="ModalFn[pane_index][config[pane_index].title].data"
                                                 :is="ModalFn[pane_index][config[pane_index].title].modal"
                                                 :paneMethods="true /* 
-                          deep dependency injection .
-                          pass all the methods needed for pane operation, instead of calling the store,
-                          systemCall, the paneModal, stage Methods like alter Metohds.
-                        */"
+                                                    deep dependency injection .
+                                                    pass all the methods needed for pane operation, instead of calling the store,
+                                                    systemCall, the paneModal, stage Methods like alter Metohds.
+                                                */"
                                             ></div>
                                         </div>
                                     </div>
@@ -228,8 +232,11 @@ export default {
         PaneModalHandler(value) {
             this.$emit("insertModal", value);
         },
-        UnSetPaneModal() {
-            this.$emit("UnSetPaneModal");
+        UnSetPaneModal(pane_index,pane_name) {
+            this.$emit("UnSetPaneModal",{
+                pane_index,
+                pane_name
+            });
         },
         init_head(arg) {
             this.config_copy = arg;

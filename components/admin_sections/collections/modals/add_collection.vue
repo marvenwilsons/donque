@@ -279,7 +279,7 @@ export default {
             this.SchemaModel = val;
         },
         Create_Collection() {
-            this.$emit("onCreateCollectionDone");
+            // this.$emit("onCreateCollectionDone");
             // SystemCall create new collection
             this.$store
                 .dispatch("systemCall", {
@@ -296,7 +296,6 @@ export default {
                         this.$store.dispatch(
                             "collections/getCollectionDataFromServer"
                         );
-                        this.$emit("onCollectionCreated");
                         this.$emit("UnSetPaneModal");
                     } else {
                         this.Err = data.actions[0].msg;
@@ -313,7 +312,7 @@ export default {
 <style>
 #ANC_inp_cn {
     border-top: none;
-    border-bottom: none;
+    border-bottom: 1px solid lightgray;
     border-left: 1px solid lightgray;
     border-right: 1px solid lightgray;
 }
