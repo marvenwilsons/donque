@@ -1,24 +1,22 @@
-# dq studio
+# donque
 
-> The most scalable CMS ever 
+> My majestic Nuxt.js project
 
-## Usage 
-> Download dq studio here >  
+## Build Setup
 
-``` bash
-# to start using dq studio, cd to the dq studio folder first then start
-$ npm start
+```bash
+# install dependencies
+$ npm install
+
+# serve with hot reload at localhost:3000
+$ npm run dev
+
+# build for production and launch server
+$ npm run build
+$ npm run start
+
+# generate static project
+$ npm run generate
 ```
-For detailed explanation on how things work, checkout [dq-studio docs](https://nuxtjs.org).
 
-## Technologies used
-* Front End
-    * VueJs
-    * GreenSock(GSAP)
-    * HTML5
-    * CSS
-* Back End
-    * NodeJS
-    * MongoDB (Default database)
-* Programming language
-    * JavaScript 
+For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).

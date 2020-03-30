@@ -1,31 +1,27 @@
 {
-  "name": "dq",
+  "name": "donque",
   "version": "1.0.0",
-  "description": "My fabulous Nuxt.js project",
-  "author": "Marven Wilson Donque",
+  "description": "My majestic Nuxt.js project",
+  "author": "marvenwilsons",
   "private": true,
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon server/index.js --watch server",
     "build": "nuxt build",
     "start": "cross-env NODE_ENV=production node server/index.js",
-    "generate": "nuxt generate"
+    "generate": "nuxt generate",
+    "test": "jest"
   },
   "dependencies": {
-    "@nuxtjs/axios": "^5.8.0",
-    "colors": "^1.4.0",
-    "cross-env": "^5.2.1",
-    "express": "^4.17.1",
-    "gsap": "^2.0.2",
-    "jsonwebtoken": "^8.4.0",
-    "moment": "^2.23.0",
-    "monaco-editor-webpack-plugin": "^1.7.0",
-    "mongodb": "^3.3.3",
-    "nuxt": "^2.10.2",
-    "vue-monaco": "^1.1.0",
-    "vue-socket.io": "^3.0.4",
-    "ws": "^6.1.2"
+    "nuxt": "^2.0.0",
+    "cross-env": "^5.2.0",
+    "express": "^4.16.4"
   },
   "devDependencies": {
-    "nodemon": "^1.19.4"
+    "nodemon": "^1.18.9",
+    "@nuxtjs/vuetify": "^1.0.0",
+    "@vue/test-utils": "^1.0.0-beta.27",
+    "babel-jest": "^24.1.0",
+    "jest": "^24.1.0",
+    "vue-jest": "^4.0.0-0"
   }
 }
