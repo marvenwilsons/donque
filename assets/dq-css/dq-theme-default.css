@@ -1,0 +1,41 @@
+:root {
+  --size-1-half: calc(var(--fontSize) * 0.25);
+  --size-1-full: calc(var(--fontSize) * 1.25);
+
+  --size-2-half: calc(var(--fontSize) * 1.25);
+
+  /* dark */
+  --dark-1: #393e42;
+  --dark-2: #5c696f;
+  --dark-3: #33383c;
+
+  /* light */
+  --light-1: #e0e0e0;
+
+  /* blue */
+  --blue-1: #0086c0;
+  --blue-2: #86a6bd;
+  --blue-3: #e9eff3;
+  --blue-4: #f4f7f9;
+  --blue-5: #86a6bd3d;
+  --blue-text: #2d4455;
+  --blue-text-2: #4a6976;
+
+  /* hovers */
+  --hover-blue: var(--blue-2);
+
+  /* error color */
+  --err: #ae1100;
+
+  /* fonts */
+  --oxygen-mono: "Oxygen Mono", monospace;
+  --ubunto-mono: "Ubuntu Mono", monospace;
+  --inconsolata: "Inconsolata", monospace;
+  --lobster: "Lobster", cursive;
+  --cuprum: "Cuprum", sans-serif;
+  --openSans: "Open Sans", sans-serif;
+  --ptSans: 'PT Sans', sans-serif;
+  
+  /* bg */
+  --page-bg: #f9f9fa;
+}
