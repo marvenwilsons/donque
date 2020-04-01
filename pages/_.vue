@@ -14,6 +14,9 @@ export default {
     data: () => ({
 
     }),
+    created() {
+        this.h = this
+    },
     layout: context => {
         const sysRoutes = [
             '/dqlogin',

@@ -2,11 +2,13 @@ import procedures from './procedures'
 
 export default {
     mixins: [procedures],
-    data: () => {
-
-    },
+    data: () => ({
+        h: undefined,
+    }),
     methods: {
+        getView(viewName) {
 
+        }
     },
     created() {
         console.log('> mounting helper')
