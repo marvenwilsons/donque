@@ -1,7 +1,9 @@
 <template>
-    <div>
-        hello
-    </div>
+    <v-app>
+        <v-flex>
+            hello
+        </v-flex>
+    </v-app>
 </template>
 
 <script>
@@ -13,19 +15,19 @@ export default {
 
     }),
     layout: context => {
-        switch(context.route.path) {
-            case '/dqadmin':
-                console.log('> admin selected')
-                // run procedures
-
-            break
-            case '/dqlogin':
-                console.log('> login selected')
-            break
-        }
-
-        if(context.route.path != '/dqlogin' || context.route.path != '/dqadmin') {
-            console.log('> mounting public')
+        const sysRoutes = [
+            '/dqlogin',
+            '/dqadmin',
+            '/dqinit',
+        ]
+        if(!sysRoutes.includes(context.route.path)) {
+            return 'default'
+        } else if(context.route.path == '/dqlogin') {
+            return 'login'
+        } else if(context.route.path == '/dqadmin') {
+            return 'admin'
+        }  else if(context.route.path == '/dqinit') {
+            return 'init'
         }
     }
 }
