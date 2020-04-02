@@ -15,10 +15,18 @@ export default {
         },
         spawnGlobalModal() {
             console.log("> spawnGlobalModal")
-
         },
         redirect() {
             
+        },
+        /**
+         * queue
+         */
+        clearQueue() {
+
+        },
+        pushToQueue() {
+
         }
     },
     created() {
