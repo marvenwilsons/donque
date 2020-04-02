@@ -16,6 +16,10 @@ export default {
     }),
     created() {
         this.h = this
+
+        this.spawnGlobalModal({
+            
+        })
     },
     layout: context => {
         const sysRoutes = [

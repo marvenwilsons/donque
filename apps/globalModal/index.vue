@@ -1,5 +1,5 @@
 <template>
-    <div style="z-index:100;" class="absolute fullwidth fullheight-percent flex flexcenter" >
+    <div v-if="state" style="z-index:100;" class="absolute fullwidth fullheight-percent flex flexcenter" >
             MODAL
     </div>
 </template>

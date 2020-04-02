@@ -23,7 +23,10 @@ export const state = () => ({
 })
 
 export const mutations = {
-    
+    stateController(state,payload) {
+        console.log('> stateController changing --', payload.key)
+        state[payload.key] = payload.value
+    }
 }
 
 export const actions = {

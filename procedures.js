@@ -13,8 +13,16 @@ export default {
 
 
         },
-        spawnGlobalModal() {
+        /**
+         * @spawnGlobalModal
+         * @param modalType string
+         */
+        spawnGlobalModal({modalType}) {
             console.log("> spawnGlobalModal")
+            this.h.$store.commit('stateController', {
+                key: 'globalModalState',
+                value: true
+            })
         },
         redirect() {
             

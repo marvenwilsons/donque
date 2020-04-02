@@ -4,13 +4,16 @@ export default {
     mixins: [procedures],
     data: () => ({
         h: undefined,
+        state: false,
+        helperData: undefined
     }),
-    methods: {
-        getView(viewName) {
-
-        }
+    watch: {
+        
     },
     created() {
         console.log('> mounting helper')
+    },
+    mounted() {
+        this.$p = this.h
     }
 }
