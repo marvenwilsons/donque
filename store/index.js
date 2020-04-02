@@ -9,13 +9,22 @@ export const state = () => ({
         '/dqinit',
     ],
     /** queue */
-    queue: [],
-    pendingTask: {
-        taskName: undefined,
-        taskAnswer: undefined
-    },
-    /** queue end */
+        queue: [],
+        queuePendingTask: {
+            taskName: undefined,
+            taskAnswer: undefined
+        },
+    /** ----- */
+    /** Gloabal Modal */
+        globalModalState: false,
+        globalModalContentType: undefined,
+        globalModalDynamicContent: undefined
+    /** ----- */
 })
+
+export const mutations = {
+    
+}
 
 export const actions = {
     nuxtServerInit (store,context) { 

@@ -1,5 +1,7 @@
 <template>
-    <v-fle></v-fle>
+    <div style="z-index:100;" class="absolute fullwidth fullheight-percent flex flexcenter" >
+            MODAL
+    </div>
 </template>
 
 <script>

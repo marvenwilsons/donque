@@ -1,26 +1,26 @@
 <template>
-    <v-app class="flexcenter flex" style="height:100vh; overflow:hidden;" >
-        <main style="height:80%;" class="borderred" >
-            <v-flex  flexcol style="max-width:250px; background:#232729;color:#206add;"  >
-                <div class="pad025">
-                    <v-flex spacebetween >
-                        <div>Site Name</div>
-                        <div>asdf</div>
-                    </v-flex>
-                </div>
-                <div style="height:200px;" class="pad025 ">
-                    <div>Site Logo</div>
-                </div>
-                <div class=" flex1">
-                    asdf
-                </div>
-            </v-flex>
+    <div class="flexcenter flex relative" style="height:100vh; overflow:hidden;" >
+        <globalModal/>
+        <v-flex class="absolute fullwidth fullheight-percent" >
+            <appSideBar/>
             <v-flex pad125 >
                 <nuxt />
             </v-flex>
-        </main>
-    </v-app>
+        </v-flex>
+    </div>
 </template>
+
+<script>
+import globalModal from '@/apps/globalModal/index'
+import appSideBar from '@/apps/appSideBar/index'
+export default {
+    components: {
+        globalModal,
+        appSideBar
+    }
+}
+</script>
+
 
 <style>
 @import url("@/assets/dq-css/dq-fw-0.3.css");
