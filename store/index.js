@@ -11,11 +11,8 @@ export const state = () => ({
     /** queue */
         queue: [],
         queueExecType: undefined,
-        queuePendingTask: {
-            taskName: undefined,
-            taskAnswer: undefined
-        },
-        queuePointer: - 1,
+        queueCurrentTaskAnswer: undefined,
+        queuePointer: 0,
     /** ----- */
     /** Gloabal Modal */
         globalModalState: false,
@@ -30,10 +27,15 @@ export const mutations = {
     },
     executeQueue(state, payload) {
         state.queuePointer = state.queuePointer + 1
-        console.log('> executing queue')
+        console.log('> executing queue items')
         //
-        const {fn, param} = state.queue[state.queuePointer]
-        fn(param)
+        if(state.queueExecType === 'sync') {
+            const {fn, param} = state.queue[state.queuePointer]
+            fn(param)
+        } else {
+
+        }
+
     }
 }
 

@@ -2,7 +2,7 @@
   --size-1-half: calc(var(--fontSize) * 0.25);
   --size-1-full: calc(var(--fontSize) * 1.25);
 
-  --size-2-half: calc(var(--fontSize) * 1.25);
+  --size-2-half: calc(var(--fontSize) * 0.50);
 
   /* dark */
 --deftheme-dark-primary: #232729;
@@ -21,4 +21,18 @@
   
   /* bg */
   --page-bg: #f9f9fa;
+}
+
+.defbtn {
+  background:#629af4; 
+  color:white; 
+  border-radius: 4px;
+  padding: var(--size-2-half);
+  padding-left: var(--size-1-full);
+  padding-right: var(--size-1-full);
+}
+.defbtn:hover {
+  background:#629af4d8; 
+  color:white; 
+  transition: 0.3s;
 }

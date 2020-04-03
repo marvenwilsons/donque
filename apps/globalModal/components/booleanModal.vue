@@ -1,10 +1,13 @@
 <template>
-    <div>
+    <div  >
+        <v-flex class="backgroundinfo pad125 marginbottom050" >
+            {{data.question}}
+        </v-flex>
         <v-flex class="flexend" >
-            <button class="pad050">
+            <button class="defbtn marginright050 buttonreset">
                 {{data.truthy}}
             </button>
-            <button class="pad050">
+            <button class="defbtn buttonreset">
                 {{data.falsey}}
             </button>
         </v-flex>

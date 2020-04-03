@@ -31,6 +31,16 @@ export default {
         this.newTask([
             {
                 type1: {
+                    taskName: 'systemCall',
+                    taskParam: {
+                        method: 'deletePage',
+                        section: 'pages',
+                        password: undefined 
+                    }
+                }
+            },
+            {
+                type1: {
                     taskName: 'ask',
                     taskParam: {
                         question: 'are you sure you want to continue?',
@@ -43,11 +53,11 @@ export default {
                 type2: function(taskResult) {
                     if(taskResult == true) {
                         return {
-                            taskName: 'ask',
+                            taskName: 'prompt',
                             taskParam: {
-                                question: 'are you really sure you want to continue?',
-                                truthy: 'yes continue',
-                                falsey: 'no cancel'
+                                promptMsg: 'Please provide password',
+                                truthy: 'Submit',
+                                falsey: 'Cancel'
                             }
                         }
                     }

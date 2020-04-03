@@ -37,7 +37,14 @@ export default {
                     key: 'globalModalContent',
                     value: modalPayload
                 })
+                console.log('modalPayload', modalPayload)
             }            
+        },
+        SYSTEM_PROCEDURE_DO_NOT_EXECUTE_OUTSIDE_HELPER_ANSWER_CURRENT_QUESTION({modalType, modalPayload}) {
+
+        },
+        SYSTEM_PROCEDURE_DO_NOT_EXECUTE_OUTSIDE_HELPER_SYSTEM_CALL({section, method, payload}) {
+
         },
         redirect() {
             

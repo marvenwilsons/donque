@@ -14,12 +14,22 @@ export default {
                 modalType: 'boolean',
                 modalPayload: {
                     truthy,
-                    falsey
+                    falsey,
+                    question
                 }
             })
         },
+        DO_NOT_EXECUTE_OUTSIDE_HELPER_$systemCall({question, truthy, falsey}) {
+
+        },
         newTask(taskArray) {
-            // push procedures to que together with its function dependecies
+            /********************************************************************
+             * push procedures to que together with its function dependecies
+             * the first item in taskArray is the item that needs to be completed
+             * the sencond item to the last are the functions that executes for the
+             * purpose of completing the first item in the taskArray.
+             * ****************************************************************** 
+             */
             let x = []
             let hasType2 = undefined
             taskArray.map((e,i) => {
@@ -46,14 +56,21 @@ export default {
                     }
                 } else if(e.type2){
                     /**
-                     * type 2 is a function that has dependency on the function
+                     * type 2 is a type of function that has dependency on the function
                      * that executed before
                      */
-                    x.push({
-                        fn: e.type2,
-                        param: null
-                    })
-                    hasType2 = true
+                    if(i == 1) {
+                        const msg = `ERR: type2 cannot be placed as a second task`
+                        alert(msg)
+                        throw msg
+                    } else {
+                        x.push({
+                            fn: e.type2,
+                            param: null
+                        })
+                        hasType2 = true
+                    }
+                    
                 }
             })
             this.h.$store.commit('stateController', {

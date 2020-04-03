@@ -3,9 +3,9 @@
         class="absolute fullwidth fullheight-percent flex flexcol flexcenter" >
         <div class="borderRad4" style="background:white;min-width:400px;" >
             <div style="background:var(--deftheme-dark-primary); color:white;" class="pad025" >
-                <span class="padleft050" >Header</span>
+                <span class="padleft050" >Alert</span>
             </div>
-            <div  class=" pad050 borerRad4" >
+            <div style="max-width:400px;"  class=" pad050 borerRad4" >
                 <div class="margin025" >
                     <booleanModal 
                         v-if="$store.state.globalModalContentType == 'boolean'" 
