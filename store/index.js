@@ -10,6 +10,7 @@ export const state = () => ({
     ],
     /** queue */
         queue: [],
+        queueExecType: undefined,
         queuePendingTask: {
             taskName: undefined,
             taskAnswer: undefined
@@ -19,7 +20,7 @@ export const state = () => ({
     /** Gloabal Modal */
         globalModalState: false,
         globalModalContentType: undefined,
-        globalModalDynamicContent: undefined
+        globalModalContent: undefined
     /** ----- */
 })
 export const mutations = {

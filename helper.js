@@ -21,6 +21,7 @@ export default {
         newTask(taskArray) {
             // push procedures to que together with its function dependecies
             let x = []
+            let hasType2 = undefined
             taskArray.map((e,i) => {
                 if(e.type1) {
                     /**
@@ -52,6 +53,7 @@ export default {
                         fn: e.type2,
                         param: null
                     })
+                    hasType2 = true
                 }
             })
             this.h.$store.commit('stateController', {
@@ -59,6 +61,17 @@ export default {
                 value: x
             })
             setTimeout(() => {
+                if(hasType2 == true) {
+                    this.h.$store.commit('stateController', {
+                        key: 'queueExecType',
+                        value: 'sync'
+                    })
+                } else {
+                    this.h.$store.commit('stateController', {
+                        key: 'queueExecType',
+                        value: 'async'
+                    })
+                }
                 this.h.$store.commit('executeQueue')
             }, 0);
         }

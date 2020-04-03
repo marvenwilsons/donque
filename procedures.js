@@ -34,7 +34,7 @@ export default {
                     value: modalType
                 })
                 this.h.$store.commit('stateController', {
-                    key: 'globalModalDynamicContent',
+                    key: 'globalModalContent',
                     value: modalPayload
                 })
             }            

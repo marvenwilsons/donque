@@ -2,7 +2,11 @@
     <main style="background:darkgray" class="fullwidth" >
         <v-flex fullwidth >
             <debug :data="{
-                queue: $store.state.queue
+                queue: $store.state.queue,
+                queueConfig: {
+                    queueExecType: $store.state.queueExecType,
+                    pointer: $store.state.queuePointer
+                }
             }" />
         </v-flex>
     </main>

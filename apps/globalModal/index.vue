@@ -1,13 +1,16 @@
 <template>
     <div v-if="$store.state.globalModalState" style="z-index:100;" 
         class="absolute fullwidth fullheight-percent flex flexcol flexcenter" >
-        <div style="background:white;min-width:400px;" >
-            <div style="background:var(--deftheme-dark-primary)" class="pad025" >
-                Header
+        <div class="borderRad4" style="background:white;min-width:400px;" >
+            <div style="background:var(--deftheme-dark-primary); color:white;" class="pad025" >
+                <span class="padleft050" >Header</span>
             </div>
             <div  class=" pad050 borerRad4" >
                 <div class="margin025" >
-                    Modal
+                    <booleanModal 
+                        v-if="$store.state.globalModalContentType == 'boolean'" 
+                        :data="$store.state.globalModalContent"
+                    />
                 </div>
             </div>
         </div>
@@ -16,6 +19,7 @@
 
 <script>
 import h from '@/helper'
+import booleanModal from './components/booleanModal'
 export default {
     mixins: [h],
     props: {
@@ -24,8 +28,8 @@ export default {
     created() {
         this.h = this
     },
-    data: () => ({
-
-    }),
+    components: {
+        booleanModal
+    }
 }
 </script>

@@ -482,6 +482,10 @@ h6 {
   color:rgba(0, 0, 0, 0.89);
 }
 
+.borderRad4{
+  border-radius: 4px;
+  overflow:hidden;
+}
 
 body {
   /* background: linear-gradient(to bottom, #ffffff, #ffffff 95%, #bda1a164 100%, #aaaaaa34); */
