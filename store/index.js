@@ -14,6 +14,7 @@ export const state = () => ({
             taskName: undefined,
             taskAnswer: undefined
         },
+        queuePointer: - 1,
     /** ----- */
     /** Gloabal Modal */
         globalModalState: false,
@@ -25,6 +26,13 @@ export const mutations = {
     stateController(state,payload) {
         console.log('> stateController changing --', payload.key)
         state[payload.key] = payload.value
+    },
+    executeQueue(state, payload) {
+        state.queuePointer = state.queuePointer + 1
+        console.log('> executing queue')
+        //
+        const {fn, param} = state.queue[state.queuePointer]
+        fn(param)
     }
 }
 

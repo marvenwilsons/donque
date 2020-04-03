@@ -1,13 +1,16 @@
 <template>
-    <v-app>
-        <v-flex>
-            hello
+    <main style="background:darkgray" class="fullwidth" >
+        <v-flex fullwidth >
+            <debug :data="{
+                queue: $store.state.queue
+            }" />
         </v-flex>
-    </v-app>
+    </main>
 </template>
 
 <script>
 import h from '@/helper'
+import debug from '@/apps/debug/index'
 
 export default {
     mixins: [h],
@@ -17,24 +20,31 @@ export default {
     created() {
         this.h = this
     },
+    components: {
+        debug
+    },
     mounted() {
         this.newTask([
             {
-                taskName: 'ask',
-                taskPayload: {
-                    question: 'are you sure you want to continue?',
-                    truthy: 'yes continue',
-                    falsey: 'no cancel'
+                type1: {
+                    taskName: 'ask',
+                    taskParam: {
+                        question: 'are you sure you want to continue?',
+                        truthy: 'yes continue',
+                        falsey: 'no cancel'
+                    }
                 }
             },
-            function(taskResult) {
-                if(taskResult == true) {
-                    return {
-                        taskName: 'ask',
-                         taskPayload: {
-                            question: 'are you really sure you want to continue?',
-                            truthy: 'yes continue',
-                            falsey: 'no cancel'
+            {
+                type2: function(taskResult) {
+                    if(taskResult == true) {
+                        return {
+                            taskName: 'ask',
+                            taskParam: {
+                                question: 'are you really sure you want to continue?',
+                                truthy: 'yes continue',
+                                falsey: 'no cancel'
+                            }
                         }
                     }
                 }

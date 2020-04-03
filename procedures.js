@@ -20,7 +20,7 @@ export default {
          * @spawnGlobalModal
          * @param modalType string
          */
-        spawnGlobalModal({modalType, modalPayload}) {
+        SYSTEM_PROCEDURE_DO_NOT_EXECUTE_OUTSIDE_HELPER_SPAWN_GLOBAL_MODAL({modalType, modalPayload}) {
             console.log("> spawnGlobalModal")
             if(this.h.$store.state.queue.length == 0) {
                 alert('ERR: Invalid spawnGlobalModal() function invocation, procedures should not directly called on components')
