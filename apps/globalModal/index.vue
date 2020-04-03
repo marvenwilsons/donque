@@ -1,5 +1,5 @@
 <template>
-    <div v-if="state" style="z-index:100;" class="absolute fullwidth fullheight-percent flex flexcenter" >
+    <div v-if="$store.state.globalModalState" style="z-index:100;" class="absolute fullwidth fullheight-percent flex flexcenter" >
             MODAL
     </div>
 </template>
@@ -17,8 +17,5 @@ export default {
     data: () => ({
 
     }),
-    methods: {
-
-    }
 }
 </script>

@@ -21,7 +21,6 @@ export const state = () => ({
         globalModalDynamicContent: undefined
     /** ----- */
 })
-
 export const mutations = {
     stateController(state,payload) {
         console.log('> stateController changing --', payload.key)

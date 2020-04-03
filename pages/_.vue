@@ -16,10 +16,30 @@ export default {
     }),
     created() {
         this.h = this
-
-        this.spawnGlobalModal({
-            
-        })
+    },
+    mounted() {
+        this.newTask([
+            {
+                taskName: 'ask',
+                taskPayload: {
+                    question: 'are you sure you want to continue?',
+                    truthy: 'yes continue',
+                    falsey: 'no cancel'
+                }
+            },
+            function(taskResult) {
+                if(taskResult == true) {
+                    return {
+                        taskName: 'ask',
+                         taskPayload: {
+                            question: 'are you really sure you want to continue?',
+                            truthy: 'yes continue',
+                            falsey: 'no cancel'
+                        }
+                    }
+                }
+            }
+        ])
     },
     layout: context => {
         const sysRoutes = [
