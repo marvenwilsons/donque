@@ -12,8 +12,8 @@ export const state = () => ({
         queue: [],
         queueExecType: undefined,
         queueCurrentTaskAnswer: null,
-        queuePointer: 0,
-        queueAnswersArray: [],
+        queuePointer: -1,
+        queueAnswersArray: undefined,
     /** ----- */
     /** Gloabal Modal */
         globalModalState: false,
@@ -22,9 +22,8 @@ export const state = () => ({
     /** ----- */
 })
 export const getters = {
-    queuePointer(state) {
-        console.log('hey')
-        return state.queuePointer
+    queueAnswersArray(state) {
+        return state.queueAnswersArray
     }
 }
 export const mutations = {
@@ -36,48 +35,26 @@ export const mutations = {
         console.log('> executing queue items')
         //
         if(payload && payload.asnwerPending == true) {
-            console.log('asnwer pending ..')
-            state.queueCurrentTaskAnswer = payload.answer
+            if(payload.answer != 'void') {
+                console.log('> updating current asnwer pending')
+                state.queueCurrentTaskAnswer = payload.answer
+            }
         } else {
-            this.commit('startQueueProcessing')
             state.queuePointer = state.queuePointer + 1
+            //
+            console.log(`> executing task index number (${state.queuePointer}) in queue`)
+            const {fn, param} = state.queue[state.queuePointer]
+            //   
+            console.log('queue item',  state.queue[state.queuePointer])
+            try {
+                fn(param)
+            } catch(err){
 
-            if(state.queueExecType === 'sync') {
-                console.log('> executing type1')
-                try{
-                    /**
-                     * type 1
-                     */
-                    const {fn, param} = state.queue[state.queuePointer]
-                    fn(param)
-                    if(state.queuePointer != state.queue.length) {
-                        this.commit('executeQueue')
-                    }
-                }catch(err) {
-                    /**
-                     * type 2
-                     */
-                    if(err.message == `Cannot read property 'fn' of undefined`) {
-                        console.log('> executing type2')
-                        console.log(state.queue[state.queuePointer])
-                    }
-                }
-            } else {
-    
             }
         }
     },
-    startQueueProcessing() {
-        /**
-         * ask the question is queueAnswersArray index (n) already answered?
-         * if yes --> is (n) === to the length of queue 
-         * if no --> call executeQueue
-         * if yes --> stop interval
-         */
-        
-        // setInterval(() => {
-        //     console.log('test')
-        // },1000)
+    updateQueueAnswers(state,payload) {
+        state.queueAnswersArray[payload.index].answer = payload.answer
     }
 }
 

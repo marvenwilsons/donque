@@ -7,7 +7,8 @@
                     queueExecType: $store.state.queueExecType,
                     pointer: $store.state.queuePointer,
                     currentAnswer: $store.state.queueCurrentTaskAnswer
-                }
+                },
+                queueAnswersArray: $store.state.queueAnswersArray
             }" />
         </v-flex>
     </main>
@@ -29,67 +30,62 @@ export default {
         debug
     },
     mounted() {
-        this.newTask([
+        this.createCompiledTask([
             {
-                type1: {
-                    taskName: 'systemCall',
-                    taskParam: {
-                        method: 'deletePage',
-                        section: 'pages',
-                        password: undefined 
-                    }
+                taskName: 'ask',
+                taskParam: {
+                    question: 'are you sure you want to continue?',
+                    truthy: 'yes continue',
+                    falsey: 'no cancel'
                 }
             },
             {
-                type1: {
-                    taskName: 'ask',
-                    taskParam: {
-                        question: 'are you sure you want to continue?',
-                        truthy: 'yes continue',
-                        falsey: 'no cancel'
-                    }
+               taskName: 'closeModal',
+               taskParam: {}
+            },
+            {
+                taskName: 'ask',
+                taskParam: {
+                    question: 'ARE YOU REALLY REALLY REALLY SURE?',
+                    truthy: 'yes continue',
+                    falsey: 'no cancel'
                 }
             },
             {
-                type1: {
-                    taskName: 'closeModal',
-                    taskParam: {}
-                }
+               taskName: 'closeModal',
+               taskParam: {}
             },
             {
-                type1: {
-                    taskName: 'ask',
-                    taskParam: {
-                        question: 'ARE YOU REALLY REALLY REALLY SURE?',
-                        truthy: 'yes continue',
-                        falsey: 'no cancel'
-                    }
-                }
-            },
-            {
-                type1: {
-                    taskName: 'closeModal',
-                    taskParam: {}
-                }
-            },
-            {
-                type2: function(taskResult) {
-                    if(taskResult == true) {
-                        console.log('HELLOOOOOOO')
+                taskName: 'exec',
+                taskParam(curentAnswer) {
+                    if(curentAnswer)  {
                         return {
-                            taskName: 'prompt',
+                            taskName: 'ask',
                             taskParam: {
-                                promptMsg: 'Please provide password',
-                                truthy: 'Submit',
-                                falsey: 'Cancel'
+                                question: 'HELLO WORLD!',
+                                truthy: 'Why Helllo There',
+                                falsey: 'GEt OUT!'
                             }
                         }
                     } else {
                         return {
-                            taskName: 'closeModal'
+                            taskName: 'ask',
+                            taskParam: {
+                                question: 'Are you sure you want to cancel transaction?',
+                                truthy: 'Yes',
+                                falsey: 'No'
+                            }
                         }
                     }
                 }
+            },
+            {
+               taskName: 'closeModal',
+               taskParam: {}
+            },
+            {
+                taskName: 'done',
+                taskParam: {}
             }
         ])
     },
