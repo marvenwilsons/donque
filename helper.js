@@ -19,8 +19,30 @@ export default {
                 }
             })
         },
-        DO_NOT_EXECUTE_OUTSIDE_HELPER_$systemCall({question, truthy, falsey}) {
+        DO_NOT_EXECUTE_OUTSIDE_HELPER_$systemCall() {
 
+        },
+        DO_NOT_EXECUTE_OUTSIDE_HELPER_$closeModal() {
+            console.log('> Closing Modal')
+            this.h.$store.commit('stateController', {
+                key: 'globalModalState',
+                value: false
+            })
+            this.h.$store.commit('stateController', {
+                key: 'globalModalContentType',
+                value: undefined
+            })
+            this.h.$store.commit('stateController', {
+                key: 'globalModalContent',
+                value: undefined
+            })
+        },
+        answerPending(answer) {
+            this.h.$store.commit('executeQueue', {
+                asnwerPending: true,
+                answer
+            })
+            // this.h.$store.commit('executeQueue')
         },
         newTask(taskArray) {
             /********************************************************************

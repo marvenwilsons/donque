@@ -5,7 +5,8 @@
                 queue: $store.state.queue,
                 queueConfig: {
                     queueExecType: $store.state.queueExecType,
-                    pointer: $store.state.queuePointer
+                    pointer: $store.state.queuePointer,
+                    currentAnswer: $store.state.queueCurrentTaskAnswer
                 }
             }" />
         </v-flex>
@@ -50,8 +51,31 @@ export default {
                 }
             },
             {
+                type1: {
+                    taskName: 'closeModal',
+                    taskParam: {}
+                }
+            },
+            {
+                type1: {
+                    taskName: 'ask',
+                    taskParam: {
+                        question: 'ARE YOU REALLY REALLY REALLY SURE?',
+                        truthy: 'yes continue',
+                        falsey: 'no cancel'
+                    }
+                }
+            },
+            {
+                type1: {
+                    taskName: 'closeModal',
+                    taskParam: {}
+                }
+            },
+            {
                 type2: function(taskResult) {
                     if(taskResult == true) {
+                        console.log('HELLOOOOOOO')
                         return {
                             taskName: 'prompt',
                             taskParam: {
@@ -59,6 +83,10 @@ export default {
                                 truthy: 'Submit',
                                 falsey: 'Cancel'
                             }
+                        }
+                    } else {
+                        return {
+                            taskName: 'closeModal'
                         }
                     }
                 }
