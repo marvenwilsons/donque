@@ -2,13 +2,14 @@
     <div v-if="$store.state.globalModalState" style="z-index:100;" 
         class="absolute fullwidth fullheight-percent flex flexcol flexcenter" >
         <div class="borderRad4" style="background:white;min-width:400px;" >
-            <div style="background:var(--deftheme-dark-primary); color:white;" class="pad025" >
-                <span class="padleft050" >Alert</span>
-            </div>
-            <div style="max-width:400px;"  class=" pad050 borerRad4" >
-                <div class="margin025" >
+            <div style="max-width:400px;"  class=" borerRad4" >
+                <div >
                     <booleanModal 
                         v-if="$store.state.globalModalContentType == 'boolean'" 
+                        :data="$store.state.globalModalContent"
+                    />
+                    <promptModal 
+                        v-if="$store.state.globalModalContentType == 'prompt'" 
                         :data="$store.state.globalModalContent"
                     />
                 </div>
@@ -20,6 +21,7 @@
 <script>
 import h from '@/helper'
 import booleanModal from './components/booleanModal'
+import promptModal from './components/promptModal'
 export default {
     mixins: [h],
     props: {
@@ -29,7 +31,8 @@ export default {
         this.h = this
     },
     components: {
-        booleanModal
+        booleanModal,
+        promptModal
     }
 }
 </script>

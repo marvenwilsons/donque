@@ -28,8 +28,8 @@
   color:white; 
   border-radius: 4px;
   padding: var(--size-2-half);
-  padding-left: var(--size-1-full);
-  padding-right: var(--size-1-full);
+  /* padding-left: var(--size-1-full); */
+  /* padding-right: var(--size-1-full); */
 }
 .defbtn:hover {
   background:#629af4d8; 

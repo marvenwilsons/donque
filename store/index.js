@@ -28,21 +28,19 @@ export const getters = {
 }
 export const mutations = {
     stateController(state,payload) {
-        console.log('> stateController changing --', payload.key)
+        // console.log('> stateController changing --', payload.key)
         state[payload.key] = payload.value
     },
     executeQueue(state, payload) {
-        console.log('> executing queue items')
+        // console.log('> executing queue items')
         //
         if(payload && payload.asnwerPending == true) {
             if(payload.answer != 'void') {
-                console.log('> updating current asnwer pending')
+                // console.log('> updating current asnwer pending')
                 state.queueCurrentTaskAnswer = payload.answer
             }
         } else {
             state.queuePointer = state.queuePointer + 1
-            //
-            console.log(`> executing task index number (${state.queuePointer}) in queue`)
             const {fn, param} = state.queue[state.queuePointer]
             //   
             if(fn) {

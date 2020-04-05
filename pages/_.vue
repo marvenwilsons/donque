@@ -44,11 +44,21 @@ export default {
                taskParam: {}
             },
             {
+                taskName: 'prompt',
+                taskParam: {
+                    type: 'string',
+                    validation: {},
+                    placeholder: '',
+                    msg: 'Type your password'
+                }
+            },
+            {
                 taskName: 'ask',
                 taskParam: {
                     question: 'ARE YOU REALLY REALLY REALLY SURE?',
                     truthy: 'yes continue',
-                    falsey: 'no cancel'
+                    falsey: 'no cancel',
+                    showHeader: false
                 }
             },
             {

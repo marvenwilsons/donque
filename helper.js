@@ -1,5 +1,6 @@
 import procedures from './procedures'
-import { mapGetters } from "vuex";
+import core from '@/apps/compiledTask/core'
+
 export default {
     mixins: [procedures],
     data: () => ({
@@ -16,6 +17,18 @@ export default {
                     truthy,
                     falsey,
                     question
+                }
+            })
+        },
+        DO_NOT_EXECUTE_OUTSIDE_HELPER_$prompt({type,validation,defaultValue, placeholder, msg}) {
+            this.SYSTEM_PROCEDURE_DO_NOT_EXECUTE_OUTSIDE_HELPER_SPAWN_GLOBAL_MODAL({
+                modalType: 'prompt',
+                modalPayload: {
+                    type,
+                    validation,
+                    defaultValue,
+                    placeholder,
+                    msg
                 }
             })
         },
@@ -151,10 +164,7 @@ export default {
             })
         },
         compiledTask(section,method) {
-            // const path = `apps/compiledTask/${section}/${method}.js`
-            // import(`/${path}`).then(module => {
-            //     console.log(module)
-            // })
+
         }
     }
 }
