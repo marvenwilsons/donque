@@ -6,16 +6,23 @@
     <div class="pad050 borderRad4" >
         <div class="pad025">
             <div class="padbottom025">
-                {{data.msg}}
+                {{data.label}}
             </div>
             <v-flex class="borderRad4 marginbottom050" >
-                <input v-model="inp" style="border: 4px solid #e9eff3;background:#e9eff3;" class="pad050 fullwidth" type="text">
+                <input 
+                    :placeholder="data.placeholder" id="modalStringPrompt" 
+                    v-model="inp"
+                    style="border: 4px solid #e9eff3;background:#e9eff3;" 
+                    class="pad050 fullwidth borderRad4" type="text">
+            </v-flex>
+            <v-flex v-if="data.err" >
+                <div class="backgrounderr pad025 fullwidth borderRad4 err padleft050" >error: {{data.err}}</div>
             </v-flex>
             <v-flex class="flexend margintop050 pad025">
-                <button @click="submitAnswer(inp)" class="defbtn buttonreset marginright050">
+                <button @click="answerPending(inp)" class="defbtn buttonreset marginright050">
                     Submit
                 </button>
-                <button @click="submitAnswer(false)" class="defbtn buttonreset">
+                <button @click="answerPending(false)" class="defbtn buttonreset">
                     Cancel
                 </button>
             </v-flex>
@@ -33,15 +40,13 @@ export default {
         data: Object
     },
     data: () => ({
-        inp: undefined
+        inp: null
     }),
     created() {
         this.h = this
     },
-    methods: {
-        submitAnswer(value) {
-            this.answerPending(value)
-        }
+    mounted() {
+        document.getElementById('modalStringPrompt').focus()
     }
 }
 </script>

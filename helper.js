@@ -20,7 +20,7 @@ export default {
                 }
             })
         },
-        DO_NOT_EXECUTE_OUTSIDE_HELPER_$prompt({type,validation,defaultValue, placeholder, msg}) {
+        DO_NOT_EXECUTE_OUTSIDE_HELPER_$prompt({type,validation,defaultValue, placeholder, label, err}) {
             this.SYSTEM_PROCEDURE_DO_NOT_EXECUTE_OUTSIDE_HELPER_SPAWN_GLOBAL_MODAL({
                 modalType: 'prompt',
                 modalPayload: {
@@ -28,12 +28,23 @@ export default {
                     validation,
                     defaultValue,
                     placeholder,
-                    msg
+                    label,
+                    err
                 }
             })
         },
         DO_NOT_EXECUTE_OUTSIDE_HELPER_$systemCall() {
 
+        },
+        DO_NOT_EXECUTE_OUTSIDE_HELPER_$goBack({resetTo,injectOrModifyProp}) {
+            console.log('going back')
+            if(injectOrModifyProp) {
+                
+                const newObj = Object.assign(this.$store.state.queue[jumpTo].param, injectOrModifyProp)
+                console.log(newObj)
+            } else {
+                
+            }
         },
         DO_NOT_EXECUTE_OUTSIDE_HELPER_$closeModal() {
             console.log('> Closing Modal')
@@ -54,7 +65,6 @@ export default {
             }, 200);
         },
         DO_NOT_EXECUTE_OUTSIDE_HELPER_$exec(payload) {
-            console.log('> exec')
             const t = payload(this.h.$store.state.queueCurrentTaskAnswer)
             const nobj = {
                 param: t.taskParam
@@ -62,7 +72,7 @@ export default {
             if(!t) {
                 const msg = `ERR! exec is undefined, exec task has to return a task object or a newTask array`
                 alert(msg)
-                throw msg
+                location.reload()
             } else {
                 // append task to queue
                 const currentQueue = this.h.$store.state.queue
@@ -107,6 +117,7 @@ export default {
             })
         },
         answerPending(answer) {
+            console.log('> Answering pending question')
             this.h.$store.commit('executeQueue', {
                 asnwerPending: true,
                 answer
@@ -163,7 +174,7 @@ export default {
                 value: queueAnswersArray
             })
         },
-        compiledTask(section,method) {
+        validate(dataTypeToValidate,modes) {
 
         }
     }

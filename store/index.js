@@ -35,16 +35,28 @@ export const mutations = {
         // console.log('> executing queue items')
         //
         if(payload && payload.asnwerPending == true) {
+            /**
+             * when there is a pending answer
+             */
             if(payload.answer != 'void') {
-                // console.log('> updating current asnwer pending')
+                console.log('> updating current asnwer pending')
                 state.queueCurrentTaskAnswer = payload.answer
             }
         } else {
+            // payload is undefined
+            console.log('> incrementing queue pointer')
             state.queuePointer = state.queuePointer + 1
-            const {fn, param} = state.queue[state.queuePointer]
-            //   
-            if(fn) {
-                fn(param)
+            try {
+                const {fn, param} = state.queue[state.queuePointer]
+                //   
+                if(fn) {
+                    console.log('> executing fn')
+                    fn(param)
+                }
+            } catch(err) {
+                const msg = `ERR: Cannot find any queue item in index ${state.queuePointer}`
+                alert(msg)
+                location.reload()
             }
         }
     },

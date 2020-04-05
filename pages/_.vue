@@ -32,66 +32,38 @@ export default {
     mounted() {
         this.createCompiledTask([
             {
-                taskName: 'ask',
-                taskParam: {
-                    question: 'are you sure you want to continue?',
-                    truthy: 'yes continue',
-                    falsey: 'no cancel'
-                }
-            },
-            {
-               taskName: 'closeModal',
-               taskParam: {}
-            },
-            {
                 taskName: 'prompt',
                 taskParam: {
                     type: 'string',
-                    validation: {},
-                    placeholder: '',
-                    msg: 'Type your password'
+                    placeholder: 'password',
+                    label: 'Type your name',
                 }
-            },
-            {
-                taskName: 'ask',
-                taskParam: {
-                    question: 'ARE YOU REALLY REALLY REALLY SURE?',
-                    truthy: 'yes continue',
-                    falsey: 'no cancel',
-                    showHeader: false
-                }
-            },
-            {
-               taskName: 'closeModal',
-               taskParam: {}
             },
             {
                 taskName: 'exec',
-                taskParam(curentAnswer) {
-                    if(curentAnswer)  {
+                taskParam: (data) => {
+                    if(data == 'marven') {
                         return {
                             taskName: 'ask',
                             taskParam: {
-                                question: 'HELLO WORLD!',
-                                truthy: 'Why Helllo There',
-                                falsey: 'GEt OUT!'
+                                question: 'who are you',
+                                truthy: 'sumbit',
+                                falsey: 'cancel'
                             }
                         }
                     } else {
                         return {
-                            taskName: 'ask',
+                            taskName: 'goBack',
                             taskParam: {
-                                question: 'Are you sure you want to cancel transaction?',
-                                truthy: 'Yes',
-                                falsey: 'No'
+                                resetTo: 0,
+                                injectOrModifyProp: {
+                                    err: `${data} is not a valid name`
+                                }
                             }
                         }
                     }
+                    
                 }
-            },
-            {
-               taskName: 'closeModal',
-               taskParam: {}
             },
             {
                 taskName: 'done',
