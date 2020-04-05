@@ -149,6 +149,12 @@ export default {
                 key: 'queueAnswersArray',
                 value: queueAnswersArray
             })
+        },
+        compiledTask(section,method) {
+            // const path = `apps/compiledTask/${section}/${method}.js`
+            // import(`/${path}`).then(module => {
+            //     console.log(module)
+            // })
         }
     }
 }

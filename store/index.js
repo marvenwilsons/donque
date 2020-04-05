@@ -45,11 +45,8 @@ export const mutations = {
             console.log(`> executing task index number (${state.queuePointer}) in queue`)
             const {fn, param} = state.queue[state.queuePointer]
             //   
-            console.log('queue item',  state.queue[state.queuePointer])
-            try {
+            if(fn) {
                 fn(param)
-            } catch(err){
-
             }
         }
     },
