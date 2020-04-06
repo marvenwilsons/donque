@@ -1,10 +1,10 @@
 <template>
   <div class="bordergray flex flexcol relative margin125" >
-   <div style="color:white;" class="pointer flex">
+   <div style="color:white;" class="pointer ">
      <div @click="collapse = !collapse" class="bgblue pad025">{{!collapse ? 'expand': 'collapse'}}</div>
    </div>
    <div v-if="collapse" style="overflow-y: hidden; min-height:400px;" class="flex1 relative">
-    <div style="height:400px;" class="flex absolute">
+    <div style="height:100%;" class="flex fullwidth fullheight-percent absolute">
       <div
         style="max-width:300px;min-width:250px;"
         class="bordergray flex flexcol"

@@ -14,6 +14,7 @@ export const state = () => ({
         queueCurrentTaskAnswer: null,
         queuePointer: -1,
         queueAnswersArray: undefined,
+        queueProcessPause: false,
     /** ----- */
     /** Gloabal Modal */
         globalModalState: false,
@@ -30,6 +31,9 @@ export const mutations = {
     stateController(state,payload) {
         // console.log('> stateController changing --', payload.key)
         state[payload.key] = payload.value
+    },
+    queueAnswersArrayController(state,{index,answer}) {
+        state.queueAnswersArray[index].answer = answer
     },
     executeQueue(state, payload) {
         // console.log('> executing queue items')

@@ -27,17 +27,19 @@ export default {
         queueAnswersArray: {
             deep: true,
             handler(newData,oldData) {
-                if(oldData == undefined) {
-                    /**
-                     * It means new task has been added and needed to be proccessed
-                     * if the pointer is in 0 execute the first index of queue array
-                     */
-                    this.$store.commit('executeQueue')
-                } else if(oldData != undefined) {
-                    if(oldData && newData != undefined){
+                if(this.$store.state.queueProcessPause == false) {
+                    if(oldData == undefined) {
+                        /**
+                         * It means new task has been added and needed to be proccessed
+                         * if the pointer is in 0 execute the first index of queue array
+                         */
                         this.$store.commit('executeQueue')
-                    }                    
-                }
+                    } else if(oldData != undefined) {
+                        if(oldData && newData != undefined){
+                            this.$store.commit('executeQueue')
+                        }                    
+                    }
+                }                
             }
         }
     }
