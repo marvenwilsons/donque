@@ -16,7 +16,7 @@
           {{Array.isArray(entries) ? 'Array' : typeof entries}}
         </div>
         <div style="background:whitesmoke;" class="bordergray flex1 debugwin">
-          <pre>{{entries == undefined ? 'undefined' : entries}}</pre>
+          <pre style="color: #206add;" >{{entries == undefined ? 'undefined' : entries}}</pre>
         </div>
         <div style="background:lightgray;">
           Length: {{entries && Array.isArray(entries) ? entries.length : entries ? Object.keys(entries).length : 'NaN'  }}

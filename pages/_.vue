@@ -1,14 +1,15 @@
 <template>
     <main style="background:darkgray" class="fullwidth" >
-        <v-flex fullwidth >
+        <v-flex fullwidth   fullheight-percent >
             <debug :data="{
-                queue: $store.state.queue,
+                QUESTIONS: $store.state.queue,
                 queueConfig: {
                     queueExecType: $store.state.queueExecType,
                     pointer: $store.state.queuePointer,
-                    currentAnswer: $store.state.queueCurrentTaskAnswer
+                    currentAnswer: $store.state.queueCurrentTaskAnswer,
+                    queueState: $store.state.queueState
                 },
-                queueAnswersArray: $store.state.queueAnswersArray
+                ANSWERS: $store.state.queueAnswersArray,
             }" />
         </v-flex>
     </main>
@@ -21,7 +22,6 @@ import debug from '@/apps/debug/index'
 export default {
     mixins: [h],
     data: () => ({
-
     }),
     created() {
         this.h = this
@@ -40,35 +40,47 @@ export default {
                 }
             },
             {
-                taskName: 'exec',
-                taskParam: (data) => {
-                    if(data == 'marven') {
-                        return {
-                            taskName: 'ask',
-                            taskParam: {
-                                question: 'who are you',
-                                truthy: 'sumbit',
-                                falsey: 'cancel'
-                            }
-                        }
-                    } else {
-                        return {
-                            taskName: 'goBack',
-                            taskParam: {
-                                resetTo: 0,
-                                injectOrModifyProp: {
-                                    err: `${data} is not a valid name`
-                                }
-                            }
-                        }
-                    }
-                    
-                }
-            },
-            {
-                taskName: 'done',
+                taskName: 'closeModal',
                 taskParam: {}
-            }
+            },
+            // {
+            //     taskName: 'exec',
+            //     taskParam: (data) => {
+            //         if(data == 'marven') {
+            //             return {
+            //                 taskName: 'ask',
+            //                 taskParam: {
+            //                     question: 'who are you',
+            //                     truthy: 'sumbit',
+            //                     falsey: 'cancel'
+            //                 }
+            //             }
+            //         } else {
+            //             return new Promise((resolve,reject) => {
+            //                 setTimeout(() => {
+            //                     return {
+            //                         taskName: 'goBack',
+            //                         taskParam: {
+            //                             resetBackTo: 0,
+            //                             injectOrModifyProp: {
+            //                                 err: `${data} is not a valid name`
+            //                             }
+            //                         }
+            //                     }
+            //                 }, 1000);
+            //             })
+            //         }
+                    
+            //     }
+            // },
+            // {
+            //     taskName: 'closeModal',
+            //     taskParam: {}
+            // },
+            // {
+            //     taskName: 'done',
+            //     taskParam: {}
+            // }
         ])
     },
     layout: context => {

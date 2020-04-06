@@ -38,13 +38,6 @@ export default {
         },
         DO_NOT_EXECUTE_OUTSIDE_HELPER_$goBack({resetTo,injectOrModifyProp}) {
             console.log('going back')
-            if(injectOrModifyProp) {
-                
-                const newObj = Object.assign(this.$store.state.queue[jumpTo].param, injectOrModifyProp)
-                console.log(newObj)
-            } else {
-                
-            }
         },
         DO_NOT_EXECUTE_OUTSIDE_HELPER_$closeModal() {
             console.log('> Closing Modal')
@@ -61,8 +54,8 @@ export default {
                 value: undefined
             })
             setTimeout(() => {
-                this.h.answerPending('void')
-            }, 200);
+                this.h.answerPending('--void--')
+            }, 100);
         },
         DO_NOT_EXECUTE_OUTSIDE_HELPER_$exec(payload) {
             const t = payload(this.h.$store.state.queueCurrentTaskAnswer)
@@ -87,13 +80,18 @@ export default {
                 })
                 setTimeout(() => {
                     this[`DO_NOT_EXECUTE_OUTSIDE_HELPER_$${t.taskName}`](t.taskParam)
-
-                    setTimeout(() => {
-                        this.h.$store.commit('updateQueueAnswers', {
-                            index: this.h.$store.state.queuePointer + 1,
-                            answer: '--pending--'
-                        })
-                    }, 100);
+                    if(t.taskName === 'goBack') {
+                        console.log('pausing')
+                        console.log(t.taskParam)
+                        // return
+                    } else {
+                        // setTimeout(() => {
+                        //     this.h.$store.commit('updateQueueAnswers', {
+                        //         index: this.h.$store.state.queuePointer + 1,
+                        //         answer: '--pending--'
+                        //     })
+                        // }, 10);
+                    }                    
                 }, 10);
             }
         },
@@ -118,14 +116,12 @@ export default {
         },
         answerPending(answer) {
             console.log('> Answering pending question')
-            this.h.$store.commit('executeQueue', {
-                asnwerPending: true,
-                answer
-            })
+            const voidAnswers = ['--void--','--pending--']
             this.h.$store.commit('updateQueueAnswers', {
                 index: this.h.$store.state.queuePointer,
-                answer
+                answer: '--done--'
             })
+            
         },
         createCompiledTask(taskArray) {
             /********************************************************************

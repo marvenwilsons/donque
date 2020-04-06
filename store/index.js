@@ -12,9 +12,9 @@ export const state = () => ({
         queue: [],
         queueExecType: undefined,
         queueCurrentTaskAnswer: null,
-        queuePointer: -1,
-        queueAnswersArray: undefined,
-        queueProcessPause: false,
+        queuePointer: null,
+        queueAnswersArray: null,
+        queueState: null,
     /** ----- */
     /** Gloabal Modal */
         globalModalState: false,
@@ -24,44 +24,45 @@ export const state = () => ({
 })
 export const getters = {
     queueAnswersArray(state) {
-        return state.queueAnswersArray
+        return {
+            latestArrayState: state.queueAnswersArray,
+            latestPointer: state.queuePointer
+        }
+
+    },
+    queueArray(state) {
+        return {
+            queue: state.queue,
+            queueLength: state.queue.length
+        }
+    },
+    queuePointer(state) {
+        return state.queuePointer
+    },
+    queueState(state) {
+        return state.queueState
     }
+
 }
 export const mutations = {
     stateController(state,payload) {
-        // console.log('> stateController changing --', payload.key)
         state[payload.key] = payload.value
     },
     queueAnswersArrayController(state,{index,answer}) {
         state.queueAnswersArray[index].answer = answer
     },
     executeQueue(state, payload) {
-        // console.log('> executing queue items')
-        //
-        if(payload && payload.asnwerPending == true) {
-            /**
-             * when there is a pending answer
-             */
-            if(payload.answer != 'void') {
-                console.log('> updating current asnwer pending')
-                state.queueCurrentTaskAnswer = payload.answer
+        console.log('> executing queue items')
+        console.log(state.queueState)
+
+        try {
+            const {fn, param} = state.queue[state.queuePointer]
+            if(fn) {
+                fn(param)
             }
-        } else {
-            // payload is undefined
-            console.log('> incrementing queue pointer')
-            state.queuePointer = state.queuePointer + 1
-            try {
-                const {fn, param} = state.queue[state.queuePointer]
-                //   
-                if(fn) {
-                    console.log('> executing fn')
-                    fn(param)
-                }
-            } catch(err) {
-                const msg = `ERR: Cannot find any queue item in index ${state.queuePointer}`
-                alert(msg)
-                location.reload()
-            }
+        }catch(err) {
+            console.log('executeQueue err', state.queuePointer)
+            return
         }
     },
     updateQueueAnswers(state,payload) {
