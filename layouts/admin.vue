@@ -81,10 +81,12 @@ export default {
                             })
                         } else {
                             console.log('> queue answers change detected')
-                            this.$store.commit('stateController', {
-                                key:"queuePointer",
-                                value: this.$store.state.queuePointer + 1
-                            })
+                            if(curState.latestArrayState[this.$store.state.queuePointer].answer != null) {
+                                this.$store.commit('stateController', {
+                                    key:"queuePointer",
+                                    value: this.$store.state.queuePointer + 1
+                                })
+                            }
                         }
                     }
 

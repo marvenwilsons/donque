@@ -8,7 +8,8 @@
                     pointer: $store.state.queuePointer,
                     currentAnswer: $store.state.queueCurrentTaskAnswer,
                     queueState: $store.state.queueState,
-                    staticCopy: $store.state.queueStatic
+                    loop: $store.state.queueOnLoop,
+                    static: $store.state.queueStatic
                 },
                 ANSWERS: $store.state.queueAnswersArray,
             }" />

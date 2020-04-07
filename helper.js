@@ -13,6 +13,18 @@ export default {
         m() {
             return this
         },
+        cp(o){
+            if (o === null) return null;
+        
+                var output, v, key;
+                output = Array.isArray(o) ? [] : {};
+                for (key in o) {
+                  v = o[key];
+                  output[key] = typeof v === "object" ? this.cp(v) : v;
+                }
+        
+            return output;
+        },
         DO_NOT_EXECUTE_OUTSIDE_HELPER_$ask({question, truthy, falsey}) {
             this.SYSTEM_PROCEDURE_DO_NOT_EXECUTE_OUTSIDE_HELPER_SPAWN_GLOBAL_MODAL({
                 modalType: 'boolean',
@@ -161,9 +173,10 @@ export default {
                 key: 'queue',
                 value: x
             })
+            const staticCopy = this.cp(x)
             this.h.$store.commit('stateController', {
                 key: 'queueStatic',
-                value: Object.freeze(x)
+                value: Object.freeze(staticCopy)
             })
             this.h.$store.commit('stateController', {
                 key: 'queueAnswersArray',
