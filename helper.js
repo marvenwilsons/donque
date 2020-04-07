@@ -52,11 +52,6 @@ export default {
 
         },
         DO_NOT_EXECUTE_OUTSIDE_HELPER_$resetTask({resetBackTo,injectOrModifyProp}) {
-            console.log('going back')
-            // this.h.$store.commit('stateController',{
-            //     key: 'queueState',
-            //     value: 'pause'
-            // })
             this.h.$store.commit('stateController',{
                 key: 'queuePointer',
                 value: resetBackTo
@@ -110,7 +105,6 @@ export default {
         answerPending(answer,pointer) {
             console.log('> Answering pending question')
             if(answer && answer != '--void--') {
-                console.log(answer)
                 this.h.$store.commit('stateController', {
                     key: 'queueCurrentTaskAnswer',
                     value: answer

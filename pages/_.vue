@@ -45,22 +45,14 @@ export default {
                 taskName: 'closeModal',
                 taskParam: {}
             },
-            // {
-            //     taskName: 'done',
-            //     taskParam: {}
-            // },
             {
                 taskName: 'exec',
                 taskParam: (data) => {
                     console.log('this is the current data', data)
                     if(data == 'marven') {
                         return {
-                            taskName: 'ask',
-                            taskParam: {
-                                question: 'who are you',
-                                truthy: 'sumbit',
-                                falsey: 'cancel'
-                            }
+                            taskName: 'done',
+                            taskParam: {}
                         }
                     } else {
                         return new Promise((resolve,reject) => {
@@ -75,28 +67,20 @@ export default {
                                         }
                                     }
                                 })
-                                // resolve({
-                                //     taskName: 'ask',
-                                //     taskParam: {
-                                //         question: 'are you marven?',
-                                //         truthy: 'yes',
-                                //         falsey: 'no'
-                                //     }
-                                // })
                             }, 1000);
                         })
                     }
                     
                 }
             },
-            // {
-            //     taskName: 'closeModal',
-            //     taskParam: {}
-            // },
-            // {
-            //     taskName: 'done',
-            //     taskParam: {}
-            // }
+            {
+                taskName: 'closeModal',
+                taskParam: {}
+            },
+            {
+                taskName: 'done',
+                taskParam: {}
+            }
         ])
     },
     layout: context => {

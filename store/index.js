@@ -58,13 +58,13 @@ export const mutations = {
             state.queue[resetIndex] = null
             state.queue[resetIndex] = m.cp(state.queueStatic[resetIndex])
             state.queueOnLoop = resetIndex
+        } else {
+            state.queueOnLoop = null
         }
     },
     async executeQueue(state, payload) {
         console.log('> executing queue items ***************')
-
         if(state.queue[state.queuePointer].mode == '--pending--') {
-            console.log('handling pending task')
             // executing exec task to get extract the task object
             const asyncOpt = await state.queue[state.queuePointer].param(state.queueCurrentTaskAnswer) // task list extracted
             if(asyncOpt) { // if task object is now available, insert task object to queue                
