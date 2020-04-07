@@ -26,9 +26,7 @@ export const getters = {
     queueAnswersArray(state) {
         return {
             latestArrayState: state.queueAnswersArray,
-            latestPointer: state.queuePointer
         }
-
     },
     queueArray(state) {
         return {
@@ -49,7 +47,7 @@ export const mutations = {
         state[payload.key] = payload.value
     },
     insertQueueItem(state,{fn,param}) {
-        state.queueState = 'pause'
+        // state.queueState = 'pause'
         state.queue[state.queuePointer].mode = null
         const m = state.queue[state.queuePointer].m()
         state.queue[state.queuePointer].fn = m[`DO_NOT_EXECUTE_OUTSIDE_HELPER_$${fn}`]
@@ -57,12 +55,11 @@ export const mutations = {
         this.commit('executeQueue')
     },
     async executeQueue(state, payload) {
-        console.log('> executing queue items')
-        console.log(state.queueState)
+        console.log('> executing queue items ***************')
 
         if(state.queue[state.queuePointer].mode == '--pending--') {
             console.log('handling exec')
-            const asyncOpt = await state.queue[state.queuePointer].param()
+            const asyncOpt = await state.queue[state.queuePointer].param(state.queueCurrentTaskAnswer)
             if(asyncOpt) {
                 this.commit('insertQueueItem', {
                     fn: asyncOpt.taskName,
@@ -79,6 +76,9 @@ export const mutations = {
     },
     updateQueueAnswers(state,payload) {
         state.queueAnswersArray[payload.index].answer = payload.answer
+        // if(payload.pointer) {
+        //     state.queuePointer = payload.pointer
+        // }
     }
 }
 

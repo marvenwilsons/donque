@@ -39,8 +39,17 @@ export default {
         DO_NOT_EXECUTE_OUTSIDE_HELPER_$systemCall() {
 
         },
-        DO_NOT_EXECUTE_OUTSIDE_HELPER_$goBack({resetTo,injectOrModifyProp}) {
+        DO_NOT_EXECUTE_OUTSIDE_HELPER_$goBack({resetBackTo,injectOrModifyProp}) {
             console.log('going back')
+            // this.h.$store.commit('stateController',{
+            //     key: 'queueState',
+            //     value: 'pause'
+            // })
+            this.h.$store.commit('stateController',{
+                key: 'queuePointer',
+                value: resetBackTo
+            })
+            // this.answerPending('--not answered--', 0)
         },
         DO_NOT_EXECUTE_OUTSIDE_HELPER_$closeModal() {
             console.log('> Closing Modal')
@@ -83,12 +92,21 @@ export default {
                 value: []
             })
         },
-        answerPending(answer) {
+        answerPending(answer,pointer) {
             console.log('> Answering pending question')
-            const voidAnswers = ['--void--','--pending--']
+            if(answer && answer != '--void--') {
+                console.log(answer)
+                this.h.$store.commit('stateController', {
+                    key: 'queueCurrentTaskAnswer',
+                    value: answer
+                })
+
+            }
+
             this.h.$store.commit('updateQueueAnswers', {
                 index: this.h.$store.state.queuePointer,
-                answer: '--done--'
+                answer: '--done--',
+                pointer
             })
         },
         runCompiledTask(taskArray) {

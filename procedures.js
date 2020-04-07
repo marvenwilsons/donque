@@ -60,6 +60,6 @@ export default {
         }
     },
     created() {
-        console.log('> moutimng procedures')
+        // console.log('> imng procedures')
     }
 }

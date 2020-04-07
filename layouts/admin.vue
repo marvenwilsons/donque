@@ -54,22 +54,20 @@ export default {
             }
         },
         // next move
-        queuePointer(curState){
-            console.log('> queue pointer change detected')
+        queuePointer(curState,prevState){
             // execute item and wait for response
             // response writting is in helper.js answerpending method
             if(this.$store.state.queueState != null && this.$store.state.queueState != 'end') {
-                console.log('> Executing', this.$store.state.queueState)
+                console.log('> queue pointer change detected executing item:', curState)
                 this.$store.commit('executeQueue')
             }
         },
         queueAnswersArray: {
             deep: true,
             handler(curState, prevState) {
-                console.log('> queue answers change detected')
-                // const curAnswer = curState.latestArrayState[curState.latestPointer].answer
-                if(prevState.latestPointer != null && this.$store.state.queueState != 'end') {
-                    if(curState.latestArrayState[curState.latestPointer].answer == '--done--') {
+
+                if(this.$store.state.queueState != 'end') {
+                    if(curState.latestArrayState[this.$store.state.queuePointer].answer == '--done--') {
                         if(this.$store.state.queuePointer == curState.latestArrayState.length - 1 || this.$store.state.queueState == 'init end') {
                             console.log('Init ending')
                             // done
@@ -82,17 +80,18 @@ export default {
                                 value: []
                             })
                         } else {
+                            console.log('> queue answers change detected')
                             this.$store.commit('stateController', {
                                 key:"queuePointer",
-                                value: curState.latestPointer + 1
+                                value: this.$store.state.queuePointer + 1
                             })
                         }
                     }
 
                     
                 } else {
-                    console.log('> reseting queue state')
                     if(this.$store.state.queuePointer == null && this.$store.state.queueState == 'end') {
+                        console.log('> reseting queue state')
                         this.$store.commit('stateController', {
                             key: 'queueState',
                             value: null

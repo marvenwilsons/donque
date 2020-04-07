@@ -50,6 +50,7 @@ export default {
             {
                 taskName: 'exec',
                 taskParam: (data) => {
+                    console.log('this is the current data', data)
                     if(data == 'marven') {
                         return {
                             taskName: 'ask',
@@ -63,37 +64,37 @@ export default {
                         return new Promise((resolve,reject) => {
                             setTimeout(() => {
                                 console.log('done validating')
-                                // resolve( {
-                                //     taskName: 'goBack',
-                                //     taskParam: {
-                                //         resetBackTo: 0,
-                                //         injectOrModifyProp: {
-                                //             err: `${data} is not a valid name`
-                                //         }
-                                //     }
-                                // })
-                                resolve({
-                                    taskName: 'ask',
+                                resolve( {
+                                    taskName: 'goBack',
                                     taskParam: {
-                                        question: 'are you marven?',
-                                        truthy: 'yes',
-                                        falsey: 'no'
+                                        resetBackTo: 0,
+                                        injectOrModifyProp: {
+                                            err: `${data} is not a valid name`
+                                        }
                                     }
                                 })
+                                // resolve({
+                                //     taskName: 'ask',
+                                //     taskParam: {
+                                //         question: 'are you marven?',
+                                //         truthy: 'yes',
+                                //         falsey: 'no'
+                                //     }
+                                // })
                             }, 1000);
                         })
                     }
                     
                 }
             },
-            {
-                taskName: 'closeModal',
-                taskParam: {}
-            },
-            {
-                taskName: 'done',
-                taskParam: {}
-            }
+            // {
+            //     taskName: 'closeModal',
+            //     taskParam: {}
+            // },
+            // {
+            //     taskName: 'done',
+            //     taskParam: {}
+            // }
         ])
     },
     layout: context => {
