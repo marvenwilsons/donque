@@ -10,6 +10,9 @@ export default {
         this.$p = this.h
     },
     methods: {
+        m() {
+            return this
+        },
         DO_NOT_EXECUTE_OUTSIDE_HELPER_$ask({question, truthy, falsey}) {
             this.SYSTEM_PROCEDURE_DO_NOT_EXECUTE_OUTSIDE_HELPER_SPAWN_GLOBAL_MODAL({
                 modalType: 'boolean',
@@ -57,49 +60,11 @@ export default {
                 this.h.answerPending('--void--')
             }, 100);
         },
-        DO_NOT_EXECUTE_OUTSIDE_HELPER_$exec(payload) {
-            const t = payload(this.h.$store.state.queueCurrentTaskAnswer)
-            const nobj = {
-                param: t.taskParam
-            }
-            if(!t) {
-                const msg = `ERR! exec is undefined, exec task has to return a task object or a newTask array`
-                alert(msg)
-                location.reload()
-            } else {
-                // append task to queue
-                const currentQueue = this.h.$store.state.queue
-                currentQueue.splice(this.h.$store.state.queuePointer,1,nobj)
-                this.h.$store.commit('stateController', {
-                    key: 'queue',
-                    value: currentQueue
-                })
-                this.h.$store.commit('stateController', {
-                    key: 'queuePointer',
-                    value: this.h.$store.state.queuePointer - 1
-                })
-                setTimeout(() => {
-                    this[`DO_NOT_EXECUTE_OUTSIDE_HELPER_$${t.taskName}`](t.taskParam)
-                    if(t.taskName === 'goBack') {
-                        console.log('pausing')
-                        console.log(t.taskParam)
-                        // return
-                    } else {
-                        // setTimeout(() => {
-                        //     this.h.$store.commit('updateQueueAnswers', {
-                        //         index: this.h.$store.state.queuePointer + 1,
-                        //         answer: '--pending--'
-                        //     })
-                        // }, 10);
-                    }                    
-                }, 10);
-            }
-        },
         DO_NOT_EXECUTE_OUTSIDE_HELPER_$done() {
             console.log('> all task done')
             this.h.$store.commit('stateController', {
-                key: 'queue',
-                value: []
+                key: 'queueState',
+                value: 'end'
             })
             this.h.$store.commit('stateController', {
                 key: 'queueCurrentTaskAnswer',
@@ -107,11 +72,15 @@ export default {
             })
             this.h.$store.commit('stateController', {
                 key: 'queuePointer',
-                value: -1
+                value: null
             })
             this.h.$store.commit('stateController', {
                 key: 'queueAnswersArray',
-                value: undefined
+                value: null
+            })
+            this.h.$store.commit('stateController', {
+                key: 'queue',
+                value: []
             })
         },
         answerPending(answer) {
@@ -121,9 +90,8 @@ export default {
                 index: this.h.$store.state.queuePointer,
                 answer: '--done--'
             })
-            
         },
-        createCompiledTask(taskArray) {
+        runCompiledTask(taskArray) {
             /********************************************************************
              * push procedures to que together with its function dependecies
              * the first item in taskArray is the item that needs to be completed
@@ -138,10 +106,8 @@ export default {
                     answer: '--not answered--'
                 })
                 if(e) {
-                    /**
-                     * type 1 is an object that tells what function to execute
-                     */
-                    const taskBeingCalled = this[`DO_NOT_EXECUTE_OUTSIDE_HELPER_$${e.taskName}`]
+                    /*** type 1 is an object that tells what function to execute */
+                    const taskBeingCalled = e.taskName == 'exec' ? true : this[`DO_NOT_EXECUTE_OUTSIDE_HELPER_$${e.taskName}`]
                     if(taskBeingCalled == undefined) {
                         const msg = `ERR: "${e.taskName}" function or task does not exist`
                         alert(msg)
@@ -153,10 +119,19 @@ export default {
                             throw msg
                         } else {
                             console.log('> pushing task array')
-                            x.push({
-                                fn: taskBeingCalled,
-                                param: e.taskParam
-                            })
+                            if(e.taskName == 'exec') {
+                                x.push({
+                                    fn: taskBeingCalled,
+                                    param: e.taskParam,
+                                    mode: '--pending--',
+                                    m: this.m
+                                })
+                            } else {
+                                x.push({
+                                    fn: taskBeingCalled,
+                                    param: e.taskParam
+                                })
+                            }                     
                         }
                     }
                 }

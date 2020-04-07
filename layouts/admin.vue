@@ -36,7 +36,7 @@ export default {
                     key: 'queuePointer',
                     value: null
                 })
-            }else if(prevState != 'end') {
+            }else if(prevState != 'end' || prevState != 'pause') {
                 this.$store.commit('stateController', {
                     key: 'queueState',
                     value: 'running'
@@ -69,9 +69,9 @@ export default {
                 console.log('> queue answers change detected')
                 // const curAnswer = curState.latestArrayState[curState.latestPointer].answer
                 if(prevState.latestPointer != null && this.$store.state.queueState != 'end') {
-                    console.log('> updating pointer to ', curState.latestPointer + 1)
                     if(curState.latestArrayState[curState.latestPointer].answer == '--done--') {
-                        if( this.$store.state.queuePointer == curState.latestArrayState.length - 1) {
+                        if(this.$store.state.queuePointer == curState.latestArrayState.length - 1 || this.$store.state.queueState == 'init end') {
+                            console.log('Init ending')
                             // done
                             this.$store.commit('stateController', {
                                 key: 'queueState',
@@ -82,8 +82,6 @@ export default {
                                 value: []
                             })
                         } else {
-                            console.log( this.$store.state.queuePointer,curState.latestArrayState.length)
-                            console.log( this.$store.state.queuePointer == curState.latestArrayState.length)
                             this.$store.commit('stateController', {
                                 key:"queuePointer",
                                 value: curState.latestPointer + 1

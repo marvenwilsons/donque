@@ -30,7 +30,7 @@ export default {
         debug
     },
     mounted() {
-        this.createCompiledTask([
+        this.runCompiledTask([
             {
                 taskName: 'prompt',
                 taskParam: {
@@ -44,43 +44,56 @@ export default {
                 taskParam: {}
             },
             // {
-            //     taskName: 'exec',
-            //     taskParam: (data) => {
-            //         if(data == 'marven') {
-            //             return {
-            //                 taskName: 'ask',
-            //                 taskParam: {
-            //                     question: 'who are you',
-            //                     truthy: 'sumbit',
-            //                     falsey: 'cancel'
-            //                 }
-            //             }
-            //         } else {
-            //             return new Promise((resolve,reject) => {
-            //                 setTimeout(() => {
-            //                     return {
-            //                         taskName: 'goBack',
-            //                         taskParam: {
-            //                             resetBackTo: 0,
-            //                             injectOrModifyProp: {
-            //                                 err: `${data} is not a valid name`
-            //                             }
-            //                         }
-            //                     }
-            //                 }, 1000);
-            //             })
-            //         }
-                    
-            //     }
-            // },
-            // {
-            //     taskName: 'closeModal',
-            //     taskParam: {}
-            // },
-            // {
             //     taskName: 'done',
             //     taskParam: {}
-            // }
+            // },
+            {
+                taskName: 'exec',
+                taskParam: (data) => {
+                    if(data == 'marven') {
+                        return {
+                            taskName: 'ask',
+                            taskParam: {
+                                question: 'who are you',
+                                truthy: 'sumbit',
+                                falsey: 'cancel'
+                            }
+                        }
+                    } else {
+                        return new Promise((resolve,reject) => {
+                            setTimeout(() => {
+                                console.log('done validating')
+                                // resolve( {
+                                //     taskName: 'goBack',
+                                //     taskParam: {
+                                //         resetBackTo: 0,
+                                //         injectOrModifyProp: {
+                                //             err: `${data} is not a valid name`
+                                //         }
+                                //     }
+                                // })
+                                resolve({
+                                    taskName: 'ask',
+                                    taskParam: {
+                                        question: 'are you marven?',
+                                        truthy: 'yes',
+                                        falsey: 'no'
+                                    }
+                                })
+                            }, 1000);
+                        })
+                    }
+                    
+                }
+            },
+            {
+                taskName: 'closeModal',
+                taskParam: {}
+            },
+            {
+                taskName: 'done',
+                taskParam: {}
+            }
         ])
     },
     layout: context => {
