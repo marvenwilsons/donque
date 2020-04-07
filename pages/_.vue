@@ -7,7 +7,8 @@
                     queueExecType: $store.state.queueExecType,
                     pointer: $store.state.queuePointer,
                     currentAnswer: $store.state.queueCurrentTaskAnswer,
-                    queueState: $store.state.queueState
+                    queueState: $store.state.queueState,
+                    staticCopy: $store.state.queueStatic
                 },
                 ANSWERS: $store.state.queueAnswersArray,
             }" />
@@ -65,7 +66,7 @@ export default {
                             setTimeout(() => {
                                 console.log('done validating')
                                 resolve( {
-                                    taskName: 'goBack',
+                                    taskName: 'resetTask',
                                     taskParam: {
                                         resetBackTo: 0,
                                         injectOrModifyProp: {

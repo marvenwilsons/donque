@@ -39,7 +39,7 @@ export default {
         DO_NOT_EXECUTE_OUTSIDE_HELPER_$systemCall() {
 
         },
-        DO_NOT_EXECUTE_OUTSIDE_HELPER_$goBack({resetBackTo,injectOrModifyProp}) {
+        DO_NOT_EXECUTE_OUTSIDE_HELPER_$resetTask({resetBackTo,injectOrModifyProp}) {
             console.log('going back')
             // this.h.$store.commit('stateController',{
             //     key: 'queueState',
@@ -49,7 +49,10 @@ export default {
                 key: 'queuePointer',
                 value: resetBackTo
             })
-            // this.answerPending('--not answered--', 0)
+            console.log()
+            console.log()
+            Object.assign(this.h.$store.state.queue[this.$store.state.queuePointer].param, injectOrModifyProp)
+            // reset back n exec initial value 
         },
         DO_NOT_EXECUTE_OUTSIDE_HELPER_$closeModal() {
             console.log('> Closing Modal')
@@ -157,6 +160,10 @@ export default {
             this.h.$store.commit('stateController', {
                 key: 'queue',
                 value: x
+            })
+            this.h.$store.commit('stateController', {
+                key: 'queueStatic',
+                value: Object.freeze(x)
             })
             this.h.$store.commit('stateController', {
                 key: 'queueAnswersArray',
