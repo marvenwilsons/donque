@@ -181,6 +181,16 @@ export default {
         
             return output;
         },
+        pipe(...funcs) {
+            return function(val) {
+                let lastResult
+                for(func of funcs) {
+                    lastResult = func(lastResult || val)
+                }
+                return lastResult
+            }
+            /**usage -> this.pipe(fn1,fn2,fn3)('input') */
+        },
         answerPending(answer,pointer) {
             console.log('> Answering pending question')
             if(answer && answer != '--void--') {
