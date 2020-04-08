@@ -58,16 +58,29 @@ export default {
                         // validate
                         return new Promise((resolve,reject) => {
                             setTimeout(() => {
-                                console.log('done validating')
-                                resolve( {
-                                    taskName: 'resetTask',
-                                    taskParam: {
-                                        resetBackTo: 0,
-                                        injectOrModifyProp: {
-                                            err: `${data} is not a valid name`
+                                if(data == 'marven') {
+                                    // resolve({
+                                    //     taskName: 'closeModal',
+                                    //     taskParam: {}
+                                    // })
+                                    resolve({
+                                        taskName: 'insertCompiledTask',
+                                        taskParam: {
+                                            compiledTask: this.getCompiledTask('sysvoid.prompt-password'),
+                                            payload: ''
                                         }
-                                    }
-                                })
+                                    })
+                                } else {
+                                    resolve( {
+                                        taskName: 'resetTask',
+                                        taskParam: {
+                                            resetBackTo: 0,
+                                            injectOrModifyProp: {
+                                                err: `${data} is not a valid name`
+                                            }
+                                        }
+                                    })
+                                }
                             }, 100);
                         })
                     }
@@ -75,13 +88,12 @@ export default {
                 }
             },
             {
-                taskName: 'closeModal',
-                taskParam: {}
+                taskName: 'insertCompiledTask',
+                taskParam: {
+                    compiledTask: this.getCompiledTask('sysvoid.prompt-password'),
+                    payload: ''
+                }
             },
-            {
-                taskName: 'done',
-                taskParam: {}
-            }
         ])
     },
     layout: context => {

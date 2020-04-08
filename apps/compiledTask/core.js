@@ -1,5 +1,4 @@
 export default {
-    core: {
         adminLoad: function() {
            return [] 
         },
@@ -66,5 +65,5 @@ export default {
                 }
             ]
         }
-    }
+    
 }

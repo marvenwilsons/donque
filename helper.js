@@ -1,5 +1,6 @@
 import procedures from './procedures'
 import core from '@/apps/compiledTask/core'
+import sysvoid from '@/apps/compiledTask/sysvoid'
 
 export default {
     mixins: [procedures],
@@ -48,16 +49,58 @@ export default {
                 }
             })
         },
-        DO_NOT_EXECUTE_OUTSIDE_HELPER_$systemCall() {
-
+        DO_NOT_EXECUTE_OUTSIDE_HELPER_$insertCompiledTask({compiledTask,payload}) {
+            // compiled task returns an array of task items
+            const ct = compiledTask(payload)
+            const pa = () => {
+                this.h.$store.state.queueAnswersArray.push({
+                    answer: '--not answered--'
+                })
+            }
+            if(Array.isArray(ct)) {
+                // push or insert tasks to queue
+                if(this.h.$store.state.queue.length - 1 === this.h.$store.state.queuePointer) {
+                    // get function and push to queue
+                    ct.map(e => {
+                        this.h.$store.state.queue.push({
+                            fn: this[`DO_NOT_EXECUTE_OUTSIDE_HELPER_$${e.taskName}`],
+                            param: e.taskParam
+                        })
+                        pa()
+                    })
+                    this.h.$store.commit('stateController', {
+                        key: 'queuePointer',
+                        value: this.h.$store.state.queuePointer + 1
+                    })
+                } else {
+                    // insert
+                    const f = ct.map(e => {
+                        pa()
+                        return {
+                            fn: this[`DO_NOT_EXECUTE_OUTSIDE_HELPER_$${e.taskName}`],
+                            param: e.taskParam
+                        }                        
+                    })
+                    this.h.$store.state.queue.splice(this.h.$store.state.queuePointer ,0,f)
+                    this.h.$store.state.queue = this.h.$store.state.queue.flat()
+                    this.$store.commit('executeQueue')
+                }
+            } else {
+                alert('Err: Invalid compiled task in insertCompiledTask item')
+                location.reload()
+            }
         },
         DO_NOT_EXECUTE_OUTSIDE_HELPER_$resetTask({resetBackTo,injectOrModifyProp}) {
-            this.h.$store.commit('stateController',{
-                key: 'queuePointer',
-                value: resetBackTo
-            })
-            console.log()
-            console.log()
+            if(resetBackTo > this.h.$store.state.queuePointer) {
+                alert(`Err: in resetTask task item object, illegal reset value in "resetBackTo" property, value:${resetBackTo}`)
+                location.reload()
+            } else {
+                this.h.$store.commit('stateController',{
+                    key: 'queuePointer',
+                    value: resetBackTo
+                })
+            }
+            
             Object.assign(this.h.$store.state.queue[this.$store.state.queuePointer].param, injectOrModifyProp)
             // reset back n exec initial value 
         },
@@ -180,6 +223,23 @@ export default {
                 key: 'queueAnswersArray',
                 value: queueAnswersArray
             })
+        },
+        getCompiledTask(lib,payload){
+            
+            // syscore <-- methods that require initial data to run
+            // sysutil <-- system methods like prompt err, show modal message,
+            console.log('getCompiledTask')
+            if(lib.indexOf('.') != -1) {
+                const namespace = lib.split('.')[0]
+                const method = lib.split('.')[1]
+                // sysvoid <-- methods that does not require any initial input for this compiled task to run
+                if(namespace == 'sysvoid') {
+                    return sysvoid[method]
+                }
+            } else {
+                alert(`Err: Invalid task name ${lib}`)
+                location.reload()
+            }
         },
         validate(dataTypeToValidate,modes) {
 
