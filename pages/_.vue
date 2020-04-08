@@ -59,17 +59,11 @@ export default {
                         return new Promise((resolve,reject) => {
                             setTimeout(() => {
                                 if(data == 'marven') {
-                                    // resolve({
-                                    //     taskName: 'closeModal',
-                                    //     taskParam: {}
-                                    // })
                                     resolve({
-                                        taskName: 'insertCompiledTask',
-                                        taskParam: {
-                                            compiledTask: this.getCompiledTask('sysvoid.prompt-password'),
-                                            payload: ''
-                                        }
+                                        taskName: 'closeModal',
+                                        taskParam: {}
                                     })
+                                    // resolve('sysutil.log -"test 1123"')
                                 } else {
                                     resolve( {
                                         taskName: 'resetTask',

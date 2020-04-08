@@ -1,6 +1,9 @@
 import procedures from './procedures'
 import core from '@/apps/compiledTask/core'
 import sysvoid from '@/apps/compiledTask/sysvoid'
+import sysutil from '@/apps/compiledTask/sysutil'
+import syspane from '@/apps/compiledTask/syspane'
+
 
 export default {
     mixins: [procedures],
@@ -226,8 +229,6 @@ export default {
         },
         getCompiledTask(lib,payload){
             
-            // syscore <-- methods that require initial data to run
-            // sysutil <-- system methods like prompt err, show modal message,
             console.log('getCompiledTask')
             if(lib.indexOf('.') != -1) {
                 const namespace = lib.split('.')[0]
@@ -235,6 +236,17 @@ export default {
                 // sysvoid <-- methods that does not require any initial input for this compiled task to run
                 if(namespace == 'sysvoid') {
                     return sysvoid[method]
+                }
+                // sysutil, log, log-err, log-info
+                else if(namespace == 'sysutil') {
+                    return sysutil[method]
+                }
+                // syspane, managing pane sysytem
+                else if(namespace == 'syspane') {
+                    return syspane[method]
+                }else {
+                    alert(`Err: invalid namespace ${namespace}`)
+                    location.reload()
                 }
             } else {
                 alert(`Err: Invalid task name ${lib}`)
