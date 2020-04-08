@@ -121,7 +121,7 @@ export default {
             // reset back n exec initial value 
         },
         DO_NOT_EXECUTE_OUTSIDE_HELPER_$closeModal() {
-            console.log('> Closing Modal')
+            // console.log('> Closing Modal')
             this.h.$store.commit('stateController', {
                 key: 'globalModalState',
                 value: false
@@ -139,7 +139,7 @@ export default {
             }, 100);
         },
         DO_NOT_EXECUTE_OUTSIDE_HELPER_$done() {
-            console.log('> all task done')
+            // console.log('> all task done')
             this.h.$store.commit('stateController', {
                 key: 'queueState',
                 value: 'end'
@@ -192,7 +192,7 @@ export default {
             /**usage -> this.pipe(fn1,fn2,fn3)('input') */
         },
         answerPending(answer,pointer) {
-            console.log('> Answering pending question')
+            // console.log('> Answering pending question')
             if(answer && answer != '--void--') {
                 this.h.$store.commit('stateController', {
                     key: 'queueCurrentTaskAnswer',
@@ -267,7 +267,7 @@ export default {
         },
         getCompiledTask(lib,payload){
             
-            console.log('getCompiledTask')
+            // console.log('getCompiledTask')
             if(lib.indexOf('.') != -1) {
                 const namespace = lib.split('.')[0]
                 const method = lib.split('.')[1]

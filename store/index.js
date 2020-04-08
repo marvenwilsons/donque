@@ -55,7 +55,7 @@ export const mutations = {
         }
     },
     async executeQueue(state, payload) {
-        console.log('> executing queue items ***************')
+        // console.log('> executing queue items ***************')
         if(state.queue[state.queuePointer].mode == '--pending--') {
             // executing exec task to get extract the task object
             const asyncOpt = await state.queue[state.queuePointer].param(state.queueCurrentTaskAnswer) // task list extracted
@@ -96,7 +96,7 @@ export const mutations = {
 
 export const actions = {
     nuxtServerInit (store,context) { 
-        console.log('> NuxtServerInit')
+        // console.log('> NuxtServerInit')
         const urlPath = context.route.path
         if(!store.state.app.systemRoutes.includes(urlPath) ) {
             // user choose public route
