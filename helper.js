@@ -48,6 +48,22 @@ export default {
                 }
             })
         },
+        DO_NOT_EXECUTE_OUTSIDE_HELPER_$loginfo({msg}) {
+            this.SYSTEM_PROCEDURE_DO_NOT_EXECUTE_OUTSIDE_HELPER_SPAWN_GLOBAL_MODAL({
+                modalType: 'loginfo',
+                modalPayload: {
+                    msg
+                }
+            })
+        },
+        DO_NOT_EXECUTE_OUTSIDE_HELPER_$logerr({msg}) {
+            this.SYSTEM_PROCEDURE_DO_NOT_EXECUTE_OUTSIDE_HELPER_SPAWN_GLOBAL_MODAL({
+                modalType: 'logerr',
+                modalPayload: {
+                    msg
+                }
+            })
+        },
         DO_NOT_EXECUTE_OUTSIDE_HELPER_$insertCompiledTask({compiledTask,payload}) {
             // compiled task returns an array of task items
             const prm = payload ? payload : this.h.$store.state.queueCurrentTaskAnswer

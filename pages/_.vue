@@ -34,11 +34,9 @@ export default {
     mounted() {
         this.runCompiledTask([
             {
-                taskName: 'prompt',
+                taskName: 'logerr',
                 taskParam: {
-                    type: 'string',
-                    placeholder: 'password',
-                    label: 'Type your full name',
+                    msg: 'hello world'
                 }
             },
             {

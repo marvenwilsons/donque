@@ -16,6 +16,14 @@
                         v-if="$store.state.globalModalContentType == 'select'" 
                         :data="$store.state.globalModalContent"
                     />
+                    <loginfo
+                        v-if="$store.state.globalModalContentType == 'loginfo'" 
+                        :data="$store.state.globalModalContent"
+                    />
+                    <logerr
+                        v-if="$store.state.globalModalContentType == 'logerr'" 
+                        :data="$store.state.globalModalContent"
+                    />
                 </div>
             </div>
         </div>
@@ -27,6 +35,8 @@ import h from '@/helper'
 import booleanModal from './components/booleanModal'
 import promptModal from './components/promptModal'
 import sel from './components/selectModal'
+import loginfo from './components/loginfo'
+import logerr from './components/logerr'
 export default {
     mixins: [h],
     props: {
@@ -38,7 +48,9 @@ export default {
     components: {
         booleanModal,
         promptModal,
-        sel
+        sel,
+        loginfo,
+        logerr
     }
 }
 </script>

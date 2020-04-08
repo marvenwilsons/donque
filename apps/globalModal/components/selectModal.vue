@@ -1,7 +1,7 @@
 <template>
     <main class="modalShadow" >
         <div style="background:var(--deftheme-dark-primary); color:white;" class="pad050" >
-            <span class="padleft025" >Prompt</span>
+            <span class="padleft025" >Select</span>
         </div>
         <div class="pad050 borderRad4" >
             <div class="pad025">
