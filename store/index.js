@@ -1,13 +1,5 @@
 
 export const state = () => ({
-    adminName: '',
-    siteName: '',
-    adminPermSet: undefined,
-    systemRoutes: [
-        '/dqlogin',
-        '/dqadmin',
-        '/dqinit',
-    ],
     /** queue */
         queue: [],
         queueExecType: undefined,
@@ -106,7 +98,7 @@ export const actions = {
     nuxtServerInit (store,context) { 
         console.log('> NuxtServerInit')
         const urlPath = context.route.path
-        if(!store.state.systemRoutes.includes(urlPath) ) {
+        if(!store.state.app.systemRoutes.includes(urlPath) ) {
             // user choose public route
         } else if(urlPath === '/dqlogin') {
             // user wants to login
