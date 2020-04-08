@@ -12,6 +12,10 @@
                         v-if="$store.state.globalModalContentType == 'prompt'" 
                         :data="$store.state.globalModalContent"
                     />
+                    <sel 
+                        v-if="$store.state.globalModalContentType == 'select'" 
+                        :data="$store.state.globalModalContent"
+                    />
                 </div>
             </div>
         </div>
@@ -22,6 +26,7 @@
 import h from '@/helper'
 import booleanModal from './components/booleanModal'
 import promptModal from './components/promptModal'
+import sel from './components/selectModal'
 export default {
     mixins: [h],
     props: {
@@ -32,7 +37,8 @@ export default {
     },
     components: {
         booleanModal,
-        promptModal
+        promptModal,
+        sel
     }
 }
 </script>

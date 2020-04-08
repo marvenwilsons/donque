@@ -33,60 +33,17 @@ export default {
     },
     mounted() {
         this.runCompiledTask([
-            {
-                taskName: 'prompt',
-                taskParam: {
-                    type: 'string',
-                    placeholder: 'password',
-                    label: 'Type your full name',
-                }
-            },
+            // {
+            //     taskName: 'prompt',
+            //     taskParam: {
+            //         type: 'string',
+            //         placeholder: 'password',
+            //         label: 'Type your full name',
+            //     }
+            // },
             {
                 taskName: 'closeModal',
                 taskParam: {}
-            },
-            {
-                taskName: 'exec',
-                taskParam: (data) => {
-                    console.log('this is the current data', data)
-                    if(data === '$dcore.system.closeModal') {
-                        return {
-                            taskName: 'done',
-                            taskParam: {}
-                        }
-                    } else {
-                        // validate
-                        return new Promise((resolve,reject) => {
-                            setTimeout(() => {
-                                if(data == 'marven') {
-                                    resolve({
-                                        taskName: 'closeModal',
-                                        taskParam: {}
-                                    })
-                                    // resolve('sysutil.log -"test 1123"')
-                                } else {
-                                    resolve( {
-                                        taskName: 'resetTask',
-                                        taskParam: {
-                                            resetBackTo: 0,
-                                            injectOrModifyProp: {
-                                                err: `${data} is not a valid name`
-                                            }
-                                        }
-                                    })
-                                }
-                            }, 100);
-                        })
-                    }
-                    
-                }
-            },
-            {
-                taskName: 'insertCompiledTask',
-                taskParam: {
-                    compiledTask: this.getCompiledTask('sysvoid.prompt-password'),
-                    payload: ''
-                }
             },
         ])
     },

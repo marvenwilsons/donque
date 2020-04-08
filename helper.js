@@ -39,12 +39,11 @@ export default {
                 }
             })
         },
-        DO_NOT_EXECUTE_OUTSIDE_HELPER_$prompt({type,validation,defaultValue, placeholder, label, err}) {
+        DO_NOT_EXECUTE_OUTSIDE_HELPER_$prompt({type,defaultValue, placeholder, label, err}) {
             this.SYSTEM_PROCEDURE_DO_NOT_EXECUTE_OUTSIDE_HELPER_SPAWN_GLOBAL_MODAL({
                 modalType: 'prompt',
                 modalPayload: {
                     type,
-                    validation,
                     defaultValue,
                     placeholder,
                     label,
@@ -52,9 +51,21 @@ export default {
                 }
             })
         },
+        DO_NOT_EXECUTE_OUTSIDE_HELPER_$select({options,defaultValue, label, err}) {
+            this.SYSTEM_PROCEDURE_DO_NOT_EXECUTE_OUTSIDE_HELPER_SPAWN_GLOBAL_MODAL({
+                modalType: 'select',
+                modalPayload: {
+                    options,
+                    defaultValue,
+                    label,
+                    err
+                }
+            })
+        },
         DO_NOT_EXECUTE_OUTSIDE_HELPER_$insertCompiledTask({compiledTask,payload}) {
             // compiled task returns an array of task items
-            const ct = compiledTask(payload)
+            const prm = payload ? payload : this.h.$store.state.queueCurrentTaskAnswer
+            const ct = compiledTask(prm)
             const pa = () => {
                 this.h.$store.state.queueAnswersArray.push({
                     answer: '--not answered--'
@@ -195,7 +206,6 @@ export default {
                             alert(msg)
                             throw msg
                         } else {
-                            console.log('> pushing task array')
                             if(e.taskName == 'exec') {
                                 x.push({
                                     fn: taskBeingCalled,
