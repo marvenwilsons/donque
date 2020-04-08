@@ -33,14 +33,14 @@ export default {
     },
     mounted() {
         this.runCompiledTask([
-            // {
-            //     taskName: 'prompt',
-            //     taskParam: {
-            //         type: 'string',
-            //         placeholder: 'password',
-            //         label: 'Type your full name',
-            //     }
-            // },
+            {
+                taskName: 'prompt',
+                taskParam: {
+                    type: 'string',
+                    placeholder: 'password',
+                    label: 'Type your full name',
+                }
+            },
             {
                 taskName: 'closeModal',
                 taskParam: {}

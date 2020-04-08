@@ -14,21 +14,7 @@ export default {
         this.$p = this.h
     },
     methods: {
-        m() {
-            return this
-        },
-        cp(o){
-            if (o === null) return null;
-        
-                var output, v, key;
-                output = Array.isArray(o) ? [] : {};
-                for (key in o) {
-                  v = o[key];
-                  output[key] = typeof v === "object" ? this.cp(v) : v;
-                }
-        
-            return output;
-        },
+                /** sys programs */
         DO_NOT_EXECUTE_OUTSIDE_HELPER_$ask({question, truthy, falsey}) {
             this.SYSTEM_PROCEDURE_DO_NOT_EXECUTE_OUTSIDE_HELPER_SPAWN_GLOBAL_MODAL({
                 modalType: 'boolean',
@@ -162,6 +148,22 @@ export default {
                 key: 'queueStatic',
                 value: null
             })
+        },
+        /** component utils */
+        m() {
+            return this
+        },
+        cp(o){
+            if (o === null) return null;
+        
+                var output, v, key;
+                output = Array.isArray(o) ? [] : {};
+                for (key in o) {
+                  v = o[key];
+                  output[key] = typeof v === "object" ? this.cp(v) : v;
+                }
+        
+            return output;
         },
         answerPending(answer,pointer) {
             console.log('> Answering pending question')
