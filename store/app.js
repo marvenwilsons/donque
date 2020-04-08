@@ -1,7 +1,7 @@
 export const state = () => ({
-    adminName: '',
-    siteName: '',
-    adminPermSet: undefined,
+    'app-admin-name': null,
+    'app-name': null,
+    'app-admin-resources': null,
     systemRoutes: [
         '/dqlogin',
         '/dqadmin',

@@ -48,18 +48,6 @@ export default {
         },
         redirect() {
             
-        },
-        /**
-         * queue
-         */
-        clearQueue() {
-
-        },
-        pushToQueue() {
-
         }
-    },
-    created() {
-        // console.log('> imng procedures')
     }
 }
