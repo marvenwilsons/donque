@@ -101,6 +101,10 @@ export default {
                 key: 'queue',
                 value: []
             })
+            this.h.$store.commit('stateController', {
+                key: 'queueStatic',
+                value: null
+            })
         },
         answerPending(answer,pointer) {
             console.log('> Answering pending question')

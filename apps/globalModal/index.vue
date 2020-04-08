@@ -1,7 +1,7 @@
 <template>
     <div v-if="$store.state.globalModalState" style="z-index:100;" 
         class="absolute fullwidth fullheight-percent flex flexcol flexcenter" >
-        <div class="borderRad4" style="background:white;min-width:400px;" >
+        <div class="borderRad4 modalShadow" style="background:white;min-width:400px;" >
             <div style="max-width:400px;"  class=" borerRad4" >
                 <div >
                     <booleanModal 

@@ -25,9 +25,9 @@ export default {
     watch: {
         // init
         queueArray(curState,prevState) {
-            console.log('> queue state change detected')
+            // console.log('> queue state change detected')
             if(this.$store.state.queueState == 'end') {
-                console.log('yes it ended')
+                // console.log('yes it ended')
                 this.$store.commit('stateController', {
                     key: 'queueAnswersArray',
                     value: null
@@ -46,7 +46,7 @@ export default {
         // execution
         queueState(curState,prevState) {
             if(curState == 'running' && prevState == null) {
-                console.log('> processing queue items')
+                // console.log('> processing queue items')
                 this.$store.commit('stateController', {
                     key:"queuePointer",
                     value: 0
@@ -58,7 +58,7 @@ export default {
             // execute item and wait for response
             // response writting is in helper.js answerpending method
             if(this.$store.state.queueState != null && this.$store.state.queueState != 'end') {
-                console.log('> queue pointer change detected executing item:', curState)
+                // console.log('> queue pointer change detected executing item:', curState)
                 this.$store.commit('executeQueue')
             }
         },
@@ -69,7 +69,7 @@ export default {
                 if(this.$store.state.queueState != 'end') {
                     if(curState.latestArrayState[this.$store.state.queuePointer].answer == '--done--') {
                         if(this.$store.state.queuePointer == curState.latestArrayState.length - 1 || this.$store.state.queueState == 'init end') {
-                            console.log('Init ending')
+                            // console.log('Init ending')
                             // done
                             this.$store.commit('stateController', {
                                 key: 'queueState',
@@ -80,7 +80,7 @@ export default {
                                 value: []
                             })
                         } else {
-                            console.log('> queue answers change detected')
+                            // console.log('> queue answers change detected')
                             if(curState.latestArrayState[this.$store.state.queuePointer].answer != null) {
                                 this.$store.commit('stateController', {
                                     key:"queuePointer",
@@ -93,7 +93,7 @@ export default {
                     
                 } else {
                     if(this.$store.state.queuePointer == null && this.$store.state.queueState == 'end') {
-                        console.log('> reseting queue state')
+                        // console.log('> reseting queue state')
                         this.$store.commit('stateController', {
                             key: 'queueState',
                             value: null

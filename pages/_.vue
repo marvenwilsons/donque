@@ -38,7 +38,7 @@ export default {
                 taskParam: {
                     type: 'string',
                     placeholder: 'password',
-                    label: 'Type your name',
+                    label: 'Type your full name',
                 }
             },
             {
@@ -49,12 +49,13 @@ export default {
                 taskName: 'exec',
                 taskParam: (data) => {
                     console.log('this is the current data', data)
-                    if(data == 'marven') {
+                    if(data === '$dcore.system.closeModal') {
                         return {
                             taskName: 'done',
                             taskParam: {}
                         }
                     } else {
+                        // validate
                         return new Promise((resolve,reject) => {
                             setTimeout(() => {
                                 console.log('done validating')
@@ -67,7 +68,7 @@ export default {
                                         }
                                     }
                                 })
-                            }, 1000);
+                            }, 100);
                         })
                     }
                     

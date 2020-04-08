@@ -19,12 +19,11 @@
                     <div class="backgrounderr pad025 fullwidth borderRad4 err padleft050" >error: {{data.err}}</div>
                 </v-flex>
                 <v-flex class="flexend margintop050 pad025">
-                    
-                    <button @click="answerPending(false)" class="defbtn buttonreset marginright050">
-                        Cancel
-                    </button>
-                    <button @click="answerPending(inp)" class="defbtn buttonreset ">
+                    <button @click="answerPending(inp)" class="defbtn buttonreset marginright050">
                         Submit
+                    </button>
+                    <button @click="answerPending('$dcore.system.closeModal')" class="defbtn buttonreset ">
+                        Cancel
                     </button>
                 </v-flex>
             </div>

@@ -382,6 +382,9 @@ img {
 .backgrounderr {
   background: #ae11001a;
   border-left: 5px solid  #ae110059;
+  border-top: 1px solid #ae110059;
+  border-right: 1px solid #ae110059;
+  border-bottom: 1px solid #ae110059;
 }
 
 /* My Own Style ( dq framework 0.2 )
