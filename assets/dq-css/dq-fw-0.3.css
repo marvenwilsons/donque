@@ -472,6 +472,9 @@ h6 {
   background:#629af47e;
   color:#206add;
   border-left: 5px solid #629af4;
+  border-top: 1px solid #629af4;
+  border-bottom: 1px solid #629af4;
+  border-right: 1px solid #629af4;
 }
 
 /* dq input normalize */
