@@ -290,8 +290,26 @@ export default {
                 location.reload()
             }
         },
-        validate(dataTypeToValidate,modes) {
-            // TODO: validation
+        validateString({mode,value,expected}) {
+            // TODO: validation'
+            if(mode === 'has-special-character') {
+                console.log('special-character')
+                const regex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/gim;
+                return regex.exec(value) != null;
+            } else if(mode === 'has-number') {
+                const regex = /[0-9]/gim;
+                return regex.exec(value) != null;
+            } else if(mode === 'has-whitespace') {
+                return value.indexOf(" ") != -1
+            } else if(mode === 'is-required') {
+                return value.trim() != ""
+            } else if(mode === 'is-email') {
+                const condition = ["@", ".com"];
+                const res = condition.map(charSet => {
+                    return RegExp(`${charSet}`, "").exec(value) != null;
+                });
+                return res.join("/") == "true/true";
+            }
         }
     }
 }
