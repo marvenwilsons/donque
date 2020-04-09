@@ -60,12 +60,14 @@ export const mutations = {
             // executing exec task to get extract the task object
             const asyncOpt = await state.queue[state.queuePointer].param(state.queueCurrentTaskAnswer) // task list extracted
             if(asyncOpt) { // if task object is now available, insert task object to queue                
-                if(typeof asyncOpt.taskParam.resetBackTo == 'number') {
-                    this.commit('insertQueueItem', { // insert the task item to the queue
-                        fn: asyncOpt.taskName,
-                        param: asyncOpt.taskParam,
-                        resetIndex: state.queuePointer
-                    })
+                if(asyncOpt.taskParam && asyncOpt.taskParam.resetBackTo != undefined) {
+                    if(typeof asyncOpt.taskParam.resetBackTo == 'number') {
+                        this.commit('insertQueueItem', { // insert the task item to the queue
+                            fn: asyncOpt.taskName,
+                            param: asyncOpt.taskParam,
+                            resetIndex: state.queuePointer
+                        })
+                    }                    
                 } else {
                     this.commit('insertQueueItem', { // insert the task item to the queue
                         fn: asyncOpt.taskName,
