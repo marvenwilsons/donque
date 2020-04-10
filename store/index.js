@@ -115,10 +115,10 @@ export const mutations = {
             state.pane = state.pane.splice(numToBeRemoved,paneIndexOrigin)
         },
         paneUpdateData(state,{paneIndex,paneData}) {
-            state.pane[paneIndex] = paneData
+            state.pane[paneIndex].paneData = paneData
         },
         paneSwitchView(state,{paneIndex,paneView}) {
-            state.pane[paneIndex] = paneView
+            state.pane[paneIndex].paneView = paneView
         }
 }
 

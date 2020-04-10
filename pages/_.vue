@@ -41,14 +41,55 @@ export default {
     mounted() {
         this.runCompiledTask([
             {
-                taskName: 'loginfo',
+                taskName: 'addPane',
                 taskParam: {
-                    msg: 'hello world'
+                    paneIndex: null,
+                    payload: {
+                        paneName: '',
+                        paneView: '',
+                        paneData: '',
+                        paneWidth: '600px'
+                    }
                 }
             },
             {
-                taskName: 'closeModal',
-                taskParam: {}
+                taskName: 'addPane',
+                taskParam: {
+                    paneIndex: null,
+                    payload: {
+                        paneName: '',
+                        paneView: '',
+                        paneData: '',
+                        paneWidth: '600px'
+                    }
+                }
+            },
+            {
+                taskName: 'addPane',
+                taskParam: {
+                    paneIndex: null,
+                    payload: {
+                        paneName: '',
+                        paneView: '',
+                        paneData: '',
+                        paneWidth: '600px'
+                    }
+                }
+            },
+            {
+                taskName: 'deletePane',
+                taskParam: {
+                    paneIndexOrigin: 2
+                }
+            },
+            {
+                taskName: 'updatePaneData',
+                taskParam: {
+                    paneIndex: 1,
+                    paneData: {
+                        msg: 'hello world'
+                    }
+                }
             },
         ])
     },

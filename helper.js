@@ -164,8 +164,32 @@ export default {
                 value: null
             })
         },
-        DO_NOT_EXECUTE_OUTSIDE_HELPER_$addPane() {
-            console.log('adding pane')
+        DO_NOT_EXECUTE_OUTSIDE_HELPER_$addPane({paneIndex, payload}) {
+            this.h.$store.commit('paneAdd', {
+                paneIndex,
+                payload
+            })
+            this.answerPending('--done--')
+        },
+        DO_NOT_EXECUTE_OUTSIDE_HELPER_$deletePane({paneIndexOrigin}){
+            this.h.$store.commit('paneDelete', {
+                paneIndexOrigin
+            })
+            this.answerPending('--done--')
+        },
+        DO_NOT_EXECUTE_OUTSIDE_HELPER_$updatePaneData({paneIndex,paneData}) {
+            this.h.$store.commit('paneUpdateData', {
+                paneIndex,
+                paneData
+            })
+            this.answerPending('--done--')
+        },
+        DO_NOT_EXECUTE_OUTSIDE_HELPER_$updatePaneView({paneIndex,paneView}) {
+            this.h.$store.commit('paneUpdateData', {
+                paneIndex,
+                paneView
+            })
+            this.answerPending('--done--')
         },
     /** sys utils */
         m() {
