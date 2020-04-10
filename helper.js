@@ -164,6 +164,9 @@ export default {
                 value: null
             })
         },
+        DO_NOT_EXECUTE_OUTSIDE_HELPER_$addPane() {
+            console.log('adding pane')
+        },
     /** sys utils */
         m() {
             return this
@@ -291,7 +294,6 @@ export default {
             }
         },
         validateString({mode,value,expected}) {
-            // TODO: validation'
             if(mode === 'has-special-character') {
                 console.log('special-character')
                 const regex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/gim;

@@ -1,7 +1,7 @@
 <template>
     <main style="background:darkgray" class="fullwidth" >
         <v-flex fullwidth   fullheight-percent >
-            <debug :data="{
+            <!-- <debug :data="{
                 QUESTIONS: $store.state.queue,
                 queueConfig: {
                     queueExecType: $store.state.queueExecType,
@@ -12,7 +12,14 @@
                     static: $store.state.queueStatic
                 },
                 ANSWERS: $store.state.queueAnswersArray,
-            }" />
+            }" /> -->
+            <debug 
+                :data="{
+                    'PANE-SYSTEM': {
+                        pane: $store.state.pane
+                    }
+                }"
+            />
         </v-flex>
     </main>
 </template>
@@ -34,7 +41,7 @@ export default {
     mounted() {
         this.runCompiledTask([
             {
-                taskName: 'logerr',
+                taskName: 'loginfo',
                 taskParam: {
                     msg: 'hello world'
                 }
