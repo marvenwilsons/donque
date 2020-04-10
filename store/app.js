@@ -3,7 +3,12 @@ export const state = () => ({
     'app-name': null,
     'app-admin-resources': null,
     'app-admin-sidebar-items': [
-        'Dashboard'
+        'Dashboard',
+        'Pages',
+        'Collections',
+        'Files',
+        'Office',
+        'Marketplace'
     ],
     systemRoutes: [
         '/dqlogin',
