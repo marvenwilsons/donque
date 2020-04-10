@@ -13,7 +13,14 @@
         </div>
         <!-- SIDE BAR ITEMS -->
         <div class=" flex1">
-            asdf
+            <div 
+                v-for="item in $store.state.app['app-admin-sidebar-items']" :key="item" 
+                class="pad050 pointer"
+            >
+                <div class="pad025">
+                    {{item}}
+                </div>
+            </div>
         </div>
     </v-flex>
 </template>
