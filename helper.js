@@ -1,12 +1,7 @@
 import sysvoid from '@/apps/compiledTask/sysvoid'
 import sysutil from '@/apps/compiledTask/sysutil'
 import syspane from '@/apps/compiledTask/syspane'
-
-/**
- * javaScript does not offer real private methods
- * so this is just to let the developers know this methods that has private. on it
- * should no be access outside helper okay!
- */
+import procedures from './procedures'
 
 export default {
     data: () => ({
@@ -16,213 +11,6 @@ export default {
         this.$p = this.h
     },
     methods: {
-    /** sys programs */
-        'private.sysmodal.spwan'({modalType, modalPayload}){
-            if(this.h.$store.state.queue.length == 0) {
-                alert('ERR: Invalid spawnGlobalModal() function invocation, procedures should not directly called on components')
-            } else {
-                this.h.$store.commit('stateController', {
-                    key: 'globalModalState',
-                    value: true
-                })
-                this.h.$store.commit('stateController', {
-                    key: 'globalModalContentType',
-                    value: modalType
-                })
-                this.h.$store.commit('stateController', {
-                    key: 'globalModalContent',
-                    value: modalPayload
-                })
-                
-            } 
-        },
-        'private.sysmodal.ask'({question, truthy, falsey}) {
-            this['private.sysmodal.spawn']({
-                modalType: 'boolean',
-                modalPayload: {
-                    truthy,
-                    falsey,
-                    question
-                }
-            })
-        },
-        'private.sysmodal.prompt'({type,defaultValue, placeholder, label, err}) {
-            this['private.sysmodal.spawn']({
-                modalType: 'prompt',
-                modalPayload: {
-                    type,
-                    defaultValue,
-                    placeholder,
-                    label,
-                    err
-                }
-            })
-        },
-        'private.sysmodal.select'({options,defaultValue, label, err}) {
-            this['private.sysmodal.spawn']({
-                modalType: 'select',
-                modalPayload: {
-                    options,
-                    defaultValue,
-                    label,
-                    err
-                }
-            })
-        },
-        'private.sysmodal.loginfo'({msg}) {
-            this['private.sysmodal.spawn']({
-                modalType: 'loginfo',
-                modalPayload: {
-                    msg
-                }
-            })
-        },
-        'private.sysmodal.logerr'({msg}) {
-            this['private.sysmodal.spawn']({
-                modalType: 'logerr',
-                modalPayload: {
-                    msg
-                }
-            })
-        },
-        'private.sysmodal.close'() {
-            // console.log('> Closing Modal')
-            this.h.$store.commit('stateController', {
-                key: 'globalModalState',
-                value: false
-            })
-            this.h.$store.commit('stateController', {
-                key: 'globalModalContentType',
-                value: undefined
-            })
-            this.h.$store.commit('stateController', {
-                key: 'globalModalContent',
-                value: undefined
-            })
-            setTimeout(() => {
-                this.h.answerPending('--void--')
-            }, 100);
-        },
-        // ---
-        'private.insertCompiledTask'({compiledTask,payload}) {
-            // compiled task returns an array of task items
-            const prm = payload ? payload : this.h.$store.state.queueCurrentTaskAnswer
-            const ct = compiledTask(prm)
-            const pa = () => {
-                this.h.$store.state.queueAnswersArray.push({
-                    answer: '--not answered--'
-                })
-            }
-            if(Array.isArray(ct)) {
-                // push or insert tasks to queue
-                if(this.h.$store.state.queue.length - 1 === this.h.$store.state.queuePointer) {
-                    // get function and push to queue
-                    ct.map(e => {
-                        this.h.$store.state.queue.push({
-                            fn: this[`private.${e.taskName}`],
-                            param: e.taskParam
-                        })
-                        pa()
-                    })
-                    this.h.$store.commit('stateController', {
-                        key: 'queuePointer',
-                        value: this.h.$store.state.queuePointer + 1
-                    })
-                } else {
-                    // insert
-                    const f = ct.map(e => {
-                        pa()
-                        return {
-                            fn: this[`private.${e.taskName}`],
-                            param: e.taskParam
-                        }                        
-                    })
-                    this.h.$store.state.queue.splice(this.h.$store.state.queuePointer ,0,f)
-                    this.h.$store.state.queue = this.h.$store.state.queue.flat()
-                    this.$store.commit('executeQueue')
-                }
-            } else {
-                alert('Err: Invalid compiled task in insertCompiledTask item')
-                location.reload()
-            }
-        },
-        'private.resetTask'({resetBackTo,injectOrModifyProp}) {
-            if(resetBackTo > this.h.$store.state.queuePointer) {
-                alert(`Err: in resetTask task item object, illegal reset value in "resetBackTo" property, value:${resetBackTo}`)
-                location.reload()
-            } else {
-                this.h.$store.commit('stateController',{
-                    key: 'queuePointer',
-                    value: resetBackTo
-                })
-            }
-            
-            Object.assign(this.h.$store.state.queue[this.$store.state.queuePointer].param, injectOrModifyProp)
-            // reset back n exec initial value 
-        },        
-        'private.done'() {
-            // console.log('> all task done')
-            this.h.$store.commit('stateController', {
-                key: 'queueState',
-                value: 'end'
-            })
-            this.h.$store.commit('stateController', {
-                key: 'queueCurrentTaskAnswer',
-                value: null
-            })
-            this.h.$store.commit('stateController', {
-                key: 'queuePointer',
-                value: null
-            })
-            this.h.$store.commit('stateController', {
-                key: 'queueAnswersArray',
-                value: null
-            })
-            this.h.$store.commit('stateController', {
-                key: 'queue',
-                value: []
-            })
-            this.h.$store.commit('stateController', {
-                key: 'queueStatic',
-                value: null
-            })
-        },
-        // ---
-        'private.syspane.add'({paneIndex, payload}) {
-            this.$store.commit('paneAdd', {
-                paneIndex: paneIndex,
-                payload
-            })
-            this.answerPending('--done--')
-        },
-        'private.syspane.delete'({paneIndexOrigin}){
-            this.$store.commit('paneDelete', {
-                paneIndexOrigin: paneIndexOrigin
-            })
-            this.answerPending('--done--')
-        },
-        'private.syspane.update-data'({paneIndex,paneData}) {
-            this.$store.commit('paneUpdateData', {
-                paneIndex: paneIndex,
-                paneData: paneData
-            })
-            this.answerPending('--done--')
-        },
-        'private.syspane.update-view'({paneIndex,paneView}) {
-            this.$store.commit('paneUpdateData', {
-                paneIndex: paneIndex,
-                paneView: paneView
-            })
-            this.answerPending('--done--')
-        },
-        // ---
-        'private.sidebar.switch-menu'({selectedMenu}) {
-            this.$store.commit('app/stateController', {
-                key: 'active-sidebar-item',
-                value: payload.selectedMenu
-            })
-            this.answerPending('--done--')
-        },
     /** sys utils */
         m() {
             return this
@@ -281,7 +69,8 @@ export default {
                 })
                 if(e) {
                     /*** type 1 is an object that tells what function to execute */
-                    const taskBeingCalled = e.taskName == 'exec' ? true : this[`private.${e.taskName}`]
+                    // const taskBeingCalled = e.taskName == 'exec' ? true : this[`private.${e.taskName}`]
+                    const taskBeingCalled = e.taskName == 'exec' ? true : procedures(this,e.taskName)
                     if(taskBeingCalled == undefined) {
                         const msg = `ERR: "${e.taskName}" function or task does not exist`
                         alert(msg)
