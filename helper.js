@@ -1,4 +1,3 @@
-import procedures from './procedures'
 import sysvoid from '@/apps/compiledTask/sysvoid'
 import sysutil from '@/apps/compiledTask/sysutil'
 import syspane from '@/apps/compiledTask/syspane'
@@ -10,7 +9,6 @@ import syspane from '@/apps/compiledTask/syspane'
  */
 
 export default {
-    mixins: [procedures],
     data: () => ({
         h: undefined,
     }),
@@ -19,8 +17,27 @@ export default {
     },
     methods: {
     /** sys programs */
+        'private.sysmodal.spwan'({modalType, modalPayload}){
+            if(this.h.$store.state.queue.length == 0) {
+                alert('ERR: Invalid spawnGlobalModal() function invocation, procedures should not directly called on components')
+            } else {
+                this.h.$store.commit('stateController', {
+                    key: 'globalModalState',
+                    value: true
+                })
+                this.h.$store.commit('stateController', {
+                    key: 'globalModalContentType',
+                    value: modalType
+                })
+                this.h.$store.commit('stateController', {
+                    key: 'globalModalContent',
+                    value: modalPayload
+                })
+                
+            } 
+        },
         'private.sysmodal.ask'({question, truthy, falsey}) {
-            this.$SPAWN_GLOBAL_MODAL({
+            this['private.sysmodal.spawn']({
                 modalType: 'boolean',
                 modalPayload: {
                     truthy,
@@ -30,7 +47,7 @@ export default {
             })
         },
         'private.sysmodal.prompt'({type,defaultValue, placeholder, label, err}) {
-            this.$SPAWN_GLOBAL_MODAL({
+            this['private.sysmodal.spawn']({
                 modalType: 'prompt',
                 modalPayload: {
                     type,
@@ -42,7 +59,7 @@ export default {
             })
         },
         'private.sysmodal.select'({options,defaultValue, label, err}) {
-            this.$SPAWN_GLOBAL_MODAL({
+            this['private.sysmodal.spawn']({
                 modalType: 'select',
                 modalPayload: {
                     options,
@@ -53,7 +70,7 @@ export default {
             })
         },
         'private.sysmodal.loginfo'({msg}) {
-            this.$SPAWN_GLOBAL_MODAL({
+            this['private.sysmodal.spawn']({
                 modalType: 'loginfo',
                 modalPayload: {
                     msg
@@ -61,7 +78,7 @@ export default {
             })
         },
         'private.sysmodal.logerr'({msg}) {
-            this.$SPAWN_GLOBAL_MODAL({
+            this['private.sysmodal.spawn']({
                 modalType: 'logerr',
                 modalPayload: {
                     msg
@@ -171,39 +188,38 @@ export default {
             })
         },
         // ---
-        'private.pane.add'({paneIndex, payload}) {
-            this.h.$store.commit('paneAdd', {
-                paneIndex,
+        'private.syspane.add'({paneIndex, payload}) {
+            this.$store.commit('paneAdd', {
+                paneIndex: paneIndex,
                 payload
             })
             this.answerPending('--done--')
         },
-        'private.pane.delete'({paneIndexOrigin}){
-            this.h.$store.commit('paneDelete', {
-                paneIndexOrigin
+        'private.syspane.delete'({paneIndexOrigin}){
+            this.$store.commit('paneDelete', {
+                paneIndexOrigin: paneIndexOrigin
             })
             this.answerPending('--done--')
         },
-        'private.pane.update-data'({paneIndex,paneData}) {
-            this.h.$store.commit('paneUpdateData', {
-                paneIndex,
-                paneData
+        'private.syspane.update-data'({paneIndex,paneData}) {
+            this.$store.commit('paneUpdateData', {
+                paneIndex: paneIndex,
+                paneData: paneData
             })
             this.answerPending('--done--')
         },
-        'private.pane.update-view'({paneIndex,paneView}) {
-            this.h.$store.commit('paneUpdateData', {
-                paneIndex,
-                paneView
+        'private.syspane.update-view'({paneIndex,paneView}) {
+            this.$store.commit('paneUpdateData', {
+                paneIndex: paneIndex,
+                paneView: paneView
             })
             this.answerPending('--done--')
         },
+        // ---
         'private.sidebar.switch-menu'({selectedMenu}) {
-            this.$SIDE_BAR_MUTATIONS({
-                mode:'switch-menu',
-                payload: {
-                    selectedMenu
-                }
+            this.$store.commit('app/stateController', {
+                key: 'active-sidebar-item',
+                value: payload.selectedMenu
             })
             this.answerPending('--done--')
         },
