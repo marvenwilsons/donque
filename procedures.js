@@ -5,22 +5,11 @@ export default {
      * ling this methods
      */
     methods: {
-        checkLocalStorageForAdminCredentials() {
-            console.log("> checkLocalStorageForAdminCredentials")
-        },
-        clearLocalStorage() {
-            console.log("> clearLocalStorage")
-
-
-        },
-        setLocalStorage() {
-            console.log("> setLocalStorage")
-        },
         /**
          * @spawnGlobalModal
          * @param modalType string
          */
-        SYSTEM_PROCEDURE_DO_NOT_EXECUTE_OUTSIDE_HELPER_SPAWN_GLOBAL_MODAL({modalType, modalPayload}) {
+        $SPAWN_GLOBAL_MODAL({modalType, modalPayload}) {
             // console.log("> spawnGlobalModal")
             if(this.h.$store.state.queue.length == 0) {
                 alert('ERR: Invalid spawnGlobalModal() function invocation, procedures should not directly called on components')
@@ -40,14 +29,43 @@ export default {
                 
             }            
         },
-        SYSTEM_PROCEDURE_DO_NOT_EXECUTE_OUTSIDE_HELPER_ANSWER_CURRENT_QUESTION({modalType, modalPayload}) {
+        $SYSTEM_CALL({section, method, payload}) {
 
         },
-        SYSTEM_PROCEDURE_DO_NOT_EXECUTE_OUTSIDE_HELPER_SYSTEM_CALL({section, method, payload}) {
-
+        $PANESYSTEM_MUTATIONS({mode, payload}) {
+            if(mode === 'add-pane') {
+                this.$store.commit('paneAdd', {
+                    paneIndex: payload.paneIndex,
+                    payload
+                })
+                this.answerPending('--done--')
+            } else if(mode === 'delete-pane') {
+                this.$store.commit('paneDelete', {
+                    paneIndexOrigin: payload.paneIndexOrigin
+                })
+                this.answerPending('--done--')
+            } else if(mode === 'update-pane-data') {
+                this.$store.commit('paneUpdateData', {
+                    paneIndex: payload.paneIndex,
+                    paneData: payload.paneData
+                })
+                this.answerPending('--done--')
+            } else if(mode === 'update-pane-view') {
+                this.$store.commit('paneUpdateData', {
+                    paneIndex: payload.paneIndex,
+                    paneView: payload.paneView
+                })
+                this.answerPending('--done--')
+            }
         },
-        redirect() {
-            
+        $SIDE_BAR_MUTATIONS({mode,payload}) {
+            if(mode == 'switch-menu') {
+                console.log('side bar mutations')
+                this.$store.commit('app/stateController', {
+                    key: 'active-sidebar-item',
+                    value: payload.selectedMenu
+                })
+            }
         }
     }
 }

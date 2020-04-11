@@ -1,5 +1,5 @@
 <template>
-    <v-flex  flexcol style="max-width:250px; background:#232729;color:#206add;"  >
+    <v-flex  flexcol style="max-width:220px; background:#232729;color:white;"  >
         <!-- SITE BANNER AND CONTROLS -->
         <div class="pad025">
             <v-flex spacebetween >
@@ -14,13 +14,44 @@
         <!-- SIDE BAR ITEMS -->
         <div class=" flex1">
             <div 
+                :style="{background: $store.state.app['active-sidebar-item'] == item ? 'var(--deftheme-dark-secondary)' : ''}"
                 v-for="item in $store.state.app['app-admin-sidebar-items']" :key="item" 
                 class="pad050 pointer"
+                @click="sideBarItemClick(item)"
             >
-                <div class="pad025">
+                <div 
+                    style="color:var(--deftheme-blue-text);" 
+                    class="pad025"
+                    >
                     {{item}}
                 </div>
             </div>
         </div>
     </v-flex>
 </template>
+
+<script>
+import h from '@/helper'
+
+export default {
+    mixins: [h],
+    created() {
+        this.h = this
+    },
+    methods: {        
+        sideBarItemClick(selectedMenu) {
+            this.runCompiledTask([
+                {
+                    taskName: 'insertCompiledTask',
+                    taskParam: {
+                        compiledTask: this.getCompiledTask('syspane.switch-menu'),
+                        payload: {
+                            selectedMenu
+                        }
+                    }
+                }
+            ])
+        }
+    }
+}
+</script>

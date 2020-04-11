@@ -1,7 +1,7 @@
 <template>
     <main style="background:darkgray" class="fullwidth" >
         <v-flex fullwidth   fullheight-percent >
-            <!-- <debug :data="{
+            <debug :data="{
                 QUESTIONS: $store.state.queue,
                 queueConfig: {
                     queueExecType: $store.state.queueExecType,
@@ -9,17 +9,16 @@
                     currentAnswer: $store.state.queueCurrentTaskAnswer,
                     queueState: $store.state.queueState,
                     loop: $store.state.queueOnLoop,
-                    static: $store.state.queueStatic
                 },
                 ANSWERS: $store.state.queueAnswersArray,
-            }" /> -->
-            <debug 
+            }" />
+            <!-- <debug 
                 :data="{
                     'PANE-SYSTEM': {
                         pane: $store.state.pane
                     }
                 }"
-            />
+            /> -->
         </v-flex>
     </main>
 </template>
@@ -39,59 +38,59 @@ export default {
         debug
     },
     mounted() {
-        this.runCompiledTask([
-            {
-                taskName: 'addPane',
-                taskParam: {
-                    paneIndex: null,
-                    payload: {
-                        paneName: '',
-                        paneView: '',
-                        paneData: '',
-                        paneWidth: '600px'
-                    }
-                }
-            },
-            {
-                taskName: 'addPane',
-                taskParam: {
-                    paneIndex: null,
-                    payload: {
-                        paneName: '',
-                        paneView: '',
-                        paneData: '',
-                        paneWidth: '600px'
-                    }
-                }
-            },
-            {
-                taskName: 'addPane',
-                taskParam: {
-                    paneIndex: null,
-                    payload: {
-                        paneName: '',
-                        paneView: '',
-                        paneData: '',
-                        paneWidth: '600px'
-                    }
-                }
-            },
-            {
-                taskName: 'deletePane',
-                taskParam: {
-                    paneIndexOrigin: 2
-                }
-            },
-            {
-                taskName: 'updatePaneData',
-                taskParam: {
-                    paneIndex: 1,
-                    paneData: {
-                        msg: 'hello world'
-                    }
-                }
-            },
-        ])
+        // this.runCompiledTask([
+        //     {
+        //         taskName: 'addPane',
+        //         taskParam: {
+        //             paneIndex: null,
+        //             payload: {
+        //                 paneName: '',
+        //                 paneView: '',
+        //                 paneData: '',
+        //                 paneWidth: '600px'
+        //             }
+        //         }
+        //     },
+        //     {
+        //         taskName: 'addPane',
+        //         taskParam: {
+        //             paneIndex: null,
+        //             payload: {
+        //                 paneName: '',
+        //                 paneView: '',
+        //                 paneData: '',
+        //                 paneWidth: '600px'
+        //             }
+        //         }
+        //     },
+        //     {
+        //         taskName: 'addPane',
+        //         taskParam: {
+        //             paneIndex: null,
+        //             payload: {
+        //                 paneName: '',
+        //                 paneView: '',
+        //                 paneData: '',
+        //                 paneWidth: '600px'
+        //             }
+        //         }
+        //     },
+        //     {
+        //         taskName: 'deletePane',
+        //         taskParam: {
+        //             paneIndexOrigin: 2
+        //         }
+        //     },
+        //     {
+        //         taskName: 'updatePaneData',
+        //         taskParam: {
+        //             paneIndex: 1,
+        //             paneData: {
+        //                 msg: 'hello world'
+        //             }
+        //         }
+        //     },
+        // ])
     },
     layout: context => {
         const sysRoutes = [

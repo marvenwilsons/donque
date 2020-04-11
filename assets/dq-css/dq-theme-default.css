@@ -5,8 +5,9 @@
   --size-2-half: calc(var(--fontSize) * 0.50);
 
   /* dark */
---deftheme-dark-primary: #232729;
-
+  --deftheme-dark-primary: #232729;
+  --deftheme-dark-secondary:#303340;
+  --deftheme-blue-text: #206add;
   /* error color */
   --err: #ae1100;
 

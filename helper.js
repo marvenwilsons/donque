@@ -3,6 +3,11 @@ import sysvoid from '@/apps/compiledTask/sysvoid'
 import sysutil from '@/apps/compiledTask/sysutil'
 import syspane from '@/apps/compiledTask/syspane'
 
+/**
+ * javaScript does not offer real private methods
+ * so this is just to let the developers know this methods that has private. on it
+ * should no be access outside helper okay!
+ */
 
 export default {
     mixins: [procedures],
@@ -14,8 +19,8 @@ export default {
     },
     methods: {
     /** sys programs */
-        DO_NOT_EXECUTE_OUTSIDE_HELPER_$ask({question, truthy, falsey}) {
-            this.SYSTEM_PROCEDURE_DO_NOT_EXECUTE_OUTSIDE_HELPER_SPAWN_GLOBAL_MODAL({
+        'private.sysmodal.ask'({question, truthy, falsey}) {
+            this.$SPAWN_GLOBAL_MODAL({
                 modalType: 'boolean',
                 modalPayload: {
                     truthy,
@@ -24,8 +29,8 @@ export default {
                 }
             })
         },
-        DO_NOT_EXECUTE_OUTSIDE_HELPER_$prompt({type,defaultValue, placeholder, label, err}) {
-            this.SYSTEM_PROCEDURE_DO_NOT_EXECUTE_OUTSIDE_HELPER_SPAWN_GLOBAL_MODAL({
+        'private.sysmodal.prompt'({type,defaultValue, placeholder, label, err}) {
+            this.$SPAWN_GLOBAL_MODAL({
                 modalType: 'prompt',
                 modalPayload: {
                     type,
@@ -36,8 +41,8 @@ export default {
                 }
             })
         },
-        DO_NOT_EXECUTE_OUTSIDE_HELPER_$select({options,defaultValue, label, err}) {
-            this.SYSTEM_PROCEDURE_DO_NOT_EXECUTE_OUTSIDE_HELPER_SPAWN_GLOBAL_MODAL({
+        'private.sysmodal.select'({options,defaultValue, label, err}) {
+            this.$SPAWN_GLOBAL_MODAL({
                 modalType: 'select',
                 modalPayload: {
                     options,
@@ -47,79 +52,23 @@ export default {
                 }
             })
         },
-        DO_NOT_EXECUTE_OUTSIDE_HELPER_$loginfo({msg}) {
-            this.SYSTEM_PROCEDURE_DO_NOT_EXECUTE_OUTSIDE_HELPER_SPAWN_GLOBAL_MODAL({
+        'private.sysmodal.loginfo'({msg}) {
+            this.$SPAWN_GLOBAL_MODAL({
                 modalType: 'loginfo',
                 modalPayload: {
                     msg
                 }
             })
         },
-        DO_NOT_EXECUTE_OUTSIDE_HELPER_$logerr({msg}) {
-            this.SYSTEM_PROCEDURE_DO_NOT_EXECUTE_OUTSIDE_HELPER_SPAWN_GLOBAL_MODAL({
+        'private.sysmodal.logerr'({msg}) {
+            this.$SPAWN_GLOBAL_MODAL({
                 modalType: 'logerr',
                 modalPayload: {
                     msg
                 }
             })
         },
-        DO_NOT_EXECUTE_OUTSIDE_HELPER_$insertCompiledTask({compiledTask,payload}) {
-            // compiled task returns an array of task items
-            const prm = payload ? payload : this.h.$store.state.queueCurrentTaskAnswer
-            const ct = compiledTask(prm)
-            const pa = () => {
-                this.h.$store.state.queueAnswersArray.push({
-                    answer: '--not answered--'
-                })
-            }
-            if(Array.isArray(ct)) {
-                // push or insert tasks to queue
-                if(this.h.$store.state.queue.length - 1 === this.h.$store.state.queuePointer) {
-                    // get function and push to queue
-                    ct.map(e => {
-                        this.h.$store.state.queue.push({
-                            fn: this[`DO_NOT_EXECUTE_OUTSIDE_HELPER_$${e.taskName}`],
-                            param: e.taskParam
-                        })
-                        pa()
-                    })
-                    this.h.$store.commit('stateController', {
-                        key: 'queuePointer',
-                        value: this.h.$store.state.queuePointer + 1
-                    })
-                } else {
-                    // insert
-                    const f = ct.map(e => {
-                        pa()
-                        return {
-                            fn: this[`DO_NOT_EXECUTE_OUTSIDE_HELPER_$${e.taskName}`],
-                            param: e.taskParam
-                        }                        
-                    })
-                    this.h.$store.state.queue.splice(this.h.$store.state.queuePointer ,0,f)
-                    this.h.$store.state.queue = this.h.$store.state.queue.flat()
-                    this.$store.commit('executeQueue')
-                }
-            } else {
-                alert('Err: Invalid compiled task in insertCompiledTask item')
-                location.reload()
-            }
-        },
-        DO_NOT_EXECUTE_OUTSIDE_HELPER_$resetTask({resetBackTo,injectOrModifyProp}) {
-            if(resetBackTo > this.h.$store.state.queuePointer) {
-                alert(`Err: in resetTask task item object, illegal reset value in "resetBackTo" property, value:${resetBackTo}`)
-                location.reload()
-            } else {
-                this.h.$store.commit('stateController',{
-                    key: 'queuePointer',
-                    value: resetBackTo
-                })
-            }
-            
-            Object.assign(this.h.$store.state.queue[this.$store.state.queuePointer].param, injectOrModifyProp)
-            // reset back n exec initial value 
-        },
-        DO_NOT_EXECUTE_OUTSIDE_HELPER_$closeModal() {
+        'private.sysmodal.close'() {
             // console.log('> Closing Modal')
             this.h.$store.commit('stateController', {
                 key: 'globalModalState',
@@ -137,7 +86,64 @@ export default {
                 this.h.answerPending('--void--')
             }, 100);
         },
-        DO_NOT_EXECUTE_OUTSIDE_HELPER_$done() {
+        // ---
+        'private.insertCompiledTask'({compiledTask,payload}) {
+            // compiled task returns an array of task items
+            const prm = payload ? payload : this.h.$store.state.queueCurrentTaskAnswer
+            const ct = compiledTask(prm)
+            const pa = () => {
+                this.h.$store.state.queueAnswersArray.push({
+                    answer: '--not answered--'
+                })
+            }
+            if(Array.isArray(ct)) {
+                // push or insert tasks to queue
+                if(this.h.$store.state.queue.length - 1 === this.h.$store.state.queuePointer) {
+                    // get function and push to queue
+                    ct.map(e => {
+                        this.h.$store.state.queue.push({
+                            fn: this[`private.${e.taskName}`],
+                            param: e.taskParam
+                        })
+                        pa()
+                    })
+                    this.h.$store.commit('stateController', {
+                        key: 'queuePointer',
+                        value: this.h.$store.state.queuePointer + 1
+                    })
+                } else {
+                    // insert
+                    const f = ct.map(e => {
+                        pa()
+                        return {
+                            fn: this[`private.${e.taskName}`],
+                            param: e.taskParam
+                        }                        
+                    })
+                    this.h.$store.state.queue.splice(this.h.$store.state.queuePointer ,0,f)
+                    this.h.$store.state.queue = this.h.$store.state.queue.flat()
+                    this.$store.commit('executeQueue')
+                }
+            } else {
+                alert('Err: Invalid compiled task in insertCompiledTask item')
+                location.reload()
+            }
+        },
+        'private.resetTask'({resetBackTo,injectOrModifyProp}) {
+            if(resetBackTo > this.h.$store.state.queuePointer) {
+                alert(`Err: in resetTask task item object, illegal reset value in "resetBackTo" property, value:${resetBackTo}`)
+                location.reload()
+            } else {
+                this.h.$store.commit('stateController',{
+                    key: 'queuePointer',
+                    value: resetBackTo
+                })
+            }
+            
+            Object.assign(this.h.$store.state.queue[this.$store.state.queuePointer].param, injectOrModifyProp)
+            // reset back n exec initial value 
+        },        
+        'private.done'() {
             // console.log('> all task done')
             this.h.$store.commit('stateController', {
                 key: 'queueState',
@@ -164,30 +170,40 @@ export default {
                 value: null
             })
         },
-        DO_NOT_EXECUTE_OUTSIDE_HELPER_$addPane({paneIndex, payload}) {
+        // ---
+        'private.pane.add'({paneIndex, payload}) {
             this.h.$store.commit('paneAdd', {
                 paneIndex,
                 payload
             })
             this.answerPending('--done--')
         },
-        DO_NOT_EXECUTE_OUTSIDE_HELPER_$deletePane({paneIndexOrigin}){
+        'private.pane.delete'({paneIndexOrigin}){
             this.h.$store.commit('paneDelete', {
                 paneIndexOrigin
             })
             this.answerPending('--done--')
         },
-        DO_NOT_EXECUTE_OUTSIDE_HELPER_$updatePaneData({paneIndex,paneData}) {
+        'private.pane.update-data'({paneIndex,paneData}) {
             this.h.$store.commit('paneUpdateData', {
                 paneIndex,
                 paneData
             })
             this.answerPending('--done--')
         },
-        DO_NOT_EXECUTE_OUTSIDE_HELPER_$updatePaneView({paneIndex,paneView}) {
+        'private.pane.update-view'({paneIndex,paneView}) {
             this.h.$store.commit('paneUpdateData', {
                 paneIndex,
                 paneView
+            })
+            this.answerPending('--done--')
+        },
+        'private.sidebar.switch-menu'({selectedMenu}) {
+            this.$SIDE_BAR_MUTATIONS({
+                mode:'switch-menu',
+                payload: {
+                    selectedMenu
+                }
             })
             this.answerPending('--done--')
         },
@@ -249,7 +265,7 @@ export default {
                 })
                 if(e) {
                     /*** type 1 is an object that tells what function to execute */
-                    const taskBeingCalled = e.taskName == 'exec' ? true : this[`DO_NOT_EXECUTE_OUTSIDE_HELPER_$${e.taskName}`]
+                    const taskBeingCalled = e.taskName == 'exec' ? true : this[`private.${e.taskName}`]
                     if(taskBeingCalled == undefined) {
                         const msg = `ERR: "${e.taskName}" function or task does not exist`
                         alert(msg)
