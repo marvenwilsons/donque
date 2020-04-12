@@ -52,6 +52,9 @@ export default {
                 }
             ])
         }
+    },
+    mounted() {
+        // this.sideBarItemClick('Dashboard')
     }
 }
 </script>

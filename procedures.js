@@ -84,8 +84,23 @@ export default function (app,method) {
         
         Object.assign(app.$store.state.queue[app.$store.state.queuePointer].param, injectOrModifyProp)
     }
+    i['private.syscall.get'] = function() {
+        console.log('getting resources')
+        setTimeout(() => {
+            app.answerPending({
+                data: app.$store.state.pane.length == 0 ? 'test 1' : 'test 2'
+            })
+        }, 4000);
+        app.answerPending()
+    }
+    i['private.syscall.post'] = function() {
+
+    }
+    i['private.syscall.delete'] = function() {
+
+    }
     // modal
-    i['private.sysmodal.spwan'] = function ({modalType, modalPayload}) {
+    i['private.sysmodal.spawn'] = function ({modalType, modalPayload}) {
         if(app.$store.state.queue.length == 0) {
             alert('ERR: Invalid spawnGlobalModal() function invocation, procedures should not directly called on components')
         } else {
@@ -153,7 +168,7 @@ export default function (app,method) {
             }
         })
     }
-    i['private.sysmodal.close'] = function () {
+    i['private.sysmodal.close-modal'] = function () {
         // console.log('> Closing Modal')
         app.$store.commit('stateController', {
             key: 'globalModalState',
@@ -173,20 +188,28 @@ export default function (app,method) {
     }
     // sidebar
     i['private.sidebar.switch-menu'] = function ({selectedMenu}) {
-        console.log('switch menu!!')
+        /** emptying the pane array */
+        app.$store.commit('stateController', {
+            key: 'pane',
+            value: []
+        })
+        /** change the active menu in side bar */
         app.$store.commit('app/stateController', {
             key: 'active-sidebar-item',
             value: selectedMenu
         })
-        app.answerPending('--done--')
+        /** move to next */
+        app.answerPending()
     }
     // pane system
     i['private.syspane.add'] = function ({paneIndex, payload}) {
         app.$store.commit('paneAdd', {
             paneIndex: paneIndex,
-            payload
+            payload: {
+                paneView: payload.paneView
+            }
         })
-        app.answerPending('--done--')
+        app.answerPending()
     }
     i['private.syspane.delete'] = function ({paneIndexOrigin}) {
         app.$store.commit('paneDelete', {
@@ -207,6 +230,9 @@ export default function (app,method) {
             paneView: paneView
         })
         app.answerPending('--done--')
+    }
+    i['private.syspane.get-pane-data'] = function ({paneIndex, payload}) {
+
     }
 
 

@@ -16,7 +16,7 @@ export const state = () => ({
         globalModalContent: undefined,
     /** ----- */
     /** Pane System */
-        pane:[]
+        pane:[],
 })
 export const getters = {
     /** QUEUE GETTERS */
@@ -101,7 +101,7 @@ export const mutations = {
         },
     /** ----- */
     /** PANE MUTATIONS */
-        paneAdd(state,{paneIndex, payload: {paneName,paneView,paneData,paneWidth}}) {
+        paneAdd(state,{paneIndex, payload: {paneName = 'untitled pane',paneView = 'loading',paneData = {},paneWidth = '700px'}}) {
             state.pane.push({
                 paneName,
                 paneIndex,
