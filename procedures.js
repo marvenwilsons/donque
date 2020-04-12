@@ -17,7 +17,7 @@ export default function (app,method) {
     i['private.insertCompiledTask'] = function ({compiledTask,payload}) {
         // compiled task returns an array of task items
         const prm = payload ? payload : app.$store.state.queueCurrentTaskAnswer
-        const ct = compiledTask(prm)
+        const ct = Array.isArray(compiledTask) ? compiledTask : compiledTask(prm)
         const pa = () => {
             app.$store.state.queueAnswersArray.push({
                 answer: '--not answered--'
@@ -259,7 +259,9 @@ export default function (app,method) {
         console.log('getting pane data')
         setTimeout(() => {
             app.answerPending({
-                data: 'hello world'
+                statusCode: 200,
+                status: true,
+                payload: 'test payload'
             })
 
             console.log(app.$store.state.queue)

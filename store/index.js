@@ -63,23 +63,32 @@ export const mutations = {
             // console.log('> executing queue items ***************')
             if(state.queue[state.queuePointer].mode == '--pending--') {
                 // executing exec task to get extract the task object
-                const asyncOpt = await state.queue[state.queuePointer].param(state.queueCurrentTaskAnswer) // task list extracted
-                if(asyncOpt) { // if task object is now available, insert task object to queue                
-                    if(asyncOpt.taskParam && asyncOpt.taskParam.resetBackTo != undefined) {
-                        if(typeof asyncOpt.taskParam.resetBackTo == 'number') {
+                try {
+                    const asyncOpt = await state.queue[state.queuePointer].param(state.queueCurrentTaskAnswer) // task list extracted
+                    if(asyncOpt) { // if task object is now available, insert task object to queue                
+                        if(asyncOpt.taskParam && asyncOpt.taskParam.resetBackTo != undefined) {
+                            if(typeof asyncOpt.taskParam.resetBackTo == 'number') {
+                                this.commit('insertQueueItem', { // insert the task item to the queue
+                                    fn: asyncOpt.taskName,
+                                    param: asyncOpt.taskParam,
+                                    resetIndex: state.queuePointer
+                                })
+                            }                    
+                        } else {
                             this.commit('insertQueueItem', { // insert the task item to the queue
                                 fn: asyncOpt.taskName,
-                                param: asyncOpt.taskParam,
-                                resetIndex: state.queuePointer
+                                param: asyncOpt.taskParam
                             })
-                        }                    
-                    } else {
-                        this.commit('insertQueueItem', { // insert the task item to the queue
-                            fn: asyncOpt.taskName,
-                            param: asyncOpt.taskParam
+                        }
+                    }
+                } catch(errObject) {
+                    if(errObject.taskName) {
+                        this.commit('insertQueueItem', {
+                            fn: errObject.taskName,
+                            param: errObject.taskParam
                         })
                     }
-                } 
+                }
             } else {
                 // this is where normal void task gets handled, normaly sync task
                 const {fn, param} = state.queue[state.queuePointer] 

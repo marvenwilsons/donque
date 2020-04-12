@@ -13,7 +13,7 @@ export default {
                 {
                     taskName: 'sysmodal.loading',
                     taskParam: {
-                        msg: `Fetching ${selectedMenu} resoruces, please wait a moment`
+                        msg: `validating and fetching ${selectedMenu} request`
                     }
                 },
                 {
@@ -26,44 +26,42 @@ export default {
                 },
                 {
                     taskName: 'exec',
-                    taskParam: function(data) {
-                        console.log('this is data', data)
-
-                        return new Promise((resolve,reject) => {
-                            resolve({
-                                taskName: 'sysmodal.loginfo',
-                                taskParam: {
-                                    msg: 'everything okay!'
-                                }
+                    taskParam: function({statusCode, status, payload}) {
+                        if(statusCode === 200) {
+                            return new Promise((resolve,reject) => {
+                                resolve({
+                                    taskName: 'insertCompiledTask',
+                                    taskParam: {
+                                        compiledTask: [
+                                            {
+                                                taskName: 'sidebar.switch-menu',
+                                                taskParam: {
+                                                    currentActiveMenu,
+                                                    selectedMenu
+                                                }
+                                            },
+                                            {
+                                                taskName: 'syspane.add',
+                                                taskParam: {
+                                                    payload: {
+                                                        paneView: selectedMenu
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                taskName: 'sysmodal.close-modal',
+                                                taskParam: {}
+                                            },
+                                            {
+                                                taskName: 'done',
+                                                taskParam: {}
+                                            }
+                                        ]
+                                    }
+                                })
                             })
-                        })
-                    }
-                },
-                // side bar mutation
-                {
-                    taskName: 'sidebar.switch-menu',
-                    taskParam: {
-                        currentActiveMenu,
-                        selectedMenu
-                    }
-                },
-                // get server data
-                
-                {
-                    taskName: 'syspane.add',
-                    taskParam: {
-                        payload: {
-                            paneView: selectedMenu
                         }
                     }
-                },
-                {
-                    taskName: 'sysmodal.close-modal',
-                    taskParam: {}
-                },
-                {
-                    taskName: 'done',
-                    taskParam: {}
                 }
             ]
         } else {
