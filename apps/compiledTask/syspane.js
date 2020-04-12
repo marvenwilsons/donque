@@ -10,14 +10,35 @@ export default {
             // this operation should be bloocking, because what if the user switches menus repeatedly
             // it can be costly if you have to reach server repeatedly      
             return [
-                // {
-                //     taskName: 'syspane.get-pane-data',
-                //     taskParam: {
-                //         payload: {
-                //             section: selectedMenu
-                //         }
-                //     }
-                // },
+                {
+                    taskName: 'sysmodal.loading',
+                    taskParam: {
+                        msg: `Fetching ${selectedMenu} resoruces, please wait a moment`
+                    }
+                },
+                {
+                    taskName: 'syspane.get-pane-data',
+                    taskParam: {
+                        payload: {
+                            section: selectedMenu
+                        }
+                    }
+                },
+                {
+                    taskName: 'exec',
+                    taskParam: function(data) {
+                        console.log('this is data', data)
+
+                        return new Promise((resolve,reject) => {
+                            resolve({
+                                taskName: 'sysmodal.loginfo',
+                                taskParam: {
+                                    msg: 'everything okay!'
+                                }
+                            })
+                        })
+                    }
+                },
                 // side bar mutation
                 {
                     taskName: 'sidebar.switch-menu',
@@ -35,6 +56,10 @@ export default {
                             paneView: selectedMenu
                         }
                     }
+                },
+                {
+                    taskName: 'sysmodal.close-modal',
+                    taskParam: {}
                 },
                 {
                     taskName: 'done',

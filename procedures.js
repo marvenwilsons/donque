@@ -2,6 +2,18 @@ export default function (app,method) {
     const i = {}
     
     // system
+    i['private.sysutil.cp'] = function(o) {
+        if (o === null) return null;
+        
+                var output, v, key;
+                output = Array.isArray(o) ? [] : {};
+                for (key in o) {
+                  v = o[key];
+                  output[key] = typeof v === "object" ? this.cp(v) : v;
+                }
+        
+        return output;
+    }
     i['private.insertCompiledTask'] = function ({compiledTask,payload}) {
         // compiled task returns an array of task items
         const prm = payload ? payload : app.$store.state.queueCurrentTaskAnswer
@@ -18,7 +30,9 @@ export default function (app,method) {
                 ct.map(e => {
                     app.$store.state.queue.push({
                         fn: i[`private.${e.taskName}`],
-                        param: e.taskParam
+                        param: e.taskParam,
+                        mode: e.taskName === 'exec' ? '--pending--' : undefined,
+                        m: i
                     })
                     pa()
                 })
@@ -32,7 +46,9 @@ export default function (app,method) {
                     pa()
                     return {
                         fn: i[`private.${e.taskName}`],
-                        param: e.taskParam
+                        param: e.taskParam,
+                        mode: e.taskName === 'exec' ? '--pending--' : undefined,
+                        m: i
                     }                        
                 })
                 app.$store.state.queue.splice(app.$store.state.queuePointer ,0,f)
@@ -168,6 +184,14 @@ export default function (app,method) {
             }
         })
     }
+    i['private.sysmodal.loading'] = function ({msg}) {
+        i['private.sysmodal.spawn']({
+            modalType: 'loading',
+            modalPayload: {
+                msg
+            }
+        })
+    }
     i['private.sysmodal.close-modal'] = function () {
         // console.log('> Closing Modal')
         app.$store.commit('stateController', {
@@ -232,7 +256,14 @@ export default function (app,method) {
         app.answerPending('--done--')
     }
     i['private.syspane.get-pane-data'] = function ({paneIndex, payload}) {
+        console.log('getting pane data')
+        setTimeout(() => {
+            app.answerPending({
+                data: 'hello world'
+            })
 
+            console.log(app.$store.state.queue)
+        }, 1000);
     }
 
 

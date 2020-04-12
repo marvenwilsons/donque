@@ -24,6 +24,10 @@
                         v-if="$store.state.globalModalContentType == 'logerr'" 
                         :data="$store.state.globalModalContent"
                     />
+                    <loading
+                        v-if="$store.state.globalModalContentType == 'loading'" 
+                        :data="$store.state.globalModalContent"
+                    />
                 </div>
             </div>
         </div>
@@ -37,6 +41,8 @@ import promptModal from './components/promptModal'
 import sel from './components/selectModal'
 import loginfo from './components/loginfo'
 import logerr from './components/logerr'
+import loading from './components/loadingModal'
+
 export default {
     mixins: [h],
     props: {
@@ -50,7 +56,8 @@ export default {
         promptModal,
         sel,
         loginfo,
-        logerr
+        logerr,
+        loading
     }
 }
 </script>

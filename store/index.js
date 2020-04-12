@@ -47,13 +47,13 @@ export const mutations = {
         },
         insertQueueItem(state,{fn,param,resetIndex}) {
             state.queue[state.queuePointer].mode = null
-            const m = state.queue[state.queuePointer].m() // pulling all of available methods in helper.js
-            state.queue[state.queuePointer].fn = m[`DO_NOT_EXECUTE_OUTSIDE_HELPER_$${fn}`] // method found and assign to queue item
+            const m = state.queue[state.queuePointer].m // pulling all of available methods in helper.js
+            state.queue[state.queuePointer].fn = m[`private.${fn}`] // method found and assign to queue item
             state.queue[state.queuePointer].param = param // function param found
             this.commit('executeQueue') // execute task
             if(typeof resetIndex == 'number') {
                 state.queue[resetIndex] = null
-                state.queue[resetIndex] = m.cp(state.queueStatic[resetIndex])
+                state.queue[resetIndex] = m['sysutil.cp'](state.queueStatic[resetIndex])
                 state.queueOnLoop = resetIndex
             } else {
                 state.queueOnLoop = null
