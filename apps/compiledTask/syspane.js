@@ -49,6 +49,13 @@ export default {
                                                 }
                                             },
                                             {
+                                                taskName: 'syspane.update-data',
+                                                taskParam: {
+                                                    paneIndex: 0,
+                                                    paneData: payload
+                                                }
+                                            },
+                                            {
                                                 taskName: 'sysmodal.close-modal',
                                                 taskParam: {}
                                             },

@@ -13,7 +13,7 @@ export const state = () => ({
             'Office',
             'Marketplace'
         ],
-        'active-sidebar-item': 'Dashboard',
+        'active-sidebar-item': null,
     /** ----- */
     systemRoutes: [
         '/dqlogin',

@@ -54,7 +54,7 @@ export default {
         }
     },
     mounted() {
-        // this.sideBarItemClick('Dashboard')
+        this.sideBarItemClick('Pages')
     }
 }
 </script>

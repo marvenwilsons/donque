@@ -6,8 +6,10 @@
         <div class="pad050 borderRad4" >
             <div class="pad025">
                 <v-flex class="borderRad4 marginbottom050" >
-                    <v-flex class="pad050 borderRad4 backgroundinfo " >
-                        <div class="loader"></div>
+                    <v-flex class="borderRad4 backgroundinfo flexcenter flexstart" >
+                        <div style="background: #629af4;" class="pad050">
+                            <div style="" class="loader marginright025"></div>
+                        </div>
                         <div class="padleft050" >{{data.msg}}</div>
                     </v-flex>
                 </v-flex>
@@ -41,7 +43,7 @@ export default {
 <style>
 .loader {
   border: 2px solid #f3f3f3; /* Light grey */
-  border-top: 2px solid #3498db; /* Blue */
+  border-top: 2px solid lightslategray; /* Blue */
   border-radius: 50%;
   width: 20px;
   height: 20px;

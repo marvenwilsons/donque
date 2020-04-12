@@ -106,7 +106,7 @@ export default function (app,method) {
             app.answerPending({
                 data: app.$store.state.pane.length == 0 ? 'test 1' : 'test 2'
             })
-        }, 4000);
+        }, 100);
         app.answerPending()
     }
     i['private.syscall.post'] = function() {
@@ -256,16 +256,13 @@ export default function (app,method) {
         app.answerPending('--done--')
     }
     i['private.syspane.get-pane-data'] = function ({paneIndex, payload}) {
-        console.log('getting pane data')
         setTimeout(() => {
             app.answerPending({
                 statusCode: 200,
                 status: true,
                 payload: 'test payload'
             })
-
-            console.log(app.$store.state.queue)
-        }, 1000);
+        }, 500);
     }
 
 

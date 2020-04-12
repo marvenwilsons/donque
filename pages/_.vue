@@ -12,13 +12,13 @@
                 },
                 ANSWERS: $store.state.queueAnswersArray,
             }" /> -->
-            <debug 
+            <!-- <debug 
                 :data="{
                     'PANE-SYSTEM': {
                         pane: $store.state.pane
                     }
                 }"
-            />
+            /> -->
         </v-flex>
     </main>
 </template>
