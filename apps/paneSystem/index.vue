@@ -1,5 +1,6 @@
 <template>
-    <v-flex style="overflow-y:auto;"  relative >
+    <v-flex style="overflow-y:auto;background:
+#f5f5f5;"  relative >
         <div class="fullwidth" >
             <svg 
                 xmlns="http://www.w3.org/2000/svg" 
@@ -16,7 +17,7 @@
                 v-for="pane in $store.state.pane"
                 class="paneShadow marginleft050 marginbottom050 margintop050" 
                 :myData="pane"
-                :key="pane" >
+                :key="pane.paneName" >
             </pane>
         </v-flex>
     </v-flex>

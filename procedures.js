@@ -1,3 +1,5 @@
+import templates from '@/apps/templates/index'
+
 export default function (app,method) {
     const i = {}
     
@@ -28,12 +30,18 @@ export default function (app,method) {
             if(app.$store.state.queue.length - 1 === app.$store.state.queuePointer) {
                 // get function and push to queue
                 ct.map(e => {
-                    app.$store.state.queue.push({
-                        fn: i[`private.${e.taskName}`],
-                        param: e.taskParam,
-                        mode: e.taskName === 'exec' ? '--pending--' : undefined,
-                        m: i
-                    })
+                    if(e.taskName === 'exec') {
+                        app.$store.state.queue.push(new templates.ExecQueueItem({
+                            fn: i[`private.${e.taskName}`],
+                            param: e.taskParam,
+                            m: i
+                        }))
+                    } else {
+                        app.$store.state.queue.push(new templates.NormalQueueItem({
+                            fn: i[`private.${e.taskName}`],
+                            param: e.taskParam,
+                        }))
+                    }                    
                     pa()
                 })
                 app.$store.commit('stateController', {
@@ -44,11 +52,17 @@ export default function (app,method) {
                 // insert
                 const f = ct.map(e => {
                     pa()
-                    return {
-                        fn: i[`private.${e.taskName}`],
-                        param: e.taskParam,
-                        mode: e.taskName === 'exec' ? '--pending--' : undefined,
-                        m: i
+                    if(e.taskName === 'exec') {
+                        return new templates.ExecQueueItem({
+                            fn: i[`private.${e.taskName}`],
+                            param: e.taskParam,
+                            m: i
+                        })
+                    } else {
+                        return new templates.NormalQueueItem({
+                            fn: i[`private.${e.taskName}`],
+                            param: e.taskParam,
+                        })
                     }                        
                 })
                 app.$store.state.queue.splice(app.$store.state.queuePointer ,0,f)

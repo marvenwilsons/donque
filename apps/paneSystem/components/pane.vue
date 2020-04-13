@@ -10,7 +10,9 @@
                     <div>
                         <span 
                             class="pointer"
-                            style="color:transparent;text-shadow: 0 0 0 white; font-weight:100" >&#10060;</span>
+                            style="color:white; font-weight:100" >
+                            	&#x2716;
+                        </span>
                     </div>
                 </v-flex>
         </div>

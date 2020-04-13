@@ -1,6 +1,7 @@
 import sysvoid from '@/apps/compiledTask/sysvoid'
 import sysutil from '@/apps/compiledTask/sysutil'
 import syspane from '@/apps/compiledTask/syspane'
+import templates from '@/apps/templates/index'
 import procedures from './procedures'
 
 export default {
@@ -72,28 +73,22 @@ export default {
                     // const taskBeingCalled = e.taskName == 'exec' ? true : this[`private.${e.taskName}`]
                     const taskBeingCalled = e.taskName == 'exec' ? true : procedures(this,e.taskName)
                     if(taskBeingCalled == undefined) {
-                        const msg = `ERR: "${e.taskName}" function or task does not exist`
-                        alert(msg)
-                        throw msg
+                        new templates.DonqueDevError(`ERR: "${e.taskName}" function or task does not exist`)
                     } else {
                         if(e.taskParam == undefined || e.taskParam == null) {
-                            const msg = `ERR: "taskParam" property cannot be undefined of null at index: ${i} task name: ${e.taskName}`
-                            alert(msg)
-                            throw msg
+                            new templates.DonqueDevError(`ERR: "taskParam" property cannot be undefined of null at index: ${i} task name: ${e.taskName}`)
                         } else {
                             if(e.taskName == 'exec') {
-                                x.push({
+                                x.push(new templates.ExecQueueItem({
                                     fn: taskBeingCalled,
                                     param: e.taskParam,
-                                    mode: '--pending--',
                                     m: this.m
-                                })
+                                }))
                             } else {
-
-                                x.push({
+                                x.push(new templates.NormalQueueItem({
                                     fn: taskBeingCalled,
                                     param: e.taskParam
-                                })
+                                }))
                             }                     
                         }
                     }

@@ -47,7 +47,7 @@ export default {
   border-radius: 50%;
   width: 20px;
   height: 20px;
-  animation: spin 2s linear infinite;
+  animation: spin 0.5s linear infinite;
 }
 
 @keyframes spin {
