@@ -3,7 +3,7 @@
         <globalModal/>
         <v-flex class="absolute fullwidth fullheight-percent" >
             <appSideBar/>
-            <v-flex pad125 >                
+            <v-flex >                
                 <nuxt />
             </v-flex>
         </v-flex>
@@ -21,6 +21,12 @@ export default {
     },
     computed: {
         ...mapGetters(['queueAnswersArray','queueState', 'queueArray','queuePointer'])
+    },
+    mounted() {
+        this.$store.commit('app/stateController', {
+            key: 'app-current-view',
+            value: 'paneSystem'
+        })
     },
     watch: {
         // init

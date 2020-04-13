@@ -1,5 +1,5 @@
 <template>
-    <v-fle></v-fle>
+    <v-flex></v-flex>
 </template>
 
 <script>

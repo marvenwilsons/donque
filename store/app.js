@@ -3,6 +3,8 @@ export const state = () => ({
         'app-admin-name': null,
         'app-name': null,
         'app-admin-resources': null,
+        'app-current-view': null,
+        'app-current-resource': null,
     /** ----- */
     /** App Side bar state */
         'app-admin-sidebar-items': [
