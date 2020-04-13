@@ -110,13 +110,15 @@ export const mutations = {
         },
     /** ----- */
     /** PANE MUTATIONS */
-        paneAdd(state,{paneIndex, payload: {paneName = 'untitled pane',paneView = 'loading',paneData = {},paneWidth = '700px'}}) {
+        paneAdd(state,{paneIndex, payload: {paneName = 'untitled pane',paneView = 'loading',paneData = {},paneWidth = '700px', modalBody = null, modalHeader = null}}) {
             state.pane.push({
                 paneName,
                 paneIndex,
                 paneView,
                 paneData,
-                paneWidth
+                paneWidth,
+                modalBody,
+                modalHeader
             })
         },
         paneDelete(state,{paneIndexOrigin}) {

@@ -4,6 +4,7 @@
 
 <script>
 import h from '@/helper'
+import Templates from '@/templates'
 export default {
     mixins: [h],
     props: {

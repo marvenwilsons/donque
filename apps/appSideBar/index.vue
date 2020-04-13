@@ -32,6 +32,7 @@
 
 <script>
 import h from '@/helper'
+import Templates from '@/templates'
 
 export default {
     mixins: [h],
@@ -41,20 +42,15 @@ export default {
     methods: {        
         sideBarItemClick(selectedMenu) {
             this.runCompiledTask([
-                {
-                    taskName: 'insertCompiledTask',
-                    taskParam: {
-                        compiledTask: this.getCompiledTask('syspane.switch-menu'),
-                        payload: {
-                            selectedMenu
-                        }
-                    }
-                }
+                new Templates.TaskItem('insertCompiledTask', {
+                    payload: { selectedMenu },
+                    compiledTask: this.getCompiledTask('syspane.switch-menu')
+                })
             ])
         }
     },
     mounted() {
-        this.sideBarItemClick('Pages')
+        this.sideBarItemClick('Dashboard')
     }
 }
 </script>
