@@ -1,7 +1,7 @@
 import sysvoid from '@/apps/compiledTask/sysvoid'
 import sysutil from '@/apps/compiledTask/sysutil'
 import syspane from '@/apps/compiledTask/syspane'
-import templates from '@/apps/templates/index'
+import templates from './templates'
 import procedures from './procedures'
 
 export default {

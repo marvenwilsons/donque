@@ -1,3 +1,5 @@
+import Templates from '@/templates'
+
 export default {
     'switch-menu'({currentActiveMenu,selectedMenu}) {
         /**
@@ -10,73 +12,33 @@ export default {
             // this operation should be bloocking, because what if the user switches menus repeatedly
             // it can be costly if you have to reach server repeatedly      
             return [
-                {
-                    taskName: 'sysmodal.loading',
-                    taskParam: {
-                        msg: `validating and fetching ${selectedMenu} request`
+                new Templates.TaskItem('sysmodal.loading', {
+                    msg: `validating and fetching ${selectedMenu} request`
+                }),
+                new Templates.TaskItem('syspane.get-pane-data', {
+                    payload: {
+                        section: selectedMenu
                     }
-                },
-                {
-                    taskName: 'syspane.get-pane-data',
-                    taskParam: {
-                        payload: {
-                            section: selectedMenu
-                        }
+                }),
+                new Templates.TaskItem('exec', function({statusCode, status, payload}) {
+                    if(statusCode === 200) {
+                        return new Promise((resolve,reject) => {
+                            resolve(new Templates.TaskItem('insertCompiledTask',{
+                                compiledTask: [
+                                    new Templates.TaskItem('sidebar.switch-menu', {currentActiveMenu, selectedMenu}),
+                                    new Templates.TaskItem('syspane.add',{payload: {paneView: selectedMenu}}),
+                                    new Templates.TaskItem('syspane.update-data', {paneIndex: 0, paneData: payload}),
+                                    new Templates.TaskItem('sysmodal.close-modal', {}),
+                                    new Templates.TaskItem('done',{})
+                                ]
+                            }))
+                        })
                     }
-                },
-                {
-                    taskName: 'exec',
-                    taskParam: function({statusCode, status, payload}) {
-                        if(statusCode === 200) {
-                            return new Promise((resolve,reject) => {
-                                resolve({
-                                    taskName: 'insertCompiledTask',
-                                    taskParam: {
-                                        compiledTask: [
-                                            {
-                                                taskName: 'sidebar.switch-menu',
-                                                taskParam: {
-                                                    currentActiveMenu,
-                                                    selectedMenu
-                                                }
-                                            },
-                                            {
-                                                taskName: 'syspane.add',
-                                                taskParam: {
-                                                    payload: {
-                                                        paneView: selectedMenu
-                                                    }
-                                                }
-                                            },
-                                            {
-                                                taskName: 'syspane.update-data',
-                                                taskParam: {
-                                                    paneIndex: 0,
-                                                    paneData: payload
-                                                }
-                                            },
-                                            {
-                                                taskName: 'sysmodal.close-modal',
-                                                taskParam: {}
-                                            },
-                                            {
-                                                taskName: 'done',
-                                                taskParam: {}
-                                            }
-                                        ]
-                                    }
-                                })
-                            })
-                        }
-                    }
-                }
+                })
             ]
         } else {
             return [
-                {
-                    taskName: 'done',
-                    taskParam: {}
-                }
+                new Templates.TaskItem('done',{})
             ]
         }        
     }

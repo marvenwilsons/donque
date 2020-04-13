@@ -1,4 +1,4 @@
-import templates from '@/apps/templates/index'
+import templates from './templates'
 
 export default function (app,method) {
     const i = {}
