@@ -4,6 +4,8 @@ import syspane from '@/apps/compiledTask/syspane'
 import templates from './templates'
 import procedures from './procedures'
 
+import Vue from "vue";
+Vue.prototype.$_________paneSettings = {}
 export default {
     data: () => ({
         h: undefined,
@@ -152,6 +154,36 @@ export default {
                     return RegExp(`${charSet}`, "").exec(value) != null;
                 });
                 return res.join("/") == "true/true";
+            }
+        },
+        covertToPaneView(n){
+            n = n.toLowerCase()
+            n = `p-${n}`
+            return n
+        },
+        paneSettings({paneName,paneWidth,isClosable}) {
+            if(paneName) {
+                this.$store.commit('paneController',{
+                    index: this.paneIndex,
+                    key: 'paneName',
+                    value: paneName
+                })
+            } 
+            
+            if(paneWidth) {
+                this.$store.commit('paneController',{
+                    index: this.paneIndex,
+                    key: 'paneWidth',
+                    value: paneWidth
+                })
+            }
+            
+            if(isClosable) {
+                this.$store.commit('paneController',{
+                    index: this.paneIndex,
+                    key: 'isClosable',
+                    value: isClosable
+                })
             }
         }
     }

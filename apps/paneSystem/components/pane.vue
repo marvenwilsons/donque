@@ -35,7 +35,7 @@
                 </main>
             </v-flex>
             <v-flex>
-                <div :is="myData.paneView" ></div>
+                <div :paneIndex="paneIndex" :is="myData.paneView" ></div>
             </v-flex>
         </v-flex>
     </v-flex>
@@ -46,7 +46,8 @@ import h from '@/helper'
 export default {
     mixins: [h],
     props: {
-        myData: Object
+        myData: Object,
+        paneIndex: Number
     },
     created() {
         this.h = this

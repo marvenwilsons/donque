@@ -45,6 +45,9 @@ export const mutations = {
         stateController(state,payload) {
             state[payload.key] = payload.value
         },
+        paneController(state, {index,key,value}){
+            state.pane[index][key] = value
+        },
         insertQueueItem(state,{fn,param,resetIndex}) {
             state.queue[state.queuePointer].mode = null
             const m = state.queue[state.queuePointer].m // pulling all of available methods in helper.js

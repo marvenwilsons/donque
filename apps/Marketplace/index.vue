@@ -1,5 +1,7 @@
 <template>
-    <v-flex></v-flex>
+    <v-flex>
+        this is marketplace
+    </v-flex>
 </template>
 
 <script>
@@ -17,8 +19,12 @@ export default {
     data: () => ({
 
     }),
-    methods: {
-
+    mounted() {
+        this.paneSettings({
+            paneWidth: '95%',
+            paneName: 'sample name',
+            isClosable: true
+        })
     }
 }
 </script>
