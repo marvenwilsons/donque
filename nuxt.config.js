@@ -37,6 +37,7 @@ module.exports = {
   */
   buildModules: [
     '@nuxtjs/vuetify',
+    '@nuxtjs/moment' // https://www.npmjs.com/package/@nuxtjs/moment
   ],
   /*
   ** Nuxt.js modules
