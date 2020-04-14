@@ -21,8 +21,8 @@ export default {
     }),
     mounted() {
         this.paneSettings({
-            paneWidth: '95%',
-            paneName: 'sample name',
+            paneWidth: '400px',
+            paneName: 'Pages',
             isClosable: true
         })
     }

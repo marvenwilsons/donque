@@ -9,6 +9,7 @@
                     </div>
                     <div>
                         <span 
+                            @click="closePane"
                             class="pointer"
                             style="color:white; font-weight:100" >
                             	&#x2716;

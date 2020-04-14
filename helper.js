@@ -185,6 +185,9 @@ export default {
                     value: isClosable
                 })
             }
+        },
+        closePane() {
+            console.log('closing pane > ')
         }
     }
 }

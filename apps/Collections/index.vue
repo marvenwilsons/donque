@@ -22,7 +22,7 @@ export default {
     mounted() {
         this.paneSettings({
             paneWidth: '95%',
-            paneName: 'sample name',
+            paneName: 'Collections',
             isClosable: true
         })
     }

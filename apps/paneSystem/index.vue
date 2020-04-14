@@ -1,6 +1,5 @@
 <template>
-    <v-flex style="overflow-y:auto;background:
-#f5f5f5;"  relative >
+    <v-flex style="overflow-y:auto;background:#7fccff;"  relative >
         <div class="fullwidth" style="position:fixed;" >
             <svg 
                 xmlns="http://www.w3.org/2000/svg" 
@@ -14,7 +13,7 @@
         <v-flex class="flex absolute fullheight-percent pad025" style="width:100%;" >
             <v-flex v-for="(pane,index) in $store.state.pane" :key="pane.paneName" margin050 :style="{maxWidth: pane.paneWidth}">
                 <pane 
-                    :style="{background:'white',borderRadius:'4px', overflow: 'hidden', maxWidth: pane.paneWidth}" 
+                    :style="{background:'#e8e8e8',borderRadius:'4px', overflow: 'hidden', maxWidth: pane.paneWidth}" 
                     
                     class="paneShadow marginright050" 
                     :myData="pane"
