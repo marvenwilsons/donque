@@ -3,9 +3,8 @@ import sysutil from '@/apps/compiledTask/sysutil'
 import syspane from '@/apps/compiledTask/syspane'
 import templates from './templates'
 import procedures from './procedures'
+import utils from './utils'
 
-import Vue from "vue";
-Vue.prototype.$_________paneSettings = {}
 export default {
     data: () => ({
         h: undefined,
@@ -18,28 +17,9 @@ export default {
         m() {
             return this
         },
-        cp(o){
-            if (o === null) return null;
-        
-                var output, v, key;
-                output = Array.isArray(o) ? [] : {};
-                for (key in o) {
-                  v = o[key];
-                  output[key] = typeof v === "object" ? this.cp(v) : v;
-                }
-        
-            return output;
-        },
-        pipe(...funcs) {
-            return function(val) {
-                let lastResult
-                for(func of funcs) {
-                    lastResult = func(lastResult || val)
-                }
-                return lastResult
-            }
-            /**usage -> this.pipe(fn1,fn2,fn3)('input') */
-        },
+        cp: utils.copy,
+        pipe: utils.pipe,
+        validateString:utils.validateString,
         answerPending(answer,pointer) {
             // console.log('> Answering pending question')
             if(answer && answer != '--void--') {
@@ -58,7 +38,7 @@ export default {
         },
         runCompiledTask(taskArray) {
             /********************************************************************
-             * push procedures to que together with its function dependecies
+             * push procedures to queue together with its function dependecies
              * the first item in taskArray is the item that needs to be completed
              * the sencond item to the last are the functions that executes for the
              * purpose of completing the first item in the taskArray.
@@ -134,26 +114,6 @@ export default {
             } else {
                 alert(`Err: Invalid task name ${lib}`)
                 location.reload()
-            }
-        },
-        validateString({mode,value,expected}) {
-            if(mode === 'has-special-character') {
-                console.log('special-character')
-                const regex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/gim;
-                return regex.exec(value) != null;
-            } else if(mode === 'has-number') {
-                const regex = /[0-9]/gim;
-                return regex.exec(value) != null;
-            } else if(mode === 'has-whitespace') {
-                return value.indexOf(" ") != -1
-            } else if(mode === 'is-required') {
-                return value.trim() != ""
-            } else if(mode === 'is-email') {
-                const condition = ["@", ".com"];
-                const res = condition.map(charSet => {
-                    return RegExp(`${charSet}`, "").exec(value) != null;
-                });
-                return res.join("/") == "true/true";
             }
         },
         covertToPaneView(n){

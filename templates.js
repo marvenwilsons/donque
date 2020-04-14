@@ -1,17 +1,5 @@
-
-const randId = (len) => (length => {
-    var result = "";
-    var characters =
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    var charactersLength = characters.length;
-    for (var i = 0; i < length; i++) {
-      result += characters.charAt(
-        Math.floor(Math.random() * charactersLength)
-      );
-    }
-    return result;
-  })(len)
-
+const moment = require('moment')
+const utils = require('./utils')
 
 export default {
     TaskItem(taskName,taskParam) {
@@ -42,9 +30,9 @@ export default {
         alert(msg)
         location.reload()
     },
-    Page({pageName,createdOn,admin_id,lastModified,pageContent,version_id,isUndermaintenance}) {
+    Page({pageName,admin_id,lastModified,pageContent,version_id,isUndermaintenance}) {
         this.pageName = pageName
-        this.createdOn = createdOn
+        this.createdOn = moment().format("MMM Do YY")
         this.createdBy = admin_id
         this.lastModified = lastModified
         this.pageContent = pageContent
@@ -53,9 +41,9 @@ export default {
     },
     PageVersion({versionName}){
         this.versionName = versionName
-        this.version_id = randId(8)
+        this.version_id = utils.randId(8)
     },
-    PageElement({tag,name,role,inlineStyle,innerText,classList,els,path,addedOn,addedBy,lastModified, collection,globalAttr,nativeAttr}) {
+    PageElement({tag,name,role,inlineStyle,innerText,classList,els,path,addedBy,lastModified, collection,globalAttr,nativeAttr}) {
         this.tag = tag
         this.name = name
         this.role = role
@@ -64,13 +52,13 @@ export default {
         this.classList = classList
         this.els = els ? els : []
         this.path = path
-        this.addedOn = addedOn
+        this.addedOn = moment().format("MMM Do YY")
         this.addedBy = addedBy
         this.lastModified = lastModified
         this.collection = collection
         this.globalAttr = globalAttr
         this.nativeAttr = nativeAttr
-        this.elementId = randId(10)
+        this.elementId = utils.randId(10)
     },
     AdminRule({ruleTitle,ruleResources,ruleId}){
         this.ruleTitle = ruleTitle
