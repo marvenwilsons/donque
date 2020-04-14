@@ -23,6 +23,7 @@
                     style="color:var(--deftheme-blue-text);" 
                     class="pad025"
                     >
+                    <span >&#9702;</span>
                     {{item}}
                 </div>
             </div>
@@ -41,12 +42,24 @@ export default {
     },
     methods: {        
         sideBarItemClick(selectedMenu) {
-            this.runCompiledTask([
-                new Templates.TaskItem('insertCompiledTask', {
-                    payload: { selectedMenu },
-                    compiledTask: this.getCompiledTask('syspane.switch-menu')
-                })
-            ])
+            if(selectedMenu === 'Dashboard') {
+                this.runCompiledTask([
+                    new Templates.TaskItem('insertCompiledTask', {
+                        payload: { 
+                            selectedMenu,
+                            paneWidth: '100%' 
+                        },
+                        compiledTask: this.getCompiledTask('syspane.switch-menu')
+                    })
+                ])
+            } else {
+                this.runCompiledTask([
+                    new Templates.TaskItem('insertCompiledTask', {
+                        payload: { selectedMenu },
+                        compiledTask: this.getCompiledTask('syspane.switch-menu')
+                    })
+                ])
+            }            
         }
     },
     mounted() {

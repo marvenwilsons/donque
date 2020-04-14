@@ -34,7 +34,9 @@
                     </v-flex>
                 </main>
             </v-flex>
-            {{myData.paneView}}
+            <v-flex>
+                <div :is="myData.paneView" ></div>
+            </v-flex>
         </v-flex>
     </v-flex>
 </template>

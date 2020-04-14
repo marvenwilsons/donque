@@ -26,7 +26,12 @@ export default {
                             resolve(new Templates.TaskItem('insertCompiledTask',{
                                 compiledTask: [
                                     new Templates.TaskItem('sidebar.switch-menu', {currentActiveMenu, selectedMenu}),
-                                    new Templates.TaskItem('syspane.add',{payload: {paneView: selectedMenu}}),
+                                    new Templates.TaskItem('syspane.add',{
+                                        payload: {
+                                            paneView: selectedMenu,
+                                            ...payload
+                                        }
+                                    }),
                                     new Templates.TaskItem('syspane.update-data', {paneIndex: 0, paneData: payload}),
                                     new Templates.TaskItem('sysmodal.close-modal', {}),
                                     new Templates.TaskItem('done',{})
@@ -34,7 +39,7 @@ export default {
                             }))
                         })
                     }
-                })
+                }) 
             ]
         } else {
             return [

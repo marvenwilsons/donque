@@ -14,9 +14,10 @@
         <v-flex class="flex absolute fullheight-percent pad025 " >
             <pane 
                 :style="{minWidth: pane.paneWidth, background:'white',borderRadius:'4px', overflow: 'hidden'}" 
-                v-for="pane in $store.state.pane"
+                v-for="(pane,index) in $store.state.pane"
                 class="paneShadow marginleft050 marginbottom050 margintop050" 
                 :myData="pane"
+                :paneIndex="index"
                 :key="pane.paneName" >
             </pane>
         </v-flex>
