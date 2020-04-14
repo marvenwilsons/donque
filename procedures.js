@@ -222,7 +222,7 @@ export default function (app,method) {
         })
         setTimeout(() => {
             app.answerPending('--void--')
-        }, 100);
+        }, 50);
     }
     // sidebar
     i['private.sidebar.switch-menu'] = function ({selectedMenu}) {
@@ -270,13 +270,21 @@ export default function (app,method) {
         app.answerPending('--done--')
     }
     i['private.syspane.get-pane-data'] = function ({paneIndex, payload}) {
-        setTimeout(() => {
+        if(app.$store.state.app['app-admin-resources']){
             app.answerPending({
                 statusCode: 200,
                 status: true,
                 payload: 'test payload'
             })
-        }, 500);
+        } else {
+            setTimeout(() => {
+                app.answerPending({
+                    statusCode: 200,
+                    status: true,
+                    payload: 'test payload'
+                })
+            }, 500);
+        }
     }
 
 

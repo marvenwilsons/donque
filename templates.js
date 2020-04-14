@@ -26,5 +26,24 @@ export default {
     DonqueDevError(msg) {
         alert(msg)
         location.reload()
+    },
+    Page() {
+        
+    },
+    TimeStamp({createdBy,createdOn}) {
+        this.createdBy = createdBy
+        this.createdOn = createdOn
+    },
+    AdminRule({ruleTitle,ruleResources}){
+        this.ruleTitle = ruleTitle
+        this.ruleResources = ruleResources
+    },
+    AdminUser({username,password,ruleTitle}) {
+        this.username = username
+        this.password = password
+        this.ruleTitle = ruleTitle
+    },
+    AdminResource() {
+
     }
 }

@@ -2,7 +2,7 @@ export const state = () => ({
     /** App Admin State */
         'app-admin-name': null,
         'app-name': null,
-        'app-admin-resources': null,
+        'app-admin-resources': {},
         'app-current-view': null,
         'app-current-resource': null,
     /** ----- */
@@ -18,6 +18,7 @@ export const state = () => ({
         'active-sidebar-item': null,
         'defualt-active': 'Dashboard',
     /** ----- */
+
     systemRoutes: [
         '/dqlogin',
         '/dqadmin',
