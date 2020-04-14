@@ -186,8 +186,19 @@ export default {
                 })
             }
         },
-        closePane() {
-            console.log('closing pane > ')
+        closePane() {            
+            if(this.$store.state.pane.length == 1){
+                this.runCompiledTask([
+                    new templates.TaskItem('insertCompiledTask', {
+                        payload: { 
+                            selectedMenu: this.$store.state.app['defualt-active']
+                        },
+                        compiledTask: this.getCompiledTask('syspane.switch-menu')
+                    })
+                ])
+            } else {
+                alert('TODO! pane close')
+            }
         }
     }
 }

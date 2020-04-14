@@ -47,7 +47,6 @@ export default {
                     new Templates.TaskItem('insertCompiledTask', {
                         payload: { 
                             selectedMenu,
-                            paneWidth: '100%' 
                         },
                         compiledTask: this.getCompiledTask('syspane.switch-menu')
                     })
@@ -63,7 +62,7 @@ export default {
         }
     },
     mounted() {
-        this.sideBarItemClick('Dashboard')
+        this.sideBarItemClick(this.$store.state.app['defualt-active'])
     }
 }
 </script>

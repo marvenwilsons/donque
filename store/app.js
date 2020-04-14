@@ -16,6 +16,7 @@ export const state = () => ({
             'Marketplace'
         ],
         'active-sidebar-item': null,
+        'defualt-active': 'Dashboard',
     /** ----- */
     systemRoutes: [
         '/dqlogin',
