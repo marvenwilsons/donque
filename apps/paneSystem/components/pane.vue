@@ -7,7 +7,7 @@
                     <div>
                         {{myData.paneName}}
                     </div>
-                    <div>
+                    <div v-if="myData.isClosable" >
                         <span 
                             @click="closePane"
                             class="pointer"

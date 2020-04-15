@@ -23,7 +23,7 @@ export default {
         this.paneSettings({
             paneWidth: '95%',
             paneName: 'Dashboard',
-            isClosable: true
+            isClosable: false
         })
     }
 }
