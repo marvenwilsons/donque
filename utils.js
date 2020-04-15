@@ -4,19 +4,49 @@ utils.validateString = function({mode,value}) {
     if(mode === 'has-special-character') {
         const regex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/gim;
         return regex.exec(value) != null;
+    } else if(mode === 'is-required') {
+        if(value === '' || value === null || value === undefined) {
+            return true
+        } else {
+            const x = value.replace(' ','')
+            if(x === '') {
+                return true
+            } else {
+                return false
+            }
+        }
     } else if(mode === 'has-number') {
         const regex = /[0-9]/gim;
         return regex.exec(value) != null;
     } else if(mode === 'has-whitespace') {
-        return value.indexOf(" ") != -1
-    } else if(mode === 'is-required') {
-        return value.trim() != ""
+        return value ? value.indexOf(" ") != -1 : false
     } else if(mode === 'is-email') {
         const condition = ["@", ".com"];
         const res = condition.map(charSet => {
             return RegExp(`${charSet}`, "").exec(value) != null;
         });
         return res.join("/") == "true/true";
+    }
+}
+
+utils.commonStringValidations = {
+    // string should not have whitspaces
+    // string should not have special characters
+    // string should be defined
+    vs1: function(name,string,minCharLen) {
+        if (utils.validateString({mode:'has-whitespace', value: string}) === true ) {
+            throw `invalid-${name}: ${name} should not have any whitespaces`
+        } else if(utils.validateString({mode:'has-special-character', value: string}) === true ) {
+            throw `invalid-${name}: ${name} should not have special characters`
+        } else if(utils.validateString({mode:'is-required', value: string}) === true) {
+            throw `invalid-${name}: ${name} cannot be left undefined, ${name} is required`
+        } else if(minCharLen) {
+            if(string.length < minCharLen) {
+                throw `invalid-${name}: ${name} should at least have a minimum of ${minCharLen} characters`
+            }
+        } else {
+            return string
+        }
     }
 }
 
@@ -45,8 +75,7 @@ utils.copy = function (o) {
 }
 
 utils.randId = function(length) {
-    return (length => {
-        var result = "";
+    var result = "";
         var characters =
           "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         var charactersLength = characters.length;
@@ -55,8 +84,7 @@ utils.randId = function(length) {
             Math.floor(Math.random() * charactersLength)
           );
         }
-        return result;
-      })(length)
+    return result;
 }
 
 export default utils
