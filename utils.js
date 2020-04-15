@@ -33,20 +33,32 @@ utils.commonStringValidations = {
     // string should not have whitspaces
     // string should not have special characters
     // string should be defined
-    vs1: function(name,string,minCharLen) {
-        if (utils.validateString({mode:'has-whitespace', value: string}) === true ) {
+    vs1: function(name,string,minCharLen,allowNumbers) {
+        if(allowNumbers === false) {
+            if(utils.validateString({mode:'has-number', value: string}) === true) {
+                throw `invalid-${name}: ${name} should not have numbers`
+            }
+        } 
+        
+        if(utils.validateString({mode:'has-whitespace', value: string}) === true ) {
             throw `invalid-${name}: ${name} should not have any whitespaces`
-        } else if(utils.validateString({mode:'has-special-character', value: string}) === true ) {
+        } 
+        
+        if(utils.validateString({mode:'has-special-character', value: string}) === true ) {
             throw `invalid-${name}: ${name} should not have special characters`
-        } else if(utils.validateString({mode:'is-required', value: string}) === true) {
+        } 
+        
+        if(utils.validateString({mode:'is-required', value: string}) === true) {
             throw `invalid-${name}: ${name} cannot be left undefined, ${name} is required`
-        } else if(minCharLen) {
+        } 
+        
+        if(minCharLen) {
             if(string.length < minCharLen) {
                 throw `invalid-${name}: ${name} should at least have a minimum of ${minCharLen} characters`
             }
-        } else {
-            return string
-        }
+        } 
+
+        return string
     }
 }
 
