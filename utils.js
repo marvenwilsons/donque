@@ -2,7 +2,6 @@ const utils = {}
 
 utils.validateString = function({mode,value}) {
     if(mode === 'has-special-character') {
-        console.log('special-character')
         const regex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/gim;
         return regex.exec(value) != null;
     } else if(mode === 'has-number') {
