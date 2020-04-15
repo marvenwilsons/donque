@@ -22,6 +22,9 @@ export default {
         this.mode = '--pending--'
         this.m = m
     },
+    ServerResponse({statusCode,payload,key}) {
+
+    },
     NormalQueueItem({fn,param}) {
         this.fn = fn
         this.param = param

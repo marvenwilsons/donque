@@ -19,7 +19,8 @@
     "gsap": "^2.0.2",
     "jsonwebtoken": "^8.4.0",
     "moment": "^2.23.0",
-    "nuxt": "^2.0.0"
+    "nuxt": "^2.0.0",
+    "pg": "^8.0.2"
   },
   "devDependencies": {
     "@nuxtjs/vuetify": "^1.0.0",
