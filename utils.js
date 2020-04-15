@@ -99,4 +99,21 @@ utils.randId = function(length) {
     return result;
 }
 
+const crypto = require('crypto')
+utils.encrypt = (ValueToHash,Salt) => {
+    let cipher = crypto.createCipher('aes-128-cbc',`${ValueToHash,Salt}`)
+    let encrypted = cipher.update(ValueToHash,'utf8','hex')
+    encrypted += cipher.final('hex')
+    return encrypted
+}
+
+utils.decrypt = (ValueToReHash,Salt) => {
+    const encrypted = e.encrypt(ValueToReHash,Salt)
+
+    let decipher = crypto.createDecipher('aes-128-cbc', `${ValueToReHash, Salt}`)
+    let decrypted = decipher.update(encrypted,'hex','utf8')
+    decrypted += decipher.final('utf-8')
+    return decrypted 
+}
+
 export default utils
