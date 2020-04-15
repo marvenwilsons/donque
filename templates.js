@@ -1,5 +1,5 @@
 const moment = require('moment')
-const utils = require('./utils')
+import utils from './utils'
 
 export default {
     TaskItem(taskName,taskParam) {
@@ -31,7 +31,10 @@ export default {
         location.reload()
     },
     Page({pageName,admin_id,lastModified,pageContent,version_id,isUndermaintenance}) {
-        this.pageName = pageName
+        this.pageName = ((pageName) => {
+            // validations here
+            pageName
+        })(pageName)
         this.createdOn = moment().format("MMM Do YY")
         this.createdBy = admin_id
         this.lastModified = lastModified
@@ -65,15 +68,27 @@ export default {
         this.ruleResources = ruleResources
         this.ruleId = ruleId
     },
-    AdminUser({username,password,firstName,lastName,age,gender,ruleTitle_id,adminId,token}) {
-        this.username = username
-        this.password = password
-        this.firstName = firstName
-        this.lastName = lastName
-        this.gender = gender
-        this.age = age
-        this.token = token
-        this.adminId = adminId
+    AdminUser({username,password,firstName,lastName,ruleTitle_id}) {
+        this.username = utils.commonStringValidations.vs1('username',username, 8, true)
+        this.firstName = utils.commonStringValidations.vs1('First Name', firstName, 3, false)
+        this.lastName = utils.commonStringValidations.vs1('Last Name', lastName, 2, false)
+        this.password = ((string) => {
+            if (utils.validateString({mode:'has-whitespace', value: string}) === true ) {
+                throw `invalid-passwrod, password should not have whitespace`
+            } 
+            
+            if(utils.validateString({mode:'is-required',value: string}) === true) {
+                throw `invalid-passwrod, password cannot be left undefined, password is required`
+            } 
+            
+            if(password.length < 8) {
+                throw `invalid-password: password should at least have a minimum of 8 characters`
+            } 
+
+            return string
+        })(password)
+        this.token = null
+        this.adminId = null
         this.ruleTitle_id = ruleTitle_id
     },
 }
