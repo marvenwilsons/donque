@@ -4,7 +4,9 @@ utils.validateString = function({mode,value}) {
     if(mode === 'has-special-character') {
         const regex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/gim;
         return regex.exec(value) != null;
-    } else if(mode === 'is-required') {
+    }
+    
+    if(mode === 'is-required') {
         if(value === '' || value === null || value === undefined) {
             return true
         } else {
@@ -15,12 +17,28 @@ utils.validateString = function({mode,value}) {
                 return false
             }
         }
-    } else if(mode === 'has-number') {
+    }
+    
+    if(mode === 'has-number') {
         const regex = /[0-9]/gim;
         return regex.exec(value) != null;
-    } else if(mode === 'has-whitespace') {
+    }
+    
+    if(mode === 'has-whitespace') {
         return value ? value.indexOf(" ") != -1 : false
-    } else if(mode === 'is-email') {
+    }
+
+    if(mode === 'has-uppercase') {
+        const regex = /.*[A-Z]/g;
+        return regex.exec(value) != null
+    }
+
+    if(mode === 'has-lowercase') {
+        const regex = /.*[a-z]/g;
+        return regex.exec(value) != null
+    }
+    
+    if(mode === 'is-email') {
         const condition = ["@", ".com"];
         const res = condition.map(charSet => {
             return RegExp(`${charSet}`, "").exec(value) != null;
