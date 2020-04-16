@@ -1,5 +1,7 @@
+console.log(__dirname)
+
 const moment = require('moment')
-import utils from './utils'
+const utils = require('../utils')
 
 export default {
     TaskItem(taskName,taskParam) {

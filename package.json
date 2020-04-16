@@ -20,7 +20,8 @@
     "jsonwebtoken": "^8.4.0",
     "moment": "^2.23.0",
     "nuxt": "^2.0.0",
-    "pg": "^8.0.2"
+    "pg": "^8.0.2",
+    "require-from-string": "^2.0.2"
   },
   "devDependencies": {
     "@nuxtjs/vuetify": "^1.0.0",
