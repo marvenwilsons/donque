@@ -1,15 +1,13 @@
-const requireFromString = require('require-from-string')
-const fs = require('fs')
-const utils = fs.readFileSync('../utils.js','utf8')
+const Templates = require('./templates')
 
-const convertToNodeModuleString = (jsString) => {
-  return nodeModuleString = jsString.replace('export default', 'module.exports =')
+try {
+    const AdminUser = Templates.AdminUser({
+        username: 'marven2'
+    })
+}catch(err) {
+console.log(err)
+
 }
-
-const template = convertToNodeModuleString(fs.readFileSync('../templates.js','utf8'))
-
-console.log(template)
-
 
 
 
