@@ -75,5 +75,9 @@ module.exports = {
     */
     extend (config, ctx) {
     }
-  }
+  },
+  serverMiddleware: [
+    bodyParser.json(),
+    '~/server/app.js',
+  ]
 }
