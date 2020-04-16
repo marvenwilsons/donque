@@ -1,28 +1,18 @@
-const express = require('express')
-const router = express.Router()
+const requireFromString = require('require-from-string')
+const fs = require('fs')
+const utils = fs.readFileSync('../utils.js','utf8')
 
-const { Pool, Client } = require('pg')
-// pools will use environment variables
-// for connection information
-const pool = new Pool()
-
-
-const x = async () => {
-    pool.query('SELECT NOW()', (err, res) => {
-        console.log(err, res)
-        pool.end()
-      })
-      // you can also use async/await
-    //   const res = await pool.query('SELECT NOW()')
-    //   await pool.end()
-    //   // clients will also use environment variables
-    //   // for connection information
-    //   const client = new Client()
-    //   await client.connect()
-    //   const res = await client.query('SELECT NOW()')
-    //   await client.end()
+const convertToNodeModuleString = (jsString) => {
+  return nodeModuleString = jsString.replace('export default', 'module.exports =')
 }
-x()
+
+const template = convertToNodeModuleString(fs.readFileSync('../templates.js','utf8'))
+
+console.log(template)
+
+
+
+
 // module.exports = {
 //     path: '/dqapp',
 //     handler: router
