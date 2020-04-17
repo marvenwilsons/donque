@@ -1,17 +1,29 @@
-const Templates = require('./templates')
+const templates = require('./templates')
+const {Client} = require('pg') 
+const pg = require('pg')
+const express = require('express')
+const {router} = express()
 
-try {
-    const AdminUser = Templates.AdminUser({
-        username: 'marven2'
-    })
-}catch(err) {
-console.log(err)
+// create a postgresql client
+// const client = new Client({
+//     user: 'marvenwilsons',
+//     password: 'sakura900',
+//     host: 'Servers',
+//     database: 'socratica'
+// })
 
+
+// client
+// .connect()
+// .then(res => {
+//     console.log('connected successfully')
+// })
+// .catch(err => {
+//     console.log('connection error: \n',err)
+// })
+
+
+module.exports = {
+    path: '/dqapp',
+    handler: router
 }
-
-
-
-// module.exports = {
-//     path: '/dqapp',
-//     handler: router
-// }

@@ -25,6 +25,26 @@ export default {
             paneName: 'Dashboard',
             isClosable: false
         })
+
+
+        // const service  = function() {}
+
+        // new service ({
+        //     name: 'pages',
+        //     dataSet: [], // array of objects
+        //     views: [
+        //         {
+        //             dataType: Object,
+        //             ObjectKeys: ['pageName','pageContent'],
+        //             component: 'objectify' // name of vue component
+        //         }, 
+        //         {
+        //             dataType: Array,
+        //             ObjectKeys: null, // assumes array
+        //             component: 'listify'
+        //         }
+        //     ]
+        // })
     }
 }
 </script>

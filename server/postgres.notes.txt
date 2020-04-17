@@ -1,0 +1,36 @@
+## postgres server
+    # run postgresql server in background
+    $ sudo service postgresql start
+
+    # stop postgresql server
+    $ sudo service postgresql stop
+
+## Logging in to psql as a root or super user & starting server
+    > link: https://stackoverflow.com/questions/11919391/postgresql-error-fatal-role-username-does-not-exist/18708583#18708583
+    # connect to defualt postgres database width defualt login info (ubuntu)
+    $ sudo -u postgres -i
+
+## some psql command
+    $ psql --h : retunrs host name
+    $ psql --p : returns port name
+    > link: https://blog.logrocket.com/setting-up-a-restful-api-with-node-js-and-postgresql-d96d6fc892d8/
+
+## Select a database
+    > command anatomy: psql database_name
+    $ psql postgres
+    > postgres=#
+    > The prompt ends with a # to denote that we’re logged in as the superuser, or root.
+
+## Database commands
+    # get connection info
+    $ \conninfo
+
+    # disconnect or exit from database
+    $ \q
+    # this commnad will exit you from the database command line
+    # and you will be returned back to psql command line
+    > link: https://blog.logrocket.com/setting-up-a-restful-api-with-node-js-and-postgresql-d96d6fc892d8/
+    
+## Users
+    # Create a user ROLE
+    $ CREATE ROLE me WITH LOGIN PASSWORD 'password'
