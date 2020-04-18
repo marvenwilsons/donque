@@ -33,12 +33,45 @@ export default {
         alert(msg)
         location.reload()
     },
-    Service({name,data,views}) {
-        this.name = name
-        this.data = data
-        this.views = (({objectKeys = Array,component = Object}) => {
-            /**  */
-        })(views)
+    Service({name,data,fistPaneDefualtView,dataController,views,config, onEmptyData}) {
+        return {
+            // service name
+            name: ((arg) => {
+                if(!arg) throw new Error('service name cannot be undefined')
+                return arg
+            })(name),
+            // service data
+            data: ((arg) =>{
+                if(!arg) throw new Error('service data cannot be undefined')
+                if(!Array.isArray(arg)) throw new Error(`service data should be an array, instead got a ${typeof arg}: ${arg}`)
+                return arg
+            })(data),
+            // fistPaneDefualtView
+            fistPaneDefualtView: ((arg) => {
+                if(!arg) throw new Error('fistPaneDefualtView cannot be undefined')
+                return arg
+            })(fistPaneDefualtView),
+            // dataController
+            dataController: ((arg) => {
+                return arg
+            })(dataController),
+            // views
+            views: ((arg) => {
+                return arg
+            })(views),
+            config: ((arg) => {
+                return {
+                    dataSchema: ((ds) => {
+                        // if ds it cannot be an empty object
+                        return ds ? ds : null
+                    })(arg.dataSchema)
+                }
+            })(config),
+            onEmptyData
+        }
+        // this.views = (({objectKeys = Array,component = Object}) => {
+        //     /**  */
+        // })(views)
     },
     Page({pageName,admin_id,lastModified,pageContent,version_id,isUndermaintenance}) {
         this.pageName = ((pageName) => {
