@@ -2,7 +2,7 @@ const templates = require('./templates')
 const {Client} = require('pg') 
 const pg = require('pg')
 const express = require('express')
-const {router} = express()
+const router = express.Router()
 
 // create a postgresql client
 // const client = new Client({

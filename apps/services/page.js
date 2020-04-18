@@ -1,0 +1,35 @@
+import Templates from '@/templates'
+
+export default new Templates.Service({
+    name: 'Pages',
+    data: [{},{},{}], // from server, represents individual pages
+    fistPaneDefualtView: '', // vue component
+    dataController: {
+        name: 'view page',
+        handler: function() {
+            // execute compiled task or task here
+        },
+        name: 'delete page',
+        handler: function() {
+            // execute compiled task or task here
+        }
+    },
+    views: [
+        {
+            // if an object has this set of keys then find the component and
+            // push a new pane, assign pass the object as a prop to the component
+            objectKeys: ['pageName','pageOwner','pageContent'],
+            component: '', // vue component
+            onLoad(data) {
+                
+            }
+        }
+    ],
+    config: {
+        dataSchema: {}, // define the exact sturcture of data property
+        executeFrom: '' //server or front end
+    },
+    onEmptyData() {
+        
+    }
+})

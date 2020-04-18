@@ -129,6 +129,9 @@ export default function (app,method) {
     i['private.syscall.delete'] = function() {
 
     }
+    i['private.insert-service'] = function (service) {
+
+    }
     // modal
     i['private.sysmodal.spawn'] = function ({modalType, modalPayload}) {
         if(app.$store.state.queue.length == 0) {

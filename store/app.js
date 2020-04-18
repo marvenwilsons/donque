@@ -18,6 +18,7 @@ export const state = () => ({
         'active-sidebar-item': null,
         'defualt-active': 'Dashboard',
     /** ----- */
+        'app-services': [],
 
     systemRoutes: [
         '/dqlogin',
@@ -30,4 +31,7 @@ export const mutations = {
     stateController(state,payload) {
         state[payload.key] = payload.value
     },
+    addAppService(state,payload) {
+        state['app-services'].push(payload)
+    }
 }

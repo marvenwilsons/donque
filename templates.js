@@ -33,6 +33,13 @@ export default {
         alert(msg)
         location.reload()
     },
+    Service({name,data,views}) {
+        this.name = name
+        this.data = data
+        this.views = (({objectKeys = Array,component = Object}) => {
+            /**  */
+        })(views)
+    },
     Page({pageName,admin_id,lastModified,pageContent,version_id,isUndermaintenance}) {
         this.pageName = ((pageName) => {
             // validations here
