@@ -148,7 +148,7 @@ export const actions = {
         } else if(urlPath === '/dqadmin') {
             // user wants to manage admin methods
             // require to submit username, and API key
-            console.log('getting services')
+            this.$axios.get('services/marvenwilsons/liadLIHFOIWh234')
         }
         
     }

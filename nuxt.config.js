@@ -80,5 +80,6 @@ module.exports = {
   serverMiddleware: [
     bodyParser.json(),
     '~/server/app.js',
+    '~/server/services.route.js',
   ]
 }

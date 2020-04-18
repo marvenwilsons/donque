@@ -22,6 +22,7 @@ const router = express.Router()
 //     console.log('connection error: \n',err)
 // })
 
+// get services
 
 module.exports = {
     path: '/dqapp',
