@@ -7,16 +7,9 @@ export const state = () => ({
         'app-current-resource': null,
     /** ----- */
     /** App Side bar state */
-        'app-admin-sidebar-items': [
-            'Dashboard',
-            'Pages',
-            'Collections',
-            'Files',
-            'Office',
-            'Marketplace'
-        ],
+        'app-admin-sidebar-items': [],
         'active-sidebar-item': null,
-        'defualt-active': 'Dashboard',
+        'defualt-active': '',
     /** ----- */
         'app-services': [],
 

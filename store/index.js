@@ -147,7 +147,8 @@ export const actions = {
             // submit username and password get api key for session
         } else if(urlPath === '/dqadmin') {
             // user wants to manage admin methods
-            // submit username, and API key
+            // require to submit username, and API key
+            console.log('getting services')
         }
         
     }
