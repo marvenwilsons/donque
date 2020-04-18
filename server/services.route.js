@@ -1,17 +1,17 @@
 const express = require('express')
 const router = express.Router()
 
-router.use((req,res,next) => {
-    console.log('serives middleware')
-    // console.log(req.url.split())
-    next()
-})
-
-router.get('username/api', (req,res) => {
+router.get(':cred', (req,res) => {
     console.log('service route')
+
+    console.log('serives middleware')
+    const u = req.url.split('/')
+    u.shift()
+    console.log(u)
+    res.status(200).json("OK!")
 })
 
 module.exports = {
-    path: '/services',
+    path: '/$dqappservices',
     handler: router
 }
