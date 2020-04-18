@@ -5,8 +5,11 @@ const rootDirForServices = path.join(__dirname,'../apps/services')
 const getServices = fs.readdirSync(rootDirForServices)
 
 try {
-    const services = getServices.map(serviceFile =>  require(`${rootDirForServices}/${serviceFile}`))
-    module.exports = services
+    module.exports = (userServices) => {
+        let fns = []
+        userServices.map(s => fns.push(require(`${rootDirForServices}/${s}`)))
+        return fns
+    }
 } catch(err) {
-    console.log('ERROR', err.message)
+    console.log('error in serivce.js', err.message)
 }

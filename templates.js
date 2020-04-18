@@ -108,7 +108,7 @@ export default {
     },
     AdminRule({ruleTitle,ruleResources,ruleId}){
         this.ruleTitle = ruleTitle
-        this.ruleResources = ruleResources
+        this.ruleResources = ruleResources // array of services
         this.ruleId = ruleId
     },
     AdminUser({username,password,firstName,lastName,ruleTitle_id}) {

@@ -146,12 +146,15 @@ export const actions = {
             // user wants to login
             // submit username and password get api key for session
         } else if(urlPath === '/dqadmin') {
-            // user wants to manage admin methods
-            // require to submit username, and API key
+            // get services
             this.$axios
-            .get('$dqappservices/marvenwilsons/liadLIHFOIWh234')
-            .then(res => {
-                console.log('response',res)
+            .get('/$dqappservices/service', {
+                params: {
+                    username: 'marvenwilsons', // get from localstorage
+                    apikey: 'test' // get from localstorage
+                  }
+            }).then(({data}) => {
+                console.log('res',data)
             })
         }
         
