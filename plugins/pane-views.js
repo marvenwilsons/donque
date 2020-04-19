@@ -7,9 +7,12 @@ import Files from '@/apps/Files/index.vue'
 import Office from '@/apps/Office/index.vue'
 import Marketplace from '@/apps/Marketplace/index.vue'
 
+import listify from '@/apps/util-views/components/listify/sample.vue'
+
 Vue.component("Dashboard", Dashboard);
 Vue.component("Pages", Pages);
 Vue.component("Collections", Collections)
 Vue.component("Files", Files)
 Vue.component("Office", Office)
 Vue.component("Marketplace", Marketplace)
+Vue.component("listify", listify)

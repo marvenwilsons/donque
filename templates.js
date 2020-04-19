@@ -59,12 +59,15 @@ export default {
             views: ((arg) => {
                 return arg
             })(views),
-            config: ((arg) => {
+            config: (({dataSchema,paneName,paneWidth,isClosable}) => {
                 return {
                     dataSchema: ((ds) => {
                         // if ds it cannot be an empty object
                         return ds ? ds : null
-                    })(arg.dataSchema)
+                    })(dataSchema),
+                    paneName,
+                    paneWidth,
+                    isClosable
                 }
             })(config),
             onEmptyData

@@ -28,8 +28,11 @@ module.exports = Templates.Service({
     ],
     config: {
         dataSchema: {}, // define the exact sturcture of data property
+        paneName: 'Pages pane!!',
+        paneWidth: '500px',
+        isClosable: true
     },
     onEmptyData() {
-
+        console.log('test')
     }
 })

@@ -244,12 +244,21 @@ export default function (app,method) {
     }
     // pane system
     i['private.syspane.add'] = function ({paneIndex, payload}) {
-        app.$store.commit('paneAdd', {
-            paneIndex: paneIndex,
-            payload: {
-                paneView: payload.paneView
-            }
-        })
+        payload.onEmptyData()
+        if(app.$store.state.pane.length == 0) {
+            app.$store.commit('paneAdd', {
+                paneIndex: paneIndex,
+                payload: {
+                    paneView: payload.fistPaneDefualtView,
+                    paneName: payload.config.paneName,
+                    paneWidth: payload.config.paneWidth,
+                    isClosable: payload.config.isClosable,
+                }
+            })
+        } else {
+            console.log('> CODE IT!')
+        }
+        
         app.answerPending()
     }
     i['private.syspane.delete'] = function ({paneIndexOrigin}) {
@@ -274,10 +283,20 @@ export default function (app,method) {
     }
     i['private.syspane.get-pane-data'] = function ({paneIndex, payload}) {
         if(app.$store.state.app['app-admin-resources']){
-            app.answerPending({
-                statusCode: 200,
-                status: true,
-                payload: 'test payload'
+            // console.log('> getting pane data', payload.section)
+            app.$store.state.app['app-services'].map(serviceItem => {
+                if(serviceItem.name === payload.section) {
+                    if(serviceItem.data.length != 0) {
+                        app.answerPending({
+                            statusCode: 200,
+                            status: true,
+                            payload: serviceItem
+                        })
+                    } else {
+                        // get data 
+                        console.log('> get data from database')
+                    }
+                }
             })
         } else {
             setTimeout(() => {

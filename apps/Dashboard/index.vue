@@ -1,6 +1,7 @@
 <template>
     <v-flex>
         this is dashboard
+        {{$store.state.app['app-admin-sidebar-items']}}
     </v-flex>
 </template>
 
@@ -20,6 +21,7 @@ export default {
 
     }),
     mounted() {
+        console.log(this.$store.state.app['app-admin-sidebar-items'])
         this.paneSettings({
             paneWidth: '95%',
             paneName: 'Dashboard',

@@ -26,5 +26,8 @@ export const mutations = {
     },
     addAppService(state,payload) {
         state['app-services'].push(payload)
+    },
+    addMenu(state,payload) {
+        state['app-admin-sidebar-items'].push(payload)
     }
 }

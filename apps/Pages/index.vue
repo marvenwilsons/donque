@@ -1,6 +1,8 @@
 <template>
     <v-flex>
-        this is pages
+        <pre>
+            {{myData}}
+        </pre>
     </v-flex>
 </template>
 
@@ -9,10 +11,7 @@ import h from '@/helper'
 import Templates from '@/templates'
 export default {
     mixins: [h],
-    props: {
-        myData: Object,
-        paneIndex: Number
-    },
+    props: ['myData','paneIndex'],
     created() {
         this.h = this
     },

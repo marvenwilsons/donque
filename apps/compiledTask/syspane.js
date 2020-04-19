@@ -32,7 +32,7 @@ export default {
                                             ...payload
                                         }
                                     }),
-                                    new Templates.TaskItem('syspane.update-data', {paneIndex: 0, paneData: payload}),
+                                    new Templates.TaskItem('syspane.update-data', {paneIndex: 0, paneData: payload.data}),
                                     new Templates.TaskItem('sysmodal.close-modal', {}),
                                     new Templates.TaskItem('done',{})
                                 ]

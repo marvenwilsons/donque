@@ -36,7 +36,7 @@
                 </main>
             </v-flex>
             <v-flex>
-                <div :paneIndex="paneIndex" :is="myData.paneView" ></div>
+                <div :paneIndex="paneIndex" :is="myData.paneView" :myData="myData.data" ></div>
             </v-flex>
         </v-flex>
     </v-flex>
@@ -46,10 +46,7 @@
 import h from '@/helper'
 export default {
     mixins: [h],
-    props: {
-        myData: Object,
-        paneIndex: Number
-    },
+    props: ['myData','paneIndex'],
     created() {
         this.h = this
     },
@@ -58,6 +55,11 @@ export default {
     }),
     methods: {
 
+    },
+    mounted() {
+        console.log('mounted')
+        console.log(this.myData)
+        // console.log(this.myData.paneData)
     }
 }
 </script>

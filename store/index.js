@@ -113,7 +113,7 @@ export const mutations = {
         },
     /** ----- */
     /** PANE MUTATIONS */
-        paneAdd(state,{paneIndex, payload: {paneName = 'untitled pane',paneView = 'loading',paneData = {},paneWidth = '700px', modalBody = null, modalHeader = null}}) {
+        paneAdd(state,{paneIndex, payload: {paneName = 'untitled pane',paneView = 'loading',paneData = {},paneWidth = '700px', modalBody = null, modalHeader = null, isClosable = true}}) {
             state.pane.push({
                 paneName,
                 paneIndex,
@@ -121,7 +121,8 @@ export const mutations = {
                 paneData,
                 paneWidth,
                 modalBody,
-                modalHeader
+                modalHeader,
+                isClosable
             })
         },
         paneDelete(state,{paneIndexOrigin}) {
@@ -137,25 +138,41 @@ export const mutations = {
 }
 
 export const actions = {
-    nuxtServerInit (store,context) { 
+    async nuxtServerInit ({commit,state},context) { 
         // console.log('> NuxtServerInit')
         const urlPath = context.route.path
-        if(!store.state.app.systemRoutes.includes(urlPath) ) {
+        if(!state.app.systemRoutes.includes(urlPath) ) {
             // user choose public route
         } else if(urlPath === '/dqlogin') {
             // user wants to login
             // submit username and password get api key for session
         } else if(urlPath === '/dqadmin') {
             // get services
-            this.$axios
+            const service = await this.$axios
             .get('/$dqappservices/service', {
                 params: {
                     username: 'marvenwilsons', // get from localstorage
                     apikey: 'test' // get from localstorage
                   }
             }).then(({data}) => {
-                console.log('res',data)
+                return data
             })
+            // set menu items
+            service.map(items => {
+                commit('app/addMenu', items.name)
+            })
+            // set services to app store state
+            commit('app/stateController', {
+                key: 'app-services',
+                value: service
+            })
+            // assign default active menu
+            if(!state.app['defualt-active']) {
+                commit('app/stateController', {
+                    key: 'defualt-active',
+                    value: state.app['app-admin-sidebar-items'][0]
+                })
+            }
         }
         
     }
