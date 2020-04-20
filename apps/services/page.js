@@ -1,9 +1,10 @@
-const path = require('path')
-const Templates = require(path.join(__dirname,'../../server/templates.js'))
-
-module.exports = Templates.Service({
+module.exports = {
     name: 'Pages',
-    data: [{},{},{}], // from server, represents individual pages
+    data: function(sql,fetch) {
+        // perform an sql queriy here or a fetch
+        // should return an array of objects select * from staff
+        return [{},{},{}]
+    }, 
     fistPaneDefualtView: 'listify', // vue component
     dataController: {
         name: 'view page',
@@ -35,4 +36,4 @@ module.exports = Templates.Service({
     onEmptyData() {
         console.log('test')
     }
-})
+}

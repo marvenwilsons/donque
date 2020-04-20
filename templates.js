@@ -43,7 +43,7 @@ export default {
             // service data
             data: ((arg) =>{
                 if(!arg) throw new Error('service data cannot be undefined')
-                if(!Array.isArray(arg)) throw new Error(`service data should be an array, instead got a ${typeof arg}: ${arg}`)
+                // if(!Array.isArray(arg)) throw new Error(`service data should be an array, instead got a ${typeof arg}: ${arg}`)
                 return arg
             })(data),
             // fistPaneDefualtView
@@ -70,7 +70,9 @@ export default {
                     isClosable
                 }
             })(config),
-            onEmptyData
+            onEmptyData:((arg) => {
+                return `${arg}`.toString().replace('onEmptyData()','')
+            })(onEmptyData)
         }
         // this.views = (({objectKeys = Array,component = Object}) => {
         //     /**  */

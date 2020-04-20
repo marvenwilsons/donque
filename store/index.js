@@ -154,25 +154,34 @@ export const actions = {
                     username: 'marvenwilsons', // get from localstorage
                     apikey: 'test' // get from localstorage
                   }
-            }).then(({data}) => {
+            })
+            .then(({data}) => {
                 return data
+            }).catch(err => {
+                console.log('> err',err.message)
             })
+            // console.log('asdf',service)
+            // const e = eval(service.content)
+            // console.log(service.content)
+            const x = JSON.stringify(service.content)
+            const first = JSON.parse(x)
+            console.log(JSON.parse(JSON.stringify(first)))
             // set menu items
-            service.map(items => {
-                commit('app/addMenu', items.name)
-            })
+            // service.map(items => {
+            //     commit('app/addMenu', items.name)
+            // })
             // set services to app store state
-            commit('app/stateController', {
-                key: 'app-services',
-                value: service
-            })
+            // commit('app/stateController', {
+            //     key: 'app-services',
+            //     value: service
+            // })
             // assign default active menu
-            if(!state.app['defualt-active']) {
-                commit('app/stateController', {
-                    key: 'defualt-active',
-                    value: state.app['app-admin-sidebar-items'][0]
-                })
-            }
+            // if(!state.app['defualt-active']) {
+            //     commit('app/stateController', {
+            //         key: 'defualt-active',
+            //         value: state.app['app-admin-sidebar-items'][0]
+            //     })
+            // }
         }
         
     }

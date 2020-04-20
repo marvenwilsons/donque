@@ -244,7 +244,7 @@ export default function (app,method) {
     }
     // pane system
     i['private.syspane.add'] = function ({paneIndex, payload}) {
-        payload.onEmptyData()
+        // payload.onEmptyData()
         if(app.$store.state.pane.length == 0) {
             app.$store.commit('paneAdd', {
                 paneIndex: paneIndex,
