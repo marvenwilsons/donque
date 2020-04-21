@@ -256,6 +256,7 @@ export default function (app,method) {
                 }
             })
         } else {
+            //TODO: syspane add
             console.log('> CODE IT!')
         }
         
@@ -285,17 +286,13 @@ export default function (app,method) {
         if(app.$store.state.app['app-admin-resources']){
             // console.log('> getting pane data', payload.section)
             app.$store.state.app['app-services'].map(serviceItem => {
+                console.log('serviceItem', serviceItem)
                 if(serviceItem.name === payload.section) {
-                    if(serviceItem.data.length != 0) {
-                        app.answerPending({
-                            statusCode: 200,
-                            status: true,
-                            payload: serviceItem
-                        })
-                    } else {
-                        // get data 
-                        console.log('> get data from database')
-                    }
+                    app.answerPending({
+                        statusCode: 200,
+                        status: true,
+                        payload: serviceItem
+                    })
                 }
             })
         } else {

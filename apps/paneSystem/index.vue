@@ -13,12 +13,12 @@
         <v-flex class="flex absolute fullheight-percent pad025" style="width:100%;" >
             <v-flex v-for="(pane,index) in $store.state.pane" :key="pane.paneName" margin050 :style="{maxWidth: pane.paneWidth}">
                 <pane 
-                    :style="{background:'#e8e8e8',borderRadius:'4px', overflow: 'hidden', maxWidth: pane.paneWidth}" 
-                    
-                    class="paneShadow marginright050" 
-                    :myData="pane"
-                    :paneIndex="index"
-                     >
+                        :style="{background:'#e8e8e8',borderRadius:'4px', overflow: 'hidden', maxWidth: pane.paneWidth}" 
+                        
+                        class="paneShadow marginright050" 
+                        :myData="pane"
+                        :paneIndex="index"
+                    >
                 </pane>
             </v-flex>
         </v-flex>

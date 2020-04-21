@@ -1,4 +1,3 @@
-
 export const state = () => ({
     /** queue */
         queue: [],
@@ -156,32 +155,42 @@ export const actions = {
                   }
             })
             .then(({data}) => {
-                return data
+                return data.response
             }).catch(err => {
                 console.log('> err',err.message)
             })
-            // console.log('asdf',service)
-            // const e = eval(service.content)
-            // console.log(service.content)
-            const x = JSON.stringify(service.content)
-            const first = JSON.parse(x)
-            console.log(JSON.parse(JSON.stringify(first)))
+            
+            const unPackServices = ((s) => {
+                s = s.map(service => JSON.parse(service))
+                /** desrializing */
+                // s.map((service,si) => {
+                //     /** desrializing data controllers */
+                //     service.dataControllers.map((dtc,dtci) => {
+                //         const deserializeHandler = new Function('return ' + dtc.handler)()
+                //         s[si].dataControllers[dtci].handler = deserializeHandler
+                //     })
+                //     /** desrializing data onEmptyData */
+                //     const deserializeOnEmptyData = new Function('return ' + service.onEmptyData)()
+                //     s[si].onEmptyData = deserializeOnEmptyData
+                // })
+                return s
+            })(service)
             // set menu items
-            // service.map(items => {
-            //     commit('app/addMenu', items.name)
-            // })
+            unPackServices.map(items => {
+                commit('app/addMenu', items.name)
+            })
             // set services to app store state
-            // commit('app/stateController', {
-            //     key: 'app-services',
-            //     value: service
-            // })
+            commit('app/stateController', {
+                key: 'app-services',
+                value: unPackServices
+            })
             // assign default active menu
-            // if(!state.app['defualt-active']) {
-            //     commit('app/stateController', {
-            //         key: 'defualt-active',
-            //         value: state.app['app-admin-sidebar-items'][0]
-            //     })
-            // }
+            if(!state.app['defualt-active']) {
+                commit('app/stateController', {
+                    key: 'defualt-active',
+                    value: state.app['app-admin-sidebar-items'][0]
+                })
+            }
         }
         
     }

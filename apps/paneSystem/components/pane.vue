@@ -36,7 +36,7 @@
                 </main>
             </v-flex>
             <v-flex>
-                <div :paneIndex="paneIndex" :is="myData.paneView" :myData="myData.data" ></div>
+                <div :paneIndex="paneIndex" :is="myData.paneView" :myData="myData.paneData.data" ></div>
             </v-flex>
         </v-flex>
     </v-flex>
@@ -59,6 +59,15 @@ export default {
     mounted() {
         console.log('mounted')
         console.log(this.myData)
+        const p = this.myData.paneData
+        if(p.data.length === 0) {
+            const deserializeOnEmptyData = new Function('return ' + p.onEmptyData)()
+            const task = {
+                runCompiledTask : this.runCompiledTask,
+                getCompiledTask : this.getCompiledTask
+            }
+            deserializeOnEmptyData(task,this.paneSettings)
+        }
         // console.log(this.myData.paneData)
     }
 }

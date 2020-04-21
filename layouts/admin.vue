@@ -13,6 +13,8 @@
 <script>
 import globalModal from '@/apps/globalModal/index'
 import appSideBar from '@/apps/appSideBar/index'
+import Templates from '@/templates'
+
 import {mapGetters} from 'vuex'
 export default {
     components: {
@@ -27,6 +29,11 @@ export default {
             key: 'app-current-view',
             value: 'paneSystem'
         })
+        // deserialize a function
+        // x.dataControllers.map(e => {
+        //     const myfn = new Function('return ' + e.handler.toString())()
+        //     console.log(myfn(this))
+        // })
     },
     watch: {
         // init

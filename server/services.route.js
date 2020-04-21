@@ -6,10 +6,17 @@ const systemServices = require('./services')
 
 
 router.get('/service', auth, getList, (req,res) => {
-    console.log('> service route')
     const {services} = res.locals
+    let finalContent = []
+    const serviceContent = systemServices(services)
+    serviceContent.map(({payload,content}) => {
+        const deserializeContent = new Function('return ' + content.toString())()
+       deserializeContent.data = payload
+       finalContent.push(JSON.stringify(deserializeContent))
+    })
+
     if(services) {
-        res.status(200).json(systemServices(services))
+        res.status(200).json({response: finalContent} /** TODO: encrypt finalContent */)
     }
 })
 

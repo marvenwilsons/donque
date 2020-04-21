@@ -1,21 +1,29 @@
-module.exports = {
+const path = require('path')
+const Templates = require(path.join(__dirname,'../../server/templates.js'))
+
+module.exports = Templates.Service({
     name: 'Pages',
-    data: function(sql,fetch) {
+    data: ((arg) => {
         // perform an sql queriy here or a fetch
         // should return an array of objects select * from staff
-        return [{},{},{}]
-    }, 
+        return []
+    }), 
     fistPaneDefualtView: 'listify', // vue component
-    dataController: {
-        name: 'view page',
-        handler: function() {
-            // execute compiled task or task here
+    dataControllers: [
+        {
+            name: 'open page',
+            handler: function(helper) {
+                console.log('hello world')
+                console.log(helper)
+            }
         },
-        name: 'delete page',
-        handler: function() {
-            // execute compiled task or task here
-        }
-    },
+        {
+            name: 'remove page',
+            handler: function(helper) {
+
+            }
+        },
+    ],
     views: [
         {
             // if an object has this set of keys then find the component and
@@ -23,7 +31,7 @@ module.exports = {
             objectKeys: ['pageName','pageOwner','pageContent'],
             component: '', // vue component
             onLoad(data) {
-                
+                // TODO: serialize onLoad
             }
         }
     ],
@@ -33,7 +41,7 @@ module.exports = {
         paneWidth: '500px',
         isClosable: true
     },
-    onEmptyData() {
-        console.log('test')
+    onEmptyData: function(task,paneSettings) {
+        console.log('testing', task)
     }
-}
+})

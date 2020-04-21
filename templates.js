@@ -33,8 +33,8 @@ export default {
         alert(msg)
         location.reload()
     },
-    Service({name,data,fistPaneDefualtView,dataController,views,config, onEmptyData}) {
-        return {
+    Service({name,data,fistPaneDefualtView,dataControllers,views,config, onEmptyData}) {
+        const s = {
             // service name
             name: ((arg) => {
                 if(!arg) throw new Error('service name cannot be undefined')
@@ -52,13 +52,18 @@ export default {
                 return arg
             })(fistPaneDefualtView),
             // dataController
-            dataController: ((arg) => {
+            dataControllers: ((arg) => {
+                arg.map((e,i) => {
+                    arg[i].handler = e.handler.toString()
+                })
                 return arg
-            })(dataController),
+            })(dataControllers),
             // views
             views: ((arg) => {
+                if(!Array.isArray(arg)) throw new Error('views should be an array of objects')
                 return arg
             })(views),
+            // config object
             config: (({dataSchema,paneName,paneWidth,isClosable}) => {
                 return {
                     dataSchema: ((ds) => {
@@ -70,9 +75,15 @@ export default {
                     isClosable
                 }
             })(config),
+            // onEmptyData hook
             onEmptyData:((arg) => {
-                return `${arg}`.toString().replace('onEmptyData()','')
+                return arg.toString()
             })(onEmptyData)
+        }
+
+        return {
+            data: s.data,
+            body: JSON.stringify(s)
         }
         // this.views = (({objectKeys = Array,component = Object}) => {
         //     /**  */
