@@ -159,22 +159,13 @@ export const actions = {
             }).catch(err => {
                 console.log('> err',err.message)
             })
+
             
             const unPackServices = ((s) => {
-                s = s.map(service => JSON.parse(service))
-                /** desrializing */
-                // s.map((service,si) => {
-                //     /** desrializing data controllers */
-                //     service.dataControllers.map((dtc,dtci) => {
-                //         const deserializeHandler = new Function('return ' + dtc.handler)()
-                //         s[si].dataControllers[dtci].handler = deserializeHandler
-                //     })
-                //     /** desrializing data onEmptyData */
-                //     const deserializeOnEmptyData = new Function('return ' + service.onEmptyData)()
-                //     s[si].onEmptyData = deserializeOnEmptyData
-                // })
-                return s
+                return s.map(service => JSON.parse(service))
             })(service)
+
+
             // set menu items
             unPackServices.map(items => {
                 commit('app/addMenu', items.name)

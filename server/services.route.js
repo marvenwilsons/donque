@@ -10,11 +10,11 @@ router.get('/service', auth, getList, (req,res) => {
     let finalContent = []
     const serviceContent = systemServices(services)
     serviceContent.map(({payload,content}) => {
-        const deserializeContent = new Function('return ' + content.toString())()
-       deserializeContent.data = payload
-       finalContent.push(JSON.stringify(deserializeContent))
-    })
+        // const deserializeContent = new Function('return ' + content.toString())()
+       content.data = payload
+       finalContent.push(JSON.stringify(content))
 
+    })
     if(services) {
         res.status(200).json({response: finalContent} /** TODO: encrypt finalContent */)
     }

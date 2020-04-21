@@ -146,6 +146,11 @@ export default {
                 })
             }
         },
+        /**TODO pane modal */
+        paneModal({header,width,body}) {
+            const {isComponent,content} = body
+            /** if isComponent is false it will assume it is string, else name of a vue component */
+        },
         closePane() {            
             if(this.$store.state.pane.length == 1){
                 this.runCompiledTask([

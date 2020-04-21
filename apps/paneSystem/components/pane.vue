@@ -58,17 +58,15 @@ export default {
     },
     mounted() {
         console.log('mounted')
-        console.log(this.myData)
         const p = this.myData.paneData
-        if(p.data.length === 0) {
-            const deserializeOnEmptyData = new Function('return ' + p.onEmptyData)()
-            const task = {
-                runCompiledTask : this.runCompiledTask,
-                getCompiledTask : this.getCompiledTask
-            }
-            deserializeOnEmptyData(task,this.paneSettings)
+        const task = {
+            runCompiledTask : this.runCompiledTask,
+            getCompiledTask : this.getCompiledTask
         }
-        // console.log(this.myData.paneData)
+        const deserializeViews = new Function('return ' + p.views)()
+        const {paneOnLoad,component,componentConfig} = 
+        deserializeViews(p.data,task,this.paneSettings,this.paneModal,null/**TODO: import utils here */)
+        paneOnLoad()
     }
 }
 </script>

@@ -46,22 +46,9 @@ export default {
                 // if(!Array.isArray(arg)) throw new Error(`service data should be an array, instead got a ${typeof arg}: ${arg}`)
                 return arg
             })(data),
-            // fistPaneDefualtView
-            fistPaneDefualtView: ((arg) => {
-                if(!arg) throw new Error('fistPaneDefualtView cannot be undefined')
-                return arg
-            })(fistPaneDefualtView),
-            // dataController
-            dataControllers: ((arg) => {
-                arg.map((e,i) => {
-                    arg[i].handler = e.handler.toString()
-                })
-                return arg
-            })(dataControllers),
             // views
             views: ((arg) => {
-                if(!Array.isArray(arg)) throw new Error('views should be an array of objects')
-                return arg
+                return arg.toString()
             })(views),
             // config object
             config: (({dataSchema,paneName,paneWidth,isClosable}) => {
@@ -74,16 +61,12 @@ export default {
                     paneWidth,
                     isClosable
                 }
-            })(config),
-            // onEmptyData hook
-            onEmptyData:((arg) => {
-                return arg.toString()
-            })(onEmptyData)
+            })(config)
         }
 
         return {
             data: s.data,
-            body: JSON.stringify(s)
+            body: s
         }
         // this.views = (({objectKeys = Array,component = Object}) => {
         //     /**  */
