@@ -36,7 +36,7 @@
                 </main>
             </v-flex>
             <v-flex>
-                <div :paneIndex="paneIndex" :is="myData.paneView" :myData="myData.paneData.data" ></div>
+                <div v-if="componentConfig" :myConfig="componentConfig" :paneIndex="paneIndex" :is="myData.paneView" :myData="myData.paneData.data" ></div>
             </v-flex>
         </v-flex>
     </v-flex>
@@ -51,13 +51,12 @@ export default {
         this.h = this
     },
     data: () => ({
-
+        componentConfig: null
     }),
     methods: {
 
     },
     mounted() {
-        console.log('mounted')
         const p = this.myData.paneData
         const task = {
             runCompiledTask : this.runCompiledTask,
@@ -67,6 +66,12 @@ export default {
         const {paneOnLoad,component,componentConfig} = 
         deserializeViews(p.data,task,this.paneSettings,this.paneModal,null/**TODO: import utils here */)
         paneOnLoad()
+        this.$store.commit('paneSwitchView', {
+            paneIndex: this.paneIndex,
+            paneView: component
+        })
+
+        this.componentConfig = componentConfig
     }
 }
 </script>
