@@ -42,7 +42,7 @@ export default {
     },
     methods: {        
         sideBarItemClick(selectedMenu) {
-            if(selectedMenu === 'Dashboard') {
+            if(selectedMenu && selectedMenu != this.$store.state.app['active-sidebar-item']) {
                 this.runCompiledTask([
                     new Templates.TaskItem('insertCompiledTask', {
                         payload: { 
@@ -51,7 +51,7 @@ export default {
                         compiledTask: this.getCompiledTask('syspane.switch-menu')
                     })
                 ])
-            } else {
+            } else if(selectedMenu != this.$store.state.app['active-sidebar-item']) {
                 this.runCompiledTask([
                     new Templates.TaskItem('insertCompiledTask', {
                         payload: { selectedMenu },

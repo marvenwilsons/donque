@@ -286,7 +286,6 @@ export default function (app,method) {
         if(app.$store.state.app['app-admin-resources']){
             // console.log('> getting pane data', payload.section)
             app.$store.state.app['app-services'].map(serviceItem => {
-                console.log('serviceItem', serviceItem)
                 if(serviceItem.name === payload.section) {
                     app.answerPending({
                         statusCode: 200,

@@ -162,6 +162,7 @@ export default {
                     })
                 ])
             } else {
+                /** TODO: implement pane close for non 0 index pane */
                 alert('TODO! pane close')
             }
         }
