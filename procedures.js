@@ -256,7 +256,7 @@ export default function (app,method) {
                 }
             })
         } else {
-            //TODO: syspane add
+            //TODO: implement adding new pane from 0 index pane
             console.log('> CODE IT!')
         }
         

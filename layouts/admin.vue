@@ -1,13 +1,15 @@
 <template>
-    <div class="flexcenter flex relative" style="height:100vh; overflow:hidden;" >
+    <v-app class="flexcenter flex relative" style="height:100vh; overflow:hidden;" >
         <globalModal/>
-        <v-flex class="absolute fullwidth fullheight-percent" >
-            <appSideBar/>
-            <v-flex >                
-                <nuxt />
+        <v-content>
+            <v-flex class="absolute fullwidth fullheight-percent" >
+                <appSideBar/>
+                <v-flex >                
+                    <nuxt />
+                </v-flex>
             </v-flex>
-        </v-flex>
-    </div>
+        </v-content>
+    </v-app>
 </template>
 
 <script>

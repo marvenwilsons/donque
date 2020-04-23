@@ -6,13 +6,87 @@ module.exports = Templates.Service({
     data: function(sql,fetch) {
         // perform get request here
         return [
-            ['foo',{}],
+            // TODO: should not use normal object, use Templates new page instead for extra validation
             {
-                name: 'jane',
-                fam: 'doe'
+                pageName: 'Home',
+                pageDetails: {}
             },
-            'hello world',
-            123456
+            {
+                pageName: 'About',
+                pageDetails: {}
+            },
+            {
+                pageName: 'Teams',
+                pageDetails: {}
+            },
+            {
+                pageName: 'Products',
+                pageDetails: {}
+            },
+            {
+                pageName: 'Blog',
+                pageDetails: {}
+            },
+            {
+                pageName: 'Achivements',
+                pageDetails: {}
+            },
+            {
+                pageName: 'Home',
+                pageDetails: {}
+            },
+            {
+                pageName: 'About',
+                pageDetails: {}
+            },
+            {
+                pageName: 'Teams',
+                pageDetails: {}
+            },
+            {
+                pageName: 'Products',
+                pageDetails: {}
+            },
+            {
+                pageName: 'Blog',
+                pageDetails: {}
+            },
+            {
+                pageName: 'Achivements',
+                pageDetails: {}
+            },
+            {
+                pageName: 'Blog',
+                pageDetails: {}
+            },
+            {
+                pageName: 'Achivements',
+                pageDetails: {}
+            },
+            {
+                pageName: 'Home',
+                pageDetails: {}
+            },
+            {
+                pageName: 'About',
+                pageDetails: {}
+            },
+            {
+                pageName: 'Teams',
+                pageDetails: {}
+            },
+            {
+                pageName: 'Products',
+                pageDetails: {}
+            },
+            {
+                pageName: 'Blog',
+                pageDetails: {}
+            },
+            {
+                pageName: 'Achivements',
+                pageDetails: {}
+            },
         ]
     },
     views: function(data,task,paneSettings,paneModal,utils) {
@@ -29,12 +103,19 @@ module.exports = Templates.Service({
                             }
                         },
                         {
-                            name: 'remove page',
+                            name: 'sub page',
                             handler: function(helper) {
                 
                             }
                         },
-                    ]
+                        {
+                            name: 'delete page',
+                            handler: function(helper) {
+                
+                            }
+                        },
+                    ],
+                    displayProp: 'pageName'
                 },
                 paneOnLoad: function() {
                     console.log('testing! on load', data)
@@ -44,8 +125,8 @@ module.exports = Templates.Service({
     },
     config: {
         dataSchema: {}, // define the exact sturcture of data property
-        paneName: 'Pages pane!!',
-        paneWidth: '500px',
+        paneName: 'Pages',
+        paneWidth: '550px',
         isClosable: true
     },
 

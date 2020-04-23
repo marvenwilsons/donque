@@ -1,8 +1,7 @@
 const fs = require('fs')
 const path = require('path')
-
+const fetch = require('node-fetch');
 const rootDirForServices = path.join(__dirname,'../apps/services')
-const getServices = fs.readdirSync(rootDirForServices)
 
 try {
     module.exports = (userServices) => {
@@ -10,7 +9,7 @@ try {
         userServices.map(s => {
             const file = require(`${rootDirForServices}/${s}`)
             fns.push({
-                payload: file.data(), // <-- TODO: pass sql api and fetch dependecy here
+                payload: file.data(null,fetch), // <-- TODO: pass psql connection on first param
                 content: file.body
             })
         })

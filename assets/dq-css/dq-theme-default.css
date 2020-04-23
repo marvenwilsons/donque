@@ -53,3 +53,17 @@
   box-shadow: 0px 0px 30px -18px rgba(54,54,54,1);
   border-bottom: 1px solid rgba(54, 54, 54, 0.096);
 }
+.itemShadow{
+  box-shadow: 0px 0px 30px -18px rgba(54, 54, 54, 0.404);
+}
+.listitem:hover{
+  background: #E3F2FDFF; 
+  cursor: pointer;
+  transition: 0.1s;
+}
+.optiontext:hover {
+  /* text-shadow: 0px 1px 1px black; */
+  /* font-weight: 600; */
+  color: #2069dd80 !important;
+  transition: 0.2s;
+}
