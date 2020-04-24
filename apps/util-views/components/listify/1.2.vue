@@ -1,79 +1,87 @@
 <template>
-    <v-app id="listify1-2">
-        <v-flex style="background:white;" class="flexcol pad125 fullheight-percent" >
-            <div>
-                <v-flex>
-                    <div class="fullwidth marginright125 flex flexcenter" >
-                        <v-text-field
-                            dense=""
-                            label="Search item"
-                            outlined
-                        ></v-text-field>
-                    </div>
-                    <div class="pointer" >
-                        <v-select
-                            dense
-                            :items="['A-Z','Z-A']"
-                            label="Sort By"
-                            outlined
-                        ></v-select>
-                    </div>
-                    <div class="pointer marginleft125" >
-                        <v-btn dense small  fab dark color="primary">
-                            <v-icon dark>mdi-plus</v-icon>
-                        </v-btn>
-                    </div>
-                </v-flex>
-            </div>
-            <!-- <v-divider></v-divider> -->
-            <v-flex style="overflow-y:auto; border:1px solid #9e9e9e;" relative>
-                <div  class="absolute fullwidth" >
-                    <v-flex class="listitem"  v-for="(item,itemIndex) in myData" :key="itemIndex" >
-                        <v-card
-                            flat=""
-                            style="border-bottom:1px solid lightgray;border-radius:0px;"
-                            class="listitem   fullwidth">
-                            <v-flex class="pad050" style="font-weight:500;" >
-                                <div class="pad050">
-                                    <v-chip 
-                                            text-color="var(--deftheme-blue-text)" 
-                                        >
-                                        <!-- <pre>{{item[myConfig.displayProp]}}</pre> -->
-                                        <v-card-title>
-                                            <small>{{item[myConfig.displayProp]}}</small>
-                                        </v-card-title>
-                                        
-                                </v-chip>
+    <v-container>
+            <v-flex class="flexcol fullheight-percent" >
+                <v-card class="fullwidth fullheight-percent">
+                    <main class="flex flexcol fullheight-percent" >
+                        <div style="background:white" class="padtop125 margintop125 padleft125 padright125" >
+                            <v-flex>
+                                <div class="fullwidth marginright125 flex flexcenter" >
+                                    <v-text-field
+                                        dense
+                                        label="Search item"
+                                        outlined
+                                    ></v-text-field>
                                 </div>
-                                <v-flex flexend flexcenter marginright050 >
-                                    <span 
-                                        class="marginleft125 pointer" 
-                                        v-for="(myOpt,optIndex) in myConfig.dataControllers" 
-                                        :key="optIndex" >
-                                            <span class="optiontext" style="color:var(--deftheme-blue-text)" >{{myOpt.name}}</span>
-                                    </span>
-                                </v-flex>
+                                <div class="pointer" >
+                                    <v-select
+                                        dense
+                                        :items="['A-Z','Z-A']"
+                                        label="Sort By"
+                                        outlined
+                                    ></v-select>
+                                </div>
+                                <div v-if="myConfig.ableToAddItem" class="pointer marginleft125" >
+                                    <v-btn dense small  fab dark color="primary">
+                                        <v-icon dark>mdi-plus</v-icon>
+                                    </v-btn>
+                                </div>
                             </v-flex>
-                        </v-card>
-                    </v-flex>
-                </div>
-            </v-flex>
-            <!--  -->
-            <!-- <div class="padtop050" >
-                <v-flex flexend class="marginright050" >
-                    <span style="color:var(--deftheme-blue-text)" >found {{myData.length}} items</span>
-                </v-flex>
-            </div> -->
+                        </div>
+                        <div style="overflow-y:scroll" class="flexcol relative fullwidth flex1 relative"  >
+                            <div class=" fullwidth absolute pad125" >
+                                <v-card v-for="(item,itemIndex) in myData" :key="itemIndex"  outlined class="marginbottom050 fullwidth" >
+                                    <div class="pa-2 grey lighten-4 d-flex align-top" >
+                                        <div class="flex xs3 text-xs-left" >
+                                            <v-flex flexcol ``>
+                                                <div class="header grey--text text--darken-1">
+                                                    <small><pre>{{myConfig.infoDisplay[0]}}</pre></small>
+                                                </div>
+                                                <div style="color:#bd4147;" class="mono name">
+                                                    <pre>{{item[myConfig.infoDisplay[0]]}}</pre>
+                                                </div>
+                                            </v-flex>
+                                        </div>
+                                        <div class="flex xs6 text-xs-left" >
+                                            <v-flex flexcol >
+                                                <div class="header grey--text text--darken-1"> <small> <pre>{{myConfig.infoDisplay[1]}}</pre> </small> </div>
+                                                <div class="mono name">
+                                                    <pre>{{item[myConfig.infoDisplay[1]] ? item[myConfig.infoDisplay[1]] : 'null'}}</pre>
+                                                </div>
+                                            </v-flex>
+                                        </div>
+                                        <div class="flex xs3 text-xs-right" >
+                                            <v-flex flexcol >
+                                                <div class="header grey--text text--darken-1"> <small> <pre>{{myConfig.infoDisplay[2]}}</pre> </small> </div>
+                                                <div class="mono name">
+                                                     <pre>{{item[myConfig.infoDisplay[2]] ? item[myConfig.infoDisplay[2]] : 'null'}}</pre>
+                                                </div>
+                                            </v-flex>
+                                        </div>
+                                    </div>
+                                    <div class="pa-2 grey lighten-3 grey--text text--darken-2 d-flex flexend">
+                                        <span 
+                                            class="pointer marginleft125" 
+                                            v-for="(myOpt,optIndex) in myConfig.dataControllers" 
+                                            :key="optIndex"
+                                            >
+                                            <v-card-text @click="myOpt.handler" class="optiontext" style="padding:0px;" >
+                                                {{myOpt.name}}
+                                            </v-card-text>
+                                        </span>
+                                    </div>
+                                </v-card>
+                            </div>
+                        </div>
+                    </main>
+                </v-card>
+                <!--  -->
         </v-flex>
-    </v-app>
+    </v-container>
 </template>
 
 <script>
 export default {
     props: ['myData','myConfig'],
-    mounted() {
-        // console.log(this.myConfig)
-    }
 }
 </script>
 

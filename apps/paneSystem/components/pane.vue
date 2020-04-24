@@ -2,7 +2,7 @@
     <v-flex flexcol >
         <div 
             style="background: var(--deftheme-dark-primary); color:white;"
-            class="pad050" >
+            class="pad125" >
                 <v-flex spacebetween >
                     <div>
                         {{myData.paneName}}

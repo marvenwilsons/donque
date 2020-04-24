@@ -9,84 +9,34 @@ module.exports = Templates.Service({
             // TODO: should not use normal object, use Templates new page instead for extra validation
             {
                 pageName: 'Home',
-                pageDetails: {}
+                lastUpdated: null,
+                updatedBy: null
             },
             {
                 pageName: 'About',
-                pageDetails: {}
+                lastUpdated: null,
+                updatedBy: null
             },
             {
                 pageName: 'Teams',
-                pageDetails: {}
+                lastUpdated: null,
+                updatedBy: null
             },
             {
                 pageName: 'Products',
-                pageDetails: {}
+                lastUpdated: null,
+                updatedBy: null
             },
             {
                 pageName: 'Blog',
-                pageDetails: {}
+                lastUpdated: null,
+                updatedBy: null
             },
             {
                 pageName: 'Achivements',
-                pageDetails: {}
-            },
-            {
-                pageName: 'Home',
-                pageDetails: {}
-            },
-            {
-                pageName: 'About',
-                pageDetails: {}
-            },
-            {
-                pageName: 'Teams',
-                pageDetails: {}
-            },
-            {
-                pageName: 'Products',
-                pageDetails: {}
-            },
-            {
-                pageName: 'Blog',
-                pageDetails: {}
-            },
-            {
-                pageName: 'Achivements',
-                pageDetails: {}
-            },
-            {
-                pageName: 'Blog',
-                pageDetails: {}
-            },
-            {
-                pageName: 'Achivements',
-                pageDetails: {}
-            },
-            {
-                pageName: 'Home',
-                pageDetails: {}
-            },
-            {
-                pageName: 'About',
-                pageDetails: {}
-            },
-            {
-                pageName: 'Teams',
-                pageDetails: {}
-            },
-            {
-                pageName: 'Products',
-                pageDetails: {}
-            },
-            {
-                pageName: 'Blog',
-                pageDetails: {}
-            },
-            {
-                pageName: 'Achivements',
-                pageDetails: {}
-            },
+                lastUpdated: null,
+                updatedBy: null
+            }
         ]
     },
     views: function(data,task,paneSettings,paneModal,utils) {
@@ -114,8 +64,17 @@ module.exports = Templates.Service({
                 
                             }
                         },
+                        {
+                            name: 'rename page',
+                            handler: function(helper) {
+                                
+                            }
+                        }
                     ],
-                    displayProp: 'pageName'
+                    displayProp: 'pageName',
+                    ableToAddItem: true,
+                    infoDisplay: ['pageName','lastUpdated','updatedBy']
+
                 },
                 paneOnLoad: function() {
                     console.log('testing! on load', data)

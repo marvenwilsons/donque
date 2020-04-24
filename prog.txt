@@ -1,7 +1,8 @@
 @task
 
-wire up listify so that you can start
+listify v1.2 done!
 implementing system pane feature adding new pane
 from zero index pane.
+
 
 add encryption and decryption to utils, add hasSetOfKeys validation to utils
