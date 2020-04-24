@@ -42,18 +42,22 @@
                                             </v-flex>
                                         </div>
                                         <div class="flex xs6 text-xs-left" >
-                                            <v-flex flexcol >
-                                                <div class="header grey--text text--darken-1"> <small> <pre>{{myConfig.infoDisplay[1]}}</pre> </small> </div>
-                                                <div class="mono name">
-                                                    <pre>{{item[myConfig.infoDisplay[1]] ? item[myConfig.infoDisplay[1]] : 'null'}}</pre>
+                                            <v-flex  >
+                                                <div class="header grey--text text--darken-1"> <small> <pre>{{myConfig.infoDisplay[1]}}: </pre> </small> </div>
+                                                <div class="header grey--text text--darken-1"> 
+                                                    <small style="color:#bd4147;"> 
+                                                        <pre>{{item[myConfig.infoDisplay[1]] ? item[myConfig.infoDisplay[1]] : 'null'}}</pre>
+                                                    </small> 
                                                 </div>
                                             </v-flex>
                                         </div>
                                         <div class="flex xs3 text-xs-right" >
-                                            <v-flex flexcol >
-                                                <div class="header grey--text text--darken-1"> <small> <pre>{{myConfig.infoDisplay[2]}}</pre> </small> </div>
-                                                <div class="mono name">
-                                                     <pre>{{item[myConfig.infoDisplay[2]] ? item[myConfig.infoDisplay[2]] : 'null'}}</pre>
+                                            <v-flex >
+                                                <div class="header grey--text text--darken-1"> <small> <pre>{{myConfig.infoDisplay[2]}}: </pre> </small> </div>
+                                                <div class="header grey--text text--darken-1"> 
+                                                    <small style="color:#bd4147;"> 
+                                                        <pre>{{item[myConfig.infoDisplay[2]] ? item[myConfig.infoDisplay[2]] : 'null'}}</pre>
+                                                    </small> 
                                                 </div>
                                             </v-flex>
                                         </div>
@@ -64,7 +68,7 @@
                                             v-for="(myOpt,optIndex) in myConfig.dataControllers" 
                                             :key="optIndex"
                                             >
-                                            <v-card-text @click="myOpt.handler(item,itemIndex)" class="optiontext" style="padding:0px;" >
+                                            <v-card-text @click="myOpt.handler({item,itemIndex,controllerName: myOpt.name})" class="optiontext" style="padding:0px;" >
                                                 {{myOpt.name}}
                                             </v-card-text>
                                         </span>
@@ -80,12 +84,35 @@
 
 <script>
 import h from '@/helper'
-
+import templates from '@/templates'
 export default {
     props: ['myData','myConfig'],
     mixins: [h],
     created() {
         this.h = this
+        const x = {
+            pageName: 'test',
+            createdBy: '12384128394',
+            lastModified: '',
+            pageContent: '',
+            version_id: '',
+            isUndermaintenance: false
+        }
+        const xx = new templates.Page({
+            pageName: 'my-page',
+            createdBy: 'marven',
+            lastModified: 'test',
+            pagetContent: 'test',
+            version_id: '123',
+            isUndermaintenance: false
+        })
+        
+        const utilts = {}
+        utis.hasSetOfkey = () => {
+
+        }
+
+        utis.hasSetOfkey()
     },
 }
 </script>

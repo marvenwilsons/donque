@@ -73,9 +73,12 @@ export default {
         // })(views)
     },
     Page({pageName,admin_id,lastModified,pageContent,version_id,isUndermaintenance}) {
-        this.pageName = ((pageName) => {
-            // validations here
-            pageName
+        this.pageName = ((arg) => {
+            // TODO:
+            // convert everything to lower case
+            // convert white space to dash
+            // should not allow special characters
+            return arg
         })(pageName)
         this.createdOn = moment().format("MMM Do YY")
         this.createdBy = admin_id

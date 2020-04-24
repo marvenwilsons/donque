@@ -8,6 +8,7 @@ import utils from './utils'
 export default {
     data: () => ({
         h: undefined,
+        viewFilter: undefined
     }),
     mounted() {
         this.$p = this.h
@@ -150,6 +151,20 @@ export default {
         paneModal({header,width,body}) {
             const {isComponent,content} = body
             /** if isComponent is false it will assume it is string, else name of a vue component */
+        },
+        paneAdd(dat) {
+            /** TODO: pane add */
+            console.log('adding pane')
+            console.log(dat)
+            // this.runCompiledTask([
+            //     templates.TaskItem('syspane.pane-add',{
+
+            //     })
+            // ])
+        },
+        paneGetView(componentName){
+            // returns a view name sring or a component name
+            return this.viewFilter(componentName)
         },
         closePane() {            
             if(this.$store.state.pane.length == 1){

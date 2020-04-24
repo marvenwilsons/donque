@@ -49,6 +49,6 @@ export default {
         }        
     },
     'add-pane'({keys,paneIndex}) {
-
+        console.log('adding new pane')
     }
 }

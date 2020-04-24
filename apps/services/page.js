@@ -8,39 +8,45 @@ module.exports = Templates.Service({
         return [
             // TODO: should not use normal object, use Templates new page instead for extra validation
             {
-                pageName: 'Home',
+                pageName: '/',
                 lastUpdated: null,
                 updatedBy: null
             },
             {
-                pageName: 'About',
+                pageName: '/about',
+                lastUpdated: 'Dec 7 20',
+                updatedBy: 'owner'
+            },
+            {
+                pageName: '/teams',
+                lastUpdated: 'Oct 4 20',
+                updatedBy: 'owner'
+            },
+            {
+                pageName: '/products',
                 lastUpdated: null,
                 updatedBy: null
             },
             {
-                pageName: 'Teams',
+                pageName: '/blog',
                 lastUpdated: null,
                 updatedBy: null
             },
             {
-                pageName: 'Products',
+                pageName: '/achivements',
                 lastUpdated: null,
                 updatedBy: null
             },
             {
-                pageName: 'Blog',
-                lastUpdated: null,
-                updatedBy: null
-            },
-            {
-                pageName: 'Achivements',
+                pageName: '/my-service-canada-account',
                 lastUpdated: null,
                 updatedBy: null
             }
         ]
     },
-    views: function(data,task,paneSettings,paneModal,utils,templates) {
-        if(Array.isArray(data)) {
+    views: function(data,helper,utils,templates) {
+        
+        if(Array.isArray(data) || typeof data === 'object' && data.controllerName === 'sub page') {
             return {
                 component: 'listify',
                 componentConfig: {
@@ -48,18 +54,15 @@ module.exports = Templates.Service({
                         {
                             name: 'open page',
                             handler: function(item) {
-                                // add new pane
-                                task.runCompiledTask([
-                                    new templates.taskItem('')
-                                ])
+                                const componentName = helper.paneGetView(item)
+                                helper.paneAdd(componentName)
                             }
                         },
                         {
                             name: 'sub page',
-                            handler: function(helper) {
-                                task.runCompiledTask([
-
-                                ])
+                            handler: function() {
+                                console.log('sub page')
+                                console.log(data)
                             }
                         },
                         {
@@ -81,8 +84,17 @@ module.exports = Templates.Service({
 
                 },
                 paneOnLoad: function() {
-                    console.log('testing! on load', data)
+                    // console.log('testing! on load', data)
                 }
+            }
+        } else if(typeof data === 'object' && !Array.isArray(data) && data.controllerName === 'open page' ) {
+            // && utils.hasSetOfKeys(['pageName','lastUpdated','updatedBy'],)
+            // console.log('this is the view you are looking for', data)
+            return {
+                component: 'pageContent',
+                payload: data.item,
+                componentConfig: {},
+                paneOnLoad: function () {}
             }
         }
     },

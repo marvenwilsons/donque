@@ -45,6 +45,7 @@
 <script>
 import h from '@/helper'
 import templates from '@/templates'
+
 export default {
     mixins: [h],
     props: ['myData','paneIndex'],
@@ -59,19 +60,23 @@ export default {
     },
     mounted() {
         const p = this.myData.paneData
-        const task = {
+        const helper = {
             runCompiledTask : this.runCompiledTask,
-            getCompiledTask : this.getCompiledTask
+            getCompiledTask : this.getCompiledTask,
+            paneSettings: this.paneSettings,
+            paneModal : this.paneModal,
+            paneAdd : this.paneAdd,
+            paneGetView: this.paneGetView
         }
         const deserializeViews = new Function('return ' + p.views)()
         const {paneOnLoad,component,componentConfig} = 
-        deserializeViews(p.data,task,this.paneSettings,this.paneModal,null/**TODO: import utils here */,templates)
+        deserializeViews(p.data,helper,null/**TODO: import utils here */,templates)
+        this.viewFilter = deserializeViews
         paneOnLoad()
         this.$store.commit('paneSwitchView', {
             paneIndex: this.paneIndex,
             paneView: component
         })
-
         this.componentConfig = componentConfig
     }
 }
