@@ -3,6 +3,7 @@ import Templates from '@/templates'
 export default {
     'switch-menu'({currentActiveMenu,selectedMenu}) {
         /**
+         *  TODO:
          * 1. reach out to local storage if there is a data saved in there
          *    if there is data alocated for selectedMenu there is no need to reach out to server
          *    a. if there is data alocated use that data
@@ -46,5 +47,8 @@ export default {
                 new Templates.TaskItem('done',{})
             ]
         }        
+    },
+    'add-pane'({keys,paneIndex}) {
+
     }
 }

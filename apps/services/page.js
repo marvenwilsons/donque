@@ -39,7 +39,7 @@ module.exports = Templates.Service({
             }
         ]
     },
-    views: function(data,task,paneSettings,paneModal,utils) {
+    views: function(data,task,paneSettings,paneModal,utils,templates) {
         if(Array.isArray(data)) {
             return {
                 component: 'listify',
@@ -47,15 +47,19 @@ module.exports = Templates.Service({
                     dataControllers: [
                         {
                             name: 'open page',
-                            handler: function(helper) {
-                                console.log('hello world')
-                                console.log(helper)
+                            handler: function(item) {
+                                // add new pane
+                                task.runCompiledTask([
+                                    new templates.taskItem('')
+                                ])
                             }
                         },
                         {
                             name: 'sub page',
                             handler: function(helper) {
-                
+                                task.runCompiledTask([
+
+                                ])
                             }
                         },
                         {

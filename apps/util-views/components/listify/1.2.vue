@@ -27,7 +27,7 @@
                                 </div>
                             </v-flex>
                         </div>
-                        <div style="overflow-y:scroll" class="flexcol relative fullwidth flex1 relative"  >
+                        <div style="overflow-y:auto" class="flexcol relative fullwidth flex1 relative"  >
                             <div class=" fullwidth absolute pad125" >
                                 <v-card v-for="(item,itemIndex) in myData" :key="itemIndex"  outlined class="marginbottom050 fullwidth" >
                                     <div class="pa-2 grey lighten-4 d-flex align-top" >
@@ -64,7 +64,7 @@
                                             v-for="(myOpt,optIndex) in myConfig.dataControllers" 
                                             :key="optIndex"
                                             >
-                                            <v-card-text @click="myOpt.handler" class="optiontext" style="padding:0px;" >
+                                            <v-card-text @click="myOpt.handler(item,itemIndex)" class="optiontext" style="padding:0px;" >
                                                 {{myOpt.name}}
                                             </v-card-text>
                                         </span>
@@ -74,14 +74,19 @@
                         </div>
                     </main>
                 </v-card>
-                <!--  -->
         </v-flex>
     </v-container>
 </template>
 
 <script>
+import h from '@/helper'
+
 export default {
     props: ['myData','myConfig'],
+    mixins: [h],
+    created() {
+        this.h = this
+    },
 }
 </script>
 
