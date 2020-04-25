@@ -45,6 +45,15 @@ utils.validateString = function({mode,value}) {
         });
         return res.join("/") == "true/true";
     }
+
+    if(mode === 'has-setof-chars') {
+        const {ArrayOfCharacters, CharacterToCompare} = value
+        const res = ArrayOfCharacters.map(charSet => {
+            return RegExp(`${charSet}`, "").exec(CharacterToCompare) != null;
+        });
+        const isTrue = (current) => current === true 
+        return res.every(isTrue)
+    }
 }
 
 utils.commonStringValidations = {
@@ -78,6 +87,18 @@ utils.commonStringValidations = {
 
         return string
     }
+}
+
+utils.hasSetOfKeys = (ArrayOfKeys, ObjectToCompare) => {            
+    let res = []
+    Object.keys(ObjectToCompare).map(e => {
+        if(ArrayOfKeys.indexOf(e) != -1) {
+            res.push(true)
+        }
+    })
+
+    const isTrue = (current) => current === true 
+    return res.every(isTrue) && ArrayOfKeys.length === res.length
 }
 
 utils.pipe = function (...funcs) {

@@ -90,29 +90,6 @@ export default {
     mixins: [h],
     created() {
         this.h = this
-        const x = {
-            pageName: 'test',
-            createdBy: '12384128394',
-            lastModified: '',
-            pageContent: '',
-            version_id: '',
-            isUndermaintenance: false
-        }
-        const xx = new templates.Page({
-            pageName: 'my-page',
-            createdBy: 'marven',
-            lastModified: 'test',
-            pagetContent: 'test',
-            version_id: '123',
-            isUndermaintenance: false
-        })
-        
-        const utilts = {}
-        utis.hasSetOfkey = () => {
-
-        }
-
-        utis.hasSetOfkey()
     },
 }
 </script>

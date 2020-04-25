@@ -4,7 +4,7 @@
             style="background: var(--deftheme-dark-primary); color:white;"
             class="pad125" >
                 <v-flex spacebetween >
-                    <div>
+                    <div style="color:whitsmoke" >
                         {{myData.paneName}}
                     </div>
                     <div v-if="myData.isClosable" >
@@ -36,7 +36,8 @@
                 </main>
             </v-flex>
             <v-flex>
-                <div v-if="componentConfig" :myConfig="componentConfig" :paneIndex="paneIndex" :is="myData.paneView" :myData="myData.paneData.data" ></div>
+                <!-- <pre>{{myData}}</pre> {{componentConfig ? true : false}} -->
+                <div :id="myData.paneView" v-if="componentConfig" :myConfig="componentConfig" :paneIndex="paneIndex" :is="myData.paneView" :myData="myData.paneData" ></div>
             </v-flex>
         </v-flex>
     </v-flex>
@@ -45,6 +46,7 @@
 <script>
 import h from '@/helper'
 import templates from '@/templates'
+import utils from '@/utils'
 
 export default {
     mixins: [h],
@@ -68,16 +70,22 @@ export default {
             paneAdd : this.paneAdd,
             paneGetView: this.paneGetView
         }
-        const deserializeViews = new Function('return ' + p.views)()
-        const {paneOnLoad,component,componentConfig} = 
-        deserializeViews(p.data,helper,null/**TODO: import utils here */,templates)
-        this.viewFilter = deserializeViews
-        paneOnLoad()
-        this.$store.commit('paneSwitchView', {
-            paneIndex: this.paneIndex,
-            paneView: component
-        })
-        this.componentConfig = componentConfig
+        if(this.paneIndex === 0) {
+            // cannot desrialized in procedure, so it is being done here
+            const deserializeViews = new Function('return ' + this.myData.views)()
+            const {paneOnLoad,componentConfig   } = deserializeViews(this.myData.paneData,helper,utils,templates)
+            this.viewFilter = deserializeViews
+            paneOnLoad()
+            this.componentConfig = componentConfig
+
+            // this.$store.commit('paneSwitchView', {
+            //     paneIndex: this.paneIndex,
+            //     paneView: paneConfig.paneView
+            // })
+        } else {
+            console.log('hhhhhhhheeeeeeeeeu')
+            this.componentConfig = this.myData.componentConfig
+        }
     }
 }
 </script>

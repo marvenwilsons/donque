@@ -1,5 +1,6 @@
 <template>
     <v-flex>
+        this is page
         <pre>
             {{myData}}
         </pre>
@@ -19,11 +20,7 @@ export default {
 
     }),
     mounted() {
-        this.paneSettings({
-            paneWidth: '400px',
-            paneName: 'Pages',
-            isClosable: true
-        })
+        console.log('hello world! this is pageContent')
     }
 }
 </script>

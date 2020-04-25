@@ -5,50 +5,69 @@ module.exports = Templates.Service({
     name: 'Pages',
     data: function(sql,fetch) {
         // perform get request here
-        return [
-            // TODO: should not use normal object, use Templates new page instead for extra validation
-            {
-                pageName: '/',
-                lastUpdated: null,
-                updatedBy: null
-            },
-            {
-                pageName: '/about',
-                lastUpdated: 'Dec 7 20',
-                updatedBy: 'owner'
-            },
-            {
-                pageName: '/teams',
-                lastUpdated: 'Oct 4 20',
-                updatedBy: 'owner'
-            },
-            {
-                pageName: '/products',
-                lastUpdated: null,
-                updatedBy: null
-            },
-            {
-                pageName: '/blog',
-                lastUpdated: null,
-                updatedBy: null
-            },
-            {
-                pageName: '/achivements',
-                lastUpdated: null,
-                updatedBy: null
-            },
-            {
-                pageName: '/my-service-canada-account',
-                lastUpdated: null,
-                updatedBy: null
-            }
-        ]
+        let pages = []
+        pages.push(new Templates.Page({
+            pageName: '/',
+            admin_id:'test',
+            lastModified: 'test 1',
+            pageContent: 'none',
+            version_id:'ASDFWEE52',
+            isUndermaintenance: true
+        }))
+        pages.push(new Templates.Page({
+            pageName: '/about',
+            admin_id:'test',
+            lastModified: 'test 1',
+            pageContent: 'none',
+            version_id:'ASDFWEE52',
+            isUndermaintenance: true
+        }))
+        pages.push(new Templates.Page({
+            pageName: '/teams',
+            admin_id:'test',
+            lastModified: 'test 1',
+            pageContent: 'none',
+            version_id:'ASDFWEE52',
+            isUndermaintenance: true
+        }))
+        pages.push(new Templates.Page({
+            pageName: '/products',
+            admin_id:'test',
+            lastModified: 'test 1',
+            pageContent: 'none',
+            version_id:'ASDFWEE52',
+            isUndermaintenance: true
+        }))
+        pages.push(new Templates.Page({
+            pageName: '/blog',
+            admin_id:'test',
+            lastModified: 'test 1',
+            pageContent: 'none',
+            version_id:'ASDFWEE52',
+            isUndermaintenance: true
+        }))
+        pages.push(new Templates.Page({
+            pageName: '/achivements',
+            admin_id:'test',
+            lastModified: 'test 1',
+            pageContent: 'none',
+            version_id:'ASDFWEE52',
+            isUndermaintenance: true
+        }))
+        pages.push(new Templates.Page({
+            pageName: '/my-service-canada-account',
+            admin_id:'test',
+            lastModified: 'test 1',
+            pageContent: 'none',
+            version_id:'ASDFWEE52',
+            isUndermaintenance: true
+        }))
+        return pages
     },
     views: function(data,helper,utils,templates) {
         
         if(Array.isArray(data) || typeof data === 'object' && data.controllerName === 'sub page') {
             return {
-                component: 'listify',
                 componentConfig: {
                     dataControllers: [
                         {
@@ -85,24 +104,31 @@ module.exports = Templates.Service({
                 },
                 paneOnLoad: function() {
                     // console.log('testing! on load', data)
-                }
+                },
+                paneConfig: {
+                    paneName: 'Pages',
+                    paneWidth: '550px',
+                    isClosable: true,
+                    paneView: 'listify'
+                },
             }
         } else if(typeof data === 'object' && !Array.isArray(data) && data.controllerName === 'open page' ) {
             // && utils.hasSetOfKeys(['pageName','lastUpdated','updatedBy'],)
-            // console.log('this is the view you are looking for', data)
+            // console.log('this is the view you are looking for', data.item instanceof templates.Page)
+            // console.log(data )
             return {
-                component: 'pageContent',
-                payload: data.item,
-                componentConfig: {},
-                paneOnLoad: function () {}
+                componentConfig: {
+                    msg: 'hello world'
+                },
+                paneOnLoad: function () {},
+                paneConfig: {
+                    paneName: data.item.pageName,
+                    paneWidth: '700px',
+                    isClosable: true,
+                    paneView: 'pageContent',
+                    paneData: data.item,
+                }
             }
         }
-    },
-    config: {
-        dataSchema: {}, // define the exact sturcture of data property
-        paneName: 'Pages',
-        paneWidth: '550px',
-        isClosable: true
-    },
-
+    }
 })

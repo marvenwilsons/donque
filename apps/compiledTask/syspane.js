@@ -33,7 +33,7 @@ export default {
                                             ...payload
                                         }
                                     }),
-                                    new Templates.TaskItem('syspane.update-data', {paneIndex: 0, paneData: payload}),
+                                    // new Templates.TaskItem('syspane.update-data', {paneIndex: 0, paneData: payload}),
                                     new Templates.TaskItem('sysmodal.close-modal', {}),
                                     new Templates.TaskItem('done',{})
                                 ]
@@ -48,7 +48,15 @@ export default {
             ]
         }        
     },
-    'add-pane'({keys,paneIndex}) {
+    'add-pane'({data,paneIndex}) {
         console.log('adding new pane')
+        return [
+            new Templates.TaskItem('syspane.add', {
+                paneIndex,
+                payload: data
+            }),
+            new Templates.TaskItem('sysmodal.close-modal', {}),
+            new Templates.TaskItem('done', {})
+        ]
     }
 }

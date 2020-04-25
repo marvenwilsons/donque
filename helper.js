@@ -152,19 +152,30 @@ export default {
             const {isComponent,content} = body
             /** if isComponent is false it will assume it is string, else name of a vue component */
         },
-        paneAdd(dat) {
+        paneAdd(data) {
             /** TODO: pane add */
             console.log('adding pane')
-            console.log(dat)
-            // this.runCompiledTask([
-            //     templates.TaskItem('syspane.pane-add',{
-
-            //     })
-            // ])
+            console.log(data)
+            this.runCompiledTask([
+                new templates.TaskItem('insertCompiledTask',{
+                    compiledTask: this.getCompiledTask('syspane.add-pane'),
+                    payload: {
+                        paneIndex: this.paneIndex,
+                        data
+                    }
+                })
+            ])
         },
         paneGetView(componentName){
             // returns a view name sring or a component name
-            return this.viewFilter(componentName)
+            return this.viewFilter(componentName,{
+                runCompiledTask : this.runCompiledTask,
+                getCompiledTask : this.getCompiledTask,
+                paneSettings: this.paneSettings,
+                paneModal : this.paneModal,
+                paneAdd : this.paneAdd,
+                paneGetView: this.paneGetView
+            },utils,templates)
         },
         closePane() {            
             if(this.$store.state.pane.length == 1){

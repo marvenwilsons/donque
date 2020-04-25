@@ -112,16 +112,10 @@ export const mutations = {
         },
     /** ----- */
     /** PANE MUTATIONS */
-        paneAdd(state,{paneIndex, payload: {paneName = 'untitled pane',paneView = 'loading',paneData = {},paneWidth = '700px', modalBody = null, modalHeader = null, isClosable = true}}) {
+        paneAdd(state,{paneIndex, payload}) {
             state.pane.push({
-                paneName,
                 paneIndex,
-                paneView,
-                paneData,
-                paneWidth,
-                modalBody,
-                modalHeader,
-                isClosable
+                ...payload
             })
         },
         paneDelete(state,{paneIndexOrigin}) {
@@ -149,6 +143,7 @@ export const actions = {
             // get services
             const service = await this.$axios
             .get('/$dqappservices/service', {
+                // TODO:
                 params: {
                     username: 'marvenwilsons', // get from localstorage
                     apikey: 'test' // get from localstorage
@@ -160,7 +155,6 @@ export const actions = {
                 console.log('> err',err.message)
             })
 
-            
             const unPackServices = ((s) => {
                 return s.map(service => JSON.parse(service))
             })(service)

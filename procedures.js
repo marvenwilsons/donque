@@ -246,18 +246,33 @@ export default function (app,method) {
     i['private.syspane.add'] = function ({paneIndex, payload}) {
         // payload.onEmptyData()
         if(app.$store.state.pane.length == 0) {
+            const deserializeViews = new Function('return ' + payload.views)()
+            const unpacked = deserializeViews(payload.data)
+            // console.log('lakjsih',unpacked)
             app.$store.commit('paneAdd', {
                 paneIndex: paneIndex,
                 payload: {
-                    paneView: payload.fistPaneDefualtView,
-                    paneName: payload.config.paneName,
-                    paneWidth: payload.config.paneWidth,
-                    isClosable: payload.config.isClosable,
+                    ...unpacked.paneConfig,
+                    paneData: payload.data,
+                    views: payload.views
                 }
             })
         } else {
             //TODO: implement adding new pane from 0 index pane
-            console.log('> CODE IT!')
+            console.log('> CODE IT!', paneIndex,payload.paneConfig)
+            // const { paneConfig, paneView, paneName, paneWidth, isClosable } = payload.paneConfig
+            if(app.$store.state.pane[ paneIndex + 1] == undefined) {
+                app.$store.commit('paneAdd', {
+                    paneIndex: paneIndex,
+                    payload: {
+                        ...payload.paneConfig,
+                        ...payload
+                    }
+                })
+            } else {
+                i['private.syspane.update-data']({paneIndex: paneIndex + 1, paneData: payload.paneConfig.paneData})
+            }
+            
         }
         
         app.answerPending()

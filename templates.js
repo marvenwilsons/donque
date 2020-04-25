@@ -49,19 +49,7 @@ export default {
             // views
             views: ((arg) => {
                 return arg.toString()
-            })(views),
-            // config object
-            config: (({dataSchema,paneName,paneWidth,isClosable}) => {
-                return {
-                    dataSchema: ((ds) => {
-                        // if ds it cannot be an empty object
-                        return ds ? ds : null
-                    })(dataSchema),
-                    paneName,
-                    paneWidth,
-                    isClosable
-                }
-            })(config)
+            })(views)
         }
 
         return {
@@ -72,7 +60,7 @@ export default {
         //     /**  */
         // })(views)
     },
-    Page({pageName,admin_id,lastModified,pageContent,version_id,isUndermaintenance}) {
+    Page: function({pageName,admin_id,lastModified,pageContent,version_id,isUndermaintenance}) {
         this.pageName = ((arg) => {
             // TODO:
             // convert everything to lower case
@@ -87,11 +75,11 @@ export default {
         this.version_id = version_id
         this.isUndermaintenance = isUndermaintenance
     },
-    PageVersion({versionName}){
+    PageVersion: function({versionName}){
         this.versionName = versionName
         this.version_id = utils.randId(8)
     },
-    PageElement({tag,name,role,inlineStyle,innerText,classList,els,path,addedBy,lastModified, collection,globalAttr,nativeAttr}) {
+    PageElement: function({tag,name,role,inlineStyle,innerText,classList,els,path,addedBy,lastModified, collection,globalAttr,nativeAttr}) {
         this.tag = tag
         this.name = name
         this.role = role
@@ -108,12 +96,12 @@ export default {
         this.nativeAttr = nativeAttr
         this.elementId = utils.randId(10)
     },
-    AdminRule({ruleTitle,ruleResources,ruleId}){
+    AdminRule: function({ruleTitle,ruleResources,ruleId}){
         this.ruleTitle = ruleTitle
         this.ruleResources = ruleResources // array of services
         this.ruleId = ruleId
     },
-    AdminUser({username,password,firstName,lastName,ruleTitle_id}) {
+    AdminUser: function({username,password,firstName,lastName,ruleTitle_id}) {
         this.username = utils.commonStringValidations.vs1('username',username, 8, true)
         this.firstName = utils.commonStringValidations.vs1('First Name', firstName, 3, false)
         this.lastName = utils.commonStringValidations.vs1('Last Name', lastName, 2, false)
