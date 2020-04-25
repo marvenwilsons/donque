@@ -49,7 +49,6 @@ export default {
         }        
     },
     'add-pane'({data,paneIndex}) {
-        console.log('adding new pane')
         return [
             new Templates.TaskItem('syspane.add', {
                 paneIndex,

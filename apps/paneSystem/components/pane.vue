@@ -61,6 +61,7 @@ export default {
 
     },
     mounted() {
+        // console.log('> pane loadded', this.myData)
         const p = this.myData.paneData
         const helper = {
             runCompiledTask : this.runCompiledTask,
@@ -77,13 +78,7 @@ export default {
             this.viewFilter = deserializeViews
             paneOnLoad()
             this.componentConfig = componentConfig
-
-            // this.$store.commit('paneSwitchView', {
-            //     paneIndex: this.paneIndex,
-            //     paneView: paneConfig.paneView
-            // })
         } else {
-            console.log('hhhhhhhheeeeeeeeeu')
             this.componentConfig = this.myData.componentConfig
         }
     }

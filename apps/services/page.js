@@ -11,55 +11,55 @@ module.exports = Templates.Service({
             admin_id:'test',
             lastModified: 'test 1',
             pageContent: 'none',
-            version_id:'ASDFWEE52',
+            version_id:'000DSFKJHB3J4G5',
             isUndermaintenance: true
         }))
         pages.push(new Templates.Page({
             pageName: '/about',
             admin_id:'test',
-            lastModified: 'test 1',
+            lastModified: 'test about',
             pageContent: 'none',
-            version_id:'ASDFWEE52',
+            version_id:'NFGRIUHIERGHG4',
             isUndermaintenance: true
         }))
         pages.push(new Templates.Page({
             pageName: '/teams',
             admin_id:'test',
-            lastModified: 'test 1',
+            lastModified: 'test teams',
             pageContent: 'none',
-            version_id:'ASDFWEE52',
+            version_id:'JGHEKSU45',
             isUndermaintenance: true
         }))
         pages.push(new Templates.Page({
             pageName: '/products',
             admin_id:'test',
-            lastModified: 'test 1',
+            lastModified: 'test products',
             pageContent: 'none',
-            version_id:'ASDFWEE52',
+            version_id:'HDGTKBH483',
             isUndermaintenance: true
         }))
         pages.push(new Templates.Page({
             pageName: '/blog',
             admin_id:'test',
-            lastModified: 'test 1',
+            lastModified: 'test blog',
             pageContent: 'none',
-            version_id:'ASDFWEE52',
+            version_id:'ASDFJHBVJEGT34WEE52',
             isUndermaintenance: true
         }))
         pages.push(new Templates.Page({
             pageName: '/achivements',
             admin_id:'test',
-            lastModified: 'test 1',
+            lastModified: 'test achivements',
             pageContent: 'none',
-            version_id:'ASDFWEE52',
+            version_id:'POJLK4H562',
             isUndermaintenance: true
         }))
         pages.push(new Templates.Page({
             pageName: '/my-service-canada-account',
             admin_id:'test',
-            lastModified: 'test 1',
+            lastModified: 'test msca',
             pageContent: 'none',
-            version_id:'ASDFWEE52',
+            version_id:'KJSBD345',
             isUndermaintenance: true
         }))
         return pages
@@ -112,21 +112,24 @@ module.exports = Templates.Service({
                     paneView: 'listify'
                 },
             }
-        } else if(typeof data === 'object' && !Array.isArray(data) && data.controllerName === 'open page' ) {
+        } else if(
+                typeof data === 'object' && !Array.isArray(data) || 
+                data.controllerName === 'open page' || utils.hasSetOfKeys(['pageName','admin_id','version_id'],data) ) {
             // && utils.hasSetOfKeys(['pageName','lastUpdated','updatedBy'],)
             // console.log('this is the view you are looking for', data.item instanceof templates.Page)
             // console.log(data )
+            console.log('page.js pageContent')
             return {
                 componentConfig: {
                     msg: 'hello world'
                 },
                 paneOnLoad: function () {},
                 paneConfig: {
-                    paneName: data.item.pageName,
+                    paneName: data.item ? data.item.pageName : data.pageName,
                     paneWidth: '700px',
                     isClosable: true,
                     paneView: 'pageContent',
-                    paneData: data.item,
+                    paneData: data.item ? data.item : data,
                 }
             }
         }

@@ -1,9 +1,13 @@
 <template>
-    <v-flex>
+    <v-flex style="overflow-y: scroll" relative >
         this is page
-        <pre>
-            {{myData}}
-        </pre>
+        <v-flex style="overflow-y: scroll" >
+            <div class="absolute" >
+                <pre>
+                    {{myData}}
+                </pre>
+            </div>
+        </v-flex>
     </v-flex>
 </template>
 
@@ -20,7 +24,7 @@ export default {
 
     }),
     mounted() {
-        console.log('hello world! this is pageContent')
+        // console.log('hello world! this is pageContent')
     }
 }
 </script>

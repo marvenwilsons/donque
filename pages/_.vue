@@ -1,8 +1,9 @@
 <template>
-    <div :is="$store.state.app['app-current-view']" ></div>
-    <!-- <main style="background:darkgray" class="fullwidth" >
+    <v-flex flexcol >
+        <div>
+                <main style="background:darkgray" class="fullwidth" >
         <v-flex fullwidth   fullheight-percent >
-            <debug :data="{
+            <!-- <debug :data="{
                 QUESTIONS: $store.state.queue,
                 queueConfig: {
                     queueExecType: $store.state.queueExecType,
@@ -12,16 +13,16 @@
                     loop: $store.state.queueOnLoop,
                 },
                 ANSWERS: $store.state.queueAnswersArray,
-            }" />
+            }" /> -->
             <debug 
-                :data="{
-                    'PANE-SYSTEM': {
-                        pane: $store.state.pane
-                    }
-                }"
+                :data=" $store.state.pane"
             />
         </v-flex>
-    </main> -->
+    </main>
+        </div>
+        <div :is="$store.state.app['app-current-view']" ></div>
+
+    </v-flex>
 </template>
 
 <script>

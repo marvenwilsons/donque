@@ -127,7 +127,10 @@ export const mutations = {
         },
         paneSwitchView(state,{paneIndex,paneView}) {
             state.pane[paneIndex].paneView = paneView
-        }
+        },
+        paneUpdate(state,{paneIndex,payload}) {
+            state.pane.splice(paneIndex,1,payload)
+        },
 }
 
 export const actions = {

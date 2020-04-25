@@ -258,10 +258,9 @@ export default function (app,method) {
                 }
             })
         } else {
-            //TODO: implement adding new pane from 0 index pane
-            console.log('> CODE IT!', paneIndex,payload.paneConfig)
-            // const { paneConfig, paneView, paneName, paneWidth, isClosable } = payload.paneConfig
             if(app.$store.state.pane[ paneIndex + 1] == undefined) {
+                // adds pane to pane array
+                console.log('add pane to array')
                 app.$store.commit('paneAdd', {
                     paneIndex: paneIndex,
                     payload: {
@@ -270,7 +269,15 @@ export default function (app,method) {
                     }
                 })
             } else {
-                i['private.syspane.update-data']({paneIndex: paneIndex + 1, paneData: payload.paneConfig.paneData})
+                // updates an existing pane 
+                const unpacked = payload.viewFilter(payload.paneConfig.paneData)
+                i['private.syspane.update-pane']({
+                    paneIndex: paneIndex + 1,
+                    payload: {
+                        ...unpacked.paneConfig,
+                        ...unpacked
+                    }
+                })
             }
             
         }
@@ -287,6 +294,13 @@ export default function (app,method) {
         app.$store.commit('paneUpdateData', {
             paneIndex: paneIndex,
             paneData: paneData
+        })
+        app.answerPending('--done--')
+    }
+    i['private.syspane.update-pane'] = function ({paneIndex, payload}) {
+        app.$store.commit('paneUpdate', {
+            paneIndex: paneIndex,
+            payload
         })
         app.answerPending('--done--')
     }

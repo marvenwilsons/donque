@@ -153,15 +153,16 @@ export default {
             /** if isComponent is false it will assume it is string, else name of a vue component */
         },
         paneAdd(data) {
-            /** TODO: pane add */
-            console.log('adding pane')
-            console.log(data)
+            // console.log('adding pane')
             this.runCompiledTask([
                 new templates.TaskItem('insertCompiledTask',{
                     compiledTask: this.getCompiledTask('syspane.add-pane'),
                     payload: {
                         paneIndex: this.paneIndex,
-                        data
+                        data: {
+                            viewFilter: this.viewFilter,
+                            ...data
+                        }
                     }
                 })
             ])

@@ -6,7 +6,7 @@
    <div v-if="collapse" style="overflow-y: hidden; min-height:400px;" class="flex1 relative">
     <div style="height:100%;" class="flex fullwidth fullheight-percent absolute">
       <div
-        style="max-width:300px;min-width:250px;"
+        style="max-width:400px;min-width:400px;"
         class="bordergray flex flexcol"
         v-for="(entries, entries_key) in data"
         :key="`deubug-${entries_key}`"
@@ -15,7 +15,7 @@
           <strong>{{entries_key}}</strong> -
           {{Array.isArray(entries) ? 'Array' : typeof entries}}
         </div>
-        <div style="background:whitesmoke;" class="bordergray flex1 debugwin">
+        <div style="background:whitesmoke;width:400px" class="debugwin fullwidth">
           <pre style="color: #206add;" >{{entries == undefined ? 'undefined' : entries}}</pre>
         </div>
         <div style="background:lightgray;">
@@ -45,7 +45,7 @@ export default {
  <style>
 .debugwin {
   overflow: auto;
-  max-width: 300px;
+  max-width: 400px;
 }
 .bordergray {
   border: 1px solid rgba(128, 128, 128, 0.76);
