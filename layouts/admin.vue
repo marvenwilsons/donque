@@ -4,8 +4,17 @@
         <v-content>
             <v-flex class="absolute fullwidth fullheight-percent" >
                 <appSideBar/>
-                <v-flex >                
-                    <nuxt />
+                <v-flex > 
+                    <v-flex flexcol>
+                        <v-flex v-if="false" >
+                            <!-- TODO: implement this view -->
+                            <!-- dwin.top({winView: '', veiwConfig: '', data: ''}) -->
+                        </v-flex>               
+                        <nuxt />
+                    </v-flex>
+                </v-flex>
+                <v-flex v-if="false"  style="background:var(--deftheme-dark-primary); z-index:100; max-width:500px; border-left:2px solid whitesmoke;" >
+                        <!-- TODO: implement this view -->
                 </v-flex>
             </v-flex>
         </v-content>
