@@ -190,7 +190,14 @@ export default {
                 ])
             } else {
                 /** TODO: implement pane close for non 0 index pane */
-                alert('TODO! pane close')
+                this.runCompiledTask([
+                    new templates.TaskItem('insertCompiledTask', {
+                        payload: { 
+                            origin: this.paneIndex
+                        },
+                        compiledTask: this.getCompiledTask('syspane.close-pane')
+                    })
+                ])
             }
         }
     }

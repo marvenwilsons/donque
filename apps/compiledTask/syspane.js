@@ -57,5 +57,18 @@ export default {
             new Templates.TaskItem('sysmodal.close-modal', {}),
             new Templates.TaskItem('done', {})
         ]
+    },
+    'close-pane'(payload){
+        return [
+            /**TODO: implement prompt user for unsave changes before closing the pane */
+            // new Templates.TaskItem('sysmodal.loginfo', {
+            //     msg: 'are you sure you want to close this pane? all unsave changes will be lost permanently.'
+            // }),
+            // new Templates.TaskItem('sysmodal.close-modal', {}),
+            new Templates.TaskItem('syspane.delete', {
+                paneIndexOrigin: payload.origin
+            }),
+            new Templates.TaskItem('done', {})
+        ]
     }
 }

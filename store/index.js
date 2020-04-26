@@ -119,8 +119,10 @@ export const mutations = {
             })
         },
         paneDelete(state,{paneIndexOrigin}) {
-            const numToBeRemoved = state.pane.length - 1 - paneIndexOrigin
-            state.pane = state.pane.splice(numToBeRemoved,paneIndexOrigin)
+            const numToBeRemoved = state.pane.length - 1
+            // console.log('numToBeRemoved',numToBeRemoved)
+            // console.log('paneIndexOrigin',paneIndexOrigin)
+            state.pane.splice(paneIndexOrigin,numToBeRemoved)
         },
         paneUpdateData(state,{paneIndex,paneData}) {
             state.pane[paneIndex].paneData = paneData
