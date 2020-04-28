@@ -1,6 +1,5 @@
 <template>
     <v-container>
-        {{paneIndex}}
             <v-flex class="flexcol fullheight-percent" >
                 <v-card class="fullwidth fullheight-percent">
                     <main class="flex flexcol fullheight-percent" >
@@ -69,7 +68,7 @@
                                             v-for="(myOpt,optIndex) in myConfig.dataControllers" 
                                             :key="optIndex"
                                             >
-                                            <v-card-text @click="myOpt.handler({item,itemIndex,controllerName: myOpt.name})" class="optiontext" style="padding:0px;" >
+                                            <v-card-text @click="myOpt.handler({item,itemIndex,controllerName: myOpt.name, paneIndex})" class="optiontext" style="padding:0px;" >
                                                 {{myOpt.name}}
                                             </v-card-text>
                                         </span>

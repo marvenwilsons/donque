@@ -152,33 +152,51 @@ export default {
             const {isComponent,content} = body
             /** if isComponent is false it will assume it is string, else name of a vue component */
         },
-        renderPane(data) {
-            // console.log('> from',this.paneIndex)
-            if(data.componentConfig || data.paneConfig) {
-                this.runCompiledTask([
-                    new templates.TaskItem('sysmodal.logerr', {
-                        msg: 'SystemError: renderPane error: Invalid input data, input should be a paneData not a serviceObject'
-                    }),
-                    new templates.TaskItem('sysmodal.close-modal', {}),
-                    new templates.TaskItem('exec', function() {
-                        window.location.reload()
-                    }),
-                    new templates.TaskItem('done', {})
-                ])
-                console.error(`renderPane error: Invalid input data, input should be a paneData not a serviceObject`, data)
-            } else {
+        renderPane(data, paneIndex) {
+            if(paneIndex == undefined || paneIndex == null) {
+                console.error('renderPane error, paneIndex cannot be undefined')
+                return
+            }
+
+            // console.log('helper',paneIndex, this.$store.state.pane.length - 1)
+            if(this.$store.state.pane[paneIndex + 1] == undefined) {
+                /** it means add one pane */
                 this.runCompiledTask([
                     new templates.TaskItem('insertCompiledTask',{
                         compiledTask: this.getCompiledTask('syspane.add-pane'),
                         payload: {
                             data
                         }
-                    })
+                    }),
+                    new templates.TaskItem('done',{})
                 ])
+            } else {
+                /** it means update the paneData? or replace the pane with a new view  */
+                if(paneIndex + 1 == this.$store.state.pane.length - 1) {
+                    this.runCompiledTask([
+                        new templates.TaskItem('syspane.update-pane', {
+                            paneIndex: paneIndex + 1,
+                            payload: this.getServiceView(data.paneConfig.paneData)
+                        }),
+                        new templates.TaskItem('done',{})
+                    ])
+                } else {
+                    this.runCompiledTask([
+                        new templates.TaskItem('syspane.delete', {
+                            paneIndexOrigin: paneIndex + 1
+                        }),
+                        new templates.TaskItem('syspane.add', {
+                            payload: data
+                        }),
+                        new templates.TaskItem('done',{})
+                    ])
+                }
+                
             }
+            
         },
         getServiceView(dataSet){
-            // console.log('> Getting service view ', dataSet)
+            console.log('> Getting service view ', dataSet)
             // returns a service objects
             const {views} = this.$store.state.app['app-services'][this.$store.state.app['active-sidebar-item']]
             const deserializeViews = new Function('return ' + views)()
@@ -213,7 +231,6 @@ export default {
                     componentConfig,
                     paneConfig
                 }
-                
             }
             
         },

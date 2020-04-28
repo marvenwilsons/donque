@@ -59,15 +59,6 @@ export default {
     props: ['myData','paneIndex'],
     created() {
         this.h = this
-    },
-    beforeMount() {
-        console.log('> beforeMount')
-        try {
-            this.getServiceView(this.myData.paneConfig.paneData)
-        } catch(err) {
-            console.error('pane beforeMount error in pane.vue \n', err)
-            return
-        }
     }
 }
 </script>

@@ -242,7 +242,7 @@ export default function (app,method) {
         })
         /** pane add */
         i['private.syspane.add']({
-            payload
+            payload:  app.getServiceView(payload)
         })
 
 
@@ -251,12 +251,15 @@ export default function (app,method) {
     }
     // pane system
     i['private.syspane.add'] = function ({payload}) {
-        console.log('> syspane.add ',payload)
-        const serviceObject = app.getServiceView(payload)
-        app.$store.commit('paneAdd', {
-            payload: serviceObject
-        })
-        app.answerPending()
+        console.log('> syspane.add ', payload)
+        if(!payload.componentConfig || !payload.paneConfig) {
+            console.error('Invalid pane object ', payload)
+        } else {
+            app.$store.commit('paneAdd', {
+                payload
+            })
+            app.answerPending()
+        }
     }
     i['private.syspane.delete'] = function ({paneIndexOrigin}) {
         app.$store.commit('paneDelete', {

@@ -1,10 +1,7 @@
 @task
 
-implement delete panes because of view change in root
-implement delete pane because of closing one pane
-fix paneAdd
-
-
+implement pane modal
+implement dwins
 implement key press systemm with ctrl + cm
 
 add encryption and decryption to utils, add hasSetOfKeys validation to utils

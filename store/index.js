@@ -123,11 +123,14 @@ export const mutations = {
             // console.log('paneIndexOrigin',paneIndexOrigin)
             state.pane.splice(paneIndexOrigin,numToBeRemoved)
         },
+        paneClose(state,{paneIndexOrigin}) {
+            state.pane.splice(paneIndexOrigin,1)
+        },
         paneUpdateData(state,{paneIndex,paneData}) {
-            state.pane[paneIndex].paneData = paneData
+            state.pane[paneIndex].paneConfig.paneData = paneData
         },
         paneSwitchView(state,{paneIndex,paneView}) {
-            state.pane[paneIndex].paneView = paneView
+            state.pane[paneIndex].paneConfig.paneView = paneView
         },
         paneUpdate(state,{paneIndex,payload}) {
             state.pane.splice(paneIndex,1,payload)
@@ -160,21 +163,15 @@ export const actions = {
             })
 
             const unPackServices = ((s) => {
-                // addAppService
                 return s.map(service => JSON.parse(service))
             })(service)
-
 
             // set menu items
             unPackServices.map(items => {
                 commit('app/addAppService', items)
                 commit('app/addMenu', items.name)
             })
-            // set services to app store state
-            // commit('app/stateController', {
-            //     key: 'app-services',
-            //     value: unPackServices
-            // })
+            
             // assign default active menu
             if(!state.app['defualt-active']) {
                 commit('app/stateController', {

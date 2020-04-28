@@ -191,16 +191,15 @@ module.exports = Templates.Service({
                     dataControllers: [
                         {
                             name: 'view page',
-                            handler: function({item}) {
-                                const serviceView = helper.getServiceView(item)
-                                helper.renderPane(serviceView)
+                            handler: function({item,itemIndex,controllerName, paneIndex}) {
+                                helper.renderPane(helper.getServiceView(item), paneIndex)
                             }
                         },
                         {
                             name: 'sub page',
-                            handler: function({item}) {
-                                const {paneConfig} = helper.getServiceView(item.subPages)
-                                helper.renderPane(paneConfig.paneData)
+                            handler: function({item,itemIndex,controllerName, paneIndex}) {
+                                console.log('subPage',paneIndex)
+                                helper.renderPane(helper.getServiceView(item.subPages), paneIndex)
                             }
                         },
                         {
@@ -239,22 +238,20 @@ module.exports = Templates.Service({
             }
         } 
         
-        if( !Array.isArray(data) && utils.hasSetOfKeys(['componentConfig','paneConfig'], data) ) {
-            if(utils.hasSetOfKeys(['pageName','pageId'], data)) {
-                return {
-                    componentConfig: {
-                        msg: 'hello world'
-                    },
-                    paneOnLoad: function () {
-                        // console.log('> pageContent loaded ')
-                    },
-                    paneConfig: {
-                        paneName: 'view page',
-                        paneWidth: '700px',
-                        isClosable: true,
-                        paneView: 'pageContent',
-                        paneData: data.item ? data.item : data,
-                    }
+        if( !Array.isArray(data) && utils.hasSetOfKeys(['pageName','pageId'], data) ) {
+            return {
+                componentConfig: {
+                    msg: 'hello world'
+                },
+                paneOnLoad: function () {
+                    // console.log('> pageContent loaded ')
+                },
+                paneConfig: {
+                    paneName: data.pageName,
+                    paneWidth: '700px',
+                    isClosable: true,
+                    paneView: 'pageContent',
+                    paneData: data.item ? data.item : data,
                 }
             }
         }
