@@ -9,7 +9,7 @@ try {
         userServices.map(s => {
             const file = require(`${rootDirForServices}/${s}`)
             fns.push({
-                payload: file.data(null,fetch), // <-- TODO: pass psql connection on first param
+                payload: file.body.initialData(null,fetch), // <-- TODO: pass psql connection on first param
                 content: file.body
             })
         })

@@ -228,7 +228,8 @@ export default function (app,method) {
         }, 50);
     }
     // sidebar
-    i['private.sidebar.switch-menu'] = function ({selectedMenu}) {
+    i['private.sidebar.switch-menu'] = function ({selectedMenu,payload}) {
+        console.log('> switch menu')
         /** emptying the pane array */
         app.$store.commit('stateController', {
             key: 'pane',
@@ -239,49 +240,22 @@ export default function (app,method) {
             key: 'active-sidebar-item',
             value: selectedMenu
         })
-        /** move to next */
+        /** pane add */
+        i['private.syspane.add']({
+            payload
+        })
+
+
+        /** move to next queue item */
         app.answerPending()
     }
     // pane system
-    i['private.syspane.add'] = function ({paneIndex, payload}) {
-        // payload.onEmptyData()
-        if(app.$store.state.pane.length == 0) {
-            const deserializeViews = new Function('return ' + payload.views)()
-            const unpacked = deserializeViews(payload.data)
-            // console.log('lakjsih',unpacked)
-            app.$store.commit('paneAdd', {
-                paneIndex: paneIndex,
-                payload: {
-                    ...unpacked.paneConfig,
-                    paneData: payload.data,
-                    views: payload.views
-                }
-            })
-        } else {
-            if(app.$store.state.pane[ paneIndex + 1] == undefined) {
-                // adds pane to pane array
-                console.log('add pane to array')
-                app.$store.commit('paneAdd', {
-                    paneIndex: paneIndex,
-                    payload: {
-                        ...payload.paneConfig,
-                        ...payload
-                    }
-                })
-            } else {
-                // updates an existing pane 
-                const unpacked = payload.viewFilter(payload.paneConfig.paneData)
-                i['private.syspane.update-pane']({
-                    paneIndex: paneIndex + 1,
-                    payload: {
-                        ...unpacked.paneConfig,
-                        ...unpacked
-                    }
-                })
-            }
-            
-        }
-        
+    i['private.syspane.add'] = function ({payload}) {
+        console.log('> syspane.add ',payload)
+        const serviceObject = app.getServiceView(payload)
+        app.$store.commit('paneAdd', {
+            payload: serviceObject
+        })
         app.answerPending()
     }
     i['private.syspane.delete'] = function ({paneIndexOrigin}) {
@@ -311,27 +285,11 @@ export default function (app,method) {
         })
         app.answerPending('--done--')
     }
-    i['private.syspane.get-pane-data'] = function ({paneIndex, payload}) {
-        if(app.$store.state.app['app-admin-resources']){
-            // console.log('> getting pane data', payload.section)
-            app.$store.state.app['app-services'].map(serviceItem => {
-                if(serviceItem.name === payload.section) {
-                    app.answerPending({
-                        statusCode: 200,
-                        status: true,
-                        payload: serviceItem
-                    })
-                }
-            })
-        } else {
-            setTimeout(() => {
-                app.answerPending({
-                    statusCode: 200,
-                    status: true,
-                    payload: 'test payload'
-                })
-            }, 500);
-        }
+    i['private.syspane.get-initial-data'] = function ({serviceName}) {
+        console.log('> getting initil data of ',serviceName)
+        app.answerPending({
+            payload: app.$store.state.app['app-services'][serviceName].data
+        })
     }
 
 

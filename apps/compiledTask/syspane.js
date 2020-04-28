@@ -16,30 +16,19 @@ export default {
                 new Templates.TaskItem('sysmodal.loading', {
                     msg: `validating and fetching ${selectedMenu} request`
                 }),
-                new Templates.TaskItem('syspane.get-pane-data', {
-                    payload: {
-                        section: selectedMenu
-                    }
+                new Templates.TaskItem('syspane.get-initial-data', {
+                    serviceName: selectedMenu
                 }),
-                new Templates.TaskItem('exec', function({statusCode, status, payload}) {
-                    if(statusCode === 200) {
-                        return new Promise((resolve,reject) => {
-                            resolve(new Templates.TaskItem('insertCompiledTask',{
-                                compiledTask: [
-                                    new Templates.TaskItem('sidebar.switch-menu', {currentActiveMenu, selectedMenu}),
-                                    new Templates.TaskItem('syspane.add',{
-                                        payload: {
-                                            paneView: selectedMenu,
-                                            ...payload
-                                        }
-                                    }),
-                                    // new Templates.TaskItem('syspane.update-data', {paneIndex: 0, paneData: payload}),
-                                    new Templates.TaskItem('sysmodal.close-modal', {}),
-                                    new Templates.TaskItem('done',{})
-                                ]
-                            }))
-                        })
-                    }
+                new Templates.TaskItem('exec', function({payload}) {
+                    return new Promise((resolve,reject) => {
+                        resolve(new Templates.TaskItem('insertCompiledTask',{
+                            compiledTask: [
+                                new Templates.TaskItem('sidebar.switch-menu', {currentActiveMenu, selectedMenu, payload}),
+                                new Templates.TaskItem('sysmodal.close-modal', {}),
+                                new Templates.TaskItem('done',{})
+                            ]
+                        }))
+                    })
                 }) 
             ]
         } else {
@@ -48,10 +37,9 @@ export default {
             ]
         }        
     },
-    'add-pane'({data,paneIndex}) {
+    'add-pane'({data}) {
         return [
             new Templates.TaskItem('syspane.add', {
-                paneIndex,
                 payload: data
             }),
             new Templates.TaskItem('sysmodal.close-modal', {}),

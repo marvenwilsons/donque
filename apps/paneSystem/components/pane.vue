@@ -5,9 +5,9 @@
             class="pad125" >
                 <v-flex spacebetween >
                     <div style="color:whitsmoke" >
-                        {{myData.paneName}}
+                        {{$store.state.pane[paneIndex].paneConfig.paneName}}
                     </div>
-                    <div v-if="myData.isClosable" >
+                    <div v-if="$store.state.pane[paneIndex].paneConfig.isClosable" >
                         <span 
                             @click="closePane"
                             class="pointer"
@@ -36,8 +36,14 @@
                 </main>
             </v-flex>
             <v-flex>
-                <!-- <pre>{{myData}}</pre> {{componentConfig ? true : false}} -->
-                <div :id="myData.paneView" v-if="componentConfig" :myConfig="componentConfig" :paneIndex="paneIndex" :is="myData.paneView" :myData="myData.paneData" ></div>
+                <!-- {{$store.state.pane[paneIndex]}} -->
+                <div 
+                    :id="$store.state.pane[paneIndex].paneConfig.paneName" 
+                    :myConfig="$store.state.pane[paneIndex].componentConfig" 
+                    :paneIndex="paneIndex" 
+                    :is="$store.state.pane[paneIndex].paneConfig.paneView" 
+                    :myData="$store.state.pane[paneIndex].paneConfig.paneData" >
+                </div>
             </v-flex>
         </v-flex>
     </v-flex>
@@ -54,32 +60,13 @@ export default {
     created() {
         this.h = this
     },
-    data: () => ({
-        componentConfig: null
-    }),
-    methods: {
-
-    },
-    mounted() {
-        // console.log('> pane loadded', this.myData)
-        const p = this.myData.paneData
-        const helper = {
-            runCompiledTask : this.runCompiledTask,
-            getCompiledTask : this.getCompiledTask,
-            paneSettings: this.paneSettings,
-            paneModal : this.paneModal,
-            paneAdd : this.paneAdd,
-            paneGetView: this.paneGetView
-        }
-        if(this.paneIndex === 0) {
-            // cannot desrialized in procedure, so it is being done here
-            const deserializeViews = new Function('return ' + this.myData.views)()
-            const {paneOnLoad,componentConfig   } = deserializeViews(this.myData.paneData,helper,utils,templates)
-            this.viewFilter = deserializeViews
-            paneOnLoad()
-            this.componentConfig = componentConfig
-        } else {
-            this.componentConfig = this.myData.componentConfig
+    beforeMount() {
+        console.log('> beforeMount')
+        try {
+            this.getServiceView(this.myData.paneConfig.paneData)
+        } catch(err) {
+            console.error('pane beforeMount error in pane.vue \n', err)
+            return
         }
     }
 }

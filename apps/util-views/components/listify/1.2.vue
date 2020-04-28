@@ -1,5 +1,6 @@
 <template>
     <v-container>
+        {{paneIndex}}
             <v-flex class="flexcol fullheight-percent" >
                 <v-card class="fullwidth fullheight-percent">
                     <main class="flex flexcol fullheight-percent" >
@@ -86,7 +87,7 @@
 import h from '@/helper'
 import templates from '@/templates'
 export default {
-    props: ['myData','myConfig'],
+    props: ['myData','myConfig', 'paneIndex'],
     mixins: [h],
     created() {
         this.h = this

@@ -1,24 +1,18 @@
 <template>
     <v-flex flexcol >
         <div>
-                <main style="background:darkgray" class="fullwidth" >
-        <v-flex fullwidth   fullheight-percent >
-            <!-- <debug :data="{
-                QUESTIONS: $store.state.queue,
-                queueConfig: {
-                    queueExecType: $store.state.queueExecType,
-                    pointer: $store.state.queuePointer,
-                    currentAnswer: $store.state.queueCurrentTaskAnswer,
-                    queueState: $store.state.queueState,
-                    loop: $store.state.queueOnLoop,
-                },
-                ANSWERS: $store.state.queueAnswersArray,
-            }" /> -->
-            <debug 
-                :data=" $store.state.pane"
-            />
-        </v-flex>
-    </main>
+            <main style="background:darkgray" class="fullwidth" >
+                <v-flex fullwidth   fullheight-percent >
+                    <!-- <debug 
+                        :data=" $store.state.pane"
+                    /> -->
+                    <!-- <debug 
+                        :data="{
+                            paneSystem: $store.state.pane
+                        }"
+                    /> -->
+                </v-flex>
+            </main>
         </div>
         <div :is="$store.state.app['app-current-view']" ></div>
 

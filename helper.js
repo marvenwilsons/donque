@@ -8,7 +8,7 @@ import utils from './utils'
 export default {
     data: () => ({
         h: undefined,
-        viewFilter: undefined
+        componentConfig: null
     }),
     mounted() {
         this.$p = this.h
@@ -152,31 +152,70 @@ export default {
             const {isComponent,content} = body
             /** if isComponent is false it will assume it is string, else name of a vue component */
         },
-        paneAdd(data) {
-            // console.log('adding pane')
-            this.runCompiledTask([
-                new templates.TaskItem('insertCompiledTask',{
-                    compiledTask: this.getCompiledTask('syspane.add-pane'),
-                    payload: {
-                        paneIndex: this.paneIndex,
-                        data: {
-                            viewFilter: this.viewFilter,
-                            ...data
+        renderPane(data) {
+            // console.log('> from',this.paneIndex)
+            if(data.componentConfig || data.paneConfig) {
+                this.runCompiledTask([
+                    new templates.TaskItem('sysmodal.logerr', {
+                        msg: 'SystemError: renderPane error: Invalid input data, input should be a paneData not a serviceObject'
+                    }),
+                    new templates.TaskItem('sysmodal.close-modal', {}),
+                    new templates.TaskItem('exec', function() {
+                        window.location.reload()
+                    }),
+                    new templates.TaskItem('done', {})
+                ])
+                console.error(`renderPane error: Invalid input data, input should be a paneData not a serviceObject`, data)
+            } else {
+                this.runCompiledTask([
+                    new templates.TaskItem('insertCompiledTask',{
+                        compiledTask: this.getCompiledTask('syspane.add-pane'),
+                        payload: {
+                            data
                         }
-                    }
-                })
-            ])
+                    })
+                ])
+            }
         },
-        paneGetView(componentName){
-            // returns a view name sring or a component name
-            return this.viewFilter(componentName,{
+        getServiceView(dataSet){
+            // console.log('> Getting service view ', dataSet)
+            // returns a service objects
+            const {views} = this.$store.state.app['app-services'][this.$store.state.app['active-sidebar-item']]
+            const deserializeViews = new Function('return ' + views)()
+            const helper = {
                 runCompiledTask : this.runCompiledTask,
                 getCompiledTask : this.getCompiledTask,
                 paneSettings: this.paneSettings,
                 paneModal : this.paneModal,
-                paneAdd : this.paneAdd,
-                paneGetView: this.paneGetView
-            },utils,templates)
+                renderPane : this.renderPane,
+                getServiceView: this.getServiceView
+            }
+            const serviceObject = deserializeViews(dataSet,helper,utils,templates)
+
+            if(!serviceObject) {
+                this.runCompiledTask([
+                    new templates.TaskItem('sysmodal.logerr', {
+                        msg: 'getServiceView error: Unhandled dataSet in service views, cannot find a service view, check console log for more details'
+                    }),
+                    new templates.TaskItem('sysmodal.close-modal', {}),
+                    new templates.TaskItem('exec', function() {
+                        window.location.reload()
+                    }),
+                    new templates.TaskItem('done', {})
+                ])
+                console.error('getServiceView error: Unhandled dataSet in service views, cannot find a service view for this data set', dataSet)
+                return
+            } else {
+                // Problem start here, the data will be incorrect starting on a non zero index pane
+                const { componentConfig, paneConfig, paneOnLoad } = serviceObject
+                paneOnLoad()
+                return {
+                    componentConfig,
+                    paneConfig
+                }
+                
+            }
+            
         },
         closePane() {            
             if(this.$store.state.pane.length == 1){

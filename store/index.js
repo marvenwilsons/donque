@@ -112,9 +112,8 @@ export const mutations = {
         },
     /** ----- */
     /** PANE MUTATIONS */
-        paneAdd(state,{paneIndex, payload}) {
+        paneAdd(state,{payload}) {
             state.pane.push({
-                paneIndex,
                 ...payload
             })
         },
@@ -161,19 +160,21 @@ export const actions = {
             })
 
             const unPackServices = ((s) => {
+                // addAppService
                 return s.map(service => JSON.parse(service))
             })(service)
 
 
             // set menu items
             unPackServices.map(items => {
+                commit('app/addAppService', items)
                 commit('app/addMenu', items.name)
             })
             // set services to app store state
-            commit('app/stateController', {
-                key: 'app-services',
-                value: unPackServices
-            })
+            // commit('app/stateController', {
+            //     key: 'app-services',
+            //     value: unPackServices
+            // })
             // assign default active menu
             if(!state.app['defualt-active']) {
                 commit('app/stateController', {

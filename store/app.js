@@ -11,7 +11,7 @@ export const state = () => ({
         'active-sidebar-item': null,
         'defualt-active': '',
     /** ----- */
-        'app-services': [],
+        'app-services': {},
 
     systemRoutes: [
         '/dqlogin',
@@ -25,7 +25,7 @@ export const mutations = {
         state[payload.key] = payload.value
     },
     addAppService(state,payload) {
-        state['app-services'].push(payload)
+        state['app-services'][payload.name] = payload
     },
     addMenu(state,payload) {
         state['app-admin-sidebar-items'].push(payload)

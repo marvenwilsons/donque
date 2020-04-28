@@ -33,7 +33,7 @@ export default {
         alert(msg)
         location.reload()
     },
-    Service({name,data,fistPaneDefualtView,dataControllers,views,config, onEmptyData}) {
+    Service({name,initialData,fistPaneDefualtView,dataControllers,views,config, onEmptyData}) {
         const s = {
             // service name
             name: ((arg) => {
@@ -41,11 +41,11 @@ export default {
                 return arg
             })(name),
             // service data
-            data: ((arg) =>{
-                if(!arg) throw new Error('service data cannot be undefined')
+            initialData: ((arg) =>{
+                if(!arg) throw new Error('initial data cannot be undefined')
                 // if(!Array.isArray(arg)) throw new Error(`service data should be an array, instead got a ${typeof arg}: ${arg}`)
                 return arg
-            })(data),
+            })(initialData),
             // views
             views: ((arg) => {
                 return arg.toString()
@@ -60,7 +60,7 @@ export default {
         //     /**  */
         // })(views)
     },
-    Page: function({pageName,admin_id,lastModified,pageContent,version_id,isUndermaintenance}) {
+    Page: function({pageName,admin_id,lastModified,pageContent,version_id,isUndermaintenance,subPages,pageId}) {
         this.pageName = ((arg) => {
             // TODO:
             // convert everything to lower case
@@ -68,12 +68,14 @@ export default {
             // should not allow special characters
             return arg
         })(pageName)
+        this.pageId = pageId
         this.createdOn = moment().format("MMM Do YY")
         this.createdBy = admin_id
         this.lastModified = lastModified
         this.pageContent = pageContent
         this.version_id = version_id
         this.isUndermaintenance = isUndermaintenance
+        this.subPages = subPages
     },
     PageVersion: function({versionName}){
         this.versionName = versionName
