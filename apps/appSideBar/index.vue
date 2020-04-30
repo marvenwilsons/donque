@@ -42,16 +42,6 @@ export default {
     },
     methods: {        
         sideBarItemClick(selectedMenu) {
-            // if(selectedMenu && selectedMenu != this.$store.state.app['active-sidebar-item']) {
-            //     this.runCompiledTask([
-            //         new Templates.TaskItem('insertCompiledTask', {
-            //             payload: { 
-            //                 selectedMenu,
-            //             },
-            //             compiledTask: this.getCompiledTask('syspane.switch-menu')
-            //         })
-            //     ])
-            // } 
             this.runCompiledTask([
                 new Templates.TaskItem('insertCompiledTask', {
                     payload: { selectedMenu },

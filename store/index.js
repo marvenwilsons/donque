@@ -129,6 +129,22 @@ export const mutations = {
         paneUpdateData(state,{paneIndex,paneData}) {
             state.pane[paneIndex].paneConfig.paneData = paneData
         },
+        paneUpdateView(state,{paneIndex,viewIndex}) {
+            state.pane[paneIndex].paneConfig.defaultPaneView = viewIndex
+        },
+        paneModalUpdate(state,{paneIndex,payload}) {
+            if(payload === 'closeModal') {
+                state.pane[paneIndex].paneConfig.modal.modalBody = undefined
+                state.pane[paneIndex].paneConfig.modal.modalConfig = undefined
+                state.pane[paneIndex].paneConfig.modal.modalErr = undefined
+                state.pane[paneIndex].paneConfig.modal.modalInfo = undefined
+                state.pane[paneIndex].paneConfig.modal.isClosable = false
+                state.pane[paneIndex].paneConfig.modal.modalWidth = undefined
+                state.pane[paneIndex].paneConfig.modal.componentConfig = undefined
+            } else {
+                state.pane[paneIndex].paneConfig.modal[payload.key] = payload.value
+            }
+        },
         paneSwitchView(state,{paneIndex,paneView}) {
             state.pane[paneIndex].paneConfig.paneView = paneView
         },

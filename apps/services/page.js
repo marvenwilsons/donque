@@ -184,28 +184,27 @@ module.exports = Templates.Service({
         return pages
     },
     views: function(data,helper,utils,Templates) {
-        
+        /** Page list and sub pages */
         if(Array.isArray(data)) {
             return {
                 componentConfig: {
                     dataControllers: [
                         {
                             name: 'view page',
-                            handler: function({item,itemIndex,controllerName, paneIndex}) {
-                                helper.renderPane(helper.getServiceView(item), paneIndex)
+                            handler: function({item,paneIndex}) {
+                                helper.render(item,paneIndex)
                             }
                         },
                         {
                             name: 'sub page',
-                            handler: function({item,itemIndex,controllerName, paneIndex}) {
-                                console.log('subPage',paneIndex)
-                                helper.renderPane(helper.getServiceView(item.subPages), paneIndex)
+                            handler: function({item,paneIndex}) {
+                                helper.render(item.subPages,paneIndex)
                             }
                         },
                         {
                             name: 'delete page',
                             handler: function(helper) {
-                
+                                // should add modal methods in helper arg
                             }
                         },
                         {
@@ -225,33 +224,85 @@ module.exports = Templates.Service({
                     ableToAddItem: true,
                     infoDisplay: ['pageName','lastUpdated','updatedBy']
                 },
-                paneOnLoad: function() {
+                paneOnLoad: function(paneMethods,modalMethods) {
                     // console.log('> pageList loaded', data)
+                    // setTimeout(() => {
+                    //     paneMethods.closePane()
+                    //     paneMethods.changePaneView(1)
+                    // }, 300);
+                    paneMethods.changePaneView(1)
+                },
+                onModalData: function(modalData,modalMethods) {
+                    // modalData is the set of input data from the user
+                    if(modalData == undefined) {
+                        modalMethods.appendErrorMsg('Page Name Cannot be undefined')
+                        // modalMethods.appendInfoMsg('this is an info msg')
+                        modalMethods.updateProps({
+                            key: 'modalHeader',
+                            value: 'Error!'
+                        })
+                        // modalMethods.logError('this is log error')
+                        // modalMethods.logInfo('this is log info')
+                    }
                 },
                 paneConfig: {
                     paneName: 'Pages',
                     paneWidth: '550px',
                     isClosable: true,
-                    paneView: 'listify',
-                    paneData: data
+                    paneViews: ['listify','raw'],
+                    defaultPaneView: 0,
+                    paneData: data,
+                    modal: (() => {
+                        if(data.length == 0) {
+                            console.log('modal loaded')
+                            return {
+                                modalBody: 'formBuilder',
+                                componentConfig: {
+                                    schema: {
+                                        'Page Name': {
+                                            type: 'string'
+                                        }
+                                    }
+                                },
+                                modalHeader: 'Create Page',
+                                modalConfig: undefined,
+                                modalErr: undefined,
+                                modalInfo: 'Create a page to get started',
+                                isClosable: false,
+                                modalWidth: '400px'
+                            }
+                        }
+                    })()
                 },
             }
         } 
-        
+        /** Page Content when user clicks view page */
         if( !Array.isArray(data) && utils.hasSetOfKeys(['pageName','pageId'], data) ) {
             return {
                 componentConfig: {
                     msg: 'hello world'
                 },
                 paneOnLoad: function () {
-                    // console.log('> pageContent loaded ')
+                    // console.log('> pageContent loaded ',data)
                 },
                 paneConfig: {
                     paneName: data.pageName,
                     paneWidth: '700px',
                     isClosable: true,
-                    paneView: 'pageContent',
+                    paneViews: ['pageContent','raw'],
+                    defaultPaneView: 0,
                     paneData: data.item ? data.item : data,
+                    modal: (() => {
+                        return {
+                            modalBody: undefined,
+                            componentConfig: undefined,
+                            modalConfig: undefined,
+                            modalErr: undefined,
+                            modalInfo: undefined,
+                            isClosable: false,
+                            modalWidth: undefined
+                        }
+                    })()
                 }
             }
         }

@@ -152,7 +152,45 @@ export default {
             const {isComponent,content} = body
             /** if isComponent is false it will assume it is string, else name of a vue component */
         },
+        paneOnLoad(paneIndex) {
+            ((s) => { /** I have to wrap it and inject the scope to its closure to avoid infinite loop */
+                const modalMethods = {
+                    closePaneModal: function() {
+                        s.closePaneModal(paneIndex)
+                    },
+                    appendErrorMsg: function(msg) {
+                        s.appendErrorMsg({paneIndex,msg})
+                    },
+                    appendInfoMsg:  function(msg) {
+                        s.appendInfoMsg({paneIndex,msg})
+                    },
+                    updateProps: function({key,value}) {
+                        s.updateProps(paneIndex,{key,value})
+                    },
+                    logError: function(msg) {
+                        s.logError(paneIndex,msg)
+                    },
+                    logInfo: function(msg) {
+                        s.logInfo(logInfo,msg)
+                    }
+                }
+                const paneMethods = {
+                    closePane: this.closePane,
+                    changePaneView: function(viewIndex) {
+                        s.changePaneView({paneIndex,viewIndex})
+                    },
+                }
+                const dWinTopMethods = {
+                    // TODO
+                }
+                const dWinRightMethods = {
+                    // TODO
+                }
+                s.$store.state.pane[paneIndex].paneConfig.paneOnLoad(paneMethods,modalMethods)
+            })(this)
+        },
         renderPane(data, paneIndex) {
+            // console.log('renderPane', data)
             if(paneIndex == undefined || paneIndex == null) {
                 console.error('renderPane error, paneIndex cannot be undefined')
                 return
@@ -180,6 +218,7 @@ export default {
                         }),
                         new templates.TaskItem('done',{})
                     ])
+                    this.paneOnLoad(paneIndex + 1,this)
                 } else {
                     this.runCompiledTask([
                         new templates.TaskItem('syspane.delete', {
@@ -190,13 +229,14 @@ export default {
                         }),
                         new templates.TaskItem('done',{})
                     ])
+                    this.paneOnLoad(paneIndex + 1,this)
                 }
                 
             }
             
         },
         getServiceView(dataSet){
-            console.log('> Getting service view ', dataSet)
+            // console.log('> Getting service view ', dataSet)
             // returns a service objects
             const {views} = this.$store.state.app['app-services'][this.$store.state.app['active-sidebar-item']]
             const deserializeViews = new Function('return ' + views)()
@@ -206,7 +246,15 @@ export default {
                 paneSettings: this.paneSettings,
                 paneModal : this.paneModal,
                 renderPane : this.renderPane,
-                getServiceView: this.getServiceView
+                getServiceView: this.getServiceView,
+                closePane: this.closePane,
+                render: this.render,
+                modalMethods: {
+                    closePaneModal: this.closePaneModal,
+                    appendErrorMsg: this.appendErrorMsg,
+                    appendInfoMsg: this.appendInfoMsg,
+                    updateProps: this.updateProps
+                }
             }
             const serviceObject = deserializeViews(dataSet,helper,utils,templates)
 
@@ -225,14 +273,28 @@ export default {
                 return
             } else {
                 // Problem start here, the data will be incorrect starting on a non zero index pane
-                const { componentConfig, paneConfig, paneOnLoad } = serviceObject
-                paneOnLoad()
+                const { componentConfig, paneConfig, paneOnLoad, onModalData } = serviceObject
+                if(!paneConfig.modal) {
+                    paneConfig.modal = {}
+                    paneConfig.modal.modalBody = undefined
+                    paneConfig.modal.componentConfig = undefined
+                    paneConfig.modal.modalConfig = undefined
+                    paneConfig.modal.modalErr = undefined
+                    paneConfig.modal.modalInfo = undefined
+                    paneConfig.modal.isClosable = false
+                    paneConfig.modal.modalWidth = undefined
+                }
+                paneConfig.modal.onModalData = onModalData
+                paneConfig.paneOnLoad = paneOnLoad
                 return {
                     componentConfig,
                     paneConfig
                 }
             }
             
+        },
+        render(dataSet,paneIndex) {
+            this.renderPane(this.getServiceView(dataSet),paneIndex)
         },
         closePane() {            
             if(this.$store.state.pane.length == 1){
@@ -255,6 +317,49 @@ export default {
                     })
                 ])
             }
+        },
+        changePaneView({paneIndex,viewIndex}) {
+            this.$store.commit('paneUpdateView', {
+                paneIndex,
+                viewIndex
+            })
+        },
+        /** Pane Modal Methods */
+        closePaneModal(paneIndex) {
+            this.$store.commit('paneModalUpdate', {
+                paneIndex,
+                payload: 'closeModal'
+            })
+        },
+        appendErrorMsg(paneIndex,msg) {
+            this.$store.commit('paneModalUpdate', {
+                paneIndex,
+                payload: {
+                    key: 'modalErr',
+                    value: msg
+                }
+            })
+        },
+        appendInfoMsg(paneIndex,msg) {
+            this.$store.commit('paneModalUpdate', {
+                paneIndex,
+                payload: {
+                    key: 'modalInfo',
+                    value: msg
+                }
+            })
+        },
+        updateProps(paneIndex, payload) {
+            this.$store.commit('paneModalUpdate', {
+                paneIndex,
+                payload
+            })
+        },
+        logError(paneIndex,msg) {
+            // TODO
+        },
+        logInfo(paneIndex,msg) {
+            // TODo
         }
     }
 }

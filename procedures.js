@@ -241,6 +241,7 @@ export default function (app,method) {
             value: selectedMenu
         })
         /** pane add */
+        console.log(app.getServiceView(payload))
         i['private.syspane.add']({
             payload:  app.getServiceView(payload)
         })
@@ -251,7 +252,7 @@ export default function (app,method) {
     }
     // pane system
     i['private.syspane.add'] = function ({payload}) {
-        console.log('> syspane.add ', payload)
+        // console.log('> syspane.add ', payload)
         if(!payload.componentConfig || !payload.paneConfig) {
             console.error('Invalid pane object ', payload)
         } else {
