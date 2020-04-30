@@ -14,3 +14,7 @@ Vue.component("listify", listify)
 Vue.component("loading", loading)
 Vue.component("formBuilder",formBuilder)
 Vue.component("raw",raw)
+
+import JsonViewer from 'vue-json-viewer/ssr'
+Vue.use(JsonViewer)
+Vue.component('JsonViewer',JsonViewer)

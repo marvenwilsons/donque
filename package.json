@@ -22,7 +22,8 @@
     "node-fetch": "^2.6.0",
     "nuxt": "^2.0.0",
     "pg": "^8.0.2",
-    "require-from-string": "^2.0.2"
+    "require-from-string": "^2.0.2",
+    "vue-json-viewer": "^2.2.11"
   },
   "devDependencies": {
     "@nuxtjs/vuetify": "^1.0.0",

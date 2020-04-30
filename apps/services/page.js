@@ -225,12 +225,10 @@ module.exports = Templates.Service({
                     infoDisplay: ['pageName','lastUpdated','updatedBy']
                 },
                 paneOnLoad: function(paneMethods,modalMethods) {
-                    // console.log('> pageList loaded', data)
-                    // setTimeout(() => {
-                    //     paneMethods.closePane()
-                    //     paneMethods.changePaneView(1)
-                    // }, 300);
-                    paneMethods.changePaneView(1)
+                    /**
+                     * paneMethods.closePane() -> closes the current pane
+                     * paneMethods.changePaneView(<index>) -> change the pane view
+                     */
                 },
                 onModalData: function(modalData,modalMethods) {
                     // modalData is the set of input data from the user
