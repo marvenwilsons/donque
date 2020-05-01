@@ -33,7 +33,7 @@ export default {
         alert(msg)
         location.reload()
     },
-    Service({name,initialData,fistPaneDefualtView,dataControllers,views,config, onEmptyData}) {
+    Service({name,initialData,views}) {
         const s = {
             // service name
             name: ((arg) => {
@@ -56,9 +56,15 @@ export default {
             data: s.data,
             body: s
         }
-        // this.views = (({objectKeys = Array,component = Object}) => {
-        //     /**  */
-        // })(views)
+    },
+    paneModal: function({modalBody,componentConfig,modalConfig,modalErr,modalInfo,isClosable,modalWidth}) {
+        this.modalBody = modalBody
+        this.componentConfig = componentConfig
+        this.modalConfig = modalConfig
+        this.modalErr = modalErr
+        this.modalInfo = modalInfo
+        this.isClosable = isClosable
+        this.modalWidth = modalWidth
     },
     Page: function({pageName,admin_id,lastModified,pageContent,version_id,isUndermaintenance,subPages,pageId}) {
         this.pageName = ((arg) => {

@@ -145,6 +145,9 @@ export const mutations = {
                 state.pane[paneIndex].paneConfig.modal[payload.key] = payload.value
             }
         },
+        paneModalOverwrite(state,{paneIndex,modalObject}) {
+            state.pane[paneIndex].paneConfig.modal = modalObject
+        },
         paneSwitchView(state,{paneIndex,paneView}) {
             state.pane[paneIndex].paneConfig.paneView = paneView
         },

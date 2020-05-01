@@ -30,7 +30,7 @@
                             maxHeight: '90%'
                         }" 
                     class="borderRad4 modalShadow" >
-                    <div style="background: var(--deftheme-dark-primary);color:white;" class="pad050" >
+                    <div style="background: var(--deftheme-dark-primary);color:white;" class="pad125" >
                         <v-flex spacebetween>
                             <span>{{$store.state.pane[paneIndex].paneConfig.modal.modalHeader}}</span>
                             <span

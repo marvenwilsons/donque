@@ -183,7 +183,7 @@ module.exports = Templates.Service({
         }))
         return pages
     },
-    views: function(data,helper,utils,Templates) {
+    views: function(data,helper,utils,Templates,dWin) {
         /** Page list and sub pages */
         if(Array.isArray(data)) {
             return {
@@ -224,23 +224,25 @@ module.exports = Templates.Service({
                     ableToAddItem: true,
                     infoDisplay: ['pageName','lastUpdated','updatedBy']
                 },
-                paneOnLoad: function(paneMethods,modalMethods) {
-                    /**
+                paneOnLoad: function(paneMethods,modalMethods,) {
+                    /** paneMethods, TODO: write proper documentation
                      * paneMethods.closePane() -> closes the current pane
                      * paneMethods.changePaneView(<index>) -> change the pane view
                      */
+                    helper.systemError('This is a test error')
                 },
-                onModalData: function(modalData,modalMethods) {
+                onModalData: function(modalData,paneMethods,modalMethods) {
                     // modalData is the set of input data from the user
+                    /** modalMethods, TODO: write proper documentation
+                     * modalMethods.appendErrorMsg('msg') -> append error msg on the current modal container
+                     * modalMethods.appendInfoMsg('msg') -> append info msg on the current modal container
+                     * modalMethods.updateProps({key,value}) -> mutates the current modal ojbect
+                     * modalMethods.logError('this is log error', fn()<func to be executed after modal closes>)
+                     * modalMethods.logInfo('this is log info',fn()<func to be executed after modal closes>)
+                     * modalMethods.activatePaneModal({<modal object>}) -> spawns a new modal
+                     */
                     if(modalData == undefined) {
                         modalMethods.appendErrorMsg('Page Name Cannot be undefined')
-                        // modalMethods.appendInfoMsg('this is an info msg')
-                        modalMethods.updateProps({
-                            key: 'modalHeader',
-                            value: 'Error!'
-                        })
-                        // modalMethods.logError('this is log error')
-                        // modalMethods.logInfo('this is log info')
                     }
                 },
                 paneConfig: {
@@ -252,7 +254,6 @@ module.exports = Templates.Service({
                     paneData: data,
                     modal: (() => {
                         if(data.length == 0) {
-                            console.log('modal loaded')
                             return {
                                 modalBody: 'formBuilder',
                                 componentConfig: {

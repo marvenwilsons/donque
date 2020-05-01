@@ -172,6 +172,9 @@ export default {
                     },
                     logInfo: function(msg) {
                         s.logInfo(logInfo,msg)
+                    },
+                    activatePaneModal: function(modalObject) {
+
                     }
                 }
                 const paneMethods = {
@@ -235,6 +238,20 @@ export default {
             }
             
         },
+        systemError(msg) {
+            setTimeout(() => {
+                this.runCompiledTask([
+                    new templates.TaskItem('sysmodal.logerr', {
+                        msg
+                    }),
+                    new templates.TaskItem('sysmodal.close-modal', {}),
+                    new templates.TaskItem('exec', function() {
+                        window.location.reload()
+                    }),
+                    new templates.TaskItem('done', {})
+                ])
+            }, 1000);
+        },
         getServiceView(dataSet){
             // console.log('> Getting service view ', dataSet)
             // returns a service objects
@@ -249,6 +266,7 @@ export default {
                 getServiceView: this.getServiceView,
                 closePane: this.closePane,
                 render: this.render,
+                systemError: this.systemError,
                 modalMethods: {
                     closePaneModal: this.closePaneModal,
                     appendErrorMsg: this.appendErrorMsg,
@@ -256,21 +274,13 @@ export default {
                     updateProps: this.updateProps
                 }
             }
+            
+            // TODO: create dWin object api
+            // dependency enject the views function
             const serviceObject = deserializeViews(dataSet,helper,utils,templates)
 
             if(!serviceObject) {
-                this.runCompiledTask([
-                    new templates.TaskItem('sysmodal.logerr', {
-                        msg: 'getServiceView error: Unhandled dataSet in service views, cannot find a service view, check console log for more details'
-                    }),
-                    new templates.TaskItem('sysmodal.close-modal', {}),
-                    new templates.TaskItem('exec', function() {
-                        window.location.reload()
-                    }),
-                    new templates.TaskItem('done', {})
-                ])
-                console.error('getServiceView error: Unhandled dataSet in service views, cannot find a service view for this data set', dataSet)
-                return
+                this.systemError('getServiceView error: Unhandled dataSet in service views, cannot find a service view, check console log for more details')
             } else {
                 // Problem start here, the data will be incorrect starting on a non zero index pane
                 const { componentConfig, paneConfig, paneOnLoad, onModalData } = serviceObject
@@ -286,10 +296,13 @@ export default {
                 }
                 paneConfig.modal.onModalData = onModalData
                 paneConfig.paneOnLoad = paneOnLoad
+
                 return {
                     componentConfig,
                     paneConfig
                 }
+
+
             }
             
         },
@@ -354,6 +367,18 @@ export default {
                 paneIndex,
                 payload
             })
+        },
+        activatePaneModal(paneIndex,modalObject) {
+            // call templates here
+            try {
+                this.closePaneModal(paneIndex)
+                this.$store.commit('paneModalOverwrite', {
+                    paneIndex,
+                    modalObject: new templates.paneModal(modalObject)
+                })
+            }catch(err) {
+                this.systemError(`activaPaneModal ERR \n ${err}`)
+            }
         },
         logError(paneIndex,msg) {
             // TODO

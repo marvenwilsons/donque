@@ -1,7 +1,12 @@
 @task
 
-implement pane modal
-implement dwins
+finish pane modal
+
+normalize dependency enjection on dataControlelrs of listify by partial appliying paneIndex
+before passing it as a dependency
+
+implement dWins
+implement uniview
 implement key press systemm with ctrl + cm
 
 add encryption and decryption to utils, add hasSetOfKeys validation to utils
