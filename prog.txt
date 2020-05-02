@@ -1,12 +1,18 @@
 @task
 
-finish pane modal
-
-normalize dependency enjection on dataControlelrs of listify by partial appliying paneIndex
-before passing it as a dependency
-
-implement dWins
-implement uniview
-implement key press systemm with ctrl + cm
-
-add encryption and decryption to utils, add hasSetOfKeys validation to utils
+Month: May 2020
+[x] normalize dependency enjection on dataControlelrs of listify by partial appliying paneIndex
+    before passing it as a dependency
+[x] add hasSetOfKeys validation to utils
+[-] add viewIndex support for render in paneMethods
+[-] add prompt support for pane modal 
+[-] implement dWins
+[-] implement uniview
+[-] add encryption and decryption to utils
+[-] implement key press systemm with for + cm
+[-] make initialData function async in the backend
+[-] add service manager menu
+[-] write documentaion for pane methods
+[-] write documentaion for modal methods
+[-] write documentaion for task system methods
+[-] write documentaion for queue system methods

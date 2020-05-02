@@ -164,19 +164,20 @@ export default {
         normyDep(paneIndex,scope) {
             return ((s) => {
                 const modalMethods = {
+                    closePaneModal: () =>  s.closePaneModal(paneIndex),
                     appendErrorMsg: msg => s.appendErrorMsg(paneIndex,msg),
                     appendInfoMsg:  msg => s.appendInfoMsg(paneIndex,msg),
                     logError:       (msg,fn) => s.paneLogError(paneIndex,msg,fn),
                     logInfo:        (msg,fn) => s.paneLogInfo(paneIndex,msg,fn),
                     logWarn:        (msg,fn) => s.paneLogWarn(paneIndex,msg,fn),
-                    closePaneModal: () =>  s.closePaneModal(paneIndex),
                     updateProps:    ({key,value}) => s.updateProps(paneIndex,{key,value}),
-                    activatePaneModal: modalObject => s.activatePaneModal(paneIndex,modalObject)
                 }
                 const paneMethods = {
                     closePane:      () => s.closePane,
+                    closeUnUsedPane: () => s.closeUnUsedPane(paneIndex + 1),
                     changePaneView: viewIndex => s.changePaneView({paneIndex,viewIndex}),
-                    render:         (data,viewIndex) => s.render(data,paneIndex,viewIndex)
+                    render:         (data,viewIndex) => s.render(data,paneIndex,viewIndex),
+                    spawnModal: modalObject => s.spawnModal(paneIndex,modalObject)
                 }
                 const dWinMethods = {
                     // TODO
@@ -248,6 +249,7 @@ export default {
                 closePane: this.closePane,
                 render: this.render,
                 systemError: this.systemError,
+                closeUnUsedPane: this.closeUnUsedPane,
                 modalMethods: {
                     /** TODO: system modal */
                 }
@@ -293,7 +295,6 @@ export default {
                     })
                 ])
             } else {
-                /** TODO: implement pane close for non 0 index pane */
                 this.runCompiledTask([
                     new templates.TaskItem('insertCompiledTask', {
                         payload: { 
@@ -316,6 +317,16 @@ export default {
                 paneIndex,
                 payload: 'closeModal'
             })
+        },
+        closeUnUsedPane(paneIndex) {
+            this.runCompiledTask([
+                new templates.TaskItem('insertCompiledTask', {
+                    payload: { 
+                        origin: paneIndex
+                    },
+                    compiledTask: this.getCompiledTask('syspane.close-pane')
+                })
+            ])
         },
         appendErrorMsg(paneIndex,msg) {
             this.$store.commit('paneModalUpdate', {
@@ -355,7 +366,7 @@ export default {
                 payload
             })
         },
-        activatePaneModal(paneIndex,modalObject) {
+        spawnModal(paneIndex,modalObject) {
             // call templates here
             try {
                 this.closePaneModal(paneIndex)

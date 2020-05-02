@@ -205,15 +205,21 @@ module.exports = Templates.Service({
                             name: 'delete page',
                             handler: function(selected, paneMethods, modalMethods, dWinMethods) {
                                 // should add modal methods in helper arg
-                                modalMethods.logWarn(`Are you sure you want to delete ${selected.item.pageName}`,() => {
+                                modalMethods.logWarn(`Warning! Are you sure you want to delete ${selected.item.pageName}`,() => {
                                     modalMethods.closePaneModal()
+                                    paneMethods.closeUnUsedPane()
                                 })
                             }
                         },
                         {
                             name: 'rename',
                             handler: function(item, paneMethods, modalMethods, dWinMethods) {
-                                
+                                modalMethods.prompt({
+                                    type: 'string', // select, number, range, multiselect
+                                    value: ''
+                                }, (data) => {
+                                    console.log(data)
+                                })
                             }
                         },
                         {
@@ -231,6 +237,8 @@ module.exports = Templates.Service({
                     /** paneMethods, TODO: write proper documentation
                      * paneMethods.closePane() -> closes the current pane
                      * paneMethods.changePaneView(<index>) -> change the pane view
+                     * paneMethods.closeUnUsedPane()
+                     * paneMethods.spawnModal(<modalObject>)
                      */
                     // helper.systemError('This is a test error')
                 },
@@ -244,6 +252,7 @@ module.exports = Templates.Service({
                      * modalMethods.logInfo('this is log info',fn()<func to be executed after modal closes>)
                      * modalMethods.logWarn('this is log info',fn()<func to be executed after modal closes>)
                      * modalMethods.activatePaneModal({<modal object>}) -> spawns a new modal
+                     * modalMethods.closePaneModal()
                      */
                     if(modalData == undefined) {
                         modalMethods.appendErrorMsg('Page Name Cannot be undefined')
@@ -308,13 +317,6 @@ module.exports = Templates.Service({
                     })()
                 }
             }
-        }
-
-
-
-
-
-
-        
+        }  
     }
 })
