@@ -57,7 +57,7 @@ export default {
             body: s
         }
     },
-    paneModal: function({modalBody,componentConfig,modalConfig,modalErr,modalInfo,isClosable,modalWidth}) {
+    paneModal: function({modalBody,componentConfig,modalConfig,modalErr,modalInfo,isClosable,modalWidth, modalHeader}) {
         this.modalBody = modalBody
         this.componentConfig = componentConfig
         this.modalConfig = modalConfig
@@ -65,6 +65,7 @@ export default {
         this.modalInfo = modalInfo
         this.isClosable = isClosable
         this.modalWidth = modalWidth
+        this.modalHeader = modalHeader
     },
     Page: function({pageName,admin_id,lastModified,pageContent,version_id,isUndermaintenance,subPages,pageId}) {
         this.pageName = ((arg) => {

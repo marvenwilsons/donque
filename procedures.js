@@ -229,7 +229,6 @@ export default function (app,method) {
     }
     // sidebar
     i['private.sidebar.switch-menu'] = function ({selectedMenu,payload}) {
-        console.log('> switch menu')
         /** emptying the pane array */
         app.$store.commit('stateController', {
             key: 'pane',
@@ -241,7 +240,6 @@ export default function (app,method) {
             value: selectedMenu
         })
         /** pane add */
-        console.log(app.getServiceView(payload))
         i['private.syspane.add']({
             payload:  app.getServiceView(payload)
         })

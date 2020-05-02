@@ -14,7 +14,21 @@ export default {
         this.$p = this.h
     },
     methods: {
-    /** sys utils */
+        /** sys utils */
+        systemError(msg) {
+                                            setTimeout(() => {
+                                                this.runCompiledTask([
+                                                    new templates.TaskItem('sysmodal.logerr', {
+                                                        msg
+                                                    }),
+                                                    new templates.TaskItem('sysmodal.close-modal', {}),
+                                                    new templates.TaskItem('exec', function() {
+                                                        window.location.reload()
+                                                    }),
+                                                    new templates.TaskItem('done', {})
+                                                ])
+                                            }, 500);
+        },
         m() {
             return this
         },
@@ -147,50 +161,28 @@ export default {
                 })
             }
         },
-        /**TODO pane modal */
-        paneModal({header,width,body}) {
-            const {isComponent,content} = body
-            /** if isComponent is false it will assume it is string, else name of a vue component */
-        },
-        paneOnLoad(paneIndex) {
-            ((s) => { /** I have to wrap it and inject the scope to its closure to avoid infinite loop */
+        normyDep(paneIndex,scope) {
+            return ((s) => {
                 const modalMethods = {
-                    closePaneModal: function() {
-                        s.closePaneModal(paneIndex)
-                    },
-                    appendErrorMsg: function(msg) {
-                        s.appendErrorMsg({paneIndex,msg})
-                    },
-                    appendInfoMsg:  function(msg) {
-                        s.appendInfoMsg({paneIndex,msg})
-                    },
-                    updateProps: function({key,value}) {
-                        s.updateProps(paneIndex,{key,value})
-                    },
-                    logError: function(msg) {
-                        s.logError(paneIndex,msg)
-                    },
-                    logInfo: function(msg) {
-                        s.logInfo(logInfo,msg)
-                    },
-                    activatePaneModal: function(modalObject) {
-
-                    }
+                    appendErrorMsg: msg => s.appendErrorMsg(paneIndex,msg),
+                    appendInfoMsg:  msg => s.appendInfoMsg(paneIndex,msg),
+                    logError:       (msg,fn) => s.paneLogError(paneIndex,msg,fn),
+                    logInfo:        (msg,fn) => s.paneLogInfo(paneIndex,msg,fn),
+                    logWarn:        (msg,fn) => s.paneLogWarn(paneIndex,msg,fn),
+                    closePaneModal: () =>  s.closePaneModal(paneIndex),
+                    updateProps:    ({key,value}) => s.updateProps(paneIndex,{key,value}),
+                    activatePaneModal: modalObject => s.activatePaneModal(paneIndex,modalObject)
                 }
                 const paneMethods = {
-                    closePane: this.closePane,
-                    changePaneView: function(viewIndex) {
-                        s.changePaneView({paneIndex,viewIndex})
-                    },
+                    closePane:      () => s.closePane,
+                    changePaneView: viewIndex => s.changePaneView({paneIndex,viewIndex}),
+                    render:         (data,viewIndex) => s.render(data,paneIndex,viewIndex)
                 }
-                const dWinTopMethods = {
+                const dWinMethods = {
                     // TODO
                 }
-                const dWinRightMethods = {
-                    // TODO
-                }
-                s.$store.state.pane[paneIndex].paneConfig.paneOnLoad(paneMethods,modalMethods)
-            })(this)
+                return { paneMethods, modalMethods, dWinMethods }
+            })(scope)
         },
         renderPane(data, paneIndex) {
             // console.log('renderPane', data)
@@ -221,7 +213,9 @@ export default {
                         }),
                         new templates.TaskItem('done',{})
                     ])
-                    this.paneOnLoad(paneIndex + 1,this)
+                    const {paneMethods,modalMethods} =  this.normyDep(paneIndex + 1,this)
+                    this.$store.state.pane[paneIndex].paneConfig.paneOnLoad(paneMethods,modalMethods)
+
                 } else {
                     this.runCompiledTask([
                         new templates.TaskItem('syspane.delete', {
@@ -232,32 +226,19 @@ export default {
                         }),
                         new templates.TaskItem('done',{})
                     ])
-                    this.paneOnLoad(paneIndex + 1,this)
+                    const {paneMethods,modalMethods} =  this.normyDep(paneIndex + 1,this)
+                    this.$store.state.pane[paneIndex].paneConfig.paneOnLoad(paneMethods,modalMethods)
                 }
                 
             }
             
         },
-        systemError(msg) {
-            setTimeout(() => {
-                this.runCompiledTask([
-                    new templates.TaskItem('sysmodal.logerr', {
-                        msg
-                    }),
-                    new templates.TaskItem('sysmodal.close-modal', {}),
-                    new templates.TaskItem('exec', function() {
-                        window.location.reload()
-                    }),
-                    new templates.TaskItem('done', {})
-                ])
-            }, 1000);
-        },
-        getServiceView(dataSet){
+        getServiceView(dataSet,viewIndex){
             // console.log('> Getting service view ', dataSet)
             // returns a service objects
             const {views} = this.$store.state.app['app-services'][this.$store.state.app['active-sidebar-item']]
             const deserializeViews = new Function('return ' + views)()
-            const helper = {
+            const helper = {  /** this for global access, if you use this, you have to provide a paneIndex, or if not all panes will be affected */
                 runCompiledTask : this.runCompiledTask,
                 getCompiledTask : this.getCompiledTask,
                 paneSettings: this.paneSettings,
@@ -268,10 +249,7 @@ export default {
                 render: this.render,
                 systemError: this.systemError,
                 modalMethods: {
-                    closePaneModal: this.closePaneModal,
-                    appendErrorMsg: this.appendErrorMsg,
-                    appendInfoMsg: this.appendInfoMsg,
-                    updateProps: this.updateProps
+                    /** TODO: system modal */
                 }
             }
             
@@ -297,16 +275,11 @@ export default {
                 paneConfig.modal.onModalData = onModalData
                 paneConfig.paneOnLoad = paneOnLoad
 
-                return {
-                    componentConfig,
-                    paneConfig
-                }
-
-
+                return { componentConfig, paneConfig }
             }
             
         },
-        render(dataSet,paneIndex) {
+        render(dataSet,paneIndex,viewIndex) {
             this.renderPane(this.getServiceView(dataSet),paneIndex)
         },
         closePane() {            
@@ -348,12 +321,26 @@ export default {
             this.$store.commit('paneModalUpdate', {
                 paneIndex,
                 payload: {
+                    key: 'modalInfo',
+                    value: undefined
+                }
+            })
+            this.$store.commit('paneModalUpdate', {
+                paneIndex,
+                payload: {
                     key: 'modalErr',
                     value: msg
                 }
             })
         },
         appendInfoMsg(paneIndex,msg) {
+            this.$store.commit('paneModalUpdate', {
+                paneIndex,
+                payload: {
+                    key: 'modalErr',
+                    value: undefined
+                }
+            })
             this.$store.commit('paneModalUpdate', {
                 paneIndex,
                 payload: {
@@ -380,11 +367,50 @@ export default {
                 this.systemError(`activaPaneModal ERR \n ${err}`)
             }
         },
-        logError(paneIndex,msg) {
-            // TODO
+        paneLogError(paneIndex,msg, fn) {
+            this.closePaneModal(paneIndex)
+            this.$store.commit('paneModalOverwrite', {
+                paneIndex,
+                modalObject: new templates.paneModal({
+                    modalBody: 'logErr',
+                    modalHeader: 'Error!',
+                    isClosable: true,
+                    modalConfig: {
+                        msg,
+                        fn: fn ? fn : function() {}
+                    }
+                })
+            })
         },
-        logInfo(paneIndex,msg) {
-            // TODo
+        paneLogInfo(paneIndex,msg, fn) {
+            this.closePaneModal(paneIndex)
+            this.$store.commit('paneModalOverwrite', {
+                paneIndex,
+                modalObject: new templates.paneModal({
+                    modalBody: 'logInfo',
+                    modalHeader: 'Info!',
+                    isClosable: true,
+                    modalConfig: {
+                        msg,
+                        fn: fn ? fn : function() {}
+                    }
+                })
+            })
+        },
+        paneLogWarn(paneIndex,msg, fn) {
+            this.closePaneModal(paneIndex)
+            this.$store.commit('paneModalOverwrite', {
+                paneIndex,
+                modalObject: new templates.paneModal({
+                    modalBody: 'logWarn',
+                    modalHeader: 'Warning!',
+                    isClosable: true,
+                    modalConfig: {
+                        msg,
+                        fn: fn ? fn : function() {}
+                    }
+                })
+            })
         }
     }
 }

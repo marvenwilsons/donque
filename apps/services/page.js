@@ -191,31 +191,34 @@ module.exports = Templates.Service({
                     dataControllers: [
                         {
                             name: 'view page',
-                            handler: function({item,paneIndex}) {
-                                helper.render(item,paneIndex)
+                            handler: function(selected, paneMethods, modalMethods, dWinMethods) {
+                                paneMethods.render(selected.item)
                             }
                         },
                         {
                             name: 'sub page',
-                            handler: function({item,paneIndex}) {
-                                helper.render(item.subPages,paneIndex)
+                            handler: function(selected, paneMethods, modalMethods, dWinMethods) {
+                                paneMethods.render(selected.item.subPages)
                             }
                         },
                         {
                             name: 'delete page',
-                            handler: function(helper) {
+                            handler: function(selected, paneMethods, modalMethods, dWinMethods) {
                                 // should add modal methods in helper arg
+                                modalMethods.logWarn(`Are you sure you want to delete ${selected.item.pageName}`,() => {
+                                    modalMethods.closePaneModal()
+                                })
                             }
                         },
                         {
                             name: 'rename',
-                            handler: function(helper) {
+                            handler: function(item, paneMethods, modalMethods, dWinMethods) {
                                 
                             }
                         },
                         {
                             name: 'edit page',
-                            handler: function() {
+                            handler: function(item, paneMethods, modalMethods, dWinMethods) {
 
                             }
                         }
@@ -229,7 +232,7 @@ module.exports = Templates.Service({
                      * paneMethods.closePane() -> closes the current pane
                      * paneMethods.changePaneView(<index>) -> change the pane view
                      */
-                    helper.systemError('This is a test error')
+                    // helper.systemError('This is a test error')
                 },
                 onModalData: function(modalData,paneMethods,modalMethods) {
                     // modalData is the set of input data from the user
@@ -239,6 +242,7 @@ module.exports = Templates.Service({
                      * modalMethods.updateProps({key,value}) -> mutates the current modal ojbect
                      * modalMethods.logError('this is log error', fn()<func to be executed after modal closes>)
                      * modalMethods.logInfo('this is log info',fn()<func to be executed after modal closes>)
+                     * modalMethods.logWarn('this is log info',fn()<func to be executed after modal closes>)
                      * modalMethods.activatePaneModal({<modal object>}) -> spawns a new modal
                      */
                     if(modalData == undefined) {

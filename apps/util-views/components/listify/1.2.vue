@@ -68,7 +68,7 @@
                                             v-for="(myOpt,optIndex) in myConfig.dataControllers" 
                                             :key="optIndex"
                                             >
-                                            <v-card-text @click="myOpt.handler({item,itemIndex,controllerName: myOpt.name, paneIndex})" class="optiontext" style="padding:0px;" >
+                                            <v-card-text @click="c({item,itemIndex,controllerName: myOpt.name, paneIndex},myOpt.handler)" class="optiontext" style="padding:0px;" >
                                                 {{myOpt.name}}
                                             </v-card-text>
                                         </span>
@@ -91,6 +91,12 @@ export default {
     created() {
         this.h = this
     },
+    methods: {
+        c(data,fn) {
+            const { paneMethods, modalMethods, dWinMethods} =  this.normyDep(this.paneIndex,this)
+            fn(data,paneMethods,modalMethods,dWinMethods)
+        }
+    }
 }
 </script>
 

@@ -18,6 +18,7 @@
                 </v-flex>
         </div>
         <v-flex flex1 relative >
+            <!-- pane modal -->
             <v-flex
                 v-if="$store.state.pane[paneIndex].paneConfig.modal.modalBody != undefined"  
                 style="z-index:900" absolute flexcenter fullwidth fullheight-percent >
@@ -42,7 +43,7 @@
                             </span>
                         </v-flex>
                     </div>
-                    <v-flex pad125 flexcol >
+                    <v-flex style="background:whitesmoke;" pad125 flexcol borderRad4 >
                         <div
                             v-if="$store.state.pane[paneIndex].paneConfig.modal.modalErr" 
                             class="backgrounderr err borderRad4 pad050 marginbottom125" >
@@ -54,14 +55,34 @@
                             {{$store.state.pane[paneIndex].paneConfig.modal.modalInfo}}
                         </div>
                         <div 
+                            v-if="!['logWarn','logErr','logInfo'].includes($store.state.pane[paneIndex].paneConfig.modal.modalBody)"
                             :is="$store.state.pane[paneIndex].paneConfig.modal.modalBody" 
                             :myConfig="$store.state.pane[paneIndex].paneConfig.modal.modalConfig" 
                             :paneIndex="paneIndex" 
                             :submitHandler="onModalData">
                         </div>
+                        <div
+                            v-if="['logWarn','logErr','logInfo'].includes($store.state.pane[paneIndex].paneConfig.modal.modalBody)"
+                            >
+                            <div 
+                                :class="['pad050', 'borderRad4',
+                                        $store.state.pane[paneIndex].paneConfig.modal.modalBody == 'logErr' && 'backgrounderr',
+                                        $store.state.pane[paneIndex].paneConfig.modal.modalBody == 'logInfo' && 'backgroundinfo',
+                                        $store.state.pane[paneIndex].paneConfig.modal.modalBody == 'logWarn' && 'backgroundwarn',
+                                    ]" 
+                                >
+                                <div class="pad025" >
+                                    {{$store.state.pane[paneIndex].paneConfig.modal.modalConfig.msg}}
+                                </div>
+                            </div>
+                            <v-flex margintop125 flexend>
+                                <v-btn @click="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.fn" color="primary" >continue</v-btn>
+                            </v-flex>
+                        </div>
                     </v-flex>
                 </main>
             </v-flex>
+            <!-- pane body -->
             <v-flex>
                 <div 
                     :id="$store.state.pane[paneIndex].paneConfig.paneName" 
@@ -96,66 +117,12 @@ export default {
         this.h = this
     },
     mounted() {
-        this.paneOnLoad(this.paneIndex)
+        this.normyDep(this.paneIndex,this)
     },
     methods: {
         onModalData(data) {
-            return ((paneIndex,scope) => {
-                return this.$store.state.pane[this.paneIndex].paneConfig.modal.onModalData(data,{
-                    closePaneModal: function() {
-                        scope.$store.commit('paneModalUpdate', {
-                            paneIndex,
-                            payload: 'closeModal'
-                        })
-                    },
-                    appendErrorMsg: function(msg) {
-                        scope.$store.commit('paneModalUpdate', {
-                            paneIndex,
-                            payload: {
-                                key: 'modalErr',
-                                value: msg
-                            }
-                        })
-                        scope.$store.commit('paneModalUpdate', {
-                            paneIndex,
-                            payload: {
-                                key: 'modalInfo',
-                                value: undefined
-                            }
-                        })
-                    },
-                    appendInfoMsg: function(msg) {
-                        scope.$store.commit('paneModalUpdate', {
-                            paneIndex,
-                            payload: {
-                                key: 'modalErr',
-                                value: undefined
-                            }
-                        })
-                        scope.$store.commit('paneModalUpdate', {
-                            paneIndex,
-                            payload: {
-                                key: 'modalInfo',
-                                value: msg
-                            }
-                        })
-                    },
-                    updateProps: function({key,value}) {
-                        scope.$store.commit('paneModalUpdate', {
-                            paneIndex,
-                            payload: {
-                                key,
-                                value
-                            }
-                        })
-                    },
-                    appendView: function({viewName,componentConfig}) {
-
-                    },
-                    logError: this.logError,
-                    logInfo: this.logInfo
-                })
-            })(this.paneIndex,this)
+            const { paneMethods, modalMethods, dWinMethods} =  this.normyDep(this.paneIndex,this)
+            this.$store.state.pane[this.paneIndex].paneConfig.modal.onModalData(data,paneMethods,modalMethods,dWinMethods)
         }
     }
 }

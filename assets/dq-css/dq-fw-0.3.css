@@ -381,13 +381,40 @@ img {
 }
 .backgrounderr {
   background: #ae11001a;
+  color: rgb(107, 4, 4);
   border-left: 5px solid  #ae110059;
   border-top: 1px solid #ae110059;
   border-right: 1px solid #ae110059;
   border-bottom: 1px solid #ae110059;
 }
 
-/* My Own Style ( dq framework 0.2 )
+.backgroundsuc{
+  background: #dff0d8;
+  color: #417946;
+  border-left: 5px solid #41794683;
+  border-top: 1px solid #41794683;
+  border-bottom: 1px solid #41794683;
+  border-right: 1px solid #41794683;
+}
+.backgroundinfo{
+  background:#629af47e;
+  color:#206add;
+  border-left: 5px solid #629af4;
+  border-top: 1px solid #629af4;
+  border-bottom: 1px solid #629af4;
+  border-right: 1px solid #629af4;
+}
+.backgroundwarn{
+  background: rgba(255, 166, 0, 0.253);
+  color:rgb(90, 62, 11);
+  border-left: 5px solid orange;
+  border-top: 1px solid orange;
+  border-bottom: 1px solid orange;
+  border-right: 1px solid orange;
+}
+
+
+/* My Own Style ( dq framework 1.2 )
      ============================================================================*/
 :root {
   --fontSize: 14px;
@@ -463,19 +490,6 @@ h6 {
   margin-bottom: calc(var(--ln) * 0.85);
 }
 
-.backgroundsuc{
-  background: #dff0d8;
-  color: #417946;
-  border-left: 5px solid #41794683;
-}
-.backgroundinfo{
-  background:#629af47e;
-  color:#206add;
-  border-left: 5px solid #629af4;
-  border-top: 1px solid #629af4;
-  border-bottom: 1px solid #629af4;
-  border-right: 1px solid #629af4;
-}
 
 /* dq input normalize */
 .dqinp {
