@@ -4,7 +4,7 @@ Month: May 2020
 [x] normalize dependency enjection on dataControlelrs of listify by partial appliying paneIndex
     before passing it as a dependency
 [x] add hasSetOfKeys validation to utils
-[-] add viewIndex support for render in paneMethods
+[x] add viewIndex support for render in paneMethods
 [-] add prompt support for pane modal 
 [-] implement dWins
 [-] implement uniview

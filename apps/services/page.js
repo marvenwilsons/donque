@@ -192,13 +192,13 @@ module.exports = Templates.Service({
                         {
                             name: 'view page',
                             handler: function(selected, paneMethods, modalMethods, dWinMethods) {
-                                paneMethods.render(selected.item)
+                                paneMethods.render(selected.item,1)
                             }
                         },
                         {
                             name: 'sub page',
                             handler: function(selected, paneMethods, modalMethods, dWinMethods) {
-                                paneMethods.render(selected.item.subPages)
+                                paneMethods.render(selected.item.subPages,1)
                             }
                         },
                         {

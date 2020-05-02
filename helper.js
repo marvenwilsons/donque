@@ -185,7 +185,7 @@ export default {
                 return { paneMethods, modalMethods, dWinMethods }
             })(scope)
         },
-        renderPane(data, paneIndex) {
+        renderPane(data, paneIndex,viewIndex) {
             // console.log('renderPane', data)
             if(paneIndex == undefined || paneIndex == null) {
                 console.error('renderPane error, paneIndex cannot be undefined')
@@ -210,7 +210,7 @@ export default {
                     this.runCompiledTask([
                         new templates.TaskItem('syspane.update-pane', {
                             paneIndex: paneIndex + 1,
-                            payload: this.getServiceView(data.paneConfig.paneData)
+                            payload: this.getServiceView(data.paneConfig.paneData,viewIndex)
                         }),
                         new templates.TaskItem('done',{})
                     ])
@@ -277,12 +277,18 @@ export default {
                 paneConfig.modal.onModalData = onModalData
                 paneConfig.paneOnLoad = paneOnLoad
 
+                if(typeof viewIndex == 'number') {
+                    paneConfig.defaultPaneView = viewIndex
+                }
+
                 return { componentConfig, paneConfig }
+
+
             }
             
         },
         render(dataSet,paneIndex,viewIndex) {
-            this.renderPane(this.getServiceView(dataSet),paneIndex)
+            this.renderPane(this.getServiceView(dataSet,viewIndex),paneIndex,viewIndex)
         },
         closePane() {            
             if(this.$store.state.pane.length == 1){
