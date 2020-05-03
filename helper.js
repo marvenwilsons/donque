@@ -16,18 +16,18 @@ export default {
     methods: {
         /** sys utils */
         systemError(msg) {
-                                            setTimeout(() => {
-                                                this.runCompiledTask([
-                                                    new templates.TaskItem('sysmodal.logerr', {
-                                                        msg
-                                                    }),
-                                                    new templates.TaskItem('sysmodal.close-modal', {}),
-                                                    new templates.TaskItem('exec', function() {
-                                                        window.location.reload()
-                                                    }),
-                                                    new templates.TaskItem('done', {})
-                                                ])
-                                            }, 500);
+            setTimeout(() => {
+                this.runCompiledTask([
+                    new templates.TaskItem('sysmodal.logerr', {
+                        msg
+                    }),
+                    new templates.TaskItem('sysmodal.close-modal', {}),
+                    new templates.TaskItem('exec', function() {
+                        window.location.reload()
+                    }),
+                    new templates.TaskItem('done', {})
+                ])
+            }, 300);
         },
         m() {
             return this
@@ -177,7 +177,8 @@ export default {
                     closeUnUsedPane: () => s.closeUnUsedPane(paneIndex + 1),
                     changePaneView: viewIndex => s.changePaneView({paneIndex,viewIndex}),
                     render:         (data,viewIndex) => s.render(data,paneIndex,viewIndex),
-                    spawnModal: modalObject => s.spawnModal(paneIndex,modalObject)
+                    spawnModal: modalObject => s.spawnModal(paneIndex,modalObject),
+                    prompt: (promptObject,cb) => s.panePrompt(paneIndex,promptObject,cb)
                 }
                 const dWinMethods = {
                     // TODO
@@ -250,12 +251,9 @@ export default {
                 render: this.render,
                 systemError: this.systemError,
                 closeUnUsedPane: this.closeUnUsedPane,
-                modalMethods: {
-                    /** TODO: system modal */
-                }
+                panePrompt: this.panePrompt,
             }
             
-            // TODO: create dWin object api
             // dependency enject the views function
             const serviceObject = deserializeViews(dataSet,helper,utils,templates)
 
@@ -278,18 +276,20 @@ export default {
                 paneConfig.paneOnLoad = paneOnLoad
 
                 if(typeof viewIndex == 'number') {
-                    paneConfig.defaultPaneView = viewIndex
+                    if(paneConfig.paneViews[viewIndex] == undefined) {
+                        this.systemError(`System Error: Invalid index value in render method, value: ${viewIndex} \n Cannot set pane view of undefined, reverting to 0 index pane view`)
+                    } else {
+                        paneConfig.defaultPaneView = viewIndex
+                    }
                 }
-
                 return { componentConfig, paneConfig }
-
-
             }
             
         },
         render(dataSet,paneIndex,viewIndex) {
             this.renderPane(this.getServiceView(dataSet,viewIndex),paneIndex,viewIndex)
         },
+        /** TODO doc */
         closePane() {            
             if(this.$store.state.pane.length == 1){
                 this.runCompiledTask([
@@ -317,13 +317,14 @@ export default {
                 viewIndex
             })
         },
-        /** Pane Modal Methods */
+        /** TODO doc */
         closePaneModal(paneIndex) {
             this.$store.commit('paneModalUpdate', {
                 paneIndex,
                 payload: 'closeModal'
             })
         },
+        /** TODO doc */
         closeUnUsedPane(paneIndex) {
             this.runCompiledTask([
                 new templates.TaskItem('insertCompiledTask', {
@@ -334,6 +335,7 @@ export default {
                 })
             ])
         },
+        /** TODO doc */
         appendErrorMsg(paneIndex,msg) {
             this.$store.commit('paneModalUpdate', {
                 paneIndex,
@@ -350,6 +352,7 @@ export default {
                 }
             })
         },
+        /** TODO doc */
         appendInfoMsg(paneIndex,msg) {
             this.$store.commit('paneModalUpdate', {
                 paneIndex,
@@ -366,12 +369,14 @@ export default {
                 }
             })
         },
+        /** TODO doc */
         updateProps(paneIndex, payload) {
             this.$store.commit('paneModalUpdate', {
                 paneIndex,
                 payload
             })
         },
+        /** TODO doc */
         spawnModal(paneIndex,modalObject) {
             // call templates here
             try {
@@ -384,6 +389,7 @@ export default {
                 this.systemError(`activaPaneModal ERR \n ${err}`)
             }
         },
+        /** Spawns an error pane modal, this is a non queue function */
         paneLogError(paneIndex,msg, fn) {
             this.closePaneModal(paneIndex)
             this.$store.commit('paneModalOverwrite', {
@@ -399,6 +405,7 @@ export default {
                 })
             })
         },
+        /** Spawns an info pane modal, this is a non queue function */
         paneLogInfo(paneIndex,msg, fn) {
             this.closePaneModal(paneIndex)
             this.$store.commit('paneModalOverwrite', {
@@ -414,6 +421,7 @@ export default {
                 })
             })
         },
+        /** Spawns a warning pane modal, this is a non queue function */
         paneLogWarn(paneIndex,msg, fn) {
             this.closePaneModal(paneIndex)
             this.$store.commit('paneModalOverwrite', {
@@ -428,6 +436,115 @@ export default {
                     }
                 })
             })
+        },
+        panePrompt(paneIndex,promptObject,fn) {
+            console.log('> prompt')
+            const types = ['string','number','select','multiselect','range', 'password']
+            if(Object.keys(promptObject).toString() == 'type,value,header') {
+                if(types.indexOf(promptObject.type) != -1) {
+                    // string
+                    if(promptObject.type === 'string') {
+                        this.closePaneModal(paneIndex)
+                        this.$store.commit('paneModalOverwrite', {
+                            paneIndex,
+                            modalObject: new templates.paneModal({
+                                modalBody: 'logPrompt',
+                                modalHeader: promptObject.header,
+                                isClosable: true,
+                                modalConfig: {
+                                    value: promptObject.value,
+                                    fn: fn ? fn : function() {},
+                                    type: 'string'
+                                }
+                            })
+                        })
+                    }
+                    // number
+                    if(promptObject.type === 'number') {
+                        this.$store.commit('paneModalOverwrite', {
+                            paneIndex,
+                            modalObject: new templates.paneModal({
+                                modalBody: 'logPrompt',
+                                modalHeader: promptObject.header,
+                                isClosable: true,
+                                modalConfig: {
+                                    value: promptObject.value,
+                                    fn: fn ? fn : function() {},
+                                    type: 'number'
+                                }
+                            })
+                        })
+                    }
+                    // select
+                    if(promptObject.type === 'select') {
+                        this.$store.commit('paneModalOverwrite', {
+                            paneIndex,
+                            modalObject: new templates.paneModal({
+                                modalBody: 'logPrompt',
+                                modalHeader: promptObject.header,
+                                isClosable: true,
+                                modalConfig: {
+                                    value: promptObject.value,
+                                    fn: fn ? fn : function() {},
+                                    type: 'select'
+                                }
+                            })
+                        })
+                    }
+                    // multiselect
+                    if(promptObject.type === 'multiselect') {
+                        this.$store.commit('paneModalOverwrite', {
+                            paneIndex,
+                            modalObject: new templates.paneModal({
+                                modalBody: 'logPrompt',
+                                modalHeader: promptObject.header,
+                                isClosable: true,
+                                modalConfig: {
+                                    value: promptObject.value,
+                                    fn: fn ? fn : function() {},
+                                    type: 'multiselect'
+                                }
+                            })
+                        })
+                    }
+                    // range
+                    if(promptObject.type === 'range') {
+                        this.$store.commit('paneModalOverwrite', {
+                            paneIndex,
+                            modalObject: new templates.paneModal({
+                                modalBody: 'logPrompt',
+                                modalHeader: promptObject.header,
+                                isClosable: true,
+                                modalConfig: {
+                                    value: promptObject.value,
+                                    fn: fn ? fn : function() {},
+                                    type: 'range'
+                                }
+                            })
+                        })
+                    }
+                    // password
+                    if(promptObject.type === 'password') {
+                        this.$store.commit('paneModalOverwrite', {
+                            paneIndex,
+                            modalObject: new templates.paneModal({
+                                modalBody: 'logPrompt',
+                                modalHeader: promptObject.header,
+                                isClosable: true,
+                                modalConfig: {
+                                    value: promptObject.value,
+                                    fn: fn ? fn : function() {},
+                                    type: 'password'
+                                }
+                            })
+                        })
+                    }
+                } else {
+                    this.systemError(`panePrompt Error: in second argument Invalid type: "${promptObject.type}"`)
+                }
+            } else {
+                this.systemError('panePrompt Error: in second argument Invalid promptObject')
+            }
         }
     }
 }

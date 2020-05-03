@@ -192,13 +192,13 @@ module.exports = Templates.Service({
                         {
                             name: 'view page',
                             handler: function(selected, paneMethods, modalMethods, dWinMethods) {
-                                paneMethods.render(selected.item,1)
+                                paneMethods.render(selected.item)
                             }
                         },
                         {
                             name: 'sub page',
                             handler: function(selected, paneMethods, modalMethods, dWinMethods) {
-                                paneMethods.render(selected.item.subPages,1)
+                                paneMethods.render(selected.item.subPages)
                             }
                         },
                         {
@@ -214,10 +214,12 @@ module.exports = Templates.Service({
                         {
                             name: 'rename',
                             handler: function(item, paneMethods, modalMethods, dWinMethods) {
-                                modalMethods.prompt({
+                                paneMethods.prompt({
                                     type: 'string', // select, number, range, multiselect
-                                    value: ''
+                                    value: '',
+                                    header: 'Rename page'
                                 }, (data) => {
+                                    modalMethods.appendErrorMsg('Page name cannot be undefined')
                                     console.log(data)
                                 })
                             }
@@ -239,6 +241,7 @@ module.exports = Templates.Service({
                      * paneMethods.changePaneView(<index>) -> change the pane view
                      * paneMethods.closeUnUsedPane()
                      * paneMethods.spawnModal(<modalObject>)
+                     * paneMethods.render(<data>,<view index>)
                      */
                     // helper.systemError('This is a test error')
                 },

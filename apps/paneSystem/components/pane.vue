@@ -44,23 +44,27 @@
                         </v-flex>
                     </div>
                     <v-flex style="background:whitesmoke;" pad125 flexcol borderRad4 >
+                        <!-- modal Error -->
                         <div
                             v-if="$store.state.pane[paneIndex].paneConfig.modal.modalErr" 
                             class="backgrounderr err borderRad4 pad050 marginbottom125" >
                             {{$store.state.pane[paneIndex].paneConfig.modal.modalErr}}
                         </div>
+                        <!-- modal Info -->
                         <div
                             v-if="$store.state.pane[paneIndex].paneConfig.modal.modalInfo" 
                             class="backgroundinfo borderRad4 pad050 marginbottom125" >
                             {{$store.state.pane[paneIndex].paneConfig.modal.modalInfo}}
                         </div>
+                        <!-- custom modals -->
                         <div 
-                            v-if="!['logWarn','logErr','logInfo'].includes($store.state.pane[paneIndex].paneConfig.modal.modalBody)"
+                            v-if="!['logWarn','logErr','logInfo','logPrompt'].includes($store.state.pane[paneIndex].paneConfig.modal.modalBody)"
                             :is="$store.state.pane[paneIndex].paneConfig.modal.modalBody" 
                             :myConfig="$store.state.pane[paneIndex].paneConfig.modal.modalConfig" 
                             :paneIndex="paneIndex" 
                             :submitHandler="onModalData">
                         </div>
+                        <!-- logs -->
                         <div
                             v-if="['logWarn','logErr','logInfo'].includes($store.state.pane[paneIndex].paneConfig.modal.modalBody)"
                             >
@@ -79,6 +83,35 @@
                                 <v-btn @click="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.fn" color="primary" >continue</v-btn>
                             </v-flex>
                         </div>
+                        <!-- panePrompt -->
+                        <div
+                            v-if="$store.state.pane[paneIndex].paneConfig.modal.modalBody === 'logPrompt'"
+                        >
+                            <div v-if="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.type === 'string' " >
+                                <v-text-field
+                                    v-model="logPromptData"
+                                    dense
+                                    :label="$store.state.pane[paneIndex].paneConfig.modal.modalHeader"
+                                    outlined
+                                />
+                            </div>
+                            <div v-if="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.type === 'number' " >
+                                this is log prompt
+                            </div>
+                            <div v-if="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.type === 'select' " >
+                                this is log prompt
+                            </div>
+                            <div v-if="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.type === 'multiselect' " >
+                                this is log prompt
+                            </div>
+                            <div v-if="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.type === 'password' " >
+                                this is log prompt
+                            </div>
+                            <v-flex flexend >
+                                <v-btn color="primary" @click="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.fn(logPromptData)" >submit</v-btn>
+                            </v-flex>
+                        </div>
+
                     </v-flex>
                 </main>
             </v-flex>
@@ -116,6 +149,9 @@ export default {
     created() {
         this.h = this
     },
+    data:() => ({
+        logPromptData: undefined
+    }),
     mounted() {
         this.normyDep(this.paneIndex,this)
     },
