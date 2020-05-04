@@ -438,26 +438,40 @@ export default {
             })
         },
         panePrompt(paneIndex,promptObject,fn) {
-            console.log('> prompt')
             const types = ['string','number','select','multiselect','range', 'password']
-            if(Object.keys(promptObject).toString() == 'type,value,header') {
+            if(promptObject != undefined) {
                 if(types.indexOf(promptObject.type) != -1) {
                     // string
                     if(promptObject.type === 'string') {
-                        this.closePaneModal(paneIndex)
-                        this.$store.commit('paneModalOverwrite', {
-                            paneIndex,
-                            modalObject: new templates.paneModal({
-                                modalBody: 'logPrompt',
-                                modalHeader: promptObject.header,
-                                isClosable: true,
-                                modalConfig: {
-                                    value: promptObject.value,
-                                    fn: fn ? fn : function() {},
-                                    type: 'string'
+                        if(typeof promptObject.value == 'string' || promptObject.value == null || promptObject.value == undefined) {
+                            if(promptObject.value == null || promptObject.value == undefined) {
+                                if(promptObject.defaultValue == null){
+                                    this.systemError(`panePrompt Error: in second argument defualtValue property and value property cannot be undefined at the same time`)
+                                } else {
+                                    if(typeof promptObject.defaultValue != 'string') {
+                                        this.systemError(`panePrompt Error: in second argument, Invalid default value type, it should be a string but got a type of ${typeof promptObject.value}`)
+                                    }
+                                    this.closePaneModal(paneIndex)
+                                    this.$store.commit('paneModalOverwrite', {
+                                        paneIndex,
+                                        modalObject: new templates.paneModal({
+                                            modalBody: 'logPrompt',
+                                            modalHeader: promptObject.header,
+                                            isClosable: true,
+                                            modalConfig: {
+                                                value: promptObject.value,
+                                                fn: fn ? fn : function() {},
+                                                type: 'string',
+                                                defaultValue: promptObject.defaultValue
+                                            }
+                                        })
+                                    })
                                 }
-                            })
-                        })
+                            }
+                        } else {
+                            this.systemError(`panePrompt Error: in second argument, Invalid value type, it should be a string but got a type of ${typeof promptObject.value}`)
+                        }
+    
                     }
                     // number
                     if(promptObject.type === 'number') {
@@ -470,26 +484,37 @@ export default {
                                 modalConfig: {
                                     value: promptObject.value,
                                     fn: fn ? fn : function() {},
-                                    type: 'number'
+                                    type: 'number',
+                                    defaultValue: promptObject.defaultValue
                                 }
                             })
                         })
                     }
                     // select
                     if(promptObject.type === 'select') {
-                        this.$store.commit('paneModalOverwrite', {
-                            paneIndex,
-                            modalObject: new templates.paneModal({
-                                modalBody: 'logPrompt',
-                                modalHeader: promptObject.header,
-                                isClosable: true,
-                                modalConfig: {
-                                    value: promptObject.value,
-                                    fn: fn ? fn : function() {},
-                                    type: 'select'
-                                }
-                            })
-                        })
+                        if(promptObject.value != undefined) {
+                            if(Array.isArray(promptObject.value) ){
+                                this.$store.commit('paneModalOverwrite', {
+                                    paneIndex,
+                                    modalObject: new templates.paneModal({
+                                        modalBody: 'logPrompt',
+                                        modalHeader: promptObject.header,
+                                        isClosable: true,
+                                        modalConfig: {
+                                            value: promptObject.value,
+                                            fn: fn ? fn : function() {},
+                                            type: 'select',
+                                            defaultValue: promptObject.defaultValue
+                                        }
+                                    })
+                                })
+                            } else {
+                                this.systemError(`panePrompt Error: in second argument, Invalid select value type, it should be an array but got a type of ${typeof promptObject.value}`)
+                            }
+                        } else {
+                            this.systemError(`panePrompt Error: in second argument, value cannot be undefined`)
+                        }
+
                     }
                     // multiselect
                     if(promptObject.type === 'multiselect') {
@@ -502,7 +527,8 @@ export default {
                                 modalConfig: {
                                     value: promptObject.value,
                                     fn: fn ? fn : function() {},
-                                    type: 'multiselect'
+                                    type: 'multiselect',
+                                    defaultValue: promptObject.defaultValue
                                 }
                             })
                         })

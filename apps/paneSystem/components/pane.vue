@@ -87,28 +87,43 @@
                         <div
                             v-if="$store.state.pane[paneIndex].paneConfig.modal.modalBody === 'logPrompt'"
                         >
-                            <div v-if="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.type === 'string' " >
+                            <div v-if="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.type === 'string' || $store.state.pane[paneIndex].paneConfig.modal.modalConfig.type === 'number' " >
                                 <v-text-field
                                     v-model="logPromptData"
                                     dense
                                     :label="$store.state.pane[paneIndex].paneConfig.modal.modalHeader"
                                     outlined
+                                    :loading="$store.state.pane[paneIndex].paneConfig.modal.modalErr ? false : isLoading"
                                 />
                             </div>
-                            <div v-if="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.type === 'number' " >
-                                this is log prompt
-                            </div>
                             <div v-if="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.type === 'select' " >
-                                this is log prompt
+                                <v-select
+                                    v-model="logPromptData"
+                                    dense
+                                    :items="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.value"
+                                    :label="$store.state.pane[paneIndex].paneConfig.modal.modalHeader"
+                                    outlined
+                                ></v-select>
                             </div>
                             <div v-if="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.type === 'multiselect' " >
-                                this is log prompt
+                                <v-combobox
+                                    chips
+                                    v-model="logPromptData"
+                                    :items="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.value"
+                                    :label="$store.state.pane[paneIndex].paneConfig.modal.modalHeade"
+                                    multiple
+                                ></v-combobox>
                             </div>
                             <div v-if="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.type === 'password' " >
                                 this is log prompt
                             </div>
                             <v-flex flexend >
-                                <v-btn color="primary" @click="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.fn(logPromptData)" >submit</v-btn>
+                                <v-btn 
+                                    color="primary" 
+                                    @click="paneModalCb"
+                                    :loading="$store.state.pane[paneIndex].paneConfig.modal.modalErr ? false : isLoading"
+                                    >
+                                    submit</v-btn>
                             </v-flex>
                         </div>
 
@@ -134,15 +149,6 @@ import h from '@/helper'
 import templates from '@/templates'
 import utils from '@/utils'
 
-const modalMethods = {
-    closePaneModal: function(scope,paneIndex) {
-        scope.$store.commit('paneModalUpdate', {
-            paneIndex,
-            payload: 'closeModal'
-        })
-    },    
-}
-
 export default {
     mixins: [h],
     props: ['myData','paneIndex'],
@@ -150,8 +156,32 @@ export default {
         this.h = this
     },
     data:() => ({
-        logPromptData: undefined
+        logPromptData: undefined,
+        isLoading: false
     }),
+    computed: {
+        paneModal() {
+            return this.$store.state.pane[this.paneIndex].paneConfig.modal
+        }
+    },
+    watch: {
+        paneModal() {
+            this.isLoading = false
+            try {
+                this.logPromptData = this.$store.state.pane[this.paneIndex].paneConfig.modal.modalConfig.defaultValue
+            }catch(err) {} 
+        },
+        logPromptData() {
+            this.isLoading = false
+            this.$store.commit('paneModalUpdate', {
+                paneIndex: this.paneIndex,
+                payload: {
+                    key: 'modalErr',
+                    value: undefined
+                }
+            })
+        }
+    },
     mounted() {
         this.normyDep(this.paneIndex,this)
     },
@@ -159,6 +189,14 @@ export default {
         onModalData(data) {
             const { paneMethods, modalMethods, dWinMethods} =  this.normyDep(this.paneIndex,this)
             this.$store.state.pane[this.paneIndex].paneConfig.modal.onModalData(data,paneMethods,modalMethods,dWinMethods)
+        },
+        paneModalCb() {
+            this.isLoading = true
+            if(this.$store.state.pane[this.paneIndex].paneConfig.modal.modalConfig.type === 'number'){
+                this.logPromptData = parseInt(this.logPromptData)
+            }
+
+            this.$store.state.pane[this.paneIndex].paneConfig.modal.modalConfig.fn(this.logPromptData)
         }
     }
 }

@@ -213,13 +213,20 @@ module.exports = Templates.Service({
                         },
                         {
                             name: 'rename',
-                            handler: function(item, paneMethods, modalMethods, dWinMethods) {
+                            handler: function({item}, paneMethods, modalMethods, dWinMethods) {
                                 paneMethods.prompt({
                                     type: 'string', // select, number, range, multiselect
-                                    value: '',
-                                    header: 'Rename page'
+                                    value: null,
+                                    header: 'Rename page',
+                                    defaultValue: item.pageName
                                 }, (data) => {
-                                    modalMethods.appendErrorMsg('Page name cannot be undefined')
+                                    setTimeout(() => {
+                                        if(data == 'error') {
+                                            modalMethods.appendErrorMsg('Page name cannot be undefined')
+                                        } else {
+                                            modalMethods.closePaneModal()
+                                        }
+                                    }, 2000);
                                     console.log(data)
                                 })
                             }
