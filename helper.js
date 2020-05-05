@@ -27,7 +27,7 @@ export default {
                     }),
                     new templates.TaskItem('done', {})
                 ])
-            }, 300);
+            }, 100);
         },
         m() {
             return this
@@ -178,7 +178,8 @@ export default {
                     changePaneView: viewIndex => s.changePaneView({paneIndex,viewIndex}),
                     render:         (data,viewIndex) => s.render(data,paneIndex,viewIndex),
                     spawnModal: modalObject => s.spawnModal(paneIndex,modalObject),
-                    prompt: (promptObject,cb) => s.panePrompt(paneIndex,promptObject,cb)
+                    prompt: (promptObject,cb) => s.panePrompt(paneIndex,promptObject,cb),
+                    updatePaneData: (data) => s.updatePaneData(paneIndex,objectData)
                 }
                 const dWinMethods = {
                     // TODO
@@ -205,6 +206,7 @@ export default {
                     }),
                     new templates.TaskItem('done',{})
                 ])
+
             } else {
                 /** it means update the paneData? or replace the pane with a new view  */
                 if(paneIndex + 1 == this.$store.state.pane.length - 1) {
@@ -437,62 +439,96 @@ export default {
                 })
             })
         },
+        /** Updates the pane data */
+        updatePaneData(paneIndex,paneData) {
+            this.commit('paneUpdateData', {
+                paneIndex,
+                paneData
+            })
+        },
         panePrompt(paneIndex,promptObject,fn) {
-            const types = ['string','number','select','multiselect','range', 'password']
+            const types = ['string','number','select','multiselect','slider', 'minmax', 'password']
+
             if(promptObject != undefined) {
                 if(types.indexOf(promptObject.type) != -1) {
                     // string
                     if(promptObject.type === 'string') {
                         if(typeof promptObject.value == 'string' || promptObject.value == null || promptObject.value == undefined) {
-                            if(promptObject.value == null || promptObject.value == undefined) {
-                                if(promptObject.defaultValue == null){
-                                    this.systemError(`panePrompt Error: in second argument defualtValue property and value property cannot be undefined at the same time`)
-                                } else {
-                                    if(typeof promptObject.defaultValue != 'string') {
-                                        this.systemError(`panePrompt Error: in second argument, Invalid default value type, it should be a string but got a type of ${typeof promptObject.value}`)
+                            this.closePaneModal(paneIndex)
+                            this.$store.commit('paneModalOverwrite', {
+                                paneIndex,
+                                modalObject: new templates.paneModal({
+                                    modalBody: 'logPrompt',
+                                    modalHeader: promptObject.header,
+                                    isClosable: true,
+                                    modalConfig: {
+                                        value: promptObject.value,
+                                        fn: fn ? fn : function() {},
+                                        type: 'string',
+                                        defaultValue: promptObject.defaultValue
                                     }
-                                    this.closePaneModal(paneIndex)
-                                    this.$store.commit('paneModalOverwrite', {
-                                        paneIndex,
-                                        modalObject: new templates.paneModal({
-                                            modalBody: 'logPrompt',
-                                            modalHeader: promptObject.header,
-                                            isClosable: true,
-                                            modalConfig: {
-                                                value: promptObject.value,
-                                                fn: fn ? fn : function() {},
-                                                type: 'string',
-                                                defaultValue: promptObject.defaultValue
-                                            }
-                                        })
-                                    })
-                                }
-                            }
+                                })
+                            })
                         } else {
-                            this.systemError(`panePrompt Error: in second argument, Invalid value type, it should be a string but got a type of ${typeof promptObject.value}`)
+                            this.systemError(`panePrompt Error: in second argument, Invalid value type default value type, 
+                            it should be a string but got a type of ${typeof promptObject.value}`)
                         }
     
                     }
                     // number
                     if(promptObject.type === 'number') {
-                        this.$store.commit('paneModalOverwrite', {
-                            paneIndex,
-                            modalObject: new templates.paneModal({
-                                modalBody: 'logPrompt',
-                                modalHeader: promptObject.header,
-                                isClosable: true,
-                                modalConfig: {
-                                    value: promptObject.value,
-                                    fn: fn ? fn : function() {},
-                                    type: 'number',
-                                    defaultValue: promptObject.defaultValue
-                                }
+                        // value can be undefined and default value
+                        if(promptObject.value || promptObject.defaultValue) {
+                            if(typeof promptObject.value == 'number' || typeof promptObject.defaultValue == 'number') {
+                                this.$store.commit('paneModalOverwrite', {
+                                    paneIndex,
+                                    modalObject: new templates.paneModal({
+                                        modalBody: 'logPrompt',
+                                        modalHeader: promptObject.header,
+                                        isClosable: true,
+                                        modalConfig: {
+                                            value: promptObject.value,
+                                            fn: fn ? fn : function() {},
+                                            type: 'number',
+                                            defaultValue: promptObject.defaultValue
+                                        }
+                                    })
+                                })
+                            } else {
+                                this.systemError(`panePrompt Error: in second argument, Invalid value or default value type, 
+                                it should be a number but got ${typeof promptObject.value == undefined || typeof promptObject.value == null ? 'undefined' :
+                                 `a type of \n (value: ${typeof promptObject.value}) \n (default value: ${typeof promptObject.defaultValue})` }`)
+                            }
+                        } else {
+                            this.$store.commit('paneModalOverwrite', {
+                                paneIndex,
+                                modalObject: new templates.paneModal({
+                                    modalBody: 'logPrompt',
+                                    modalHeader: promptObject.header,
+                                    isClosable: true,
+                                    modalConfig: {
+                                        value: null,
+                                        fn: fn ? fn : function() {},
+                                        type: 'number',
+                                        defaultValue: null
+                                    }
+                                })
                             })
-                        })
+                        }
                     }
                     // select
                     if(promptObject.type === 'select') {
                         if(promptObject.value != undefined) {
+                            if(promptObject.defaultValue) {
+                                if(promptObject.defaultValue) {
+                                    if(typeof promptObject.defaultValue != 'string') {
+                                        this.systemError(`panePrompt Error: Invalid defaultValue type, defaultValue should be a type of string`)
+                                        if(!promptObject.value.includes(promptObject.defaultValue)) {
+                                            this.systemError(`panePrompt Error: Cannot find "${promptObject.defaultValue}" in value's array`)
+                                        } 
+                                    }
+                                }
+                            }
                             if(Array.isArray(promptObject.value) ){
                                 this.$store.commit('paneModalOverwrite', {
                                     paneIndex,
@@ -518,36 +554,120 @@ export default {
                     }
                     // multiselect
                     if(promptObject.type === 'multiselect') {
-                        this.$store.commit('paneModalOverwrite', {
-                            paneIndex,
-                            modalObject: new templates.paneModal({
-                                modalBody: 'logPrompt',
-                                modalHeader: promptObject.header,
-                                isClosable: true,
-                                modalConfig: {
-                                    value: promptObject.value,
-                                    fn: fn ? fn : function() {},
-                                    type: 'multiselect',
-                                    defaultValue: promptObject.defaultValue
-                                }
+                        if(!promptObject.value) {
+                            this.systemError('panePrompt Error: type multiselect value property cannot be undefined or null')
+                        } else if(promptObject.defaultValue) {
+                            if(!Array.isArray(promptObject.defaultValue)) {
+                                this.systemError('panePrompt Error; Invalid defaultValue type, should be an array of string values')
+                            } else {
+                                promptObject.defaultValue.map(e => {
+                                    if(!promptObject.value.includes(e)) {
+                                        this.systemError(`panePrompt Error: Cannot find ${e} in values array`)
+                                    }
+                                })
+                            }
+                            this.$store.commit('paneModalOverwrite', {
+                                paneIndex,
+                                modalObject: new templates.paneModal({
+                                    modalBody: 'logPrompt',
+                                    modalHeader: promptObject.header,
+                                    isClosable: true,
+                                    modalConfig: {
+                                        value: promptObject.value,
+                                        fn: fn ? fn : function() {},
+                                        type: 'multiselect',
+                                        defaultValue: promptObject.defaultValue
+                                    }
+                                })
                             })
-                        })
+                        }
                     }
-                    // range
-                    if(promptObject.type === 'range') {
-                        this.$store.commit('paneModalOverwrite', {
-                            paneIndex,
-                            modalObject: new templates.paneModal({
-                                modalBody: 'logPrompt',
-                                modalHeader: promptObject.header,
-                                isClosable: true,
-                                modalConfig: {
-                                    value: promptObject.value,
-                                    fn: fn ? fn : function() {},
-                                    type: 'range'
-                                }
+                    // slider
+                    if(promptObject.type === 'slider') {
+                        if(!promptObject.value) {
+                            this.systemError('panePrompt Error: value cannot be undefined or null')
+                        } else if( Object.keys(promptObject.value).toString() != 'min,max' ) {
+                            this.systemError('panePrompt Error: Invalid value properties for slider.')
+                        } else if(promptObject.defaultValue) {
+                            if(promptObject.defaultValue < promptObject.value.min ) {
+                                this.systemError(`panePrompt Error: defaultValue in slider cannot be lesser than ${promptObject.value.min}`)
+                            } else if(promptObject.defaultValue > promptObject.value.max) {
+                                this.systemError(`panePrompt Error: defaultValue in slider cannot be greater than ${promptObject.value.max}`)
+                            } else {
+                                this.$store.commit('paneModalOverwrite', {
+                                    paneIndex,
+                                    modalObject: new templates.paneModal({
+                                        modalBody: 'logPrompt',
+                                        modalHeader: promptObject.header,
+                                        isClosable: true,
+                                        modalConfig: {
+                                            value: promptObject.value,
+                                            fn: fn ? fn : function() {},
+                                            type: 'slider',
+                                            defaultValue: promptObject.defaultValue
+                                        }
+                                    })
+                                })
+                            }
+                        } else {
+                            this.$store.commit('paneModalOverwrite', {
+                                paneIndex,
+                                modalObject: new templates.paneModal({
+                                    modalBody: 'logPrompt',
+                                    modalHeader: promptObject.header,
+                                    isClosable: true,
+                                    modalConfig: {
+                                        value: promptObject.value,
+                                        fn: fn ? fn : function() {},
+                                        type: 'slider',
+                                        defaultValue: promptObject.value.min
+                                    }
+                                })
                             })
-                        })
+                        }
+                    }
+                    if(promptObject.type === 'minmax') {
+                        if(!promptObject.value) {
+                            this.systemError('panePrompt Error: value cannot be undefined or null')
+                        } else if( Object.keys(promptObject.value).toString() != 'min,max' ) {
+                            this.systemError('panePrompt Error: Invalid value properties for minmax.')
+                        }  else if(promptObject.defaultValue) {
+                            this.$store.commit('paneModalOverwrite', {
+                                paneIndex,
+                                modalObject: new templates.paneModal({
+                                    modalBody: 'logPrompt',
+                                    modalHeader: promptObject.header,
+                                    isClosable: true,
+                                    modalConfig: {
+                                        value: {
+                                            min: promptObject.value.min,
+                                            max: promptObject.value.max
+                                        },
+                                        fn: fn ? fn : function() {},
+                                        type: 'minmax',
+                                        defaultValue: promptObject.defaultValue
+                                    }
+                                })
+                            })
+                        } else {
+                            this.$store.commit('paneModalOverwrite', {
+                                paneIndex,
+                                modalObject: new templates.paneModal({
+                                    modalBody: 'logPrompt',
+                                    modalHeader: promptObject.header,
+                                    isClosable: true,
+                                    modalConfig: {
+                                        value: {
+                                            min: 0,
+                                            max: 100
+                                        },
+                                        fn: fn ? fn : function() {},
+                                        type: 'minmax',
+                                        defaultValue: [25,75]
+                                    }
+                                })
+                            })
+                        }
                     }
                     // password
                     if(promptObject.type === 'password') {
@@ -570,6 +690,10 @@ export default {
                 }
             } else {
                 this.systemError('panePrompt Error: in second argument Invalid promptObject')
+            }
+
+            if(promptObject.info) {
+                this.appendInfoMsg(paneIndex,promptObject.info)
             }
         }
     }

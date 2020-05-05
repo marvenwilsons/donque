@@ -5,11 +5,11 @@ Month: May 2020
     before passing it as a dependency
 [x] add hasSetOfKeys validation to utils
 [x] add viewIndex support for render in paneMethods
-[-] added prompt support for pane modal 
+[x] added prompt support for pane modal 
+[-] add encryption and decryption to utils
 [-] implemented dWins
 [-] implemented uniview
 [-] added auto slide for pane host 
-[-] add encryption and decryption to utils
 [-] implement key press systemm with for + cm
 [-] make initialData function async in the backend
 [-] add service manager menu

@@ -87,10 +87,17 @@
                         <div
                             v-if="$store.state.pane[paneIndex].paneConfig.modal.modalBody === 'logPrompt'"
                         >
-                            <div v-if="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.type === 'string' || $store.state.pane[paneIndex].paneConfig.modal.modalConfig.type === 'number' " >
+                            <div v-if="
+                                $store.state.pane[paneIndex].paneConfig.modal.modalConfig.type === 'string' || 
+                                $store.state.pane[paneIndex].paneConfig.modal.modalConfig.type === 'number' ||
+                                $store.state.pane[paneIndex].paneConfig.modal.modalConfig.type === 'password'
+                                "
+                                 >
                                 <v-text-field
+                                    id="inyp"
                                     v-model="logPromptData"
                                     dense
+                                    :type="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.type"
                                     :label="$store.state.pane[paneIndex].paneConfig.modal.modalHeader"
                                     outlined
                                     :loading="$store.state.pane[paneIndex].paneConfig.modal.modalErr ? false : isLoading"
@@ -98,10 +105,11 @@
                             </div>
                             <div v-if="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.type === 'select' " >
                                 <v-select
-                                    v-model="logPromptData"
                                     dense
+                                    v-model="logPromptData"
                                     :items="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.value"
                                     :label="$store.state.pane[paneIndex].paneConfig.modal.modalHeader"
+                                    :loading="$store.state.pane[paneIndex].paneConfig.modal.modalErr ? false : isLoading"
                                     outlined
                                 ></v-select>
                             </div>
@@ -111,16 +119,33 @@
                                     v-model="logPromptData"
                                     :items="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.value"
                                     :label="$store.state.pane[paneIndex].paneConfig.modal.modalHeade"
+                                    :loading="$store.state.pane[paneIndex].paneConfig.modal.modalErr ? false : isLoading"
                                     multiple
                                 ></v-combobox>
                             </div>
-                            <div v-if="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.type === 'password' " >
-                                this is log prompt
+                            <div class="padtop125" v-if="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.type === 'slider' " >
+                                <v-slider
+                                    v-model="logPromptData"
+                                    :thumb-size="24"
+                                    thumb-label="always"
+                                    :min="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.value.min"
+                                    :max="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.value.max"
+                                ></v-slider>
+                            </div>
+                            <div class="padtop125" v-if="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.type === 'minmax' " >
+                                <v-range-slider
+                                    :value="logPromptData"
+                                    :max="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.value.max"
+                                    :min="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.value.min"
+                                    thumb-label="always"
+                                     @end="logPromptData = $event"
+                                    range
+                                />
                             </div>
                             <v-flex flexend >
                                 <v-btn 
                                     color="primary" 
-                                    @click="paneModalCb"
+                                    @click="paneModalCb()"
                                     :loading="$store.state.pane[paneIndex].paneConfig.modal.modalErr ? false : isLoading"
                                     >
                                     submit</v-btn>
@@ -183,7 +208,8 @@ export default {
         }
     },
     mounted() {
-        this.normyDep(this.paneIndex,this)
+        const {paneMethods,modalMethods} = this.normyDep(this.paneIndex,this)
+        this.$store.state.pane[this.paneIndex].paneConfig.paneOnLoad(paneMethods,modalMethods)
     },
     methods: {
         onModalData(data) {
@@ -193,10 +219,14 @@ export default {
         paneModalCb() {
             this.isLoading = true
             if(this.$store.state.pane[this.paneIndex].paneConfig.modal.modalConfig.type === 'number'){
-                this.logPromptData = parseInt(this.logPromptData)
+                if(isNaN(parseInt(this.logPromptData))) {
+                    this.appendErrorMsg(this.paneIndex,'Invalid input type, it should be a type of number')
+                } else {
+                    this.$store.state.pane[this.paneIndex].paneConfig.modal.modalConfig.fn(parseInt(this.logPromptData))
+                }
+            } else {
+                this.$store.state.pane[this.paneIndex].paneConfig.modal.modalConfig.fn(this.logPromptData)
             }
-
-            this.$store.state.pane[this.paneIndex].paneConfig.modal.modalConfig.fn(this.logPromptData)
         }
     }
 }

@@ -215,18 +215,12 @@ module.exports = Templates.Service({
                             name: 'rename',
                             handler: function({item}, paneMethods, modalMethods, dWinMethods) {
                                 paneMethods.prompt({
-                                    type: 'string', // select, number, range, multiselect
+                                    type: 'password',
                                     value: null,
-                                    header: 'Rename page',
-                                    defaultValue: item.pageName
+                                    header: 'Enter Password',
+                                    defaultValue: null,
+                                    info: 'Enter password'
                                 }, (data) => {
-                                    setTimeout(() => {
-                                        if(data == 'error') {
-                                            modalMethods.appendErrorMsg('Page name cannot be undefined')
-                                        } else {
-                                            modalMethods.closePaneModal()
-                                        }
-                                    }, 2000);
                                     console.log(data)
                                 })
                             }
@@ -251,6 +245,17 @@ module.exports = Templates.Service({
                      * paneMethods.render(<data>,<view index>)
                      */
                     // helper.systemError('This is a test error')
+                    if(data.length ==0) {
+                        paneMethods.prompt({
+                            type: 'string',
+                            header: 'Page Name',
+                            info: 'There are no page(s) to display, Create a new page to get started.'
+                        }, () => {
+                            setTimeout(() => {
+                                modalMethods.closePaneModal()
+                            }, 5000);
+                        })
+                    }
                 },
                 onModalData: function(modalData,paneMethods,modalMethods) {
                     // modalData is the set of input data from the user
@@ -275,26 +280,6 @@ module.exports = Templates.Service({
                     paneViews: ['listify','raw'],
                     defaultPaneView: 0,
                     paneData: data,
-                    modal: (() => {
-                        if(data.length == 0) {
-                            return {
-                                modalBody: 'formBuilder',
-                                componentConfig: {
-                                    schema: {
-                                        'Page Name': {
-                                            type: 'string'
-                                        }
-                                    }
-                                },
-                                modalHeader: 'Create Page',
-                                modalConfig: undefined,
-                                modalErr: undefined,
-                                modalInfo: 'Create a page to get started',
-                                isClosable: false,
-                                modalWidth: '400px'
-                            }
-                        }
-                    })()
                 },
             }
         } 
@@ -313,18 +298,7 @@ module.exports = Templates.Service({
                     isClosable: true,
                     paneViews: ['pageContent','raw'],
                     defaultPaneView: 0,
-                    paneData: data.item ? data.item : data,
-                    modal: (() => {
-                        return {
-                            modalBody: undefined,
-                            componentConfig: undefined,
-                            modalConfig: undefined,
-                            modalErr: undefined,
-                            modalInfo: undefined,
-                            isClosable: false,
-                            modalWidth: undefined
-                        }
-                    })()
+                    paneData: data.item ? data.item : data
                 }
             }
         }  
