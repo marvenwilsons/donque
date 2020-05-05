@@ -182,11 +182,53 @@ export default {
                     updatePaneData: (data) => s.updatePaneData(paneIndex,objectData)
                 }
                 const dWinMethods = {
-                    // TODO
+                    spawn: dWinObject => s.dwinSpawn(dWinObject),
+                    close: (section) => s.dwinClose(section)
                 }
                 return { paneMethods, modalMethods, dWinMethods }
             })(scope)
         },
+        /** dwin */
+        dwinSpawn(dWinObject) {
+            // section, winView, viewConfig, data
+            if(!dWinObject.section || !dWinObject.winView || !dWinObject.viewConfig || !dWinObject.data) {
+                this.systemError('dwinSpawn Error: Cannot spawn dWin Invalid dWinObject or has missing properties')
+            } else {
+                const {section, winView, viewConfig, winConfig, data} = dWinObject
+                if(winConfig) {
+                    if(!winConfig.height) {
+                        winConfig.height = '100%'
+                    }
+                }
+                this.$store.commit('stateController', {
+                    key: ((section) => {
+                        if(section === 'top') {
+                            return 'dWinTop'
+                        } else if(section === 'right') {
+                            return 'dWinRight'
+                        } else {
+                            this.systemError('dwinSpawn Error: Invalid dWin section')
+                        }
+                    })(section),
+                    value: { winView, viewConfig, data, winConfig }
+                })
+            }
+        },
+        dwinClose(section) {
+            this.$store.commit('stateController',{
+                key: ((section) => {
+                    if(section === 'top') {
+                        return 'dWinTop'
+                    } else if(section === 'right') {
+                        return 'dWinRight'
+                    } else {
+                        this.systemError('dwinClose Error: Invalid dWin section')
+                    }
+                })(section),
+                value: undefined
+            })
+        },
+        /** end of dwin */
         renderPane(data, paneIndex,viewIndex) {
             // console.log('renderPane', data)
             if(paneIndex == undefined || paneIndex == null) {
