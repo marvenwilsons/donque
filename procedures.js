@@ -75,7 +75,7 @@ export default function (app,method) {
         }
     }
     i['private.done'] = function () {
-        // console.log('> all task done')
+        console.log('> all task done')
         app.$store.commit('stateController', {
             key: 'queueState',
             value: 'end'
@@ -252,7 +252,7 @@ export default function (app,method) {
     i['private.syspane.add'] = function ({payload}) {
         // console.log('> syspane.add ', payload)
         if(!payload.componentConfig || !payload.paneConfig) {
-            console.error('Invalid pane object ', payload)
+            app.systemError('Invalid pane object')
         } else {
             app.$store.commit('paneAdd', {
                 payload
@@ -288,7 +288,7 @@ export default function (app,method) {
         app.answerPending('--done--')
     }
     i['private.syspane.get-initial-data'] = function ({serviceName}) {
-        console.log('> getting initil data of ',serviceName)
+        // console.log('> getting initial data of ',serviceName)
         app.answerPending({
             payload: app.$store.state.app['app-services'][serviceName].data
         })

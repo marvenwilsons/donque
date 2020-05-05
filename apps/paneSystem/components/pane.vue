@@ -186,7 +186,9 @@ export default {
     }),
     computed: {
         paneModal() {
-            return this.$store.state.pane[this.paneIndex].paneConfig.modal
+            if(this.$store.state.pane[this.paneIndex]) {
+                return this.$store.state.pane[this.paneIndex].paneConfig.modal
+            }
         }
     },
     watch: {

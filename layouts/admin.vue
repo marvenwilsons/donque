@@ -6,10 +6,11 @@
                 <appSideBar/>
                 <v-flex > 
                     <v-flex flexcol>
-                        <v-flex v-if="false" >
-                            <!-- TODO: implement this view -->
-                            <!-- dwin.top({winView: '', veiwConfig: '', data: ''}) -->
-                        </v-flex>               
+                        <div :style="{maxHeight: '50%', height: $store.state.dWinTop.winConfig.height}" v-if="$store.state.dWinTop" >
+                            <v-flex relative fullheight-percent >
+                                <div :myData="$store.state.dWinTop.data" :myConfig="$store.state.dWinTop.viewConfig" :is="$store.state.dWinTop.winView" ></div>
+                            </v-flex>
+                        </div>               
                         <nuxt />
                     </v-flex>
                 </v-flex>

@@ -199,6 +199,7 @@ module.exports = Templates.Service({
                             name: 'sub page',
                             handler: function(selected, paneMethods, modalMethods, dWinMethods) {
                                 paneMethods.render(selected.item.subPages)
+                                dWinMethods.close('top')
                             }
                         },
                         {
@@ -227,8 +228,18 @@ module.exports = Templates.Service({
                         },
                         {
                             name: 'edit page',
-                            handler: function(item, paneMethods, modalMethods, dWinMethods) {
-
+                            handler: function(selected, paneMethods, modalMethods, dWinMethods) {
+                                paneMethods.render(selected.item.subPages)
+                                dWinMethods.spawn({
+                                    section: 'top',
+                                    winView: 'raw',
+                                    winConfig: {},
+                                    viewConfig: {},
+                                    data: {
+                                        name: 'foo',
+                                        age: 30
+                                    }
+                                })
                             }
                         }
                     ],
@@ -236,7 +247,7 @@ module.exports = Templates.Service({
                     ableToAddItem: true,
                     infoDisplay: ['pageName','lastUpdated','updatedBy']
                 },
-                paneOnLoad: function(paneMethods,modalMethods,) {
+                paneOnLoad: function(paneMethods,modalMethods) {
                     /** paneMethods, TODO: write proper documentation
                      * paneMethods.closePane() -> closes the current pane
                      * paneMethods.changePaneView(<index>) -> change the pane view
@@ -244,17 +255,19 @@ module.exports = Templates.Service({
                      * paneMethods.spawnModal(<modalObject>)
                      * paneMethods.render(<data>,<view index>)
                      */
-                    // helper.systemError('This is a test error')
-                    if(data.length ==0) {
+                    console.log('paneOnLoad')
+                    if(data.length == 0) {
+                        console.log('show modal', data)
                         paneMethods.prompt({
                             type: 'string',
                             header: 'Page Name',
                             info: 'There are no page(s) to display, Create a new page to get started.'
                         }, () => {
-                            setTimeout(() => {
-                                modalMethods.closePaneModal()
-                            }, 5000);
+                            console.log('finishing')
+                            modalMethods.closePaneModal()
                         })
+                    } else {
+                        console.log('2nd',data)
                     }
                 },
                 onModalData: function(modalData,paneMethods,modalMethods) {

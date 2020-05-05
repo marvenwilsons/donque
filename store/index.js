@@ -16,6 +16,9 @@ export const state = () => ({
     /** ----- */
     /** Pane System */
         pane:[],
+    /** dWin */
+        dWinTop: undefined,
+        dWinRight: undefined
 })
 export const getters = {
     /** QUEUE GETTERS */
