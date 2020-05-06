@@ -11,6 +11,12 @@
                             paneSystem: $store.state.pane
                         }"
                     /> -->
+                    <debug 
+                        :data="{
+                            queue: $store.state.queue,
+                            pointer: $store.state.queuePointer
+                        }"
+                    />
                 </v-flex>
             </main>
         </div>

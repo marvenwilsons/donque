@@ -179,7 +179,9 @@ export default {
                     render:         (data,viewIndex) => s.render(data,paneIndex,viewIndex),
                     spawnModal: modalObject => s.spawnModal(paneIndex,modalObject),
                     prompt: (promptObject,cb) => s.panePrompt(paneIndex,promptObject,cb),
-                    updatePaneData: (data) => s.updatePaneData(paneIndex,objectData)
+                    updatePaneData: (data) => s.updatePaneData(paneIndex,objectData),
+                    updatePaneConfig: (config) => s.updatePaneConfig(paneIndex,config) ,
+                    getCurrentPaneIndex: () => paneIndex
                 }
                 const dWinMethods = {
                     spawn: dWinObject => s.dwinSpawn(dWinObject),
@@ -232,12 +234,13 @@ export default {
         renderPane(data, paneIndex,viewIndex) {
             // console.log('renderPane', data)
             if(paneIndex == undefined || paneIndex == null) {
-                console.error('renderPane error, paneIndex cannot be undefined')
+                this.systemError('renderPane error, paneIndex cannot be undefined')
                 return
             }
 
             // console.log('helper',paneIndex, this.$store.state.pane.length - 1)
             if(this.$store.state.pane[paneIndex + 1] == undefined) {
+                // console.log('> renderPane Case1')
                 /** it means add one pane */
                 this.runCompiledTask([
                     new templates.TaskItem('insertCompiledTask',{
@@ -250,6 +253,7 @@ export default {
                 ])
 
             } else {
+                // console.log('> renderPane Case2')
                 /** it means update the paneData? or replace the pane with a new view  */
                 if(paneIndex + 1 == this.$store.state.pane.length - 1) {
                     this.runCompiledTask([
@@ -259,10 +263,12 @@ export default {
                         }),
                         new templates.TaskItem('done',{})
                     ])
+                    console.log(data.paneConfig.paneData)
                     const {paneMethods,modalMethods} =  this.normyDep(paneIndex + 1,this)
-                    this.$store.state.pane[paneIndex].paneConfig.paneOnLoad(paneMethods,modalMethods)
+                    this.$store.state.pane[paneIndex + 1].paneConfig.paneOnLoad(paneMethods,modalMethods)
 
                 } else {
+                    // console.log('> renderPane Case3')
                     this.runCompiledTask([
                         new templates.TaskItem('syspane.delete', {
                             paneIndexOrigin: paneIndex + 1
@@ -273,14 +279,14 @@ export default {
                         new templates.TaskItem('done',{})
                     ])
                     const {paneMethods,modalMethods} =  this.normyDep(paneIndex + 1,this)
-                    this.$store.state.pane[paneIndex].paneConfig.paneOnLoad(paneMethods,modalMethods)
+                    this.$store.state.pane[paneIndex + 1].paneConfig.paneOnLoad(paneMethods,modalMethods)
                 }
                 
             }
             
         },
         getServiceView(dataSet,viewIndex){
-            // console.log('> Getting service view ', dataSet)
+            console.log('> Getting service view ', dataSet)
             // returns a service objects
             const {views} = this.$store.state.app['app-services'][this.$store.state.app['active-sidebar-item']]
             const deserializeViews = new Function('return ' + views)()
@@ -296,6 +302,9 @@ export default {
                 systemError: this.systemError,
                 closeUnUsedPane: this.closeUnUsedPane,
                 panePrompt: this.panePrompt,
+                updatePaneData: this.updatePaneData,
+                updatePaneConfig: this.updatePaneConfig,
+                getCurrentPaneIndex: this.paneIndex
             }
             
             // dependency enject the views function
@@ -413,7 +422,7 @@ export default {
                 }
             })
         },
-        /** TODO doc */
+        /** Update Modal Props */
         updateProps(paneIndex, payload) {
             this.$store.commit('paneModalUpdate', {
                 paneIndex,
@@ -488,6 +497,14 @@ export default {
                 paneData
             })
         },
+        updatePaneConfig(paneIndex,config) {
+            // console.log('> updatePaneConfig', paneIndex)
+            this.$store.commit('paneUpdateConfig', {
+                index: paneIndex,
+                key: config.key,
+                value: config.value
+            })
+        },
         panePrompt(paneIndex,promptObject,fn) {
             const types = ['string','number','select','multiselect','slider', 'minmax', 'password']
 
@@ -497,20 +514,22 @@ export default {
                     if(promptObject.type === 'string') {
                         if(typeof promptObject.value == 'string' || promptObject.value == null || promptObject.value == undefined) {
                             this.closePaneModal(paneIndex)
-                            this.$store.commit('paneModalOverwrite', {
-                                paneIndex,
-                                modalObject: new templates.paneModal({
-                                    modalBody: 'logPrompt',
-                                    modalHeader: promptObject.header,
-                                    isClosable: true,
-                                    modalConfig: {
-                                        value: promptObject.value,
-                                        fn: fn ? fn : function() {},
-                                        type: 'string',
-                                        defaultValue: promptObject.defaultValue
-                                    }
+                            setTimeout(() => {
+                                this.$store.commit('paneModalOverwrite', {
+                                    paneIndex,
+                                    modalObject: new templates.paneModal({
+                                        modalBody: 'logPrompt',
+                                        modalHeader: promptObject.header,
+                                        isClosable: true,
+                                        modalConfig: {
+                                            value: promptObject.value,
+                                            fn: fn ? fn : function() {},
+                                            type: 'string',
+                                            defaultValue: promptObject.defaultValue
+                                        }
+                                    })
                                 })
-                            })
+                            }, 10);
                         } else {
                             this.systemError(`panePrompt Error: in second argument, Invalid value type default value type, 
                             it should be a string but got a type of ${typeof promptObject.value}`)

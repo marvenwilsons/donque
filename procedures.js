@@ -76,6 +76,8 @@ export default function (app,method) {
     }
     i['private.done'] = function () {
         console.log('> all task done')
+        console.log('')
+        console.log('')
         app.$store.commit('stateController', {
             key: 'queueState',
             value: 'end'
