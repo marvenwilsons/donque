@@ -26,6 +26,7 @@
 import globalModal from '@/apps/globalModal/index'
 import appSideBar from '@/apps/appSideBar/index'
 import Templates from '@/templates'
+import controlpanel from '@/apps/controlpanel/controlpanel'
 
 import {mapGetters} from 'vuex'
 export default {
@@ -36,16 +37,9 @@ export default {
     computed: {
         ...mapGetters(['queueAnswersArray','queueState', 'queueArray','queuePointer'])
     },
-    mounted() {
-        this.$store.commit('app/stateController', {
-            key: 'app-current-view',
-            value: 'paneSystem'
-        })
-        // deserialize a function
-        // x.dataControllers.map(e => {
-        //     const myfn = new Function('return ' + e.handler.toString())()
-        //     console.log(myfn(this))
-        // })
+    created() {
+        const { onAdminDashboardLoad } = controlpanel(this)
+        onAdminDashboardLoad(controlpanel)
     },
     watch: {
         // init

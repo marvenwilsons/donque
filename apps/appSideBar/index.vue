@@ -34,6 +34,7 @@
 <script>
 import h from '@/helper'
 import Templates from '@/templates'
+import controlpanel from '@/apps/controlpanel/controlpanel'
 
 export default {
     mixins: [h],
@@ -42,16 +43,13 @@ export default {
     },
     methods: {        
         sideBarItemClick(selectedMenu) {
-            this.runCompiledTask([
-                new Templates.TaskItem('insertCompiledTask', {
-                    payload: { selectedMenu },
-                    compiledTask: this.getCompiledTask('syspane.switch-menu')
-                })
-            ])
+            const { actions } = controlpanel(this)
+            actions.syspane.switchMenu(selectedMenu)
         }
     },
     mounted() {
         this.sideBarItemClick(this.$store.state.app['defualt-active'])
+        
     }
 }
 </script>
