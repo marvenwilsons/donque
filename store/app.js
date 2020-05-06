@@ -25,7 +25,7 @@ export const mutations = {
         state[payload.key] = payload.value
     },
     addAppService(state,payload) {
-        console.log('> addAppService')
+        // console.log('> addAppService')
         state['app-services'][payload.name] = payload
     },
     addMenu(state,payload) {
