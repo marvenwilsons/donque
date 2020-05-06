@@ -1,4 +1,5 @@
 import templates from './templates'
+import utils from './utils'
 
 export default function (app,method) {
     const i = {}
@@ -250,7 +251,7 @@ export default function (app,method) {
         /** move to next queue item */
         app.answerPending()
     }
-    // pane system
+    // pane system management
     i['private.syspane.add'] = function ({payload}) {
         // console.log('> syspane.add ', payload)
         if(!payload.componentConfig || !payload.paneConfig) {
@@ -294,6 +295,133 @@ export default function (app,method) {
         app.answerPending({
             payload: app.$store.state.app['app-services'][serviceName].data
         })
+    },
+    i['private.syspane.close-pane-modal'] = function({paneIndex}) {
+        console.log('> syspane.close-pane-modal', paneIndex)
+        app.$store.commit('paneModalUpdate', {
+            paneIndex,
+            payload: 'closeModal'
+        })
+        app.answerPending()
+    },
+
+    // pane system rendering
+    i['private.syspane.get-service-view'] = function({dataSet,viewIndex}) {
+        console.log('> Entering service view')
+        // returns a service objects
+        const {views} = app.$store.state.app['app-services'][app.$store.state.app['active-sidebar-item']]
+        const deserializeViews = new Function('return ' + views)()
+        const helper = {  /** this for global access, if you use this, you have to provide a paneIndex, or if not all panes will be affected */
+            runCompiledTask : app.runCompiledTask,
+            getCompiledTask : app.getCompiledTask,
+            paneSettings: app.paneSettings,
+            paneModal : app.paneModal,
+            renderPane : app.renderPane,
+            getServiceView: app.getServiceView,
+            closePane: app.closePane,
+            render: app.render,
+            systemError: app.systemError,
+            closeUnUsedPane: app.closeUnUsedPane,
+            panePrompt: app.panePrompt,
+            updatePaneData: app.updatePaneData,
+            updatePaneConfig: app.updatePaneConfig,
+            getCurrentPaneIndex: app.paneIndex
+        }
+        
+        // dependency enject the views function
+        const serviceObject = deserializeViews(dataSet,helper,utils,templates)
+
+        if(!serviceObject) {
+            app.systemError('getServiceView error: Unhandled dataSet in service views, cannot find a service view, check console log for more details')
+        } else {
+            // Problem start here, the data will be incorrect starting on a non zero index pane
+            const { componentConfig, paneConfig, paneOnLoad, onModalData } = serviceObject
+            if(!paneConfig.modal) {
+                paneConfig.modal = {}
+                paneConfig.modal.modalBody = undefined
+                paneConfig.modal.componentConfig = undefined
+                paneConfig.modal.modalConfig = undefined
+                paneConfig.modal.modalErr = undefined
+                paneConfig.modal.modalInfo = undefined
+                paneConfig.modal.isClosable = false
+                paneConfig.modal.modalWidth = undefined
+            }
+            paneConfig.modal.onModalData = onModalData
+            paneConfig.paneOnLoad = paneOnLoad
+
+            if(typeof viewIndex == 'number') {
+                if(paneConfig.paneViews[viewIndex] == undefined) {
+                    app.systemError(`System Error: Invalid index value in render method, value: ${viewIndex} \n Cannot set pane view of undefined, reverting to 0 index pane view`)
+                } else {
+                    paneConfig.defaultPaneView = viewIndex
+                }
+            }
+            console.log('> Getting service view ', {componentConfig, paneConfig})
+
+            // return { componentConfig, paneConfig }
+            app.answerPending({ componentConfig, paneConfig })
+        }
+    },
+    i['private.syspane.render-pane'] = function({data, paneIndex,viewIndex}) {
+        console.log('renderPane', data)
+        if(paneIndex == undefined || paneIndex == null) {
+            this.systemError('renderPane error, paneIndex cannot be undefined')
+            return
+        }
+
+        // console.log('helper',paneIndex, this.$store.state.pane.length - 1)
+        if(app.$store.state.pane[paneIndex + 1] == undefined) {
+            // console.log('> renderPane Case1')
+            /** it means add one pane */
+            this.runCompiledTask([
+                new templates.TaskItem('insertCompiledTask',{
+                    compiledTask: this.getCompiledTask('syspane.add-pane'),
+                    payload: {
+                        data
+                    }
+                }),
+                new templates.TaskItem('done')
+            ])
+
+        } else {
+            console.log('> renderPane Case2')
+            /** it means update the paneData? or replace the pane with a new view  */
+            if(paneIndex + 1 == this.$store.state.pane.length - 1) {
+                const sv = i['private.syspane.get-service-view']({
+                    dataSet: data.paneConfig.paneData,viewIndex,
+                    viewIndex
+                })
+                i['private.syspane.update-pane']({paneIndex: paneIndex+1, payload: sv})
+                app.answerPending()
+                // this.runCompiledTask([
+                //     new templates.TaskItem('syspane.update-pane', {
+                //         paneIndex: paneIndex + 1,
+                //         payload: this.getServiceView(data.paneConfig.paneData,viewIndex)
+                //     }),
+                //     new templates.TaskItem('done',() => {
+                //         const {paneMethods,modalMethods} =  this.normyDep(paneIndex + 1,this)
+                //         this.$store.state.pane[paneIndex + 1].paneConfig.paneOnLoad(paneMethods,modalMethods)
+                //     })
+                // ])
+
+
+            } else {
+                console.log('> renderPane Case3')
+                // this.runCompiledTask([
+                //     new templates.TaskItem('syspane.delete', {
+                //         paneIndexOrigin: paneIndex + 1
+                //     }),
+                //     new templates.TaskItem('syspane.add', {
+                //         payload: data
+                //     }),
+                //     new templates.TaskItem('done',() => {
+                //         const {paneMethods,modalMethods} =  this.normyDep(paneIndex + 1,this)
+                //         this.$store.state.pane[paneIndex + 1].paneConfig.paneOnLoad(paneMethods,modalMethods)
+                //     })
+                // ])
+            }
+            
+        }
     }
 
 

@@ -10,7 +10,7 @@
                             <v-flex relative fullheight-percent >
                                 <div :myData="$store.state.dWinTop.data" :myConfig="$store.state.dWinTop.viewConfig" :is="$store.state.dWinTop.winView" ></div>
                             </v-flex>
-                        </div>               
+                        </div>          
                         <nuxt />
                     </v-flex>
                 </v-flex>

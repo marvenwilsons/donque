@@ -17,7 +17,7 @@
                     </div>
                 </v-flex>
         </div>
-        <v-flex flex1 relative >
+        <v-flex flex1 relative flexcol >
             <!-- pane modal -->
             <v-flex
                 v-if="$store.state.pane[paneIndex].paneConfig.modal.modalBody != undefined"  
