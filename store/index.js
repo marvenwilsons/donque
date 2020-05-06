@@ -169,13 +169,12 @@ export const actions = {
         if(!state.app.systemRoutes.includes(urlPath) ) {
             // user choose public route
         } else if(urlPath === '/dqlogin') {
-            // user wants to login
-            // submit username and password get api key for session
+            // TODO: login
         } else if(urlPath === '/dqadmin') {
             // get services
             const service = await this.$axios
             .get('/$dqappservices/service', {
-                // TODO:
+                // TODO: 1
                 params: {
                     username: 'marvenwilsons', // get from localstorage
                     apikey: 'test' // get from localstorage
@@ -183,7 +182,8 @@ export const actions = {
             })
             .then(({data}) => {
                 return data.response
-            }).catch(err => {
+            })
+            .catch(err => {
                 console.log('> err',err.message)
             })
 
