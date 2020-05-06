@@ -198,8 +198,14 @@ module.exports = Templates.Service({
                         {
                             name: 'sub page',
                             handler: function(selected, paneMethods, modalMethods, dWinMethods) {
+                                // console.log('subPage',selected.item.pageName, selected.item.subPages)
                                 paneMethods.render(selected.item.subPages)
-                                dWinMethods.close('top')
+                                // paneMethods.updatePaneConfig({
+                                //     key: 'paneName',
+                                //     value: 'test'
+                                // })
+                                // dWinMethods.close('top')
+
                             }
                         },
                         {
@@ -255,9 +261,9 @@ module.exports = Templates.Service({
                      * paneMethods.spawnModal(<modalObject>)
                      * paneMethods.render(<data>,<view index>)
                      */
-                    console.log('paneOnLoad')
+                    console.log('> paneOnLoad page/subpages', data)
                     if(data.length == 0) {
-                        console.log('show modal', data)
+                        console.log('> show pane modal', data)
                         paneMethods.prompt({
                             type: 'string',
                             header: 'Page Name',
@@ -267,7 +273,7 @@ module.exports = Templates.Service({
                             modalMethods.closePaneModal()
                         })
                     } else {
-                        console.log('2nd',data)
+                        console.log('> data length is ',data.length, 'not showing modal')
                     }
                 },
                 onModalData: function(modalData,paneMethods,modalMethods) {
