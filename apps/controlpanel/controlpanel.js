@@ -245,7 +245,6 @@ export default function (app) {
             }
         })
     }
-
-
+    
     return controlpanel
 }
