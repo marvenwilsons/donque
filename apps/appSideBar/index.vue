@@ -46,10 +46,6 @@ export default {
             const { actions } = controlpanel(this)
             actions.syspane.switchMenu(selectedMenu)
         }
-    },
-    mounted() {
-        this.sideBarItemClick(this.$store.state.app['defualt-active'])
-        
     }
 }
 </script>

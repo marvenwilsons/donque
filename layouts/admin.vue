@@ -27,9 +27,11 @@ import globalModal from '@/apps/globalModal/index'
 import appSideBar from '@/apps/appSideBar/index'
 import Templates from '@/templates'
 import controlpanel from '@/apps/controlpanel/controlpanel'
+import h from '@/helper'
 
 import {mapGetters} from 'vuex'
 export default {
+    mixins: [h],
     components: {
         globalModal,
         appSideBar
@@ -38,8 +40,13 @@ export default {
         ...mapGetters(['queueAnswersArray','queueState', 'queueArray','queuePointer'])
     },
     created() {
-        const { onAdminDashboardLoad } = controlpanel(this)
-        onAdminDashboardLoad(controlpanel)
+        this.h = this
+        const { onAdminLoad } = controlpanel(this)
+        onAdminLoad()
+    },
+    mounted() {
+        const { onAdminMount } = controlpanel(this)
+        onAdminMount()
     },
     watch: {
         // init

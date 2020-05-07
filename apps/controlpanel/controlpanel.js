@@ -4,20 +4,23 @@ export default function (app) {
     controlpanel.actions.syspane = {}
     controlpanel.actions.sysmodal = {}
 
-    controlpanel.onAdminDashboardLoad = (controlpanel) => {
+    controlpanel.onAdminLoad = function() {
         // set current view to pane system
         app.$store.commit('app/stateController', {
             key: 'app-current-view',
             value: 'paneSystem'
         })
-        // set default active menu and spawn defualt pane
+    }
 
+    controlpanel.onAdminMount = function() {
+        // set default active menu and spawn defualt pane
+        controlpanel.actions.syspane.switchMenu(app.$store.state.app['defualt-active'])
     }
 
     // syspane
 
     controlpanel.actions.syspane.switchMenu = function(selectedMenu) {
-        console.log('> switchMenu')
+        // console.log('> switchMenu')
         /** emptying the pane array [done] */
         app.$store.commit('stateController', {
             key: 'pane',
