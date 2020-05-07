@@ -11,7 +11,7 @@
                     </v-flex>
                 </v-flex>
                 <v-flex class="flexend margintop050 pad025">
-                    <button @click="answerPending()" class="defbtn buttonreset ">
+                    <button @click="closeGlobalModal()" class="defbtn buttonreset ">
                         close
                     </button>
                 </v-flex>

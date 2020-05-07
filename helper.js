@@ -18,18 +18,7 @@ export default {
     methods: {
         /** sys utils */
         systemError(msg) {
-            setTimeout(() => {
-                this.runCompiledTask([
-                    new templates.TaskItem('sysmodal.logerr', {
-                        msg
-                    }),
-                    new templates.TaskItem('sysmodal.close-modal', {}),
-                    new templates.TaskItem('exec', function() {
-                        window.location.reload()
-                    }),
-                    new templates.TaskItem('done', {})
-                ])
-            }, 100);
+            this.actions.sysmodal.logError(msg)
         },
         m() {
             return this
@@ -310,6 +299,9 @@ export default {
         /** closes a the pane modal */
         closePaneModal(paneIndex) {
             return this.actions.syspane.paneModalUpdate(paneIndex,'closeModal')
+        },
+        closeGlobalModal() {
+            this.actions.sysmodal.closeModal()
         },
         /** close all un used pane */
         closeUnUsedPane(paneIndex) {
