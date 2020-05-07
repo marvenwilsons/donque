@@ -39,9 +39,6 @@ export default {
         debug,
         paneSystem
     },
-    mounted() {
-
-    },
     layout: context => {
         const sysRoutes = [
             '/dqlogin',

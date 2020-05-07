@@ -6,7 +6,9 @@ Month: May 2020
 [x] add hasSetOfKeys validation to utils
 [x] add viewIndex support for render in paneMethods
 [x] added prompt support for pane modal 
-[x] implemented dWins
+[x] cut support for queue system and migrated to centralized controlpanel file
+[-] re test global modals, then write documentaion
+[?] implemented dWins
 [-] add encryption and decryption to utils
 [-] implemented uniview
 [-] implement remaining features of listify1.2

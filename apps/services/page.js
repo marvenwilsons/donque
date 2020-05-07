@@ -198,14 +198,7 @@ module.exports = Templates.Service({
                         {
                             name: 'sub page',
                             handler: function(selected, paneMethods, modalMethods, dWinMethods) {
-                                // console.log('subPage',selected.item.pageName, selected.item.subPages)
                                 paneMethods.render(selected.item.subPages)
-                                // paneMethods.updatePaneConfig({
-                                //     key: 'paneName',
-                                //     value: 'test'
-                                // })
-                                // dWinMethods.close('top')
-
                             }
                         },
                         {
@@ -261,19 +254,17 @@ module.exports = Templates.Service({
                      * paneMethods.spawnModal(<modalObject>)
                      * paneMethods.render(<data>,<view index>)
                      */
-                    console.log('> paneOnLoad page/subpages', data)
                     if(data.length == 0) {
-                        console.log('> show pane modal', data)
                         paneMethods.prompt({
                             type: 'string',
                             header: 'Page Name',
                             info: 'There are no page(s) to display, Create a new page to get started.'
-                        }, () => {
-                            console.log('finishing')
-                            modalMethods.closePaneModal()
+                        }, (input) => {
+                            setTimeout(() => {
+                                modalMethods.closePaneModal()
+                                console.log('input -> ',input)
+                            }, 2000);
                         })
-                    } else {
-                        console.log('> data length is ',data.length, 'not showing modal')
                     }
                 },
                 onModalData: function(modalData,paneMethods,modalMethods) {
