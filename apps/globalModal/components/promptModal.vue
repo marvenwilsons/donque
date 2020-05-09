@@ -1,30 +1,42 @@
 <template>
     <main class="modalShadow" >
-        <div style="background:var(--deftheme-dark-primary); color:white;" class="pad050" >
+        <div style="background:var(--deftheme-dark-primary); color:white;" class="pad125" >
             <span class="padleft025" >Prompt</span>
         </div>
         <div class="pad050 borderRad4" >
             <div class="pad025">
-                <div class="padbottom025">
-                    {{data.label}}
-                </div>
-                <v-flex class="borderRad4 marginbottom050" >
-                    <input 
-                        :placeholder="data.placeholder" id="modalStringPrompt" 
+                <v-flex borderRad4 marginbottom050 padtop125 flexcol >
+                    <v-text-field
                         v-model="inp"
-                        style="border: 4px solid #e9eff3;background:#e9eff3;" 
-                        class="pad050 fullwidth borderRad4" type="text">
+                        :placeholder="data.placeholder"
+                        dense
+                        :type="data.type ? data.type : 'string'"
+                        :label="data.label"
+                        outlined
+                     :disabled="isLoading"
+                    />
+                    <loading @progressMethod="extractProgressMethod" />
                 </v-flex>
                 <v-flex v-if="data.err" >
-                    <div class="backgrounderr pad025 fullwidth borderRad4 err padleft050" >error: {{data.err}}</div>
+                    <div class="backgrounderr pad050 fullwidth borderRad4 err padleft050" >
+                        <div class="pad025" >
+                            error: {{data.err}}
+                        </div>
+                    </div>
                 </v-flex>
                 <v-flex class="flexend margintop050 pad025">
-                    <button @click="answerPending(inp)" class="defbtn buttonreset marginright050">
+                    <v-btn
+                    :loading="isLoading"
+                     color="primary" 
+                     @click="onSumbit"
+                     class="defbtn buttonreset marginright050">
                         Submit
-                    </button>
-                    <button @click="answerPending('$dcore.system.closeModal')" class="defbtn buttonreset ">
+                    </v-btn>
+                    <v-btn 
+                     :disabled="isLoading"
+                    color="primary" @click="data.onCancel ? data.onCancel() : true" class="defbtn buttonreset ">
                         Cancel
-                    </button>
+                    </v-btn>
                 </v-flex>
             </div>
         </div>
@@ -40,13 +52,24 @@ export default {
         data: Object
     },
     data: () => ({
-        inp: null
+        inp: null,
+        isLoading: false,
+        progressMethod: undefined
     }),
     created() {
         this.h = this
     },
+    methods: {
+        onSumbit() {
+            this.data.onSubmit(this.inp, this.progressMethod,this.data.closeModal)
+            this.isLoading = true
+        },
+        extractProgressMethod(method) {
+            this.progressMethod = method
+        }
+    },
     mounted() {
-        document.getElementById('modalStringPrompt').focus()
+        this.inp = this.data.defaultValue
     }
 }
 </script>

@@ -3,6 +3,7 @@ export default function (app) {
     controlpanel.actions = {}
     controlpanel.actions.syspane = {}
     controlpanel.actions.sysmodal = {}
+    controlpanel.settings = {}
 
     controlpanel.onAdminLoad = function() {
         // set current view to pane system
@@ -31,6 +32,7 @@ export default function (app) {
             key: 'active-sidebar-item',
             value: selectedMenu
         })
+
         /** pane add */
         const serviceData = controlpanel.actions.syspane.getInitialData(selectedMenu)
         const serviceDataToPaneObject = app.getServiceView(serviceData)
@@ -171,7 +173,7 @@ export default function (app) {
         })
     }
 
-    controlpanel.actions.sysmodal.closeModal = function () {
+    controlpanel.actions.sysmodal.closeModal = function (cb) {
         app.$store.commit('stateController', {
             key: 'globalModalState',
             value: false
@@ -184,20 +186,31 @@ export default function (app) {
             key: 'globalModalContent',
             value: undefined
         })
+        app.$store.commit('stateController', {
+            key: 'loading-msg',
+            value: null
+        })
+        if(cb) {
+            setTimeout(() => {
+                cb()
+            }, 0);
+        }
     }
 
-    controlpanel.actions.sysmodal.ask = function ({question, truthy, falsey}) {
+    controlpanel.actions.sysmodal.ask = function ({question, truthy, falsey},cb) {
         controlpanel.actions.sysmodal.spawn({
             modalType: 'boolean',
             modalPayload: {
                 truthy,
                 falsey,
-                question
+                question,
+                cb,
+                closeModal: controlpanel.actions.sysmodal.closeModal
             }
         })
     }
 
-    controlpanel.actions.sysmodal.prompt = function ({type,defaultValue,placeholder,label,err}) {
+    controlpanel.actions.sysmodal.prompt = function ({type,defaultValue,placeholder,label,err, onSubmit, onCancel}) {
         controlpanel.actions.sysmodal.spawn({
             modalType: 'prompt',
             modalPayload: {
@@ -205,19 +218,25 @@ export default function (app) {
                 defaultValue,
                 placeholder,
                 label,
-                err
+                err,
+                onSubmit,
+                onCancel,
+                closeModal: controlpanel.actions.sysmodal.closeModal
             }
         })
     }
 
-    controlpanel.actions.sysmodal.select = function ({options,defaultValue, label, err}) {
+    controlpanel.actions.sysmodal.select = function ({options,defaultValue, label, err,onSubmit,onCancel}) {
         controlpanel.actions.sysmodal.spawn({
             modalType: 'select',
             modalPayload: {
                 options,
                 defaultValue,
                 label,
-                err
+                err,
+                onSubmit,
+                onCancel,
+                closeModal: controlpanel.actions.sysmodal.closeModal
             }
         })
     }
@@ -240,11 +259,12 @@ export default function (app) {
         })
     }
 
-    controlpanel.actions.sysmodal.loading = function({msg}) {
+    controlpanel.actions.sysmodal.loading = function(payload) {
         controlpanel.actions.sysmodal.spawn({
             modalType: 'loading',
             modalPayload: {
-                msg
+                payload,
+                closeModal: controlpanel.actions.sysmodal.closeModal
             }
         })
     }
