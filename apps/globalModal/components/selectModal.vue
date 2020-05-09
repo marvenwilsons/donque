@@ -1,30 +1,40 @@
 <template>
     <main class="modalShadow" >
-        <div style="background:var(--deftheme-dark-primary); color:white;" class="pad050" >
+        <div style="background:var(--deftheme-dark-primary); color:white;" class="pad125" >
             <span class="padleft025" >Select</span>
         </div>
         <div class="pad050 borderRad4" >
             <div class="pad025">
-                <div class="padbottom025">
-                    {{data.label}}
-                </div>
-                <v-flex class="marginbottom050" >
-                    <select v-model="inp"  style="border:1px solid lightgray;" class="pad050 fullwidth" >
-                        <option v-for="opt in data.options" :key="opt" >
-                            {{opt}}
-                        </option>
-                    </select>
+                <v-flex class="marginbottom050 margintop125 flexcol" >
+                    <v-select
+                        dense
+                        v-model="inp"
+                        :items="data.options"
+                        :label="data.label"
+                        persistent-hint
+                        outlined
+                        :disabled="isLoading"
+                    ></v-select>
+                    <loading @progressMethod="extractProgressMethod" />
                 </v-flex>
                 <v-flex v-if="data.err" >
                     <div class="backgrounderr pad025 fullwidth borderRad4 err padleft050" >error: {{data.err}}</div>
                 </v-flex>
-                <v-flex class="flexend margintop050 pad025">
-                    <button @click="answerPending(inp)" class="defbtn buttonreset marginright050">
-                        Submit
-                    </button>
-                    <button @click="answerPending('$dcore.system.closeModal')" class="defbtn buttonreset ">
+                <v-flex class="flexend pad025">
+                    <v-btn 
+                        color="primary" 
+                        @click="data.onCancel()" 
+                        :disabled="isLoading"
+                        class="marginright125 ">
                         Cancel
-                    </button>
+                    </v-btn>
+                    <v-btn  
+                        color="primary" 
+                        @click="data.onSubmit(inp,progressMethod,data.closeModal), isLoading = true"
+                        :loading="isLoading"
+                        >
+                        Submit
+                    </v-btn>
                 </v-flex>
             </div>
         </div>
@@ -40,7 +50,9 @@ export default {
         data: Object
     },
     data: () => ({
-        inp: null
+        inp: null,
+        isLoading: false,
+        progressMethod: undefined
     }),
     created() {
         this.h = this
@@ -48,6 +60,11 @@ export default {
     mounted() {
         if(this.data.defaultValue) {
             this.inp = this.data.defaultValue
+        }
+    },
+    methods: {
+        extractProgressMethod(method) {
+            this.progressMethod = method
         }
     }
 }

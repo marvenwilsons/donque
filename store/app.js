@@ -12,6 +12,7 @@ export const state = () => ({
         'defualt-active': '',
     /** ----- */
         'app-services': {},
+        'loading-msg': null,
 
     systemRoutes: [
         '/dqlogin',

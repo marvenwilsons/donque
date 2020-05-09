@@ -1,6 +1,6 @@
 <template>
     <main class="modalShadow" >
-        <div style="background:var(--deftheme-dark-primary); color:white;" class="pad050" >
+        <div style="background:var(--deftheme-dark-primary); color:white;" class="pad125" >
             <span class="padleft025" >log info</span>
         </div>
         <div class="pad050 borderRad4" >
@@ -11,7 +11,7 @@
                     </v-flex>
                 </v-flex>
                 <v-flex class="flexend margintop050 pad025">
-                    <button @click="answerPending('$dcore.system.closeModal')" class="defbtn buttonreset ">
+                    <button @click="closeGlobalModal()" class="defbtn buttonreset ">
                         close
                     </button>
                 </v-flex>

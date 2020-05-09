@@ -1,6 +1,6 @@
 <template>
 <main >
-    <div style="background:var(--deftheme-dark-primary); color:white;" class="pad050" >
+    <div style="background:var(--deftheme-dark-primary); color:white;" class="pad125" >
         <span class="padleft025" >Confirmation required</span>
     </div>
     <div class="pad050 borderRad4" >
@@ -8,13 +8,18 @@
             <v-flex class="backgroundinfo pad050 borderRad4 marginbottom050" >
                 <span class="pad025" >{{data.question}}</span>
             </v-flex>
+            <loading @progressMethod="p => progress = p" />
             <v-flex class="flexend margintop050 pad025">
-                <button @click="submitAnswer(true)" class="defbtn marginright050 buttonreset">
+                <v-btn
+                    :loading="isLoading" 
+                    color="primary" 
+                    @click="submitAnswer(true)" 
+                    class="defbtn marginright050 buttonreset">
                     {{data.truthy}}
-                </button>
-                <button @click="submitAnswer(false)" class="defbtn buttonreset">
+                </v-btn>
+                <v-btn :disabled="isLoading" color="primary" @click="submitAnswer(false)" class="defbtn buttonreset">
                     {{data.falsey}}
-                </button>
+                </v-btn>
             </v-flex>
         </div>
     </div>
@@ -29,12 +34,17 @@ export default {
     props: {
         data: Object
     },
+    data: () => ({
+        progress: undefined,
+        isLoading: false
+    }),
     created() {
         this.h = this
     },
     methods: {
         submitAnswer(value) {
-            this.answerPending(value)
+            this.isLoading = true
+            this.data.cb(value,this.progress,this.data.closeModal)
         }
     }
 }

@@ -25,7 +25,7 @@ export default {
     methods: {
         updateProgressText(text, totalItems) {
             this.progressText = text
-            if(totalItems) {
+            if(totalItems && typeof totalItems == 'number') {
                 const t = 100 / Math.round(totalItems)
 
                 if(this.progressLoader == 1) {
@@ -44,6 +44,14 @@ export default {
                 if(this.isSet) {
                     this.execTimes = this.execTimes + 1
                     this.progressLoader = this.progressLoader + this.incrementValue
+
+                    if(totalItems && typeof totalItems == 'function') {
+                        if(Math.round(this.progressLoader) === 100) {
+                            setTimeout(() => {
+                                totalItems()
+                            }, 500);
+                        }
+                    }
                 }
             }
 

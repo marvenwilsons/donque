@@ -1,18 +1,16 @@
 <template>
     <main class="modalShadow" >
-        <div style="background:var(--deftheme-dark-primary); color:white;" class="pad050" >
+        <!-- <div style="background:var(--deftheme-dark-primary); color:white;" class="pad125" >
             <span class="padleft025" >loading</span>
-        </div>
-        <div class="pad050 borderRad4" >
+        </div> -->
+        <div style="border: 2px solid whitesmoke;" class="pad050 borderRad4" >
+            <div class="padleft050 padtop050" >
+                <div class="padleft025" >
+                    {{headerTxt ? headerTxt : 'Please wait ...'}}
+                </div>
+            </div>
             <div class="pad025">
-                <v-flex class="borderRad4 marginbottom050" >
-                    <v-flex class="borderRad4 backgroundinfo flexcenter flexstart" >
-                        <div style="background: #629af4;" class="pad050">
-                            <div style="" class="loader marginright025"></div>
-                        </div>
-                        <div class="padleft050" >{{data.msg}}</div>
-                    </v-flex>
-                </v-flex>
+            <loading @progressMethod="p => progress = p" />
             </div>
         </div>
     </main>
@@ -27,15 +25,20 @@ export default {
         data: Object
     },
     data: () => ({
-        inp: null
+        inp: null,
+        progress: undefined,
+        headerTxt: undefined
     }),
     created() {
         this.h = this
     },
+    methods: {
+        headerText(txt) {
+            this.headerTxt = txt
+        }
+    },
     mounted() {
-        setTimeout(() => {
-            this.answerPending('--done--')
-        }, 10);
+        this.data.payload(this.progress,this.headerText,this.data.closeModal)
     }
 }
 </script>
