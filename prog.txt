@@ -7,7 +7,7 @@ Month: May 2020
 [x] add viewIndex support for render in paneMethods
 [x] added prompt support for pane modal 
 [x] cut support for queue system and migrated to centralized controlpanel file
-    [-] re test global modals, then write documentaion
+    [x] re test global modals, then write documentaion
     [-] trim helper methods, pane components doesnt need it
 [?] implemented dWins
 [-] add encryption and decryption to utils
