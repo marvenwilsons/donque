@@ -6,6 +6,7 @@ export default function (app) {
     controlpanel.actions.syspane = {}
     controlpanel.actions.syspane.modal = {}
     controlpanel.actions.sysmodal = {}
+    controlpanel.actions.dwin = {}
     controlpanel.settings = {}
 
     controlpanel.onAdminLoad = function() {
@@ -664,14 +665,14 @@ export default function (app) {
                     winConfig.height = '100%'
                 }
             }
-            this.$store.commit('stateController', {
+            app.$store.commit('stateController', {
                 key: ((section) => {
                     if(section === 'top') {
                         return 'dWinTop'
                     } else if(section === 'right') {
                         return 'dWinRight'
                     } else {
-                        this.systemError('dwinSpawn Error: Invalid dWin section')
+                        app.systemError('dwinSpawn Error: Invalid dWin section')
                     }
                 })(section),
                 value: { winView, viewConfig, data, winConfig }
