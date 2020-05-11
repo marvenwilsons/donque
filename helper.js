@@ -128,72 +128,30 @@ export default {
         },
         normyDep(paneIndex,scope) {
             return ((s) => {
-                const modalMethods = {
-                    closePaneModal: () =>  s.closePaneModal(paneIndex),
-                    appendErrorMsg: msg => s.appendErrorMsg(paneIndex,msg),
-                    appendInfoMsg:  msg => s.appendInfoMsg(paneIndex,msg),
-                    logError:       (msg,fn) => s.paneLogError(paneIndex,msg,fn),
-                    logInfo:        (msg,fn) => s.paneLogInfo(paneIndex,msg,fn),
-                    logWarn:        (msg,fn) => s.paneLogWarn(paneIndex,msg,fn),
-                    updateModalProps:    ({key,value}) => s.updateModalProps(paneIndex,{key,value}),
+                const syspanemodal = {
+                    close: () =>  s.actions.syspane.modal.update(paneIndex,'closeModal'),
+                    appendErrorMsg: msg => s.actions.syspane.modal.appendErrorMsg(paneIndex,msg),
+                    appendInfoMsg:  msg => s.actions.syspane.modal.appendInfoMsg(paneIndex,msg),
+                    logError:  (msg,fn) => s.actions.syspane.modal.logError(paneIndex,msg,fn),
+                    logInfo:   (msg,fn) => s.actions.syspane.modal.logInfo(paneIndex,msg,fn),
+                    logWarn:   (msg,fn) => s.actions.syspane.modal.logWarn(paneIndex,msg,fn),
                 }
-                const paneMethods = {
-                    closePane:      () => s.closePane,
-                    closeUnUsedPane: () => s.closeUnUsedPane(paneIndex + 1),
-                    // changePaneView: viewIndex => s.changePaneView({paneIndex,viewIndex}),
-                    render:         (data,viewIndex) => s.render(data,paneIndex,viewIndex),
-                    spawnModal: modalObject => s.spawnModal(paneIndex,modalObject),
-                    prompt: (promptObject,cb) => s.panePrompt(paneIndex,promptObject,cb),
-                    updatePaneData: (data) => s.updatePaneData(paneIndex,objectData),
+                const syspane = {
+                    close:      () => s.actions.syspane.close(paneIndex),
+                    closeUnUsedPane: () => s.actions.syspane.delete(paneIndex + 1),
+                    render:   (data,viewIndex) => s.render(data,paneIndex,viewIndex),
+                    spawnModal:    modalObject => s.spawnModal(paneIndex,modalObject),
+                    prompt:  (promptObject,cb) => s.actions.syspane.prompt(paneIndex,promptObject,cb),
+                    updatePaneData:(  objData) => s.updatePaneData(paneIndex,objData),
                     updatePaneConfig: (config) => s.updatePaneConfig(paneIndex,config) ,
-                    getCurrentPaneIndex: () => paneIndex
+                    getCurrentPaneIndex:    () => paneIndex
                 }
                 const dWinMethods = {
-                    spawn: dWinObject => s.dwinSpawn(dWinObject),
-                    close: (section) => s.dwinClose(section)
+                    spawn: dWinObject => s.actions.dwin.spawn(dWinObject),
+                    close: (section) => s.actions.dwin.close(section)
                 }
-                return { paneMethods, modalMethods, dWinMethods }
+                return { syspane, syspanemodal, dWinMethods }
             })(scope)
-        },
-        /** dwin */
-        dwinSpawn(dWinObject) {
-            // section, winView, viewConfig, data
-            if(!dWinObject.section || !dWinObject.winView || !dWinObject.viewConfig || !dWinObject.data) {
-                this.systemError('dwinSpawn Error: Cannot spawn dWin Invalid dWinObject or has missing properties')
-            } else {
-                const {section, winView, viewConfig, winConfig, data} = dWinObject
-                if(winConfig) {
-                    if(!winConfig.height) {
-                        winConfig.height = '100%'
-                    }
-                }
-                this.$store.commit('stateController', {
-                    key: ((section) => {
-                        if(section === 'top') {
-                            return 'dWinTop'
-                        } else if(section === 'right') {
-                            return 'dWinRight'
-                        } else {
-                            this.systemError('dwinSpawn Error: Invalid dWin section')
-                        }
-                    })(section),
-                    value: { winView, viewConfig, data, winConfig }
-                })
-            }
-        },
-        dwinClose(section) {
-            this.$store.commit('stateController',{
-                key: ((section) => {
-                    if(section === 'top') {
-                        return 'dWinTop'
-                    } else if(section === 'right') {
-                        return 'dWinRight'
-                    } else {
-                        this.systemError('dwinClose Error: Invalid dWin section')
-                    }
-                })(section),
-                value: undefined
-            })
         },
         /** end of dwin */
         renderPane(data, paneIndex,viewIndex) {
@@ -216,8 +174,8 @@ export default {
                 if(paneIndex + 1 == this.$store.state.pane.length - 1) {
                     actions.syspane.updatePane(paneIndex + 1, this.getServiceView(data.paneConfig.paneData,viewIndex))
                     .then(res => {
-                        const {paneMethods,modalMethods} =  this.normyDep(paneIndex + 1,this)
-                        this.$store.state.pane[paneIndex + 1].paneConfig.paneOnLoad(paneMethods,modalMethods)
+                        const {syspane,syspanemodal} =  this.normyDep(paneIndex + 1,this)
+                        this.$store.state.pane[paneIndex + 1].paneConfig.paneOnLoad(syspane,syspanemodal)
                     })
                 } else {
                     // console.log('> renderPane Case3')
@@ -225,8 +183,8 @@ export default {
                     .syspane
                     .add(data)
                     .then(res => {
-                        const {paneMethods,modalMethods} =  this.normyDep(paneIndex + 1,this)
-                        this.$store.state.pane[paneIndex + 1].paneConfig.paneOnLoad(paneMethods,modalMethods)
+                        const {syspane,syspanemodal} =  this.normyDep(paneIndex + 1,this)
+                        this.$store.state.pane[paneIndex + 1].paneConfig.paneOnLoad(syspane,syspanemodal)
                     })
                 }
                 
@@ -290,58 +248,14 @@ export default {
         },
         /** close pane */
         closePane() {      
-            if(this.$store.state.pane.length == 1){
-                this.actions.syspane.switchMenu(this.$store.state.app['defualt-active'])
-            } else {
-                this.actions.syspane.delete(this.paneIndex)
-            }
+            this.actions.syspane.close(this.paneIndex)
         },
         /** closes a the pane modal */
         closePaneModal(paneIndex) {
-            return this.actions.syspane.paneModalUpdate(paneIndex,'closeModal')
+            return this.actions.syspane.modal.update(paneIndex,'closeModal')
         },
         closeGlobalModal() {
             this.actions.sysmodal.closeModal()
-        },
-        /** close all un used pane */
-        closeUnUsedPane(paneIndex) {
-            this.actions.syspane.delete(paneIndex)
-        },
-        /** Appends an error msg to the pane modal */
-        appendErrorMsg(paneIndex,msg) {
-            this.actions.syspane.paneModalUpdate(paneIndex,{
-                payload: {
-                    key: 'modalInfo',
-                    value: undefined
-                }
-            }).then(() => {
-                this.actions.syspane.paneModalUpdate(paneIndex,{
-                    payload: {
-                        key: 'modalErr',
-                        value: msg
-                    }
-                })
-            })
-        },
-        /** Appends an infomsg to the pane modal */
-        appendInfoMsg(paneIndex,msg) {
-            this.actions.syspane.paneModalUpdate(paneIndex,{
-                payload: {
-                    key: 'modalErr',
-                    value: msg
-                }
-            }).then(() => {
-                this.actions.syspane.paneModalUpdate(paneIndex,{
-                    payload: {
-                        key: 'modalInfo',
-                        value: undefined
-                    }
-                })
-            })
-        },
-        /** Update Modal Props */
-        updateModalProps(paneIndex, payload) {
-            return this.actions.syspane.paneModalUpdate(paneIndex, payload)
         },
         /** spwans a modal to a pane */
         spawnModal(paneIndex,modalObject) {
@@ -357,57 +271,6 @@ export default {
                 this.systemError(`activaPaneModal ERR \n ${err}`)
             }
         },
-        /** Spawns an error pane modal, this is a non queue function */
-        paneLogError(paneIndex,msg, fn) {
-            this.closePaneModal(paneIndex).then(() => {
-                this.$store.commit('paneModalOverwrite', {
-                    paneIndex,
-                    modalObject: new templates.paneModal({
-                        modalBody: 'logErr',
-                        modalHeader: 'Error!',
-                        isClosable: true,
-                        modalConfig: {
-                            msg,
-                            fn: fn ? fn : function() {}
-                        }
-                    })
-                })
-            })
-        },
-        /** Spawns an info pane modal, this is a non queue function */
-        paneLogInfo(paneIndex,msg, fn) {
-            this.closePaneModal(paneIndex).then(() => {
-                this.$store.commit('paneModalOverwrite', {
-                    paneIndex,
-                    modalObject: new templates.paneModal({
-                        modalBody: 'logInfo',
-                        modalHeader: 'Info!',
-                        isClosable: true,
-                        modalConfig: {
-                            msg,
-                            fn: fn ? fn : function() {}
-                        }
-                    })
-                })
-            })
-        },
-        /** Spawns a warning pane modal, this is a non queue function */
-        paneLogWarn(paneIndex,msg, fn) {
-            this.closePaneModal(paneIndex).then(() => {
-                this.$store.commit('paneModalOverwrite', {
-                    paneIndex,
-                    modalObject: new templates.paneModal({
-                        modalBody: 'logWarn',
-                        modalHeader: 'Warning!',
-                        isClosable: true,
-                        modalConfig: {
-                            msg,
-                            fn: fn ? fn : function() {}
-                        }
-                    })
-                })
-            })
-        },
         /** Updates the pane data */
         updatePaneData(paneIndex,paneData) {
             this.commit('paneUpdateData', {
@@ -416,281 +279,11 @@ export default {
             })
         },
         updatePaneConfig(paneIndex,config) {
-            // console.log('> updatePaneConfig', paneIndex)
             this.$store.commit('paneUpdateConfig', {
                 index: paneIndex,
                 key: config.key,
                 value: config.value
             })
-        },
-        panePrompt(paneIndex,promptObject,fn) {
-            const types = ['string','number','select','multiselect','slider', 'minmax', 'password']
-
-            if(promptObject != undefined) {
-                if(types.indexOf(promptObject.type) != -1) {
-                    // string
-                    if(promptObject.type === 'string') {
-                        if(typeof promptObject.value == 'string' || promptObject.value == null || promptObject.value == undefined) {
-                            this.closePaneModal(paneIndex).then(() => {
-                                this.$store.commit('paneModalOverwrite', {
-                                    paneIndex,
-                                    modalObject: new templates.paneModal({
-                                        modalBody: 'logPrompt',
-                                        modalHeader: promptObject.header,
-                                        isClosable: true,
-                                        modalConfig: {
-                                            value: promptObject.value,
-                                            fn: fn ? fn : function() {},
-                                            type: 'string',
-                                            defaultValue: promptObject.defaultValue
-                                        }
-                                    })
-                                })
-                            })
-                        } else {
-                            this.systemError(`panePrompt Error: in second argument, Invalid value type default value type, 
-                            it should be a string but got a type of ${typeof promptObject.value}`)
-                        }
-    
-                    }
-                    // number
-                    if(promptObject.type === 'number') {
-                        // value can be undefined and default value
-                        if(promptObject.value || promptObject.defaultValue) {
-                            if(typeof promptObject.value == 'number' || typeof promptObject.defaultValue == 'number') {
-                                this.closePaneModal(paneIndex).then(() => {
-                                    this.$store.commit('paneModalOverwrite', {
-                                        paneIndex,
-                                        modalObject: new templates.paneModal({
-                                            modalBody: 'logPrompt',
-                                            modalHeader: promptObject.header,
-                                            isClosable: true,
-                                            modalConfig: {
-                                                value: promptObject.value,
-                                                fn: fn ? fn : function() {},
-                                                type: 'number',
-                                                defaultValue: promptObject.defaultValue
-                                            }
-                                        })
-                                    })
-                                })
-                            } else {
-                                this.systemError(`panePrompt Error: in second argument, Invalid value or default value type, 
-                                it should be a number but got ${typeof promptObject.value == undefined || typeof promptObject.value == null ? 'undefined' :
-                                 `a type of \n (value: ${typeof promptObject.value}) \n (default value: ${typeof promptObject.defaultValue})` }`)
-                            }
-                        } else {
-                            this.closePaneModal(paneIndex).then(() => {
-                                this.$store.commit('paneModalOverwrite', {
-                                    paneIndex,
-                                    modalObject: new templates.paneModal({
-                                        modalBody: 'logPrompt',
-                                        modalHeader: promptObject.header,
-                                        isClosable: true,
-                                        modalConfig: {
-                                            value: null,
-                                            fn: fn ? fn : function() {},
-                                            type: 'number',
-                                            defaultValue: null
-                                        }
-                                    })
-                                })
-                            })
-                        }
-                    }
-                    // select
-                    if(promptObject.type === 'select') {
-                        if(promptObject.value != undefined) {
-                            if(promptObject.defaultValue) {
-                                if(promptObject.defaultValue) {
-                                    if(typeof promptObject.defaultValue != 'string') {
-                                        this.systemError(`panePrompt Error: Invalid defaultValue type, defaultValue should be a type of string`)
-                                        if(!promptObject.value.includes(promptObject.defaultValue)) {
-                                            this.systemError(`panePrompt Error: Cannot find "${promptObject.defaultValue}" in value's array`)
-                                        } 
-                                    }
-                                }
-                            }
-                            if(Array.isArray(promptObject.value) ){
-                                this.closePaneModal(paneIndex).then(() => {
-                                    this.$store.commit('paneModalOverwrite', {
-                                        paneIndex,
-                                        modalObject: new templates.paneModal({
-                                            modalBody: 'logPrompt',
-                                            modalHeader: promptObject.header,
-                                            isClosable: true,
-                                            modalConfig: {
-                                                value: promptObject.value,
-                                                fn: fn ? fn : function() {},
-                                                type: 'select',
-                                                defaultValue: promptObject.defaultValue
-                                            }
-                                        })
-                                    })
-                                })
-                            } else {
-                                this.systemError(`panePrompt Error: in second argument, Invalid select value type, it should be an array but got a type of ${typeof promptObject.value}`)
-                            }
-                        } else {
-                            this.systemError(`panePrompt Error: in second argument, value cannot be undefined`)
-                        }
-
-                    }
-                    // multiselect
-                    if(promptObject.type === 'multiselect') {
-                        if(!promptObject.value) {
-                            this.systemError('panePrompt Error: type multiselect value property cannot be undefined or null')
-                        } else if(promptObject.defaultValue) {
-                            if(!Array.isArray(promptObject.defaultValue)) {
-                                this.systemError('panePrompt Error; Invalid defaultValue type, should be an array of string values')
-                            } else {
-                                promptObject.defaultValue.map(e => {
-                                    if(!promptObject.value.includes(e)) {
-                                        this.systemError(`panePrompt Error: Cannot find ${e} in values array`)
-                                    }
-                                })
-                            }
-                            this.closePaneModal(paneIndex).then(() => {
-                                this.$store.commit('paneModalOverwrite', {
-                                    paneIndex,
-                                    modalObject: new templates.paneModal({
-                                        modalBody: 'logPrompt',
-                                        modalHeader: promptObject.header,
-                                        isClosable: true,
-                                        modalConfig: {
-                                            value: promptObject.value,
-                                            fn: fn ? fn : function() {},
-                                            type: 'multiselect',
-                                            defaultValue: promptObject.defaultValue
-                                        }
-                                    })
-                                })
-                            })
-                        }
-                    }
-                    // slider
-                    if(promptObject.type === 'slider') {
-                        if(!promptObject.value) {
-                            this.systemError('panePrompt Error: value cannot be undefined or null')
-                        } else if( Object.keys(promptObject.value).toString() != 'min,max' ) {
-                            this.systemError('panePrompt Error: Invalid value properties for slider.')
-                        } else if(promptObject.defaultValue) {
-                            if(promptObject.defaultValue < promptObject.value.min ) {
-                                this.systemError(`panePrompt Error: defaultValue in slider cannot be lesser than ${promptObject.value.min}`)
-                            } else if(promptObject.defaultValue > promptObject.value.max) {
-                                this.systemError(`panePrompt Error: defaultValue in slider cannot be greater than ${promptObject.value.max}`)
-                            } else {
-                                this.closePaneModal(paneIndex).then(() => {
-                                    this.$store.commit('paneModalOverwrite', {
-                                        paneIndex,
-                                        modalObject: new templates.paneModal({
-                                            modalBody: 'logPrompt',
-                                            modalHeader: promptObject.header,
-                                            isClosable: true,
-                                            modalConfig: {
-                                                value: promptObject.value,
-                                                fn: fn ? fn : function() {},
-                                                type: 'slider',
-                                                defaultValue: promptObject.defaultValue
-                                            }
-                                        })
-                                    })
-                                })
-                            }
-                        } else {
-                            this.closePaneModal(paneIndex).then(() => {
-                                this.$store.commit('paneModalOverwrite', {
-                                    paneIndex,
-                                    modalObject: new templates.paneModal({
-                                        modalBody: 'logPrompt',
-                                        modalHeader: promptObject.header,
-                                        isClosable: true,
-                                        modalConfig: {
-                                            value: promptObject.value,
-                                            fn: fn ? fn : function() {},
-                                            type: 'slider',
-                                            defaultValue: promptObject.value.min
-                                        }
-                                    })
-                                })
-                            })
-                        }
-                    }
-                    if(promptObject.type === 'minmax') {
-                        if(!promptObject.value) {
-                            this.systemError('panePrompt Error: value cannot be undefined or null')
-                        } else if( Object.keys(promptObject.value).toString() != 'min,max' ) {
-                            this.systemError('panePrompt Error: Invalid value properties for minmax.')
-                        }  else if(promptObject.defaultValue) {
-                            this.closePaneModal(paneIndex).then(() => {
-                                this.$store.commit('paneModalOverwrite', {
-                                    paneIndex,
-                                    modalObject: new templates.paneModal({
-                                        modalBody: 'logPrompt',
-                                        modalHeader: promptObject.header,
-                                        isClosable: true,
-                                        modalConfig: {
-                                            value: {
-                                                min: promptObject.value.min,
-                                                max: promptObject.value.max
-                                            },
-                                            fn: fn ? fn : function() {},
-                                            type: 'minmax',
-                                            defaultValue: promptObject.defaultValue
-                                        }
-                                    })
-                                })
-                            })
-                        } else {
-                            this.closePaneModal(paneIndex).then(() => {
-                                this.$store.commit('paneModalOverwrite', {
-                                    paneIndex,
-                                    modalObject: new templates.paneModal({
-                                        modalBody: 'logPrompt',
-                                        modalHeader: promptObject.header,
-                                        isClosable: true,
-                                        modalConfig: {
-                                            value: {
-                                                min: 0,
-                                                max: 100
-                                            },
-                                            fn: fn ? fn : function() {},
-                                            type: 'minmax',
-                                            defaultValue: [25,75]
-                                        }
-                                    })
-                                })
-                            })
-                        }
-                    }
-                    // password
-                    if(promptObject.type === 'password') {
-                        this.closePaneModal(paneIndex).then(() => {
-                            this.$store.commit('paneModalOverwrite', {
-                                paneIndex,
-                                modalObject: new templates.paneModal({
-                                    modalBody: 'logPrompt',
-                                    modalHeader: promptObject.header,
-                                    isClosable: true,
-                                    modalConfig: {
-                                        value: promptObject.value,
-                                        fn: fn ? fn : function() {},
-                                        type: 'password'
-                                    }
-                                })
-                            })
-                        })
-                    }
-                } else {
-                    this.systemError(`panePrompt Error: in second argument Invalid type: "${promptObject.type}"`)
-                }
-            } else {
-                this.systemError('panePrompt Error: in second argument Invalid promptObject')
-            }
-
-            if(promptObject.info) {
-                this.appendInfoMsg(paneIndex,promptObject.info)
-            }
         }
     }
 }
