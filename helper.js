@@ -18,7 +18,9 @@ export default {
     methods: {
         /** sys utils */
         systemError(msg) {
-            this.actions.sysmodal.logError(msg)
+            this.actions.sysmodal.logerr(`FATAL: ${msg}`, () => {
+                location.reload()
+            })
         },
         m() {
             return this
@@ -254,8 +256,11 @@ export default {
         closePaneModal(paneIndex) {
             return this.actions.syspane.modal.update(paneIndex,'closeModal')
         },
-        closeGlobalModal() {
+        closeGlobalModal(cb) {
             this.actions.sysmodal.closeModal()
+            if(cb) {
+                cb()
+            }
         },
         /** spwans a modal to a pane */
         spawnModal(paneIndex,modalObject) {
