@@ -291,7 +291,24 @@ export default function (app) {
                                             value: promptObject.value,
                                             fn: fn ? fn : function() {},
                                             type: 'multiselect',
-                                            defaultValue: promptObject.defaultValue
+                                            defaultValue: promptObject.defaultValue ? promptObject.defaultValue : []
+                                        }
+                                    })
+                                })
+                            })
+                        } else {
+                            controlpanel.actions.syspane.modal.close(paneIndex).then(() => {
+                                app.$store.commit('paneModalOverwrite', {
+                                    paneIndex,
+                                    modalObject: new templates.paneModal({
+                                        modalBody: 'logPrompt',
+                                        modalHeader: promptObject.header,
+                                        isClosable: promptObject.isClosable,
+                                        modalConfig: {
+                                            value: promptObject.value,
+                                            fn: fn ? fn : function() {},
+                                            type: 'multiselect',
+                                            defaultValue: promptObject.defaultValue ? promptObject.defaultValue : []
                                         }
                                     })
                                 })
@@ -352,25 +369,29 @@ export default function (app) {
                         } else if( Object.keys(promptObject.value).toString() != 'min,max' ) {
                             app.systemError('panePrompt Error: Invalid value properties for minmax.')
                         }  else if(promptObject.defaultValue) {
-                           controlpanel.actions.syspane.modal.close(paneIndex).then(() => {
-                                app.$store.commit('paneModalOverwrite', {
-                                    paneIndex,
-                                    modalObject: new templates.paneModal({
-                                        modalBody: 'logPrompt',
-                                        modalHeader: promptObject.header,
-                                        isClosable: promptObject.isClosable,
-                                        modalConfig: {
-                                            value: {
-                                                min: promptObject.value.min,
-                                                max: promptObject.value.max
-                                            },
-                                            fn: fn ? fn : function() {},
-                                            type: 'minmax',
-                                            defaultValue: promptObject.defaultValue
-                                        }
+                            if(!Array.isArray(promptObject.defaultValue)) {
+                                app.systemError('panePrompt Error: Invalid defaultValue type')
+                            } else {
+                                controlpanel.actions.syspane.modal.close(paneIndex).then(() => {
+                                    app.$store.commit('paneModalOverwrite', {
+                                        paneIndex,
+                                        modalObject: new templates.paneModal({
+                                            modalBody: 'logPrompt',
+                                            modalHeader: promptObject.header,
+                                            isClosable: promptObject.isClosable,
+                                            modalConfig: {
+                                                value: {
+                                                    min: promptObject.value.min,
+                                                    max: promptObject.value.max
+                                                },
+                                                fn: fn ? fn : function() {},
+                                                type: 'minmax',
+                                                defaultValue: promptObject.defaultValue ? promptObject.defaultValue : [0,0] 
+                                            }
+                                        })
                                     })
                                 })
-                            })
+                            }
                         } else {
                            controlpanel.actions.syspane.modal.close(paneIndex).then(() => {
                                 app.$store.commit('paneModalOverwrite', {
@@ -386,7 +407,7 @@ export default function (app) {
                                             },
                                             fn: fn ? fn : function() {},
                                             type: 'minmax',
-                                            defaultValue: promptObject.defaultValue
+                                            defaultValue: promptObject.defaultValue ? promptObject.defaultValue : [0,0] 
                                         }
                                     })
                                 })
@@ -644,11 +665,12 @@ export default function (app) {
         })
     }
 
-    controlpanel.actions.sysmodal.logerr = function(msg) {
+    controlpanel.actions.sysmodal.logerr = function(msg, cb) {
         controlpanel.actions.sysmodal.spawn({
             modalType: 'logerr',
             modalPayload: {
-                msg
+                msg,
+                cb
             }
         })
     }
