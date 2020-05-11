@@ -95,12 +95,12 @@
                                  >
                                 <v-text-field
                                     id="inyp"
+                                    :disabled="isLoading"
                                     v-model="logPromptData"
                                     dense
                                     :type="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.type"
                                     :label="$store.state.pane[paneIndex].paneConfig.modal.modalHeader"
                                     outlined
-                                    :loading="$store.state.pane[paneIndex].paneConfig.modal.modalErr ? false : isLoading"
                                 />
                             </div>
                             <div v-if="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.type === 'select' " >
@@ -109,7 +109,7 @@
                                     v-model="logPromptData"
                                     :items="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.value"
                                     :label="$store.state.pane[paneIndex].paneConfig.modal.modalHeader"
-                                    :loading="$store.state.pane[paneIndex].paneConfig.modal.modalErr ? false : isLoading"
+                                    :disabled="isLoading"
                                     outlined
                                 ></v-select>
                             </div>
@@ -119,7 +119,7 @@
                                     v-model="logPromptData"
                                     :items="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.value"
                                     :label="$store.state.pane[paneIndex].paneConfig.modal.modalHeade"
-                                    :loading="$store.state.pane[paneIndex].paneConfig.modal.modalErr ? false : isLoading"
+                                    :disabled="isLoading"
                                     multiple
                                 ></v-combobox>
                             </div>
@@ -130,6 +130,7 @@
                                     thumb-label="always"
                                     :min="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.value.min"
                                     :max="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.value.max"
+                                    :disabled="isLoading"
                                 ></v-slider>
                             </div>
                             <div class="padtop125" v-if="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.type === 'minmax' " >
@@ -137,11 +138,13 @@
                                     :value="logPromptData"
                                     :max="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.value.max"
                                     :min="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.value.min"
+                                    :disabled="isLoading"
                                     thumb-label="always"
                                      @end="logPromptData = $event"
                                     range
                                 />
                             </div>
+                            <loading @progressMethod="p => progress = p" />
                             <v-flex flexend >
                                 <v-btn 
                                     color="primary" 
@@ -182,7 +185,8 @@ export default {
     },
     data:() => ({
         logPromptData: undefined,
-        isLoading: false
+        isLoading: false,
+        progress: undefined,
     }),
     computed: {
         paneModal() {
@@ -224,10 +228,24 @@ export default {
                 if(isNaN(parseInt(this.logPromptData))) {
                     this.appendErrorMsg(this.paneIndex,'Invalid input type, it should be a type of number')
                 } else {
-                    this.$store.state.pane[this.paneIndex].paneConfig.modal.modalConfig.fn(parseInt(this.logPromptData))
+                    this.$store.state.pane[this.paneIndex].paneConfig.modal.modalConfig.fn(
+                        parseInt(this.logPromptData),
+                        this.progress,
+                        msg => {
+                            this.actions.syspane.modal.appendErrorMsg(this.paneIndex,msg)
+                            this.isLoading = false
+                        }
+                    )
                 }
             } else {
-                this.$store.state.pane[this.paneIndex].paneConfig.modal.modalConfig.fn(this.logPromptData)
+                this.$store.state.pane[this.paneIndex].paneConfig.modal.modalConfig.fn(
+                    this.logPromptData,
+                    this.progress,
+                    msg => {
+                        this.actions.syspane.modal.appendErrorMsg(this.paneIndex,msg)
+                        this.isLoading = false
+                    }
+                )
             }
         }
     }

@@ -8,7 +8,8 @@ Month: May 2020
 [x] added prompt support for pane modal 
 [x] cut support for queue system and migrated to centralized controlpanel file
     [x] re test global modals, then write documentaion
-    [-] trim helper methods, pane components doesnt need it
+    [x] trim helper methods, pane components doesnt need it
+    [x] re test syspanemodal's
 [?] implemented dWins
 [-] add encryption and decryption to utils
 [-] implemented uniview

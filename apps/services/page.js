@@ -183,7 +183,7 @@ module.exports = Templates.Service({
         }))
         return pages
     },
-    views: function(data,helper,utils,Templates,dWin) {
+    views: function(data,client,utils,Templates) {
         /** Page list and sub pages */
         if(Array.isArray(data)) {
             return {
@@ -191,30 +191,30 @@ module.exports = Templates.Service({
                     dataControllers: [
                         {
                             name: 'view page',
-                            handler: function(selected, paneMethods, modalMethods, dWinMethods) {
-                                paneMethods.render(selected.item)
+                            handler: function(selected, syspane, syspanemodal, dWinMethods) {
+                                syspane.render(selected.item)
                             }
                         },
                         {
                             name: 'sub page',
-                            handler: function(selected, paneMethods, modalMethods, dWinMethods) {
-                                paneMethods.render(selected.item.subPages)
+                            handler: function(selected, syspane, syspanemodal, dWinMethods) {
+                                syspane.render(selected.item.subPages)
                             }
                         },
                         {
                             name: 'delete page',
-                            handler: function(selected, paneMethods, modalMethods, dWinMethods) {
+                            handler: function(selected, syspane, syspanemodal, dWinMethods) {
                                 // should add modal methods in helper arg
-                                modalMethods.logWarn(`Warning! Are you sure you want to delete ${selected.item.pageName}`,() => {
-                                    modalMethods.closePaneModal()
-                                    paneMethods.closeUnUsedPane()
+                                syspanemodal.logError(`Warning! Are you sure you want to delete ${selected.item.pageName}`,() => {
+                                    syspanemodal.close()
+                                    syspane.closeUnUsedPane()
                                 })
                             }
                         },
                         {
                             name: 'rename',
-                            handler: function({item}, paneMethods, modalMethods, dWinMethods) {
-                                paneMethods.prompt({
+                            handler: function({item}, syspane, syspanemodal, dWinMethods) {
+                                syspane.prompt({
                                     type: 'password',
                                     value: null,
                                     header: 'Enter Password',
@@ -227,8 +227,8 @@ module.exports = Templates.Service({
                         },
                         {
                             name: 'edit page',
-                            handler: function(selected, paneMethods, modalMethods, dWinMethods) {
-                                paneMethods.render(selected.item.subPages)
+                            handler: function(selected, syspane, syspanemodal, dWinMethods) {
+                                syspane.render(selected.item.subPages)
                                 dWinMethods.spawn({
                                     section: 'top',
                                     winView: 'raw',
@@ -246,41 +246,22 @@ module.exports = Templates.Service({
                     ableToAddItem: true,
                     infoDisplay: ['pageName','lastUpdated','updatedBy']
                 },
-                paneOnLoad: function(paneMethods,modalMethods) {
-                    /** paneMethods, TODO: write proper documentation
-                     * paneMethods.closePane() -> closes the current pane
-                     * paneMethods.changePaneView(<index>) -> change the pane view
-                     * paneMethods.closeUnUsedPane()
-                     * paneMethods.spawnModal(<modalObject>)
-                     * paneMethods.render(<data>,<view index>)
-                     */
+                paneOnLoad: function(syspane,syspanemodal) {
                     if(data.length == 0) {
-                        paneMethods.prompt({
+                        syspane.prompt({
                             type: 'string',
                             header: 'Page Name',
-                            info: 'There are no page(s) to display, Create a new page to get started.'
+                            info: 'There are no page(s) to display, Create a new page to get started.',
+                            isClosable: false,
                         }, (input) => {
-                            setTimeout(() => {
-                                modalMethods.closePaneModal()
-                                console.log('input -> ',input)
-                            }, 2000);
+                            console.log('input -> ',input)
                         })
                     }
                 },
-                onModalData: function(modalData,paneMethods,modalMethods) {
+                onModalData: function(modalData,syspane,syspanemodal) {
                     // modalData is the set of input data from the user
-                    /** modalMethods, TODO: write proper documentation
-                     * modalMethods.appendErrorMsg('msg') -> append error msg on the current modal container
-                     * modalMethods.appendInfoMsg('msg') -> append info msg on the current modal container
-                     * modalMethods.updateProps({key,value}) -> mutates the current modal ojbect
-                     * modalMethods.logError('this is log error', fn()<func to be executed after modal closes>)
-                     * modalMethods.logInfo('this is log info',fn()<func to be executed after modal closes>)
-                     * modalMethods.logWarn('this is log info',fn()<func to be executed after modal closes>)
-                     * modalMethods.activatePaneModal({<modal object>}) -> spawns a new modal
-                     * modalMethods.closePaneModal()
-                     */
                     if(modalData == undefined) {
-                        modalMethods.appendErrorMsg('Page Name Cannot be undefined')
+                        syspanemodal.appendErrorMsg('Page Name Cannot be undefined')
                     }
                 },
                 paneConfig: {
