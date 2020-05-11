@@ -167,7 +167,7 @@ export default function (app) {
                                     modalObject: new templates.paneModal({
                                         modalBody: 'logPrompt',
                                         modalHeader: promptObject.header,
-                                        isClosable: true,
+                                        isClosable: promptObject.isClosable,
                                         modalConfig: {
                                             value: promptObject.value,
                                             fn: fn ? fn : function() {},
@@ -194,7 +194,7 @@ export default function (app) {
                                         modalObject: new templates.paneModal({
                                             modalBody: 'logPrompt',
                                             modalHeader: promptObject.header,
-                                            isClosable: true,
+                                            isClosable: promptObject.isClosable,
                                             modalConfig: {
                                                 value: promptObject.value,
                                                 fn: fn ? fn : function() {},
@@ -216,7 +216,7 @@ export default function (app) {
                                     modalObject: new templates.paneModal({
                                         modalBody: 'logPrompt',
                                         modalHeader: promptObject.header,
-                                        isClosable: true,
+                                        isClosable: promptObject.isClosable,
                                         modalConfig: {
                                             value: null,
                                             fn: fn ? fn : function() {},
@@ -248,7 +248,7 @@ export default function (app) {
                                         modalObject: new templates.paneModal({
                                             modalBody: 'logPrompt',
                                             modalHeader: promptObject.header,
-                                            isClosable: true,
+                                            isClosable: promptObject.isClosable,
                                             modalConfig: {
                                                 value: promptObject.value,
                                                 fn: fn ? fn : function() {},
@@ -286,7 +286,7 @@ export default function (app) {
                                     modalObject: new templates.paneModal({
                                         modalBody: 'logPrompt',
                                         modalHeader: promptObject.header,
-                                        isClosable: true,
+                                        isClosable: promptObject.isClosable,
                                         modalConfig: {
                                             value: promptObject.value,
                                             fn: fn ? fn : function() {},
@@ -316,7 +316,7 @@ export default function (app) {
                                         modalObject: new templates.paneModal({
                                             modalBody: 'logPrompt',
                                             modalHeader: promptObject.header,
-                                            isClosable: true,
+                                            isClosable: promptObject.isClosable,
                                             modalConfig: {
                                                 value: promptObject.value,
                                                 fn: fn ? fn : function() {},
@@ -334,7 +334,7 @@ export default function (app) {
                                     modalObject: new templates.paneModal({
                                         modalBody: 'logPrompt',
                                         modalHeader: promptObject.header,
-                                        isClosable: true,
+                                        isClosable: promptObject.isClosable,
                                         modalConfig: {
                                             value: promptObject.value,
                                             fn: fn ? fn : function() {},
@@ -358,7 +358,7 @@ export default function (app) {
                                     modalObject: new templates.paneModal({
                                         modalBody: 'logPrompt',
                                         modalHeader: promptObject.header,
-                                        isClosable: true,
+                                        isClosable: promptObject.isClosable,
                                         modalConfig: {
                                             value: {
                                                 min: promptObject.value.min,
@@ -378,7 +378,7 @@ export default function (app) {
                                     modalObject: new templates.paneModal({
                                         modalBody: 'logPrompt',
                                         modalHeader: promptObject.header,
-                                        isClosable: true,
+                                        isClosable: promptObject.isClosable,
                                         modalConfig: {
                                             value: {
                                                 min: 0,
@@ -386,7 +386,7 @@ export default function (app) {
                                             },
                                             fn: fn ? fn : function() {},
                                             type: 'minmax',
-                                            defaultValue: [25,75]
+                                            defaultValue: promptObject.defaultValue
                                         }
                                     })
                                 })
@@ -401,7 +401,7 @@ export default function (app) {
                                 modalObject: new templates.paneModal({
                                     modalBody: 'logPrompt',
                                     modalHeader: promptObject.header,
-                                    isClosable: true,
+                                    isClosable: promptObject.isClosable,
                                     modalConfig: {
                                         value: promptObject.value,
                                         fn: fn ? fn : function() {},
@@ -420,6 +420,8 @@ export default function (app) {
 
             if(promptObject.info) {
                 controlpanel.actions.syspane.modal.appendInfoMsg(paneIndex,promptObject.info)
+            } else if(promptObject.error) {
+                controlpanel.actions.syspane.modal.appendErrorMsg(paneIndex,promptObject.error)
             }
     }
 
@@ -433,12 +435,20 @@ export default function (app) {
 
     // syspane modal
 
-    controlpanel.actions.syspane.modal.update = function (paneIndex, mode) {
+    controlpanel.actions.syspane.modal.update = function (paneIndex, payload) {
         return new Promise(resolve => {
-            app.$store.commit('paneModalUpdate', {
-                paneIndex,
-                payload: mode
-            })
+            if(typeof payload === 'object') {
+                app.$store.commit('paneModalUpdate', {
+                    paneIndex,
+                    ...payload
+                })
+            } else {
+                app.$store.commit('paneModalUpdate', {
+                    paneIndex,
+                    payload
+                })
+            }
+
             setTimeout(() => {
                 resolve(app.$store.state.pane[paneIndex] )
             }, 0);
@@ -476,13 +486,13 @@ export default function (app) {
         controlpanel.actions.syspane.modal.update(paneIndex,{
             payload: {
                 key: 'modalErr',
-                value: msg
+                value: undefined
             }
         }).then(() => {
             controlpanel.actions.syspane.modal.update(paneIndex,{
                 payload: {
                     key: 'modalInfo',
-                    value: undefined
+                    value: msg
                 }
             })
         })
