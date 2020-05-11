@@ -93,8 +93,8 @@ export default {
     },
     methods: {
         c(data,fn) {
-            const { paneMethods, modalMethods, dWinMethods} =  this.normyDep(this.paneIndex,this)
-            fn(data,paneMethods,modalMethods,dWinMethods)
+            const { syspane, syspanemodal, dWinMethods} =  this.normyDep(this.paneIndex,this)
+            fn(data,syspane,syspanemodal,dWinMethods)
         }
     }
 }
