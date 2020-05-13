@@ -141,7 +141,7 @@ export default {
                 const syspane = {
                     close:      () => s.actions.syspane.close(paneIndex),
                     closeUnUsedPane: () => s.actions.syspane.delete(paneIndex + 1),
-                    render:   (data,viewIndex) => s.render(data,paneIndex,viewIndex),
+                    render:   (data,viewIndex) => s.actions.syspane.render(data,paneIndex,viewIndex),
                     spawnModal:    modalObject => s.spawnModal(paneIndex,modalObject),
                     prompt:  (promptObject,cb) => s.actions.syspane.prompt(paneIndex,promptObject,cb),
                     updatePaneData:(  objData) => s.updatePaneData(paneIndex,objData),
@@ -154,99 +154,6 @@ export default {
                 }
                 return { syspane, syspanemodal, dWinMethods }
             })(scope)
-        },
-        /** end of dwin */
-        renderPane(data, paneIndex,viewIndex) {
-            // console.log('renderPane', data)
-            if(paneIndex == undefined || paneIndex == null) {
-                this.systemError('renderPane error, paneIndex cannot be undefined')
-                return
-            }
-            const { actions } = this.controls
-
-
-            // console.log('helper',paneIndex, this.$store.state.pane.length - 1)
-            if(this.$store.state.pane[paneIndex + 1] == undefined) {
-                // console.log('> renderPane Case1')
-                /** it means add one pane */
-                actions.syspane.addsync(data)
-            } else {
-                // console.log('> renderPane Case2')
-                /** it means update the paneData? or replace the pane with a new view  */
-                if(paneIndex + 1 == this.$store.state.pane.length - 1) {
-                    actions.syspane.updatePane(paneIndex + 1, this.getServiceView(data.paneConfig.paneData,viewIndex))
-                    .then(res => {
-                        const {syspane,syspanemodal} =  this.normyDep(paneIndex + 1,this)
-                        this.$store.state.pane[paneIndex + 1].paneConfig.paneOnLoad(syspane,syspanemodal)
-                    })
-                } else {
-                    // console.log('> renderPane Case3')
-                    actions
-                    .syspane
-                    .add(data)
-                    .then(res => {
-                        const {syspane,syspanemodal} =  this.normyDep(paneIndex + 1,this)
-                        this.$store.state.pane[paneIndex + 1].paneConfig.paneOnLoad(syspane,syspanemodal)
-                    })
-                }
-                
-            }
-            
-        },
-        getServiceView(dataSet,viewIndex){
-            // console.log('> Getting service view ', dataSet)
-            // returns a service objects
-            const {views} = this.$store.state.app['app-services'][this.$store.state.app['active-sidebar-item']]
-            const deserializeViews = new Function('return ' + views)()
-            const helper = {  /** this for global access, if you use this, you have to provide a paneIndex, or if not all panes will be affected */
-                paneSettings: this.paneSettings,
-                paneModal : this.paneModal,
-                renderPane : this.renderPane,
-                getServiceView: this.getServiceView,
-                closePane: this.closePane,
-                render: this.render,
-                systemError: this.systemError,
-                closeUnUsedPane: this.closeUnUsedPane,
-                panePrompt: this.panePrompt,
-                updatePaneData: this.updatePaneData,
-                updatePaneConfig: this.updatePaneConfig,
-                getCurrentPaneIndex: this.paneIndex
-            }
-            
-            // dependency enject the views function
-            const serviceObject = deserializeViews(dataSet,helper,utils,templates)
-
-            if(!serviceObject) {
-                this.systemError('getServiceView error: Unhandled dataSet in service views, cannot find a service view, check console log for more details')
-            } else {
-                // Problem start here, the data will be incorrect starting on a non zero index pane
-                const { componentConfig, paneConfig, paneOnLoad, onModalData } = serviceObject
-                if(!paneConfig.modal) {
-                    paneConfig.modal = {}
-                    paneConfig.modal.modalBody = undefined
-                    paneConfig.modal.componentConfig = undefined
-                    paneConfig.modal.modalConfig = undefined
-                    paneConfig.modal.modalErr = undefined
-                    paneConfig.modal.modalInfo = undefined
-                    paneConfig.modal.isClosable = false
-                    paneConfig.modal.modalWidth = undefined
-                }
-                paneConfig.modal.onModalData = onModalData
-                paneConfig.paneOnLoad = paneOnLoad
-
-                if(typeof viewIndex == 'number') {
-                    if(paneConfig.paneViews[viewIndex] == undefined) {
-                        this.systemError(`System Error: Invalid index value in render method, value: ${viewIndex} \n Cannot set pane view of undefined, reverting to 0 index pane view`)
-                    } else {
-                        paneConfig.defaultPaneView = viewIndex
-                    }
-                }
-                return { componentConfig, paneConfig }
-            }
-            
-        },
-        render(dataSet,paneIndex,viewIndex) {
-            this.renderPane(this.getServiceView(dataSet,viewIndex),paneIndex,viewIndex)
         },
         /** close pane */
         closePane() {      
