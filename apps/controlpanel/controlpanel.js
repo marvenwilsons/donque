@@ -781,7 +781,7 @@ export default function (app) {
 
     // dwin
 
-    controlpanel.actions.dwin.spawn = function (dWinObject) {
+    controlpanel.actions.dwin.spawn = function (dWinObject, cb) {
         if(!dWinObject.section || !dWinObject.winView || !dWinObject.viewConfig || !dWinObject.data) {
             app.systemError('dwinSpawn Error: Cannot spawn dWin Invalid dWinObject or has missing properties')
         } else {
@@ -801,12 +801,12 @@ export default function (app) {
                         app.systemError('dwinSpawn Error: Invalid dWin section')
                     }
                 })(section),
-                value: { winView, viewConfig, data, winConfig }
+                value: { winView, viewConfig, data, winConfig, cb, close: controlpanel.actions.dwin.close  }
             })
         }
     }
 
-    controlpanel.actions.dwin.close = function () {
+    controlpanel.actions.dwin.close = function (section) {
         app.$store.commit('stateController',{
             key: ((section) => {
                 if(section === 'top') {

@@ -160,6 +160,14 @@ export const mutations = {
         paneUpdate(state,{paneIndex,payload}) {
             state.pane.splice(paneIndex,1,payload)
         },
+    /** dwin controlelrs */
+        dwinController(state,{section,key,value}) {
+            if(section == 'top') {
+                state.dWinTop[key] = value
+            } else if(section == 'right') {
+                state.dWinRight[key] = value
+            }
+        }
 }
 
 export const actions = {

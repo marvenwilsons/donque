@@ -150,9 +150,9 @@ export default {
                     getCurrentPaneIndex:    () => paneIndex
                 }
                 const dwin = {
-                    spawn: dWinObject => s.actions.dwin.spawn(dWinObject),
+                    spawn: (dWinObject,cb) => s.actions.dwin.spawn(dWinObject,cb),
                     close: section => s.actions.dwin.close(section),
-                    changeView: section => s.actions.dwin.changeView(section), // TODO
+                    changeView: section => s.actions.dwin.changeView(section),
                 }
                 return { syspane, syspanemodal, dwin }
             })(scope)
