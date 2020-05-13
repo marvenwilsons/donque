@@ -229,6 +229,7 @@ module.exports = Templates.Service({
                             name: 'edit page',
                             handler: function(selected, syspane, syspanemodal, dwin) {
                                 syspane.render(selected.item.subPages)
+                            
                                 dwin.spawn({
                                     section: 'top',
                                     winView: 'raw',
@@ -238,6 +239,18 @@ module.exports = Templates.Service({
                                         name: 'foo',
                                         age: 30
                                     }
+                                }, (event,close) => {
+
+                                })
+
+                                dwin.spawn({
+                                    section: 'right',
+                                    winView: 'raw',
+                                    winConfig: {},
+                                    viewConfig: {},
+                                    data: ''
+                                }, (event, close) => {
+                                    // close()
                                 })
                             }
                         }
@@ -246,7 +259,7 @@ module.exports = Templates.Service({
                     ableToAddItem: true,
                     infoDisplay: ['pageName','lastUpdated','updatedBy']
                 },
-                paneOnLoad: function(syspane,syspanemodal) {
+                paneOnLoad: function(syspane,syspanemodal, dwin) {
                     if(data.length == 0) {
                         syspane.prompt({
                             type: 'string',
@@ -258,7 +271,7 @@ module.exports = Templates.Service({
                         })
                     }
                 },
-                onModalData: function(modalData,syspane,syspanemodal) {
+                onModalData: function(modalData,syspane,syspanemodal, dwin) {
                     // modalData is the set of input data from the user
                     if(modalData == undefined) {
                         syspanemodal.appendErrorMsg('Page Name Cannot be undefined')

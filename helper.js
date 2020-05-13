@@ -131,6 +131,7 @@ export default {
         normyDep(paneIndex,scope) {
             return ((s) => {
                 const syspanemodal = {
+                    /** this methods only work when the pane modal is activated */
                     close: () =>  s.actions.syspane.modal.update(paneIndex,'closeModal'),
                     appendErrorMsg: msg => s.actions.syspane.modal.appendErrorMsg(paneIndex,msg),
                     appendInfoMsg:  msg => s.actions.syspane.modal.appendInfoMsg(paneIndex,msg),
@@ -150,7 +151,8 @@ export default {
                 }
                 const dwin = {
                     spawn: dWinObject => s.actions.dwin.spawn(dWinObject),
-                    close: (section) => s.actions.dwin.close(section)
+                    close: section => s.actions.dwin.close(section),
+                    changeView: section => s.actions.dwin.changeView(section), // TODO
                 }
                 return { syspane, syspanemodal, dwin }
             })(scope)
