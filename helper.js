@@ -148,11 +148,11 @@ export default {
                     updatePaneConfig: (config) => s.updatePaneConfig(paneIndex,config) ,
                     getCurrentPaneIndex:    () => paneIndex
                 }
-                const dWinMethods = {
+                const dwin = {
                     spawn: dWinObject => s.actions.dwin.spawn(dWinObject),
                     close: (section) => s.actions.dwin.close(section)
                 }
-                return { syspane, syspanemodal, dWinMethods }
+                return { syspane, syspanemodal, dwin }
             })(scope)
         },
         /** close pane */

@@ -191,19 +191,19 @@ module.exports = Templates.Service({
                     dataControllers: [
                         {
                             name: 'view page',
-                            handler: function(selected, syspane, syspanemodal, dWinMethods) {
+                            handler: function(selected, syspane, syspanemodal, dwin) {
                                 syspane.render(selected.item)
                             }
                         },
                         {
                             name: 'sub page',
-                            handler: function(selected, syspane, syspanemodal, dWinMethods) {
+                            handler: function(selected, syspane, syspanemodal, dwin) {
                                 syspane.render(selected.item.subPages)
                             }
                         },
                         {
                             name: 'delete page',
-                            handler: function(selected, syspane, syspanemodal, dWinMethods) {
+                            handler: function(selected, syspane, syspanemodal, dwin) {
                                 // should add modal methods in helper arg
                                 syspanemodal.logError(`Warning! Are you sure you want to delete ${selected.item.pageName}`,() => {
                                     syspanemodal.close()
@@ -213,7 +213,7 @@ module.exports = Templates.Service({
                         },
                         {
                             name: 'rename',
-                            handler: function({item}, syspane, syspanemodal, dWinMethods) {
+                            handler: function({item}, syspane, syspanemodal, dwin) {
                                 syspane.prompt({
                                     type: 'password',
                                     value: null,
@@ -227,9 +227,9 @@ module.exports = Templates.Service({
                         },
                         {
                             name: 'edit page',
-                            handler: function(selected, syspane, syspanemodal, dWinMethods) {
+                            handler: function(selected, syspane, syspanemodal, dwin) {
                                 syspane.render(selected.item.subPages)
-                                dWinMethods.spawn({
+                                dwin.spawn({
                                     section: 'top',
                                     winView: 'raw',
                                     winConfig: {},

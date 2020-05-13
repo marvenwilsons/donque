@@ -214,13 +214,13 @@ export default {
         }
     },
     mounted() {
-        const {syspane,syspanemodal} = this.normyDep(this.paneIndex,this)
-        this.$store.state.pane[this.paneIndex].paneConfig.paneOnLoad(syspane,syspanemodal)
+        const {syspane,syspanemodal,dwin} = this.normyDep(this.paneIndex,this)
+        this.$store.state.pane[this.paneIndex].paneConfig.paneOnLoad(syspane,syspanemodal,dwin)
     },
     methods: {
         onModalData(data) {
-            const { syspane, syspanemodal, dWinMethods} =  this.normyDep(this.paneIndex,this)
-            this.$store.state.pane[this.paneIndex].paneConfig.modal.onModalData(data,syspane,syspanemodal,dWinMethods)
+            const { syspane, syspanemodal, dwin} =  this.normyDep(this.paneIndex,this)
+            this.$store.state.pane[this.paneIndex].paneConfig.modal.onModalData(data,syspane,syspanemodal,dwin)
         },
         paneModalCb() {
             this.isLoading = true
