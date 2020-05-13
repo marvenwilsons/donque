@@ -8,13 +8,20 @@
                     <v-flex flexcol>
                         <div :style="{maxHeight: '50%', height: $store.state.dWinTop.winConfig.height}" v-if="$store.state.dWinTop" >
                             <v-flex relative fullheight-percent >
-                                <div :myData="$store.state.dWinTop.data" :myConfig="$store.state.dWinTop.viewConfig" :is="$store.state.dWinTop.winView" ></div>
+                                <div 
+                                    :myData="$store.state.dWinTop.data" 
+                                    :myConfig="$store.state.dWinTop.viewConfig"
+                                    @onEvent="dwinTopEventHandler"
+                                    :is="$store.state.dWinTop.winView" 
+                                    ></div>
                             </v-flex>
                         </div>          
                         <nuxt />
                     </v-flex>
                 </v-flex>
-                <v-flex v-if="false"  style="background:var(--deftheme-dark-primary); z-index:100; max-width:500px; border-left:2px solid whitesmoke;" >
+                <v-flex 
+                    v-if="$store.state.dWinRight"  
+                    style="background:var(--deftheme-dark-primary); z-index:100; max-width:400px; border-left:2px solid whitesmoke;" >
                         <!-- TODO: implement this view -->
                 </v-flex>
             </v-flex>
@@ -37,7 +44,10 @@ export default {
         appSideBar
     },
     computed: {
-        ...mapGetters(['queueAnswersArray','queueState', 'queueArray','queuePointer'])
+        ...mapGetters(['queueAnswersArray','queueState', 'queueArray','queuePointer']),
+        dWinTop() {
+            return this.$store.state.dWinTop
+        }
     },
     created() {
         this.h = this
@@ -48,7 +58,44 @@ export default {
         const { onAdminMount } = controlpanel(this)
         onAdminMount()
     },
+    methods: {
+        dwinTopEventHandler(name,context) {
+            this.dwinhandler(context,'dWinTop',name)
+        },
+        dwinhandler(dat,section,eName) {
+            const eventObj = {
+                eventName: eName
+            }
+            const context = {
+                ...this.$store.state[section],
+                set: (key,value) => {
+                    const s = section == 'dWinTop' ? 'top' : 'right'
+                    return new Promise(resolve => {
+                        this.$store.commit('dwinController',{section: s, key, value })
+                        setTimeout(() => {
+                            resolve(this.$store.state[section])
+                        }, 0);
+                    })
+                }
+            }
+            const c = (cb) => {
+                dat.close('top')
+                if(cb) {
+                    setTimeout(() => {
+                        cb()
+                    }, 0);
+                }
+            }
+
+            if(this.$store.state[section] != undefined) {
+                this.$store.state[section].cb(eventObj,context,c)
+            }
+        }
+    },
     watch: {
+        dWinTop(dat) {
+               this.dwinhandler(dat,'dWinTop','mounted')
+        },
         // init
         queueArray(curState,prevState) {
             // console.log('> queue state change detected')
