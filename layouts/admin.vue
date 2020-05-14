@@ -6,7 +6,10 @@
                 <appSideBar/>
                 <v-flex > 
                     <v-flex flexcol>
-                        <div :style="{maxHeight: '50%', height: $store.state.dWinTop.winConfig.height}" v-if="$store.state.dWinTop" >
+                        <div 
+                            :style="{maxHeight: '50%', height: $store.state.dWinTop.winConfig.height}" 
+                            v-if="$store.state.dWinTop" 
+                            >
                             <v-flex relative fullheight-percent >
                                 <div 
                                     :myData="$store.state.dWinTop.data" 
@@ -41,6 +44,8 @@ import appSideBar from '@/apps/appSideBar/index'
 import Templates from '@/templates'
 import controlpanel from '@/apps/controlpanel/controlpanel'
 import h from '@/helper'
+// import { TweenMax, TimelineLite, TweenLite } from "gsap";
+
 
 import {mapGetters} from 'vuex'
 export default {
@@ -74,7 +79,15 @@ export default {
         dwinRightEventHandler(name,context) {
             this.dwinhandler(context,'dWinRight',name)
         },
+        animateDwin(section) {
+            // const n = ''
+            // TweenMax.fromTo(n, 0.3, { opacity: "0" }, { opacity: "1" });
+        },
         dwinhandler(dat,section,eName) {
+            if(eName === 'mounted') {
+                this.animateDwin(section)
+            }
+
             const s = section == 'dWinTop' ? 'top' : 'right'
 
             const eventObj = {

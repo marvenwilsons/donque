@@ -10,9 +10,9 @@ Month: May 2020
     [x] re test global modals, then write documentaion
     [x] trim helper methods, pane components doesnt need it
     [x] re test syspanemodal's
-[?] implemented dWins
+[x] implemented dWins
+[?] implemented uniview
 [-] add encryption and decryption to utils
-[-] implemented uniview
 [-] implement remaining features of listify1.2
 [-] added auto slide for pane host 
 [-] implement key press systemm with for + cm
