@@ -471,7 +471,8 @@ export default function (app) {
             panePrompt: app.panePrompt,
             updatePaneData: app.updatePaneData,
             updatePaneConfig: app.updatePaneConfig,
-            getCurrentPaneIndex: app.paneIndex
+            getCurrentPaneIndex: app.paneIndex,
+            sysmodal: controlpanel.actions.sysmodal
         }
         
         // dependency enject the views function
