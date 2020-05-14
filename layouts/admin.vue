@@ -21,8 +21,14 @@
                 </v-flex>
                 <v-flex 
                     v-if="$store.state.dWinRight"  
-                    style="background:var(--deftheme-dark-primary); z-index:100; max-width:400px; border-left:2px solid whitesmoke;" >
-                        <!-- TODO: implement this view -->
+                    style="background:var(--deftheme-dark-primary); z-index:100; max-width:400px; border-left:2px solid whitesmoke;" 
+                    >
+                    <div 
+                        :myData="$store.state.dWinRight.data" 
+                        :myConfig="$store.state.dWinRight.viewConfig"
+                        @onEvent="dwinRightEventHandler"
+                        :is="$store.state.dWinRight.winView" 
+                        ></div>
                 </v-flex>
             </v-flex>
         </v-content>
@@ -47,6 +53,9 @@ export default {
         ...mapGetters(['queueAnswersArray','queueState', 'queueArray','queuePointer']),
         dWinTop() {
             return this.$store.state.dWinTop
+        },
+        dWinRight() {
+            return this.$store.state.dWinRight
         }
     },
     created() {
@@ -62,14 +71,19 @@ export default {
         dwinTopEventHandler(name,context) {
             this.dwinhandler(context,'dWinTop',name)
         },
+        dwinRightEventHandler(name,context) {
+            this.dwinhandler(context,'dWinRight',name)
+        },
         dwinhandler(dat,section,eName) {
+            const s = section == 'dWinTop' ? 'top' : 'right'
+
             const eventObj = {
                 eventName: eName
             }
+
             const context = {
                 ...this.$store.state[section],
                 set: (key,value) => {
-                    const s = section == 'dWinTop' ? 'top' : 'right'
                     return new Promise(resolve => {
                         this.$store.commit('dwinController',{section: s, key, value })
                         setTimeout(() => {
@@ -78,8 +92,9 @@ export default {
                     })
                 }
             }
+            
             const c = (cb) => {
-                dat.close('top')
+                dat.close(s)
                 if(cb) {
                     setTimeout(() => {
                         cb()
@@ -94,7 +109,10 @@ export default {
     },
     watch: {
         dWinTop(dat) {
-               this.dwinhandler(dat,'dWinTop','mounted')
+            this.dwinhandler(dat,'dWinTop','mounted')
+        },
+        dWinRight(dat) {
+            this.dwinhandler(dat,'dWinRight','mounted')
         },
         // init
         queueArray(curState,prevState) {

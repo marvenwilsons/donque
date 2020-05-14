@@ -256,18 +256,33 @@ module.exports = Templates.Service({
                                     }, 1000);
                                 })
 
-                                dwin.spawn({
-                                    section: 'right',
-                                    winView: 'raw',
-                                    winConfig: {},
-                                    viewConfig: {},
-                                    data: {
-                                        name: 'foo',
-                                        age: 30
-                                    }
-                                }, (event, context, close) => {
-                                    // close()
-                                })
+                                setTimeout(() => {
+                                    dwin.spawn({
+                                        section: 'right',
+                                        winView: 'raw',
+                                        winConfig: {},
+                                        viewConfig: {},
+                                        data: {
+                                            name: 'foo',
+                                            age: 30
+                                        }
+                                    }, (event,context,close) => {
+                                        console.log('dwin-cb',context)
+                                        setTimeout(() => {
+                                            context.set('data', {
+                                                name: 'marven',
+                                                age: '28'
+                                            }).then(() => {
+                                                console.log('done!')
+                                                setTimeout(() => {
+                                                    close(() => {
+                                                        console.log('successfully closed')
+                                                    })
+                                                }, 1000);
+                                            })
+                                        }, 1000);
+                                    })
+                                }, 1000);
                             }
                         }
                     ],
