@@ -11,6 +11,8 @@ Month: May 2020
     [x] trim helper methods, pane components doesnt need it
     [x] re test syspanemodal's
 [x] implemented dWins
+[x] write documentaion for pane methods
+[x] write documentaion for modal methods
 [?] implemented uniview
 [-] add encryption and decryption to utils
 [-] implement remaining features of listify1.2
@@ -18,10 +20,6 @@ Month: May 2020
 [-] implement key press systemm with for + cm
 [-] make initialData function async in the backend
 [-] add service manager menu
-[-] write documentaion for pane methods
-[-] write documentaion for modal methods
-[-] write documentaion for task system methods
-[-] write documentaion for queue system methods
 
 Before finishing dq studio blank
 [-] create new branch named blank commit name alpha
