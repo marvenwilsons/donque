@@ -481,7 +481,7 @@ export default function (app) {
             app.systemError('getServiceView error: Unhandled dataSet in service views, cannot find a service view, check console log for more details')
         } else {
             // Problem start here, the data will be incorrect starting on a non zero index pane
-            const { componentConfig, paneConfig, paneOnLoad, onModalData } = serviceObject
+            const { componentConfig, paneConfig, paneOnLoad, onModalData, onEvent } = serviceObject
             if(!paneConfig.modal) {
                 paneConfig.modal = {}
                 paneConfig.modal.modalBody = undefined
@@ -494,6 +494,7 @@ export default function (app) {
             }
             paneConfig.modal.onModalData = onModalData
             paneConfig.paneOnLoad = paneOnLoad
+            paneConfig.onEvent = onEvent
 
             if(typeof viewIndex == 'number') {
                 if(paneConfig.paneViews[viewIndex] == undefined) {

@@ -165,7 +165,9 @@
                     :myConfig="$store.state.pane[paneIndex].componentConfig" 
                     :paneIndex="paneIndex" 
                     :is="$store.state.pane[paneIndex].paneConfig.paneViews[$store.state.pane[paneIndex].paneConfig.defaultPaneView]" 
-                    :myData="$store.state.pane[paneIndex].paneConfig.paneData" >
+                    :myData="$store.state.pane[paneIndex].paneConfig.paneData" 
+                    @onEvent="onEvent"
+                    >
                 </div>
             </v-flex>
         </v-flex>
@@ -187,6 +189,7 @@ export default {
         logPromptData: undefined,
         isLoading: false,
         progress: undefined,
+        dep: undefined
     }),
     computed: {
         paneModal() {
@@ -214,13 +217,29 @@ export default {
         }
     },
     mounted() {
-        const {syspane,syspanemodal,dwin} = this.normyDep(this.paneIndex,this)
+        this.dep = this.normyDep(this.paneIndex,this)
+        const {syspane,syspanemodal,dwin} = this.dep
         this.$store.state.pane[this.paneIndex].paneConfig.paneOnLoad(syspane,syspanemodal,dwin)
     },
     methods: {
         onModalData(data) {
-            const { syspane, syspanemodal, dwin} =  this.normyDep(this.paneIndex,this)
+            const { syspane, syspanemodal, dwin} =  this.dep
             this.$store.state.pane[this.paneIndex].paneConfig.modal.onModalData(data,syspane,syspanemodal,dwin)
+        },
+        onEvent(e) {
+            const {syspane,syspanemodal,dwin} = this.dep
+            if(e.eventName) {
+                const event = {
+                    eventName: e.eventName,
+                    context: e.context
+                }
+                const targetFn = this.$store.state.pane[this.paneIndex].paneConfig.onEvent(event,syspane,syspanemodal,dwin)
+                if(targetFn[e.eventName]) {
+                    targetFn[e.eventName]()
+                }
+            } else {
+                this.systemError('onEvent Error eventName is undefined')
+            }
         },
         paneModalCb() {
             this.isLoading = true

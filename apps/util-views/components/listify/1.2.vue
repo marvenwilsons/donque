@@ -21,7 +21,10 @@
                                     ></v-select>
                                 </div>
                                 <div v-if="myConfig.ableToAddItem" class="pointer marginleft125" >
-                                    <v-btn dense small  fab dark color="primary">
+                                    <v-btn @click="$emit('onEvent',{
+                                        eventName: 'addNewPage',
+                                        context: null
+                                    })" dense small  fab dark color="primary">
                                         <v-icon dark>mdi-plus</v-icon>
                                     </v-btn>
                                 </div>
