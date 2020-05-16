@@ -74,14 +74,13 @@ export default function (app) {
     }
 
     controlpanel.actions.syspane.addsync = function(serviceObject) {
-        console.log('> controlpanel - addsync')
+        // console.log('> controlpanel - addsync')
         if(!serviceObject.componentConfig || !serviceObject.paneConfig) {
             app.systemError('Invalid pane object')
         } else {
             app.$store.commit('paneAdd', {
                 payload: serviceObject
             })
-            console.log(app.$store.state.pane)
         }
     }
 
@@ -112,7 +111,7 @@ export default function (app) {
     }
 
     controlpanel.actions.syspane.getInitialData = function (serviceName) {
-        console.log('> controlpanel - getInitialData')
+        // console.log('> controlpanel - getInitialData')
         return app.$store.state.app['app-services'][serviceName].data
     }
 
