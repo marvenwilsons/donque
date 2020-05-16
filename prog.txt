@@ -13,7 +13,7 @@ Month: May 2020
 [x] implemented dWins
 [x] write documentaion for pane methods
 [x] write documentaion for modal methods
-[?] implemented uniview
+[x] implemented uniview
 [-] add encryption and decryption to utils
 [-] implement remaining features of listify1.2
 [-] added auto slide for pane host 
