@@ -68,11 +68,14 @@
                                     <div class="pa-2 grey lighten-3 grey--text text--darken-2 d-flex flexend">
                                         <span 
                                             class="pointer marginleft125" 
-                                            v-for="(myOpt,optIndex) in myConfig.dataControllers" 
+                                            v-for="(myOpt,optIndex) in myConfig.events" 
                                             :key="optIndex"
                                             >
-                                            <v-card-text @click="c({item,itemIndex,controllerName: myOpt.name, paneIndex},myOpt.handler)" class="optiontext" style="padding:0px;" >
-                                                {{myOpt.name}}
+                                            <v-card-text @click="$emit('onEvent', {
+                                                eventName: myOpt,
+                                                context: item
+                                            })" class="optiontext" style="padding:0px;" >
+                                                {{myOpt}}
                                             </v-card-text>
                                         </span>
                                     </div>

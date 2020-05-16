@@ -188,104 +188,11 @@ module.exports = Templates.Service({
         if(Array.isArray(data)) {
             return {
                 componentConfig: {
-                    dataControllers: [
-                        {
-                            name: 'view page',
-                            handler: function(selected, syspane, syspanemodal, dwin) {
-                                syspane.render(selected.item)
-                            }
-                        },
-                        {
-                            name: 'sub page',
-                            handler: function(selected, syspane, syspanemodal, dwin) {
-                                syspane.render(selected.item.subPages)
-                            }
-                        },
-                        {
-                            name: 'delete page',
-                            handler: function(selected, syspane, syspanemodal, dwin) {
-                                // should add modal methods in helper arg
-                                syspanemodal.logError(`Warning! Are you sure you want to delete ${selected.item.pageName}`,() => {
-                                    syspanemodal.close()
-                                    syspane.closeUnUsedPane()
-                                })
-                            }
-                        },
-                        {
-                            name: 'rename',
-                            handler: function({item}, syspane, syspanemodal, dwin) {
-                                syspane.prompt({
-                                    type: 'password',
-                                    value: null,
-                                    header: 'Enter Password',
-                                    defaultValue: null,
-                                    info: 'Enter password'
-                                }, (data) => {
-                                    console.log(data)
-                                })
-                            }
-                        },
-                        {
-                            name: 'edit page',
-                            handler: function(selected, syspane, syspanemodal, dwin) {
-                                syspane.render(selected.item.subPages)
-                                
-                                dwin.spawn({
-                                    section: 'top',
-                                    winView: 'raw',
-                                    winConfig: {},
-                                    viewConfig: {},
-                                    data: {
-                                        name: 'foo',
-                                        age: 30
-                                    }
-                                }, (event,context,close) => {
-                                    console.log('dwin-cb',context)
-                                    setTimeout(() => {
-                                        context.set('data', {
-                                            name: 'marven',
-                                            age: '28'
-                                        }).then(() => {
-                                            console.log('done!')
-                                            setTimeout(() => {
-                                                close(() => {
-                                                    console.log('successfully closed')
-                                                })
-                                            }, 1000);
-                                        })
-                                    }, 1000);
-                                })
-
-                                setTimeout(() => {
-                                    dwin.spawn({
-                                        section: 'right',
-                                        winView: 'raw',
-                                        winConfig: {},
-                                        viewConfig: {},
-                                        data: {
-                                            name: 'foo',
-                                            age: 30
-                                        }
-                                    }, (event,context,close) => {
-                                        console.log('dwin-cb',context)
-                                        setTimeout(() => {
-                                            context.set('data', {
-                                                name: 'marven',
-                                                age: '28'
-                                            }).then(() => {
-                                                console.log('done!')
-                                                setTimeout(() => {
-                                                    close(() => {
-                                                        console.log('successfully closed')
-                                                    })
-                                                }, 1000);
-                                            })
-                                        }, 1000);
-                                    })
-                                }, 1000);
-                            }
-                        }
-                    ],
+                    uniview: {
+                        flexDirection: 'col',
+                        itemMargin: '20px'
+                    },
+                    events: ['view page', 'sub page', 'delete page', 'rename', 'edit page'],
                     displayProp: 'pageName',
                     ableToAddItem: true,
                     infoDisplay: ['pageName','lastUpdated','updatedBy']
@@ -301,6 +208,47 @@ module.exports = Templates.Service({
                             console.log('input -> ',input)
                         })
                     }
+                },
+                onEvent(event,syspane,syspanemodal, dwin) {
+                    return {
+                        addNewPage() {
+                            syspane.prompt({
+                                type: 'string',
+                                header: 'Page Name',
+                                isClosable: true,
+                            }, (input) => {
+                                console.log('input -> ',input)
+                            })
+                        },
+                        'view page'() {
+                            syspane.render(event.context)
+                        },
+                        'sub page'() {
+                            syspane.render(event.context.subPages)
+                        },
+                        'delete page'() {
+                            syspanemodal.logError(`Warning! Are you sure you want to delete ${event.context.pageName}`,() => {
+                                syspanemodal.close()
+                                syspane.closeUnUsedPane()
+                            })
+                        },
+                        'edit page'() {
+                            syspane.render(event.context.subPages)
+                        },
+                        rename() {
+                            syspane.prompt({
+                                type: 'password',
+                                value: null,
+                                header: 'Enter Password',
+                                defaultValue: null,
+                                info: 'Enter password',
+                                isClosable: true
+                            }, (data) => {
+                                console.log(data)
+                            })
+                        }
+                    }
+
                 },
                 onModalData: function(modalData,syspane,syspanemodal, dwin) {
                     // modalData is the set of input data from the user
