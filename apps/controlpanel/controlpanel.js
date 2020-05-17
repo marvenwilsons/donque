@@ -536,9 +536,10 @@ export default function (app) {
                 .then(() => {
                     const {syspane,syspanemodal} =  app.normyDep(paneIndex + 1,app)
                     app.$store.state.pane[paneIndex + 1].paneConfig.paneOnLoad(syspane,syspanemodal)
+                    app.autoScroll()
                 })
             } else {
-                // console.log('> renderPane Case3', paneIndex)
+                console.log('> renderPane Case3', paneIndex)
                 controlpanel.actions.syspane.delete(paneIndex + 1)
                 .then(() => {
                     controlpanel.actions.syspane.add(data)

@@ -204,8 +204,6 @@ export default {
             try {
                 this.logPromptData = this.$store.state.pane[this.paneIndex].paneConfig.modal.modalConfig.defaultValue
             }catch(err) {} 
-
-            this.autoScroll()        
         },
         logPromptData() {
             this.isLoading = false
@@ -225,18 +223,6 @@ export default {
         this.autoScroll()        
     },
     methods: {
-        autoScroll() {
-            // auto scroll
-            const paneContainer = document.getElementById('dq-main-w')
-            const paneContainerWidth = paneContainer.offsetWidth
-            const hostContainer = document.getElementById('dq-host-container')
-            const hostContainerWidth = Math.round(hostContainer.getBoundingClientRect().width)
-            if(paneContainerWidth > hostContainerWidth) {
-                setTimeout(() => {
-                    hostContainer.scrollTo({ top: 0, left: paneContainerWidth, behavior: 'smooth' })
-                },50)
-            }
-        },
         onModalData(data) {
             const { syspane, syspanemodal, dwin} =  this.dep
             this.$store.state.pane[this.paneIndex].paneConfig.modal.onModalData(data,syspane,syspanemodal,dwin)

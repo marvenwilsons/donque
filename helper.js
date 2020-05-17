@@ -157,6 +157,18 @@ export default {
                 return { syspane, syspanemodal, dwin }
             })(scope)
         },
+        autoScroll() {
+            // auto scroll
+            const paneContainer = document.getElementById('dq-main-w')
+            const paneContainerWidth = paneContainer.offsetWidth
+            const hostContainer = document.getElementById('dq-host-container')
+            const hostContainerWidth = Math.round(hostContainer.getBoundingClientRect().width)
+            if(paneContainerWidth > hostContainerWidth) {
+                setTimeout(() => {
+                    hostContainer.scrollTo({ top: 0, left: paneContainerWidth, behavior: 'smooth' })
+                },50)
+            }
+        },
         /** close pane */
         closePane() {      
             this.actions.syspane.close(this.paneIndex)
