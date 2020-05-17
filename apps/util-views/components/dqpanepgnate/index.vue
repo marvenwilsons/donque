@@ -1,18 +1,23 @@
 <template>
     <div>
         <div style="background:var(--deftheme-dark-primary); color:white;" class="pad125" >
-            <span class="padleft025" >Scroll To Pane</span>
+            <span class="padleft025" >Scroll Pane Into View</span>
         </div>
         <div class="pad125" >
             <v-flex flexwrap >
                 <v-card 
-                    @click="scrollTo" 
-                    class="marginright050 margintop050" hover 
+                    @click="scrollTo(item.paneConfig.paneName,itemIndex,item.paneConfig.pos)" 
+                    class="marginright050 margintop050 padtop050 padbottom050" hover 
                     v-for="(item,itemIndex) in $store.state.pane" 
                     :key="itemIndex"  outlined >
-                    <div class="pad050 padleft125 padright125 pointer" >
-                        {{itemIndex}}
-                    </div>
+                    <v-tooltip bottom>
+                        <template v-slot:activator="{ on }">
+                            <span  class="padleft125 padright125 pointer" v-on="on">
+                                {{itemIndex}}
+                            </span>
+                        </template>
+                        <span>pane # {{itemIndex}} | {{item.paneConfig.paneName}}</span>
+                    </v-tooltip>
                 </v-card>
             </v-flex>
             <v-flex flexend margintop125>
@@ -34,14 +39,19 @@ export default {
         this.h = this
     },
     methods: {
-        scrollTo() {
-            console.log('scroll to')
-            const paneContainer = document.getElementById('dq-main-w')
-            const paneContainerWidth = paneContainer.offsetWidth
-            const hostContainer = document.getElementById('dq-host-container')
-            const hostContainerWidth = hostContainer.offsetWidth
-            console.log(paneContainerWidth)
-            hostContainer.scrollTo({ top: 0, left: 230, behavior: 'smooth' })
+        scrollTo(id,paneIndex) {
+            const targetId = `${paneIndex}-${id}`
+            const targetEl = document.getElementById(targetId)
+            
+
+            setTimeout(() => {
+                const scrollValue = Math.round(targetEl.left)
+                targetEl.scrollIntoView({
+                    behavior: "smooth",
+                    inline: "center"
+                })
+            }, 10);
+
         }
     }
 }

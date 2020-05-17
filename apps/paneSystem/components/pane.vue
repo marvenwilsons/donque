@@ -4,8 +4,14 @@
             style="background: var(--deftheme-dark-primary); color:white;"
             class="pad125" >
                 <v-flex spacebetween >
-                    <div style="color:whitsmoke" >
-                        {{$store.state.pane[paneIndex].paneConfig.paneName}}
+                    <div class="fullwidth flex" style="color:whitsmoke" >
+                        <div class="marginright050" >
+                            <v-chip color="primary" outlined text-color="white" >
+                                pane # {{paneIndex}} | 
+                                {{$store.state.pane[paneIndex].paneConfig.paneName}}
+                            </v-chip>
+                        </div>
+
                     </div>
                     <div v-if="$store.state.pane[paneIndex].paneConfig.isClosable" >
                         <span 
@@ -161,7 +167,7 @@
             <!-- pane body -->
             <v-flex>
                 <div 
-                    :id="$store.state.pane[paneIndex].paneConfig.paneName" 
+                    :id="`${paneIndex}-${$store.state.pane[paneIndex].paneConfig.paneName}`" 
                     :myConfig="$store.state.pane[paneIndex].componentConfig" 
                     :paneIndex="paneIndex" 
                     :is="$store.state.pane[paneIndex].paneConfig.paneViews[$store.state.pane[paneIndex].paneConfig.defaultPaneView]" 
@@ -220,7 +226,7 @@ export default {
         this.dep = this.normyDep(this.paneIndex,this)
         const {syspane,syspanemodal,dwin} = this.dep
         this.$store.state.pane[this.paneIndex].paneConfig.paneOnLoad(syspane,syspanemodal,dwin)
-        this.autoScroll()        
+        this.autoScroll()
     },
     methods: {
         onModalData(data) {
