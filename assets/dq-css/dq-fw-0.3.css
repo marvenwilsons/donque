@@ -417,7 +417,7 @@ img {
 /* My Own Style ( dq framework 1.2 )
      ============================================================================*/
 :root {
-  --fontSize: 14px;
+  --fontSize: 16px;
   --ln: 1.5rem;
 }
 html {
