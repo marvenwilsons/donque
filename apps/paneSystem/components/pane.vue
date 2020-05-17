@@ -221,13 +221,15 @@ export default {
         const {syspane,syspanemodal,dwin} = this.dep
         this.$store.state.pane[this.paneIndex].paneConfig.paneOnLoad(syspane,syspanemodal,dwin)
 
+        // auto scroll
         const paneContainer = document.getElementById('dq-main-w')
-        const paneContainerWidth = Math.round(paneContainer.offsetWidth)
+        const paneContainerWidth = paneContainer.offsetWidth
         const hostContainer = document.getElementById('dq-host-container')
         const hostContainerWidth = Math.round(hostContainer.getBoundingClientRect().width)
-        
         if(paneContainerWidth > hostContainerWidth) {
-            console.log('scoll now!')
+            setTimeout(() => {
+                hostContainer.scrollTo({ top: 0, left: paneContainerWidth, behavior: 'smooth' })
+            },50)
         }
     },
     methods: {
