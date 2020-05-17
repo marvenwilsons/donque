@@ -196,7 +196,7 @@ export default {
             if(this.$store.state.pane[this.paneIndex]) {
                 return this.$store.state.pane[this.paneIndex].paneConfig.modal
             }
-        }
+        },
     },
     watch: {
         paneModal() {
@@ -220,6 +220,15 @@ export default {
         this.dep = this.normyDep(this.paneIndex,this)
         const {syspane,syspanemodal,dwin} = this.dep
         this.$store.state.pane[this.paneIndex].paneConfig.paneOnLoad(syspane,syspanemodal,dwin)
+
+        const paneContainer = document.getElementById('dq-main-w')
+        const paneContainerWidth = Math.round(paneContainer.offsetWidth)
+        const hostContainer = document.getElementById('dq-host-container')
+        const hostContainerWidth = Math.round(hostContainer.getBoundingClientRect().width)
+        
+        if(paneContainerWidth > hostContainerWidth) {
+            console.log('scoll now!')
+        }
     },
     methods: {
         onModalData(data) {
