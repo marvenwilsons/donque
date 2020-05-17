@@ -17,7 +17,8 @@ Month: May 2020
 [x] implement remaining features of listify1.2
 [x] added onEvent
 [x] added auto slide for pane host 
-[x] scrolling using scroll wheel support
+    [?] fix replace pane bug 
+[?] scrolling using scroll wheel support
 [-] add encryption and decryption to utils
 [-] make initialData function async in the backend
 [-] add service manager menu
