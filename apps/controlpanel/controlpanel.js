@@ -527,9 +527,9 @@ export default function (app) {
             /** it means add one pane */
             actions.syspane.addsync(data)
         } else {
-            // console.log('> renderPane Case2')
             /** it means update the paneData? or replace the pane with a new view  */
             if(paneIndex + 1 == app.$store.state.pane.length - 1) {
+                // console.log('> renderPane Case2')
                 controlpanel.actions.syspane.updatePane(
                     paneIndex + 1, 
                     controlpanel.actions.syspane.getServiceView(data.paneConfig.paneData,viewIndex))
@@ -538,11 +538,14 @@ export default function (app) {
                     app.$store.state.pane[paneIndex + 1].paneConfig.paneOnLoad(syspane,syspanemodal)
                 })
             } else {
-                // console.log('> renderPane Case3')
-                controlpanel.actions.syspane.add(data)
+                // console.log('> renderPane Case3', paneIndex)
+                controlpanel.actions.syspane.delete(paneIndex + 1)
                 .then(() => {
-                    const {syspane,syspanemodal} =  app.normyDep(paneIndex + 1,this)
-                    app.$store.state.pane[paneIndex + 1].paneConfig.paneOnLoad(syspane,syspanemodal)
+                    controlpanel.actions.syspane.add(data)
+                    .then(() => {
+                        const {syspane,syspanemodal} =  app.normyDep(paneIndex + 1,this)
+                        app.$store.state.pane[paneIndex + 1].paneConfig.paneOnLoad(syspane,syspanemodal)
+                    })
                 })
             }
             
