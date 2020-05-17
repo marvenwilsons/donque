@@ -28,6 +28,11 @@
                         v-if="$store.state.globalModalContentType == 'loading'" 
                         :data="$store.state.globalModalContent"
                     />
+                    <div
+                        v-if="$store.state.globalModalContentType == 'custom'"
+                        :is="$store.state.globalModalContent.view"
+                        :data="$store.state.globalModalContent"
+                        ></div>
                 </div>
             </div>
         </div>
