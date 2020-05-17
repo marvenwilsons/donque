@@ -40,7 +40,7 @@
                                                     <small><pre>{{myConfig.infoDisplay[0]}}</pre></small>
                                                 </div>
                                                 <div style="color:#bd4147;" class="mono name">
-                                                    <pre>{{item[myConfig.infoDisplay[0]]}}</pre>
+                                                    {{item[myConfig.infoDisplay[0]]}}
                                                 </div>
                                             </v-flex>
                                         </div>
