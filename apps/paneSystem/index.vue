@@ -19,7 +19,7 @@
                 :style="{maxWidth: pane.paneConfig.paneWidth, minWidth: pane.paneConfig.paneWidth}">
                     <pane 
                             :style="{background:'#f7f9fc',borderRadius:'4px', overflow: 'hidden', maxWidth: pane.paneWidth, minWidth: pane.paneWidth}" 
-                            class="paneShadow marginright050" 
+                            class="paneShadow" 
                             :myData="pane"
                             :paneIndex="index"
                         >
