@@ -98,11 +98,6 @@ export default {
                 value: queueAnswersArray
             })
         },
-        covertToPaneView(n){
-            n = n.toLowerCase()
-            n = `p-${n}`
-            return n
-        },
         paneSettings({paneName,paneWidth,isClosable}) {
             if(paneName) {
                 this.$store.commit('paneController',{
@@ -145,7 +140,8 @@ export default {
                     render:   (data,viewIndex) => s.actions.syspane.render(data,paneIndex,viewIndex),
                     spawnModal:    modalObject => s.spawnModal(paneIndex,modalObject),
                     prompt:  (promptObject,cb) => s.actions.syspane.prompt(paneIndex,promptObject,cb),
-                    updatePaneData:(  objData) => s.updatePaneData(paneIndex,objData),
+                    updatePaneData:  (objData) => s.updatePaneData(paneIndex,objData),
+                    updateNextPaneData:(objData) => s.updatePaneData(paneIndex + 1,objData),
                     updatePaneConfig: (config) => s.updatePaneConfig(paneIndex,config) ,
                     getCurrentPaneIndex:    () => paneIndex
                 }
