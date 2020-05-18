@@ -213,7 +213,7 @@ export default {
         isLoading: false,
         progress: undefined,
         dep: undefined,
-        myPaneSettings: ['show raw data', 'switch view', 'other views']
+        myPaneSettings: ['show raw data', 'switch view']
     }),
     computed: {
         paneModal() {
@@ -294,7 +294,53 @@ export default {
         },
         showPaneSettings(sel) {
             // show raw data, views
-            console.log('show pane settings',sel)
+            
+            if(sel == 'show raw data') {
+                const rawIndex = this.$store.state.pane[this.paneIndex].paneConfig.paneViews.indexOf('raw')
+                if(rawIndex != -1) {
+                    this.updatePaneConfig(this.paneIndex, {
+                        key: 'defaultPaneView',
+                        value: rawIndex
+                    })
+                    setTimeout(() => {
+                        this.myPaneSettings = ['back to default view']
+                    }, 150);
+                } else {
+                    const v = this.cp(this.$store.state.pane[this.paneIndex].paneConfig.paneViews)
+                    v.push('raw')
+                    this.updatePaneConfig(this.paneIndex, {
+                        key: 'paneViews',
+                        value: v
+                    })
+
+                    this.showPaneSettings('show raw data')
+                }
+            } else if(sel == 'back to default view') {
+                this.updatePaneConfig(this.paneIndex, {
+                    key: 'defaultPaneView',
+                    value: 0
+                })
+                setTimeout(() => {
+                    this.myPaneSettings = ['show raw data', 'switch view']
+                }, 150);
+            } else if(sel == 'switch view') {
+                // switch view
+                this.actions.syspane.prompt(this.paneIndex,{
+                    type: 'select',
+                    header: 'Switch Views',
+                    value: this.$store.state.pane[this.paneIndex].paneConfig.paneViews,
+                    defaultValue: this.$store.state.pane[this.paneIndex].paneConfig.paneViews[0], // can be null
+                    info: 'Select a view', // can be null
+                    isClosable:  true
+                }, (input,progress,error) => {
+                    this.updatePaneConfig(this.paneIndex, {
+                        key: 'defaultPaneView',
+                        value: this.$store.state.pane[this.paneIndex].paneConfig.paneViews.indexOf(input)
+                    })
+
+                    this.actions.syspane.modal.close(this.paneIndex)
+                })
+            }
         }
     }
 }

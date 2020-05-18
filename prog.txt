@@ -19,7 +19,7 @@ Month: May 2020
 [x] added auto slide for pane host 
     [x] fix replace pane bug 
 [x] scroll into view support
-[-] implement pane settings
+[x] implement pane settings
 [-] make initialData function async in the backend
 [-] add encryption and decryption to utils
 [-] add service manager menu
