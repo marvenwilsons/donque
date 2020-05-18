@@ -233,7 +233,7 @@ module.exports = Templates.Service({
                             })
                         },
                         'edit page'() {
-                            syspane.render(event.context.subPages)
+                            syspane.render(event.context.subPages,1)
                         },
                         rename() {
                             syspane.prompt({

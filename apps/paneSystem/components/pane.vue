@@ -6,20 +6,40 @@
                 <v-flex spacebetween >
                     <div class="fullwidth flex" style="color:whitsmoke" >
                         <div class="marginright050" >
-                            <v-chip color="primary" outlined text-color="white" >
+                            <v-chip color="#333" outlined text-color="white" >
                                 pane # {{paneIndex}} | 
                                 {{$store.state.pane[paneIndex].paneConfig.paneName}}
                             </v-chip>
                         </div>
 
                     </div>
-                    <div v-if="$store.state.pane[paneIndex].paneConfig.isClosable" >
-                        <span 
-                            @click="closePane"
-                            class="pointer"
-                            style="color:white; font-weight:100" >
+                    <div class="flex" v-if="$store.state.pane[paneIndex].paneConfig.isClosable" >
+           
+                        <v-menu offset-y>
+                            <template v-slot:activator="{ on }">
+                                <v-chip  v-on="on" class="marginright050 pointer" outlined color="#333" >
+                                    &#x2699;
+                                </v-chip>
+                            </template>
+                            <v-list>
+                                <v-list-item
+                                v-for="(item, index) in myPaneSettings"
+                                :key="index"
+                                @click="showPaneSettings(item)"
+                                >
+                                <v-list-item-title>{{ item }}</v-list-item-title>
+                                </v-list-item>
+                            </v-list>
+                        </v-menu>
+                        <v-chip outlined color="#333">
+                            <span 
+                                @click="closePane"
+                                class="pointer"
+                                style="color:white; font-weight:100" >
                             	&#x2716;
-                        </span>
+                            </span>
+                        </v-chip>
+
                     </div>
                 </v-flex>
         </div>
@@ -90,9 +110,7 @@
                             </v-flex>
                         </div>
                         <!-- panePrompt -->
-                        <div
-                            v-if="$store.state.pane[paneIndex].paneConfig.modal.modalBody === 'logPrompt'"
-                        >
+                        <div v-if="$store.state.pane[paneIndex].paneConfig.modal.modalBody === 'logPrompt'" >   
                             <div v-if="
                                 $store.state.pane[paneIndex].paneConfig.modal.modalConfig.type === 'string' || 
                                 $store.state.pane[paneIndex].paneConfig.modal.modalConfig.type === 'number' ||
@@ -152,7 +170,7 @@
                             </div>
                             <loading @progressMethod="p => progress = p" />
                             <v-flex flexend >
-                                <v-btn 
+                                <v-btn
                                     color="primary" 
                                     @click="paneModalCb()"
                                     :loading="$store.state.pane[paneIndex].paneConfig.modal.modalErr ? false : isLoading"
@@ -160,7 +178,6 @@
                                     submit</v-btn>
                             </v-flex>
                         </div>
-
                     </v-flex>
                 </main>
             </v-flex>
@@ -195,7 +212,8 @@ export default {
         logPromptData: undefined,
         isLoading: false,
         progress: undefined,
-        dep: undefined
+        dep: undefined,
+        myPaneSettings: ['show raw data', 'switch view', 'other views']
     }),
     computed: {
         paneModal() {
@@ -273,6 +291,10 @@ export default {
                     }
                 )
             }
+        },
+        showPaneSettings(sel) {
+            // show raw data, views
+            console.log('show pane settings',sel)
         }
     }
 }
