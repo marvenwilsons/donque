@@ -35,7 +35,7 @@ export default function (app) {
         // })
     }
 
-    // syspane
+    // syspane init functions
 
     controlpanel.actions.syspane.switchMenu = function(selectedMenu) {
         // console.log('> switchMenu')
@@ -56,33 +56,12 @@ export default function (app) {
         controlpanel.actions.syspane.addsync(serviceDataToPaneObject)
     }
 
-    controlpanel.actions.syspane.add = function(serviceObject) {
-        // console.log('> controlpanel - add')
-        return new Promise((resolve,reject) => {
-            if(!serviceObject.componentConfig || !serviceObject.paneConfig) {
-                app.systemError('Invalid pane object')
-            } else {
-                app.$store.commit('paneAdd', {
-                    payload: serviceObject
-                })
-                if(JSON.stringify(app.$store.state.pane[app.$store.state.pane.length- 1]) ==  JSON.stringify(serviceObject)){
-                    resolve(app.$store.state.pane)
-                }
-            }
-        })
-
+    controlpanel.actions.syspane.getInitialData = function (serviceName) {
+        // console.log('> controlpanel - getInitialData')
+        return app.$store.state.app['app-services'][serviceName].data
     }
 
-    controlpanel.actions.syspane.addsync = function(serviceObject) {
-        // console.log('> controlpanel - addsync')
-        if(!serviceObject.componentConfig || !serviceObject.paneConfig) {
-            app.systemError('Invalid pane object')
-        } else {
-            app.$store.commit('paneAdd', {
-                payload: serviceObject
-            })
-        }
-    }
+    // syspane pane delete functions
 
     controlpanel.actions.syspane.delete = function(paneIndexOrigin) {
         return new Promise((resolve) => {
@@ -110,10 +89,8 @@ export default function (app) {
         }
     }
 
-    controlpanel.actions.syspane.getInitialData = function (serviceName) {
-        // console.log('> controlpanel - getInitialData')
-        return app.$store.state.app['app-services'][serviceName].data
-    }
+
+    // syspane update functions
 
     controlpanel.actions.syspane.updatePane = function (paneIndex, serviceObject) {
         return new Promise((resolve) => {
@@ -152,6 +129,8 @@ export default function (app) {
             viewIndex
         })
     }
+
+    // syspane modal functions
 
     controlpanel.actions.syspane.prompt = function (paneIndex,promptObject,fn) {
         const types = ['string','number','select','multiselect','slider', 'minmax', 'password']
@@ -454,6 +433,8 @@ export default function (app) {
         }
     }
 
+    // syspane render functions
+
     controlpanel.actions.syspane.getServiceView = function (dataSet,viewIndex) {
         // returns a service objects
         const {views} = app.$store.state.app['app-services'][app.$store.state.app['active-sidebar-item']]
@@ -550,6 +531,34 @@ export default function (app) {
                 })
             }
             
+        }
+    }
+
+    controlpanel.actions.syspane.add = function(serviceObject) {
+        // console.log('> controlpanel - add')
+        return new Promise((resolve,reject) => {
+            if(!serviceObject.componentConfig || !serviceObject.paneConfig) {
+                app.systemError('Invalid pane object')
+            } else {
+                app.$store.commit('paneAdd', {
+                    payload: serviceObject
+                })
+                if(JSON.stringify(app.$store.state.pane[app.$store.state.pane.length- 1]) ==  JSON.stringify(serviceObject)){
+                    resolve(app.$store.state.pane)
+                }
+            }
+        })
+
+    }
+
+    controlpanel.actions.syspane.addsync = function(serviceObject) {
+        // console.log('> controlpanel - addsync')
+        if(!serviceObject.componentConfig || !serviceObject.paneConfig) {
+            app.systemError('Invalid pane object')
+        } else {
+            app.$store.commit('paneAdd', {
+                payload: serviceObject
+            })
         }
     }
 
