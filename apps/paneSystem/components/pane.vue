@@ -258,9 +258,13 @@ export default {
                     eventName: e.eventName,
                     context: e.context
                 }
-                const targetFn = this.$store.state.pane[this.paneIndex].paneConfig.onEvent(event,syspane,syspanemodal,dwin)
-                if(targetFn[e.eventName]) {
-                    targetFn[e.eventName]()
+                if(this.$store.state.pane[this.paneIndex].paneConfig.onEvent != undefined) {
+                    const targetFn = this.$store.state.pane[this.paneIndex].paneConfig.onEvent(event,syspane,syspanemodal,dwin)
+                    if(targetFn[e.eventName]) {
+                        targetFn[e.eventName]()
+                    }
+                } else {
+                    this.systemError('onEvent Error, Cannot find onEvent hook in serviceObject')
                 }
             } else {
                 this.systemError('onEvent Error eventName is undefined')
