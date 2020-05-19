@@ -133,8 +133,13 @@ export default function (app) {
     controlpanel.actions.syspane.updatePaneData = function(paneIndex,paneData,targetKey) {
         app.$store.commit('paneUpdateData', {
             paneIndex,
-            paneData
+            paneData,
+            targetKey
         })
+    }
+
+    controlpanel.actions.syspane.mirrorParentPaneData = function(paneIndex) {
+
     }
 
     // syspane modal functions

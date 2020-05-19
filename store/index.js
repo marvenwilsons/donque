@@ -132,8 +132,19 @@ export const mutations = {
         paneClose(state,{paneIndexOrigin}) {
             state.pane.splice(paneIndexOrigin,1)
         },
-        paneUpdateData(state,{paneIndex,paneData}) {
-            state.pane[paneIndex].paneConfig.paneData = paneData
+        paneUpdateData(state,{paneIndex,paneData, targetKey}) {
+            if(state.pane[paneIndex] != undefined) {
+                if(targetKey) {
+                    const f = () => {
+                        return new Function( ` return function(state,value) {
+                            return ( state.pane[${paneIndex}].paneConfig.paneData.${targetKey} = value )
+                        }`)
+                    }
+                    f()()(state,paneData)
+                } else {
+                    state.pane[paneIndex].paneConfig.paneData = paneData
+                }
+            }
         },
         paneUpdateView(state,{paneIndex,viewIndex}) {
             state.pane[paneIndex].paneConfig.defaultPaneView = viewIndex
