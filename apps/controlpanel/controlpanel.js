@@ -130,6 +130,13 @@ export default function (app) {
         })
     }
 
+    controlpanel.actions.syspane.updatePaneData = function(paneIndex,paneData,targetKey) {
+        app.$store.commit('paneUpdateData', {
+            paneIndex,
+            paneData
+        })
+    }
+
     // syspane modal functions
 
     controlpanel.actions.syspane.prompt = function (paneIndex,promptObject,fn) {
