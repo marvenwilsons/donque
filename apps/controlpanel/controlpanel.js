@@ -517,7 +517,7 @@ export default function (app) {
         // console.log('helper',paneIndex, this.$store.state.pane.length - 1)
         if(app.$store.state.pane[paneIndex + 1] == undefined) {
             // console.log('> renderPane Case1')
-            /** it means add one pane */
+            /** it means add one pane */ /** add before render here  */
             actions.syspane.addsync(data)
         } else {
             /** it means update the paneData? or replace the pane with a new view  */
@@ -525,20 +525,21 @@ export default function (app) {
                 // console.log('> renderPane Case2')
                 controlpanel.actions.syspane.updatePane(
                     paneIndex + 1, 
-                    controlpanel.actions.syspane.getServiceView(data.paneConfig.paneData,viewIndex))
-                .then(() => {
-                    const {syspane,syspanemodal} =  app.normyDep(paneIndex + 1,app)
-                    app.$store.state.pane[paneIndex + 1].paneConfig.paneOnLoad(syspane,syspanemodal)
+                    controlpanel.actions.syspane.getServiceView(data.paneConfig.paneData,viewIndex)
+                ).then(() => {
+                    const {syspane,syspanemodal, dwin} =  app.normyDep(paneIndex + 1,app)
+                    app.$store.state.pane[paneIndex + 1].paneConfig.paneOnLoad(syspane,syspanemodal, dwin)
                     app.autoScroll()
                 })
             } else {
-                console.log('> renderPane Case3', paneIndex)
+                // console.log('> renderPane Case3', paneIndex)
+                // when the pane origin is further down index from the last pane
                 controlpanel.actions.syspane.delete(paneIndex + 1)
                 .then(() => {
                     controlpanel.actions.syspane.add(data)
                     .then(() => {
-                        const {syspane,syspanemodal} =  app.normyDep(paneIndex + 1,this)
-                        app.$store.state.pane[paneIndex + 1].paneConfig.paneOnLoad(syspane,syspanemodal)
+                        const {syspane,syspanemodal, dwin} =  app.normyDep(paneIndex + 1,this)
+                        app.$store.state.pane[paneIndex + 1].paneConfig.paneOnLoad(syspane,syspanemodal, dwin)
                     })
                 })
             }

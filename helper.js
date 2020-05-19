@@ -140,10 +140,12 @@ export default {
                     render:   (data,viewIndex) => s.actions.syspane.render(data,paneIndex,viewIndex),
                     spawnModal:    modalObject => s.spawnModal(paneIndex,modalObject),
                     prompt:  (promptObject,cb) => s.actions.syspane.prompt(paneIndex,promptObject,cb),
-                    updatePaneData:  (objData) => s.updatePaneData(paneIndex,objData),
-                    updateNextPaneData:(objData) => s.updatePaneData(paneIndex + 1,objData),
+                    updatePaneData:  (objData,targetKey) => s.actions.syspane.updatePaneData(paneIndex,objData,targetKey),
+                    updateTargetPaneData:  (pi,objData,targetKey) => s.actions.syspane.updatePaneData(pi,objData,targetKey),
+                    updateChildPaneData:(objData,targetKey) => s.actions.syspane.updatePaneData(paneIndex + 1,objData,targetKey),
+                    updateParentPaneData:(objData,targetKey) => s.actions.syspane.updatePaneData(paneIndex - 1,objData,targetKey),
                     updatePaneConfig: (config) => s.updatePaneConfig(paneIndex,config) ,
-                    getCurrentPaneIndex:    () => paneIndex
+                    getPaneIndex:    () => paneIndex
                 }
                 const dwin = {
                     spawn: (dWinObject,cb) => s.actions.dwin.spawn(dWinObject,cb),
@@ -192,13 +194,6 @@ export default {
             }catch(err) {
                 this.systemError(`activaPaneModal ERR \n ${err}`)
             }
-        },
-        /** Updates the pane data */
-        updatePaneData(paneIndex,paneData) {
-            this.commit('paneUpdateData', {
-                paneIndex,
-                paneData
-            })
         },
         updatePaneConfig(paneIndex,config) {
             this.$store.commit('paneUpdateConfig', {
