@@ -20,6 +20,8 @@ Month: May 2020
     [x] fix replace pane bug 
 [x] scroll into view support
 [x] implement pane settings
+[?] add syspane update functions
+[-] add beforeRender hook in render function
 [-] make initialData function async in the backend
 [-] add encryption and decryption to utils
 [-] add service manager menu
