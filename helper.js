@@ -137,7 +137,7 @@ export default {
                 const syspane = {
                     close:      () => s.actions.syspane.close(paneIndex),
                     closeUnUsedPane: () => s.actions.syspane.delete(paneIndex + 1),
-                    render:   (data,viewIndex) => s.actions.syspane.render(data,paneIndex,viewIndex),
+                    render:   (data,viewIndex,beforeRender) => s.actions.syspane.render(data,paneIndex,viewIndex,beforeRender),
                     spawnModal:    modalObject => s.spawnModal(paneIndex,modalObject),
                     prompt:  (promptObject,cb) => s.actions.syspane.prompt(paneIndex,promptObject,cb),
                     updatePaneData:  (objData,targetKey) => s.actions.syspane.updatePaneData(paneIndex,objData,targetKey),

@@ -447,7 +447,7 @@ export default function (app) {
 
     // syspane render functions
 
-    controlpanel.actions.syspane.getServiceView = function (dataSet,viewIndex) {
+    controlpanel.actions.syspane.getServiceView = function (dataSet,viewIndex,beforeRender) {
         // returns a service objects
         const {views} = app.$store.state.app['app-services'][app.$store.state.app['active-sidebar-item']]
         const deserializeViews = new Function('return ' + views)()
@@ -457,7 +457,6 @@ export default function (app) {
             renderPane : app.renderPane,
             getServiceView: app.getServiceView,
             closePane: app.closePane,
-            render: app.render,
             systemError: app.systemError,
             closeUnUsedPane: app.closeUnUsedPane,
             panePrompt: app.panePrompt,
@@ -489,6 +488,23 @@ export default function (app) {
             paneConfig.paneOnLoad = paneOnLoad
             paneConfig.onEvent = onEvent
 
+            if(beforeRender != undefined) {
+                if(beforeRender(paneConfig.paneData) instanceof Promise) {
+                    beforeRender(paneConfig.paneData)
+                    .then(dataSet => {
+                        controlpanel.actions.syspane.updatePaneData(app.paneIndex + 1, null)
+                        setTimeout(() => {
+                            controlpanel.actions.syspane.updatePaneData(app.paneIndex + 1, dataSet)
+                        }, 0);
+                    })
+                    .catch(err => {
+                        app.systemError(err)
+                    })
+                } else {
+                    paneConfig.paneData = beforeRender(paneConfig.paneData)
+                }
+            }
+
             if(typeof viewIndex == 'number') {
                 if(paneConfig.paneViews[viewIndex] == undefined) {
                     app.systemError(`System Error: Invalid index value in render method, value: ${viewIndex} \n Cannot set pane view of undefined, reverting to 0 index pane view`)
@@ -500,10 +516,12 @@ export default function (app) {
         }
     }
 
-    controlpanel.actions.syspane.render = function (dataSet,paneIndex,viewIndex) {
+    controlpanel.actions.syspane.render = function (dataSet,paneIndex,viewIndex, beforeRender) {
         controlpanel.actions.syspane.renderPane(
-                controlpanel.actions.syspane.getServiceView(dataSet,viewIndex),paneIndex,viewIndex
-            )
+            controlpanel.actions.syspane.getServiceView(dataSet,viewIndex,beforeRender),
+            paneIndex,
+            viewIndex
+        )
     }
 
     controlpanel.actions.syspane.renderPane = function (data, paneIndex,viewIndex) {
