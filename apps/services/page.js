@@ -197,6 +197,14 @@ module.exports = Templates.Service({
                     ableToAddItem: true,
                     infoDisplay: ['pageName','lastUpdated','updatedBy']
                 },
+                paneConfig: {
+                    paneName: 'Pages',
+                    paneWidth: '550px',
+                    isClosable: true,
+                    paneViews: ['listify','slide'],
+                    defaultPaneView: 0,
+                    paneData: data,
+                },
                 paneOnLoad: function(syspane,syspanemodal, dwin) {
                     if(data.length == 0) {
                         syspane.prompt({
@@ -207,6 +215,12 @@ module.exports = Templates.Service({
                         }, (input) => {
                             console.log('input -> ',input)
                         })
+                    }
+                },
+                onModalData: function(modalData,syspane,syspanemodal, dwin) {
+                    // modalData is the set of input data from the user
+                    if(modalData == undefined) {
+                        syspanemodal.appendErrorMsg('Page Name Cannot be undefined')
                     }
                 },
                 onEvent(event,syspane,syspanemodal, dwin) {
@@ -226,14 +240,14 @@ module.exports = Templates.Service({
                         'sub page'() {
                             syspane.render(event.context.subPages)
                         },
-                        'delete page'() {
+                        'delete page'() { 
                             syspanemodal.logError(`Warning! Are you sure you want to delete ${event.context.pageName}`,() => {
                                 syspanemodal.close()
-                                syspane.closeUnUsedPane()
+                                syspane.closeUnUsedPane(s)
                             })
                         },
                         'edit page'() {
-                            syspane.render(event.context.subPages,1)
+                            syspane.render(event.context.subPages)
                         },
                         rename() {
                             syspane.prompt({
@@ -246,24 +260,17 @@ module.exports = Templates.Service({
                             }, (data) => {
                                 console.log(data)
                             })
+                        },
+                        openNewPane() {
+                            console.log('open new pane zero pane',event.context)
+                            syspane.render(event.context)
+                        },
+                        onDataChange() {
+                            syspane.updateChildPaneData(event.context)
                         }
                     }
 
-                },
-                onModalData: function(modalData,syspane,syspanemodal, dwin) {
-                    // modalData is the set of input data from the user
-                    if(modalData == undefined) {
-                        syspanemodal.appendErrorMsg('Page Name Cannot be undefined')
-                    }
-                },
-                paneConfig: {
-                    paneName: 'Pages',
-                    paneWidth: '550px',
-                    isClosable: true,
-                    paneViews: ['listify','raw'],
-                    defaultPaneView: 0,
-                    paneData: data,
-                },
+                }
             }
         } 
         /** Page Content when user clicks view page */
