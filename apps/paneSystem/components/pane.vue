@@ -213,7 +213,7 @@ export default {
         isLoading: false,
         progress: undefined,
         dep: undefined,
-        myPaneSettings: ['show raw data', 'switch view','spawn empty pane']
+        myPaneSettings: ['show raw data', 'switch view']
     }),
     computed: {
         paneModal() {
@@ -325,7 +325,7 @@ export default {
                     value: 0
                 })
                 setTimeout(() => {
-                    this.myPaneSettings = ['show raw data', 'switch view', 'spawn empty pane']
+                    this.myPaneSettings = ['show raw data', 'switch view']
                 }, 150);
             } else if(sel == 'switch view') {
                 // switch view
@@ -344,8 +344,6 @@ export default {
 
                     this.actions.syspane.modal.close(this.paneIndex)
                 })
-            } else if(sel == 'spawn empty pane') {
-                console.log('spawning empty pane')
             }
         }
     }
