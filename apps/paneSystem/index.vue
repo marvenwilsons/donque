@@ -12,9 +12,9 @@
         </div>
         <div @keyup.alt.67="clear" tabindex="0"  class="absolute fullheight-percent" style="display:inline-block;" >
             <v-flex flexcol fullheight-percent>
-                <v-flex id="dq-main-w" relative fullheight-percent >
+                <v-flex id="dq-main-w" relative fullheight-percent padright050 >
                     <v-flex
-                    margin050 
+                    margintop050 marginbottom050 marginleft050 
                     v-for="(pane,index) in $store.state.pane" 
                     :key="`${index}${index + 10}${index + 30}`" 
                     :style="{maxWidth: pane.paneConfig.paneWidth, minWidth: pane.paneConfig.paneWidth, zIndex: '100'}">
