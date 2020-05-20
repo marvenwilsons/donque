@@ -2,7 +2,7 @@ const path = require('path')
 const Templates = require(path.join(__dirname,'../../server/templates.js'))
 
 module.exports = Templates.Service({
-    name: 'Pages',
+    name: 'Collections',
     initialData: function(sql,fetch) { // on initial load
         // perform get request here
         let pages = []
@@ -185,6 +185,39 @@ module.exports = Templates.Service({
     },
     views: function(data,client,utils,Templates) {
         /** Page list and sub pages */
+        if(typeof data === 'object' && Object.keys(data).length == 2 && Object.keys(data)[0] == 'foo') {
+            return {
+                paneConfig: {
+                    paneName: 'test',
+                    paneWidth: '550px',
+                    isClosable: true,
+                    paneViews: ['slide','slide'],
+                    defaultPaneView: 0,
+                    paneData: data,
+                },
+                componentConfig: {
+                    test: 'test'
+                },
+                paneOnLoad: function () {
+
+                },
+                onEvent(event,syspane,syspanemodal, dwin) {
+                    return {
+                        openNewPane() {
+                            syspane.updatePaneData('my value', 'foo.value')
+                        },
+                        onDataChange() {
+                            if(syspane.getPaneIndex() == 1) {
+                                console.log('dataChange', event.context / 2)
+                                syspane.updateParentPaneData(event.context)
+                            } else if(syspane.getPaneIndex()  > 1 ) {
+                                console.log('test')
+                            }
+                        }
+                    }
+                }
+            }
+        }
         if(Array.isArray(data)) {
             return {
                 componentConfig: {
@@ -260,6 +293,13 @@ module.exports = Templates.Service({
                             }, (data) => {
                                 console.log(data)
                             })
+                        },
+                        openNewPane() {
+                            console.log('open new pane zero pane',event.context)
+                            syspane.render(event.context)
+                        },
+                        onDataChange() {
+                            syspane.updateChildPaneData(event.context)
                         }
                     }
 
