@@ -21,9 +21,6 @@
                         <v-menu offset-y>
                             <template v-slot:activator="{ on }">
                                 <v-chip  v-on="on" class=" pointer" outlined color="white" >
-                                    <!-- <span class="borderred flex flexcenter" >
-                                         &#x2699;
-                                    </span> -->
                                     <v-icon small color="#333">
                                         mdi-cog
                                     </v-icon>

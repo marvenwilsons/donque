@@ -45,8 +45,13 @@
                     style="color:var(--deftheme-blue-text);" 
                     class="pad025"
                     >
-                    <span >&#9702;</span>
-                    {{item}}
+                    <!-- <span >&#9702;</span> -->
+                    <v-icon color="var(--deftheme-blue-text)">
+                        mdi-arrow-right-circle
+                    </v-icon>
+                    <strong>
+                        {{item}}
+                    </strong>
                 </div>
             </div>
         </div>
