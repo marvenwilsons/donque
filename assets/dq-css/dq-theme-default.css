@@ -3,6 +3,8 @@
   --size-1-full: calc(var(--fontSize) * 1.25);
 
   --size-2-half: calc(var(--fontSize) * 0.50);
+  /* light */
+  --deftheme-light-primary: #e4ebf5;
 
   /* dark */
   --deftheme-dark-primary: #232729;

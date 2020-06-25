@@ -1,14 +1,17 @@
 <template>
     <v-flex flexcol >
+        <!--  var(--deftheme-dark-primary) -->
         <div 
-            style="background: var(--deftheme-dark-primary); color:white;"
-            class="pad125" >
+            style="background: var(--deftheme-light-primary); color:white;"
+            class="pad025" >
                 <v-flex spacebetween >
                     <div class="fullwidth flex" style="color:whitsmoke" >
                         <div class="marginright050" >
-                            <v-chip color="#333" outlined text-color="white" >
-                                pane # {{paneIndex}} | 
+                            <v-chip color="white" outlined text-color="#333" >
+                                <strong>
+                                    pane # {{paneIndex}} | 
                                 {{$store.state.pane[paneIndex].paneConfig.paneName}}
+                                </strong>
                             </v-chip>
                         </div>
 
@@ -17,8 +20,13 @@
            
                         <v-menu offset-y>
                             <template v-slot:activator="{ on }">
-                                <v-chip  v-on="on" class="marginright050 pointer" outlined color="#333" >
-                                    &#x2699;
+                                <v-chip  v-on="on" class=" pointer" outlined color="white" >
+                                    <!-- <span class="borderred flex flexcenter" >
+                                         &#x2699;
+                                    </span> -->
+                                    <v-icon small color="#333">
+                                        mdi-cog
+                                    </v-icon>
                                 </v-chip>
                             </template>
                             <v-list>
@@ -31,11 +39,11 @@
                                 </v-list-item>
                             </v-list>
                         </v-menu>
-                        <v-chip outlined color="#333">
+                        <v-chip outlined color="white">
                             <span 
                                 @click="closePane"
                                 class="pointer"
-                                style="color:white; font-weight:100" >
+                                style="color:#333; font-weight:100" >
                             	&#x2716;
                             </span>
                         </v-chip>
@@ -53,18 +61,18 @@
                     :style="{
                             width: $store.state.pane[paneIndex].paneConfig.modal.modalWidth ? 
                                 $store.state.pane[paneIndex].paneConfig.modal.modalWidth : '70%',
-                            border: `1px solid rgba(54, 54, 54, 0.096)`,
+                            border: `1px solid #bfcfe7`,
                             maxHeight: '90%'
                         }" 
                     class="borderRad4 modalShadow" >
-                    <div style="background: var(--deftheme-dark-primary);color:white;" class="pad125" >
+                    <div style="background: var(--deftheme-light-primary);color:#333;" class="pad050" >
                         <v-flex spacebetween>
                             <span>{{$store.state.pane[paneIndex].paneConfig.modal.modalHeader}}</span>
                             <span
                                 v-if="$store.state.pane[paneIndex].paneConfig.modal.isClosable"
                                 @click="closePaneModal(paneIndex)"
                                 class="pointer"
-                                style="color:white; font-weight:100" >
+                                style="color:#333; font-weight:100" >
                                     &#x2716;
                             </span>
                         </v-flex>
@@ -106,7 +114,9 @@
                                 </div>
                             </div>
                             <v-flex margintop125 flexend>
-                                <v-btn @click="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.fn" color="primary" >continue</v-btn>
+                                <v-btn @click="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.fn" color="primary" >
+                                    continue
+                                </v-btn>
                             </v-flex>
                         </div>
                         <!-- panePrompt -->

@@ -34,3 +34,6 @@ Before finishing dq studio blank
 Services
 [-] Create new branch for page services
 [-] Created page service
+
+@notes
+https://www.colorhexa.com/f7f9fc <-- this should be the theme
