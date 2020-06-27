@@ -1,5 +1,6 @@
 <template>
-    <v-flex flexcol >
+    <transition name="slide-fade">
+        <v-flex v-if="ready" flexcol >
         <!--  var(--deftheme-dark-primary) -->
         <div 
             style="background: var(--deftheme-light-primary);"
@@ -201,7 +202,8 @@
                 </div>
             </v-flex>
         </v-flex>
-    </v-flex>
+        </v-flex>
+    </transition>
 </template>
 
 <script>
@@ -220,7 +222,8 @@ export default {
         isLoading: false,
         progress: undefined,
         dep: undefined,
-        myPaneSettings: ['show raw data', 'switch view']
+        myPaneSettings: ['show raw data', 'switch view'],
+        ready: false
     }),
     computed: {
         paneModal() {
@@ -252,6 +255,9 @@ export default {
         const {syspane,syspanemodal,dwin} = this.dep
         this.$store.state.pane[this.paneIndex].paneConfig.paneOnLoad(syspane,syspanemodal,dwin)
         this.autoScroll()
+
+        console.log('mouted')
+        this.ready = true
     },
     methods: {
         onModalData(data) {
@@ -364,9 +370,8 @@ export default {
 .slide-fade-leave-active {
   transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
 }
-.slide-fade-enter, .slide-fade-leave-to
-/* .slide-fade-leave-active below version 2.1.8 */ {
-  transform: translateX(10px);
+.slide-fade-enter, .slide-fade-leave-to{
+  transform: translateX(15px);
   opacity: 0;
 }
 </style>

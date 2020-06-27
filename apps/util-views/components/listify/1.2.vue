@@ -1,9 +1,9 @@
 <template>
     <v-container>
             <v-flex class="flexcol fullheight-percent" >
-                <v-card class="fullwidth fullheight-percent">
+                <div class="fullwidth fullheight-percent">
                     <main class="flex flexcol fullheight-percent" >
-                        <div v-if="!myConfig.hideControlls" style="background:white" class="padtop125 margintop125 padleft125 padright125" >
+                        <div v-if="!myConfig.hideControlls" style="background:white" class="padtop125 padleft125 padright125 borderRad4" >
                             <v-flex>
                                 <div class="fullwidth marginright125 flex flexcenter" >
                                     <v-text-field
@@ -30,7 +30,7 @@
                                 </div>
                             </v-flex>
                         </div>
-                        <div style="overflow-y:auto" class="flexcol relative fullwidth flex1 relative"  >
+                        <div style="overflow-y:auto; background:white;" class="flexcol relative fullwidth flex1 relative margintop025 borderRad4"  >
                             <div class=" fullwidth absolute pad125" >
                                 <v-card v-for="(item,itemIndex) in myData" :key="itemIndex"  outlined class="marginbottom050 fullwidth" >
 
@@ -92,7 +92,7 @@
                             </div>
                         </div>
                     </main>
-                </v-card>
+                </div>
         </v-flex>
     </v-container>
 </template>
