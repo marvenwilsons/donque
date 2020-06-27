@@ -183,11 +183,11 @@ module.exports = Templates.Service({
         }))
         
         return new Promise((resolve,reject) => {
-            // setTimeout(() => {
-            //     console.log('resolve!')
-            //     resolve(pages)
-            // }, 5000);
-            resolve(pages)
+            setTimeout(() => {
+                console.log('resolve!')
+                resolve(pages)
+            }, 5000);
+            // resolve(pages)
         })
     },
     views: function(data,client,utils,Templates) {

@@ -6,20 +6,23 @@ const rootDirForServices = path.join(__dirname,'../apps/services')
 try {
     module.exports = (userServices) => {
         return new Promise((resolve,reject) => {
-            let fns = []
-            userServices.map(s => {
-                const file = require(`${rootDirForServices}/${s}`)
-                file.body
+
+            const p = userServices.map(e=> {
+                const file = require(`${rootDirForServices}/${e}`)
+                return file.body
                 .initialData(null,fetch) // <-- TODO: pass psql connection on first param
-                .then(res => {
-                    fns.push({
-                        payload: res, 
+            })
+
+            Promise.all(p)
+            .then(res => {
+                const servicePkg =  userServices.map((e,i) => {
+                    const file = require(`${rootDirForServices}/${e}`)
+                    return {
+                        payload: res[i].flat(), 
                         content: file.body
-                    })
-        
-                    resolve(fns)
+                    }
                 })
-                
+                resolve(servicePkg)
             })
         })
     }

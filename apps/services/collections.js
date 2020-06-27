@@ -39,7 +39,12 @@ module.exports = Templates.Service({
             subPages:[],
             pageId: '3450DS254GW52S'
         }))
-        return nodes
+
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve(nodes)
+            }, 2000);
+        })
     },
     views: function(data,client,utils,Templates) {
         /** Page list and sub pages */
