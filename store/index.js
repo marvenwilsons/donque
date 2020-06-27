@@ -195,8 +195,8 @@ export const actions = {
             .get('/$dqappservices/service', {
                 // TODO: 1
                 params: {
-                    username: 'marvenwilsons', // get from localstorage
-                    apikey: 'test' // get from localstorage
+                    username: 'marvenwilsons', // TODO: get from localstorage
+                    apikey: 'test' // TODO: get from localstorage
                   }
             })
             .then(({data}) => {

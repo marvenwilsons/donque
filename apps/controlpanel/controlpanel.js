@@ -58,7 +58,9 @@ export default function (app) {
 
     controlpanel.actions.syspane.getInitialData = function (serviceName) {
         // console.log('> controlpanel - getInitialData')
-        return app.$store.state.app['app-services'][serviceName].data
+        if(app.$store.state.app['app-services'][serviceName]) {
+            return app.$store.state.app['app-services'][serviceName].data
+        }
     }
 
     // syspane pane delete functions

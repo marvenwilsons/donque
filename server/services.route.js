@@ -5,19 +5,20 @@ const getList = require('./services.getlist')
 const systemServices = require('./services')
 
 
-router.get('/service', auth, getList, (req,res) => {
+router.get('/service', auth, getList,(req,res) => {
     const {services} = res.locals
-    let finalContent = []
-    const serviceContent = systemServices(services)
-    serviceContent.map(({payload,content}) => {
-        // const deserializeContent = new Function('return ' + content.toString())()
-       content.data = payload
-       finalContent.push(JSON.stringify(content))
 
+    systemServices(services).then(serviceContent => {
+        let finalContent = []
+
+        serviceContent.map(({payload,content}) => {
+           content.data = payload
+           finalContent.push(JSON.stringify(content))
+    
+        })
+
+        res.status(200).json({response: finalContent}) /** TODO: encrypt finalContent */
     })
-    if(services) {
-        res.status(200).json({response: finalContent} /** TODO: encrypt finalContent */)
-    }
 })
 
 module.exports = {
