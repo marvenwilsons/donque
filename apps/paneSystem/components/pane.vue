@@ -2,16 +2,14 @@
     <v-flex flexcol >
         <!--  var(--deftheme-dark-primary) -->
         <div 
-            style="background: var(--deftheme-light-primary); color:white;"
+            style="background: var(--deftheme-light-primary);"
             class="pad025" >
                 <v-flex spacebetween >
                     <div class="fullwidth flex" style="color:whitsmoke" >
                         <div class="marginright050" >
-                            <v-chip color="white" outlined text-color="#333" >
-                                <strong>
+                            <v-chip color="var(--deftheme-light-primary)" outlined text-color="#292929" >
                                     pane # {{paneIndex}} | 
                                 {{$store.state.pane[paneIndex].paneConfig.paneName}}
-                                </strong>
                             </v-chip>
                         </div>
 
@@ -20,8 +18,8 @@
            
                         <v-menu offset-y>
                             <template v-slot:activator="{ on }">
-                                <v-chip  v-on="on" class=" pointer" outlined color="white" >
-                                    <v-icon small color="#333">
+                                <v-chip  v-on="on" class=" pointer" outlined color="var(--deftheme-light-primary)" >
+                                    <v-icon small color="#505050">
                                         mdi-cog
                                     </v-icon>
                                 </v-chip>
@@ -36,11 +34,11 @@
                                 </v-list-item>
                             </v-list>
                         </v-menu>
-                        <v-chip outlined color="white">
+                        <v-chip outlined color="var(--deftheme-light-primary)">
                             <span 
                                 @click="closePane"
                                 class="pointer"
-                                style="color:#333; font-weight:100" >
+                                style="color:#505050; font-weight:100" >
                             	&#x2716;
                             </span>
                         </v-chip>
@@ -50,144 +48,146 @@
         </div>
         <v-flex flex1 relative flexcol >
             <!-- pane modal -->
-            <v-flex
-                v-if="$store.state.pane[paneIndex].paneConfig.modal.modalBody != undefined"  
-                style="z-index:900" absolute flexcenter fullwidth fullheight-percent >
-                <main 
-                    
-                    :style="{
-                            width: $store.state.pane[paneIndex].paneConfig.modal.modalWidth ? 
-                                $store.state.pane[paneIndex].paneConfig.modal.modalWidth : '70%',
-                            border: `1px solid #bfcfe7`,
-                            maxHeight: '90%'
-                        }" 
-                    class="borderRad4 modalShadow" >
-                    <div style="background: var(--deftheme-light-primary);color:#333;" class="pad050" >
-                        <v-flex spacebetween>
-                            <span>{{$store.state.pane[paneIndex].paneConfig.modal.modalHeader}}</span>
-                            <span
-                                v-if="$store.state.pane[paneIndex].paneConfig.modal.isClosable"
-                                @click="closePaneModal(paneIndex)"
-                                class="pointer"
-                                style="color:#333; font-weight:100" >
-                                    &#x2716;
-                            </span>
-                        </v-flex>
-                    </div>
-                    <v-flex style="background:whitesmoke;" pad125 flexcol borderRad4 >
-                        <!-- modal Error -->
-                        <div
-                            v-if="$store.state.pane[paneIndex].paneConfig.modal.modalErr" 
-                            class="backgrounderr err borderRad4 pad050 marginbottom125" >
-                            {{$store.state.pane[paneIndex].paneConfig.modal.modalErr}}
+            <transition name="slide-fade">
+                <v-flex
+                    v-if="$store.state.pane[paneIndex].paneConfig.modal.modalBody != undefined"  
+                    style="z-index:900" absolute flexcenter fullwidth fullheight-percent >
+                    <main 
+                        
+                        :style="{
+                                width: $store.state.pane[paneIndex].paneConfig.modal.modalWidth ? 
+                                    $store.state.pane[paneIndex].paneConfig.modal.modalWidth : '70%',
+                                border: `1px solid #bfcfe7`,
+                                maxHeight: '90%'
+                            }" 
+                        class="borderRad4 modalShadow" >
+                        <div style="background: var(--deftheme-light-primary);color:#505050;" class="pad050" >
+                            <v-flex spacebetween>
+                                <span>{{$store.state.pane[paneIndex].paneConfig.modal.modalHeader}}</span>
+                                <span
+                                    v-if="$store.state.pane[paneIndex].paneConfig.modal.isClosable"
+                                    @click="closePaneModal(paneIndex)"
+                                    class="pointer"
+                                    style="color:#505050; font-weight:100" >
+                                        &#x2716;
+                                </span>
+                            </v-flex>
                         </div>
-                        <!-- modal Info -->
-                        <div
-                            v-if="$store.state.pane[paneIndex].paneConfig.modal.modalInfo" 
-                            class="backgroundinfo borderRad4 pad050 marginbottom125" >
-                            {{$store.state.pane[paneIndex].paneConfig.modal.modalInfo}}
-                        </div>
-                        <!-- custom modals -->
-                        <div 
-                            v-if="!['logWarn','logErr','logInfo','logPrompt'].includes($store.state.pane[paneIndex].paneConfig.modal.modalBody)"
-                            :is="$store.state.pane[paneIndex].paneConfig.modal.modalBody" 
-                            :myConfig="$store.state.pane[paneIndex].paneConfig.modal.modalConfig" 
-                            :paneIndex="paneIndex" 
-                            :submitHandler="onModalData">
-                        </div>
-                        <!-- logs -->
-                        <div
-                            v-if="['logWarn','logErr','logInfo'].includes($store.state.pane[paneIndex].paneConfig.modal.modalBody)"
-                            >
+                        <v-flex style="background:whitesmoke;" pad125 flexcol borderRad4 >
+                            <!-- modal Error -->
+                            <div
+                                v-if="$store.state.pane[paneIndex].paneConfig.modal.modalErr" 
+                                class="backgrounderr err borderRad4 pad050 marginbottom125" >
+                                {{$store.state.pane[paneIndex].paneConfig.modal.modalErr}}
+                            </div>
+                            <!-- modal Info -->
+                            <div
+                                v-if="$store.state.pane[paneIndex].paneConfig.modal.modalInfo" 
+                                class="backgroundinfo borderRad4 pad050 marginbottom125" >
+                                {{$store.state.pane[paneIndex].paneConfig.modal.modalInfo}}
+                            </div>
+                            <!-- custom modals -->
                             <div 
-                                :class="['pad050', 'borderRad4',
-                                        $store.state.pane[paneIndex].paneConfig.modal.modalBody == 'logErr' && 'backgrounderr',
-                                        $store.state.pane[paneIndex].paneConfig.modal.modalBody == 'logInfo' && 'backgroundinfo',
-                                        $store.state.pane[paneIndex].paneConfig.modal.modalBody == 'logWarn' && 'backgroundwarn',
-                                    ]" 
+                                v-if="!['logWarn','logErr','logInfo','logPrompt'].includes($store.state.pane[paneIndex].paneConfig.modal.modalBody)"
+                                :is="$store.state.pane[paneIndex].paneConfig.modal.modalBody" 
+                                :myConfig="$store.state.pane[paneIndex].paneConfig.modal.modalConfig" 
+                                :paneIndex="paneIndex" 
+                                :submitHandler="onModalData">
+                            </div>
+                            <!-- logs -->
+                            <div
+                                v-if="['logWarn','logErr','logInfo'].includes($store.state.pane[paneIndex].paneConfig.modal.modalBody)"
                                 >
-                                <div class="pad025" >
-                                    {{$store.state.pane[paneIndex].paneConfig.modal.modalConfig.msg}}
-                                </div>
-                            </div>
-                            <v-flex margintop125 flexend>
-                                <v-btn @click="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.fn" color="primary" >
-                                    continue
-                                </v-btn>
-                            </v-flex>
-                        </div>
-                        <!-- panePrompt -->
-                        <div v-if="$store.state.pane[paneIndex].paneConfig.modal.modalBody === 'logPrompt'" >   
-                            <div v-if="
-                                $store.state.pane[paneIndex].paneConfig.modal.modalConfig.type === 'string' || 
-                                $store.state.pane[paneIndex].paneConfig.modal.modalConfig.type === 'number' ||
-                                $store.state.pane[paneIndex].paneConfig.modal.modalConfig.type === 'password'
-                                "
-                                 >
-                                <v-text-field
-                                    id="inyp"
-                                    :disabled="isLoading"
-                                    v-model="logPromptData"
-                                    dense
-                                    :type="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.type"
-                                    :label="$store.state.pane[paneIndex].paneConfig.modal.modalHeader"
-                                    outlined
-                                />
-                            </div>
-                            <div v-if="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.type === 'select' " >
-                                <v-select
-                                    dense
-                                    v-model="logPromptData"
-                                    :items="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.value"
-                                    :label="$store.state.pane[paneIndex].paneConfig.modal.modalHeader"
-                                    :disabled="isLoading"
-                                    outlined
-                                ></v-select>
-                            </div>
-                            <div v-if="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.type === 'multiselect' " >
-                                <v-combobox
-                                    chips
-                                    v-model="logPromptData"
-                                    :items="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.value"
-                                    :label="$store.state.pane[paneIndex].paneConfig.modal.modalHeade"
-                                    :disabled="isLoading"
-                                    multiple
-                                ></v-combobox>
-                            </div>
-                            <div class="padtop125" v-if="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.type === 'slider' " >
-                                <v-slider
-                                    v-model="logPromptData"
-                                    :thumb-size="24"
-                                    thumb-label="always"
-                                    :min="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.value.min"
-                                    :max="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.value.max"
-                                    :disabled="isLoading"
-                                ></v-slider>
-                            </div>
-                            <div class="padtop125" v-if="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.type === 'minmax' " >
-                                <v-range-slider
-                                    :value="logPromptData"
-                                    :max="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.value.max"
-                                    :min="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.value.min"
-                                    :disabled="isLoading"
-                                    thumb-label="always"
-                                     @end="logPromptData = $event"
-                                    range
-                                />
-                            </div>
-                            <loading @progressMethod="p => progress = p" />
-                            <v-flex flexend >
-                                <v-btn
-                                    color="primary" 
-                                    @click="paneModalCb()"
-                                    :loading="$store.state.pane[paneIndex].paneConfig.modal.modalErr ? false : isLoading"
+                                <div 
+                                    :class="['pad050', 'borderRad4',
+                                            $store.state.pane[paneIndex].paneConfig.modal.modalBody == 'logErr' && 'backgrounderr',
+                                            $store.state.pane[paneIndex].paneConfig.modal.modalBody == 'logInfo' && 'backgroundinfo',
+                                            $store.state.pane[paneIndex].paneConfig.modal.modalBody == 'logWarn' && 'backgroundwarn',
+                                        ]" 
                                     >
-                                    submit</v-btn>
-                            </v-flex>
-                        </div>
-                    </v-flex>
-                </main>
-            </v-flex>
+                                    <div class="pad025" >
+                                        {{$store.state.pane[paneIndex].paneConfig.modal.modalConfig.msg}}
+                                    </div>
+                                </div>
+                                <v-flex margintop125 flexend>
+                                    <v-btn @click="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.fn" color="primary" >
+                                        continue
+                                    </v-btn>
+                                </v-flex>
+                            </div>
+                            <!-- panePrompt -->
+                            <div v-if="$store.state.pane[paneIndex].paneConfig.modal.modalBody === 'logPrompt'" >   
+                                <div v-if="
+                                    $store.state.pane[paneIndex].paneConfig.modal.modalConfig.type === 'string' || 
+                                    $store.state.pane[paneIndex].paneConfig.modal.modalConfig.type === 'number' ||
+                                    $store.state.pane[paneIndex].paneConfig.modal.modalConfig.type === 'password'
+                                    "
+                                    >
+                                    <v-text-field
+                                        id="inyp"
+                                        :disabled="isLoading"
+                                        v-model="logPromptData"
+                                        dense
+                                        :type="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.type"
+                                        :label="$store.state.pane[paneIndex].paneConfig.modal.modalHeader"
+                                        outlined
+                                    />
+                                </div>
+                                <div v-if="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.type === 'select' " >
+                                    <v-select
+                                        dense
+                                        v-model="logPromptData"
+                                        :items="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.value"
+                                        :label="$store.state.pane[paneIndex].paneConfig.modal.modalHeader"
+                                        :disabled="isLoading"
+                                        outlined
+                                    ></v-select>
+                                </div>
+                                <div v-if="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.type === 'multiselect' " >
+                                    <v-combobox
+                                        chips
+                                        v-model="logPromptData"
+                                        :items="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.value"
+                                        :label="$store.state.pane[paneIndex].paneConfig.modal.modalHeade"
+                                        :disabled="isLoading"
+                                        multiple
+                                    ></v-combobox>
+                                </div>
+                                <div class="padtop125" v-if="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.type === 'slider' " >
+                                    <v-slider
+                                        v-model="logPromptData"
+                                        :thumb-size="24"
+                                        thumb-label="always"
+                                        :min="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.value.min"
+                                        :max="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.value.max"
+                                        :disabled="isLoading"
+                                    ></v-slider>
+                                </div>
+                                <div class="padtop125" v-if="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.type === 'minmax' " >
+                                    <v-range-slider
+                                        :value="logPromptData"
+                                        :max="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.value.max"
+                                        :min="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.value.min"
+                                        :disabled="isLoading"
+                                        thumb-label="always"
+                                        @end="logPromptData = $event"
+                                        range
+                                    />
+                                </div>
+                                <loading @progressMethod="p => progress = p" />
+                                <v-flex flexend >
+                                    <v-btn
+                                        color="primary" 
+                                        @click="paneModalCb()"
+                                        :loading="$store.state.pane[paneIndex].paneConfig.modal.modalErr ? false : isLoading"
+                                        >
+                                        submit</v-btn>
+                                </v-flex>
+                            </div>
+                        </v-flex>
+                    </main>
+                </v-flex>
+            </transition>
             <!-- pane body -->
             <v-flex>
                 <div 
@@ -356,3 +356,17 @@ export default {
     }
 }
 </script>
+
+<style>
+.slide-fade-enter-active {
+  transition: all .3s ease;
+}
+.slide-fade-leave-active {
+  transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active below version 2.1.8 */ {
+  transform: translateX(10px);
+  opacity: 0;
+}
+</style>

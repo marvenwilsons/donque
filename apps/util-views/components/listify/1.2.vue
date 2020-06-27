@@ -3,7 +3,7 @@
             <v-flex class="flexcol fullheight-percent" >
                 <v-card class="fullwidth fullheight-percent">
                     <main class="flex flexcol fullheight-percent" >
-                        <div style="background:white" class="padtop125 margintop125 padleft125 padright125" >
+                        <div v-if="!myConfig.hideControlls" style="background:white" class="padtop125 margintop125 padleft125 padright125" >
                             <v-flex>
                                 <div class="fullwidth marginright125 flex flexcenter" >
                                     <v-text-field
@@ -33,9 +33,10 @@
                         <div style="overflow-y:auto" class="flexcol relative fullwidth flex1 relative"  >
                             <div class=" fullwidth absolute pad125" >
                                 <v-card v-for="(item,itemIndex) in myData" :key="itemIndex"  outlined class="marginbottom050 fullwidth" >
-                                    <div class="pa-2 grey lighten-4 d-flex align-top" >
+
+                                    <div v-if="myConfig.infoDisplay != undefined" class="pa-2 grey lighten-4 d-flex align-top" >
                                         <div class="flex xs3 text-xs-left" >
-                                            <v-flex flexcol ``>
+                                            <v-flex v-if="item[myConfig.infoDisplay[0]]" flexcol >
                                                 <div class="header grey--text text--darken-1">
                                                     <small><pre>{{myConfig.infoDisplay[0]}}</pre></small>
                                                 </div>
@@ -45,7 +46,7 @@
                                             </v-flex>
                                         </div>
                                         <div class="flex xs6 text-xs-left" >
-                                            <v-flex  >
+                                            <v-flex v-if="item[myConfig.infoDisplay[2]]" >
                                                 <div class="header grey--text text--darken-1"> <small> <pre>{{myConfig.infoDisplay[1]}}: </pre> </small> </div>
                                                 <div class="header grey--text text--darken-1"> 
                                                     <small style="color:#bd4147;"> 
@@ -55,7 +56,7 @@
                                             </v-flex>
                                         </div>
                                         <div class="flex xs3 text-xs-right" >
-                                            <v-flex >
+                                            <v-flex v-if="item[myConfig.infoDisplay[2]]" >
                                                 <div class="header grey--text text--darken-1"> <small> <pre>{{myConfig.infoDisplay[2]}}: </pre> </small> </div>
                                                 <div class="header grey--text text--darken-1"> 
                                                     <small style="color:#bd4147;"> 
@@ -65,6 +66,13 @@
                                             </v-flex>
                                         </div>
                                     </div>
+
+                                    <div v-if="item.$listifyNodeDesc " class="pa-2 grey lighten-4 d-flex align-top" >
+                                        <span class="grey--text text--darken-1" >
+                                            {{ item.$listifyNodeDesc }}
+                                        </span>
+                                    </div>
+
                                     <div class="pa-2 grey lighten-3 grey--text text--darken-2 d-flex flexend">
                                         <span 
                                             class="pointer marginleft125" 
@@ -79,6 +87,7 @@
                                             </v-card-text>
                                         </span>
                                     </div>
+
                                 </v-card>
                             </div>
                         </div>
