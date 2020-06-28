@@ -18,7 +18,7 @@ try {
                 const servicePkg =  userServices.map((e,i) => {
                     const file = require(`${rootDirForServices}/${e}`)
                     return {
-                        payload: res[i].flat(), 
+                        payload: res[i], 
                         content: file.body
                     }
                 })

@@ -16,7 +16,6 @@ router.get('/service', auth, getList,(req,res) => {
            finalContent.push(JSON.stringify(content))
     
         })
-
         res.status(200).json({response: finalContent}) /** TODO: encrypt finalContent */
     })
 })

@@ -114,7 +114,7 @@ export default {
     watch: {
         textQuery() {
             const displayProp = this.myConfig.displayProp
-            this.dat = this.dat.filter(e => {
+            this.dat = this.myData.filter(e => {
                 if(e[displayProp].includes(this.textQuery)) {
                     return e
                 }
@@ -123,6 +123,9 @@ export default {
             if(this.textQuery == '') {
                 this.dat = this.myData
             }
+        },
+        myData() {
+            this.dat = this.myData
         }
     },
     mounted() {
