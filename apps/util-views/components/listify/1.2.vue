@@ -10,6 +10,7 @@
                                         dense
                                         label="Search item"
                                         outlined
+                                        v-model="textQuery"
                                     ></v-text-field>
                                 </div>
                                 <div class="pointer" >
@@ -32,7 +33,7 @@
                         </div>
                         <div style="overflow-y:auto; background:white;" class="flexcol relative fullwidth flex1 relative margintop025 borderRad4"  >
                             <div class=" fullwidth absolute pad125" >
-                                <v-card v-for="(item,itemIndex) in myData" :key="itemIndex"  outlined class="marginbottom050 fullwidth" >
+                                <v-card v-for="(item,itemIndex) in dat" :key="itemIndex"  outlined class="marginbottom050 fullwidth" >
 
                                     <div v-if="myConfig.infoDisplay != undefined" class="pa-2 grey lighten-4 d-flex align-top" >
                                         <div class="flex xs3 text-xs-left" >
@@ -105,6 +106,28 @@ export default {
     mixins: [h],
     created() {
         this.h = this
+    },
+    data: () => ({
+        textQuery: undefined,
+        dat: undefined
+    }),
+    watch: {
+        textQuery() {
+            const displayProp = this.myConfig.displayProp
+            this.dat = this.dat.filter(e => {
+                if(e[displayProp].includes(this.textQuery)) {
+                    return e
+                }
+            })
+
+            if(this.textQuery == '') {
+                this.dat = this.myData
+            }
+        }
+    },
+    mounted() {
+        this.dat = this.myData
+        
     },
     methods: {
         c(data,fn) {
