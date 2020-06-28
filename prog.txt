@@ -25,6 +25,7 @@
 [x] add listify filter feature
 [x] add listify sortBy feature
 [-] add form maker or objectify
+[-] add caching system
 [-] add encryption and decryption to utils
 [-] add service manager menu
 
