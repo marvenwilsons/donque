@@ -23,7 +23,7 @@
 [x] add beforeRender hook in render function
 [x] make initialData function async in the backend
 [x] add listify filter feature
-[-] add listify sortBy feature
+[x] add listify sortBy feature
 [-] add form maker or objectify
 [-] add encryption and decryption to utils
 [-] add service manager menu

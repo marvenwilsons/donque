@@ -19,6 +19,7 @@
                                         :items="['A-Z','Z-A']"
                                         label="Sort By"
                                         outlined
+                                        v-model="sortMode"
                                     ></v-select>
                                 </div>
                                 <div v-if="myConfig.ableToAddItem" class="pointer marginleft125" >
@@ -109,7 +110,8 @@ export default {
     },
     data: () => ({
         textQuery: undefined,
-        dat: undefined
+        dat: undefined,
+        sortMode: undefined
     }),
     watch: {
         textQuery() {
@@ -126,6 +128,39 @@ export default {
         },
         myData() {
             this.dat = this.myData
+        },
+        sortMode() {
+            if(this.sortMode == 'Z-A'){
+                const displayProp = this.myConfig.displayProp
+                this.dat = this.cp(this.dat).sort((a, b) => {
+                    var nameA = a[displayProp].toUpperCase(); // ignore upper and lowercase
+                    var nameB = b[displayProp].toUpperCase(); // ignore upper and lowercase
+                    if (nameA > nameB) {
+                        return -1;
+                    }
+                    if (nameA > nameB) {
+                        return 1;
+                    }
+
+                    // names must be equal
+                    return 0;
+                })
+            } else if(this.sortMode == 'A-Z') {
+                const displayProp = this.myConfig.displayProp
+                this.dat = this.cp(this.dat).sort((a, b) => {
+                    var nameA = a[displayProp].toUpperCase(); // ignore upper and lowercase
+                    var nameB = b[displayProp].toUpperCase(); // ignore upper and lowercase
+                    if (nameA < nameB) {
+                        return -1;
+                    }
+                    if (nameA > nameB) {
+                        return 1;
+                    }
+
+                    // names must be equal
+                    return 0;
+                })
+            }
         }
     },
     mounted() {

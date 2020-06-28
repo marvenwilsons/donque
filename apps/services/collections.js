@@ -19,31 +19,34 @@ module.exports = Templates.Service({
                 // $listifyNodeDesc: 'test'
             }
         )
-        // nodes.push(new Templates.Page({
-        //     pageName: 'Instances',
-        //     admin_id:'test',
-        //     lastModified: 'test about',
-        //     pageContent: 'none',
-        //     version_id:'NFGRIUHIERGHG4',
-        //     isUndermaintenance: true,
-        //     subPages:[],
-        //     pageId: '034F4R1H4R1D'
-        // }))
-        // nodes.push(new Templates.Page({
-        //     pageName: 'Relationships',
-        //     admin_id:'test',
-        //     lastModified: 'test teams',
-        //     pageContent: 'none',
-        //     version_id:'JGHEKSU45',
-        //     isUndermaintenance: true,
-        //     subPages:[],
-        //     pageId: '3450DS254GW52S'
-        // }))
-
+        nodes.push(
+            {
+                pageName: 'Instances',
+                admin_id:'test',
+                lastModified: 'test 1',
+                pageContent: 'none',
+                version_id:'000DSFKJHB3J4G5',
+                isUndermaintenance: true,
+                subPages:[],
+                pageId: '22F5E4T2WER',
+                // $listifyNodeDesc: 'test'
+            }
+        )
+        nodes.push(
+            {
+                pageName: 'Relationships',
+                admin_id:'test',
+                lastModified: 'test 1',
+                pageContent: 'none',
+                version_id:'000DSFKJHB3J4G5',
+                isUndermaintenance: true,
+                subPages:[],
+                pageId: '22F5E4T2WER',
+                // $listifyNodeDesc: 'test'
+            }
+        )
         return new Promise((resolve) => {
-            setTimeout(() => {
-                resolve(nodes)
-            }, 2000);
+            resolve(nodes);
         })
     },
     views: function(data,client,utils,Templates) {
