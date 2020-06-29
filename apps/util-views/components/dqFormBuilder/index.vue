@@ -3,6 +3,8 @@
         test
         <pre>
             {{behaviorProperties}}
+            appearanceProperties
+            {{appearanceProperties}}
         </pre>
     </main>
 </template>
@@ -99,6 +101,38 @@ export default {
                 })()
                 
             } 
+        },
+        appearanceProperties() {
+            return {
+                hostContainerCss: (() => {
+                    if(this.appearance) {
+                        return this.appearance.hostContainerCss
+                    } else {
+                        return {}
+                    }
+                })(),
+                hostContainerClasses: (() => {
+                    if(this.appearance) {
+                        return this.appearance.hostContainerClasses
+                    } else {
+                        return []
+                    }
+                })(),
+                fieldElementCss: (() => {
+                    if(this.appearance) {
+                        return this.appearance.fieldElementCss
+                    } else {
+                        return {}
+                    }
+                })(),
+                fieldElementClasses: (() => {
+                    if(this.appearance) {
+                        return this.appearance.fieldElementClasses
+                    } else {
+                        return []
+                    }
+                })()
+            }
         }
     },
     methods: {

@@ -4,13 +4,6 @@
         
         <formBuilder
             @onSubmit="() => {}"
-            :appearance="{
-                hostContainerCss: {},
-                hostContainerClasses: [],
-                fieldElementCss: {},
-                fieldElementClasses: []
-            }"
-
             :schema="[
                 {
                     // content and properties
