@@ -5,6 +5,7 @@ module.exports = Templates.Service({
     name: 'Pages',
     initialData: function(sql,fetch) { // on initial load
         // perform get request here
+        // first pane items should -> Pages, Page layouts, Page Views, Page 3rd party plugins, Recently Deleted,
         let pages = []
         pages.push(new Templates.Page({
             pageName: '/',

@@ -1,13 +1,37 @@
 <template>
-    <v-flex style="overflow-y: scroll" relative >
-        this is page
-        <v-flex style="overflow-y: scroll" >
+    <v-flex style="overflow-y: scroll" relative flexcol borderred >
+        <!-- this is page? -->
+        
+        <formBuilder
+            @onSubmit="() => {}"
+            :appearance="{
+                hostContainerCss: {},
+                hostContainerClasses: [],
+                fieldElementCss: {},
+                fieldElementClasses: []
+            }"
+
+            :schema="[
+                {
+                    // content and properties
+                    fieldLabel: 'username',
+                    fieldtype: 'string', // select, range, number, switch, multiselect, textarea
+                    fieldDescription: '',
+                    fieldId: '',
+                    // events
+                    onLoad: (element,schema,prevInput,error) => {},
+                    onInput: (element,schema,prevInput,error) => {}                    
+                }
+            ]"
+
+        ></formBuilder>
+        <!-- <v-flex style="overflow-y: scroll" >
             <div class="absolute" >
                 <pre>
                     {{myData}}
                 </pre>
             </div>
-        </v-flex>
+        </v-flex> -->
     </v-flex>
 </template>
 
