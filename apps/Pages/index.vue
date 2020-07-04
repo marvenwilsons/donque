@@ -16,6 +16,18 @@
                         
                     },
                     onInput: (element,schema,prevInput,error) => {}                    
+                },
+                {
+                    // content and properties
+                    fieldLabel: 'test',
+                    fieldtype: 'string', // select, range, number, switch, multiselect, textarea
+                    fieldDescription: '',
+                    fieldId: '',
+                    // events
+                    onLoad: (element,schema,prevInput,error) => {
+                        
+                    },
+                    onInput: (element,schema,prevInput,error) => {}                    
                 }
             ]"
 
