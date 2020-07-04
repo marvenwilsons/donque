@@ -1,11 +1,6 @@
 <template>
     <main v-if="isReady" class="borderred" >
         test
-        <pre>
-            {{behaviorProperties}}
-            appearanceProperties
-            {{appearanceProperties}}
-        </pre>
     </main>
 </template>
 
@@ -14,7 +9,7 @@ import h from '@/helper'
 import Templates from '@/templates'
 export default {
     mixins: [h],
-    props: ['schema','behavior','appearance'],
+    props: ['fields','behavior','appearance'],
     data: () => ({
         sample: undefined,
         isReady: false
@@ -26,6 +21,102 @@ export default {
         this.isReady = true
     },
     computed: {
+        getFieldItems() {
+            const isValidField = (fieldItem, cb) => {
+                console.log('isValidField', fieldItem)
+                const fieldTypes = ['string', 'select', 'range', ' number', 'switch' , 'multiselect', 'textarea']
+                
+                // validated fieldLbale
+                if(fieldItem.fieldLabel == undefined) {
+                    this.systemError(`FormBuilder Error: fieldLabel is undefined`)
+                } else {
+                    cb({
+                        fieldLabel: `${fieldItem.fieldLabel}`
+                    })
+                }
+                
+                //type
+                if(fieldTypes.includes(fieldItem.fieldtype) == false) {
+                    this.systemError(`FormBuilder Error: Invalid type ${fieldItem.fieldtype}`)
+                } else {
+                    cb({
+                        fieldtype: fieldItem.fieldtype
+                    })
+                }
+
+                // fieldDescription
+                if(fieldTypes.fieldDescription) {
+                    cb({
+                        fieldDescription: fieldTypes.fieldDescription
+                    })
+                } else {
+                    switch(fieldItem.fieldtype) {
+                        case 'string':
+                            cb({
+                                fieldDescription: `Input ${fieldItem.fieldLabel}`
+                            })
+                        break
+                        case 'select' || 'multiselect':
+                            cb({
+                                fieldDescription: `Select an option for ${fieldItem.fieldLabel}`
+                            })
+                        break
+                        case 'number':
+                            cb({
+                                fieldDescription: `Input a number for ${fieldItem.fieldLabel}`
+                            })
+                        break
+                    }
+                }
+
+                if(fieldItem.fieldId){
+                    cb({
+                        fieldId: fieldItem.fieldId
+                    })
+                }
+                //onLoad
+                if(typeof fieldItem.onLoad == 'function') {
+                    // element,schema,prevInput,error
+                    cb({
+                        onInput: fieldItem.onLoad
+                    })
+                } else {
+                    this.systemError('FormBuilder Error: onLoad should be a function')
+                }
+                //onInput
+                if(fieldItem.onInput) {
+                    if(typeof fieldItem.onInput == 'function') {
+                        // element,schema,prevInput,error
+                        cb({
+                            onInput: fieldItem.onInput
+                        })
+                    } else {
+                        this.systemError('FormBuilder Error: onLoad should be a function')
+                    }
+                }
+            }
+
+            let finalFieldObject = {
+                fieldLabel: undefined,
+                fieldtype: undefined, // select, range, number, switch, multiselect, textarea
+                fieldDescription: undefined,
+                fieldId: undefined,
+                onLoad: undefined,
+                onInput: undefined
+            }
+
+            if(this.fields != undefined) {
+                if(this.fields.length != 0) {
+                    this.fields.map(e => {
+                        isValidField(e, (fieldObject) => {
+                            finalFieldObject[Object.keys(fieldObject)[0]] = fieldObject[Object.keys(fieldObject)[0]]
+                        })
+                    })
+                }
+            }
+
+            return finalFieldObject
+        },
         behaviorProperties() {
             return {
                 // fieldRenderingMode

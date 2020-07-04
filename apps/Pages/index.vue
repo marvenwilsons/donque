@@ -4,7 +4,7 @@
         
         <formBuilder
             @onSubmit="() => {}"
-            :schema="[
+            :fields="[
                 {
                     // content and properties
                     fieldLabel: 'username',
@@ -12,7 +12,9 @@
                     fieldDescription: '',
                     fieldId: '',
                     // events
-                    onLoad: (element,schema,prevInput,error) => {},
+                    onLoad: (element,schema,prevInput,error) => {
+                        
+                    },
                     onInput: (element,schema,prevInput,error) => {}                    
                 }
             ]"
