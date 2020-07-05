@@ -7,7 +7,8 @@
             :key="item_idex" >
             <div class="flex flexcol">
                 <el 
-                    :elementProperty="item" 
+                    :elementProperty="item"
+                    :formMethods="formMethods"
                 />
             </div>
         </div>
@@ -22,7 +23,7 @@
 <script>
 import element from '../components/element'
 export default {
-    props: ['behaviorProperties','fieldItems','appearanceProperties'],
+    props: ['behaviorProperties','fieldItems','appearanceProperties','formMethods'],
     components: {
         el: element
     }

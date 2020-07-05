@@ -15,6 +15,13 @@
             :fieldItems="getFieldItems()"
             :style="appearanceProperties.hostContainerCss"
             :class="appearanceProperties.hostContainerClasses"
+            :formMethods="{
+                getFieldItem,
+                insertBelow,
+                pushNew,
+                replace,
+                remove
+            }"
             >
         </div>
     </main>
@@ -293,10 +300,10 @@ export default {
         },
         pushNew(schemaObject) {
         },
-        replace() {
+        replace(fieldLabelIndex) {
             // replace(<index||'fieldLabel'>, objectSchema)
         },
-        delete() {
+        remove(fieldLabelIndex) {
             // delete(<index||'fieldLabel'>)
         }
     }

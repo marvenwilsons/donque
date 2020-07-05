@@ -1,5 +1,5 @@
 <template>
-    <div >
+    <div v-if="hideStatus == false" >
         <v-text-field
             outlined
             v-if="elementProperty.fieldtype == 'string'"
@@ -9,6 +9,12 @@
             :hide-details="elementProperty.fieldDetails == undefined"
             persistent-hint
             :hint="elementProperty.fieldDetails"
+            :error-messages="errorMsg"
+            :class="classes"
+            :disabled="disableStatus"
+            :style="{background:bgColor}"
+            :loading="loadingStatus"
+            :id="myId"
         ></v-text-field>
         <v-text-field
             outlined
@@ -20,6 +26,11 @@
             persistent-hint
             :hint="elementProperty.fieldDetails"
             type="number"
+            :error-messages="errorMsg"
+            :disabled="disableStatus"
+            :style="{background:bgColor}"
+            :loading="loadingStatus"
+            :id="myId"
         ></v-text-field>
         <v-text-field
             outlined
@@ -31,6 +42,11 @@
             persistent-hint
             :hint="elementProperty.fieldDetails"
             type="password"
+            :error-messages="errorMsg"
+            :disabled="disableStatus"
+            :style="{background:bgColor}"
+            :loading="loadingStatus"
+            :id="myId"
         ></v-text-field>
         <v-slider
             v-if="elementProperty.fieldtype == 'range'"
@@ -41,6 +57,11 @@
             :max="dataSet && dataSet.max ? dataSet.max : 100"
             thumb-label
             persistent-hint
+            :error-messages="errorMsg"
+            :disabled="disableStatus"
+            :style="{background:bgColor}"
+            :loading="loadingStatus"
+            :id="myId"
             ></v-slider>
         <v-switch
             class="v-input--reverse v-input--expand"
@@ -49,6 +70,11 @@
             :label="elementProperty.fieldLabel"
             persistent-hint
             :hint="elementProperty.fieldDetails"
+            :error-messages="errorMsg"
+            :disabled="disableStatus"
+            :style="{background:bgColor}"
+            :loading="loadingStatus"
+            :id="myId"
         >
         </v-switch>
         <v-select
@@ -59,6 +85,11 @@
             v-model="inputValue"
             persistent-hint
             :hint="elementProperty.fieldDetails"
+            :error-messages="errorMsg"
+            :disabled="disableStatus"
+            :style="{background:bgColor}"
+            :loading="loadingStatus"
+            :id="myId"
         >
         </v-select>
         <v-autocomplete
@@ -73,6 +104,11 @@
             persistent-hint
             single-line
             outlined
+            :error-messages="errorMsg"
+            :disabled="disableStatus"
+            :style="{background:bgColor}"
+            :loading="loadingStatus"
+            :id="myId"
         ></v-autocomplete>
     </div>
 </template>
@@ -80,43 +116,87 @@
 <script>
 import mxn from '../mixins/element'
 export default {
-    props: ['elementProperty','appearanceProperties'],
+    props: ['elementProperty','appearanceProperties','formMethods'],
     data: () => ({
         inputValue: undefined,
-        dataSet: undefined
+        dataSet: undefined,
+        args: undefined,
+        errorMsg: undefined,
+        hideStatus: false,
+        classes: [],
+        disableStatus: false,
+        loadingStatus: false,
+        bgColor: undefined,
+        fieldDetails: undefined,
+        myId: undefined
     }),
+    mixins: [mxn],
     mounted() {
         this.inputValue = this.elementProperty.defaultValue
         this.dataSet = this.elementProperty.dataSet
-    },
-    mixins: [mxn],
-    methods: {
-        hide() {
 
+        this.args = {
+            element: {
+                hide: this.hide,
+                show: this.show,
+                addClass: this.addClass,
+                removeClass: this.removeClass,
+                disable: this.disable,
+                setBackgroundColor: this.setBackgroundColor,
+                showLoading: this.showLoading,
+                setFieldDetails: this.setFieldDetails,
+                setFieldId: this.setFieldId,
+                value: this.inputValue
+            },
+            schema: {
+
+            },
+            prevInput: '',
+            error: ''
+        }
+
+        this.elementProperty.onLoad(this.args.element,this.formMethods,this.showError)
+    },
+    watch: {
+        inputValue() {
+
+        }
+    },
+    methods: {
+        showError(ErrMSg) {
+            this.errorMsg = ErrMSg
+        },
+        hide() {
+            this.hideStatus = true
         },
         show() {
-
+            this.hideStatus = false
         },
-        addClass() {
-
+        addClass(ArrayOfClasses) {
+            this.classes = ArrayOfClasses
         },
-        removeClass() {
-
+        removeClass(NameOfClass) {
+            this.classes = this.classes.filter(e => {
+                if(e != NameOfClass) {
+                    return e
+                }
+            })
         },
-        disable() {
-
+        disable(isDisable) {
+            this.disableStatus = isDisable
         },
-        setBackgroundColor() {
-
+        setBackgroundColor(ColorName) {
+            this.bgColor = ColorName
         },
-        showLoading() {
-
+        showLoading(Arg) {
+            this.loadingStatus = Arg
+            this.disable(Arg)
         },
-        setFieldDesc() {
-
+        setFieldDetails(Details) {
+            this.fieldDetails = Details
         },
-        setFieldId() {
-
+        setFieldId(Id) {
+            this.myId = Id
         }
     }
 }
