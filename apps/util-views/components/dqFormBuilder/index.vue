@@ -158,7 +158,7 @@ export default {
     methods: {
         getFieldItems() {
             const isValidField = (fieldItem, cb) => {
-                const fieldTypes = ['string', 'select', 'range', 'number', 'switch' , 'multiselect', 'textarea']
+                const fieldTypes = ['string', 'password', 'select', 'range', 'number', 'switch' , 'multiselect', 'textarea']
                 
                 // validated fieldLbale
                 if(fieldItem.fieldLabel == undefined) {
@@ -173,6 +173,18 @@ export default {
                 if(fieldTypes.includes(fieldItem.fieldtype) == false) {
                     this.systemError(`FormBuilder Error: Invalid type ${fieldItem.fieldtype}`)
                 } else {
+                    if(fieldItem.fieldtype == 'multiselect') {
+                        if(fieldItem.dataSet == undefined || Array.isArray(fieldItem.dataSet) == false) {
+                            this.systemError(`formBuilder Error: multiselect (${fieldItem.fieldLabel}) dataSet property cannot be undefiend or empty array or not an array`)
+                        }
+
+                        if(fieldItem.defaultValue) {
+                            if(Array.isArray(fieldItem.defaultValue) == false) {
+                                this.systemError(`formBuilder Error: multiselect (${fieldItem.fieldLabel}) defaultValue property should be a type of array`)
+                            }
+                        }
+                    }
+
                     cb({
                         fieldtype: fieldItem.fieldtype
                     })

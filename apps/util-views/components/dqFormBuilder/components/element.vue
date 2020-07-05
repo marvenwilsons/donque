@@ -21,20 +21,32 @@
             :hint="elementProperty.fieldDetails"
             type="number"
         ></v-text-field>
+        <v-text-field
+            outlined
+            v-if="elementProperty.fieldtype == 'password'"
+            :placeholder="elementProperty.fieldDescription"
+            :label="elementProperty.fieldLabel"
+            v-model="inputValue"
+            :hide-details="elementProperty.fieldDetails == undefined"
+            persistent-hint
+            :hint="elementProperty.fieldDetails"
+            type="password"
+        ></v-text-field>
         <v-slider
             v-if="elementProperty.fieldtype == 'range'"
             v-model="inputValue"
-            label="Age"
-            hint="Be honest"
-            min="1"
-            max="100"
+            :label="elementProperty.fieldLabel"
+            :hint="elementProperty.fieldDetails"
+            :min="dataSet && dataSet.min ? dataSet.min : 0"
+            :max="dataSet && dataSet.max ? dataSet.max : 100"
             thumb-label
+            persistent-hint
             ></v-slider>
         <v-switch
             class="v-input--reverse v-input--expand"
             v-if="elementProperty.fieldtype == 'switch'"
             v-model="inputValue"
-            label="Show username when login"
+            :label="elementProperty.fieldLabel"
             persistent-hint
             :hint="elementProperty.fieldDetails"
         >
@@ -49,6 +61,19 @@
             :hint="elementProperty.fieldDetails"
         >
         </v-select>
+        <v-autocomplete
+            v-if="elementProperty.fieldtype == 'multiselect'"
+            v-model="inputValue"
+            :items="dataSet"
+            chips
+            :label="elementProperty.fieldLabel"
+            full-width
+            multiple
+            :hint="elementProperty.fieldDetails"
+            persistent-hint
+            single-line
+            outlined
+        ></v-autocomplete>
     </div>
 </template>
 
