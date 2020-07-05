@@ -1,4 +1,5 @@
 export default {
+    props: ['behaviorProperties','fieldItems'],
     data: () => ({
         input: undefined,
         index: undefined

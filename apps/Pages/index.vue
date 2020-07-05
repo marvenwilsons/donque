@@ -1,16 +1,43 @@
 <template>
-    <v-flex style="overflow-y: scroll" relative flexcol borderred >
-        <!-- this is page? -->
-        
-        <formBuilder
+    <v-flex style="overflow-x : scroll" relative flexcol flexcenter flexstart  >
+        <div class="absolute" >
+            <formBuilder
             @onSubmit="() => {}"
+            :appearance="{
+                fieldElementClasses: ['pad125'],
+                fieldElementCss: {
+                    background:'white',
+                },
+                hostContainerCss: {
+                    width: '550px',
+                    background: 'white'
+                },
+                hostContainerClasses: ['margintop125','pad125','borderRad4']
+            }"
             :fields="[
                 {
                     // content and properties
                     fieldLabel: 'username',
                     fieldtype: 'string', // select, range, number, switch, multiselect, textarea
-                    fieldDescription: '',
+                    fieldDetails: 'this is description',
                     fieldId: '',
+                    defaultValue: '',
+                    dataSet: {},
+                    // events
+                    onLoad: (element,schema,prevInput,error) => {
+                        
+                    },
+                    onInput: (element,schema,prevInput,error) => {
+                        
+                    }                    
+                },
+                {
+                    fieldLabel: 'test',
+                    fieldtype: 'select',
+                    fieldDetails: 'test details',
+                    fieldId: '',
+                    defaultValue:'',
+                    dataSet: ['foo','bar','test'],
                     // events
                     onLoad: (element,schema,prevInput,error) => {
                         
@@ -18,27 +45,49 @@
                     onInput: (element,schema,prevInput,error) => {}                    
                 },
                 {
-                    // content and properties
                     fieldLabel: 'test',
-                    fieldtype: 'string', // select, range, number, switch, multiselect, textarea
-                    fieldDescription: '',
+                    fieldtype: 'switch',
+                    fieldDetails: 'This label matches most of the examples in the Material Design documentation.',
                     fieldId: '',
+                    defaultValue: true,
+                    dataSet: {},
                     // events
                     onLoad: (element,schema,prevInput,error) => {
                         
                     },
                     onInput: (element,schema,prevInput,error) => {}                    
-                }
+                },
+                {
+                    fieldLabel: 'test',
+                    fieldtype: 'switch',
+                    fieldDetails: 'This label matches most of the examples in the Material Design documentation.',
+                    fieldId: '',
+                    defaultValue: false,
+                    dataSet: {},
+                    // events
+                    onLoad: (element,schema,prevInput,error) => {
+                        
+                    },
+                    onInput: (element,schema,prevInput,error) => {}                    
+                },
+                {
+                    fieldLabel: 'test',
+                    fieldtype: 'number',
+                    fieldDetails: 'This label matches most of the examples in the Material Design documentation.',
+                    fieldId: '',
+                    defaultValue: false,
+                    dataSet: {},
+                    // events
+                    onLoad: (element,schema,prevInput,error) => {
+                        
+                    },
+                    onInput: (element,schema,prevInput,error) => {}                    
+                },
+                
             ]"
 
         ></formBuilder>
-        <!-- <v-flex style="overflow-y: scroll" >
-            <div class="absolute" >
-                <pre>
-                    {{myData}}
-                </pre>
-            </div>
-        </v-flex> -->
+        </div>
     </v-flex>
 </template>
 

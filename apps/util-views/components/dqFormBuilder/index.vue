@@ -1,15 +1,38 @@
 <template>
-    <main v-if="isReady" class="borderred" >
-        test
+    <main v-if="isReady">
+        <div 
+            v-if="behaviorProperties.useGrouping == true" 
+            :is="'groupsLayout'"
+            :behaviorProperties="behaviorProperties"
+            :appearanceProperties="appearanceProperties"
+            :fieldItems="getFieldItems()"
+            >
+        </div>
+        <div 
+            v-if="behaviorProperties.useGrouping == false" :is="'defaultLayout'" 
+            :behaviorProperties="behaviorProperties"
+            :appearanceProperties="appearanceProperties"
+            :fieldItems="getFieldItems()"
+            :style="appearanceProperties.hostContainerCss"
+            :class="appearanceProperties.hostContainerClasses"
+            >
+        </div>
     </main>
 </template>
 
 <script>
 import h from '@/helper'
 import Templates from '@/templates'
+import defaultLayout from './layouts/default'
+import groupsLayout from './layouts/group'
+
 export default {
     mixins: [h],
     props: ['fields','behavior','appearance'],
+    components: {
+        defaultLayout,
+        groupsLayout
+    },
     data: () => ({
         sample: undefined,
         isReady: false
@@ -135,7 +158,7 @@ export default {
     methods: {
         getFieldItems() {
             const isValidField = (fieldItem, cb) => {
-                const fieldTypes = ['string', 'select', 'range', ' number', 'switch' , 'multiselect', 'textarea']
+                const fieldTypes = ['string', 'select', 'range', 'number', 'switch' , 'multiselect', 'textarea']
                 
                 // validated fieldLbale
                 if(fieldItem.fieldLabel == undefined) {
@@ -156,33 +179,46 @@ export default {
                 }
 
                 // fieldDescription
-                if(fieldTypes.fieldDescription) {
+                if(fieldItem.fieldDetails) {
                     cb({
-                        fieldDescription: fieldTypes.fieldDescription
+                        fieldDetails: fieldItem.fieldDetails
                     })
                 } else {
                     switch(fieldItem.fieldtype) {
                         case 'string':
                             cb({
-                                fieldDescription: `Input ${fieldItem.fieldLabel}`
+                                fieldDetails: `Input ${fieldItem.fieldLabel}`
                             })
                         break
                         case 'select' || 'multiselect':
                             cb({
-                                fieldDescription: `Select an option for ${fieldItem.fieldLabel}`
+                                fieldDetails: `Select an option for ${fieldItem.fieldLabel}`
                             })
                         break
                         case 'number':
                             cb({
-                                fieldDescription: `Input a number for ${fieldItem.fieldLabel}`
+                                fieldDetails: `Input a number for ${fieldItem.fieldLabel}`
                             })
                         break
+                        
                     }
                 }
 
                 if(fieldItem.fieldId){
                     cb({
                         fieldId: fieldItem.fieldId
+                    })
+                }
+
+                if(fieldItem.dataSet) {
+                    cb({
+                        dataSet: fieldItem.dataSet
+                    })
+                }
+
+                if(fieldItem.defaultValue) {
+                    cb({
+                        defaultValue: fieldItem.defaultValue
                     })
                 }
                 //onLoad
@@ -210,8 +246,10 @@ export default {
             let finalFieldObject = {
                 fieldLabel: undefined,
                 fieldtype: undefined, // select, range, number, switch, multiselect, textarea
-                fieldDescription: undefined,
+                fieldDetails: undefined,
                 fieldId: undefined,
+                defaultValue: undefined,
+                dataSet: undefined,
                 onLoad: undefined,
                 onInput: undefined
             }
