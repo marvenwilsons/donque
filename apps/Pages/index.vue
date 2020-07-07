@@ -35,8 +35,7 @@ export default {
     mounted() {
         // console.log('hello world! this is pageContent')
         this.fields = [
-                   {
-                // content and properties
+            {
                 fieldLabel: 'username',
                 fieldtype: 'string', // select, range, number, switch, multiselect, textarea
                 fieldDetails: 'this is description',
@@ -45,30 +44,48 @@ export default {
                 dataSet: {},
                 // events
                 onLoad: (element,form,error) => {
-                    console.log('onload', element, form)
                 },
                 onInput: (element,form,error) => {
-
+                    // validation
+                    element.value == 'foo' ? error('this is an error') : element.removeError()
+                    // hide
+                    element.value == 'hide' && element.hide()
+                    // addClass
+                    element.value == 'borderred' ? element.addClass(element.value) : element.removeClass('borderred')
                 }                    
             },
             {
-                // content and properties
                 fieldLabel: 'password',
                 fieldtype: 'password', // select, range, number, switch, multiselect, textarea
                 fieldDetails: 'Type your password',
                 fieldId: '',
-                defaultValue: 'marvenwilsons',
                 dataSet: {},
                 // events
                 onLoad: (element,form,error) => {
-                    console.log('onload', element)
+                    console.log('this is form', form)
                 },
                 onInput: (element,form,error) => {
-
+                    const username = form.username.value
+                    console.log(username, element.value)
+                    if(username == 'baz' && element.value == 'bar') {
+                        form.username.disable(true)
+                        form.password.disable(true)
+                        
+                        form.Visitors.show()
+                        form['Test Details'].show()
+                        form['Allow Buffering Fragments'].show()
+                        form['Value in numbers'].show()
+                        form.Range.show()
+                    } else {
+                        form.Visitors.hide()
+                        form['Test Details'].hide()
+                        form['Allow Buffering Fragments'].hide()
+                        form['Value in numbers'].hide()
+                        form.Range.hide()
+                    }
                 }                    
             },
             {
-                // content and properties
                 fieldLabel: 'Visitors',
                 fieldtype: 'multiselect', // select, range, number, switch, multiselect, textarea
                 fieldDetails: 'this is description',
@@ -77,7 +94,7 @@ export default {
                 dataSet: ['foo','bar'],
                 // events
                 onLoad: (element,form,error) => {
-                    console.log('onload', element)
+                    element.hide()
                 },
                 onInput: (element,form,error) => {
 
@@ -92,7 +109,7 @@ export default {
                 dataSet: ['foo','bar','test'],
                 // events
                 onLoad: (element,form,error) => {
-
+                    element.hide()
                 },
                 onInput: (element,form,error) => {}                    
             },
@@ -105,7 +122,7 @@ export default {
                 dataSet: {},
                 // events
                 onLoad: (element,form,error) => {
-
+                    element.hide()
                 },
                 onInput: (element,form,error) => {}                    
             },
@@ -118,7 +135,7 @@ export default {
                 dataSet: {},
                 // events
                 onLoad: (element,form,error) => {
-
+                    element.hide()
                 },
                 onInput: (element,form,error) => {}                    
             },
@@ -131,7 +148,7 @@ export default {
                 dataSet: {},
                 // events
                 onLoad: (element,form,error) => {
-
+                    element.hide()
                 },
                 onInput: (element,form,error) => {}                    
             },
@@ -144,7 +161,7 @@ export default {
                 dataSet: {},
                 // events
                 onLoad: (element,form,error) => {
-
+                    element.hide()
                 },
                 onInput: (element,form,error) => {}                    
             },

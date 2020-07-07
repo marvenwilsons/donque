@@ -146,6 +146,7 @@ export default {
                 showLoading: this.showLoading,
                 setFieldDetails: this.setFieldDetails,
                 setFieldId: this.setFieldId,
+                removeError: this.removeError,
                 value: this.inputValue
             },
             schema: {
@@ -155,16 +156,30 @@ export default {
             error: ''
         }
 
+        for(let key in this.args.element) {
+            this.formMethods[this.elementProperty.fieldLabel][key] = this.args.element[key]
+        }
+
         this.elementProperty.onLoad(this.args.element,this.formMethods,this.showError)
     },
     watch: {
-        inputValue() {
-
+        inputValue: {
+            handler(val) {
+                this.args.element.value = val
+                for(let key in this.args.element) {
+                    this.formMethods[this.elementProperty.fieldLabel][key] = this.args.element[key]
+                }
+                this.elementProperty.onInput(this.args.element,this.formMethods,this.showError)
+            },
+            deep: true
         }
     },
     methods: {
         showError(ErrMSg) {
             this.errorMsg = ErrMSg
+        },
+        removeError() {
+            this.errorMsg = undefined
         },
         hide() {
             this.hideStatus = true
@@ -173,7 +188,13 @@ export default {
             this.hideStatus = false
         },
         addClass(ArrayOfClasses) {
-            this.classes = ArrayOfClasses
+            if(typeof ArrayOfClasses == 'string') {
+                this.classes.push(ArrayOfClasses)
+            } else if(Array.isArray(ArrayOfClasses)) {
+                ArrayOfClasses.map(e => {
+                    this.classes.push(e)
+                })
+            }
         },
         removeClass(NameOfClass) {
             this.classes = this.classes.filter(e => {

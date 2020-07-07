@@ -20,7 +20,8 @@
                 insertBelow,
                 pushNew,
                 replace,
-                remove
+                remove,
+                ...getFormItems()
             }"
             >
         </div>
@@ -42,15 +43,14 @@ export default {
     },
     data: () => ({
         sample: undefined,
-        isReady: false
+        isReady: false,
+        allFormData: undefined
     }),
     created() {
         this.h = this
     },
     mounted() {
         this.isReady = true
-        console.log('test', this.getFieldItems())
-        
     },
     computed: {
         behaviorProperties() {
@@ -289,6 +289,16 @@ export default {
             }
 
             return fields
+        },
+        getFormItems() {
+            const items = this.getFieldItems()
+            let finalObject = {}
+            items.map(e => {
+                const fieldLabel = e.fieldLabel
+                finalObject[fieldLabel] = e
+            })
+
+            return finalObject
         },
         submit() {
             this.submitHandler(this.sample)
