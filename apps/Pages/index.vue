@@ -3,6 +3,7 @@
         <div class="absolute" >
             <formBuilder
             @onSubmit="() => {}"
+            @onChange="() => {}"
             :appearance="{
                 fieldElementClasses: ['pad125'],
                 fieldElementCss: {
@@ -38,9 +39,9 @@ export default {
             {
                 fieldLabel: 'username',
                 fieldtype: 'string', // select, range, number, switch, multiselect, textarea
-                fieldDetails: 'this is description',
+                fieldDetails: 'type your username',
                 fieldId: '',
-                defaultValue: 'marvenwilsons',
+                defaultValue: '',
                 dataSet: {},
                 // events
                 onLoad: (element,form,error) => {
@@ -52,6 +53,8 @@ export default {
                     element.value == 'hide' && element.hide()
                     // addClass
                     element.value == 'borderred' ? element.addClass(element.value) : element.removeClass('borderred')
+                    // mutate an input
+                    form.password.setFieldDetails(`Set password for ${element.value}`)
                 }                    
             },
             {
@@ -60,7 +63,6 @@ export default {
                 fieldDetails: 'Type your password',
                 fieldId: '',
                 dataSet: {},
-                // events
                 onLoad: (element,form,error) => {
                     console.log('this is form', form)
                 },
@@ -68,9 +70,6 @@ export default {
                     const username = form.username.value
                     console.log(username, element.value)
                     if(username == 'baz' && element.value == 'bar') {
-                        form.username.disable(true)
-                        form.password.disable(true)
-                        
                         form.Visitors.show()
                         form['Test Details'].show()
                         form['Allow Buffering Fragments'].show()

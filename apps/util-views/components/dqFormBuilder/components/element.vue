@@ -1,5 +1,8 @@
 <template>
-    <div v-if="hideStatus == false" >
+    <div v-if="hideStatus == false" 
+        :class="['pad050', ...appearanceProperties.fieldElementClasses]" 
+        :style="{...appearanceProperties.fieldElementCss}"
+      >
         <v-text-field
             outlined
             v-if="elementProperty.fieldtype == 'string'"
@@ -8,13 +11,13 @@
             v-model="inputValue"
             :hide-details="elementProperty.fieldDetails == undefined"
             persistent-hint
-            :hint="elementProperty.fieldDetails"
+            :hint="fieldDetails ? fieldDetails : elementProperty.fieldDetails"
             :error-messages="errorMsg"
-            :class="classes"
             :disabled="disableStatus"
             :style="{background:bgColor}"
             :loading="loadingStatus"
             :id="myId"
+            :class="classes"
         ></v-text-field>
         <v-text-field
             outlined
@@ -24,13 +27,14 @@
             v-model="inputValue"
             :hide-details="elementProperty.fieldDetails == undefined"
             persistent-hint
-            :hint="elementProperty.fieldDetails"
+            :hint="fieldDetails ? fieldDetails : elementProperty.fieldDetails"
             type="number"
             :error-messages="errorMsg"
             :disabled="disableStatus"
             :style="{background:bgColor}"
             :loading="loadingStatus"
             :id="myId"
+            :class="classes"
         ></v-text-field>
         <v-text-field
             outlined
@@ -40,19 +44,20 @@
             v-model="inputValue"
             :hide-details="elementProperty.fieldDetails == undefined"
             persistent-hint
-            :hint="elementProperty.fieldDetails"
+            :hint="fieldDetails ? fieldDetails : elementProperty.fieldDetails"
             type="password"
             :error-messages="errorMsg"
             :disabled="disableStatus"
             :style="{background:bgColor}"
             :loading="loadingStatus"
             :id="myId"
+            :class="classes"
         ></v-text-field>
         <v-slider
             v-if="elementProperty.fieldtype == 'range'"
             v-model="inputValue"
             :label="elementProperty.fieldLabel"
-            :hint="elementProperty.fieldDetails"
+            :hint="fieldDetails ? fieldDetails : elementProperty.fieldDetails"
             :min="dataSet && dataSet.min ? dataSet.min : 0"
             :max="dataSet && dataSet.max ? dataSet.max : 100"
             thumb-label
@@ -62,6 +67,7 @@
             :style="{background:bgColor}"
             :loading="loadingStatus"
             :id="myId"
+            :class="classes"
             ></v-slider>
         <v-switch
             class="v-input--reverse v-input--expand"
@@ -69,12 +75,13 @@
             v-model="inputValue"
             :label="elementProperty.fieldLabel"
             persistent-hint
-            :hint="elementProperty.fieldDetails"
+            :hint="fieldDetails ? fieldDetails : elementProperty.fieldDetails"
             :error-messages="errorMsg"
             :disabled="disableStatus"
             :style="{background:bgColor}"
             :loading="loadingStatus"
             :id="myId"
+            :class="classes"
         >
         </v-switch>
         <v-select
@@ -84,12 +91,13 @@
             :items="dataSet"
             v-model="inputValue"
             persistent-hint
-            :hint="elementProperty.fieldDetails"
+            :hint="fieldDetails ? fieldDetails : elementProperty.fieldDetails"
             :error-messages="errorMsg"
             :disabled="disableStatus"
             :style="{background:bgColor}"
             :loading="loadingStatus"
             :id="myId"
+            :class="classes"
         >
         </v-select>
         <v-autocomplete
@@ -100,7 +108,7 @@
             :label="elementProperty.fieldLabel"
             full-width
             multiple
-            :hint="elementProperty.fieldDetails"
+            :hint="fieldDetails ? fieldDetails : elementProperty.fieldDetails"
             persistent-hint
             single-line
             outlined
@@ -109,6 +117,7 @@
             :style="{background:bgColor}"
             :loading="loadingStatus"
             :id="myId"
+            :class="classes"
         ></v-autocomplete>
     </div>
 </template>
@@ -116,7 +125,7 @@
 <script>
 import mxn from '../mixins/element'
 export default {
-    props: ['elementProperty','appearanceProperties','formMethods'],
+    props: ['elementProperty','appearanceProperties','formMethods','hostMethods'],
     data: () => ({
         inputValue: undefined,
         dataSet: undefined,
@@ -183,9 +192,11 @@ export default {
         },
         hide() {
             this.hideStatus = true
+            this.$emit('onHide',this.elementProperty.fieldLabel)
         },
         show() {
             this.hideStatus = false
+            this.$emit('onShow',this.elementProperty.fieldLabel)
         },
         addClass(ArrayOfClasses) {
             if(typeof ArrayOfClasses == 'string') {

@@ -1,14 +1,13 @@
 <template>
     <div>
         <div 
-            :class="['pad050', ...appearanceProperties.fieldElementClasses]" 
-            :style="{...appearanceProperties.fieldElementCss}"
             v-for="(item, item_idex) in fieldItems" 
             :key="item_idex" >
             <div class="flex flexcol">
                 <el 
                     :elementProperty="item"
                     :formMethods="formMethods"
+                    :appearanceProperties="appearanceProperties"
                 />
             </div>
         </div>
