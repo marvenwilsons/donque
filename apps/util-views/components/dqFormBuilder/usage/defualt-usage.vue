@@ -99,19 +99,6 @@ export default {
                 }                    
             },
             {
-                fieldLabel: 'Desc',
-                fieldtype: 'textarea', // select, range, number, switch, multiselect, textarea
-                fieldDetails: 'Type your description',
-                fieldId: '',
-                dataSet: {},
-                onLoad: (element,form,error) => {
-                    // console.log('this is form', form)
-                },
-                onInput: (element,form,error) => {
-                    
-                }                    
-            },
-            {
                 fieldLabel: 'Visitors',
                 fieldtype: 'multiselect', // select, range, number, switch, multiselect, textarea
                 fieldDetails: 'this is description',

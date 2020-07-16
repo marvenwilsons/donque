@@ -15,8 +15,10 @@
             :fieldItems="getFieldItems()"
             :style="appearanceProperties.hostContainerCss"
             :class="appearanceProperties.hostContainerClasses"
+            @onSubmit="submit"
             :formMethods="{
-                getFieldItem,
+                insertGroup,
+                hideGroup,
                 insertBelow,
                 pushNew,
                 replace,
@@ -163,6 +165,9 @@ export default {
         }
     },
     methods: {
+        submit(dat) {
+            this.$emit('onSubmit', dat)
+        },
         getFieldItems() {
             const isValidField = (fieldItem, cb) => {
                 const fieldTypes = ['string', 'password', 'select', 'range', 'number', 'switch' , 'multiselect', 'textarea']
@@ -300,11 +305,11 @@ export default {
 
             return finalObject
         },
-        submit() {
-            this.submitHandler(this.sample)
+        insertGroup() {
+
         },
-        getFieldItem(index) {
-            // getFieldItem(index)
+        hideGroup() {
+
         },
         insertBelow(schemaObject) {
         },

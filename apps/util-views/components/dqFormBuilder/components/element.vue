@@ -19,6 +19,23 @@
             :id="myId"
             :class="classes"
         ></v-text-field>
+        <v-textarea
+            outlined
+            v-if="elementProperty.fieldtype == 'textarea'"
+            :placeholder="elementProperty.fieldDescription"
+            :label="elementProperty.fieldLabel"
+            v-model="inputValue"
+            :hide-details="elementProperty.fieldDetails == undefined"
+            persistent-hint
+            :hint="fieldDetails ? fieldDetails : elementProperty.fieldDetails"
+            :error-messages="errorMsg"
+            :disabled="disableStatus"
+            :style="{background:bgColor}"
+            :loading="loadingStatus"
+            :id="myId"
+            :class="classes"
+        >
+        </v-textarea>
         <v-text-field
             outlined
             v-if="elementProperty.fieldtype == 'number'"
@@ -123,7 +140,6 @@
 </template>
 
 <script>
-import mxn from '../mixins/element'
 export default {
     props: ['elementProperty','appearanceProperties','formMethods','hostMethods'],
     data: () => ({
@@ -137,10 +153,11 @@ export default {
         loadingStatus: false,
         bgColor: undefined,
         fieldDetails: undefined,
-        myId: undefined
+        myId: undefined,
+        elementLabel: undefined
     }),
-    mixins: [mxn],
     mounted() {
+        this.elementLabel = this.elementProperty.fieldLabel
         this.inputValue = this.elementProperty.defaultValue
         this.dataSet = this.elementProperty.dataSet
 
@@ -155,6 +172,7 @@ export default {
                 showLoading: this.showLoading,
                 setFieldDetails: this.setFieldDetails,
                 setFieldId: this.setFieldId,
+                error: this.error,
                 removeError: this.removeError,
                 value: this.inputValue
             },
@@ -168,6 +186,8 @@ export default {
         for(let key in this.args.element) {
             this.formMethods[this.elementProperty.fieldLabel][key] = this.args.element[key]
         }
+
+        this.$emit('fieldItems', this.formMethods)
 
         this.elementProperty.onLoad(this.args.element,this.formMethods,this.showError)
     },
@@ -184,7 +204,7 @@ export default {
         }
     },
     methods: {
-        showError(ErrMSg) {
+        error(ErrMSg) {
             this.errorMsg = ErrMSg
         },
         removeError() {
