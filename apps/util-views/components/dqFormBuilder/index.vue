@@ -6,6 +6,16 @@
             :behaviorProperties="behaviorProperties"
             :appearanceProperties="appearanceProperties"
             :fieldItems="getFieldItems()"
+            @onSubmit="submit"
+            :formMethods="{
+                insertGroup,
+                hideGroup,
+                insertBelow,
+                pushNew,
+                replace,
+                remove,
+                ...getFormItems()
+            }"
             >
         </div>
         <div 
@@ -127,8 +137,31 @@ export default {
                     } else {
                         return true
                     }
+                })(),
+                // groups
+                groups: (() => {
+                    if(this.behavior) {
+                        if(this.behavior && this.behavior.useGrouping  == true) {
+                            if(this.behavior.groups.length != 0) {
+                                return this.behavior.groups
+                            } else { 
+                                this.systemError('FormBuilder Error: groups cannot be an empty array')
+                            }
+                        }
+                    }
+                })(),
+                // group details
+                groupDetails: (() => {
+                    if(this.behavior) {
+                        if(this.behavior && this.behavior.useGrouping  == true) {
+                            if(this.behavior.groups.length != 0) {
+                                return this.behavior.groupDetails
+                            } else { 
+                                this.systemError('FormBuilder Error: groups cannot be an empty array')
+                            }
+                        }
+                    }
                 })()
-                
             } 
         },
         appearanceProperties() {
@@ -244,6 +277,16 @@ export default {
                     cb({
                         defaultValue: fieldItem.defaultValue
                     })
+                }
+
+                if(fieldItem.group) {
+                    if(typeof fieldItem.group != 'string') {
+                        this.systemError('formBuilder Error: Invalid group value type')
+                    } else {
+                        cb({
+                            group: fieldItem.group
+                        })
+                    }
                 }
                 //onLoad
                 if(typeof fieldItem.onLoad == 'function') {

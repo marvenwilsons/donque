@@ -2,7 +2,16 @@
     <div v-if="hideStatus == false" 
         :class="['pad050', ...appearanceProperties.fieldElementClasses]" 
         :style="{...appearanceProperties.fieldElementCss}"
-      >
+      > 
+        <div
+            v-if="elementProperty.fieldtype == 'custom'"
+            :is="elementProperty.name"
+            :style="{background:bgColor}"
+            :id="myId"
+            :class="classes"
+            :props="elementProperty.props"
+        >
+        </div>
         <v-text-field
             outlined
             v-if="elementProperty.fieldtype == 'string'"
