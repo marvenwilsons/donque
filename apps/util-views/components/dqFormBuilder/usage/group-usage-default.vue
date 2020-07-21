@@ -1,6 +1,6 @@
 <template>
     <v-flex style="overflow-x : scroll" relative flexcol flexcenter flexstart  >
-        <div class="absolute" >
+        <div class="absolute padbottom125" >
             <formBuilder
             @onSubmit="sumbit"
             @onChange="() => {}"
@@ -14,6 +14,14 @@
                     background: 'white'
                 },
                 hostContainerClasses: ['margintop125','pad125','borderRad4']
+            }"
+            :behavior="{
+                useGrouping: true,
+                groups: ['Group 1','Group 2'],
+                groupDetails: {
+                    'Group 1' : 'This is group 1 details, this a sample text description',
+                },
+                showSubmitButtonOnComplete: true
             }"
             :fields="fields"
         ></formBuilder>
@@ -35,17 +43,17 @@ export default {
     }),
     methods: {
         sumbit({data,formMethods,submitMethods}) {
-            console.log(data)
+            
             if(data.username == undefined) {
                 formMethods.username.error('username is a required field')
             } else {
+                console.log('submitting')
+                console.log(data)
                 submitMethods.setLoading(true)
                 setTimeout(() => {
                     submitMethods.setLoading(false)
                 }, 2000);
             }
-
-            
         }
     },
     mounted() {
@@ -58,6 +66,7 @@ export default {
                 fieldId: '',
                 defaultValue: '',
                 dataSet: {},
+                group: 'Group 1',
                 // events
                 onLoad: (element,form,error) => {
                 },
@@ -78,25 +87,26 @@ export default {
                 fieldDetails: 'Type your password',
                 fieldId: '',
                 dataSet: {},
+                group: 'Group 1',
                 onLoad: (element,form,error) => {
                     // console.log('this is form', form)
                 },
                 onInput: (element,form,error) => {
                     const username = form.username.value
                     // console.log(username, element.value)
-                    if(username == 'baz' && element.value == 'bar') {
-                        form.Visitors.show()
-                        form['Test Details'].show()
-                        form['Allow Buffering Fragments'].show()
-                        form['Value in numbers'].show()
-                        form.Range.show()
-                    } else {
-                        form.Visitors.hide()
-                        form['Test Details'].hide()
-                        form['Allow Buffering Fragments'].hide()
-                        form['Value in numbers'].hide()
-                        form.Range.hide()
-                    }
+                    // if(username == 'baz' && element.value == 'bar') {
+                    //     form.Visitors.show()
+                    //     form['Test Details'].show()
+                    //     form['Allow Buffering Fragments'].show()
+                    //     form['Value in numbers'].show()
+                    //     form.Range.show()
+                    // } else {
+                    //     form.Visitors.hide()
+                    //     form['Test Details'].hide()
+                    //     form['Allow Buffering Fragments'].hide()
+                    //     form['Value in numbers'].hide()
+                    //     form.Range.hide()
+                    // }
                 }                    
             },
             {
@@ -105,6 +115,7 @@ export default {
                 fieldDetails: 'Type your description',
                 fieldId: '',
                 dataSet: {},
+                group: 'Group 1',
                 onLoad: (element,form,error) => {
                     // console.log('this is form', form)
                 },
@@ -121,7 +132,7 @@ export default {
                 dataSet: ['foo','bar'],
                 // events
                 onLoad: (element,form,error) => {
-                    element.hide()
+                    // element.hide()
                 },
                 onInput: (element,form,error) => {
 
@@ -134,9 +145,10 @@ export default {
                 fieldId: '',
                 defaultValue:'',
                 dataSet: ['foo','bar','test'],
+                group: 'Group 2',
                 // events
                 onLoad: (element,form,error) => {
-                    element.hide()
+                    // element.hide()
                 },
                 onInput: (element,form,error) => {}                    
             },
@@ -149,7 +161,7 @@ export default {
                 dataSet: {},
                 // events
                 onLoad: (element,form,error) => {
-                    element.hide()
+                    // element.hide()
                 },
                 onInput: (element,form,error) => {}                    
             },
@@ -160,9 +172,10 @@ export default {
                 fieldId: '',
                 defaultValue: false,
                 dataSet: {},
+                group: 'Group 2',
                 // events
                 onLoad: (element,form,error) => {
-                    element.hide()
+                    // element.hide()
                 },
                 onInput: (element,form,error) => {}                    
             },
@@ -173,9 +186,10 @@ export default {
                 fieldId: '',
                 defaultValue: false,
                 dataSet: {},
+                group: 'Group 2',
                 // events
                 onLoad: (element,form,error) => {
-                    element.hide()
+                    // element.hide()
                 },
                 onInput: (element,form,error) => {}                    
             },
@@ -186,9 +200,10 @@ export default {
                 fieldId: '',
                 defaultValue: 30,
                 dataSet: {},
+                group: 'Group 2',
                 // events
                 onLoad: (element,form,error) => {
-                    element.hide()
+                    // element.hide()
                 },
                 onInput: (element,form,error) => {
                     // console.log(element.value)

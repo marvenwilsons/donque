@@ -35,6 +35,7 @@ export default {
     }),
     methods: {
         sumbit({data,formMethods,submitMethods}) {
+            console.log(data)
             if(data.username == undefined) {
                 formMethods.username.error('username is a required field')
             } else {

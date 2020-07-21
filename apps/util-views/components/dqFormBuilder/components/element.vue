@@ -215,9 +215,28 @@ export default {
     methods: {
         error(ErrMSg) {
             this.errorMsg = ErrMSg
+            const fieldLabel = this.elementProperty.fieldLabel
+            const group = this.elementProperty.group
+            if(this.formMethods[group]) {
+                this.formMethods[group].map(e => {
+                    if(e.fieldLabel == fieldLabel) {
+                        e.hasError = true
+                    }
+                })
+            }
         },
         removeError() {
             this.errorMsg = undefined
+            const fieldLabel = this.elementProperty.fieldLabel
+            const group = this.elementProperty.group
+            if(this.formMethods[group]) {
+                this.formMethods[group].map(e => {
+                    if(e.fieldLabel == fieldLabel) {
+                        e.hasError = false
+                    }
+                })
+            }
+            
         },
         hide() {
             this.hideStatus = true

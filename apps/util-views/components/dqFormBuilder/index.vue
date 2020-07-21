@@ -7,6 +7,7 @@
             :appearanceProperties="appearanceProperties"
             :fieldItems="getFieldItems()"
             @onSubmit="submit"
+            @onNextForm="onNextForm"
             :formMethods="{
                 insertGroup,
                 hideGroup,
@@ -14,7 +15,9 @@
                 pushNew,
                 replace,
                 remove,
-                ...getFormItems()
+                ...getFormItems(),
+                ...getGroups(),
+                getFieldItems
             }"
             >
         </div>
@@ -26,6 +29,7 @@
             :style="appearanceProperties.hostContainerCss"
             :class="appearanceProperties.hostContainerClasses"
             @onSubmit="submit"
+            @onNextForm="onNextForm"
             :formMethods="{
                 insertGroup,
                 hideGroup,
@@ -33,7 +37,9 @@
                 pushNew,
                 replace,
                 remove,
-                ...getFormItems()
+                ...getFormItems(),
+                ...getGroups(),
+                getFieldItems
             }"
             >
         </div>
@@ -161,6 +167,13 @@ export default {
                             }
                         }
                     }
+                })(),
+                useOfNext: (() => {
+                    if(this.behavior) {
+                        if(this.behavior.useOfNext == true) {
+                            return this.behavior.useOfNext
+                        }
+                    }
                 })()
             } 
         },
@@ -200,6 +213,9 @@ export default {
     methods: {
         submit(dat) {
             this.$emit('onSubmit', dat)
+        },
+        onNextForm(dat) {
+            this.$emit('onNextForm',dat)
         },
         getFieldItems() {
             const isValidField = (fieldItem, cb) => {
@@ -337,6 +353,31 @@ export default {
             }
 
             return fields
+        },
+        getGroups() {
+            let o = []
+            if(this.behavior) {
+                if(this.behavior.groups != undefined) {
+                    if(this.behavior.groups.length != 0) {
+                        this.behavior.groups.map(e => {
+                            o[e] = []
+                        })
+                        this.fields.map(e => {
+                            if(e.group) {
+                                o[e.group].push({
+                                    ...e,
+                                    hasError: false
+                                })
+                            }
+                        })
+                        return o
+                    } else {
+                        return []
+                    }
+                }
+            }
+            
+            
         },
         getFormItems() {
             const items = this.getFieldItems()
