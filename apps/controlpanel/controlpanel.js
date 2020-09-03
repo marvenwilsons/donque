@@ -25,7 +25,7 @@ export default function (app) {
 
     controlpanel.onAdminLogin = function (username, password, db) {
         // reach database for admin resource here, app code executes in the server
-
+        console.log('onAdminLogin')
         // db.storedFunctions.getAdminServices(username,password)
         // .then(res => {
         //     /**

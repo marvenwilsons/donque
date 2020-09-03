@@ -21,7 +21,6 @@
                 groupDetails: {
                     'Group 1' : 'This is group 1 details, this a sample text description',
                 },
-                showSubmitButtonOnComplete: true
             }"
             :fields="fields"
         ></formBuilder>

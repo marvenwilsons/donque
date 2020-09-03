@@ -24,10 +24,10 @@
 [x] make initialData function async in the backend
 [x] add listify filter feature
 [x] add listify sortBy feature
-[-] add form maker or objectify
+[x] add form maker or objectify
+[-] add service manager menu
 [-] add caching system
 [-] add encryption and decryption to utils
-[-] add service manager menu
 
 Before finishing dq studio blank
 [-] create new branch named blank commit name alpha

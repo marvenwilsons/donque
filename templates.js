@@ -131,4 +131,8 @@ export default {
         this.adminId = null
         this.ruleTitle_id = ruleTitle_id
     },
+    Account: function({AccountName,AdminUser}) {
+        this.AccountName = AccountName
+        this.AdminUser = AdminUser
+    }
 }
