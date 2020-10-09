@@ -247,7 +247,7 @@ module.exports = Templates.Service({
                         'delete page'() { 
                             syspanemodal.logError(`Warning! Are you sure you want to delete ${event.context.pageName}`,() => {
                                 syspanemodal.close()
-                                syspane.closeUnUsedPane(s)
+                                syspane.closeUnUsedPane()
                             })
                         },
                         'edit page'() {
