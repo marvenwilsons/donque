@@ -198,7 +198,7 @@ export default {
 
         this.$emit('fieldItems', this.formMethods)
 
-        this.elementProperty.onLoad(this.args.element,this.formMethods,this.showError)
+        this.elementProperty.onLoad(this.args.element,this.formMethods,this.error)
     },
     watch: {
         inputValue: {
@@ -207,7 +207,7 @@ export default {
                 for(let key in this.args.element) {
                     this.formMethods[this.elementProperty.fieldLabel][key] = this.args.element[key]
                 }
-                this.elementProperty.onInput(this.args.element,this.formMethods,this.showError)
+                this.elementProperty.onInput(this.args.element,this.formMethods,this.error)
             },
             deep: true
         }

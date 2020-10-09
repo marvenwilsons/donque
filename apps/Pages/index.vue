@@ -79,7 +79,7 @@ export default {
                 fieldId: '',
                 dataSet: {},
                 onLoad: (element,form,error) => {
-                    // console.log('this is form', form)
+                    console.log('>>>> this is form', element)
                 },
                 onInput: (element,form,error) => {
                     const username = form.username.value
