@@ -1,6 +1,6 @@
 <template>
     <div v-if="hideStatus == false" 
-        :class="['pad050', ...appearanceProperties.fieldElementClasses]" 
+        :class="[...appearanceProperties.fieldElementClasses]" 
         :style="{...appearanceProperties.fieldElementCss}"
       > 
         <div
@@ -13,6 +13,7 @@
         >
         </div>
         <v-text-field
+            dense
             outlined
             v-if="elementProperty.fieldtype == 'string'"
             :placeholder="elementProperty.fieldDescription"
@@ -28,7 +29,17 @@
             :id="myId"
             :class="classes"
         ></v-text-field>
+        <!-- <el-input 
+            v-if="elementProperty.fieldtype == 'string'"
+            :placeholder="`${elementProperty.fieldDescription}`"
+            v-model="inputValue"
+            :style="{background:bgColor}"
+            :loading="loadingStatus"
+            :id="myId"
+            :class="classes" 
+        /> -->
         <v-textarea
+            dense
             outlined
             v-if="elementProperty.fieldtype == 'textarea'"
             :placeholder="elementProperty.fieldDescription"
@@ -47,6 +58,7 @@
         </v-textarea>
         <v-text-field
             outlined
+            dense
             v-if="elementProperty.fieldtype == 'number'"
             :placeholder="elementProperty.fieldDescription"
             :label="elementProperty.fieldLabel"
@@ -63,6 +75,7 @@
             :class="classes"
         ></v-text-field>
         <v-text-field
+            dense
             outlined
             v-if="elementProperty.fieldtype == 'password'"
             :placeholder="elementProperty.fieldDescription"
@@ -80,6 +93,7 @@
             :class="classes"
         ></v-text-field>
         <v-slider
+            dense
             v-if="elementProperty.fieldtype == 'range'"
             v-model="inputValue"
             :label="elementProperty.fieldLabel"
@@ -96,6 +110,7 @@
             :class="classes"
             ></v-slider>
         <v-switch
+            dense
             class="v-input--reverse v-input--expand"
             v-if="elementProperty.fieldtype == 'switch'"
             v-model="inputValue"
@@ -111,6 +126,8 @@
         >
         </v-switch>
         <v-select
+            small-chips
+            dense
             v-if="elementProperty.fieldtype == 'select'"
             outlined
             :label="elementProperty.fieldLabel"
@@ -127,6 +144,8 @@
         >
         </v-select>
         <v-autocomplete
+            small-chips
+            dense
             v-if="elementProperty.fieldtype == 'multiselect'"
             v-model="inputValue"
             :items="dataSet"
@@ -169,6 +188,7 @@ export default {
         this.elementLabel = this.elementProperty.fieldLabel
         this.inputValue = this.elementProperty.defaultValue
         this.dataSet = this.elementProperty.dataSet
+        this.classes.push('dq-input-fontsize')
 
         this.args = {
             element: {
@@ -299,6 +319,11 @@ export default {
 	 display: block;
 	 flex: 1;
 }
+
+.dq-input-fontsize, .v-label{
+    font-size: 13px !important;
+}
+
  
 
 </style>

@@ -25,7 +25,7 @@
 
                  </div>
                     <div class="flex flexend margintop125" >
-                        <small @click="signOut" style="color:var(--deftheme-blue-text);" class="pointer" >Sign Out </small>
+                        <small @click="signOut" :style="{color:$vuetify.theme.themes.light.primary}" class="pointer" >Sign Out </small>
                     </div>
                  <v-divider color="gray" :light="true" ></v-divider>
 
@@ -42,7 +42,7 @@
                 @click="sideBarItemClick(item)"
             >
                 <div 
-                    style="color:var(--deftheme-blue-text);" 
+                    :style="{color: $vuetify.theme.themes.light.primary}" 
                     class="pad025"
                     >
                     <!-- <span >&#9702;</span> -->

@@ -11,6 +11,7 @@
                                         label="Search item"
                                         outlined
                                         v-model="textQuery"
+                                        class="dq-input-fontsize"
                                     ></v-text-field>
                                 </div>
                                 <div class="pointer" >
@@ -20,6 +21,8 @@
                                         label="Sort By"
                                         outlined
                                         v-model="sortMode"
+                                        class="dq-input-fontsize"
+
                                     ></v-select>
                                 </div>
                                 <div v-if="myConfig.ableToAddItem" class="pointer marginleft125" >
@@ -182,5 +185,8 @@ export default {
 }
 .v-application--wrap{
     min-height: 100% !important;
+}
+.v-select__selections {
+    font-size: 13px;
 }
 </style>

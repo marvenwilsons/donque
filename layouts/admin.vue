@@ -66,13 +66,17 @@ export default {
         }
     },
     created() {
+        this.$vuetify.theme.themes.light.primary = '#409eff'
+
         this.h = this
         const { onAdminLoad } = controlpanel(this)
         onAdminLoad()
     },
     mounted() {
+
         const { onAdminMount } = controlpanel(this)
         onAdminMount()
+
     },
     methods: {
         dwinTopEventHandler(name,context) {

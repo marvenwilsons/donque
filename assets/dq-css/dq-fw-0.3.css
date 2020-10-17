@@ -397,20 +397,14 @@ img {
   border-right: 1px solid #41794683;
 }
 .backgroundinfo{
-  background:#629af47e;
-  color:#206add;
-  border-left: 5px solid #629af4;
-  border-top: 1px solid #629af4;
-  border-bottom: 1px solid #629af4;
-  border-right: 1px solid #629af4;
+  background:#f4f4f5;
+  color:#606266;
+  border: 1px solid #979a9f;
 }
 .backgroundwarn{
   background: rgba(255, 166, 0, 0.253);
   color:rgb(90, 62, 11);
-  border-left: 5px solid orange;
-  border-top: 1px solid orange;
-  border-bottom: 1px solid orange;
-  border-right: 1px solid orange;
+  border: 1px solid orange;
 }
 
 

@@ -1,14 +1,5 @@
 <template>
     <main v-if="isReady">
-        <div style="background:white;" class="borderred pad125" >
-            <el-checkbox-group v-model="checkList">
-                <el-checkbox label="Option A"></el-checkbox>
-                <el-checkbox label="Option B"></el-checkbox>
-                <el-checkbox label="Option C"></el-checkbox>
-                <el-checkbox label="disabled" disabled></el-checkbox>
-                <el-checkbox label="selected and disabled" disabled></el-checkbox>
-            </el-checkbox-group>
-        </div>
         <div 
             v-if="behaviorProperties.useGrouping == true" 
             :is="'groupsLayout'"

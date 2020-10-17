@@ -3,7 +3,7 @@
         <v-flex v-if="ready" flexcol >
         <!--  var(--deftheme-dark-primary) -->
         <div 
-            style="background: var(--deftheme-light-primary);"
+            style="background: #f5f7fa"
             class="pad025" >
                 <v-flex spacebetween >
                     <div class="fullwidth flex" style="color:whitsmoke" >
@@ -58,11 +58,11 @@
                         :style="{
                                 width: $store.state.pane[paneIndex].paneConfig.modal.modalWidth ? 
                                     $store.state.pane[paneIndex].paneConfig.modal.modalWidth : '70%',
-                                border: `1px solid #bfcfe7`,
-                                maxHeight: '90%'
+                                maxHeight: '90%',
+                                background: 'white'
                             }" 
                         class="borderRad4 modalShadow" >
-                        <div style="background: var(--deftheme-light-primary);color:#505050;" class="pad050" >
+                        <div :style="{'background': $vuetify.theme.themes.light.primary, 'color':'white'}" class="pad050" >
                             <v-flex spacebetween>
                                 <span>{{$store.state.pane[paneIndex].paneConfig.modal.modalHeader}}</span>
                                 <span
@@ -74,7 +74,7 @@
                                 </span>
                             </v-flex>
                         </div>
-                        <v-flex style="background:whitesmoke;" pad125 flexcol borderRad4 >
+                        <v-flex style="background:#fafafa;" pad125 flexcol borderRad4 >
                             <!-- modal Error -->
                             <div
                                 v-if="$store.state.pane[paneIndex].paneConfig.modal.modalErr" 
@@ -125,6 +125,7 @@
                                     "
                                     >
                                     <v-text-field
+                                        class="dq-input-fontsize"
                                         id="inyp"
                                         :disabled="isLoading"
                                         v-model="logPromptData"
@@ -136,6 +137,7 @@
                                 </div>
                                 <div v-if="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.type === 'select' " >
                                     <v-select
+                                        class="dq-input-fontsize"
                                         dense
                                         v-model="logPromptData"
                                         :items="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.value"
@@ -146,6 +148,8 @@
                                 </div>
                                 <div v-if="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.type === 'multiselect' " >
                                     <v-combobox
+                                        dense
+                                        class="dq-input-fontsize"
                                         chips
                                         v-model="logPromptData"
                                         :items="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.value"
@@ -156,6 +160,8 @@
                                 </div>
                                 <div class="padtop125" v-if="$store.state.pane[paneIndex].paneConfig.modal.modalConfig.type === 'slider' " >
                                     <v-slider
+                                        dense
+                                        class="dq-input-fontsize"
                                         v-model="logPromptData"
                                         :thumb-size="24"
                                         thumb-label="always"
