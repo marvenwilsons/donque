@@ -4,7 +4,7 @@ module.exports = (req,res,next) => {
     if(res.locals.isValid) {
         // TODO: call sql database and get the associated services for this certain user
         // 'collections', 'page layouts'
-        res.locals.services = ['page','collections']
+        res.locals.services = ['page','collections', 'service-manager']
         next()
     }
 }

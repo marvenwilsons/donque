@@ -397,9 +397,9 @@ img {
   border-right: 1px solid #41794683;
 }
 .backgroundinfo{
-  background:#f4f4f5;
-  color:#606266;
-  border: 1px solid #979a9f;
+  background:#e5f3fd;
+  color:#389ff4;
+  /* border: 1px solid #979a9f; */
 }
 .backgroundwarn{
   background: rgba(255, 166, 0, 0.253);

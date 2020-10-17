@@ -49,7 +49,7 @@
                     <v-icon color="var(--deftheme-blue-text)">
                         mdi-arrow-right-circle
                     </v-icon>
-                    <strong>
+                    <strong :style="{color: $vuetify.theme.themes.light.primary}" >
                         {{item}}
                     </strong>
                 </div>

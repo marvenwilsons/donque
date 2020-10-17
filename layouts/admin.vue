@@ -66,7 +66,9 @@ export default {
         }
     },
     created() {
-        this.$vuetify.theme.themes.light.primary = '#409eff'
+        setTimeout(() => {
+            this.$vuetify.theme.themes.light.primary = '#409eff'
+        }, 100);
 
         this.h = this
         const { onAdminLoad } = controlpanel(this)

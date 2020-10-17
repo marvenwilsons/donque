@@ -62,7 +62,7 @@ module.exports = {
     theme: {
       dark: false,
       themes: {
-        dark: {
+        light: {
           primary: '#409eff',
           accent: colors.grey.darken3,
           secondary: colors.amber.darken3,
