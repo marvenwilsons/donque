@@ -1,7 +1,7 @@
 <template>
     <v-app class="flexcenter flex relative" style="height:100vh; overflow:hidden;" >
         <globalModal/>
-        <v-content>
+        <v-main>
             <v-flex class="absolute fullwidth fullheight-percent" >
                 <appSideBar/>
                 <v-flex > 
@@ -34,7 +34,7 @@
                         ></div>
                 </v-flex>
             </v-flex>
-        </v-content>
+        </v-main>
     </v-app>
 </template>
 

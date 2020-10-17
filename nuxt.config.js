@@ -2,7 +2,6 @@ const colors = require('vuetify/es5/util/colors').default
 const bodyParser = require('body-parser')
 
 module.exports = {
-  mode: 'universal',
   /*
   ** Headers of the page
   */
@@ -15,7 +14,8 @@ module.exports = {
       { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'stylesheet', href: 'https://unpkg.com/element-ui/lib/theme-chalk/index.css' },
     ]
   },
   /*
@@ -32,6 +32,7 @@ module.exports = {
   */
   plugins: [
     '@/plugins/pane-views.js',
+    '@/plugins/element-ui.js',
   ],
   /*
   ** Nuxt.js dev-modules
@@ -44,8 +45,13 @@ module.exports = {
   ** Nuxt.js modules
   */
   modules: [
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    'nuxt-element-ui'
   ],
+  elementUI: {
+    components: ['Button', 'DatePicker'],
+    locale: 'fr',
+  },
   /*
   ** vuetify module configuration
   ** https://github.com/nuxt-community/vuetify-module
