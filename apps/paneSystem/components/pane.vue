@@ -1,7 +1,6 @@
 <template>
     <transition name="slide-fade">
         <v-flex v-if="ready" flexcol >
-        <!--  var(--deftheme-dark-primary) -->
         <div 
             style="background: #f5f7fa"
             class="pad025" >

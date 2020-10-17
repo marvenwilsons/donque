@@ -29,15 +29,6 @@
             :id="myId"
             :class="classes"
         ></v-text-field>
-        <!-- <el-input 
-            v-if="elementProperty.fieldtype == 'string'"
-            :placeholder="`${elementProperty.fieldDescription}`"
-            v-model="inputValue"
-            :style="{background:bgColor}"
-            :loading="loadingStatus"
-            :id="myId"
-            :class="classes" 
-        /> -->
         <v-textarea
             dense
             outlined
