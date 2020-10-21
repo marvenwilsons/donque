@@ -1,0 +1,129 @@
+<template>
+    <v-sheet>
+        <div class="custom-tree-container pad050">
+            <div class="block">
+                <p>DQ Systems Services v1</p>
+                <!-- :render-content="renderContent" -->
+                <el-tree
+                    :data="data"
+                    node-key="id"
+                    default-expand-all
+                    :expand-on-click-node="false"
+                    :render-content="renderContent" 
+                    >
+                </el-tree>
+            </div>
+        </div>
+    </v-sheet>
+</template>
+
+<script>
+  let id = 1000;
+
+  export default {
+    data() {
+      const data = [
+          {
+              id: 1,
+              label: 'Page Services',
+              children: [{
+                  id: 4,
+                  label: 'layouts'
+              }]
+          }, 
+          {
+              id: 2,
+              label: 'DQ Services',
+              children: [{
+              id: 5,
+              label: 'Level two 2-1'
+              }, {
+              id: 6,
+              label: 'Level two 2-2'
+              }]
+          }, 
+        {
+          id: 3,
+          label: 'Users & Roles',
+          children: [{
+            id: 7,
+            label: 'Level two 3-1'
+          }, {
+            id: 8,
+            label: 'Level two 3-2'
+          }]
+        },
+        {
+          id: 4,
+          label: 'Roles',
+          children: [{
+            id: 7,
+            label: 'Level two 3-1'
+          }, {
+            id: 8,
+            label: 'Level two 3-2'
+          }]
+        }
+      ];
+      return {
+        data: JSON.parse(JSON.stringify(data)),
+        data: JSON.parse(JSON.stringify(data))
+      }
+    },
+
+    methods: {
+      append(data) {
+        const newChild = { id: id++, label: 'testtest', children: [] };
+        if (!data.children) {
+          this.$set(data, 'children', []);
+        }
+        data.children.push(newChild);
+      },
+
+      remove(node, data) {
+        const parent = node.parent;
+        const children = parent.data.children || parent.data;
+        const index = children.findIndex(d => d.id === data.id);
+        children.splice(index, 1);
+      },
+
+      renderContent(h, { node, data, store }) {
+        //   node.data.label
+          if(data.label == 'DQ Services' || data.label == 'Users & Roles' || data.label == 'Roles') {
+              return (
+                <span class="custom-tree-node">
+                    <span>{node.label}</span>
+                    <span>
+                    <el-button size="mini" type="text" on-click={ () => this.append(data) }>
+                        <div class="marginleft125" >
+                            New
+                        </div>
+                    </el-button>
+                    </span>
+                </span>);
+          } else {
+              return (
+                  <span class="custom-tree-node">
+                    <span>{node.label}</span>
+                  </span>
+              )
+          }
+        
+        }
+    },
+    created() {
+      console.log('fetch users, roles and services')
+    }
+  };
+</script>
+
+<style>
+  .custom-tree-node {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+    padding-right: 8px;
+  }
+</style>

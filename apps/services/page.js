@@ -281,7 +281,7 @@ module.exports = Templates.Service({
                 },
                 paneConfig: {
                     paneName: data.pageName,
-                    paneWidth: '700px',
+                    paneWidth: '1000px',
                     isClosable: true,
                     paneViews: ['pageContent'],
                     defaultPaneView: 0,

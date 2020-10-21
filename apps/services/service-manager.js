@@ -28,7 +28,7 @@ module.exports = Templates.Service({
                     paneName: 'Pages',
                     paneWidth: '100%',
                     isClosable: true,
-                    paneViews: ['listify','slide'],
+                    paneViews: ['serviceMaker','slide'],
                     defaultPaneView: 0,
                     paneData: data,
                 },
