@@ -67,10 +67,6 @@ export default {
     },
     Page: function({pageName,admin_id,lastModified,pageContent,version_id,isUndermaintenance,subPages,pageId}) {
         this.pageName = ((arg) => {
-            // TODO:
-            // convert everything to lower case
-            // convert white space to dash
-            // should not allow special characters
             return arg
         })(pageName)
         this.pageId = pageId

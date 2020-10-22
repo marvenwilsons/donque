@@ -88,7 +88,6 @@
       },
 
       renderContent(h, { node, data, store }) {
-        //   node.data.label
           if(data.label == 'DQ Services' || data.label == 'Users & Roles' || data.label == 'Roles') {
               return (
                 <span class="custom-tree-node">

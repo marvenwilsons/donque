@@ -24,6 +24,7 @@ export default function (app) {
     }
 
     controlpanel.onAdminLogin = function (username, password, db) {
+        //TODO
         // reach database for admin resource here, app code executes in the server
         console.log('onAdminLogin')
         // db.storedFunctions.getAdminServices(username,password)
@@ -32,7 +33,7 @@ export default function (app) {
         //      * returns
         //      * token,services,admiName,siteName
         //      */
-        // })
+        // })                                                                                         
     }
 
     // syspane init functions
