@@ -2,7 +2,7 @@ const path = require('path')
 const Templates = require(path.join(__dirname,'../../server/templates.js'))
 
 module.exports = Templates.Service({
-    name: 'Service Manager',
+    name: 'Market Place',
     initialData: function(sql,fetch) { // on initial load
         // perform get request here
         let nodes = []
@@ -25,7 +25,7 @@ module.exports = Templates.Service({
                     hideControlls: true
                 },
                 paneConfig: {
-                    paneName: 'Service Manager',
+                    paneName: 'Pages',
                     paneWidth: '100%',
                     isClosable: true,
                     paneViews: ['serviceMaker','slide'],
