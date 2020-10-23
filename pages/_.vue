@@ -6,7 +6,6 @@
 
 <script>
 import h from '@/helper'
-import debug from '@/apps/debug/index'
 import paneSystem from '@/apps/paneSystem/index'
 
 export default {
@@ -15,7 +14,6 @@ export default {
         this.h = this
     },
     components: {
-        debug,
         paneSystem
     },
     layout: context => {
