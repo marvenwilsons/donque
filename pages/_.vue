@@ -1,27 +1,6 @@
 <template>
     <v-flex flexcol >
-        <div>
-            <main style="background:darkgray" class="fullwidth" >
-                <v-flex fullwidth   fullheight-percent >
-                    <!-- <debug 
-                        :data=" $store.state.pane"
-                    /> -->
-                    <!-- <debug 
-                        :data="{
-                            paneSystem: $store.state.pane
-                        }"
-                    /> -->
-                    <!-- <debug 
-                        :data="{
-                            queue: $store.state.queue,
-                            pointer: $store.state.queuePointer,
-                        }"
-                    /> -->
-                </v-flex>
-            </main>
-        </div>
         <div :is="$store.state.app['app-current-view']" ></div>
-
     </v-flex>
 </template>
 
