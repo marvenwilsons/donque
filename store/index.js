@@ -181,6 +181,7 @@ export const mutations = {
         }
 }
 
+import systemEvents from '../apps/controlpanel/system-events'
 export const actions = {
     async nuxtServerInit ({commit,state},context) { 
         // console.log('> NuxtServerInit')
@@ -190,39 +191,8 @@ export const actions = {
         } else if(urlPath === '/dqlogin') {
             // TODO: login
         } else if(urlPath === '/dqadmin') {
-            // get services
-            const service = await this.$axios
-            .get('/$dqappservices/service', {
-                // TODO: 1
-                params: {
-                    username: 'marvenwilsons', // TODO: get from localstorage
-                    apikey: 'test' // TODO: get from localstorage
-                  }
-            })
-            .then(({data}) => {
-                return data.response
-            })
-            .catch(err => {
-                console.log('> err',err.message)
-            })
-
-            const unPackServices = ((s) => {
-                return s.map(service => JSON.parse(service))
-            })(service)
-
-            // set menu items
-            unPackServices.map(items => {
-                commit('app/addAppService', items)
-                commit('app/addMenu', items.name)
-            })
-            
-            // assign default active menu
-            if(!state.app['defualt-active']) {
-                commit('app/stateController', {
-                    key: 'defualt-active',
-                    value: state.app['app-admin-sidebar-items'][0]
-                })
-            }
+            const { onAdminLogin_client } = systemEvents
+            await onAdminLogin_client(this,commit,state)
         }
         
     }

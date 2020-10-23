@@ -1,5 +1,6 @@
 import templates from '@/templates'
 import utils from '@/utils'
+import systemEvents from './system-events'
 
 export default function (app) {
     const controlpanel = {}
