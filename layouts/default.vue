@@ -1,6 +1,9 @@
 <template>
   <v-app>
-        <nuxt />
+      <!-- all kinds of layouts here -->
+        <section>
+          <nuxt/>
+        </section>
   </v-app>
 </template>
 

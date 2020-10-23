@@ -16,7 +16,7 @@
             <v-flex class="flexcol fullheight-percent" :style="{width: isFullWidth ? '100%' : 'initial'}" >
                 <v-flex id="dq-main-w" class="relative fullheight-percent padright050" >
                     <v-flex
-                    class="margintop050 marginbottom050 marginleft025"
+                    class="margintop025 marginbottom025 marginleft025"
                     v-for="(pane,index) in $store.state.pane" 
                     :key="`${index}${index + 10}${index + 30}`" 
                     :style="{maxWidth: pane.paneConfig.paneWidth, minWidth: pane.paneConfig.paneWidth, zIndex: '100'}">
