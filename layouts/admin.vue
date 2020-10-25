@@ -45,10 +45,6 @@ import Templates from '@/templates'
 import controlpanel from '@/apps/controlpanel/controlpanel'
 import h from '@/helper'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
-
-// import { TweenMax, TimelineLite, TweenLite } from "gsap";
-
-
 import {mapGetters} from 'vuex'
 export default {
     mixins: [h],
@@ -75,10 +71,8 @@ export default {
         onAdminLoad()
     },
     mounted() {
-
         const { onAdminMount } = controlpanel(this)
         onAdminMount()
-
     },
     methods: {
         dwinTopEventHandler(name,context) {
