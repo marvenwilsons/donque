@@ -1,26 +1,33 @@
 <template>
-    <v-sheet>
-        <div class="custom-tree-container pad050">
-            <div class="block">
-                <p>DQ Systems Services v1</p>
-                <!-- :render-content="renderContent" -->
-                <el-tree
-                    :data="data"
-                    node-key="id"
-                    default-expand-all
-                    :expand-on-click-node="false"
-                    :render-content="renderContent" 
-                    >
-                </el-tree>
-            </div>
-        </div>
-    </v-sheet>
+    <section class="fullwidth flex" >
+      <v-sheet class="fullheight-percent" >
+          <div class="custom-tree-container pad050">
+              <div class="block">
+                  <p>DQ Systems Services v1</p>
+                  <!-- :render-content="renderContent" -->
+                  <el-tree
+                      :data="data"
+                      node-key="id"
+                      default-expand-all
+                      :expand-on-click-node="false"
+                      :render-content="renderContent" 
+                      >
+                  </el-tree>
+              </div>
+          </div>
+      </v-sheet>
+      <section class="pad125 fullwidth" role="content area" >
+        {{selectedView}}
+      </section>
+    </section>
 </template>
 
 <script>
   let id = 1000;
+  import h from '@/helper'
 
   export default {
+    mixins: [h],
     data() {
       const data = [
           {
@@ -34,13 +41,7 @@
           {
               id: 2,
               label: 'DQ Services',
-              children: [{
-              id: 5,
-              label: 'Level two 2-1'
-              }, {
-              id: 6,
-              label: 'Level two 2-2'
-              }]
+              children: []
           }, 
         {
           id: 3,
@@ -67,12 +68,26 @@
       ];
       return {
         data: JSON.parse(JSON.stringify(data)),
-        data: JSON.parse(JSON.stringify(data))
+        selectedView: undefined
       }
     },
 
     methods: {
       append(data) {
+        if(data.label == 'DQ Services') {
+          console.log('add new service', this.actions.syspane)
+          // this.selectedView = 'formBuilder'\
+          this.$emit('onEvent', {
+            eventName: '',
+            context: ''
+          })
+          
+        } else if(data.label == 'Users & roles') {
+          console.log('users and roles')
+        } else if(data.label == 'Roles') {
+          console.log('Roles')
+        }
+
         const newChild = { id: id++, label: 'testtest', children: [] };
         if (!data.children) {
           this.$set(data, 'children', []);
