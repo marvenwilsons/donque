@@ -31,7 +31,7 @@ export default {
         alert(msg)
         location.reload()
     },
-    Service({name,initialData,views}) {
+    Service({name,initialData,views,view}) {
         const s = {
             // service name
             name: ((arg) => {
@@ -47,7 +47,10 @@ export default {
             // views
             views: ((arg) => {
                 return arg.toString()
-            })(views)
+            })(views),
+            view: ((arg) => {
+                return arg.toString()
+            })(view)
         }
 
         return {
