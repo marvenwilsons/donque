@@ -453,8 +453,7 @@ export default function (app) {
 
     controlpanel.actions.syspane.getServiceView = function (dataSet,viewIndex,beforeRender) {
         // returns a service objects
-        const {views} = app.$store.state.app['app-services'][app.$store.state.app['active-sidebar-item']]
-        const deserializeViews = new Function('return ' + views)()
+        const {view} = app.$store.state.app['app-services'][app.$store.state.app['active-sidebar-item']]
         const helper = {  /** app for global access, if you use app, you have to provide a paneIndex, or if not all panes will be affected */
             paneSettings: app.paneSettings,
             paneModal : app.paneModal,
@@ -470,8 +469,45 @@ export default function (app) {
             sysmodal: controlpanel.actions.sysmodal
         }
         
-        // dependency enject the views function
-        const serviceObject = deserializeViews(dataSet,helper,utils,templates)
+        // dependency enject the views function 
+        let serviceObject = undefined
+        
+        const d = new Function('return ' + view)()
+        const svo2 = d(dataSet,helper,utils,templates)
+
+        if(Array.isArray(dataSet)) {
+            const svoArrayViews = svo2.arrayViews
+            if(svoArrayViews.length == 1) {
+                serviceObject = svoArrayViews[0]
+            } else {
+                for(let i = 0; i < svoArrayViews.length; i++) {
+                    if(svoArrayViews[i].additionalRenderCondition === true) {
+                        serviceObject = svoArrayViews[i]
+                        break
+                    } else {
+                        if(svoArrayViews.length - 1 === i) {
+                            alert('Cant find a service object for the selected dataSet')
+                        }
+                    }
+                }
+            }
+        } else if (!Array.isArray(dataSet) && typeof dataSet === 'object') {
+            const svoObjectViews = svo2.objectViews
+            if(svoObjectViews.length == 1) {
+                serviceObject = svoObjectViews[0]
+            } else {
+                for(let i = 0; i < svoObjectViews.length; i++) {
+                    if(svoObjectViews[i].additionalRenderCondition === true) {
+                        serviceObject = svoObjectViews[i]
+                        break
+                    } else {
+                        if(svoObjectViews.length - 1 === i) {
+                            alert('Cant find a service object for the selected dataSet')
+                        }
+                    }
+                }
+            }
+        }
 
         if(!serviceObject) {
             app.systemError('getServiceView error: Unhandled dataSet in service views, cannot find a service view, check console log for more details')
