@@ -2,23 +2,35 @@ const path = require('path')
 const fetch = require('node-fetch');
 
 try {
-    module.exports = function(rootDirForServices) {
+    module.exports = function(rootDirForServices,fd) {
         return function (userServices) {
             return new Promise((resolve,reject) => {
                 const userServicesDataPkg = userServices.map(e=> {
-                    const file = require(`${rootDirForServices}/${e}`)
-                    return file.body
-                    .initialData(null,fetch) // <-- TODO: pass psql connection on first param
+                    if(`${e}.js` == fd) {
+                        const file = require(`${rootDirForServices}/${e}`)
+                        return file.body
+                        .initialData(null,fetch) // <-- TODO: pass psql connection on first param
+                    }
+                    
                 })
                 Promise.all(userServicesDataPkg)
                 .then(res => {
                     const servicePkg =  userServices.map((e,i) => {
-                        const file = require(`${rootDirForServices}/${e}`)
-                        return {
-                            payload: res[i], 
-                            content: file.body
+                        if(`${e}.js` == fd) {
+                            const file = require(`${rootDirForServices}/${e}`)
+                            return {
+                                payload: res[i], 
+                                content: file.body
+                            }
                         }
                     })
+
+                    for(let i = 0; i < servicePkg.length; i++) {
+                        if(servicePkg[i] === undefined) {
+                            servicePkg.splice(i,1)
+                        }
+                    }
+
                     resolve(servicePkg)
                 })
 
