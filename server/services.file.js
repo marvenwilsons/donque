@@ -5,12 +5,12 @@ try {
     module.exports = function(rootDirForServices) {
         return function (userServices) {
             return new Promise((resolve,reject) => {
-                const p = userServices.map(e=> {
+                const userServicesDataPkg = userServices.map(e=> {
                     const file = require(`${rootDirForServices}/${e}`)
                     return file.body
                     .initialData(null,fetch) // <-- TODO: pass psql connection on first param
                 })
-                Promise.all(p)
+                Promise.all(userServicesDataPkg)
                 .then(res => {
                     const servicePkg =  userServices.map((e,i) => {
                         const file = require(`${rootDirForServices}/${e}`)

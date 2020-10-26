@@ -1,4 +1,4 @@
-export default function(data,client,utils,Templates) {
+exports = function(data,client,utils,Templates) {
     return {
         expectedSetOfKeys: ['pageName','pageId'],
         // Configuration of the pane

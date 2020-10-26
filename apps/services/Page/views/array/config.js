@@ -1,4 +1,4 @@
-export default function(data,client,utils,Templates) {
+module.exports = function(data,client,utils,Templates) {
     return {
         // Configuration of the pane
         paneConfig: {

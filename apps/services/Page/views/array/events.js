@@ -1,4 +1,4 @@
-export default () => ({
+module.exports = () => ({
     // handle what happens when the pane is loaded
     paneOnLoad: function(syspane,syspanemodal, dwin) {
         if(data.length == 0) {
