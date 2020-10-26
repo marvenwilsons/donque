@@ -31,7 +31,7 @@ export default {
         alert(msg)
         location.reload()
     },
-    Service({name,initialData,views,view}) {
+    Service({name,initialData,view}) {
         const s = {
             // service name
             name: ((arg) => {
@@ -44,10 +44,6 @@ export default {
                 // if(!Array.isArray(arg)) throw new Error(`service data should be an array, instead got a ${typeof arg}: ${arg}`)
                 return arg
             })(initialData),
-            // views
-            views: ((arg) => {
-                return arg.toString()
-            })(views),
             view: ((arg) => {
                 return arg.toString()
             })(view)
