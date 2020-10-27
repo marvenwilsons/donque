@@ -8,7 +8,6 @@
                     <div class="fullwidth flex" style="color:whitsmoke" >
                         <div class="marginright050" >
                             <v-chip color="var(--deftheme-light-primary)" outlined text-color="#292929" >
-                                    pane # {{paneIndex}} | 
                                 {{$store.state.pane[paneIndex].paneConfig.paneName}}
                             </v-chip>
                         </div>
