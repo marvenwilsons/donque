@@ -3,16 +3,16 @@ const Templates = require(path.join(__dirname,'../../server/templates.js'))
 
 module.exports = Templates.Service({
     name: 'Service Manager',
-    initialData: function(sql,fetch) { // on initial load
+    initialData (sql,fetch) { // on initial load
         // perform get request here
         let nodes = []
         return new Promise((resolve) => {
             resolve(nodes);
         })
     },
-    views: function(data,client,utils,Templates) {
-        if(Array.isArray(data)) {
-            return {
+    view: (data,client,utils,Templates) =>  ({
+        arrayViews: [
+            {
                 componentConfig: {
                     uniview: {
                         flexDirection: 'col',
@@ -99,6 +99,6 @@ module.exports = Templates.Service({
 
                 }
             }
-        } 
-    }
+        ]
+    })
 })

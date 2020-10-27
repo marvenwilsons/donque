@@ -187,10 +187,10 @@ module.exports = Templates.Service({
             resolve(pages)
         })
     },
-    views: function(data,client,utils,Templates) {
-        /** Page list and sub pages */
-        if(Array.isArray(data)) {
-            return {
+    view: (data,client,utils,Templates) => ({
+        arrayViews: [
+            // page list
+            {
                 componentConfig: {
                     uniview: {
                         flexDirection: 'col',
@@ -269,10 +269,11 @@ module.exports = Templates.Service({
 
                 }
             }
-        } 
-        /** Page Content when user clicks view page */
-        if( !Array.isArray(data) && utils.hasSetOfKeys(['pageName','pageId'], data) ) {
-            return {
+        ],
+        objectViews: [
+            // selected page, the page object
+            {
+                additionalRenderCondition: utils.hasSetOfKeys(['pageName','pageId'], data),
                 componentConfig: {
                     msg: 'hello world'
                 },
@@ -288,6 +289,6 @@ module.exports = Templates.Service({
                     paneData: data.item ? data.item : data
                 }
             }
-        }  
-    }
+        ]
+    })
 })
