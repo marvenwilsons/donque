@@ -1,7 +1,23 @@
 <template>
     <div class="">
+        <!-- warning -->
+        <div class="marginleft125 marginright125" v-if="warning" >
+            <strong>
+                <v-icon v-if="warning" x-small > 
+                    mdi-alert-circle
+                </v-icon> Attention Needed
+            </strong>
+            <div @click="warningClick" class="margintop050 pointer" >
+                <div style="background:orange" >
+                    <p class="pad025" style="line-height:20px;" >
+                        {{warning}}
+                    </p>
+                </div>
+            </div>
+            <v-divider></v-divider>
+        </div>
         <!-- type of text -->
-        <div class="marginleft125 marginright125 padtop125" v-if="type == 'text'" >
+        <div class="marginleft125 marginright125" v-if="type == 'text'" >
             <strong>
                 {{title}}
             </strong>
@@ -10,9 +26,10 @@
                     {{body}}
                 </p>
             </div>
+            <v-divider></v-divider>
         </div>
         <!-- type of events -->
-        <div class="padtop125" v-if="type == 'events'" >
+        <div class="padtop050" v-if="type == 'events'" >
             <strong class="marginleft125 marginright125" >
                 {{title}}
             </strong>
@@ -23,13 +40,15 @@
                     </div>
                 </div>
             </div>
+            <v-divider></v-divider>
+
         </div>
     </div>
 </template>
 
 <script>
 export default {
-    props: ['type', 'title', 'body'],
+    props: ['type', 'title', 'body', 'warning'],
     methods: {
         trimTitle(str) {
             if(str.length > 46){
@@ -37,6 +56,12 @@ export default {
             } else {
                 return str
             }
+        },
+        warningClick() {
+            this.$emit('onEvent', {
+                eventName: 'warningClick',
+                context: this.warning
+            })
         }
     }
 }
