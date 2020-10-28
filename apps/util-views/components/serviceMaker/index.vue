@@ -1,24 +1,22 @@
 <template>
     <section class="fullwidth flex" >
-      <v-sheet class="fullheight-percent" >
-          <div class="custom-tree-container pad050">
+      <v-sheet class="fullheight-percent borderred fullwidth" >
+          <div class="custom-tree-container">
               <div class="block">
-                  <p>DQ Systems Services v1</p>
+                  <!-- <p>DQ Systems Services v1</p> -->
+                  <simpleNavs/>
                   <!-- :render-content="renderContent" -->
-                  <el-tree
+                  <!-- <el-tree
                       :data="data"
                       node-key="id"
                       default-expand-all
                       :expand-on-click-node="false"
                       :render-content="renderContent" 
                       >
-                  </el-tree>
+                  </el-tree> -->
               </div>
           </div>
       </v-sheet>
-      <section class="pad125 fullwidth" role="content area" >
-        {{selectedView}}
-      </section>
     </section>
 </template>
 
@@ -33,10 +31,17 @@
           {
               id: 1,
               label: 'Page Services',
-              children: [{
+              children: [
+                {
                   id: 4,
                   label: 'layouts'
-              }]
+                },
+                {
+                  id: 5,
+                  label: 'Color Pallete'
+                }
+              
+              ]
           }, 
           {
               id: 2,

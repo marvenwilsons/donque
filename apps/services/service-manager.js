@@ -26,7 +26,7 @@ module.exports = Templates.Service({
                 },
                 paneConfig: {
                     paneName: 'Service Manager',
-                    paneWidth: '100%',
+                    paneWidth: 'initial',
                     isClosable: true,
                     paneViews: ['serviceMaker','slide'],
                     defaultPaneView: 0,
