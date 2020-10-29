@@ -145,7 +145,9 @@ export default {
                     updateChildPaneData:(objData,targetKey) => s.actions.syspane.updatePaneData(paneIndex + 1,objData,targetKey),
                     updateParentPaneData:(objData,targetKey) => s.actions.syspane.updatePaneData(paneIndex - 1,objData,targetKey),
                     updatePaneConfig: (config) => s.updatePaneConfig(paneIndex,config) ,
-                    getPaneIndex:    () => paneIndex
+                    getPaneIndex:    () => paneIndex,
+                    // loading is not a syspane method but a sysmodal method
+                    loading: s.actions.sysmodal.loading
                 }
                 const dwin = {
                     spawn: (dWinObject,cb) => s.actions.dwin.spawn(dWinObject,cb),
