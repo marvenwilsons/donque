@@ -276,7 +276,7 @@ export default {
                     context: e.context
                 }
                 if(this.$store.state.pane[this.paneIndex].paneConfig.onEvent != undefined) {
-                    const targetFn = this.$store.state.pane[this.paneIndex].paneConfig.onEvent(event,syspane,syspanemodal,dwin)
+                    const targetFn = this.$store.state.pane[this.paneIndex].paneConfig.onEvent(event,syspane,syspanemodal,dwin, this.$axios)
                     if(targetFn[e.eventName]) {
                         targetFn[e.eventName]()
                     }
