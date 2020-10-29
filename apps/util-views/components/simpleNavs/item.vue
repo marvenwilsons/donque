@@ -1,6 +1,7 @@
 <template>
-    <div style="min-width:300px;" >
-        <el-tooltip :open-delay="100" transition="el-zoom-in-bottom" style="border: 1px solid white;" class="item" effect="light"   placement="right-start">
+    <div @click="itemClick" style="min-width:300px;" class="relative" >
+        <loader v-if="loading == itemName" />
+        <el-tooltip  :open-delay="200" transition="el-zoom-in-bottom" style="border: 1px solid white;" class="item" effect="light"   placement="right-start">
                 <div style="width:300px;" class="" slot="content" >
                     <div style="align-items: flex-end;" class="flex padleft125 padright125 padtop125" >
                         <div class="flex flexcenter">
@@ -18,7 +19,7 @@
                     </div>
                   <div style="align-items: flex-start" class="margintop125 flex flexwrap padleft125 padright125" >
                     <!-- Available actions -->
-                    <button v-for="(e, itemEventsIndex) in itemEvents" :key="itemEventsIndex" class="ibtn dq-button" size="medium" >
+                    <button @click="eventClick(e)" v-for="(e, itemEventsIndex) in itemEvents" :key="itemEventsIndex" class="ibtn dq-button" size="medium" >
                         {{e}}
                     </button>
                   </div>
@@ -26,26 +27,34 @@
                   <div class="padtop125 relative" style="max-height:260px; overflow-y: auto;" >
                       <div class=" fullwidth fullheight-percent">
                           <div v-for="(content, index) in additionalContent" :key="index" >
-                            <itemAdditionaContent 
+                            <itemAdditionaContent
+                                :warning="warning" 
                                 :type="content.type"
                                 :title="content.title"
                                 :body="content.body"
+                                @onEvent="eventHandler"
                             />
                         </div>
                       </div>
                   </div>
                 </div>
                 <!-- btn -->
-                <el-button :autofocus="true" class="fullwidth" >
-                    <div class="flex" >
-                        <div style="width:20px;" class="" >
-                            <v-icon style="color:#389ff4; height:15px; width:15px" dense >
-                                {{itemIcon}}
-                            </v-icon>
+                <el-button :autofocus="warning ? true : false" class="fullwidth" >
+ 
+                    <div class="flex spacebetween" >
+                        <div class="flex" >
+                            <div style="width:20px;" class="" >
+                                <v-icon style="color:#389ff4; height:15px; width:15px" dense >
+                                    {{itemIcon}}
+                                </v-icon>
+                            </div>
+                            <div class="marginleft050 fullheight-percent" >
+                                {{itemName}}
+                            </div>
                         </div>
-                        <div class="marginleft050 fullheight-percent" >
-                            {{itemName}}
-                        </div>
+                        <v-icon v-if="warning"  > 
+                            mdi-alert-circle
+                        </v-icon>
                     </div>
                 </el-button>
         </el-tooltip>
@@ -54,10 +63,38 @@
 
 <script>
 import itemAdditionaContent from './itemAdditionalContent'
+import loader from './loader'
 export default {
-    props: ["itemName", "itemIcon", "itemDescription", "additionalContent", "itemEvents"],
+    props: ["itemName", "itemIcon", "itemDescription", "additionalContent", "itemEvents", "warning", "loading"],
     components: {
-        itemAdditionaContent
+        itemAdditionaContent,
+        loader
+    },
+    methods: {
+        itemClick() {
+            this.$emit('onEvent',{
+                eventName: 'navClick',
+                context: {
+                    itemName: this.itemName,
+                    itemIcon: this.itemIcon,
+                    itemDescription: this.itemDescription,
+                    additionalContent: this.additionalContent,
+                    itemEvents: this.itemEvents
+                }
+            })
+        },
+        eventClick(e) {
+            this.$emit('onEvent', {
+                eventName: 'onEventClick',
+                context: {
+                    itemName: this.itemName,
+                    clickedOn: e
+                }
+            })
+        },
+        eventHandler(e) {
+            this.$emit('onEvent', e)
+        }
     }
 }
 </script>
