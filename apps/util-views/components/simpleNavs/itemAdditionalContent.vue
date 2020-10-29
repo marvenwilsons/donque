@@ -29,12 +29,12 @@
             <v-divider></v-divider>
         </div>
         <!-- type of events -->
-        <div class="padtop050" v-if="type == 'events'" >
+        <div  class="padtop050" v-if="type == 'events'" >
             <strong class="marginleft125 marginright125" >
                 {{title}}
             </strong>
             <div class="margintop050" >
-                <div class="dq-button sbtnf  fullwidth flex" v-for="(content,index) in body" :key="index" >
+                <div @click="onServiceClick(content.eventName)" class="dq-button sbtnf  fullwidth flex" v-for="(content,index) in body" :key="index" >
                     <div class="flex padtop025 padbottom025 sbtn" style="padding-left:12px;padding-right:12px; color:#389ff4" >
                         {{trimTitle(content.title)}}
                     </div>
@@ -47,7 +47,7 @@
 
 <script>
 export default {
-    props: ['type', 'title', 'body', 'warning'],
+    props: ['type', 'title', 'body', 'warning', 'removeWarningOn'],
     methods: {
         trimTitle(str) {
             if(str.length > 46){
@@ -60,6 +60,15 @@ export default {
             this.$emit('onEvent', {
                 eventName: 'onWarningClick',
                 context: this.warning
+            })
+        },
+        onServiceClick(body) {
+            this.$emit('onEvent', {
+                eventName: 'onServiceClick',
+                context: {
+                    title: this.title,
+                    body
+                }
             })
         }
     }

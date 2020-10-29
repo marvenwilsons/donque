@@ -1,23 +1,27 @@
 <template>
-    <div style="background:white;" >
-        <div v-for="(nav, index) in navs" :key="index" >
-            <div class="marginleft125 marginright125 margintop125 padtop125" >
-                <strong class="" > 
-                    {{nav.name}}
-                </strong>
-                <v-divider></v-divider>
+    <div class="relative flex" style="background:white; overflow-y:auto; overflow-x:hidden; min-width:320px;" >
+        <div class="absolute fullwidth" >
+            <div v-for="(nav, index) in navs" :key="index" >
+                <div class="marginleft125 marginright125 margintop125 padtop125" >
+                    <strong class="" > 
+                        {{nav.name}}
+                    </strong>
+                    <v-divider></v-divider>
+                </div>
+                <item
+                    v-for="(item,n) in nav.items"
+                    :key="n"
+                    :itemName="item.name"
+                    :itemIcon="item.itemIcon"
+                    :additionalContent="item.additionalContent"
+                    :itemEvents="item.events"
+                    :warning="item.warning"
+                    
+                    :loading="ll"
+                    :removeWarningOn="removeWarningOn"
+                    @onEvent="bubbleEvent"
+                />
             </div>
-            <item
-                v-for="(item,n) in nav.items"
-                :key="n"
-                :itemName="item.name"
-                :itemIcon="item.itemIcon"
-                :additionalContent="item.additionalContent"
-                :itemEvents="item.events"
-                :warning="item.warning"
-                :loading="ll"
-                @onEvent="bubbleEvent"
-            />
         </div>
     </div>
 </template>
@@ -26,7 +30,6 @@
 import h from '@/helper'
 import Templates from '@/templates'
 import item from './item'
-
 export default {
     mixins: [h],
     props: ['myData','myConfig', 'paneIndex'],
@@ -35,13 +38,15 @@ export default {
     },
     data: () => ({
         navs: [],
-        ll: false
+        ll: false,
+        removeWarningOn: undefined
     }),
     methods: {
         bubbleEvent(e) {
             this.$emit('onEvent',{
                 methods: {
-                    loading: this.loading
+                    loading: this.loading,
+                    removeWarning: this.removeWarning
                 },
                 ...e
             })
@@ -49,14 +54,23 @@ export default {
         loading(e) {
             this.ll = e
         },
+        removeWarning(nav) {
+            for(let i = 0; i < this.navs.length;i++) {
+                for(let j = 0; j < this.navs[i].items.length; j++) {
+                    if(this.navs[i].items[j].name == nav) {
+                        this.navs[i].items[j].warning = null
+                        break
+                    }
+                }
+            }
+        },
         c(data,fn) {
             const { syspane, syspanemodal, dwin} =  this.normyDep(this.paneIndex,this)
             fn(data,syspane,syspanemodal,dwin)
         }
     },
     mounted() {
-        this.navs = this.myData
-        console.log(this.myData)
+        this.navs = this.cp(this.myData)
     },
     components: {
         item

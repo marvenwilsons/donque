@@ -33,6 +33,7 @@
                                 :title="content.title"
                                 :body="content.body"
                                 @onEvent="eventHandler"
+                                @onServiceClick="eventHandler"
                             />
                         </div>
                       </div>
