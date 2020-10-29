@@ -1,7 +1,7 @@
 <template>
     <div class="">
         <!-- warning -->
-        <div class="marginleft125 marginright125" v-if="warning" >
+        <div  class="marginleft125 marginright125" v-if="warning" >
             <strong>
                 <v-icon v-if="warning" x-small > 
                     mdi-alert-circle
@@ -41,7 +41,6 @@
                 </div>
             </div>
             <v-divider></v-divider>
-
         </div>
     </div>
 </template>
@@ -59,7 +58,7 @@ export default {
         },
         warningClick() {
             this.$emit('onEvent', {
-                eventName: 'warningClick',
+                eventName: 'onWarningClick',
                 context: this.warning
             })
         }

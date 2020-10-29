@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="absolute fullwidth fullheight-percent flex flexcenter" 
-            style="background: lightgray; z-index: 1; opacity: 0.7; filter: blur(10px); box-shadow: inset 0 0 2000px rgba(255, 255, 255, .5); backdrop-filter: blur(5px);" >
+            style="background: #fafafa; z-index: 1; opacity: 0.7; filter: blur(10px); box-shadow: inset 0 0 2000px rgba(255, 255, 255, .5); backdrop-filter: blur(5px);" >
         </div>
         <div class="absolute fullwidth fullheight-percent flex flexcenter" style="z-index: 2;" >
             <div class="flex flexcenter" >
