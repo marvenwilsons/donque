@@ -5,7 +5,82 @@ module.exports = Templates.Service({
     name: 'Service Manager',
     initialData (sql,fetch) { // on initial load
         // perform get request here
-        let nodes = []
+        let nodes = [
+            {
+                name: 'Page Services',
+                items: [
+                    {
+                        name: 'Page Pool',
+                        itemIcon: 'mdi-poll',
+                        additionalContent: [
+                          {
+                              type: 'text',
+                              title: 'Description',
+                              body: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus ipsum aspernatur modi aliquam, expedita in distinctio enim. Officiis, ullam amet. Quia quam totam commodi aspernatur, illo facere. Porro, excepturi enim?'
+                          },
+                          {
+                              type: 'events',
+                              title: 'Other Services',
+                              body: [
+                                  {
+                                      title: 'Click and you will be directed to a dq service this is a verly long tile like super long',
+                                      eventName: 'myEvent'
+                                  },
+                                  {
+                                      title: 'Click and you will be directed to a dq service',
+                                      eventName: 'myEvent'
+                                  },
+                                  {
+                                      title: 'Click and you will be directed to a dq service this is a verly long tile like super long',
+                                      eventName: 'myEvent'
+                                  },
+                                  {
+                                      title: 'Click and you will be directed to a dq service',
+                                      eventName: 'myEvent'
+                                  }
+                              ]
+                          },
+                          {
+                              type: 'events',
+                              title: 'Tutorials',
+                              body: [
+                                  {
+                                      title: 'Click and you will be directed to a dq service this is a verly long tile like super long',
+                                      eventName: 'myEvent'
+                                  },
+                                  {
+                                      title: 'Click and you will be directed to a dq service',
+                                      eventName: 'myEvent'
+                                  },
+                                  {
+                                      title: 'Click and you will be directed to a dq service this is a verly long tile like super long',
+                                      eventName: 'myEvent'
+                                  },
+                                  {
+                                      title: 'Click and you will be directed to a dq service',
+                                      eventName: 'myEvent'
+                                  }
+                              ]
+                          },
+                        ],
+                        events: ['View', "Create", "Edit"],
+                        warning: 'Pool option needs to be updated'
+                    },
+                    {
+                        name: 'Page Layouts',
+                        itemIcon: 'mdi-border-all',
+                        additionalContent: undefined,
+                        events: ['View My Layouts','Download Page Layouts']
+                    },
+                    {
+                        name: 'Color Palletes',
+                        itemIcon: 'mdi-grain',
+                        additionalContent: undefined,
+                        events: []
+                    },
+                ]
+            },
+        ]
         return new Promise((resolve) => {
             resolve(nodes);
         })
@@ -13,22 +88,12 @@ module.exports = Templates.Service({
     view: (data,client,utils,Templates) =>  ({
         arrayViews: [
             {
-                componentConfig: {
-                    uniview: {
-                        flexDirection: 'col',
-                        itemMargin: '20px'
-                    },
-                    events: ['open'],
-                    displayProp: 'pageName',
-                    ableToAddItem: false,
-                    infoDisplay: ['pageName'],
-                    hideControlls: true
-                },
+                componentConfig: {},
                 paneConfig: {
                     paneName: 'Service Manager',
                     paneWidth: 'initial',
                     isClosable: true,
-                    paneViews: ['serviceMaker','slide'],
+                    paneViews: ['simpleNavs'],
                     defaultPaneView: 0,
                     paneData: data,
                 },
@@ -50,53 +115,12 @@ module.exports = Templates.Service({
                         syspanemodal.appendErrorMsg('Page Name Cannot be undefined')
                     }
                 },
-                onEvent(event,syspane,syspanemodal, dwin) {
+                onEvent(event,syspane,syspanemodal, dwin, axios) {
                     return {
-                        addNewPage() {
-                            syspane.prompt({
-                                type: 'string',
-                                header: 'Page Name',
-                                isClosable: true,
-                            }, (input) => {
-                                console.log('input -> ',input)
-                            })
-                        },
-                        'view page'() {
-                            syspane.render(event.context)
-                        },
-                        'sub page'() {
-                            syspane.render(event.context.subPages)
-                        },
-                        'delete page'() { 
-                            syspanemodal.logError(`Warning! Are you sure you want to delete ${event.context.pageName}`,() => {
-                                syspanemodal.close()
-                                syspane.closeUnUsedPane(s)
-                            })
-                        },
-                        // 'edit page'() {
-                        //     syspane.render(event.context.subPages)
-                        // },
-                        rename() {
-                            syspane.prompt({
-                                type: 'password',
-                                value: null,
-                                header: 'Enter Password',
-                                defaultValue: null,
-                                info: 'Enter password',
-                                isClosable: true
-                            }, (data) => {
-                                console.log(data)
-                            })
-                        },
-                        openNewPane() {
-                            console.log('open new pane zero pane',event.context)
-                            syspane.render(event.context)
-                        },
-                        onDataChange() {
-                            syspane.updateChildPaneData(event.context)
+                        navClick(methods) {
+                            
                         }
                     }
-
                 }
             }
         ]
