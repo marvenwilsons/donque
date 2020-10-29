@@ -278,7 +278,7 @@ export default {
                 if(this.$store.state.pane[this.paneIndex].paneConfig.onEvent != undefined) {
                     const targetFn = this.$store.state.pane[this.paneIndex].paneConfig.onEvent(event,syspane,syspanemodal,dwin, this.$axios)
                     if(targetFn[e.eventName]) {
-                        targetFn[e.eventName]()
+                        targetFn[e.eventName](e.methods)
                     }
                 } else {
                     this.systemError('onEvent Error, Cannot find onEvent hook in serviceObject')
