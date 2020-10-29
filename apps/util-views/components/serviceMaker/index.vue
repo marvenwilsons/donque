@@ -4,16 +4,15 @@
           <div class="custom-tree-container">
               <div class="block">
                   <!-- <p>DQ Systems Services v1</p> -->
-                  <simpleNavs/>
                   <!-- :render-content="renderContent" -->
-                  <!-- <el-tree
+                  <el-tree
                       :data="data"
                       node-key="id"
                       default-expand-all
                       :expand-on-click-node="false"
                       :render-content="renderContent" 
                       >
-                  </el-tree> -->
+                  </el-tree>
               </div>
           </div>
       </v-sheet>
