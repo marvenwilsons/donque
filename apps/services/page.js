@@ -239,6 +239,7 @@ module.exports = Templates.Service({
                             })
                         },
                         'view page'() {
+                            console.log(event.context)
                             syspane.render(event.context)
                         },
                         'sub page'() {
