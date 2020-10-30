@@ -9,6 +9,8 @@
                 backdrop-filter: blur(5px);
                 " 
                 >
+                <!-- <div class="fullheight-percent ddt" style="width:20px; border-bottom:2px solid #389ff4; opacity: 0.5" >
+                </div> -->
         </div>
         <div class="absolute fullwidth fullheight-percent flex flexcenter" style="z-index: 2;" >
             <div class="flex flexcenter" >
@@ -16,7 +18,7 @@
                     <strong>
                         <!-- Fetching resources -->
                     </strong>
-                    <v-icon class="loader" small >mdi-arrow-right-bold</v-icon>
+                    <!-- <v-icon class="loader" small >mdi-arrow-right</v-icon> -->
                 </div> 
                 
             </div>
@@ -30,6 +32,7 @@
   animation: spin 0.8s linear infinite;
   border: none;
   width: 160%;
+  border-radius: 1px !important;
 }
 
 @keyframes spin {
@@ -37,5 +40,15 @@
     25%{ left: 100%;}
     50%{ right: 50%;}
     100%{ right: 0;}
+}
+
+.ddt {
+    animation: elongate 0.8s linear infinite;
+}
+@keyframes elongate {
+    0% { width: 0;}
+    25%{ width: 100%;}
+    50%{ width: 50%;}
+    100%{ width: 0;}
 }
 </style>
