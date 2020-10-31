@@ -138,10 +138,10 @@ module.exports = Templates.Service({
                         name: 'Admin Settings',
                         itemIcon: 'mdi-account',
                         events: ['View', "Create", "Edit"],
-                        warning: 'Pool option needs to be updated'
+                        warning: null
                     },
                     {
-                        name: 'Page Layouts',
+                        name: 'Explore & Install Services',
                         itemIcon: 'mdi-border-all',
                         additionalContent: undefined,
                         events: ['View My Layouts','Download Page Layouts']
