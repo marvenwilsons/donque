@@ -1,7 +1,7 @@
 <template>
-    <div @click="itemClick" style="min-width:300px;" class="relative" >
+    <div @mouseover="disabled = false" @click="itemClick" style="min-width:300px;" class="relative" >
         <loader v-if="loading == itemName" />
-        <el-tooltip  :open-delay="200" transition="el-zoom-in-bottom" style="border: 1px solid white;" class="item" effect="light"   placement="right-start">
+        <el-tooltip :disabled="disabled" :open-delay="200" transition="el-zoom-in-bottom" style="border: 1px solid white;" class="item" effect="light"   placement="right-start">
                 <div style="width:300px;" class="" slot="content" >
                     <div style="align-items: flex-end;" class="flex padleft125 padright125 padtop125" >
                         <div class="flex flexcenter">
@@ -66,7 +66,7 @@
 import itemAdditionaContent from './itemAdditionalContent'
 import loader from './loader'
 export default {
-    props: ["itemName", "itemIcon", "itemDescription", "additionalContent", "itemEvents", "warning", "loading"],
+    props: ["itemName", "itemIcon", "itemDescription", "additionalContent", "itemEvents", "warning", "loading", "disabled"],
     components: {
         itemAdditionaContent,
         loader

@@ -19,6 +19,7 @@
                     
                     :loading="ll"
                     :removeWarningOn="removeWarningOn"
+                    :disabled="disabled"
                     @onEvent="bubbleEvent"
                 />
             </div>
@@ -39,10 +40,12 @@ export default {
     data: () => ({
         navs: [],
         ll: false,
-        removeWarningOn: undefined
+        removeWarningOn: undefined,
+        disabled: false
     }),
     methods: {
         bubbleEvent(e) {
+            this.disabled = true
             this.$emit('onEvent',{
                 methods: {
                     loading: this.loading,
@@ -52,6 +55,7 @@ export default {
             })
         },
         loading(e) {
+            this.disabled = true
             this.ll = e
         },
         removeWarning(nav) {
@@ -59,6 +63,7 @@ export default {
                 for(let j = 0; j < this.navs[i].items.length; j++) {
                     if(this.navs[i].items[j].name == nav) {
                         this.navs[i].items[j].warning = null
+                        this.disabled = true
                         break
                     }
                 }
