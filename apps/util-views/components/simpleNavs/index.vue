@@ -69,6 +69,11 @@ export default {
             fn(data,syspane,syspanemodal,dwin)
         }
     },
+    watch: {
+        myData() {
+            this.navs = this.cp(this.myData)
+        }
+    },
     mounted() {
         this.navs = this.cp(this.myData)
     },

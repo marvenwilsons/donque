@@ -135,59 +135,8 @@ module.exports = Templates.Service({
                 name: 'System Settings',
                 items: [
                     {
-                        name: 'Page Pool',
-                        itemIcon: 'mdi-poll',
-                        additionalContent: [
-                          {
-                              type: 'text',
-                              title: 'Description',
-                              body: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus ipsum aspernatur modi aliquam, expedita in distinctio enim. Officiis, ullam amet. Quia quam totam commodi aspernatur, illo facere. Porro, excepturi enim?'
-                          },
-                          {
-                              type: 'events',
-                              title: 'Other Services',
-                              body: [
-                                  {
-                                      title: 'Click and you will be directed to a dq service this is a verly long tile like super long',
-                                      eventName: 'myEvent'
-                                  },
-                                  {
-                                      title: 'Click and you will be directed to a dq service',
-                                      eventName: 'myEvent'
-                                  },
-                                  {
-                                      title: 'Click and you will be directed to a dq service this is a verly long tile like super long',
-                                      eventName: 'myEvent'
-                                  },
-                                  {
-                                      title: 'Click and you will be directed to a dq service',
-                                      eventName: 'myEvent'
-                                  }
-                              ]
-                          },
-                          {
-                              type: 'events',
-                              title: 'Tutorials',
-                              body: [
-                                  {
-                                      title: 'Click and you will be directed to a dq service this is a verly long tile like super long',
-                                      eventName: 'myEvent'
-                                  },
-                                  {
-                                      title: 'Click and you will be directed to a dq service',
-                                      eventName: 'myEvent'
-                                  },
-                                  {
-                                      title: 'Click and you will be directed to a dq service this is a verly long tile like super long',
-                                      eventName: 'myEvent'
-                                  },
-                                  {
-                                      title: 'Click and you will be directed to a dq service',
-                                      eventName: 'myEvent'
-                                  }
-                              ]
-                          },
-                        ],
+                        name: 'Admin Settings',
+                        itemIcon: 'mdi-account',
                         events: ['View', "Create", "Edit"],
                         warning: 'Pool option needs to be updated'
                     },
@@ -196,12 +145,6 @@ module.exports = Templates.Service({
                         itemIcon: 'mdi-border-all',
                         additionalContent: undefined,
                         events: ['View My Layouts','Download Page Layouts']
-                    },
-                    {
-                        name: 'Color Palletes',
-                        itemIcon: 'mdi-grain',
-                        additionalContent: undefined,
-                        events: []
                     },
                 ]
             }
@@ -223,6 +166,7 @@ module.exports = Templates.Service({
                     paneData: data,
                 },
                 paneOnLoad: function(syspane,syspanemodal, dwin) {
+                    console.log('PaneOnLoad Service-Manager')
                     if(data.length == 0) {
                         syspane.prompt({
                             type: 'string',
@@ -269,6 +213,9 @@ module.exports = Templates.Service({
                                                 setTimeout(() => {
                                                     progress('end', close)
                                                     methods.loading(false)
+                                                    syspane.render({
+                                                        test: data
+                                                    })
                                                 }, 1000);
                                             }, 500);
                                         }, 2000);
@@ -277,6 +224,39 @@ module.exports = Templates.Service({
                             }, 1000);
                         }
                     }
+                }
+            }
+        ],
+        objectViews: [
+            {
+                additionalRenderCondition: utils.hasSetOfKeys(['test'], data),
+                componentConfig: {},
+                paneConfig: {
+                    paneName: 'Service Manager',
+                    paneWidth: '500px',
+                    isClosable: true,
+                    paneViews: ['raw'],
+                    defaultPaneView: 0,
+                    paneData: data,
+                },
+                paneOnLoad: function(syspane,syspanemodal, dwin) {
+                    console.log('PaneOnLoad Service-Manager')
+                    if(data.length == 0) {
+                        syspane.prompt({
+                            type: 'string',
+                            header: 'Page Name',
+                            info: 'There are no page(s) to display, Create a new page to get started.',
+                            isClosable: false,
+                        }, (input) => {
+                            console.log('input -> ',input)
+                        })
+                    }
+                },
+                onModalData: function(modalData,syspane,syspanemodal, dwin) {
+
+                },
+                onEvent() {
+
                 }
             }
         ]

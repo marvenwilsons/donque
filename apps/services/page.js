@@ -1,6 +1,15 @@
 const path = require('path')
 const Templates = require(path.join(__dirname,'../../server/templates.js'))
+// pages has events array, and events tab
+// pages has session memmory where a user cam save amy data on that variable
 
+// module.exports = function(pageMethods,pageMemory) {
+//     return {
+//       beforePageLoad(collection,nodeFetch) {},
+//       onPageLoad() {},
+//       onCustomEvent(eventName) {},
+//     }
+//   }
 module.exports = Templates.Service({
     name: 'Pages',
     initialData: function(sql,fetch) { // on initial load
@@ -210,6 +219,7 @@ module.exports = Templates.Service({
                     paneData: data,
                 },
                 paneOnLoad: function(syspane,syspanemodal, dwin) {
+                    console.log('PaneOnLoad Pages')
                     if(data.length == 0) {
                         syspane.prompt({
                             type: 'string',
