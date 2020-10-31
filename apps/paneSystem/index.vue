@@ -31,6 +31,7 @@
                                 class="paneShadow gl" 
                                 :myData="pane"
                                 :paneIndex="index"
+                                :id="`${pane.paneConfig.paneName.toLowerCase().replace(' ','')}${index}`"
                             >
                         </pane>
                     </v-flex>
