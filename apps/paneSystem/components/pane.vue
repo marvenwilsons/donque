@@ -35,7 +35,7 @@
                         </v-menu>
                         <v-chip outlined color="var(--deftheme-light-primary)">
                             <span 
-                                @click="closePane"
+                                @click="closePane(`${$store.state.pane[paneIndex].paneConfig.paneName.toLowerCase().replace(' ','')}${paneIndex}`)"
                                 class="pointer"
                                 style="color:#505050; font-weight:100" >
                             	&#x2716;
@@ -377,5 +377,16 @@ export default {
 .slide-fade-enter, .slide-fade-leave-to{
   transform: translateX(15px);
   opacity: 0;
+}
+
+.closeAnimation {
+  -webkit-animation: ca 0.8s linear infinite; /* Safari */
+  animation: ca 0.8s linear infinite;
+}
+
+@keyframes ca {
+    0% { opacity: 100%;}
+    60% { transform: scale(0)}
+    100%{ opacity: 0%;}
 }
 </style>

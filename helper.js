@@ -170,8 +170,18 @@ export default {
             }
         },
         /** close pane */
-        closePane() {      
-            this.actions.syspane.close(this.paneIndex)
+        closePane(id) {      
+            const pane =  document.getElementById(id)
+            
+
+            if(this.paneIndex == 0){
+                this.actions.syspane.close(this.paneIndex)
+            } else {
+                pane.classList.add('closeAnimation')
+                setTimeout(() => {
+                    this.actions.syspane.close(this.paneIndex)
+                }, 250);
+            }
         },
         /** closes a the pane modal */
         closePaneModal(paneIndex) {
