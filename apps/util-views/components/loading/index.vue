@@ -1,14 +1,38 @@
 <template>
     <div v-if="progressLoader" class="padleft050 padright050 marginbottom050" >
-        <v-progress-linear :value="progressLoader"></v-progress-linear>
+        <div class="flex flexcenter" >
+            <v-progress-linear :value="progressLoader"></v-progress-linear>
+            <v-icon v-if="!ptIsOpen" @click="ptIsOpen = true" class="pointer marginleft050" small >
+                mdi-arrow-left-drop-circle
+            </v-icon>
+            <v-icon v-if="ptIsOpen" @click="ptIsOpen = false" class="pointer marginleft050" small >
+                mdi-arrow-down-drop-circle
+            </v-icon>
+        </div>
+                           
         <div class="caption flex spacebetween" >
             <div>
                 <span v-if="totalItems" >{{execTimes}}/{{totalItems}}</span> {{progressText}} 
             </div>
             <div>
-                {{Math.round(progressLoader)}}%
+                <div> 
+                    {{Math.round(progressLoader)}}% 
+
+                </div>
             </div>
         </div>
+        <v-expand-transition>
+            <div v-if="ptIsOpen" style="background: black; color:white; height: 100px; overflow:auto;" class="pad025 relative" >
+                <div class="absolute" >
+                    <div v-for="(item,index) in processStack" :key="item" >
+                        <code style="background: black; color:white" >
+                            process {{index + 1}}: &nbsp; {{item}}
+                        </code>
+                    </div>
+                </div>
+            </div>
+        </v-expand-transition>
+
     </div>
 </template>
 
@@ -20,8 +44,15 @@ export default {
         incrementValue: undefined,
         totalItems: undefined,
         execTimes: 0,
-        isSet: false
+        isSet: false,
+        processStack: [],
+        ptIsOpen: false
     }),
+    watch: {
+        progressText(n) {
+            this.processStack.push(n)
+        }
+    },
     methods: {
         updateProgressText(text, totalItems) {
             this.progressText = text
