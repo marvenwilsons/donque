@@ -1,6 +1,6 @@
 <template>
-    <transition name="slide-fade">
-        <v-flex v-if="ready" flexcol >
+    <v-expand-transition>
+        <v-flex transition="slide-x-transition" v-if="ready" flexcol >
         <div 
             style="background: #f5f7fa"
             class="pad025" >
@@ -207,7 +207,7 @@
             </v-flex>
         </v-flex>
         </v-flex>
-    </transition>
+    </v-expand-transition>
 </template>
 
 <script>
@@ -380,8 +380,8 @@ export default {
 }
 
 .closeAnimation {
-  -webkit-animation: ca 0.8s linear infinite; /* Safari */
-  animation: ca 0.8s linear infinite;
+  -webkit-animation: ca 0.5s linear; /* Safari */
+  animation: ca 0.5s linear;
 }
 
 @keyframes ca {
