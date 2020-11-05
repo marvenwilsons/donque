@@ -88,5 +88,6 @@ module.exports = {
     bodyParser.json(),
     '~/server/app.js',
     '~/server/client_services/services.route.js',
-  ]
+  ],
+  telemetry: false
 }
