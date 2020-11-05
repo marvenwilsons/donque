@@ -3,9 +3,10 @@ const router = express.Router()
 const auth = require('./sevices.auth')
 const getList = require('./services.getlist')
 const systemServices = require('./services')
+const appCheck = require('../client_proxy/app_check')
 
 
-router.get('/service', auth, getList,(req,res) => {
+router.get('/service', appCheck, auth, getList,(req,res) => {
     const {services} = res.locals
     systemServices(services).then(serviceContent => {
         let finalContent = []

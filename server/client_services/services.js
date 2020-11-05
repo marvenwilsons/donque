@@ -3,8 +3,6 @@ const path = require('path')
 const fetch = require('node-fetch');
 const rootDirForServices = path.join(__dirname,'../../apps/services')
 
-console.log('asdf', rootDirForServices)
-
 try {
     module.exports = (userServices) => {
         return new Promise((resolve,reject) => {

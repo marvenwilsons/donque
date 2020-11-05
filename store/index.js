@@ -206,21 +206,26 @@ export const actions = {
                 console.log('> err',err.message)
             })
 
-            const unPackServices = ((s) => s.map(service => JSON.parse(service)))(service)
+            if(service == 'init app') {
+                console.log('initialing app')
+            } else {
+                const unPackServices = ((s) => s.map(service => JSON.parse(service)))(service)
 
-            // set menu items
-            unPackServices.map(items => {
-                commit('app/addAppService', items)
-                commit('app/addMenu', items.name)
-            })
-            
-            // assign default active menu
-            if(!state.app['defualt-active']) {
-                commit('app/stateController', {
-                    key: 'defualt-active',
-                    value: state.app['app-admin-sidebar-items'][0]
+                // set menu items
+                unPackServices.map(items => {
+                    commit('app/addAppService', items)
+                    commit('app/addMenu', items.name)
                 })
+                
+                // assign default active menu
+                if(!state.app['defualt-active']) {
+                    commit('app/stateController', {
+                        key: 'defualt-active',
+                        value: state.app['app-admin-sidebar-items'][0]
+                    })
+                }
             }
+            
         }
         
     }
