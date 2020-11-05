@@ -208,6 +208,10 @@ export const actions = {
 
             if(service == 'init app') {
                 console.log('initialing app')
+                commit('app/stateController', {
+                    key: 'app-action',
+                    value: service
+                })
             } else {
                 const unPackServices = ((s) => s.map(service => JSON.parse(service)))(service)
 

@@ -61,6 +61,11 @@ export default {
             return this.$store.state.dWinRight
         }
     },
+    beforeCreate() {
+        if(this.$store.state.app['app-action'] == 'init app') {
+            this.$router.push('/dqinit')
+        }
+    },
     created() {
         setTimeout(() => {
             this.$vuetify.theme.themes.light.primary = '#409eff'
