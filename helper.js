@@ -28,6 +28,7 @@ export default {
         cp: utils.copy,
         pipe: utils.pipe,
         validateString:utils.validateString,
+        commonStringValidations: utils.commonStringValidations.vs1,
         answerPending(answer,pointer) {
             // console.log('> Answering pending question')
             if(answer && answer != '--void--') {
