@@ -55,7 +55,58 @@ utils.validateString = function({mode,value}) {
         return res.every(isTrue)
     }
 }
+utils.validator = {
+    hasSpecialCharacters(char) {
+        if(!char) return false
+        if(typeof char == 'number') return false
+        const c = char.toString()
+        const regex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/gim;
+        return regex.exec(c) == null ? false : true
+    },
+    hasNumber(char) {
+        const regex = /[0-9]/gim;
+        return regex.exec(char) != null;
+    },
+    hasWhiteSpace(char) {
+        if(!char) return false
+        if(typeof char == 'number') return false
 
+        const c = char.toString()
+        return c ? c.indexOf(" ") != -1 : false
+    },
+    hasUppperCase(char) {
+        if(!char) return false
+        const regex = /.*[A-Z]/g;
+        return regex.exec(char) != null
+    },
+    hasLowerCase(char) {
+        if(!char) return false
+        const regex = /.*[a-z]/g;
+        return regex.exec(char) != null
+    },
+    isEmail(char) {
+        if(!char) return false
+        if(validator.hasSpecialCharacters(char) == false) return false
+        const c = char.split('@')
+        const userIdentifier = c[0]
+        const emailEnding = c[1]
+        if(c.length != 2) return false
+        if(!userIdentifier) return false
+        if(validator.hasSpecialCharacters(userIdentifier)) return false
+        if(validator.hasWhiteSpace(userIdentifier)) return false
+        if(validator.hasLowerCase(userIdentifier) == false) return false
+        let e = emailEnding.split('.')
+        if(e.length != 2) return false
+        if(!e[1]) return false
+        if(validator.hasUppperCase(e[1]) || validator.hasUppperCase(e[0])) return false
+        if(e[1].length == 1 || e[0].length == 1) return false
+        if(e[1].length > 5) return false
+        e[1] = e[1].trim()
+        if(validator.hasSpecialCharacters(e[1]) || validator.hasSpecialCharacters(e[0])) return false
+        if(validator.hasWhiteSpace(e[1]) || validator.hasWhiteSpace(e[0])) return false
+        return true
+    }
+}
 utils.commonStringValidations = {
     // string should not have whitspaces
     // string should not have special characters
@@ -88,7 +139,6 @@ utils.commonStringValidations = {
         return string
     }
 }
-
 utils.hasSetOfKeys = (ArrayOfKeys, ObjectToCompare) => {            
     let res = []
     Object.keys(ObjectToCompare).map(e => {
@@ -100,7 +150,6 @@ utils.hasSetOfKeys = (ArrayOfKeys, ObjectToCompare) => {
     const isTrue = (current) => current === true 
     return res.every(isTrue) && ArrayOfKeys.length === res.length
 }
-
 utils.pipe = function (...funcs) {
     return function(val) {
         let lastResult
@@ -111,7 +160,10 @@ utils.pipe = function (...funcs) {
     }
     /**usage -> this.pipe(fn1,fn2,fn3)('input') */
 }
-
+utils.lowercaseAlphabet = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
+utils.uppercaseAlphabet = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
+utils.numberStrings = ['0','1','2','3','4','5','6','7','8','9']
+utils.specialCharacters = ['!','@','#','$','%','^','&','*','(',')','_','+']
 utils.copy = function (o) {
     if (o === null) return null;
         
@@ -124,7 +176,6 @@ utils.copy = function (o) {
         
     return output;
 }
-
 utils.randId = function(length) {
     var result = "";
         var characters =
@@ -137,7 +188,6 @@ utils.randId = function(length) {
         }
     return result;
 }
-
 const crypto = require('crypto')
 utils.encrypt = (ValueToHash,Salt) => {
     let cipher = crypto.createCipher('aes-128-cbc',`${ValueToHash,Salt}`)
@@ -145,7 +195,6 @@ utils.encrypt = (ValueToHash,Salt) => {
     encrypted += cipher.final('hex')
     return encrypted
 }
-
 utils.decrypt = (ValueToReHash,Salt) => {
     const encrypted = e.encrypt(ValueToReHash,Salt)
 
@@ -154,5 +203,4 @@ utils.decrypt = (ValueToReHash,Salt) => {
     decrypted += decipher.final('utf-8')
     return decrypted 
 }
-
 export default utils
