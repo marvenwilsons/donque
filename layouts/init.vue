@@ -17,11 +17,14 @@
                         </h5>
                     </div>
                 </div>
-                <div v-if="error" >
-                    <div class="backgrounderr pad050 marginbottom125" >
-                        {{error}}
+                <v-expand-transition>
+                    <div v-if="error" >
+                        <div class="backgrounderr pad050 marginbottom125 borderRad4" >
+                            {{error}}
+                        </div>
                     </div>
-                </div>
+                </v-expand-transition>
+
                 <div class=" marginbottom125" >
                     <v-text-field
                         label="First Name"
@@ -30,6 +33,7 @@
                         outlined
                         v-model="firstName"
                         :error="errorTarget == 'First Name'"
+                        :disabled="disableAll"
                     ></v-text-field>
                     <v-text-field
                         label="Last Name"
@@ -38,6 +42,7 @@
                         outlined
                         v-model="lastName"
                         :error="errorTarget == 'Last Name'"
+                        :disabled="disableAll"
                     ></v-text-field>
                     <v-text-field
                         label="Email"
@@ -46,6 +51,7 @@
                         outlined
                         v-model="email"
                         :error="errorTarget == 'Email'"
+                        :disabled="disableAll"
                     ></v-text-field>
                 </div>
                 <v-text-field
@@ -55,6 +61,7 @@
                     outlined
                     v-model="applicationName"
                     :error="errorTarget == 'Application Name'"
+                    :disabled="disableAll"
                 ></v-text-field>
                 <v-text-field
                     label="Username"
@@ -63,17 +70,21 @@
                     outlined
                     v-model="username"
                     :error="errorTarget == 'Username'"
+                    :disabled="disableAll"
                 ></v-text-field>
                 <v-text-field
                     label="Password"
                     dense
                     class="marginbottom125"
                     outlined
-                    type="password"
+                    :type="show1 ? 'text' : 'password'"
                     v-model="password"
                     :error="errorTarget == 'Password'"
                     persistent-hint
                     hint="Password must have Special characters, lower & uppercase letters & numbers"
+                    :disabled="disableAll"
+                    :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                    @click:append="show1 = !show1"
                 ></v-text-field>
                 <div class="flex flexend margintop125" >
                     <v-btn :loading="isLoading" @click="createApp" color="primary" >
@@ -95,10 +106,9 @@ export default {
     mixins: [h],
     created() {
         this.h = this
-
-        console.log(this.validateString)
     },
     data: () => ({
+        disableAll: false,
         error: undefined,
         errorTarget: undefined,
         isLoading: false,
@@ -107,50 +117,89 @@ export default {
         applicationName: undefined,
         username: undefined,
         password: undefined,
-        email: undefined
+        email: undefined,
+        show1: false
     }),
+    created() {
+        this.firstName = 'Marven Wilson'
+        this.lastName = 'Donque'
+        this.email = 'marveenwilsons@gmail.com'
+        this.applicationName = 'wordpress'
+        this.username = 'marvenwilsons'
+    },
     methods: {
         createApp() {
             this.error = undefined
             this.errorTarget = undefined
             try{
-                this.commonStringValidations('First Name',this.firstName,2,false)
+                const correcntFirstNameConditions = [
+                    this.validateString({mode: 'has-special-character', value: this.firstName}) == false,
+                    this.validateString({mode: 'has-number', value: this.firstName}) == false,
+                    this.validateString({mode: 'is-required', value: this.firstName}) == false
+                ]
+
+                switch(correcntFirstNameConditions.indexOf(false)) {
+                    case 0:
+                        throw 'First Name should not have any special characters'
+                    break
+                    case 1:
+                        throw 'First Name should not have any number characters'
+                    break
+                    case 2:
+                        throw 'First Name should not be left empty or undefined'
+                    break
+                }
+
+                if(this.validateString({mode: 'is-email', value: this.email}) == false) {
+                    throw 'invalid-Email: Invalid Email Format'
+                }
+
                 this.commonStringValidations('Last Name',this.lastName,2,false)
                 this.commonStringValidations('Application Name',this.applicationName,1,false)
                 this.commonStringValidations('Username',this.username,5,false)
-                console.log('email', this.validateString({mode: 'is-email', value: this.email}))
-                if(this.validateString({mode: 'is-email', value: this.email}) == false) {
-                    this.error = 'Invalid Email Format'
-                    this.errorTarget = 'Email'
+
+                
+                const correctPasswordConditions = [
+                    this.validateString({mode: 'is-required', value: this.password}),
+                    this.validateString({mode: 'has-special-character', value: this.password}),
+                    this.validateString({mode: 'has-number', value: this.password}),
+                    this.validateString({mode: 'has-whitespace', value: this.password}),
+                    this.validateString({mode: 'has-uppercase', value: this.password}),
+                    this.validateString({mode: 'has-lowercase', value: this.password})
+                ]
+
+                const passwordErrors = [
+                    'Password should include special characters',
+                    'Password should include number characters',
+                    'Password should not have whitespaces',
+                    'Password should include uppercase characters',
+                    'Password should include lowercase characters'
+                ]
+
+                switch(correctPasswordConditions.indexOf(false)) {
+                    case 1:
+                        throw 'Invalid-Password: Password is required'
+                    break
                 }
 
-                // password should have all caps letters
-                // password should have small caps letter
-                // password should have special characters
-                // password should have special numbers
-                const correctPasswordConditions = 
-                this.validateString({mode: 'has-special-character', value: this.password}) &&
-                this.validateString({mode: 'is-required', value: this.password}) == false &&
-                this.validateString({mode: 'has-number', value: this.password}) &&
-                this.validateString({mode: 'has-whitespace', value: this.password}) == false &&
-                this.validateString({mode: 'has-uppercase', value: this.password}) &&
-                this.validateString({mode: 'has-lowercase', value: this.password})
+                const allPasswordErrors = correctPasswordConditions.map((e,i) => {
+                    console.log(e)
+                    if(!e) {
+                        return passwordErrors[i]
+                    }
+                })
 
-                console.log('has-special-char', this.password, this.validateString({mode: 'has-special-character', value: this.password}))
-                console.log('is-required', this.password, this.validateString({mode: 'is-required', value: this.password}))
-
-                if(correctPasswordConditions == false) {
-                    this.error = 'Invalid Password Format'
-                    this.errorTarget = 'Password'
-                }
+                // console.log('ss', allPasswordErrors.toString().replace(",,", ",") )
+                console.log(correctPasswordConditions)
 
             }catch(e) {
-                this.errorTarget = e.split(':')[0].split('-')[1]
-                this.error = e.split(':')[1]
+                this.errorTarget = e.split(':')[0].split('-')[1] == undefined ? e.split('should')[0].trim() : e.split(':')[0].split('-')[1]
+                this.error = e.split(':')[1] == undefined ? e : e.split(':')[1].trim()
             }
 
             if(this.error == undefined) {
                 this.isLoading = true
+                this.disableAll = true
                 this.$axios.post('/app/initialize-app', {
                     username: 'this.username'
                 }).then(res => {
