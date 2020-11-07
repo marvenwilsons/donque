@@ -128,80 +128,75 @@ export default {
         this.username = 'marvenwilsons'
     },
     methods: {
+        postError(target,errmsg) {
+            this.error = errmsg
+            this.errorTarget = target
+        },
+        validateFirstName() {
+            this.validator.hasSpecialCharacters(this.firstName) &&
+            this.postError('First Name', 'First Name should not have any special characters')
+            this.validator.hasNumber(this.firstName) &&
+            this.postError('First Name','First Name should not have any numbers')
+        },
+        validateLastName() {
+            this.validator.hasSpecialCharacters(this.lastName) &&
+            this.postError('Last Name', 'Last Name should not have any special characters')
+            this.validator.hasNumber(this.lastName) &&
+            this.postError('Last Name','Last Name should not have any numbers')
+            this.validator.hasWhiteSpace(this.lastName) &&
+            this.postError('Last Name','Last Name should not have any white spaces')
+        },
+        validateApplicationName() {
+            this.validator.hasSpecialCharacters(this.applicationName) &&
+            this.postError('Application Name', 'Application Name should not have any special characters')
+            this.validator.hasWhiteSpace(this.applicationName) &&
+            this.postError('Application Name','Application Name should not have any white spaces')
+        },
+        validateUsername() {
+            this.validator.hasSpecialCharacters(this.username) &&
+            this.postError('Username', 'Username should not have any special characters')
+            this.validator.hasWhiteSpace(this.username) &&
+            this.postError('Username','Username should not have any white spaces')
+        },
+        validatePassword() {
+            // included
+            !this.validator.hasSpecialCharacters(this.password) &&
+            this.postError('Password', 'Password should include special characters')
+            !this.validator.hasNumber(this.password) &&
+            this.postError('Password', 'Password should include number characters')
+            !this.validator.hasLowerCase(this.password) &&
+            this.postError('Password', 'Password should include lower case characters')
+            !this.validator.hasUppperCase(this.password) &&
+            this.postError('Password', 'Password should include upper case characters')
+            // not included
+            this.validator.hasWhiteSpace(this.password) &&
+            this.postError('Password','Password should not have any white spaces')
+        },
+        validateEmail() {
+            !this.validator.isEmail(this.email) &&
+            this.postError('Email', 'Invalid Email Format')
+        },
         createApp() {
             this.error = undefined
             this.errorTarget = undefined
-            try{
-                const correcntFirstNameConditions = [
-                    this.validateString({mode: 'has-special-character', value: this.firstName}) == false,
-                    this.validateString({mode: 'has-number', value: this.firstName}) == false,
-                    this.validateString({mode: 'is-required', value: this.firstName}) == false
-                ]
-
-                switch(correcntFirstNameConditions.indexOf(false)) {
-                    case 0:
-                        throw 'First Name should not have any special characters'
-                    break
-                    case 1:
-                        throw 'First Name should not have any number characters'
-                    break
-                    case 2:
-                        throw 'First Name should not be left empty or undefined'
-                    break
-                }
-
-                if(this.validateString({mode: 'is-email', value: this.email}) == false) {
-                    throw 'invalid-Email: Invalid Email Format'
-                }
-
-                this.commonStringValidations('Last Name',this.lastName,2,false)
-                this.commonStringValidations('Application Name',this.applicationName,1,false)
-                this.commonStringValidations('Username',this.username,5,false)
-
-                
-                const correctPasswordConditions = [
-                    this.validateString({mode: 'is-required', value: this.password}),
-                    this.validateString({mode: 'has-special-character', value: this.password}),
-                    this.validateString({mode: 'has-number', value: this.password}),
-                    this.validateString({mode: 'has-whitespace', value: this.password}),
-                    this.validateString({mode: 'has-uppercase', value: this.password}),
-                    this.validateString({mode: 'has-lowercase', value: this.password})
-                ]
-
-                const passwordErrors = [
-                    'Password should include special characters',
-                    'Password should include number characters',
-                    'Password should not have whitespaces',
-                    'Password should include uppercase characters',
-                    'Password should include lowercase characters'
-                ]
-
-                switch(correctPasswordConditions.indexOf(false)) {
-                    case 1:
-                        throw 'Invalid-Password: Password is required'
-                    break
-                }
-
-                const allPasswordErrors = correctPasswordConditions.map((e,i) => {
-                    console.log(e)
-                    if(!e) {
-                        return passwordErrors[i]
-                    }
-                })
-
-                // console.log('ss', allPasswordErrors.toString().replace(",,", ",") )
-                console.log(correctPasswordConditions)
-
-            }catch(e) {
-                this.errorTarget = e.split(':')[0].split('-')[1] == undefined ? e.split('should')[0].trim() : e.split(':')[0].split('-')[1]
-                this.error = e.split(':')[1] == undefined ? e : e.split(':')[1].trim()
-            }
+            
+            this.validateFirstName()
+            this.validateLastName()
+            this.validateApplicationName()
+            this.validateUsername()
+            this.validatePassword()
+            this.validateEmail()
 
             if(this.error == undefined) {
                 this.isLoading = true
                 this.disableAll = true
                 this.$axios.post('/app/initialize-app', {
-                    username: 'this.username'
+                    username: this.username,
+                    firstName: this.firstName,
+                    lastName: this.lastName,
+                    email: this.email,
+                    applicationName: this.applicationName,
+                    password: this.password
                 }).then(res => {
                     // console.log('createApp ', res)
                 })
