@@ -55,7 +55,7 @@ utils.validateString = function({mode,value}) {
         return res.every(isTrue)
     }
 }
-utils.validator = {
+utils.stringValidator = {
     hasSpecialCharacters(char) {
         if(!char) return false
         if(typeof char == 'number') return false
@@ -86,24 +86,24 @@ utils.validator = {
     },
     isEmail(char) {
         if(!char) return false
-        if(validator.hasSpecialCharacters(char) == false) return false
+        if(this.hasSpecialCharacters(char) == false) return false
         const c = char.split('@')
         const userIdentifier = c[0]
         const emailEnding = c[1]
         if(c.length != 2) return false
         if(!userIdentifier) return false
-        if(validator.hasSpecialCharacters(userIdentifier)) return false
-        if(validator.hasWhiteSpace(userIdentifier)) return false
-        if(validator.hasLowerCase(userIdentifier) == false) return false
+        if(this.hasSpecialCharacters(userIdentifier)) return false
+        if(this.hasWhiteSpace(userIdentifier)) return false
+        if(this.hasLowerCase(userIdentifier) == false) return false
         let e = emailEnding.split('.')
         if(e.length != 2) return false
         if(!e[1]) return false
-        if(validator.hasUppperCase(e[1]) || validator.hasUppperCase(e[0])) return false
+        if(this.hasUppperCase(e[1]) || this.hasUppperCase(e[0])) return false
         if(e[1].length == 1 || e[0].length == 1) return false
         if(e[1].length > 5) return false
         e[1] = e[1].trim()
-        if(validator.hasSpecialCharacters(e[1]) || validator.hasSpecialCharacters(e[0])) return false
-        if(validator.hasWhiteSpace(e[1]) || validator.hasWhiteSpace(e[0])) return false
+        if(this.hasSpecialCharacters(e[1]) || this.hasSpecialCharacters(e[0])) return false
+        if(this.hasWhiteSpace(e[1]) || this.hasWhiteSpace(e[0])) return false
         return true
     }
 }
