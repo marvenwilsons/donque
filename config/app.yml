@@ -1,0 +1,3 @@
+version: "3.8"
+
+admin_route_name: dqadmin

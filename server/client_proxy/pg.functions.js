@@ -1,55 +1,63 @@
 // should only direct call to database
 // bussiness logic should not be written here
 
-// services
-export function getServices() {
+// users
+function getUsers() {
+
+}
+function getUser() {
     
 }
-export function deleteService(serviceName) {
+function addUser() {
 
 }
-export function updateService(serviceName) {
+function deleteUser() {
 
 }
-
-// users
-export function getUsers() {
-
-}
-export function addUser() {
-
-}
-export function deleteUser() {
-
-}
-export function updateUser() {
+function updateUser() {
 
 }
 
 // collection entities
-export function getEntities() {
+function getEntities() {
 
 }
-export function updateEntitie() {
+function updateEntitie() {
 
 }
-export function deleteEntitie() {
+function deleteEntitie() {
     
 }
-export function addEntitie() {
+function addEntitie() {
     
 }
 
 // collection instances
-export function getInstances(entityName) {
+function getInstances(entityName) {
 
 }
-export function addInstance(entityName, payload) {
+function addInstance(entityName, payload) {
 
 }
-export function deleteInstance() {
+function deleteInstance() {
 
 }
-export function updateInstance() {
+function updateInstance() {
 
+}
+
+module.exports = {
+    getUsers,
+    getUser,
+    addUser,
+    deleteUser,
+    updateUser,
+    getEntities,
+    updateEntitie,
+    deleteEntitie,
+    addEntitie,
+    getInstances,
+    addInstance,
+    deleteInstance,
+    updateInstance
 }

@@ -120,13 +120,13 @@ export default {
         email: undefined,
         show1: false
     }),
-    created() {
-        this.firstName = 'Marven Wilson'
-        this.lastName = 'Donque'
-        this.email = 'marveenwilsons@gmail.com'
-        this.applicationName = 'wordpress'
-        this.username = 'marvenwilsons'
-    },
+    // created() {
+    //     this.firstName = 'Marven Wilson'
+    //     this.lastName = 'Donque'
+    //     this.email = 'marveenwilsons@gmail.com'
+    //     this.applicationName = 'wordpress'
+    //     this.username = 'marvenwilsons'
+    // },
     methods: {
         postError(target,errmsg) {
             this.error = errmsg
