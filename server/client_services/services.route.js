@@ -3,7 +3,7 @@ const router = express.Router()
 const auth = require('./sevices.auth')
 const getList = require('./services.getlist')
 const systemServices = require('./services')
-const appCheck = require('../client_proxy/app_check')
+const appCheck = require('../client_proxy/app-check.js')
 
 
 router.get('/service', appCheck, auth, getList,(req,res) => {

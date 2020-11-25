@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres
+    container_name: dq-db
+    volumes:
+      - db-data:/var/lib/postgresql/data 
+    ports: 
+      - 5432:5432
+    environment: 
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=postgres
+  
+  dq:
+    build: 
+      context: .
+      target: dev
+    container_name: dq-sys
+    restart: always
+    depends_on: 
+      - postgres
+    links: 
+      - postgres
+    ports: 
+      - 3000:3000
+
+volumes: 
+  db-data:
