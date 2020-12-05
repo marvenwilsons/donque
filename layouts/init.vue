@@ -80,22 +80,19 @@ export default {
                 firstName.removeErrors()
 
                 const lastName = this.$refs.FirstForm.validateLastName()
-                lastName.errors.length != 0 &&
-                lastName.renderError(() => {
-                    hasError.push(true)
-                })
+                lastName.errors.length != 0 ?
+                lastName.renderError(() => hasError.push(true)) :
+                lastName.removeErrors()
 
                 const applicationName = this.$refs.FirstForm.validateApplicationName()
-                applicationName.errors.length != 0 &&
-                applicationName.renderError(() => {
-                    hasError.push(true)
-                })
+                applicationName.errors.length != 0 ?
+                applicationName.renderError(() =>hasError.push(true)) :
+                applicationName.removeErrors()
 
                 const username = this.$refs.FirstForm.validateUsername()
-                username.errors.length != 0 &&
-                username.renderError(() => {
-                    hasError.push(true)
-                })
+                username.errors.length != 0 ?
+                username.renderError(() => hasError.push(true)) :
+                username.removeErrors()
                 
                 const password = this.$refs.FirstForm.validatePassword()
                 password.errors.length != 0 ?
