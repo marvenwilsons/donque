@@ -23,19 +23,25 @@
                                 </h5>
                             </div>
                         </div>
-                        <v-expand-transition>
-                            <div v-if="error" >
-                                <div class="backgrounderr pad050 marginbottom125 borderRad4" >
-                                    {{error}}
-                                </div>
-                            </div>
-                        </v-expand-transition>
+                        <!--  -->
                         <FirstFom 
                             v-show="currentFrom == 1"
+                            ref="FirstForm"
+                            :disableAll="disableAll"
                         />
                         <SecondForm 
                             v-show="currentFrom == 2" 
                         />
+                        <div class="flex flexend margintop125" >
+                            <v-btn :loading="isLoading" @click="next" color="primary" >
+                                <strong>
+                                    Next
+                                    <v-icon size="medium">
+                                        mdi-arrow-right
+                                    </v-icon>
+                                </strong>
+                            </v-btn>
+                        </div>
                     </div>
                 </section>
             </div>
@@ -59,17 +65,66 @@ export default {
         SecondForm
     },
     data: () => ({
-        disableAll: false,
-        error: undefined,
-        errorTarget: undefined,
         isLoading: false,
-        show1: false,
-        currentFrom: 1
+        currentFrom: 1,
+        disableAll: undefined
     }),
     methods: {
-        postError(target,errmsg) {
-            this.error = errmsg
-            this.errorTarget = target
+        next() {
+            if(this.currentFrom == 1) {
+                let hasError = []
+                
+                const firstName = this.$refs.FirstForm.validateFirstName()
+                firstName.errors.length != 0 ? 
+                firstName.renderError(() => hasError.push(true)) :
+                firstName.removeErrors()
+
+                const lastName = this.$refs.FirstForm.validateLastName()
+                lastName.errors.length != 0 &&
+                lastName.renderError(() => {
+                    hasError.push(true)
+                })
+
+                const applicationName = this.$refs.FirstForm.validateApplicationName()
+                applicationName.errors.length != 0 &&
+                applicationName.renderError(() => {
+                    hasError.push(true)
+                })
+
+                const username = this.$refs.FirstForm.validateUsername()
+                username.errors.length != 0 &&
+                username.renderError(() => {
+                    hasError.push(true)
+                })
+                
+                const password = this.$refs.FirstForm.validatePassword()
+                password.errors.length != 0 ?
+                password.renderError(() => hasError.push(true)) :
+                password.removeErrors()
+
+                const email = this.$refs.FirstForm.validateEmail()
+                email.errors.length != 0 ?
+                email.renderError(() => hasError.push(true)) :
+                email.removeErrors()
+
+
+                if(!hasError.includes(true)) {
+                    this.isLoading = true
+                    this.disableAll = true
+                    // this.$axios.post('/app/initialize-app', {
+                    //     username: this.username,
+                    //     firstName: this.firstName,
+                    //     lastName: this.lastName,
+                    //     email: this.email,
+                    //     applicationName: this.applicationName,
+                    //     password: this.password
+                    // }).then(res => {
+                    //     // console.log('createApp ', res)
+                    // })
+                }
+            } else if(this.currentFrom == 2) {
+
+            }
         }
     }
 }
