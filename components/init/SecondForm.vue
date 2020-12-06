@@ -1,54 +1,54 @@
 <template>
     <div>
         <div class="" >
-            <v-card :elevation="firstName.errors ? 5 : 0" :class="[firstName.errors ? 'smth padtop125 padleft125 padright125 marginbottom125' : 'smth']" >
-                <div v-if="firstName.errors" class="marginbottom050 err" > 
-                    <div v-for="(msg,msgIndex) in firstName.errors" :key="`${msg}${msgIndex}`" >{{msg}}</div>
+            <v-card :elevation="databaseName.errors ? 5 : 0" :class="[databaseName.errors ? 'smth padtop125 padleft125 padright125 marginbottom125' : 'smth']" >
+                <div v-if="databaseName.errors" class="marginbottom050 err" > 
+                    <div v-for="(msg,msgIndex) in databaseName.errors" :key="`${msg}${msgIndex}`" >{{msg}}</div>
                 </div>
                 <v-text-field
                     label="Database Name"
                     dense
                     outlined
                     class="marginbottom125"
-                    v-model="firstName.value"
-                    :error="firstName.errors ? true : false"
+                    v-model="databaseName.value"
+                    :error="databaseName.errors ? true : false"
                     :disabled="disableAll"
                 ></v-text-field>
             </v-card>
 
-            <v-card :elevation="lastName.errors ? 5 : 0" :class="[lastName.errors ? 'smth padtop125 padleft125 padright125 marginbottom125' : 'smth']" >
-                <div v-if="lastName.errors" class="marginbottom050 err">
-                    <div v-for="(msg,msgIndex) in lastName.errors" :key="`${msg}${msgIndex}`" >{{msg}}</div>
+            <v-card :elevation="databaseUsername.errors ? 5 : 0" :class="[databaseUsername.errors ? 'smth padtop125 padleft125 padright125 marginbottom125' : 'smth']" >
+                <div v-if="databaseUsername.errors" class="marginbottom050 err">
+                    <div v-for="(msg,msgIndex) in databaseUsername.errors" :key="`${msg}${msgIndex}`" >{{msg}}</div>
                 </div>
                 <v-text-field
                     label="Database Username"
                     dense
                     outlined
                     class="marginbottom125"
-                    v-model="lastName.value"
-                    :error="lastName.errors ? true : false"
+                    v-model="databaseUsername.value"
+                    :error="databaseUsername.errors ? true : false"
                     :disabled="disableAll"
                 ></v-text-field>
             </v-card>
 
-            <v-card :elevation="email.errors ? 5 : 0" :class="[email.errors  ? 'smth padtop125 padleft125 padright125 marginbottom125' : 'smth']" >
-                <div v-if="email.errors " class="marginbottom050 err"> 
-                    <div v-for="(msg,msgIndex) in email.errors" :key="`${msg}${msgIndex}`" >{{msg}}</div>
+            <v-card :elevation="tablePrefix.errors ? 5 : 0" :class="[tablePrefix.errors  ? 'smth padtop125 padleft125 padright125 marginbottom125' : 'smth']" >
+                <div v-if="tablePrefix.errors " class="marginbottom050 err"> 
+                    <div v-for="(msg,msgIndex) in tablePrefix.errors" :key="`${msg}${msgIndex}`" >{{msg}}</div>
                 </div>
                 <v-text-field
                     label="Table Prefix"
                     outlined
                     dense
                     class="marginbottom125"
-                    v-model="email.value"
-                    :error="email.errors ? true : false"
+                    v-model="tablePrefix.value"
+                    :error="tablePrefix.errors ? true : false"
                     :disabled="disableAll"
                 ></v-text-field>
             </v-card>
 
-            <v-card :elevation="applicationName.errors ? 5 : 0" :class="[applicationName.errors ? 'smth padtop125 padleft125 padright125 marginbottom125' : 'smth']" >
-                <div v-if="applicationName.errors" class="marginbottom050 err" >
-                    <div v-for="(msg,msgIndex) in applicationName.errors" :key="`${msg}${msgIndex}`" >{{msg}}</div>
+            <v-card :elevation="databasePassword.errors ? 5 : 0" :class="[databasePassword.errors ? 'smth padtop125 padleft125 padright125 marginbottom125' : 'smth']" >
+                <div v-if="databasePassword.errors" class="marginbottom050 err" >
+                    <div v-for="(msg,msgIndex) in databasePassword.errors" :key="`${msg}${msgIndex}`" >{{msg}}</div>
                 </div>
                 <v-text-field
                 label="Database Password"
@@ -56,8 +56,8 @@
                 dense
                 class="marginbottom125"
                 :type="show1 ? 'text' : 'password'"
-                v-model="password.value"
-                :error="password.errors ? true : false"
+                v-model="databasePassword.value"
+                :error="databasePassword.errors ? true : false"
                 :disabled="disableAll"
                 :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
                 @click:append="show1 = !show1"
@@ -75,125 +75,100 @@ import h from '@/helper'
 
 export default {
     mixins: [h],
-    props:['disableAll','errorTargets'],
+    props:['disableAll'],
     created() {
         this.h = this
     },
     data: () => ({
-        firstName:      {value: undefined, errors: undefined},
-        lastName:       {value: undefined, errors: undefined},
-        email:          {value: undefined, errors: undefined},
-        applicationName:{value: undefined, errors: undefined},
-        username:       {value: undefined, errors: undefined},
-        password:       {value: undefined, errors: undefined},
-        error:          {value: undefined, errors: undefined},
+        databaseName:    {value: undefined, errors: undefined},
+        databaseUsername:{value: undefined, errors: undefined},
+        tablePrefix:     {value: undefined, errors: undefined},
+        databasePassword:{value: undefined, errors: undefined},
+        error:           {value: undefined, errors: undefined},
         show1: false,
     }),
     methods: {
-        validateFirstName() {
+        validateDatabaseName() {
             let errors = []
-            const value = this.firstName.value
+            const value = this.databaseName.value
 
             value == undefined && 
-                errors.push('First Nane is a required field')
+                errors.push('Database Name is a required field')
 
             this.validator.hasSpecialCharacters(value) &&
-                errors.push('First Name must not have any special characters')
+                errors.push('Datbase Name must not have any special characters')
 
             this.validator.hasNumber(value) &&
-                errors.push('First Name must not have any numbers')
+                errors.push('Database Name must not have any numbers')
 
             return {
                 value,
                 errors,
                 renderError: (cb) => {
-                    this.$set(this.firstName,'errors',errors)
+                    this.$set(this.databaseName,'errors',errors)
                     errors = []
                     cb()
                 },
-                removeErrors: () => this.$set(this.firstName,'errors',undefined)
+                removeErrors: () => this.$set(this.databaseName,'errors',undefined)
             }
         },
-        validateLastName() {
+        validateDatabaseUsername() {
             const errors = []
-            const value = this.lastName.value
+            const value = this.databaseUsername.value
 
             value == undefined && 
-                errors.push('Last Name is a required field')
+                errors.push('Database Username Name is a required field')
 
             this.validator.hasSpecialCharacters(value) &&
-                errors.push('Last Name must not have any special characters')
+                errors.push('Database Username must not have any special characters')
 
             
 
             this.validator.hasNumber(value) &&
-                errors.push('Last Name must not have any numbers')
+                errors.push('Database Username must not have any numbers')
 
             this.validator.hasWhiteSpace(value) &&
-                errors.push('Last Name must not have any white spaces')
+                errors.push('Database Username must not have any white spaces')
 
             return {
                 value,
                 errors,
                 renderError: (cb) => {
-                    this.$set(this.lastName, 'errors', errors)
+                    this.$set(this.databaseUsername, 'errors', errors)
                     cb()
                 },
-                removeErrors: () => this.$set(this.lastName,'errors',undefined)
+                removeErrors: () => this.$set(this.databaseUsername,'errors',undefined)
             }
         },
-        validateApplicationName() {
+        validateTablePrefix() {
             const errors = []
-            const value = this.applicationName.value
+            const value = this.tablePrefix.value
 
             value == undefined && 
-                errors.push('Application name is required')
+                errors.push('Table Prefix is required')
 
             this.validator.hasSpecialCharacters(value) &&
-                errors.push('Application Name must not have any special characters')
+                errors.push('Table Prefix must not have any special characters')
 
             this.validator.hasWhiteSpace(value) &&
-                errors.push('Application Name must not have any white spaces')
+                errors.push('Table Prefix must not have any white spaces')
 
             return {
                 value,
                 errors,
                 renderError: (cb) => {
-                    this.$set(this.applicationName, 'errors', errors)
+                    this.$set(this.tablePrefix, 'errors', errors)
                     cb()
                 },
-                removeErrors: () => this.$set(this.applicationName,'errors',undefined)
+                removeErrors: () => this.$set(this.tablePrefix,'errors',undefined)
             }
         },
-        validateUsername() {
+        validateDatabasePassword() {
             const errors = []
-            const value = this.username.value
+            const value = this.databasePassword.value
 
-            value == undefined 
-                && errors.push('Username is required')
-
-            this.validator.hasSpecialCharacters(value) &&
-                errors.push('Username must not have any special characters')
-
-            this.validator.hasWhiteSpace(value) &&
-                errors.push('Username must not have any white spaces')
-
-            return {
-                value,
-                errors,
-                renderError: (cb) => {
-                    this.$set(this.username, 'errors', errors)
-                    cb()
-                },
-                removeErrors: () => this.$set(this.username,'errors',undefined)
-            }
-        },
-        validatePassword() {
-            const errors = []
-            const value = this.password.value
-
-            this.password == undefined && 
-                errors.push(target,'Password is required')
+            value == undefined && 
+                errors.push('Password is required')
             // included
             !this.validator.hasSpecialCharacters(value) &&
                 errors.push('Password must include special characters')
@@ -214,32 +189,12 @@ export default {
                 value,
                 errors,
                 renderError: (cb) => {
-                    this.$set(this.password, 'errors', errors)
+                    this.$set(this.databasePassword, 'errors', errors)
                     cb()
                 },
-                removeErrors: () => this.$set(this.password,'errors',undefined)
+                removeErrors: () => this.$set(this.databasePassword,'errors',undefined)
             }
-        },
-        validateEmail() {
-            const errors = []
-            const value = this.email.value
-
-            value == undefined &&
-                errors.push('Email is a required field')
-
-            !this.validator.isEmail(value) &&
-                errors.push('Invalid Email Format')
-            
-            return {
-                value,
-                errors,
-                renderError: (cb) => {
-                    this.$set(this.email, 'errors', errors)
-                    cb()
-                },
-                removeErrors: () => this.$set(this.email,'errors',undefined)
-            }
-        },
+        }
     }
 }
 </script>

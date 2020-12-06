@@ -108,12 +108,12 @@ export default {
     props:['disableAll','errorTargets'],
     created() {
         this.h = this
-        // this.firstName.value = 'Marven Wilson'
-        // this.lastName.value = 'Donque'
-        // this.email.value = 'marveenwilsons@gmail.com'
-        // this.applicationName.value = 'wordpress'
-        // this.username.value = 'marvenwilsons'
-        // this.password.value = 'marven2123@@!ABC'
+        this.firstName.value = 'Marven Wilson'
+        this.lastName.value = 'Donque'
+        this.email.value = 'marveenwilsons@gmail.com'
+        this.applicationName.value = 'wordpress'
+        this.username.value = 'marvenwilsons'
+        this.password.value = 'marven2123@@!ABC'
     },
     data: () => ({
         firstName:      {value: undefined, errors: undefined},
@@ -229,7 +229,7 @@ export default {
             const value = this.password.value
 
             this.password == undefined && 
-                errors.push(target,'Password is required')
+                errors.push('Password is required')
             // included
             !this.validator.hasSpecialCharacters(value) &&
                 errors.push('Password must include special characters')

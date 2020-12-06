@@ -16,10 +16,17 @@
                 <section style="background:white; max-width:400px;" class="pad125 margintop125 marginbottom125 flex flexcenter borderRad4 modalShadow" >
                     <div class="padleft125 padright125 padbottom125" >
                         <div class="marginbottom125 margintop125 flex flexcenter flexcol" >
-                            <img style="height:70px;width:70px;" src="dq-logo.png" alt="">
+                            <!-- logo -->
+                            <div class="relative" style="height:70px;width:70px;" >
+                                <img class="absolute" style="height:70px;width:70px; z-index:1;" src="dq-logo.png" alt="">
+                                <div v-if="currentForm == 3" style="z-index:0;" class="absolute fullwidth fullheight-percent " >
+                                    <loading/>
+                                </div>
+                            </div>
+                            <!-- form title -->
                             <div>
-                                <h5 style="font-weight:100;" >
-                                    Create App
+                                <h5 class="smth" style="font-weight:100;" >
+                                    Creat{{currentForm != 3 ? 'e' : 'ing'}} App{{currentForm != 3 ? '' : '...'}}
                                 </h5>
                             </div>
                         </div>
@@ -38,13 +45,14 @@
                             />
                             <SecondForm
                                 v-if="currentForm == 2"
-                                :style="!hasError ? {width:'315px', right: '-260px'}: ''" 
-                                :class="!hasError ? ['absolute', slide ? 'FirstForm_exit' : '']: ''"
+                                :style="!hasError &&  secondFormConfig.slide ? {width:'315px', right: '-260px'}: ''" 
+                                :class="!hasError && secondFormConfig.slide ? ['absolute', slide ? 'FirstForm_exit' : '']: ''"
+                                :disableAll="disableAll"
                                 id="initSecondForm"
                                 ref="SecondForm"
                             />
                         </div>
-                        <div class="flex flexend margintop125" >
+                        <div v-if="currentForm != 3" class="flex flexend margintop125" >
                             <v-btn :loading="isLoading" @click="next" color="primary" >
                                 <strong>
                                     {{currentForm == 1 ? 'next' : 'submit'}}
@@ -66,6 +74,7 @@
 import h from '@/helper'
 import FirstFom from '@/components/init/FirstForm.vue'
 import SecondForm from '@/components/init/SecondForm.vue'
+import loading from '@/components/init/loading.vue'
 
 export default {
     mixins: [h],
@@ -74,15 +83,20 @@ export default {
     },
     components: {
         FirstFom,
-        SecondForm
+        SecondForm,
+        loading
     },
     data: () => ({
         isLoading: false,
         currentForm: 1,
-        disableAll: undefined,
+        disableAll: false,
         slide: false,
         formHeight: '440px',
-        hasError: false
+        hasError: false,
+        secondFormConfig: {
+            slide: true
+        },
+        firstFormValue: undefined
     }),
     methods: {
         nextAnimate() {
@@ -92,10 +106,13 @@ export default {
                 const el_secondFormHeight = el_secondForm.offsetHeight + 12
                 
                 this.formHeight = `${el_secondFormHeight}px`
+                
+                setTimeout(() => {
+                    this.$set(this.secondFormConfig,'slide', false)
+                }, 1000);
+            } else if(this.currentForm == 3) {
+                this.formHeight = '0px'
             }
-
-
-            
         },
         next() {
             if(this.currentForm == 1) {
@@ -133,6 +150,17 @@ export default {
 
 
                 if(!userInfoErrors.includes(true)) {
+                    this.firstFormValue = {
+                        firstName: firstName.value,
+                        lastName: lastName.value,
+                        applicationName: applicationName.value,
+                        username: username.value,
+                        password: password.value,
+                        email: email.value
+                    }
+
+                    console.table(this.firstFormValue)
+
                     this.hasError = false
 
                     this.isLoading = true
@@ -145,9 +173,8 @@ export default {
 
                     setTimeout(() => {
                         this.isLoading = false
+                        this.disableAll = false
                     }, 500);
-
-                    
                 } else {
                     this.hasError = true
                 }
@@ -175,17 +202,28 @@ export default {
                 databasePassword.removeErrors()
 
                 if(!databaseFormErrors.includes(true)) {
+                    this.hasError = false
+                    this.currentForm = 3
+                    this.isLoading = true
+                    this.disableAll = true
+                    this.nextAnimate()
+                    setTimeout(() => {
+                        this.isLoading = false
+                    }, 500);
+
+                    const completedForm = {
+                        ...this.firstFormValue,
+                        databaseName: databaseName.value,
+                        databaseUsername: databaseUsername.value,
+                        tablePrefix: tablePrefix.value,
+                        databasePassword: databasePassword.value
+                    }
+
                     // submit data to database
-                    // this.$axios.post('/app/initialize-app', {
-                    //     username: this.username,
-                    //     firstName: this.firstName,
-                    //     lastName: this.lastName,
-                    //     email: this.email,
-                    //     applicationName: this.applicationName,
-                    //     password: this.password
-                    // }).then(res => {
-                    //     // console.log('createApp ', res)
-                    // })
+                    this.$axios.post('/$dqappservices/v1/initialize', completedForm)
+                    .then(res => {
+                        console.log('createApp ', res)
+                    })
                 } else {
                     this.hasError = true
                 }
