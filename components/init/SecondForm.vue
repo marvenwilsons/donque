@@ -1,12 +1,12 @@
 <template>
     <div>
-        <div class=" marginbottom125" >
-            <v-card style="z-index:100" :elevation="firstName.errors ? 5 : 0" :class="[firstName.errors ? 'smth padtop125 padleft125 padright125 marginbottom125' : 'smth']" >
+        <div class="" >
+            <v-card :elevation="firstName.errors ? 5 : 0" :class="[firstName.errors ? 'smth padtop125 padleft125 padright125 marginbottom125' : 'smth']" >
                 <div v-if="firstName.errors" class="marginbottom050 err" > 
                     <div v-for="(msg,msgIndex) in firstName.errors" :key="`${msg}${msgIndex}`" >{{msg}}</div>
                 </div>
                 <v-text-field
-                    label="First Name"
+                    label="Database Name"
                     dense
                     outlined
                     class="marginbottom125"
@@ -21,7 +21,7 @@
                     <div v-for="(msg,msgIndex) in lastName.errors" :key="`${msg}${msgIndex}`" >{{msg}}</div>
                 </div>
                 <v-text-field
-                    label="Last Name"
+                    label="Database Username"
                     dense
                     outlined
                     class="marginbottom125"
@@ -36,7 +36,7 @@
                     <div v-for="(msg,msgIndex) in email.errors" :key="`${msg}${msgIndex}`" >{{msg}}</div>
                 </div>
                 <v-text-field
-                    label="Email"
+                    label="Table Prefix"
                     outlined
                     dense
                     class="marginbottom125"
@@ -46,57 +46,27 @@
                 ></v-text-field>
             </v-card>
 
-        </div>
-        <v-card :elevation="applicationName.errors ? 5 : 0" :class="[applicationName.errors ? 'smth padtop125 padleft125 padright125 marginbottom125' : 'smth']" >
-            <div v-if="applicationName.errors" class="marginbottom050 err" >
-                <div v-for="(msg,msgIndex) in applicationName.errors" :key="`${msg}${msgIndex}`" >{{msg}}</div>
-            </div>
-            <v-text-field
-                label="Application Name"
-                outlined
-                dense
-                class="marginbottom125"
-                v-model="applicationName.value"
-                :error="applicationName.errors ? true : false"
-                :disabled="disableAll"
-            ></v-text-field>
-        </v-card>
-
-        <v-card :elevation="username.errors ? 5 : 0" :class="[username.errors ? 'smth padtop125 padleft125 padright125 marginbottom125' : 'smth']" >
-            <div v-if="username.errors" class="marginbottom050 err">
-                <div v-for="(msg,msgIndex) in username.errors" :key="`${msg}${msgIndex}`" >{{msg}}</div>
-            </div>
-            <v-text-field
-                label="Username"
-                outlined
-                dense
-                class="marginbottom125"
-                v-model="username.value"
-                :error="username.errors ? true : false"
-                :disabled="disableAll"
-            ></v-text-field>
-        </v-card>
-
-        <v-card :elevation="password.errors ? 5 : 0" :class="[password.errors ? 'smth padtop125 padleft125 padright125 marginbottom125' : 'smth']" >
-            <div v-if="password.errors" class="marginbottom050 err" >
-                <div v-for="(msg,msgIndex) in password.errors" :key="`${msg}${msgIndex}`" >{{msg}}</div>
-            </div>
-            <v-text-field
-                label="Password"
+            <v-card :elevation="applicationName.errors ? 5 : 0" :class="[applicationName.errors ? 'smth padtop125 padleft125 padright125 marginbottom125' : 'smth']" >
+                <div v-if="applicationName.errors" class="marginbottom050 err" >
+                    <div v-for="(msg,msgIndex) in applicationName.errors" :key="`${msg}${msgIndex}`" >{{msg}}</div>
+                </div>
+                <v-text-field
+                label="Database Password"
                 outlined
                 dense
                 class="marginbottom125"
                 :type="show1 ? 'text' : 'password'"
                 v-model="password.value"
                 :error="password.errors ? true : false"
-                persistent-hint
-                hint="Password must have Special characters, lower & uppercase letters & numbers"
                 :disabled="disableAll"
                 :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
                 @click:append="show1 = !show1"
+                persistent-hint
+                hint="Password must have Special characters, lower & uppercase letters & numbers "
             ></v-text-field>
-        </v-card>
+            </v-card>
 
+        </div>
     </div>
 </template>
 
@@ -108,12 +78,6 @@ export default {
     props:['disableAll','errorTargets'],
     created() {
         this.h = this
-        // this.firstName.value = 'Marven Wilson'
-        // this.lastName.value = 'Donque'
-        // this.email.value = 'marveenwilsons@gmail.com'
-        // this.applicationName.value = 'wordpress'
-        // this.username.value = 'marvenwilsons'
-        // this.password.value = 'marven2123@@!ABC'
     },
     data: () => ({
         firstName:      {value: undefined, errors: undefined},

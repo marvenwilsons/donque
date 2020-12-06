@@ -1,5 +1,5 @@
 <template>
-    <v-app id="dq-init-page" class="fullheight-VH relative overflowhidden flex flexcenter" >
+    <v-app id="dq-init-page" class="fullheight-VH relative overflowhidden flex flexcenter smth" >
         <!-- <div id="bgContainer2" style="width:100%;height:100%;position:fixed;" class="fullwidth  fullheight-percent" ></div> -->
         <img id="leaves" class="absolute" src="leaves.jpeg" alt="">
 
@@ -11,7 +11,7 @@
         </v-flex>
 
         <!-- form -->
-        <div style="z-index:1; overflow-x:auto;" class="fullheight-VH" >
+        <div style="z-index:1; overflow-x:auto;" :class="['fullheight-VH', slide ? ['flex', 'flexcenter', 'smth'] : '']" >
             <div class="flex flexcenter" >
                 <section style="background:white; max-width:400px;" class="pad125 margintop125 marginbottom125 flex flexcenter borderRad4 modalShadow" >
                     <div class="pad125" >
@@ -24,19 +24,30 @@
                             </div>
                         </div>
                         <!--  -->
-                        <FirstFom 
-                            v-show="currentFrom == 1"
-                            ref="FirstForm"
-                            :disableAll="disableAll"
-                        />
-                        <SecondForm 
-                            v-show="currentFrom == 2" 
-                        />
+                        <div v-if="true" 
+                            :style="!hasError ? {width:'315px', minHeight:formHeight} : {} " 
+                            :class="!hasError ? ['flex', 'relative', 'smth', 'overflowhidden', 'flexcenter'] : ''" 
+                        >
+                            <FirstFom
+                                v-show="currentForm == 1"
+                                :class="!hasError ? ['absolute', slide ? 'FirstForm_exit' : ''] : ''"
+                                :style="!hasError ? {minwidth:'360px'} : ''" 
+                                ref="FirstForm"
+                                :disableAll="disableAll"
+                                id="initFirstForm"
+                            />
+                            <SecondForm
+                                v-show="currentForm == 2"
+                                :style="!hasError ? {width:'315px', right: '-260px'}: ''" 
+                                :class="!hasError ? ['absolute', slide ? 'FirstForm_exit' : '']: ''"
+                                id="initSecondForm"
+                            />
+                        </div>
                         <div class="flex flexend margintop125" >
                             <v-btn :loading="isLoading" @click="next" color="primary" >
                                 <strong>
-                                    Next
-                                    <v-icon size="medium">
+                                    {{currentForm == 1 ? 'next' : 'submit'}}
+                                    <v-icon v-if="currentForm == 1" size="medium">
                                         mdi-arrow-right
                                     </v-icon>
                                 </strong>
@@ -66,12 +77,25 @@ export default {
     },
     data: () => ({
         isLoading: false,
-        currentFrom: 1,
-        disableAll: undefined
+        currentForm: 1,
+        disableAll: undefined,
+        slide: false,
+        formHeight: '440px',
+        hasError: false
     }),
     methods: {
+        nextAnimate() {
+            this.slide = true
+            const el_firstForm = document.getElementById("initFirstForm")
+            const el_firstFormHeight = el_firstForm.offsetHeight + 12
+
+            const el_secondForm = document.getElementById("initSecondForm")
+            const el_secondFormHeight = el_secondForm.offsetHeight + 12
+            
+            this.formHeight = `${el_secondFormHeight}px`
+        },
         next() {
-            if(this.currentFrom == 1) {
+            if(this.currentForm == 1) {
                 let hasError = []
                 
                 const firstName = this.$refs.FirstForm.validateFirstName()
@@ -106,21 +130,36 @@ export default {
 
 
                 if(!hasError.includes(true)) {
+                    this.hasError = false
+
                     this.isLoading = true
                     this.disableAll = true
-                    // this.$axios.post('/app/initialize-app', {
-                    //     username: this.username,
-                    //     firstName: this.firstName,
-                    //     lastName: this.lastName,
-                    //     email: this.email,
-                    //     applicationName: this.applicationName,
-                    //     password: this.password
-                    // }).then(res => {
-                    //     // console.log('createApp ', res)
-                    // })
-                }
-            } else if(this.currentFrom == 2) {
+                    this.currentForm = 2
+                    
+                    setTimeout(() => {
+                        this.nextAnimate()
+                    }, 0);
 
+                    setTimeout(() => {
+                        this.isLoading = false
+                    }, 500);
+
+                    
+                } else {
+                    this.hasError = true
+                }
+            } else if(this.currentForm == 2) {
+                // submit data to database
+                // this.$axios.post('/app/initialize-app', {
+                //     username: this.username,
+                //     firstName: this.firstName,
+                //     lastName: this.lastName,
+                //     email: this.email,
+                //     applicationName: this.applicationName,
+                //     password: this.password
+                // }).then(res => {
+                //     // console.log('createApp ', res)
+                // })
             }
         }
     }
@@ -134,6 +173,11 @@ export default {
 /* #dq-init-page{
     background: url('~static/leaves.jpeg');
 } */
+.FirstForm_exit {
+    transform: translateX(-260px);
+    transition: all 300ms ease;
+}
+
 
 #bgContainer {
   display: grid;
