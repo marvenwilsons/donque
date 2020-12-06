@@ -1,6 +1,6 @@
 <template>
     <v-app id="dq-init-page" class="fullheight-VH relative overflowhidden flex flexcenter smth" >
-        <!-- <div id="bgContainer2" style="width:100%;height:100%;position:fixed;" class="fullwidth  fullheight-percent" ></div> -->
+        <div id="bgContainer2" style="width:100%;height:100%;" class="fullwidth  fullheight-percent absolute" ></div>
         <img id="leaves" class="absolute" src="leaves.jpeg" alt="">
 
 
@@ -11,12 +11,12 @@
         </v-flex>
 
         <!-- form -->
-        <div style="z-index:1; overflow-x:auto;" :class="['fullheight-VH', slide ? ['flex', 'flexcenter', 'smth'] : '']" >
+        <div style="z-index:3; overflow-x:auto;" :class="['fullheight-VH', slide && !hasError || currentForm == 1 ? ['flex', 'flexcenter', 'smth'] : '']" >
             <div class="flex flexcenter" >
                 <section style="background:white; max-width:400px;" class="pad125 margintop125 marginbottom125 flex flexcenter borderRad4 modalShadow" >
-                    <div class="pad125" >
+                    <div class="padleft125 padright125 padbottom125" >
                         <div class="marginbottom125 margintop125 flex flexcenter flexcol" >
-                            <img style="height:40px;width:40px;" src="favicon.ico" alt="">
+                            <img style="height:70px;width:70px;" src="dq-logo.png" alt="">
                             <div>
                                 <h5 style="font-weight:100;" >
                                     Create App
@@ -29,7 +29,7 @@
                             :class="!hasError ? ['flex', 'relative', 'smth', 'overflowhidden', 'flexcenter'] : ''" 
                         >
                             <FirstFom
-                                v-show="currentForm == 1"
+                                v-if="currentForm == 1"
                                 :class="!hasError ? ['absolute', slide ? 'FirstForm_exit' : ''] : ''"
                                 :style="!hasError ? {minwidth:'360px'} : ''" 
                                 ref="FirstForm"
@@ -37,10 +37,11 @@
                                 id="initFirstForm"
                             />
                             <SecondForm
-                                v-show="currentForm == 2"
+                                v-if="currentForm == 2"
                                 :style="!hasError ? {width:'315px', right: '-260px'}: ''" 
                                 :class="!hasError ? ['absolute', slide ? 'FirstForm_exit' : '']: ''"
                                 id="initSecondForm"
+                                ref="SecondForm"
                             />
                         </div>
                         <div class="flex flexend margintop125" >
@@ -86,50 +87,52 @@ export default {
     methods: {
         nextAnimate() {
             this.slide = true
-            const el_firstForm = document.getElementById("initFirstForm")
-            const el_firstFormHeight = el_firstForm.offsetHeight + 12
+            if(this.currentForm == 2) {
+                const el_secondForm = document.getElementById("initSecondForm")
+                const el_secondFormHeight = el_secondForm.offsetHeight + 12
+                
+                this.formHeight = `${el_secondFormHeight}px`
+            }
 
-            const el_secondForm = document.getElementById("initSecondForm")
-            const el_secondFormHeight = el_secondForm.offsetHeight + 12
+
             
-            this.formHeight = `${el_secondFormHeight}px`
         },
         next() {
             if(this.currentForm == 1) {
-                let hasError = []
+                let userInfoErrors = []
                 
                 const firstName = this.$refs.FirstForm.validateFirstName()
                 firstName.errors.length != 0 ? 
-                firstName.renderError(() => hasError.push(true)) :
+                firstName.renderError(() => userInfoErrors.push(true)) :
                 firstName.removeErrors()
 
                 const lastName = this.$refs.FirstForm.validateLastName()
                 lastName.errors.length != 0 ?
-                lastName.renderError(() => hasError.push(true)) :
+                lastName.renderError(() => userInfoErrors.push(true)) :
                 lastName.removeErrors()
 
                 const applicationName = this.$refs.FirstForm.validateApplicationName()
                 applicationName.errors.length != 0 ?
-                applicationName.renderError(() =>hasError.push(true)) :
+                applicationName.renderError(() => userInfoErrors.push(true)) :
                 applicationName.removeErrors()
 
                 const username = this.$refs.FirstForm.validateUsername()
                 username.errors.length != 0 ?
-                username.renderError(() => hasError.push(true)) :
+                username.renderError(() => userInfoErrors.push(true)) :
                 username.removeErrors()
                 
                 const password = this.$refs.FirstForm.validatePassword()
                 password.errors.length != 0 ?
-                password.renderError(() => hasError.push(true)) :
+                password.renderError(() => userInfoErrors.push(true)) :
                 password.removeErrors()
 
                 const email = this.$refs.FirstForm.validateEmail()
                 email.errors.length != 0 ?
-                email.renderError(() => hasError.push(true)) :
+                email.renderError(() => userInfoErrors.push(true)) :
                 email.removeErrors()
 
 
-                if(!hasError.includes(true)) {
+                if(!userInfoErrors.includes(true)) {
                     this.hasError = false
 
                     this.isLoading = true
@@ -149,17 +152,45 @@ export default {
                     this.hasError = true
                 }
             } else if(this.currentForm == 2) {
-                // submit data to database
-                // this.$axios.post('/app/initialize-app', {
-                //     username: this.username,
-                //     firstName: this.firstName,
-                //     lastName: this.lastName,
-                //     email: this.email,
-                //     applicationName: this.applicationName,
-                //     password: this.password
-                // }).then(res => {
-                //     // console.log('createApp ', res)
-                // })
+                const databaseFormErrors = []
+
+                const databaseName = this.$refs.SecondForm.validateDatabaseName()
+                databaseName.errors.length != 0 ? 
+                databaseName.renderError(() => databaseFormErrors.push(true)) :
+                databaseName.removeErrors()
+
+                const databaseUsername = this.$refs.SecondForm.validateDatabaseUsername()
+                databaseUsername.errors.length != 0 ? 
+                databaseUsername.renderError(() => databaseFormErrors.push(true)) :
+                databaseUsername.removeErrors()
+
+                const tablePrefix = this.$refs.SecondForm.validateTablePrefix()
+                tablePrefix.errors.length != 0 ? 
+                tablePrefix.renderError(() => databaseFormErrors.push(true)) :
+                tablePrefix.removeErrors()
+                
+                const databasePassword = this.$refs.SecondForm.validateDatabasePassword()
+                databasePassword.errors.length != 0 ? 
+                databasePassword.renderError(() => databaseFormErrors.push(true)) :
+                databasePassword.removeErrors()
+
+                if(!databaseFormErrors.includes(true)) {
+                    // submit data to database
+                    // this.$axios.post('/app/initialize-app', {
+                    //     username: this.username,
+                    //     firstName: this.firstName,
+                    //     lastName: this.lastName,
+                    //     email: this.email,
+                    //     applicationName: this.applicationName,
+                    //     password: this.password
+                    // }).then(res => {
+                    //     // console.log('createApp ', res)
+                    // })
+                } else {
+                    this.hasError = true
+                }
+
+
             }
         }
     }
@@ -205,6 +236,7 @@ export default {
     transform:rotate(40deg);
     overflow: hidden;
     /* transform: skewX(-20deg); */
+    z-index: 2;
 }
 
 #bgContainer::before {
@@ -223,12 +255,14 @@ export default {
 #leaves {
     height: 100%;
     /* opacity: 0.2; */
+    /* z-index: 2; */
 }
 
 
 /* #bgContainer2{
     background: rgb(34,193,195);
-    background: linear-gradient(0deg, rgba(34,193,195,0.5816701680672269) 0%, rgba(253,187,45,0.5368522408963585) 100%);
-     background: inherit;
+    background: linear-gradient(0deg, rgba(19, 72, 73, 0.219) 0%, rgba(71, 53, 14, 0.247) 100%);
+    z-index: 1;
+    filter: blur(10px);
 } */
 </style>
