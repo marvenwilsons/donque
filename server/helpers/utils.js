@@ -12,4 +12,4 @@ const utils = convertToNodeModuleString(
     fs.readFileSync(path.join(__dirname,'../utils.js'),'utf8')
   )
 
-module.exports = requireFromString(utils)
+// module.exports = requireFromString(utils)

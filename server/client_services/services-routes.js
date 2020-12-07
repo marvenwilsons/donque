@@ -1,11 +1,13 @@
 const express = require('express')
 const router = express.Router()
-const auth = require('./sevices.auth')
-const getList = require('./services.getlist')
 const systemServices = require('./services')
-const appCheck = require('../client_proxy/app-check.js')
 
+// Middlewares
+const auth = require('./middlewares/services/sevices.auth')
+const getList = require('./middlewares/services/services.getlist')
+const appCheck = require('./middlewares/global/app-check.js')
 
+// Get admin services
 router.get('/service', appCheck, auth, getList,(req,res) => {
     const {services} = res.locals
     systemServices(services).then(serviceContent => {
@@ -18,6 +20,12 @@ router.get('/service', appCheck, auth, getList,(req,res) => {
         })
         res.status(200).json({response: finalContent}) /** TODO: encrypt finalContent */
     })
+})
+
+// Initialize app
+router.post('/v1/initialize', (req,res) => {
+    // {firstName, lastName, applicationName, username, password, email, databaseName, databaseUsername, tablePrefix, databasePassword}
+    console.log('Initialize app!')
 })
 
 module.exports = {
