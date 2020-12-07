@@ -1,5 +1,5 @@
 const path = require('path')
-const Templates = require(path.join(__dirname,'../../server/templates.js'))
+const Templates = require(path.join(__dirname,'../../server/helper/templates.js'))
 
 module.exports = Templates.Service({
     name: 'Pages',

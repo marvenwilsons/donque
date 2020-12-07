@@ -1,5 +1,5 @@
 const path = require('path')
-const Templates = require(path.join(__dirname,'../../server/templates.js'))
+const Templates = require(path.join(__dirname,'../../server/helper/templates.js'))
 // pages has events array, and events tab
 // pages has session memmory where a user cam save amy data on that variable
 
