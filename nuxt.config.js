@@ -34,6 +34,9 @@ module.exports = {
     '@/plugins/pane-views.js',
     '@/plugins/element-ui.js',
   ],
+  privateRuntimeConfig: {
+    // Will only be available on the server side
+  },
   /*
   ** Nuxt.js dev-modules
   */

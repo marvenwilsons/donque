@@ -1,11 +1,14 @@
 const express = require('express')
 const router = express.Router()
 const systemServices = require('./services')
+const db = require('../db/index')
 
 // Middlewares
 const auth = require('./middlewares/services/sevices.auth')
 const getList = require('./middlewares/services/services.getlist')
 const appCheck = require('./middlewares/global/app-check.js')
+
+require('dotenv').config()
 
 // Get admin services
 router.get('/service', appCheck, auth, getList,(req,res) => {
@@ -22,10 +25,11 @@ router.get('/service', appCheck, auth, getList,(req,res) => {
     })
 })
 
+
 // Initialize app
 router.post('/v1/initialize', (req,res) => {
     // {firstName, lastName, applicationName, username, password, email, databaseName, databaseUsername, tablePrefix, databasePassword}
-    console.log('Initialize app!')
+    console.log('Initialize application!')
 })
 
 module.exports = {

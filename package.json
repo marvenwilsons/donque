@@ -1,7 +1,7 @@
 {
   "name": "donque",
   "version": "1.0.0",
-  "description": "My majestic Nuxt.js project",
+  "description": "dq system builder",
   "author": "marvenwilsons",
   "private": true,
   "scripts": {
@@ -22,6 +22,7 @@
     "@nuxtjs/moment": "^1.6.1",
     "axios": "^0.21.0",
     "cross-env": "^5.2.0",
+    "dotenv": "^8.2.0",
     "express": "^4.16.4",
     "gsap": "^2.0.2",
     "jsonwebtoken": "^8.4.0",
