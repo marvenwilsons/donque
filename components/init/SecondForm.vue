@@ -95,8 +95,6 @@ export default {
             value == undefined && 
                 errors.push('Database Name is a required field')
 
-            this.validator.hasSpecialCharacters(value) &&
-                errors.push('Datbase Name must not have any special characters')
 
             this.validator.hasNumber(value) &&
                 errors.push('Database Name must not have any numbers')
