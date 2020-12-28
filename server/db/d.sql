@@ -17,11 +17,36 @@ CREATE TABLE dq_service (
     service_config jsonb NOT NULL
 )
 
+-- installed_services: ust for documentation, the service jest is on the other server
+-- Pupose of dq_app table
 CREATE TABLE dq_app (
     id uuid NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
     application_name VARCHAR(250) NOT NULL,
     application_settings jsonb NOT NULL,
-    pages jsonb NOT NULL,
-    history json NOT NULL,
-    installed_services jsonb NOT NULL -- just for documentation, the service jest is on the other server
+    history jsonb NOT NULL,
+    installed_services jsonb NOT NULL
 );
+
+CREATE TABLE dq_collections (
+    collection_id NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
+    collection_name VARCHAR(255) NOT NULL,
+    collection_content jsonb NOT NULL,
+    created_on date NOT NULL
+    created_by REFERENCES dq_users(user_id)
+)
+
+CREATE TABLE dq_pages (
+    page_id NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
+    created_on date NOT NULL,
+    created_by REFERENCES dq_users(user_id)
+)
+
+CREATE TABLE dq_history (
+    history_id NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
+    created_on date NOT NULL,
+    created_by REFERENCES dq_users(user_id)
+)
+
+CREATE TABLE dq_installed_services (
+    service_id NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
+)

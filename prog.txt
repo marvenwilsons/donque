@@ -37,5 +37,12 @@ Services
 [-] Create new branch for page services
 [-] Created page service
 
-@notes
-https://www.colorhexa.com/f7f9fc <-- this should be the theme
+@notes for running dq in localhost
+1. Install nodejs
+2. run npm Install
+3. start the dq server by running npm start in the terminal
+4. go to localhost:3000/dqinit
+5. fill the user and db info form fields
+6. stop the server in the terminal: ctrl + c
+7. type npm run build
+8. after the build start the dq server again by running npm start

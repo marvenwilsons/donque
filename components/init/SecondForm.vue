@@ -168,9 +168,6 @@ export default {
             value == undefined && 
                 errors.push('Password is required')
             // included
-            !this.validator.hasSpecialCharacters(value) &&
-                errors.push('Password must include special characters')
-
             !this.validator.hasNumber(value) &&
                 errors.push('Password must include number characters')
 
@@ -181,7 +178,9 @@ export default {
                 errors.push('Password must include upper case characters')
             // not included
             this.validator.hasWhiteSpace(value) &&
-                errors.push('Password must not have any white spaces')
+                errors.push('Password must not include white spaces')
+            this.validator.hasSpecialCharacters(value) &&
+                errors.push('Password must not include special characters')
             
             return {
                 value,
