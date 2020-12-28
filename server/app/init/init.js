@@ -99,9 +99,13 @@ function init (applicationName, databaseName, databaseUsername, tablePrefix, dat
                         if(r) {
                             return udb.query(createPgUser)
                         }
-                    }).
-                    then(r => {
+                    })
+                    .then(r => {
                         console.log('==> Creating Table dq_services')
+                        return udb.query(createDqService)
+                    })
+                    .then(r => {
+                        console.log('==> Creating Table Collections')
                         return udb.query(createDqService)
                     })
                     .then(r => {

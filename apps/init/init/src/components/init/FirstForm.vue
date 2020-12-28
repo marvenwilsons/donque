@@ -101,13 +101,10 @@
 </template>
 
 <script>
-import h from '@/helper'
 
 export default {
-    mixins: [h],
     props:['disableAll','errorTargets'],
     created() {
-        this.h = this
         this.firstName.value = 'Marven Wilson'
         this.lastName.value = 'Donque'
         this.email.value = 'marveenwilsons@gmail.com'

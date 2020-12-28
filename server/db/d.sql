@@ -26,7 +26,8 @@ CREATE TABLE dq_app (
     history jsonb NOT NULL,
     installed_services jsonb NOT NULL
 );
-
+ 
+-- dq_collections are application bussiness data
 CREATE TABLE dq_collections (
     collection_id NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
     collection_name VARCHAR(255) NOT NULL,
