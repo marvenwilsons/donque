@@ -45,30 +45,25 @@ async function start () {
     badge: true
   })
 
+  // get env file content
   const envContent = fs.readFileSync(path.join(__dirname,'../.env'), 'utf-8')
   const PGUSERisNull = envContent.split('\n').indexOf('PGUSER=null') != -1
   const PGDBisNull = envContent.split('\n').indexOf('PGDATABASE=null') != -1
+
+  // if env file is not initialized prompt for initialization
   if(PGUSERisNull && PGDBisNull) {
-    consola.info({
-      message: 'Initialization Required'
-    })
-    consola.info({
-      message: 'Spawning init server'
-    })
+    consola.info({message: 'Initialization Required'})
+    consola.info({message: 'Spawning init server'})
 
+    // launch child process for initialization
     if(process.env.MODE != 'init') {
-      /**
-       * launch child process for initialization
-       */
 
-      /**
-       * kill any server that is running in this port infavor to run this
-       * initialization
-       */
+      //kill any server that is maybe running in this port infavor to run this initialization
       try {
         await fkill(':3000')
       } catch {}
-
+      
+      // spawing child process using fork
       const initializationProcess  = fork('server/index.js', {
         env: {
           MODE: 'init',
@@ -78,78 +73,24 @@ async function start () {
         silent: true
       })
 
-
+      // listinig to the child process data event
       initializationProcess.stdout.on('data', (data) => {
-        const childLogs = data.toString().replace('\n', '')
-        console.log('donque ==> ',data.toString().replace('\n', ''))
 
+        // removing new lines on logs and logging back to terminal
+        const childLogs = data.toString().replace('\n', '')
+        console.log('donque ==>',childLogs)
+
+        // when the server is ready launch default browser to redirect
+        // to the initialization page
         if(childLogs.split('READY').length != 1) {
           open('http://localhost:3000/dqinit')
         }
       })
     } else {
-      /**
-       * Child process for init
-       */
+      // if env variables are set
       nuxtStart()
-      // process.stdout.on('data', (data) => {
-      //   console.log('data ==> ', data)
-      // })
-      // process.send({msg: 'hello'})
-
     }
-    
-    
-
-    
-    /**
-     * File is located in apps/init/init
-     * its a minimal vue app
-     * Install init dependecy
-     */
-    // const installInitDep = () => {
-    //   return spawn('npm install', {
-    //     stdio: 'inherit',
-    //     shell: true,
-    //     cwd: path.join(__dirname,'../apps/init/init')
-    //   })
-    // }
-
-    /**
-     * Run's the vue server, this app is for initializing dq only
-     */
-    // const runInitProg = async () => {
-    //   setTimeout(() => {
-    //     open('http://localhost:3000')
-    //   }, 15000);
-    //   return spawn(`vue-cli-service serve --port ${network.port}`, {
-    //     stdio: 'inherit',
-    //     shell: true,
-    //     cwd: path.join(__dirname,'../apps/init/init')
-    //   })
-    // }
-
-
-    /**
-     * Chain run, install dependecies then run the vue server
-     */
-    // installInitDep()
-    // .on('exit', runInitProg)
-    // .on('data', () => {
-    //   console.log('data')
-    // })
-
-  } else {
-
   }
-
-  // Determine if app initialized
-  // if app is initialized go to login screen
-  // if app is not initialized spwan a web server for initialization
-
-  
-
-  // nuxtStart()
 }
 
 start()
