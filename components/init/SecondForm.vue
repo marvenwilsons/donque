@@ -71,8 +71,12 @@
 </template>
 
 <script>
-
+import h from '@/helper.js'
 export default {
+    mixins: [h],
+    created() {
+        this.h = this
+    },
     props:['disableAll'],
     data: () => ({
         databaseName:    {value: undefined, errors: undefined},

@@ -33,6 +33,7 @@
     "node-fetch": "^2.6.1",
     "nuxt": "^2.14.7",
     "nuxt-element-ui": "^1.0.10",
+    "open": "^7.3.0",
     "pg": "^8.4.1",
     "require-from-string": "^2.0.2",
     "vue-json-viewer": "^2.2.15"

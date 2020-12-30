@@ -89,7 +89,7 @@ module.exports = {
   },
   serverMiddleware: [
     bodyParser.json(),
-    '~/server/client_services/services-routes.js',
+    '~server/client_services/services-routes.js',
   ],
   telemetry: false
 }

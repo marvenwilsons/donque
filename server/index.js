@@ -4,10 +4,14 @@ const { Nuxt, Builder } = require('nuxt')
 const app = express()
 const fs = require('fs')
 const path = require('path')
-const { spawn } = require('child_process')
+const { spawn, fork } = require('child_process')
+const open = require('open')
+const fkill = require('fkill')
 
 // Import and Set Nuxt.js options
 const config = require('../nuxt.config.js')
+const { async } = require('crypto-random-string')
+const { on } = require('process')
 config.dev = process.env.NODE_ENV !== 'production'
 
 async function nuxtStart () {
@@ -35,7 +39,7 @@ async function nuxtStart () {
   })
 }
 
-function start () {
+async function start () {
   consola.info({
     message: 'Launching DONQUE',
     badge: true
@@ -52,13 +56,91 @@ function start () {
       message: 'Spawning init server'
     })
 
-    console.log(process.argv)
+    if(process.env.MODE != 'init') {
+      /**
+       * launch child process for initialization
+       */
 
-    const child = spawn('npm run serve', {
-      stdio: 'inherit',
-      shell: true,
-      cwd: path.join(__dirname,'../apps/init/init')
-    })
+      /**
+       * kill any server that is running in this port infavor to run this
+       * initialization
+       */
+      try {
+        await fkill(':3000')
+      } catch {}
+
+      const initializationProcess  = fork('server/index.js', {
+        env: {
+          MODE: 'init',
+          NODE_ENV: 'production',
+          ...process.env
+        },
+        silent: true
+      })
+
+
+      initializationProcess.stdout.on('data', (data) => {
+        const childLogs = data.toString().replace('\n', '')
+        console.log('donque ==> ',data.toString().replace('\n', ''))
+
+        if(childLogs.split('READY').length != 1) {
+          open('http://localhost:3000/dqinit')
+        }
+      })
+    } else {
+      /**
+       * Child process for init
+       */
+      nuxtStart()
+      // process.stdout.on('data', (data) => {
+      //   console.log('data ==> ', data)
+      // })
+      // process.send({msg: 'hello'})
+
+    }
+    
+    
+
+    
+    /**
+     * File is located in apps/init/init
+     * its a minimal vue app
+     * Install init dependecy
+     */
+    // const installInitDep = () => {
+    //   return spawn('npm install', {
+    //     stdio: 'inherit',
+    //     shell: true,
+    //     cwd: path.join(__dirname,'../apps/init/init')
+    //   })
+    // }
+
+    /**
+     * Run's the vue server, this app is for initializing dq only
+     */
+    // const runInitProg = async () => {
+    //   setTimeout(() => {
+    //     open('http://localhost:3000')
+    //   }, 15000);
+    //   return spawn(`vue-cli-service serve --port ${network.port}`, {
+    //     stdio: 'inherit',
+    //     shell: true,
+    //     cwd: path.join(__dirname,'../apps/init/init')
+    //   })
+    // }
+
+
+    /**
+     * Chain run, install dependecies then run the vue server
+     */
+    // installInitDep()
+    // .on('exit', runInitProg)
+    // .on('data', () => {
+    //   console.log('data')
+    // })
+
+  } else {
+
   }
 
   // Determine if app initialized
@@ -71,3 +153,4 @@ function start () {
 }
 
 start()
+
