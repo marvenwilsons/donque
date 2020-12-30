@@ -1,5 +1,6 @@
-module.exports = `dq_pages (
-    page_id NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
+module.exports = `CREATE TABLE dq_pages (
+    page_id uuid DEFAULT uuid_generate_v4(),
     created_on date NOT NULL,
-    created_by REFERENCES dq_users(user_id)
+    created_by uuid REFERENCES dq_users(user_id),
+    PRIMARY KEY (page_id)
 )`
