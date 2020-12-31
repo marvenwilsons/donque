@@ -29,6 +29,7 @@ const envContent = require('./env_content')
 const createPgUser = require('./pg_dq_users')
 const createDqService = require('./pg_dq_service')
 const createDqCollections = require('./pg_dq_collection')
+const createDqPages = require('./pg_dq_pages')
 
 /**
  * Using the default postgres credentials and database to
@@ -80,7 +81,7 @@ function init (applicationName, databaseName, databaseUsername, tablePrefix, dat
                         console.log(`Creating Environment Variables`)
         
                         // 2. Create a .env file containing user defined database
-                        fs.writeFileSync(path.join(__dirname,'../../.env'),envContent(databaseUsername,databasePassword,databaseName,tablePrefix,applicationName))
+                        fs.writeFileSync(path.join(__dirname,'../../../.env'),envContent(databaseUsername,databasePassword,databaseName,tablePrefix,applicationName))
                         resolve(true)
                     } else {
                         throw '==> Fail in creating database'
@@ -161,29 +162,58 @@ function init (applicationName, databaseName, databaseUsername, tablePrefix, dat
                         password: databasePassword,
                         database: databaseName
                     })
-    
+                    
+                    // Create uuid-ossp extension to be used on table primary keys
                     console.log('Creating Extension uuid-ossp')
                     udb
                     .query(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`)
-                    .then(r => {
-                        console.log('Creating Table dq_users')
-                        if(r) {
-                            return udb.query(createPgUser)
+
+                    // create table users
+                    .then(async (ready) => {
+                        if(ready) {
+                            console.log('Creating Table dq_users')
+                            return await udb.query(createPgUser)
+                        }
+                        
+                    })
+                    .catch(err => console.log(err))
+
+                    // create table services
+                    .then(async (ready) => {
+                        if(ready) {
+                            console.log('Creating Table dq_services')
+                            return await udb.query(createDqService)
+                        }
+                        
+                    })
+                    .catch(err => console.log(err))
+
+                    // create table collection
+                    .then(async (ready) => {
+                        if(ready) {
+                            console.log('Creating Table Collections')
+                            return await udb.query(createDqCollections)
                         }
                     })
-                    .then(r => {
-                        console.log('Creating Table dq_services')
-                        return udb.query(createDqService)
+                    .catch(err => console.log(err))
+
+                    // create table pages
+                    .then(async (ready) => {
+                        if(ready) {
+                            console.log('Creating Table Collections')
+                            return await udb.query(createDqPages)
+                        }
                     })
-                    .then(r => {
-                        console.log('Creating Table Collections')
-                        return udb.query(createDqCollections)
+                    .catch(err => console.log(err))
+
+                    // end process
+                    .then(async (ready) => {
+                        if(ready) {
+                            console.log('Dq Successfuly Initialized')
+                            process.send({msg: 'done'})
+                            resolve(true)
+                        }
                     })
-                    .then(r => {
-                        console.log('==> Dq Successfuly Initialized')
-                        resolve(true)
-                    })
-                    
                 }
             })
 

@@ -37,12 +37,17 @@ Services
 [-] Create new branch for page services
 [-] Created page service
 
-@notes for running dq in localhost
-1. Install nodejs
-2. run npm Install
-3. start the dq server by running npm start in the terminal
-4. go to localhost:3000/dqinit
-5. fill the user and db info form fields
-6. stop the server in the terminal: ctrl + c
-7. type npm run build
-8. after the build start the dq server again by running npm start
+@notes
+
+---- To reset everything to fresh download
+
+.env
+    all values must be null except for PGHOST and PGPORT
+
+package.json
+    scripts > start value must be "node server/dq-start"
+
+postgres
+    make database is clean
+
+---- End

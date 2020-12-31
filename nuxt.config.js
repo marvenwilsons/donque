@@ -18,6 +18,9 @@ module.exports = {
       { rel: 'stylesheet', href: 'https://unpkg.com/element-ui/lib/theme-chalk/index.css' },
     ]
   },
+  env: {
+    mode: null
+  },
   /*
   ** Customize the progress-bar color
   */
