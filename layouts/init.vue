@@ -246,6 +246,10 @@ export default {
         this.socket.on('mydata' , (data) => {
             console.log(data)
         })
+
+        this.socket.on('createAppLogs', (data) => {
+            console.log('moo ',data)
+        })
     }
 }
 </script>
