@@ -35,7 +35,6 @@ try {
   
       installDependency.on('close', () => {
         console.log('Done Installing')
-        // const projectPkg = JSON.parse(pkg)
         pkg.scripts.start = "cross-env NODE_ENV=production node server/index.js"
         
         fs.writeFileSync(path.join(__dirname,'../package.json'), JSON.stringify(pkg, null, 4))

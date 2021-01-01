@@ -231,6 +231,21 @@ export default {
 
             }
         }
+    },
+    mounted() {
+        console.log('init')
+        this.socket = this.$nuxtSocket({
+            name: 'home',
+            channel: '/'
+        })
+
+        // this.socket.emit('mydata', {id: 'abc123'}, (resp) => {
+        //     console.log('resp')
+        // })
+
+        this.socket.on('mydata' , (data) => {
+            console.log(data)
+        })
     }
 }
 </script>

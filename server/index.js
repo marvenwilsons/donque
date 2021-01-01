@@ -7,6 +7,8 @@ const consola = require('consola')
 const { Nuxt, Builder } = require('nuxt')
 const app = express()
 const path = require('path')
+const socket = require('socket.io')
+const dqSocket = require('./dq-socket')
 require('dotenv').config()
 
 
@@ -32,7 +34,11 @@ async function nuxtStart () {
   app.use(nuxt.render)
 
   // Listen the server
-  app.listen(port, host)
+  const server = app.listen(port, host)
+  
+  const IO_Instance = socket(server)
+  dqSocket(IO_Instance)
+
   consola.ready({
     message: `Server listening on http://${host}:${port}`,
     badge: true

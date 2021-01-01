@@ -52,8 +52,18 @@ module.exports = {
   */
   modules: [
     '@nuxtjs/axios',
-    'nuxt-element-ui'
+    'nuxt-element-ui',
+    'nuxt-socket-io'
   ],
+  io: {
+    sockets: [
+      { // At least one entry is required
+        name: 'home',
+        url: 'http://localhost:3000',
+        default: true,
+      }
+    ]
+  },
   elementUI: {
     components: ['Button', 'DatePicker'],
     locale: 'fr',
