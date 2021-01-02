@@ -161,12 +161,18 @@ async function start (isNotInit) {
       })
     } else {
       // if env variables are set and process.env.MODE == 'init'
-      nuxtStart()
+      if(process.env.MODE != 'init') {
+        nuxtStart({
+          openBrowser: `http://${process.env.APP_HOST}:${process.env.DQ_PORT}/login`
+        })
+      } else {
+        nuxtStart()
+      }
     }
   } else {
     consola.log('donque ==> Serving first load')
     nuxtStart({
-      openBrowser: 'http://${host}:${process.env.DQ_PORT}/login'
+      openBrowser: `http://${process.env.APP_HOST}:${process.env.DQ_PORT}/login`
     })
   }
 }

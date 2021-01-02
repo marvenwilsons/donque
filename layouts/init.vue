@@ -227,6 +227,16 @@ export default {
                     .then(res => {
                         console.log('createApp ', res)
                     })
+
+                    const m = setInterval(() => {
+                        this.$axios.get('/$dqappservices/apt')
+                        .then(res => {
+                            if(res.data.status) {
+                                clearInterval(m)
+                                window.close()
+                            }
+                        })
+                    }, 1000)
                 } else {
                     this.hasError = true
                 }
@@ -250,8 +260,8 @@ export default {
             console.log(data)
         })
 
-        this.socket.on('createAppLogs', (data) => {
-            console.log('moo ',data)
+        this.socket.on('status', (data) => {
+            console.log('status ',data)
         })
     }
 }

@@ -9,5 +9,7 @@ module.exports = function (io) {
                 socket.emit('mydata', 'confimation sent!')
             }, 1500)
         })
+
+        socket.emit('status', 'app loaded')
     })
 }

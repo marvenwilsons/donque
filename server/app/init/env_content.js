@@ -13,6 +13,7 @@ SALT=${cryptoRandomString({length: 20})}
 TABLE_PREFIX=${tablePrefix}
 APP_NAME=${applicationName}
 DQ_PORT=3000
+APP_HOST=localhost
 `
 }
 
