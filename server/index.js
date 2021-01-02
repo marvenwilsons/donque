@@ -15,7 +15,7 @@ require('dotenv').config()
 const config = require('../nuxt.config.js')
 config.dev = process.env.NODE_ENV !== 'production'
 
-async function nuxtStart () {
+async function nuxtStart (options) {
   // Init Nuxt.js
   const nuxt = new Nuxt(config)
 
@@ -34,7 +34,11 @@ async function nuxtStart () {
   app.use(nuxt.render)
 
   // Listen the server
-  const server = app.listen(port, host)
+  const server = app.listen(port, host, () => {
+    if(options && options.openBrowser) {
+      open(options.openBrowser)
+    }
+  })
   
   // io socket ready
   console.log('IO Socket Ready')
@@ -81,7 +85,6 @@ async function start (isNotInit) {
         env: {
           MODE: 'init',
           NODE_ENV: 'production',
-          ...process.env
         },
         silent: true
       })
@@ -162,7 +165,9 @@ async function start (isNotInit) {
     }
   } else {
     consola.log('donque ==> Serving first load')
-    nuxtStart()
+    nuxtStart({
+      openBrowser: 'http://${host}:${process.env.DQ_PORT}/login'
+    })
   }
 }
 
