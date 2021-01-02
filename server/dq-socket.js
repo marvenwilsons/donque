@@ -1,4 +1,4 @@
-module.exports = function (io, s) {
+module.exports = function (io) {
     io.on('connection', (socket) => {
         console.log('made socket connection')
 
@@ -9,7 +9,5 @@ module.exports = function (io, s) {
                 socket.emit('mydata', 'confimation sent!')
             }, 1500)
         })
-
-        s(socket)
     })
 }

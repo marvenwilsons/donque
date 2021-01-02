@@ -39,6 +39,7 @@ module.exports = {
   ],
   privateRuntimeConfig: {
     // Will only be available on the server side
+    msg: 'hello'
   },
   /*
   ** Nuxt.js dev-modules

@@ -25,8 +25,11 @@
                             </div>
                             <!-- form title -->
                             <div>
-                                <h5 class="smth" style="font-weight:100;" >
+                                <h5 v-if="currentForm != 3 " class="smth" style="font-weight:100;" >
                                     Creat{{currentForm != 3 ? 'e' : 'ing'}} App{{currentForm != 3 ? '' : '...'}}
+                                </h5>
+                                <h5 v-if="currentForm == 3 " class="smth" style="font-weight:100;" >
+                                    Please wait ...
                                 </h5>
                             </div>
                         </div>

@@ -15,12 +15,11 @@ require('dotenv').config()
 const config = require('../nuxt.config.js')
 config.dev = process.env.NODE_ENV !== 'production'
 
-async function nuxtStart (o) {
-  console.log('nuxtStart run')
-
+async function nuxtStart () {
   // Init Nuxt.js
   const nuxt = new Nuxt(config)
 
+  nuxt.options.server.port = process.env.DQ_PORT
   const { host, port } = nuxt.options.server
 
   await nuxt.ready()
@@ -40,18 +39,12 @@ async function nuxtStart (o) {
   // io socket ready
   console.log('IO Socket Ready')
   const IO_Instance = socket(server)
-  dqSocket(IO_Instance, (dqSocketCb) => {
-    o(dqSocketCb)
-  })
+  dqSocket(IO_Instance)
 
-  consola.ready({
-    message: `Server listening on http://${host}:${port}`,
-    badge: true
-  })
+  console.log(`READY server listening on http://${host}:${port}`)
 }
 
 async function start (isNotInit) {
-  console.log('start run')
   consola.info({
     message: 'Launching DONQUE',
     badge: true
@@ -69,7 +62,7 @@ async function start (isNotInit) {
 
       //kill any server that is maybe running in this port infavor to run this initialization
       try {
-        await fkill(':3000')
+        await fkill(`:${process.env.DQ_PORT}`)
       } catch {}
       
       /**
@@ -79,7 +72,10 @@ async function start (isNotInit) {
        * 2. set MODE_ENV env to production -> this will cause to run in production when start() function run
        */
 
-      // Run the start() function with ENV set
+      /**
+       * Run the start() function with ENV set
+       * this will run server, or the nuxtStart() function
+       */
       consola.log('donque ==> Setting ENV')
       const initializationProcess  = fork('server/index.js', {
         env: {
@@ -101,16 +97,18 @@ async function start (isNotInit) {
         const childLogs = data.toString().replace('\n', '')
         console.log('donque ==>',childLogs)
 
-        // when the server is ready launch default browser to redirect
-        // to the initialization page
+        /**
+         * when the server is ready launch default browser to redirect to the initialization page
+         * it is espected that this file will run only in localhost so I didn't bother making
+         * the host part dynamic
+         */
         if(childLogs.split('READY').length != 1) {
-          open('http://localhost:3000/dqinit')
+          open(`http://localhost:${process.env.DQ_PORT}/dqinit`)
         }
       })
 
       // listening to child on message
       initializationProcess.on('message', (p) => {
-
         /**
          * if app/init/init.js send's a msg that says done
          */
@@ -160,15 +158,11 @@ async function start (isNotInit) {
       })
     } else {
       // if env variables are set and process.env.MODE == 'init'
-      nuxtStart((ioSocket) => {
-        process.stdout.on('data', (d) => {
-          console.log('yasdfasdf', d)
-        })
-      })
+      nuxtStart()
     }
   } else {
     consola.log('donque ==> Serving first load')
-    // consola.log(fs.readFileSync(path.join(__dirname,'../.env'), 'utf-8'))
+    nuxtStart()
   }
 }
 
