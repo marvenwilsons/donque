@@ -35,7 +35,6 @@ router.post('/v1/initialize', async (req,res) => {
     .then(r => {
         // console.log(r)
     })
-    
 })
 
 module.exports = {

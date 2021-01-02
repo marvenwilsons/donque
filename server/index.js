@@ -15,7 +15,9 @@ require('dotenv').config()
 const config = require('../nuxt.config.js')
 config.dev = process.env.NODE_ENV !== 'production'
 
-async function nuxtStart () {
+async function nuxtStart (o) {
+  console.log('nuxtStart run')
+
   // Init Nuxt.js
   const nuxt = new Nuxt(config)
 
@@ -38,7 +40,9 @@ async function nuxtStart () {
   // io socket ready
   console.log('IO Socket Ready')
   const IO_Instance = socket(server)
-  dqSocket(IO_Instance)
+  dqSocket(IO_Instance, (dqSocketCb) => {
+    o(dqSocketCb)
+  })
 
   consola.ready({
     message: `Server listening on http://${host}:${port}`,
@@ -47,6 +51,7 @@ async function nuxtStart () {
 }
 
 async function start (isNotInit) {
+  console.log('start run')
   consola.info({
     message: 'Launching DONQUE',
     badge: true
@@ -154,9 +159,12 @@ async function start (isNotInit) {
         console.log('donque ==> Done! Closing child process')
       })
     } else {
-      // if env variables are set
-      // consola.log(process.env)
-      nuxtStart()
+      // if env variables are set and process.env.MODE == 'init'
+      nuxtStart((ioSocket) => {
+        process.stdout.on('data', (d) => {
+          console.log('yasdfasdf', d)
+        })
+      })
     }
   } else {
     consola.log('donque ==> Serving first load')

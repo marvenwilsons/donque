@@ -1,4 +1,4 @@
-module.exports = function (io) {
+module.exports = function (io, s) {
     io.on('connection', (socket) => {
         console.log('made socket connection')
 
@@ -10,5 +10,6 @@ module.exports = function (io) {
             }, 1500)
         })
 
+        s(socket)
     })
 }
