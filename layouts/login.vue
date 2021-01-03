@@ -1,15 +1,20 @@
 <template>
     <v-app id="dq-init-page" class="fullheight-VH relative overflowhidden flex flexcenter smth flexcenter" >
         <div id="bgContainer2" style="width:100%;height:100%;" class="fullwidth  fullheight-percent absolute" ></div>
-        <img id="leaves" class="absolute" src="leaves.jpeg" alt="">
+        <img id="lleaves" class="absolute" src="ganapathy.jpg" alt="">
 
         <!-- blur div here -->
+        <div id="loginOverlay" class="absolute fullwidth fullheight-percent" >
 
+        </div>
 
         <!-- form -->
-        <div style="z-index:3; overflow-x:auto;" :class="['fullheight-VH', 'flex', 'flexcenter']" >
+        <div style="z-index:3; overflow: hidden;" :class="['fullheight-VH', 'flex', 'flexcenter']" >
             <div class="flex flexcenter" >
-                <section style="background:white; max-width:400px; margin-top:-120px;" class="pad125 margintop125 marginbottom125 flex flexcenter borderRad4 modalShadow" >
+                <section
+                    id="login-s"
+                    style="background:white; max-width:400px; margin-top:-120px;" 
+                    class="pad125 margintop125 marginbottom125 flex flexcenter borderRad4" >
                     <div class="padleft125 padright125 padbottom125 flex flexcol" >
                         <div class="flex flexcol flexcenter fullwidth" >
                             <!-- logo -->
@@ -39,7 +44,7 @@
                             ></v-text-field>
                         </div>
                         <div>
-                            <span class="pointer" >
+                            <span @click="cantAccessAccount" class="pointer" >
                                 Cant access your account?
                             </span>
                         </div>
@@ -70,7 +75,11 @@ export default {
     },
     data: () => ({
     }),
-    methods: {},
+    methods: {
+        cantAccessAccount() {
+            alert('This feature is not handled')
+        }
+    },
     mounted() {
     }
 }
@@ -80,68 +89,41 @@ export default {
 @import url("@/assets/dq-css/normalize.css");
 @import url("@/assets/dq-css/dq-fw-0.3.css");
 
-/* #dq-init-page{
-    background: url('~static/leaves.jpeg');
-} */
-.FirstForm_exit {
-    transform: translateX(-260px);
-    transition: all 300ms ease;
-}
 
 
-#bgContainer {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-  gap: 0px 0px;
-  grid-template-areas:
-    ". . . ."
-    ". . . ."
-    ". . . ."
-    ". . . ."
-    ". . . ."
-    ". . . ."
-    ". . . ."
-    ". . . ."
-    ". . . ."
-    ". . . ."
-    ". . . ."
-    ". . . .";
-    /* clip-path: polygon(0 0, 1600px 0, 1600px 87%, 0 100%); */
-    background: rgb(255,161,64);
-    background: linear-gradient(90deg, rgba(255,161,64,0.6825105042016807) 0%, rgba(255,64,158,0.43881302521008403) 91%);
-    margin-right: 120px;
-    margin-top: -85px;
-    transform:rotate(40deg);
-    overflow: hidden;
-    /* transform: skewX(-20deg); */
-    z-index: 2;
-}
-
-#bgContainer::before {
-    content: "";
-    background-color: #409eff;
-    grid-column: 3;
-    grid-row: 1;
-}
-
-#bgContainer::after {
-    content: "";
-    background-color: #409eff;
-    grid-column: 4;
-    grid-row:12;
-}
-#leaves {
+#lleaves {
     height: 100%;
     /* opacity: 0.2; */
     /* z-index: 2; */
 }
 
-
-/* #bgContainer2{
-    background: rgb(34,193,195);
-    background: linear-gradient(0deg, rgba(19, 72, 73, 0.219) 0%, rgba(71, 53, 14, 0.247) 100%);
-    z-index: 1;
+#loginOverlay:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    box-shadow: inset 0 0 2000px rgba(255, 255, 255, 0.13);
     filter: blur(10px);
-} */
+    
+}
+#loginOverlay {
+    /* background-attachment: fixed; */
+    background: inherit;
+    background-color: rgba(248, 247, 247, 0.397);  
+    backdrop-filter: blur(15px);
+    /* z-index: 100; */
+    height: 100vh;
+}
+
+#login-s {
+    box-shadow: 0 1px 2px rgba(0,0,0,0.07), 
+                0 2px 4px rgba(0,0,0,0.07), 
+                0 4px 8px rgba(0,0,0,0.07), 
+                0 8px 16px rgba(0,0,0,0.07),
+                0 16px 32px rgba(0,0,0,0.07), 
+                0 32px 64px rgba(0,0,0,0.07);
+    
+}
 </style>

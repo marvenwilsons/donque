@@ -14,6 +14,7 @@ TABLE_PREFIX=${tablePrefix}
 APP_NAME=${applicationName}
 DQ_PORT=3000
 APP_HOST=localhost
+LOGIN_ROUTE_NAME=dqlogin
 `
 }
 
