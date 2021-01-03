@@ -9,7 +9,7 @@
         </div>
 
         <!-- form -->
-        <div style="z-index:3; overflow: hidden;" :class="['fullheight-VH', 'flex', 'flexcenter']" >
+        <div style="z-index:3; overflow: hidden;" :class="['fullheight-VH', 'flex', 'flexcenter smth']" >
             <div class="flex flexcenter" >
                 <section
                     v-if="ready"
@@ -27,26 +27,34 @@
                         </div>
                         <!-- forms -->
                         <main class="relative flex" style="overflow:hidden;" >  
-
+                            <div
+                                :style="{minWidth: showForms ? '0px' : '319px'}"
+                                class="smth"
+                            ></div>
                             <!-- email or username -->
                             <section
+                                v-if="showForms"
                                 role="signIn"
-                                style="min-width:319px"
+                                :style="{minWidth:'319px', 
+                                    transform: `translateX(${signIn.currentPosition}px)`
+                                }"
                                 :class="['flex', 'relative flexcol', 'smth', 'flexcenter', 'fullwidth' ]" 
                             >
                                 <div class="fullwidth" >
                                     <div class="fullwidth marginbottom050 margintop050" >
                                         <h5 style="margin:0" >{{signIn.title}}</h5>
                                     </div>
-                                    <div v-if="false" class="fullwidth padtop125" >
-                                        <span class="err" >
+                                    <div v-if="signIn.error" class="fullwidth padtop125" >
+                                        <span style="font-size:14px" class="err" >
                                             {{signIn.error}}
                                         </span>
                                     </div>
                                     <v-text-field
-                                    style="margin-bottom:0px;"
+                                        tyle="margin-bottom:0px;"
+                                        v-model="signIn.value"
                                         :label="signIn.placeholder"
                                         class="marginbottom125 fullwidth"
+                                        :error="signIn.error"
                                     ></v-text-field>
                                     <div class="fullwidth" >
                                         <span @click="cantAccessAccount" class="pointer" >
@@ -62,7 +70,9 @@
                             <!-- password -->
                             <section
                                 role="password"
-                                style="min-width:318px"
+                                :style="{minWidth: '318px', 
+                                    transform: `translateX(${password.currentPosition}px)`
+                                }"
                                 :class="['flex', 'relative flexcol', 'smth', 'flexcenter', 'fullwidth' ]" 
                             >
                                 <div class="fullwidth" >
@@ -75,9 +85,11 @@
                                         </span>
                                     </div>
                                     <v-text-field
-                                    style="margin-bottom:0px;"
+                                        v-model="password.value"
+                                        style="margin-bottom:0px;"
                                         :label="password.placeholder"
                                         class="marginbottom125 fullwidth"
+                                        type="password"
                                     ></v-text-field>
                                     <div class="fullwidth" >
                                         <span @click="cantAccessAccount" class="pointer" >
@@ -91,13 +103,16 @@
                             </section>
                         </main>
                         
-                        <div class="flex flexend margintop125" >
-                            <v-btn :loading="isLoading" @click="next" color="primary" >
-                                <strong>
-                                    {{currentForm.btnText}}
-                                </strong>
-                            </v-btn>
-                        </div>
+                        <v-expand-transition>
+                            <div v-if="showForms" class="flex flexend margintop125" >
+                                <v-btn :loading="currentForm.isLoading" @click="next" color="primary" >
+                                    <strong>
+                                        {{currentForm.btnText}}
+                                    </strong>
+                                </v-btn>
+                            </div>
+                        </v-expand-transition>
+                        
                     </div>
                 </section>
             </div>
@@ -126,7 +141,8 @@ export default {
             title: 'Sign in',
             value: undefined,
             featureText: 'Cant access your account?',
-            showFeature: false
+            showFeature: false,
+            currentPosition: 0,
         },
         password: {
             error: undefined,
@@ -137,22 +153,48 @@ export default {
             title: 'Enter password',
             value: undefined,
             featureText: 'Forgot password?',
-            showFeature: false
+            showFeature: false,
+            currentPosition: 0,
         },
         currentForm: undefined,
-        ready: false
+        ready: false,
+        showForms: false
     }),
     methods: {
         cantAccessAccount() {
             alert('This feature is not handled')
         },
+        slideToLeft() {
+            this.signIn.currentPosition = '-319'
+            this.password.currentPosition = '-319'
+        },
+        slideToRight() {
+            this.signIn.currentPosition = '0'
+            this.password.currentPosition = '319'
+        },
         next() {
-            this.currentForm = this.password
+            // this.currentForm = this.password
+
+            if(this.currentForm.value == undefined) {
+                this.currentForm.error = `Invalid ${this.currentForm.placeholder}`
+                console.log(this.currentForm)
+            } else {
+                console.log('val')
+                this.currentForm.isLoading = true
+
+                setTimeout(() => {
+                    this.currentForm.error = `Invalid: Cannot find "${this.currentForm.value}" in the database`
+                }, 1000);
+                // fetch database if username or email exist
+            }
         }
     },
     mounted() {
         this.ready = true
         this.currentForm = this.signIn
+        setTimeout(() => {
+            this.showForms = true
+        }, 500);
     }
 }
 </script>
@@ -165,8 +207,6 @@ export default {
 
 #lleaves {
     height: 100%;
-    /* opacity: 0.2; */
-    /* z-index: 2; */
 }
 
 #loginOverlay:before {
