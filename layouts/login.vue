@@ -12,9 +12,10 @@
         <div style="z-index:3; overflow: hidden;" :class="['fullheight-VH', 'flex', 'flexcenter']" >
             <div class="flex flexcenter" >
                 <section
+                    v-if="ready"
                     id="login-s"
                     style="background:white; max-width:400px; margin-top:-120px;" 
-                    class="pad125 margintop125 marginbottom125 flex flexcenter borderRad4" >
+                    class="pad125 margintop125 marginbottom125 flex flexcenter" >
                     <div class="padleft125 padright125 padbottom125 flex flexcol" >
                         <div class="flex flexcol flexcenter fullwidth" >
                             <!-- logo -->
@@ -22,36 +23,78 @@
                                 <img class="absolute flex" style="z-index:1;" src="dq-logo.png" alt="">
                             </div>
 
-                            <div class="fullwidth" >
-                                <h5 style="margin:0" >Sign in</h5>
-                            </div>
-                            <!-- form title -->
-                            <div>
-                                <h5 v-if="currentForm == 3 " class="smth" style="font-weight:100;" >
-                                    Please wait ...
-                                </h5>
-                            </div>
-                        </div>
-                        <!-- froms -->
-                        <div
-                            :class="['flex', 'relative', 'smth', 'flexcenter', 'fullwidth', 'margintop125' ]" 
                             
-                        >
-                            <v-text-field
-                            style="margin-bottom:0px;"
-                                label="Email or Username"
-                                class="marginbottom125"
-                            ></v-text-field>
                         </div>
-                        <div>
-                            <span @click="cantAccessAccount" class="pointer" >
-                                Cant access your account?
-                            </span>
-                        </div>
+                        <!-- forms -->
+                        <main class="relative flex" style="overflow:hidden;" >  
+
+                            <!-- email or username -->
+                            <section
+                                role="signIn"
+                                style="min-width:319px"
+                                :class="['flex', 'relative flexcol', 'smth', 'flexcenter', 'fullwidth' ]" 
+                            >
+                                <div class="fullwidth" >
+                                    <div class="fullwidth marginbottom050 margintop050" >
+                                        <h5 style="margin:0" >{{signIn.title}}</h5>
+                                    </div>
+                                    <div v-if="false" class="fullwidth padtop125" >
+                                        <span class="err" >
+                                            {{signIn.error}}
+                                        </span>
+                                    </div>
+                                    <v-text-field
+                                    style="margin-bottom:0px;"
+                                        :label="signIn.placeholder"
+                                        class="marginbottom125 fullwidth"
+                                    ></v-text-field>
+                                    <div class="fullwidth" >
+                                        <span @click="cantAccessAccount" class="pointer" >
+                                            {{signIn.featureText}}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <!-- cant access account -->
+                                </div>
+                            </section>
+
+                            <!-- password -->
+                            <section
+                                role="password"
+                                style="min-width:318px"
+                                :class="['flex', 'relative flexcol', 'smth', 'flexcenter', 'fullwidth' ]" 
+                            >
+                                <div class="fullwidth" >
+                                    <div class="fullwidth marginbottom050 margintop050" >
+                                        <h5 style="margin:0" >{{password.title}}</h5>
+                                    </div>
+                                    <div v-if="false" class="fullwidth padtop125" >
+                                        <span class="err" >
+                                            {{password.error}}
+                                        </span>
+                                    </div>
+                                    <v-text-field
+                                    style="margin-bottom:0px;"
+                                        :label="password.placeholder"
+                                        class="marginbottom125 fullwidth"
+                                    ></v-text-field>
+                                    <div class="fullwidth" >
+                                        <span @click="cantAccessAccount" class="pointer" >
+                                            {{password.featureText}}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <!-- forgot password -->
+                                </div>
+                            </section>
+                        </main>
+                        
                         <div class="flex flexend margintop125" >
                             <v-btn :loading="isLoading" @click="next" color="primary" >
                                 <strong>
-                                    next
+                                    {{currentForm.btnText}}
                                 </strong>
                             </v-btn>
                         </div>
@@ -74,13 +117,42 @@ export default {
     components: {
     },
     data: () => ({
+        signIn: {
+            error: undefined,
+            isDone: false,
+            isLoading: false,
+            btnText: 'next',
+            placeholder: 'Email or Username',
+            title: 'Sign in',
+            value: undefined,
+            featureText: 'Cant access your account?',
+            showFeature: false
+        },
+        password: {
+            error: undefined,
+            isDone: false,
+            isLoading: false,
+            btnText: 'sign in',
+            placeholder: 'Password',
+            title: 'Enter password',
+            value: undefined,
+            featureText: 'Forgot password?',
+            showFeature: false
+        },
+        currentForm: undefined,
+        ready: false
     }),
     methods: {
         cantAccessAccount() {
             alert('This feature is not handled')
+        },
+        next() {
+            this.currentForm = this.password
         }
     },
     mounted() {
+        this.ready = true
+        this.currentForm = this.signIn
     }
 }
 </script>
@@ -117,13 +189,13 @@ export default {
     height: 100vh;
 }
 
-#login-s {
+#login-s, .formShadow {
     box-shadow: 0 1px 2px rgba(0,0,0,0.07), 
                 0 2px 4px rgba(0,0,0,0.07), 
                 0 4px 8px rgba(0,0,0,0.07), 
                 0 8px 16px rgba(0,0,0,0.07),
                 0 16px 32px rgba(0,0,0,0.07), 
                 0 32px 64px rgba(0,0,0,0.07);
-    
 }
+
 </style>
