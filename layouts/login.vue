@@ -32,112 +32,9 @@
                                 class="smth"
                             ></div>
                             <!-- email or username -->
-                            <section
-                                v-if="showForms"
-                                role="signIn"
-                                :style="{minWidth:'310px', 
-                                    transform: `translateX(${signIn.currentPosition}px)`
-                                }"
-                                :class="['flex', 'relative flexcol marginleft025 marginright025', 'smth', 'flexcenter', 'fullwidth' ]" 
-                            >
-                                <div v-if="signIn.showField" class="fullwidth" >
-                                    <div class="fullwidth marginbottom050 margintop050" >
-                                        <h5 style="margin:0" >{{signIn.title}}</h5>
-                                    </div>
-                                    <v-expand-transition>
-                                        <div v-if="signIn.error" class="fullwidth padtop125" >
-                                            <span style="font-size:14px" class="err" >
-                                                {{signIn.error}}
-                                            </span>
-                                        </div>
-                                    </v-expand-transition>
-                                    <v-text-field
-                                        style="margin-bottom:0px;"
-                                        v-model="signIn.value"
-                                        :label="signIn.placeholder"
-                                        class="marginbottom125 fullwidth"
-                                        :error="signIn.error"
-                                    ></v-text-field>
-                                    <div class="fullwidth" >
-                                        <span @click="signIn.showFeature = true, signIn.showField = false, signIn.error = undefined" 
-                                        class="pointer" >
-                                            {{signIn.featureText}}
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="fullwidth" v-if="signIn.showFeature">
-                                    <!-- cant access account -->
-                                    <div class="fullwidth marginbottom050 margintop050" >
-                                        <h5 style="margin:0" >Retrive account</h5>
-                                    </div>
-                                    <v-expand-transition>
-                                        <div v-if="signIn.error" class="fullwidth padtop125" >
-                                            <span style="font-size:14px" class="err" >
-                                                {{signIn.error}}
-                                            </span>
-                                        </div>
-                                    </v-expand-transition>
-                                    <v-text-field
-                                        style="margin-bottom:0px;"
-                                        v-model="signIn.forgotAccount.firstName"
-                                        label="First Name"
-                                        class="marginbottom125 fullwidth"
-                                        :error="signIn.error"
-                                    ></v-text-field>
-                                    <v-text-field
-                                        style="margin-bottom:0px;"
-                                        v-model="signIn.forgotAccount.lastName"
-                                        label="Last Name"
-                                        class="marginbottom125 fullwidth"
-                                        :error="signIn.error"
-                                    ></v-text-field>
-                                    <v-text-field
-                                        style="margin-bottom:0px;"
-                                        v-model="signIn.forgotAccount.emailUsed"
-                                        label="Email Used In Account"
-                                        class="marginbottom125 fullwidth"
-                                        :error="signIn.error"
-                                    ></v-text-field>
-                                </div>
-                            </section>
-
+                            <signInForm ref="signInForm" />
                             <!-- password -->
-                            <section
-                                v-if="currentForm.title == 'Enter Password'"
-                                role="password"
-                                :style="{minWidth: '318px', 
-                                    transform: `translateX(${password.currentPosition}px)`
-                                }"
-                                :class="['flex', 'relative flexcol', 'smth', 'flexcenter', 'fullwidth' ]" 
-                            >
-                                <div class="fullwidth" >
-                                    <div class="fullwidth marginbottom050 margintop050" >
-                                        <h5 style="margin:0" >{{password.title}}</h5>
-                                    </div>
-                                    <v-expand-transition>
-                                        <div v-if="false" class="fullwidth padtop125" >
-                                            <span class="err" >
-                                                {{password.error}}
-                                            </span>
-                                        </div>
-                                    </v-expand-transition>
-                                    <v-text-field
-                                        v-model="password.value"
-                                        style="margin-bottom:0px;"
-                                        :label="password.placeholder"
-                                        class="marginbottom125 fullwidth"
-                                        type="password"
-                                    ></v-text-field>
-                                    <div class="fullwidth" >
-                                        <span @click="cantAccessAccount" class="pointer" >
-                                            {{password.featureText}}
-                                        </span>
-                                    </div>
-                                </div>
-                                <div>
-                                    <!-- forgot password -->
-                                </div>
-                            </section>
+                            <passwordForm ref="passwordForm" />
                         </main>
                         
                         <v-expand-transition>
@@ -157,36 +54,21 @@
     </v-app>
 </template>
 
-// on next, --> database_name database username, database password, token_secret, table_prefix
 <script>
 import h from '@/helper'
 
+import signInForm from '@/components/login/sign-in'
+import passwordForm from '@/components/login/password'
 export default {
     mixins: [h],
     created() {
         this.h = this
     },
     components: {
+        signInForm,
+        passwordForm
     },
     data: () => ({
-        signIn: {
-            error: undefined,
-            isDone: false,
-            isLoading: false,
-            btnText: 'next',
-            placeholder: 'Email or Username',
-            title: 'Sign in',
-            value: undefined,
-            featureText: 'Cant access your account?',
-            showFeature: false,
-            currentPosition: 0,
-            showField: true,
-            forgotAccount: {
-                firstName: undefined,
-                lastName: undefined,
-                emailUsed: undefined
-            }
-        },
         password: {
             error: undefined,
             isDone: false,
@@ -205,9 +87,6 @@ export default {
         showForms: false
     }),
     methods: {
-        cantAccessAccount() {
-            alert('This feature is not handled')
-        },
         slideToLeft() {
             this.signIn.currentPosition = '-319'
             this.password.currentPosition = '-319'
@@ -215,12 +94,6 @@ export default {
         slideToRight() {
             this.signIn.currentPosition = '0'
             this.password.currentPosition = '319'
-        },
-        signInRetriveAccount() {
-
-        },
-        passwordRetrievePassword() {
-
         },
         next() {
             // this.currentForm = this.password
@@ -241,10 +114,12 @@ export default {
     },
     mounted() {
         this.ready = true
-        this.currentForm = this.signIn
+
         setTimeout(() => {
             this.showForms = true
-        }, 500);
+            this.$refs.signInForm.showForm = true
+            this.currentForm = this.$refs.signInForm
+        }, 400);
     }
 }
 </script>
