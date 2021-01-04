@@ -40,7 +40,7 @@
                         <v-icon dense class="marginright050" >mdi-arrow-left</v-icon> Back to Sign in
                     </div>
                 </div>
-                <div class="fullwidth marginbottom050 margintop050" >
+                <div v-if="showFeature" class="fullwidth marginbottom050 margintop050" >
                     <h5 style="margin:0" >Retrive account</h5>
                 </div>
                 <v-expand-transition>
@@ -82,16 +82,31 @@ export default {
     data: () => ({
         showForm: false
     }),
-    mounted() {
-        // set instance default
-        this.placeholder = 'Email or Username'
-        this.title = 'Sign in'
-        this.featureText = 'Cant access your account?'
-        this.showField = true
-        this.btnText = 'next'
+    methods: {
+        setDefaults() {
+            // set instance default
+            this.placeholder = 'Email or Username'
+            this.title = 'Sign in'
+            this.featureText = 'Cant access your account?'
+            this.showField = true
+            this.btnText = 'next'
 
-        // set component default
-        this.showForm = true
+            // set component default
+            this.showForm = true
+        }
+    },
+    mounted() {
+        this.setDefaults()
+    },
+    watch: {
+        showFeature() {
+            if(this.showFeature) {
+                this.btnText = 'Submit'
+                this.title = 'Retrive account'
+            } else {
+                this.setDefaults()
+            }
+        }
     }
 }
 </script>

@@ -22,8 +22,6 @@
                             <div class="relative flex flexcenter" style="height:85px;width:85px;" >
                                 <img class="absolute flex" style="z-index:1;" src="dq-logo.png" alt="">
                             </div>
-
-                            
                         </div>
                         <!-- forms -->
                         <main class="relative flex" style="overflow:hidden;" >  
@@ -32,7 +30,7 @@
                                 class="smth"
                             ></div>
                             <!-- email or username -->
-                            <signInForm ref="signInForm" />
+                            <signInForm @retrieveAccount="retrieveAccount" ref="signInForm" />
                             <!-- password -->
                             <passwordForm ref="passwordForm" />
                         </main>
@@ -88,21 +86,61 @@ export default {
     }),
     methods: {
         slideToLeft() {
-            this.signIn.currentPosition = '-319'
-            this.password.currentPosition = '-319'
+            this.$refs.signInForm.currentPosition = '-319'
+            this.$refs.passwordForm.currentPosition = '-319'
         },
         slideToRight() {
             this.signIn.currentPosition = '0'
             this.password.currentPosition = '319'
         },
         next() {
-            // this.currentForm = this.password
-
             if(this.currentForm.value == undefined) {
                 this.currentForm.error = `Invalid ${this.currentForm.placeholder}`
                 console.log(this.currentForm)
             } else {
-                console.log('val')
+                switch(this.currentForm.title) {
+                    /**
+                     * /$dqappservices/user/confirm
+                     * 
+                     * get if the email or username supplied exist in the database
+                     */
+                    case 'Sign in':
+                    break
+
+                    /**
+                     * /$dqappservices/user/get-account
+                     * 
+                     * payload: first name, last name, email used
+                     */
+                    case 'Retrive account':
+                    break
+
+                    /**
+                     * /$dqappservices/user/signin
+                     * 
+                     * When this case hits, it mean the user clicks the
+                     * submit button to submit the entered username or email together
+                     * with password
+                     * 
+                     * valdiate in server if credintials submitted is valid, if valid it
+                     * returns a token, then redirects to the admin dashboard
+                     * 
+                     * payload: email or username and password
+                     */
+                    case 'Input password':
+                    break
+
+                    /**
+                     * /$dqappservices/user/get-account
+                     * 
+                     * the admin will define in the dashboard if to give the user an 
+                     * ability to change password on request
+                     * 
+                     * payload: first name, last name, email used
+                     */
+                    case 'Forgot password':
+                    break
+                }
                 this.currentForm.isLoading = true
 
                 setTimeout(() => {
@@ -110,6 +148,12 @@ export default {
                 }, 1000);
                 // fetch database if username or email exist
             }
+            
+
+            
+        },
+        retrieveAccount() {
+            console.log('retrive')
         }
     },
     mounted() {
@@ -119,7 +163,7 @@ export default {
             this.showForms = true
             this.$refs.signInForm.showForm = true
             this.currentForm = this.$refs.signInForm
-        }, 400);
+        }, 1000);
     }
 }
 </script>

@@ -36,7 +36,7 @@ Init Todo
 [-] add owner default services in database
 
 Sign In Todo
-[-]
+[-] add new ways of logging in
 
 Before finishing dq studio blank
 [-] create new branch named blank commit name alpha
@@ -45,6 +45,8 @@ Before finishing dq studio blank
 Services
 [-] Create new branch for page services
 [-] Created page service
+[-] SignIn
+    [-] forgot password request list
 
 @notes
 

@@ -40,6 +40,17 @@
 <script>
 import m from './mixin'
 export default {
-    mixins: [m]
+    mixins: [m],
+    mounted() {
+        // set instance default
+        this.placeholder = 'Password'
+        this.title = 'Input Password'
+        this.featureText = 'Forgot password?'
+        this.showField = true
+        this.btnText = 'Sign In'
+
+        // set component default
+        this.showForm = true
+    },
 }
 </script>
