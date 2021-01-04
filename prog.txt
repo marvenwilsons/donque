@@ -27,7 +27,16 @@
 [x] add form maker or objectify
 [-] add service manager menu
 [-] add caching system
-[-] add encryption and decryption to utils
+[x] add encryption and decryption to utils (will use bcrypt)
+
+Init Todo
+[-] implement table prefix
+[-] add owner to users table on registration
+[-] add dummy page in pages table
+[-] add owner default services in database
+
+Sign In Todo
+[-]
 
 Before finishing dq studio blank
 [-] create new branch named blank commit name alpha
