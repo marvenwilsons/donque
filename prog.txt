@@ -47,6 +47,7 @@ Services
 [-] Created page service
 [-] SignIn
     [-] forgot password request list
+    [-] retrive account request list
 
 @notes
 

@@ -7,6 +7,7 @@ export default {
         placeholder: undefined,
         title: undefined,
         value: undefined,
+        user: undefined,
         featureText: undefined,
         showFeature: false,
         currentPosition: 0,

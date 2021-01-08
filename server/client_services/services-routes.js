@@ -40,13 +40,24 @@ router.post('/v1/initialize', async (req,res) => {
     })
 })
 
+// TODO
 router.get('/v1/user/confirm', (req,res) => {
     console.log(req.query)
     const user = req.query.user
     res.status(200).json({
-        result: false,
+        result: true,
         msg: `Invalid: Cannot find "${user}" in the database`
     })
+})
+
+//TODO
+router.post('/v1/user/signin', (req,res) => {
+    console.log(req.body)
+    // const user = req.query.user
+    // res.status(200).json({
+    //     result: true,
+    //     msg: `Invalid: Cannot find "${user}" in the database`
+    // })
 })
 
 router.get('/apt', (_, res) => {

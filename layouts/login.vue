@@ -32,19 +32,18 @@
                             <!-- email or username -->
                             <signInForm @retrieveAccount="retrieveAccount" ref="signInForm" />
                             <!-- password -->
-                            <passwordForm @forgotPassword="forgotPassword" ref="passwordForm" />
+                            <passwordForm @forgotPassword="forgotPassword" @backToSignIn="backToSignIn" ref="passwordForm" />
                         </main>
                         
                         <v-expand-transition>
                             <div v-if="showForms" class="flex flexend margintop125" >
-                                <v-btn :loading="currentForm.isLoading" @click="next" color="primary" >
+                                <v-btn tabindex="0" :loading="currentForm.isLoading" @click="next" color="primary" >
                                     <strong>
                                         {{currentForm.btnText}}
                                     </strong>
                                 </v-btn>
                             </div>
                         </v-expand-transition>
-                        
                     </div>
                 </section>
             </div>
@@ -90,16 +89,27 @@ export default {
             this.$refs.passwordForm.currentPosition = '-319'
         },
         slideToRight() {
-            this.signIn.currentPosition = '0'
-            this.password.currentPosition = '319'
+            this.$refs.signInForm.currentPosition  = '0'
+            this.$refs.passwordForm.currentPosition = '319'
         },
         forgotPassword() {
 
         },
+        backToSignIn() {
+            /**
+             * if it is loading it means the user already submitted the password
+             * so you cannot go back to sign-in while its validating the password
+             */
+            if(this.$refs.passwordForm.isLoading == false) {
+                this.slideToRight()
+                this.$refs.signInForm.showForm = true
+                this.currentForm = this.$refs.signInForm
+                this.currentForm.isLoading = false
+            }
+        },
         next() {
             if(this.currentForm.value == undefined) {
                 this.currentForm.error = `Invalid ${this.currentForm.placeholder}`
-                console.log(this.currentForm)
             } else {
                 switch(this.currentForm.title) {
                     /**
@@ -121,11 +131,16 @@ export default {
                                 if(result) {
                                     this.slideToLeft()
                                     this.currentForm = this.$refs.passwordForm
+                                    this.currentForm.user = this.$refs.signInForm.value
                                     this.currentForm.opacity = 1
                                     this.currentForm.isLoading = false
+                                    setTimeout(() => {
+                                        document.getElementById('password-field').focus()
+                                    }, 500);
                                 } else {
                                     this.currentForm.error = msg
                                     this.currentForm.isLoading = false
+                                    
                                 }
                             })
 
@@ -153,7 +168,12 @@ export default {
                      * 
                      * payload: email or username and password
                      */
-                    case 'Input password':
+                    case 'Input Password':
+                        console.log("Input password!")
+                        this.$axios.$post('/$dqappservices/v1/user/signin', {
+                            user: this.$refs.signInForm.value,
+                            password: this.$refs.passwordForm.value
+                        })
                     break
 
                     /**
