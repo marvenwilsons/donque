@@ -40,6 +40,15 @@ router.post('/v1/initialize', async (req,res) => {
     })
 })
 
+router.get('/v1/user/confirm', (req,res) => {
+    console.log(req.query)
+    const user = req.query.user
+    res.status(200).json({
+        result: false,
+        msg: `Invalid: Cannot find "${user}" in the database`
+    })
+})
+
 router.get('/apt', (_, res) => {
     res.status(200).json({status: true})
 })

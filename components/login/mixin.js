@@ -11,6 +11,7 @@ export default {
         showFeature: false,
         currentPosition: 0,
         showField: false,
+        opacity: 0,
         forgotAccount: {
             firstName: undefined,
             lastName: undefined,

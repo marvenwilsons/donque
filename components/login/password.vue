@@ -1,9 +1,10 @@
 <template>
     <section
-        v-if="title == 'Enter Password'"
+        v-if="title == 'Input Password'"
         role="password"
         :style="{minWidth: '318px', 
-            transform: `translateX(${currentPosition}px)`
+            transform: `translateX(${currentPosition}px)`,
+            opacity: opacity
         }"
         :class="['flex', 'relative flexcol', 'smth', 'flexcenter', 'fullwidth' ]" 
     >
@@ -26,7 +27,7 @@
                 type="password"
             ></v-text-field>
             <div class="fullwidth" >
-                <span @click="cantAccessAccount" class="pointer" >
+                <span @click="$emit('forgotPassword')" class="pointer" >
                     {{featureText}}
                 </span>
             </div>

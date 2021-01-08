@@ -32,7 +32,7 @@
                             <!-- email or username -->
                             <signInForm @retrieveAccount="retrieveAccount" ref="signInForm" />
                             <!-- password -->
-                            <passwordForm ref="passwordForm" />
+                            <passwordForm @forgotPassword="forgotPassword" ref="passwordForm" />
                         </main>
                         
                         <v-expand-transition>
@@ -93,6 +93,9 @@ export default {
             this.signIn.currentPosition = '0'
             this.password.currentPosition = '319'
         },
+        forgotPassword() {
+
+        },
         next() {
             if(this.currentForm.value == undefined) {
                 this.currentForm.error = `Invalid ${this.currentForm.placeholder}`
@@ -105,6 +108,29 @@ export default {
                      * get if the email or username supplied exist in the database
                      */
                     case 'Sign in':
+                        console.log('sign in')
+                        setTimeout(() => {
+                            // sample on error
+ 
+
+                            this.$axios
+                            .$get(`$dqappservices/v1/user/confirm`, {
+                                params: { user: this.currentForm.value }
+                            })
+                            .then(({result, msg}) => {
+                                if(result) {
+                                    this.slideToLeft()
+                                    this.currentForm = this.$refs.passwordForm
+                                    this.currentForm.opacity = 1
+                                    this.currentForm.isLoading = false
+                                } else {
+                                    this.currentForm.error = msg
+                                    this.currentForm.isLoading = false
+                                }
+                            })
+
+                            
+                        }, 1000);
                     break
 
                     /**
@@ -141,11 +167,7 @@ export default {
                     case 'Forgot password':
                     break
                 }
-                this.currentForm.isLoading = true
-
-                setTimeout(() => {
-                    this.currentForm.error = `Invalid: Cannot find "${this.currentForm.value}" in the database`
-                }, 1000);
+                this.currentForm.isLoading = true 
                 // fetch database if username or email exist
             }
             
@@ -159,6 +181,9 @@ export default {
     mounted() {
         this.ready = true
 
+        /**
+         * Set defaults
+         */
         setTimeout(() => {
             this.showForms = true
             this.$refs.signInForm.showForm = true
