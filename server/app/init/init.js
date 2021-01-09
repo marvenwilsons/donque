@@ -18,9 +18,9 @@
 
  /** */
 const { Pool } = require('pg');
-const { async } = require('crypto-random-string');
 const fs = require('fs')
 const path = require('path')
+const config = require('../../../server/config/config')
 
 /**
  * SQL Table Creation Queries
@@ -233,11 +233,10 @@ function init (applicationName, databaseName, databaseUsername, tablePrefix, dat
                                 user_firstName: user.firstName,
                                 user_lastName: user.lastName,
                                 user_title: 'owner',
-                                user_settings: null
+                                user_settings: '{"setting": ""}'
                             }
 
-                            console.log(u)
-                            // return await addAdmin(udb, u)
+                            return await addAdmin(udb, u)
                         }
                     })
 
