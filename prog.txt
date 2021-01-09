@@ -1,54 +1,18 @@
-@task
+ENV Defaults
+# Postgres
+PGUSER=null
+PGHOST=localhost
+PGPASSWORD=null
+PGDATABASE=null
+PGPORT=5432
+# App
+SALT=null
+TABLE_PREFIX=null
+APP_NAME=null
+DQ_PORT=3000
+APP_HOST=localhost
+LOGIN_ROUTE_NAME=dqlogin
 
-[x] normalize dependency enjection on dataControlelrs of listify by partial appliying paneIndex
-    before passing it as a dependency
-[x] add hasSetOfKeys validation to utils
-[x] add viewIndex support for render in paneMethods
-[x] added prompt support for pane modal 
-[x] cut support for queue system and migrated to centralized controlpanel file
-    [x] re test global modals, then write documentaion
-    [x] trim helper methods, pane components doesnt need it
-    [x] re test syspanemodal's
-[x] implemented dWins
-[x] write documentaion for pane methods
-[x] write documentaion for modal methods
-[x] implemented uniview
-[x] implement remaining features of listify1.2
-[x] added onEvent
-[x] added auto slide for pane host 
-    [x] fix replace pane bug 
-[x] scroll into view support
-[x] implement pane settings
-[x] add syspane update functions
-[x] add beforeRender hook in render function
-[x] make initialData function async in the backend
-[x] add listify filter feature
-[x] add listify sortBy feature
-[x] add form maker or objectify
-[x] add encryption and decryption to utils (will use bcrypt)
-[-] add service manager menu
-[-] add caching system
-[-] add navigation guards to page
-
-Init Todo
-[-] implement table prefix
-[-] add owner to users table on registration
-[-] add dummy page in pages table
-[-] add owner default services in database
-
-Sign In Todo
-[-] add new ways of logging in
-
-Before finishing dq studio blank
-[-] create new branch named blank commit name alpha
-[-] merge dev2 to blank
-
-Services
-[-] Create new branch for page services
-[-] Created page service
-[-] SignIn
-    [-] forgot password request list
-    [-] retrive account request list
 
 @notes
 

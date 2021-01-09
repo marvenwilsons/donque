@@ -25,11 +25,17 @@ const path = require('path')
 /**
  * SQL Table Creation Queries
  */
-const envContent = require('./env_content')
-const createPgUser = require('./pg_dq_users')
-const createDqService = require('./pg_dq_service')
-const createDqCollections = require('./pg_dq_collection')
-const createDqPages = require('./pg_dq_pages')
+const envContent = require('./en-content')
+const createPgUser = require('./pg-dq-users')
+const createDqService = require('./pg-dq-service')
+const createDqCollections = require('./pg-dq-collection')
+const createDqPages = require('./pg-dq-pages')
+const createTitles = require('./pg-dq-titles')
+
+/**
+ * ADMIN METHODS
+ */
+const addAdmin = require('../admin/addAdmin')
 
 /**
  * Using the default postgres credentials and database to
@@ -43,7 +49,7 @@ const pool = new Pool({
     database: 'postgres'
 })
 
-function init (applicationName, databaseName, databaseUsername, tablePrefix, databasePassword) {
+function init (applicationName, databaseName, databaseUsername, tablePrefix, databasePassword, user) {
     return new Promise(async (resolve,reject) => {
         try {
             console.log('Initialize application!')
@@ -205,6 +211,31 @@ function init (applicationName, databaseName, databaseUsername, tablePrefix, dat
                         }
                     })
                     .catch(err => console.log(err))
+
+                    // create table titles
+                    .then(async (ready) => {
+                        if(ready) {
+                            console.log('Creating Table Titles')
+                            return await udb.query(createTitles)
+                        }
+                    })
+                    .catch(err => console.log(err))
+
+                    // Add first user to user table, add owner to users table on registration
+                    .then(async (ready) => {
+                        if(ready) {
+                            console.log('Adding User To Users Table')
+                            return await addAdmin(udb, {
+                                user_email: user.email,
+                                user_password: null,
+                                username: null,
+                                user_title: 'owner',
+                                user_collections: null,
+                                user_services: null,
+                                user_settings: null
+                            })
+                        }
+                    })
 
                     // end process
                     .then(async (ready) => {

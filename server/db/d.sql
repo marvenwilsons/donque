@@ -5,9 +5,8 @@ CREATE TABLE dq_users (
     user_email VARCHAR(500) NOT NULL,
     user_password VARCHAR(250) NOT NULL,
     username VARCHAR(250) NOT NULL,
-    user_settings jsonb NOT NULL,
-    user_notes jsonb NOT NULL,
-    user_services jsonb NOT NULL, -- just the names
+    user_settings jsonb,
+    user_collections jsonb,
     user_title VARCHAR(100) NOT NULL
 );
 
@@ -15,6 +14,12 @@ CREATE TABLE dq_service (
     service_id uuid NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
     service_title VARCHAR (250) NOT NULL,
     service_config jsonb NOT NULL
+)
+
+CREATE TABLE dq_titles (
+    title_id uuid NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
+    title_name VARCHAR (250) NOT NULL,
+    title_services uuid REFERENCES dq_service(service_id)
 )
 
 -- installed_services: ust for documentation, the service jest is on the other server

@@ -35,7 +35,13 @@ router.get('/service', appCheck, auth, getList,(req,res) => {
  */
 router.post('/v1/initialize', async (req,res) => {
     const {firstName, lastName, applicationName, username, password, email, databaseName, databaseUsername, tablePrefix, databasePassword} = req.body
-    appInit(applicationName,databaseName, databaseUsername, tablePrefix, databasePassword)
+    appInit(applicationName,databaseName, databaseUsername, tablePrefix, databasePassword, {
+        firstName,
+        lastName,
+        username,
+        password,
+        email
+    })
     .then(resp => {
         console.log('responding!')
         res.status(200).json({
