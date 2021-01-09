@@ -33,6 +33,7 @@
                 class="marginbottom125 fullwidth"
                 type="password"
                 id="password-field"
+                :disabled="disabled"
             ></v-text-field>
 
             <div class="fullwidth" >

@@ -9,6 +9,7 @@ export default {
         value: undefined,
         user: undefined,
         featureText: undefined,
+        disabled: false,
         showFeature: false,
         currentPosition: 0,
         showField: false,

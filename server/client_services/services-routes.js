@@ -12,7 +12,9 @@ const appCheck = require('./middlewares/global/app-check.js')
 
 require('dotenv').config()
 
-// Get admin services
+/**
+ * Responsilbe for getting all the services of the authenticated user
+ */
 router.get('/service', appCheck, auth, getList,(req,res) => {
     const {services} = res.locals
     systemServices(services).then(serviceContent => {
@@ -28,7 +30,9 @@ router.get('/service', appCheck, auth, getList,(req,res) => {
 })
 
 
-// Initialize app
+/**
+ * Responsible for initizling the app, this route is called in '/dqinit' page
+ */
 router.post('/v1/initialize', async (req,res) => {
     const {firstName, lastName, applicationName, username, password, email, databaseName, databaseUsername, tablePrefix, databasePassword} = req.body
     appInit(applicationName,databaseName, databaseUsername, tablePrefix, databasePassword)
@@ -40,24 +44,36 @@ router.post('/v1/initialize', async (req,res) => {
     })
 })
 
-// TODO
+/**
+ * Responsible for checking the database if user exist
+ * this route is first called in '/dqlogin' page
+ */
 router.get('/v1/user/confirm', (req,res) => {
     console.log(req.query)
     const user = req.query.user
     res.status(200).json({
-        result: true,
-        msg: `Invalid: Cannot find "${user}" in the database`
+        isSuccess: true,
+        msg: `Invalid: Cannot find "${user}" in the database`,
+        contents: null
     })
 })
 
-//TODO
+/**
+ * Responsible for signing in a user
+ * if payload is authenticated successfully
+ * this route will return a token
+ * this route is first called in '/dqlogin' page
+ */
 router.post('/v1/user/signin', (req,res) => {
     console.log(req.body)
     // const user = req.query.user
-    // res.status(200).json({
-    //     result: true,
-    //     msg: `Invalid: Cannot find "${user}" in the database`
-    // })
+    res.status(200).json({
+        isSuccess: true,
+        msg: null,
+        content: {
+            token: 'nvoYkjsdfkjndkjhf2983475932rksdnf'
+        }
+    })
 })
 
 router.get('/apt', (_, res) => {

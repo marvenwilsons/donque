@@ -182,21 +182,28 @@ export const mutations = {
 }
 
 export const actions = {
-    async nuxtServerInit ({commit,state},context) { 
+    async nuxtServerInit ({commit,state},context) {
+        console.log('NuxtServerInit') 
         // console.log('> NuxtServerInit')
         const urlPath = context.route.path
         if(!state.app.systemRoutes.includes(urlPath) ) {
             // user choose public route
-        } else if(urlPath === '/dqlogin') {
+        } 
+        else if(urlPath === '/dqinit') {
+            console.log('dqinit')
+        }
+        else if(urlPath === '/dqlogin') {
             // TODO: login
         } else if(urlPath === '/dqadmin') {
+
+
             // get services
             const service = await this.$axios
             .get('/$dqappservices/service', {
                 // TODO: 1
                 params: {
                   username: 'marvenwilsons', // TODO: get from localstorage
-                  apikey: 'test' // TODO: get from localstorage
+                  token: 'test' // TODO: get from localstorage
                 }
             })
             .then(({data}) => {

@@ -25,9 +25,10 @@
 [x] add listify filter feature
 [x] add listify sortBy feature
 [x] add form maker or objectify
+[x] add encryption and decryption to utils (will use bcrypt)
 [-] add service manager menu
 [-] add caching system
-[x] add encryption and decryption to utils (will use bcrypt)
+[-] add navigation guards to page
 
 Init Todo
 [-] implement table prefix

@@ -127,8 +127,8 @@ export default {
                             .$get(`$dqappservices/v1/user/confirm`, {
                                 params: { user: this.currentForm.value }
                             })
-                            .then(({result, msg}) => {
-                                if(result) {
+                            .then(({isSuccess, msg}) => {
+                                if(isSuccess) {
                                     this.slideToLeft()
                                     this.currentForm = this.$refs.passwordForm
                                     this.currentForm.user = this.$refs.signInForm.value
@@ -170,9 +170,19 @@ export default {
                      */
                     case 'Input Password':
                         console.log("Input password!")
+                        this.currentForm.disabled = true
                         this.$axios.$post('/$dqappservices/v1/user/signin', {
                             user: this.$refs.signInForm.value,
                             password: this.$refs.passwordForm.value
+                        })
+                        .then(({isSuccess, content}) => {
+                            if(isSuccess) {
+                                localStorage.setItem('token', content.token)
+                            }
+                        })
+                        .then(() => {
+                            // get token and send to server, get user sevices then
+                            // redirect to admin dashboard
                         })
                     break
 

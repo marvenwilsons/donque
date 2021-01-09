@@ -63,7 +63,7 @@ export default {
     },
     beforeCreate() {
         if(this.$store.state.app['app-action'] == 'init app') {
-            this.$router.push('/dqinit')
+            // this.$router.push('/dqinit')
         }
     },
     created() {
