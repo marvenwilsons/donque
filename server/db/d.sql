@@ -3,10 +3,12 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE TABLE dq_users (
     user_id uuid NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_email VARCHAR(500) NOT NULL,
+    user_firstName VARCHAR(100) NOT NULL,
+    user_lastName VARCHAR(100) NOT NULL,
     user_password VARCHAR(250) NOT NULL,
     username VARCHAR(250) NOT NULL,
     user_settings jsonb,
-    user_collections jsonb,
+    user_collections uuid [ ],
     user_title VARCHAR(100) NOT NULL
 );
 
@@ -19,7 +21,7 @@ CREATE TABLE dq_service (
 CREATE TABLE dq_titles (
     title_id uuid NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
     title_name VARCHAR (250) NOT NULL,
-    title_services uuid REFERENCES dq_service(service_id)
+    title_services uuid [ ]
 )
 
 -- installed_services: ust for documentation, the service jest is on the other server

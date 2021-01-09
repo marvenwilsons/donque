@@ -36,6 +36,7 @@ const createTitles = require('./pg-dq-titles')
  * ADMIN METHODS
  */
 const addAdmin = require('../admin/addAdmin')
+const encryptPassword = require('../admin/encypt-password')
 
 /**
  * Using the default postgres credentials and database to
@@ -225,15 +226,18 @@ function init (applicationName, databaseName, databaseUsername, tablePrefix, dat
                     .then(async (ready) => {
                         if(ready) {
                             console.log('Adding User To Users Table')
-                            return await addAdmin(udb, {
+                            const u = {
                                 user_email: user.email,
-                                user_password: null,
-                                username: null,
+                                user_password: await encryptPassword(user.password), /** enrypt */
+                                username: user.username,
+                                user_firstName: user.firstName,
+                                user_lastName: user.lastName,
                                 user_title: 'owner',
-                                user_collections: null,
-                                user_services: null,
                                 user_settings: null
-                            })
+                            }
+
+                            console.log(u)
+                            // return await addAdmin(udb, u)
                         }
                     })
 
