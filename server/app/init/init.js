@@ -36,7 +36,9 @@ const createTitles = require('./pg-dq-titles')
  * ADMIN METHODS
  */
 const addAdmin = require('../admin/addAdmin')
-const encryptPassword = require('../admin/encypt-password')
+const encryptPassword = require('../admin/encypt-password');
+const adminMethods = require('../admin/index');
+const { async } = require('crypto-random-string');
 
 /**
  * Using the default postgres credentials and database to
@@ -228,7 +230,7 @@ function init (applicationName, databaseName, databaseUsername, tablePrefix, dat
                             console.log('Adding User To Users Table')
                             const u = {
                                 user_email: user.email,
-                                user_password: await encryptPassword(user.password), /** enrypt */
+                                user_password: await adminMethods.encryptPassword(user.password), /** enrypt */
                                 username: user.username,
                                 user_firstName: user.firstName,
                                 user_lastName: user.lastName,
@@ -239,6 +241,42 @@ function init (applicationName, databaseName, databaseUsername, tablePrefix, dat
                             return await addAdmin(udb, u)
                         }
                     })
+                    .catch(err => console.log(err))
+
+                    // add services
+                    .then(async (ready) => {
+                        if(ready) {
+                            console.log("Adding User Default Services")
+                            const defaultServices = config.adminDefaults.defaultServices
+
+                            /**
+                             * Add default admin services to dq_services table
+                             * default services is an array can be found in adminDefaults property
+                             * in config/config.ks
+                             */
+                            const op = defaultServices.map(async serviceName => {
+                                const service_config = {}
+                                const service_body = {}
+                                return new Promise(async (resolve,reject) => {
+                                    const result = await adminMethods.addService(udb, {
+                                        service_title: serviceName,
+                                        service_config: JSON.stringify(service_config),
+                                        service_body: JSON.stringify(service_body), /** TODO: service body is the code that is stringyfied then hashed */
+                                        initial_data_fetching_method: 'collection',
+                                        initial_data_fetching_path: 'collection/sample'
+                                    })
+                                    resolve (await result.rowCount == 1 ? true : false)
+                                })
+                            })
+
+                            Promise.all(op).then((values) => {
+                                console.log(values)
+                            }).catch(err => {
+                                console.log(err)
+                            })
+                        }
+                    })
+                    .catch(err => console.log(err))
 
                     // end process
                     .then(async (ready) => {
