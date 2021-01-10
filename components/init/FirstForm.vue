@@ -112,9 +112,9 @@ export default {
             this.firstName.value = 'Marven Wilson'
             this.lastName.value = 'Donque'
             this.email.value = 'marvenwilsons@gmail.com'
-            this.applicationName.value = 'sample app'
+            this.applicationName.value = 'sampleapp'
             this.username.value = 'marvenwilsons'
-            this.password.value = 'password123ABC'
+            this.password.value = 'password123ABC@'
         }
         
     },

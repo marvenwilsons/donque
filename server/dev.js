@@ -11,10 +11,44 @@ const socket = require('socket.io')
 const dqSocket = require('./dq-socket')
 require('dotenv').config()
 
-// Import and Set Nuxt.js options
+const { Pool } = require('pg');
 
+const resetTestData = async () =>  {
+  const pool = new Pool({
+      host: 'localhost',
+      port: 5432,
+      user: 'postgres',
+      password: 'postgres',
+      database: 'postgres'
+  })
+
+  const deleteTestDb = await pool.query(`DROP DATABASE IF EXISTS asdfasdf`)
+
+  fs.writeFileSync(path.join(__dirname,'../.env'), `
+# Postgres
+PGUSER=null
+PGHOST=localhost
+PGPASSWORD=null
+PGDATABASE=null
+PGPORT=5432
+# App
+SALT=null
+TABLE_PREFIX=null
+APP_NAME=null
+DQ_PORT=3000
+APP_HOST=localhost
+LOGIN_ROUTE_NAME=dqlogin
+  `)
+  
+  if(deleteTestDb) {
+    const dropRole = await pool.query(`DROP ROLE IF EXISTS marven`)
+    console.log('dropRole ',dropRole.command)
+
+  }
+}
 
 async function nuxtStart (options) {
+  // Import and Set Nuxt.js options
   const config = require('../nuxt.config.js')
   config.dev = process.env.NODE_ENV !== 'production'
   
@@ -52,6 +86,8 @@ async function nuxtStart (options) {
 }
 
 async function start (isNotInit) {
+  resetTestData()
+
   consola.info({
     message: 'Launching DONQUE ON DEVELOPMENT MODE',
     badge: true
@@ -88,8 +124,29 @@ async function start (isNotInit) {
           NODE_ENV: 'development',
         },
         silent: true,
-        stdio: 'inherit'
       })
+
+      /**
+       * listinig to the child process data event
+       * when the steam of string logs has the word READY on it it will
+       * 1. open a browser of the url dqinit
+       */
+      initializationProcess.stdout.on('data', (data) => {
+
+        // removing new lines on logs and logging back to terminal
+        const childLogs = data.toString().replace('\n', '')
+        console.log('donque ==>',childLogs)
+
+        /**
+         * when the server is ready launch default browser to redirect to the initialization page
+         * it is espected that this file will run only in localhost so I didn't bother making
+         * the host part dynamic
+         */
+        if(childLogs.split('READY').length != 1) {
+          open(`http://localhost:${process.env.DQ_PORT}/dqinit`)
+        }
+      })
+
 
 
       // listening to child on message
@@ -166,6 +223,8 @@ const PGDBisNull = envContent.split('\n').indexOf('PGDATABASE=null') != -1
 
 // launch
 start(PGUSERisNull && PGDBisNull)
+
+
 
 
 

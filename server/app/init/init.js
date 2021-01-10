@@ -38,7 +38,6 @@ const createTitles = require('./pg-dq-titles')
 const addAdmin = require('../admin/addAdmin')
 const encryptPassword = require('../admin/encypt-password');
 const adminMethods = require('../admin/index');
-const { async } = require('crypto-random-string');
 
 /**
  * Using the default postgres credentials and database to
