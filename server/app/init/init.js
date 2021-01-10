@@ -237,7 +237,15 @@ function init (applicationName, databaseName, databaseUsername, tablePrefix, dat
                                 user_settings: '{"setting": ""}'
                             }
 
-                            return await addAdmin(udb, u)
+                            const result = await addAdmin(udb, u)
+
+                            if(process.env.NODE_ENV == 'development') {
+                                // confirming INSERT INTO dq_users
+                                const confirm_insert = await udb.query('SELECT * FROM dq_users')
+                                console.log(confirm_insert.rows)
+                            }
+
+                            return result
                         }
                     })
                     .catch(err => console.log(err))
@@ -268,7 +276,15 @@ function init (applicationName, databaseName, databaseUsername, tablePrefix, dat
                                 })
                             })
 
-                            Promise.all(op).then((values) => {
+                            Promise.all(op).then(async (values) => {
+                                if(process.env.NODE_ENV == 'development') {
+                                    // confirming INSERT INTO dq_service
+                                    const confirm_insert = await udb.query(`SELECT * FROM dq_service`)
+                                    console.log('\n\nCONFIRMING INSERT INTO dq_service')
+                                    console.log(confirm_insert.rows)
+                                }
+
+
                                 console.log(values)
                             }).catch(err => {
                                 console.log(err)

@@ -13,7 +13,8 @@ require('dotenv').config()
 
 const { Pool } = require('pg');
 
-const resetTestData = async () =>  {
+const resetTestData = async (arg) =>  {
+  console.log('RESETING TEST ENVIRONMENT')
   const pool = new Pool({
       host: 'localhost',
       port: 5432,
@@ -24,7 +25,13 @@ const resetTestData = async () =>  {
 
   const deleteTestDb = await pool.query(`DROP DATABASE IF EXISTS asdfasdf`)
 
-  fs.writeFileSync(path.join(__dirname,'../.env'), `
+
+  
+  try{
+    if(deleteTestDb) {
+      const dropRole = await pool.query(`DROP ROLE IF EXISTS marven`)
+      if(dropRole) {
+fs.writeFileSync(path.join(__dirname,'../.env'), `
 # Postgres
 PGUSER=null
 PGHOST=localhost
@@ -39,12 +46,11 @@ DQ_PORT=3000
 APP_HOST=localhost
 LOGIN_ROUTE_NAME=dqlogin
   `)
-  
-  if(deleteTestDb) {
-    const dropRole = await pool.query(`DROP ROLE IF EXISTS marven`)
-    console.log('dropRole ',dropRole.command)
-
-  }
+      setTimeout(arg, 500);
+        
+      }
+    }
+  } catch(err) {}
 }
 
 async function nuxtStart (options) {
@@ -86,7 +92,6 @@ async function nuxtStart (options) {
 }
 
 async function start (isNotInit) {
-  resetTestData()
 
   consola.info({
     message: 'Launching DONQUE ON DEVELOPMENT MODE',
@@ -222,7 +227,8 @@ const PGUSERisNull = envContent.split('\n').indexOf('PGUSER=null') != -1
 const PGDBisNull = envContent.split('\n').indexOf('PGDATABASE=null') != -1
 
 // launch
-start(PGUSERisNull && PGDBisNull)
+resetTestData(start(PGUSERisNull && PGDBisNull))
+
 
 
 
