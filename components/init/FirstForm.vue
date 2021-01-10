@@ -107,12 +107,16 @@ export default {
     props:['disableAll','errorTargets'],
     created() {
         this.h = h
-        this.firstName.value = 'Marven Wilson'
-        this.lastName.value = 'Donque'
-        this.email.value = 'marveenwilsons@gmail.com'
-        this.applicationName.value = 'wordpress'
-        this.username.value = 'marvenwilsons'
-        this.password.value = 'marven2123@@!ABC'
+
+        if(process.env.NODE_ENV == 'development') {
+            this.firstName.value = 'Marven Wilson'
+            this.lastName.value = 'Donque'
+            this.email.value = 'marvenwilsons@gmail.com'
+            this.applicationName.value = 'sample app'
+            this.username.value = 'marvenwilsons'
+            this.password.value = 'password123ABC'
+        }
+        
     },
     data: () => ({
         firstName:      {value: undefined, errors: undefined},

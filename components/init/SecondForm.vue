@@ -77,6 +77,15 @@ export default {
     created() {
         this.h = this
     },
+    mounted() {
+        if(process.env.NODE_ENV == 'development') {
+            console.log('RUNNING ON DEVELOPMENT')
+            this.databaseName.value = 'asdfasdf'
+            this.databaseUsername.value = 'marven'
+            this.tablePrefix.value = 'asdf'
+            this.databasePassword.value = 'password123ABC'
+        }
+    },
     props:['disableAll'],
     data: () => ({
         databaseName:    {value: undefined, errors: undefined},

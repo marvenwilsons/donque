@@ -37,6 +37,7 @@ async function nuxtStart (options) {
 
   // Listen the server
   const server = app.listen(port, host, () => {
+    console.log("DEV READY!")
     if(options && options.openBrowser) {
       open(options.openBrowser)
     }
@@ -52,7 +53,7 @@ async function nuxtStart (options) {
 
 async function start (isNotInit) {
   consola.info({
-    message: 'Launching DONQUE',
+    message: 'Launching DONQUE ON DEVELOPMENT MODE',
     badge: true
   })
 
@@ -84,31 +85,12 @@ async function start (isNotInit) {
       const initializationProcess  = fork('server/index.js', {
         env: {
           MODE: 'init',
-          NODE_ENV: 'production',
+          NODE_ENV: 'development',
         },
-        silent: true
+        silent: true,
+        stdio: 'inherit'
       })
 
-      /**
-       * listinig to the child process data event
-       * when the steam of string logs has the word READY on it it will
-       * 1. open a browser of the url dqinit
-       */
-      initializationProcess.stdout.on('data', (data) => {
-
-        // removing new lines on logs and logging back to terminal
-        const childLogs = data.toString().replace('\n', '')
-        console.log('donque ==>',childLogs)
-
-        /**
-         * when the server is ready launch default browser to redirect to the initialization page
-         * it is espected that this file will run only in localhost so I didn't bother making
-         * the host part dynamic
-         */
-        if(childLogs.split('READY').length != 1) {
-          open(`http://localhost:${process.env.DQ_PORT}/dqinit`)
-        }
-      })
 
       // listening to child on message
       initializationProcess.on('message', (p) => {

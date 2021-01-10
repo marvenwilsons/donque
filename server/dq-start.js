@@ -1,11 +1,9 @@
-// cross-env NODE_ENV=production node server/index.js
 const fs = require('fs')
 const path = require('path')
 const { spawn, exec } = require('child_process')
 let pkg = require('../package.json')
 
 const files = fs.readdirSync(path.join(__dirname,'../'))
-
 try {
   if(!files.includes('node_modules')) {
     console.log('donque ==> Please Wait, Installing Dependencies ...')
