@@ -31,22 +31,7 @@ const resetTestData = async (arg) =>  {
     if(deleteTestDb) {
       const dropRole = await pool.query(`DROP ROLE IF EXISTS marven`)
       if(dropRole) {
-fs.writeFileSync(path.join(__dirname,'../.env'), `
-# Postgres
-PGUSER=null
-PGHOST=localhost
-PGPASSWORD=null
-PGDATABASE=null
-PGPORT=5432
-# App
-SALT=null
-TABLE_PREFIX=null
-APP_NAME=null
-DQ_PORT=3000
-APP_HOST=localhost
-LOGIN_ROUTE_NAME=dqlogin
-  `)
-      setTimeout(arg, 500);
+       setTimeout(arg, 500);
         
       }
     }
@@ -226,8 +211,27 @@ const envContent = fs.readFileSync(path.join(__dirname,'../.env'), 'utf-8')
 const PGUSERisNull = envContent.split('\n').indexOf('PGUSER=null') != -1
 const PGDBisNull = envContent.split('\n').indexOf('PGDATABASE=null') != -1
 
-// launch
-resetTestData(start(PGUSERisNull && PGDBisNull))
+fs.writeFile(path.join(__dirname,'../.env'), `
+# Postgres
+PGUSER=null
+PGHOST=localhost
+PGPASSWORD=null
+PGDATABASE=null
+PGPORT=5432
+# App
+SALT=null
+TABLE_PREFIX=null
+APP_NAME=null
+DQ_PORT=3000
+APP_HOST=localhost
+LOGIN_ROUTE_NAME=dqlogin
+  `, () => {
+    // launch
+    resetTestData(start(PGUSERisNull && PGDBisNull))
+  })
+
+
+
 
 
 

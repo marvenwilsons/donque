@@ -276,7 +276,7 @@ function init (applicationName, databaseName, databaseUsername, tablePrefix, dat
                                 })
                             })
 
-                            Promise.all(op).then(async (values) => {
+                            return await Promise.all(op).then(async (values) => {
                                 if(process.env.NODE_ENV == 'development') {
                                     // confirming INSERT INTO dq_service
                                     const confirm_insert = await udb.query(`SELECT * FROM dq_service`)
@@ -285,7 +285,13 @@ function init (applicationName, databaseName, databaseUsername, tablePrefix, dat
                                 }
 
 
-                                console.log(values)
+                                const isAllTrue = values.every((v) => v == true)
+                                
+                                if(isAllTrue) {
+                                    return isAllTrue
+                                } else {
+                                    throw 'Error while inserting default services'
+                                }
                             }).catch(err => {
                                 console.log(err)
                             })
