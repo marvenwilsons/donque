@@ -35,7 +35,6 @@ const createTitles = require('./pg-dq-titles')
 /**
  * ADMIN METHODS
  */
-const addAdmin = require('../admin/addAdmin')
 const encryptPassword = require('../admin/encypt-password');
 const adminMethods = require('../admin/index');
 
@@ -228,20 +227,20 @@ function init (applicationName, databaseName, databaseUsername, tablePrefix, dat
                         if(ready) {
                             console.log('Adding User To Users Table')
                             const u = {
-                                user_email: user.email,
-                                user_password: await adminMethods.encryptPassword(user.password), /** enrypt */
+                                admin_email: user.email,
+                                admin_password: await adminMethods.encryptPassword(user.password), /** enrypt */
                                 username: user.username,
-                                user_firstName: user.firstName,
-                                user_lastName: user.lastName,
-                                user_title: 'owner',
-                                user_settings: '{"setting": ""}'
+                                admin_firstName: user.firstName,
+                                admin_lastName: user.lastName,
+                                admin_title: 'master',
+                                admin_settings: '{"setting": ""}'
                             }
 
-                            const result = await addAdmin(udb, u)
+                            const result = await adminMethods.addAdmin(udb, u)
 
                             if(process.env.NODE_ENV == 'development') {
-                                // confirming INSERT INTO dq_users
-                                const confirm_insert = await udb.query('SELECT * FROM dq_users')
+                                // confirming INSERT INTO dq_admin
+                                const confirm_insert = await udb.query('SELECT * FROM dq_admin')
                                 console.log(confirm_insert.rows)
                             }
 
