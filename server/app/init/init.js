@@ -267,16 +267,33 @@ function init (applicationName, databaseName, databaseUsername, tablePrefix, dat
                                 return new Promise(async (resolve,reject) => {
                                     const result = await adminMethods.addService(udb, {
                                         service_title: serviceName,
+
+                                        /** TODO: Runtime configuration of the service */
                                         service_config: JSON.stringify(service_config),
-                                        service_body: JSON.stringify(service_body), /** TODO: service body is the code that is stringyfied then hashed */
+
+                                        /** TODO: service body is the code that is stringyfied then hashed */
+                                        service_body: JSON.stringify(service_body),
+
+                                        /**
+                                         * Data fetching method, there are only two options, collection or 3rd party
+                                         * if 3rd party this is the domain example: example.com
+                                        */
                                         initial_data_fetching_method: 'collection',
+
+                                        /** 
+                                         * this is the route path 
+                                        */
                                         initial_data_fetching_path: 'collection/sample'
                                     })
+
+                                    /** return the row count */
                                     resolve (await result.rowCount == 1 ? true : false)
                                 })
                             })
 
                             return await Promise.all(op).then(async (values) => {
+
+                                /** Development terminal logs */
                                 if(process.env.NODE_ENV == 'development') {
                                     // confirming INSERT INTO dq_service
                                     const confirm_insert = await udb.query(`SELECT * FROM dq_service`)
@@ -284,7 +301,7 @@ function init (applicationName, databaseName, databaseUsername, tablePrefix, dat
                                     console.log(confirm_insert.rows)
                                 }
 
-
+                                /** if every value in the array is true return it else throw an error */
                                 const isAllTrue = values.every((v) => v == true)
                                 
                                 if(isAllTrue) {
