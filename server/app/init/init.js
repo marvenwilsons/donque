@@ -317,6 +317,11 @@ function init (applicationName, databaseName, databaseUsername, tablePrefix, dat
                     })
                     .catch(err => console.log(err))
 
+                    /** Add default collections */
+                    .then((ready) => {
+                        
+                    }).catch(err => console.log(err))
+
                     // end process
                     .then(async (ready) => {
                         if(ready) {

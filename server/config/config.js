@@ -18,7 +18,7 @@ const config = {
                 collectionPassword: '',
                 collectionUsername: '',
                 collectionSchema: {},
-                allowedTitlesToAccess: ['owner'] /** array of string, of titles */
+                allowedTitlesToAccess: ['master'] /** array of string, of titles */
             }, 
         }
     }
