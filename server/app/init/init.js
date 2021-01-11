@@ -26,7 +26,7 @@ const config = require('../../../server/config/config')
  * SQL Table Creation Queries
  */
 const envContent = require('./en-content')
-const createPgUser = require('./pg-dq-users')
+const createPgUser = require('./pg-dq-admin')
 const createDqService = require('./pg-dq-service')
 const createDqCollections = require('./pg-dq-collection')
 const createDqPages = require('./pg-dq-pages')
@@ -262,9 +262,11 @@ function init (applicationName, databaseName, databaseUsername, tablePrefix, dat
                              * in config/config.ks
                              */
                             const op = defaultServices.map(async serviceName => {
+                                console.log('TODO! 876-oiud')
+
                                 const service_config = {}
                                 const service_body = {}
-                                console.log('TODO! 876-oiud')
+
                                 return new Promise(async (resolve,reject) => {
                                     const result = await adminMethods.addService(udb, {
                                         service_title: serviceName,
@@ -318,7 +320,13 @@ function init (applicationName, databaseName, databaseUsername, tablePrefix, dat
                     .catch(err => console.log(err))
 
                     /** Add default collections */
-                    .then((ready) => {
+                    .then(async (ready) => {
+                        const defaultCollections = config.adminDefaults.defaultCollections
+                        const op = defaultCollections.map(collectionName => {
+                            return new Promise((resolve,reject) => {
+                                const result = udb.query()
+                            })
+                        })
                         
                     }).catch(err => console.log(err))
 
