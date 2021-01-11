@@ -8,14 +8,18 @@ module.exports = {
                 service_title,
                 service_config,
                 service_body, /** long text, will be executed in front end */
-                initial_data_fetching_method, /** collection or 3rd party */
-                initial_data_fetching_path /** ei: if collection: collection.collectionName, if 3rd part: 'https://exmaple.com/jsondata' */
+                initial_data_fetching_method, /** collection or 3rd party, this is the doamin */
+                initial_data_fetching_path /** the route, ei: foo/bar */
             ])
 
             return result
         } catch(err) {
             console.log(err)
         }
+    },
+    async getDefaultServices() {
+        // const collection = require('../../../apps/services/collections')
+        // console.log(collection)
     },
     /**
      * Fetches the initial data of the collection

@@ -264,6 +264,7 @@ function init (applicationName, databaseName, databaseUsername, tablePrefix, dat
                             const op = defaultServices.map(async serviceName => {
                                 const service_config = {}
                                 const service_body = {}
+                                console.log('TODO! 876-oiud')
                                 return new Promise(async (resolve,reject) => {
                                     const result = await adminMethods.addService(udb, {
                                         service_title: serviceName,
