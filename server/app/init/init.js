@@ -37,6 +37,7 @@ const createTitles = require('./pg-dq-titles')
  */
 const encryptPassword = require('../admin/encypt-password');
 const adminMethods = require('../admin/index');
+const { async } = require('crypto-random-string');
 
 /**
  * Using the default postgres credentials and database to
@@ -222,7 +223,7 @@ function init (applicationName, databaseName, databaseUsername, tablePrefix, dat
                     })
                     .catch(err => console.log(err))
 
-                    // Add first user to user table, add owner to users table on registration
+                    // Add first admin to user table, add owner to users table on registration
                     .then(async (ready) => {
                         if(ready) {
                             console.log('Adding User To Users Table')
@@ -320,13 +321,45 @@ function init (applicationName, databaseName, databaseUsername, tablePrefix, dat
 
                     /** Add default collections */
                     .then(async (ready) => {
-                        const defaultCollections = config.adminDefaults.defaultCollections
-                        const op = defaultCollections.map(collectionName => {
-                            return new Promise((resolve,reject) => {
-                                const result = udb.query()
+                        if(ready) {
+                            /** Get id of username */
+                            const idOfUsername = await adminMethods.getAdminIdByUsername(udb, {
+                                username: user.username
                             })
-                        })
-                        
+
+                            /** Get id */
+                            const adminId = idOfUsername.admin_id
+
+                            const defaultCollections = config.adminDefaults.defaultCollections
+                            const op = defaultCollections.map(({name,schema}) => {
+                                console.log('COLLECTION ADD > ', name)
+                                return new Promise(async (resolve,reject) => {
+                                    try {
+                                        const result = await adminMethods.createCollection(udb, {
+                                            collection_name: name,
+                                            collection_schema: schema,
+                                            collection_content: JSON.stringify({requests:[]}),
+                                            created_by: adminId
+                                        })
+                                        resolve(result.rowCount == 1 ? true : false)
+                                    } catch(err) {
+                                        console.log(err)
+                                    }
+
+                                })
+                            })
+
+                            return await Promise.all(op).then(async (values) => {
+                                /** if every value in the array is true return it else throw an error */
+                                const isAllTrue = values.every((v) => v == true)
+
+                                if(isAllTrue) {
+                                    return isAllTrue
+                                } else {
+                                    throw 'Error while inserting default services'
+                                }
+                            })
+                        }
                     }).catch(err => console.log(err))
 
                     // end process

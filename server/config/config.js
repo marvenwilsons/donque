@@ -10,17 +10,25 @@ const config = {
             'service-manager'
         ],
         /** use on creating new collection */
-        defaultCollection: {
-            collectionName: '',
-            collectionContent: [],
-            config: {
-                loginOnAccess: false,
-                collectionPassword: '',
-                collectionUsername: '',
-                collectionSchema: {},
-                allowedTitlesToAccess: ['master'] /** array of string, of titles */
-            }, 
-        }
+        defaultCollections: [
+            {
+                name: 'Forgot Password Request',
+                schema: JSON.stringify({
+                    firstName: 'String',
+                    lastName: 'String',
+                    email: 'String'
+                })
+            },
+            {
+                name: 'Retrieve Account Request',
+                schema: JSON.stringify({
+                    firstName: 'String',
+                    lastName: 'String',
+                    email: 'String'
+                })
+            }
+            
+        ]
     }
 }
 

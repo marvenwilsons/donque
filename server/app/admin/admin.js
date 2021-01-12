@@ -20,13 +20,16 @@ module.exports = {
            console.log(err)
        }
     },
-    async getAdminIdByUsername(db,username) {
-        const result = await db.query('SELECT ')
+    async getAdminIdByUsername(db, { username } ) {
+        const result = await db.query('SELECT admin_id FROM dq_admin WHERE username = $1', [username])
+        return result.rows[0]
     },
-    async getAdminIdByFirstNameLastName(firstName,lastName) {
-
+    async getAdminIdByFirstNameLastName(db, { firstName,lastName }) {
+        const result = await db.query('SELECT admin_id FROM dq_admin WHERE admin_firstname = $1 AND admin_lastname = $2', [firstName, lastName])
+        return result.rows[0]
     },
-    async getAdminsWithLastNameOf(lastName) {
-
+    async getAdminIdsWithLastNameOf(db,{ lastName }) {
+        const result = await db.query('SELECT admin_id FROM dq_admin WHERE admin_lastname = $2', [lastName])
+        return result.rows
     }
 }
