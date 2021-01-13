@@ -1,4 +1,3 @@
-const { v4: uuidv4 } = require('uuid');
 module.exports = {
     async createCollection(db,{collection_name, collection_schema, created_by}) {
         return await db.query('INSERT INTO dq_collections (collection_name, collection_schema, created_by) values($1, $2, $3)',[
@@ -13,10 +12,6 @@ module.exports = {
          */
     },
     async pushNewCollection(db, {collection_name, body, created_by }) {
-        const uid = uuidv4()
-
-        
-
         /** 
          * 1. Insert into dq_collection_item 
          * 2. get the item id of the newly added collection item
@@ -40,5 +35,49 @@ module.exports = {
          ])
 
          return addItemToCollectionContentArray
+    },
+    /**
+     * ITEM: This is equavalent on moving an item to recycle bin
+     */
+    async markItemAsTrash(db) {
+
+    },
+    /**
+     * ITEM: Completely removes and delete's item out of existance
+     */
+    async deleteItemFromTrash(db) {
+
+    },
+    /**
+     * Removes label trash on an item
+     * sets the is_trash to an item from is_trash: true --> is_trash: false
+     */
+    async unMarkItemAsTrash(db) {
+
+    },
+    /**
+     * updates the configuration of a collection
+     * collection username, password, loginOnAccess, allowedTitlesToAccess
+     */
+    async setCollectionConfig(db, {key, value}) {
+
+    },
+    /**
+     * Update Collection Schema
+     */
+    async setCollectionSchema(db) {
+
+    },
+    /**
+     * Remove 
+     */
+    async removeSchemaProperty(db) {
+
+    },
+    /**
+     * Add new property to a schema
+     */
+    async appendSchemaProperty(db) {
+
     }
 }
