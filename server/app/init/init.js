@@ -31,6 +31,7 @@ const createDqService = require('./pg-dq-service')
 const createDqCollections = require('./pg-dq-collection')
 const createDqPages = require('./pg-dq-pages')
 const createTitles = require('./pg-dq-titles')
+const createItemCollection = require('./pg-dq-collection-item')
 
 /**
  * ADMIN METHODS
@@ -223,6 +224,15 @@ function init (applicationName, databaseName, databaseUsername, tablePrefix, dat
                     })
                     .catch(err => console.log(err))
 
+                    // create table item collection
+                    .then(async (ready) => {
+                        if(ready) {
+                            console.log('Creating Table Titles')
+                            return await udb.query(createItemCollection)
+                        }
+                    })
+                    .catch(err => console.log(err))
+
                     // Add first admin to user table, add owner to users table on registration
                     .then(async (ready) => {
                         if(ready) {
@@ -319,7 +329,7 @@ function init (applicationName, databaseName, databaseUsername, tablePrefix, dat
                     })
                     .catch(err => console.log(err))
 
-                    /** Add default collections */
+                    /** Create Default collections */
                     .then(async (ready) => {
                         if(ready) {
                             /** Get id of username */
@@ -327,18 +337,20 @@ function init (applicationName, databaseName, databaseUsername, tablePrefix, dat
                                 username: user.username
                             })
 
-                            /** Get id */
+                            /** Extract admin id */
                             const adminId = idOfUsername.admin_id
-
+                            
+                            /** Get Default Collections from config.adminDefaults
+                             *  then loop throught each item, create new collection item
+                             *  base on each default collection item.
+                             */
                             const defaultCollections = config.adminDefaults.defaultCollections
                             const op = defaultCollections.map(({name,schema}) => {
-                                console.log('COLLECTION ADD > ', name)
                                 return new Promise(async (resolve,reject) => {
                                     try {
                                         const result = await adminMethods.createCollection(udb, {
                                             collection_name: name,
                                             collection_schema: schema,
-                                            collection_content: JSON.stringify({requests:[]}),
                                             created_by: adminId
                                         })
                                         resolve(result.rowCount == 1 ? true : false)
@@ -348,6 +360,50 @@ function init (applicationName, databaseName, databaseUsername, tablePrefix, dat
 
                                 })
                             })
+                            
+                            /**
+                             * Making sure all of the query successfully executed
+                             * successfull query should return an array or true
+                             * ei: [true, true, true]
+                             */
+                            return await Promise.all(op).then(async (values) => {
+                                /** if every value in the array is true return it else throw an error */
+                                const isAllTrue = values.every((v) => v == true)
+
+                                if(isAllTrue) {
+                                    return isAllTrue
+                                } else {
+                                    throw 'Error while inserting default services'
+                                }
+                            })
+                        }
+                    }).catch(err => console.log(err))
+
+                    /**
+                     * Add default admin titles
+                     * Push to existing collections 
+                    */
+                    .then(async (ready) => {
+                        console.log("Pushing to existing collection")
+                        if(ready) {
+                            const op = config.adminDefaults.titles.map(({name, services}) => {
+                                return new Promise(async (resolve,reject) => {
+                                    const pushCollectionResult = await adminMethods.pushNewCollection(udb,{
+                                        collection_name: 'Admin Titles',
+                                        body: JSON.stringify({
+                                            name,
+                                            services
+                                        }),
+                                        created_by: await adminMethods.getAdminIdByUsername(udb,{
+                                            username: user.username
+                                        })
+                                    })
+
+                                    resolve(pushCollectionResult.rowCount == 1 ? true : false)
+                                })
+                            })
+
+                            
 
                             return await Promise.all(op).then(async (values) => {
                                 /** if every value in the array is true return it else throw an error */
@@ -361,6 +417,7 @@ function init (applicationName, databaseName, databaseUsername, tablePrefix, dat
                             })
                         }
                     }).catch(err => console.log(err))
+
 
                     // end process
                     .then(async (ready) => {

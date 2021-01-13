@@ -1,8 +1,18 @@
 const config = {
     adminDefaults: {
         titles: [
-            'owner',
-            'spectator'
+            {
+                name: 'master',
+                services: '*'
+            },
+            {
+                name: 'admin',
+                services: [
+                    'page',
+                    'collections',
+                    // 'social' /** TODO social */
+                ]
+            }
         ],
         defaultServices: [
             'page',
@@ -17,7 +27,7 @@ const config = {
                     firstName: 'String',
                     lastName: 'String',
                     email: 'String'
-                })
+                }),
             },
             {
                 name: 'Retrieve Account Request',
@@ -25,7 +35,14 @@ const config = {
                     firstName: 'String',
                     lastName: 'String',
                     email: 'String'
-                })
+                }),
+            },
+            {
+                name: 'Admin Titles',
+                schema: JSON.stringify({
+                    name: 'String',
+                    services: 'Array', /** array of services id */
+                }),
             }
             
         ]

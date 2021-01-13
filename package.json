@@ -38,6 +38,7 @@
         "open": "^7.3.0",
         "pg": "^8.4.1",
         "require-from-string": "^2.0.2",
+        "uuid": "^8.3.2",
         "vue-json-viewer": "^2.2.15"
     },
     "devDependencies": {
