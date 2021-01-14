@@ -1,0 +1,6 @@
+
+{
+    "filepath_to_test": "server/app/admin/collection.js",
+    "method_to_test": "createCollection"
+}
+        
