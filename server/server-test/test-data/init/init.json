@@ -1,0 +1,17 @@
+{
+    "data_description": "Data is expected to be successfull",
+    "data": {
+        "applicationName": "sampleapp", 
+        "databaseName": "asdfasdf", 
+        "databaseUsername": "marven", 
+        "tablePrefix":"asdf", 
+        "databasePassword":"password123ABC", 
+        "user": {
+            "username": "marvenwilsons",
+            "firstName": "Marven Wilson",
+            "lastName": "Donque",
+            "password": "passwordABC123@",
+            "email": "marven@mail.com"
+        }
+    }
+}

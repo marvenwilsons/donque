@@ -423,8 +423,10 @@ function init (applicationName, databaseName, databaseUsername, tablePrefix, dat
                     .then(async (ready) => {
                         if(ready) {
                             console.log('Dq Successfuly Initialized')
-                            process.send({msg: 'done'})
-                            resolve(true)
+                            try{
+                                process.send({msg: 'done'})
+                                resolve(true)
+                            }catch(err) {}
                         }
                     })
                 }
