@@ -1,6 +1,7 @@
 const prompts = require('prompts');
 const fs = require('fs')
-const path =require('path')
+const path = require('path')
+const watcher = require('./watcher/index')
 
 /** Get test data, returns an array of objects */
 const getTestData = (of) => {
@@ -71,28 +72,41 @@ const displayJSON = (title,val) => {
       displayJSON('Params', getParamNames(getFileToTest))
     }
 
-    if(method_to_test) {
-      /** when file exports an object */
-      promptResponse.value.middleware({
-        data: promptResponse.value.data,
-        method: getFileToTest[method_to_test]
-      })
-    } else {
-      /** when file exports a function not an object */
-
-      var originallog = console.log;
-
-      console.log = function(txt) {
-          process.stdout.write(`             │>   `)
-          originallog.apply(console, arguments);
+    const execFunc = () => {
+      if(method_to_test) {
+        /** when file exports an object */
+        promptResponse.value.middleware({
+          data: promptResponse.value.data,
+          method: getFileToTest[method_to_test]
+        })
+      } else {
+        /** when file exports a function not an object */
+  
+        var originallog = console.log;
+  
+        console.log = function(txt) {
+            process.stdout.write(`             │>   `)
+            originallog.apply(console, arguments);
+        }
+        console.log(`
+  
+        Execution Logs
+        `)
+        // map and execute function
+        promptResponse.value.middleware.func({
+          data: promptResponse.value.data,
+          method: getFileToTest
+        })
       }
-      console.log(`
-
-      Execution Logs
-      `)
-      promptResponse.value.middleware.func({
-        data: promptResponse.value.data,
-        method: getFileToTest
-      })
     }
+
+    execFunc()
+
+    // const w = watcher(path.join(__dirname,'../'))
+    // w.on('fileChanged', () => {
+    //   process.kill()
+    //   console.clear()
+    //   execFunc()
+    // })
+    
   })(getTestData,displayJSON)
