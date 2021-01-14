@@ -1,6 +1,6 @@
 const { Pool } = require('pg');
 
-module.exports = ({data : {applicationName, databaseName, databaseUsername, tablePrefix, databasePassword, user},method}) => {
+module.exports = async ({data : {applicationName, databaseName, databaseUsername, tablePrefix, databasePassword, user},method}) => {
 
 
     const resetTestData = async (arg) =>  {
@@ -19,9 +19,13 @@ module.exports = ({data : {applicationName, databaseName, databaseUsername, tabl
             if(deleteTestDb) {
                 const dropRole = await pool.query(`DROP ROLE IF EXISTS marven`)
 
-                if(dropRole) {
+                if(dropRole && arg) {
                     console.log('Executing')
-                    setTimeout(arg, 1500);
+                    // const methodResponse =  await arg()
+                    // console.log(methodResponse)
+                    arg(applicationName, databaseName, databaseUsername, tablePrefix, databasePassword, user).then(() => {
+                        console.log('test')
+                    })
                 }
             }
         } catch(err) {}
@@ -30,6 +34,6 @@ module.exports = ({data : {applicationName, databaseName, databaseUsername, tabl
     
     resetTestData()
     setTimeout(() => {
-        resetTestData(method(applicationName, databaseName, databaseUsername, tablePrefix, databasePassword, user))
+        resetTestData(method)
     }, 1000);
 }
