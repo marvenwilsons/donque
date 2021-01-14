@@ -40,7 +40,6 @@ const createItemCollection = require('./pg-dq-collection-item')
  */
 const encryptPassword = require('../admin/encypt-password');
 const adminMethods = require('../admin/index');
-const { async } = require('crypto-random-string');
 
 /**
  * Using the default postgres credentials and database to
