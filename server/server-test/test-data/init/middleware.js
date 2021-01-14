@@ -1,6 +1,6 @@
 const { Pool } = require('pg');
 
-module.exports = async ({data : {applicationName, databaseName, databaseUsername, tablePrefix, databasePassword, user},method}) => {
+module.exports = async ({data : {applicationName, databaseName, databaseUsername, tablePrefix, databasePassword, user},method}, cb) => {
 
 
     const resetTestData = async (arg) =>  {
@@ -20,11 +20,18 @@ module.exports = async ({data : {applicationName, databaseName, databaseUsername
                 const dropRole = await pool.query(`DROP ROLE IF EXISTS marven`)
 
                 if(dropRole && arg) {
-                    console.log('Executing')
-                    // const methodResponse =  await arg()
-                    // console.log(methodResponse)
-                    arg(applicationName, databaseName, databaseUsername, tablePrefix, databasePassword, user).then(() => {
-                        console.log('test')
+                    const init = await arg(applicationName, databaseName, databaseUsername, tablePrefix, databasePassword, user)
+                    init.on('progress', (data) => {
+                        console.log(data)
+                    })
+                    init.on('error', (err) => {
+                        if(err != 'process.send is not a function') {
+                            console.log(err)
+                        }
+                    })
+                    init.on('done', (val) => {
+                        console.log('test dome!', val)
+                        cb(val)
                     })
                 }
             }

@@ -1,7 +1,7 @@
 const prompts = require('prompts');
 const fs = require('fs')
 const path = require('path')
-const watcher = require('./watcher/index')
+const watcher = require('./watcher/index');
 
 /** Get test data, returns an array of objects */
 const getTestData = (of) => {
@@ -16,7 +16,10 @@ const getTestData = (of) => {
       value: {
         title: e,
         data: c.data,
-        testConfig,
+        testConfig: {
+          ...testConfig,
+          expected: c.expected
+        } ,
         middleware: {
           func: middleware,
           path: path.join(__dirname, `./test-data/${of}/middleware.js`)
@@ -44,7 +47,7 @@ const displayJSON = (title,val) => {
         type: 'select',
         name: 'value',
         message: '1. Pick initialization data',
-        choices: getTestData('init'),
+        choices: getTestData(process.argv[2]),
         initial: 0
       });
 
@@ -93,9 +96,19 @@ const displayJSON = (title,val) => {
         Execution Logs
         `)
         // map and execute function
-        promptResponse.value.middleware.func({
+        const test = promptResponse.value.middleware.func({
           data: promptResponse.value.data,
           method: getFileToTest
+        }, (v) => {
+          console.log(`
+  
+        Test Result
+        `)
+        console.log(`
+             │> Expected: ${promptResponse.value.testConfig.expected}
+             │> Result:   ${v}
+             │> Type:     ${promptResponse.value.testConfig.expected == v ? 'TEST SUCCESS' : 'TEST FAILED'}
+        `)
         })
       }
     }
