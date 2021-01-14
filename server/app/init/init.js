@@ -54,7 +54,7 @@ const pool = new Pool({
     database: 'postgres'
 })
 
-function init (applicationName, databaseName, databaseUsername, tablePrefix, databasePassword, user) {
+async function init (applicationName, databaseName, databaseUsername, tablePrefix, databasePassword, user) {
     try {
         console.log('Initialize application!')
         /**
@@ -88,14 +88,17 @@ function init (applicationName, databaseName, databaseUsername, tablePrefix, dat
         .then(async (p) => {
             return new Promise((resolve,reject) => {
                 if(p == true) {
-                    console.log(`Creating Environment Variables`)
+                    // console.log(`Creating Environment Variables`)
     
                     // 2. Create a .env file containing user defined database
                     fs.writeFileSync(path.join(__dirname,'../../../.env'),envContent(databaseUsername,databasePassword,databaseName,tablePrefix,applicationName))
                     resolve(true)
-                    events
+                    initEvents.emit('progress',{
+                        msg: 'Creating Environment Variables',
+                        step: 0
+                    })
                 } else {
-                    throw '==> Fail in creating database'
+                    initEvents.emit('error','Fail Creating ENV')
                 }
             })
         })
@@ -108,7 +111,11 @@ function init (applicationName, databaseName, databaseUsername, tablePrefix, dat
         .then(async (p) => {
             // Create DB user
             if(p) {
-                console.log(`Creating DB User`)
+                // console.log(`Creating DB User`)
+                initEvents.emit('progress',{
+                    msg: 'Creating DB User',
+                    step: 1
+                })
                 return await pool.query(`CREATE USER ${databaseUsername}`)
             } else {
                 console.log(process.env.PGUSER)
@@ -121,7 +128,10 @@ function init (applicationName, databaseName, databaseUsername, tablePrefix, dat
          */
         .then(async (p) => {
             if(p) {
-                console.log(`Altering Database User and user Setting Password`)
+                initEvents.emit('progress',{
+                    msg: 'Altering Database User and user Setting Password',
+                    step: 2
+                })
                 return await pool.query(`ALTER USER ${databaseUsername} PASSWORD '${databasePassword}'`)
             } else {
                 throw 'Failed setting database password'
@@ -135,8 +145,10 @@ function init (applicationName, databaseName, databaseUsername, tablePrefix, dat
         .then(async (p) => {
             // Grant user privileges
             if(p) {
-                console.log(`Assign user to "${databaseName}" database`)
-
+                initEvents.emit('progress',{
+                    msg: `Assign user to "${databaseName}" database`,
+                    step: 3
+                })
                 const assignUserToDb = await pool.query(`GRANT ALL PRIVILEGES ON DATABASE ${databaseName} TO ${databaseUsername}`)
                 return assignUserToDb
             } else {
@@ -152,7 +164,10 @@ function init (applicationName, databaseName, databaseUsername, tablePrefix, dat
             if(p.command == 'GRANT') {
                 cl.release()
                 return pool.end().then(() => {
-                    console.log("Default Postgres Pool Ended")
+                    initEvents.emit('progress',{
+                        msg: 'Default Postgres Pool Ended',
+                        step: 4
+                    })
                     return true
                 })
             } else {
@@ -175,24 +190,33 @@ function init (applicationName, databaseName, databaseUsername, tablePrefix, dat
                 })
                 
                 // Create uuid-ossp extension to be used on table primary keys
-                console.log('Creating Extension uuid-ossp')
+                initEvents.emit('progress',{
+                    msg: `Creating uuid-ossp`,
+                    step: 5
+                })
+
                 udb
                 .query(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`)
 
                 // create table users
                 .then(async (ready) => {
                     if(ready) {
-                        console.log('Creating Table dq_users')
+                        initEvents.emit('progress',{
+                            msg: 'Creating Table dq_users',
+                            step: 6
+                        })
                         return await udb.query(createPgUser)
                     }
-                    
                 })
                 .catch(err => console.log(err))
 
                 // create table services
                 .then(async (ready) => {
                     if(ready) {
-                        console.log('Creating Table dq_services')
+                        initEvents.emit('progress',{
+                            msg: 'Creating Table dq_services',
+                            step: 7
+                        })
                         return await udb.query(createDqService)
                     }
                     
@@ -202,7 +226,10 @@ function init (applicationName, databaseName, databaseUsername, tablePrefix, dat
                 // create table collection
                 .then(async (ready) => {
                     if(ready) {
-                        console.log('Creating Table Collections')
+                        initEvents.emit('progress',{
+                            msg: 'Creating Table Collections',
+                            step: 8
+                        })
                         return await udb.query(createDqCollections)
                     }
                 })
@@ -211,7 +238,10 @@ function init (applicationName, databaseName, databaseUsername, tablePrefix, dat
                 // create table pages
                 .then(async (ready) => {
                     if(ready) {
-                        console.log('Creating Table Collections')
+                        initEvents.emit('progress',{
+                            msg: 'Creating Table Pages',
+                            step: 9
+                        })
                         return await udb.query(createDqPages)
                     }
                 })
@@ -220,7 +250,10 @@ function init (applicationName, databaseName, databaseUsername, tablePrefix, dat
                 // create table titles
                 .then(async (ready) => {
                     if(ready) {
-                        console.log('Creating Table Titles')
+                        initEvents.emit('progress',{
+                            msg: 'Creating Table Titles',
+                            step: 10
+                        })
                         return await udb.query(createTitles)
                     }
                 })
@@ -229,7 +262,10 @@ function init (applicationName, databaseName, databaseUsername, tablePrefix, dat
                 // create table item collection
                 .then(async (ready) => {
                     if(ready) {
-                        console.log('Creating Table Titles')
+                        initEvents.emit('progress',{
+                            msg: 'Creating table item collection',
+                            step: 11
+                        })
                         return await udb.query(createItemCollection)
                     }
                 })
@@ -238,7 +274,10 @@ function init (applicationName, databaseName, databaseUsername, tablePrefix, dat
                 // Add first admin to user table, add owner to users table on registration
                 .then(async (ready) => {
                     if(ready) {
-                        console.log('Adding User To Users Table')
+                        initEvents.emit('progress',{
+                            msg: `Adding ${user.firstName} User To Users Table`,
+                            step: 12
+                        })
                         const u = {
                             admin_email: user.email,
                             admin_password: await adminMethods.encryptPassword(user.password), /** enrypt */
@@ -265,8 +304,11 @@ function init (applicationName, databaseName, databaseUsername, tablePrefix, dat
                 // add services
                 .then(async (ready) => {
                     if(ready) {
-                        console.log("Adding User Default Services")
                         const defaultServices = config.adminDefaults.defaultServices
+                        initEvents.emit('progress',{
+                            msg: `Adding User Default Services`,
+                            step: 13
+                        })
 
                         /**
                          * Add default admin services to dq_services table
@@ -334,6 +376,10 @@ function init (applicationName, databaseName, databaseUsername, tablePrefix, dat
                 /** Create Default collections */
                 .then(async (ready) => {
                     if(ready) {
+                        initEvents.emit('progress',{
+                            msg: `Creating Default collections`,
+                            step: 14
+                        })
                         /** Get id of username */
                         const idOfUsername = await adminMethods.getAdminIdByUsername(udb, {
                             username: user.username
@@ -386,7 +432,11 @@ function init (applicationName, databaseName, databaseUsername, tablePrefix, dat
                  * Push to existing collections 
                 */
                 .then(async (ready) => {
-                    console.log("Pushing to existing collection")
+                    initEvents.emit('progress',{
+                        msg: `Creating Default default titles`,
+                        step: 15
+                    })
+
                     if(ready) {
                         const op = config.adminDefaults.titles.map(({name, services}) => {
                             return new Promise(async (resolve,reject) => {
@@ -424,10 +474,15 @@ function init (applicationName, databaseName, databaseUsername, tablePrefix, dat
                 // end process
                 .then(async (ready) => {
                     if(ready) {
-                        console.log('Dq Successfuly Initialized')
+                        initEvents.emit('progress',{
+                            msg: `Dq Successfuly Initialized`,
+                            step: 16
+                        })
+                        initEvents.emit('done')
+
                         try{
+                            /** for running on a child process */
                             process.send({msg: 'done'})
-                            resolve(true)
                         }catch(err) {}
                     }
                 })
