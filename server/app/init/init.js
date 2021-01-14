@@ -54,6 +54,8 @@ const pool = new Pool({
     database: 'postgres'
 })
 
+let step = 1
+
 async function init (applicationName, databaseName, databaseUsername, tablePrefix, databasePassword, user) {
     try {
         console.log('Initialize application!')
@@ -78,8 +80,13 @@ async function init (applicationName, databaseName, databaseUsername, tablePrefi
         const cl = await pool.connect()
         pool.query(`CREATE DATABASE ${databaseName}`)
         .then(r => {
-            console.log(`Database ${databaseName} created`)
+            initEvents.emit('progress',{
+                msg: `Database ${databaseName} created`,
+                step: step++
+            })
             return true
+        }).catch(err => {
+            initEvents.emit('error',err.message)
         })
 
         /**
@@ -95,7 +102,7 @@ async function init (applicationName, databaseName, databaseUsername, tablePrefi
                     resolve(true)
                     initEvents.emit('progress',{
                         msg: 'Creating Environment Variables',
-                        step: 0
+                        step: step++
                     })
                 } else {
                     initEvents.emit('error','Fail Creating ENV')
@@ -114,12 +121,11 @@ async function init (applicationName, databaseName, databaseUsername, tablePrefi
                 // console.log(`Creating DB User`)
                 initEvents.emit('progress',{
                     msg: 'Creating DB User',
-                    step: 1
+                    step: step++
                 })
                 return await pool.query(`CREATE USER ${databaseUsername}`)
             } else {
-                console.log(process.env.PGUSER)
-                throw 'Failed Creating Database'
+                initEvents.emit('error','Failed Creating Database')
             }
         })
 
@@ -130,11 +136,11 @@ async function init (applicationName, databaseName, databaseUsername, tablePrefi
             if(p) {
                 initEvents.emit('progress',{
                     msg: 'Altering Database User and user Setting Password',
-                    step: 2
+                    step: step++
                 })
                 return await pool.query(`ALTER USER ${databaseUsername} PASSWORD '${databasePassword}'`)
             } else {
-                throw 'Failed setting database password'
+                initEvents.emit('error','Failed setting database password')
             }
         })
 
@@ -147,12 +153,12 @@ async function init (applicationName, databaseName, databaseUsername, tablePrefi
             if(p) {
                 initEvents.emit('progress',{
                     msg: `Assign user to "${databaseName}" database`,
-                    step: 3
+                    step: step++
                 })
                 const assignUserToDb = await pool.query(`GRANT ALL PRIVILEGES ON DATABASE ${databaseName} TO ${databaseUsername}`)
                 return assignUserToDb
             } else {
-                throw 'Failed granting privileges to user'
+                initEvents.emit('error','Failed granting privileges to user')
             }
         })
 
@@ -166,12 +172,12 @@ async function init (applicationName, databaseName, databaseUsername, tablePrefi
                 return pool.end().then(() => {
                     initEvents.emit('progress',{
                         msg: 'Default Postgres Pool Ended',
-                        step: 4
+                        step: step++
                     })
                     return true
                 })
             } else {
-                throw 'Failed closing connection'
+                initEvents.emit('error','Failed closing connection')
             }
         })
 
@@ -192,7 +198,7 @@ async function init (applicationName, databaseName, databaseUsername, tablePrefi
                 // Create uuid-ossp extension to be used on table primary keys
                 initEvents.emit('progress',{
                     msg: `Creating uuid-ossp`,
-                    step: 5
+                    step: step++
                 })
 
                 udb
@@ -203,80 +209,80 @@ async function init (applicationName, databaseName, databaseUsername, tablePrefi
                     if(ready) {
                         initEvents.emit('progress',{
                             msg: 'Creating Table dq_users',
-                            step: 6
+                            step: step++
                         })
                         return await udb.query(createPgUser)
                     }
                 })
-                .catch(err => console.log(err))
+                .catch(err => initEvents.emit('error',err.message) )
 
                 // create table services
                 .then(async (ready) => {
                     if(ready) {
                         initEvents.emit('progress',{
                             msg: 'Creating Table dq_services',
-                            step: 7
+                            step: step++
                         })
                         return await udb.query(createDqService)
                     }
                     
                 })
-                .catch(err => console.log(err))
+                .catch(err => initEvents.emit('error',err.message) )
 
                 // create table collection
                 .then(async (ready) => {
                     if(ready) {
                         initEvents.emit('progress',{
                             msg: 'Creating Table Collections',
-                            step: 8
+                            step: step++
                         })
                         return await udb.query(createDqCollections)
                     }
                 })
-                .catch(err => console.log(err))
+                .catch(err => initEvents.emit('error',err.message) )
 
                 // create table pages
                 .then(async (ready) => {
                     if(ready) {
                         initEvents.emit('progress',{
                             msg: 'Creating Table Pages',
-                            step: 9
+                            step: step++
                         })
                         return await udb.query(createDqPages)
                     }
                 })
-                .catch(err => console.log(err))
+                .catch(err => initEvents.emit('error',err.message) )
 
                 // create table titles
                 .then(async (ready) => {
                     if(ready) {
                         initEvents.emit('progress',{
                             msg: 'Creating Table Titles',
-                            step: 10
+                            step: step++
                         })
                         return await udb.query(createTitles)
                     }
                 })
-                .catch(err => console.log(err))
+                .catch(err => initEvents.emit('error',err.message) )
 
                 // create table item collection
                 .then(async (ready) => {
                     if(ready) {
                         initEvents.emit('progress',{
                             msg: 'Creating table item collection',
-                            step: 11
+                            step: step++
                         })
                         return await udb.query(createItemCollection)
                     }
                 })
-                .catch(err => console.log(err))
+                .catch(err => initEvents.emit('error',err.message) )
 
                 // Add first admin to user table, add owner to users table on registration
                 .then(async (ready) => {
                     if(ready) {
                         initEvents.emit('progress',{
                             msg: `Adding ${user.firstName} User To Users Table`,
-                            step: 12
+                            step: step++
                         })
                         const u = {
                             admin_email: user.email,
@@ -288,15 +294,19 @@ async function init (applicationName, databaseName, databaseUsername, tablePrefi
                             admin_settings: '{"setting": ""}'
                         }
 
-                        const result = await adminMethods.addAdmin(udb, u)
+                        try {
+                            const result = await adminMethods.addAdmin(udb, u)
 
-                        if(process.env.NODE_ENV == 'development') {
-                            // confirming INSERT INTO dq_admin
-                            const confirm_insert = await udb.query('SELECT * FROM dq_admin')
-                            console.log(confirm_insert.rows)
+                            if(process.env.NODE_ENV == 'development') {
+                                // confirming INSERT INTO dq_admin
+                                const confirm_insert = await udb.query('SELECT * FROM dq_admin')
+                                console.log(confirm_insert.rows)
+                            }
+
+                            return result
+                        } catch(err) {
+                            initEvents.emit('error',err.message)
                         }
-
-                        return result
                     }
                 })
                 .catch(err => console.log(err))
@@ -307,7 +317,7 @@ async function init (applicationName, databaseName, databaseUsername, tablePrefi
                         const defaultServices = config.adminDefaults.defaultServices
                         initEvents.emit('progress',{
                             msg: `Adding User Default Services`,
-                            step: 13
+                            step: step++
                         })
 
                         /**
@@ -322,33 +332,38 @@ async function init (applicationName, databaseName, databaseUsername, tablePrefi
                             const service_body = {}
 
                             return new Promise(async (resolve,reject) => {
-                                const result = await adminMethods.addService(udb, {
-                                    service_title: serviceName,
-
-                                    /** TODO: Runtime configuration of the service */
-                                    service_config: JSON.stringify(service_config),
-
-                                    /** TODO: service body is the code that is stringyfied then hashed */
-                                    service_body: JSON.stringify(service_body),
-
-                                    /**
-                                     * Data fetching method, there are only two options, collection or 3rd party
-                                     * if 3rd party this is the domain example: example.com
-                                    */
-                                    initial_data_fetching_method: 'collection',
-
-                                    /** 
-                                     * this is the route path 
-                                    */
-                                    initial_data_fetching_path: 'collection/sample'
-                                })
-
-                                /** return the row count */
-                                resolve (await result.rowCount == 1 ? true : false)
+                                try {
+                                    const result = await adminMethods.addService(udb, {
+                                        service_title: serviceName,
+    
+                                        /** TODO: Runtime configuration of the service */
+                                        service_config: JSON.stringify(service_config),
+    
+                                        /** TODO: service body is the code that is stringyfied then hashed */
+                                        service_body: JSON.stringify(service_body),
+    
+                                        /**
+                                         * Data fetching method, there are only two options, collection or 3rd party
+                                         * if 3rd party this is the domain example: example.com
+                                        */
+                                        initial_data_fetching_method: 'collection',
+    
+                                        /** 
+                                         * this is the route path 
+                                        */
+                                        initial_data_fetching_path: 'collection/sample'
+                                    })
+    
+                                    /** return the row count */
+                                    resolve (await result.rowCount == 1 ? true : false)
+                                } catch(err) {
+                                    initEvents.emit('error',err.message)
+                                }
                             })
                         })
 
-                        return await Promise.all(op).then(async (values) => {
+                        return await Promise.all(op)
+                        .then(async (values) => {
 
                             /** Development terminal logs */
                             if(process.env.NODE_ENV == 'development') {
@@ -367,18 +382,18 @@ async function init (applicationName, databaseName, databaseUsername, tablePrefi
                                 throw 'Error while inserting default services'
                             }
                         }).catch(err => {
-                            console.log(err)
+                            initEvents.emit('error',err.message)
                         })
                     }
                 })
-                .catch(err => console.log(err))
+                .catch(err => initEvents.emit('error',err.message) )
 
                 /** Create Default collections */
                 .then(async (ready) => {
                     if(ready) {
                         initEvents.emit('progress',{
                             msg: `Creating Default collections`,
-                            step: 14
+                            step: step++
                         })
                         /** Get id of username */
                         const idOfUsername = await adminMethods.getAdminIdByUsername(udb, {
@@ -403,7 +418,7 @@ async function init (applicationName, databaseName, databaseUsername, tablePrefi
                                     })
                                     resolve(result.rowCount == 1 ? true : false)
                                 } catch(err) {
-                                    console.log(err)
+                                    initEvents.emit('error',err.message)
                                 }
 
                             })
@@ -425,7 +440,7 @@ async function init (applicationName, databaseName, databaseUsername, tablePrefi
                             }
                         })
                     }
-                }).catch(err => console.log(err))
+                }).catch(err => initEvents.emit('error',err.message) )
 
                 /**
                  * Add default admin titles
@@ -434,24 +449,28 @@ async function init (applicationName, databaseName, databaseUsername, tablePrefi
                 .then(async (ready) => {
                     initEvents.emit('progress',{
                         msg: `Creating Default default titles`,
-                        step: 15
+                        step: step++
                     })
 
                     if(ready) {
                         const op = config.adminDefaults.titles.map(({name, services}) => {
                             return new Promise(async (resolve,reject) => {
-                                const pushCollectionResult = await adminMethods.pushNewCollection(udb,{
-                                    collection_name: 'Admin Titles',
-                                    body: JSON.stringify({
-                                        name,
-                                        services
-                                    }),
-                                    created_by: await adminMethods.getAdminIdByUsername(udb,{
-                                        username: user.username
+                                try {
+                                    const pushCollectionResult = await adminMethods.pushNewCollection(udb,{
+                                        collection_name: 'Admin Titles',
+                                        body: JSON.stringify({
+                                            name,
+                                            services
+                                        }),
+                                        created_by: await adminMethods.getAdminIdByUsername(udb,{
+                                            username: user.username
+                                        })
                                     })
-                                })
-
-                                resolve(pushCollectionResult.rowCount == 1 ? true : false)
+    
+                                    resolve(pushCollectionResult.rowCount == 1 ? true : false)
+                                } catch(err) {
+                                    initEvents.emit('error',err.message)
+                                }
                             })
                         })
 
@@ -464,11 +483,11 @@ async function init (applicationName, databaseName, databaseUsername, tablePrefi
                             if(isAllTrue) {
                                 return isAllTrue
                             } else {
-                                throw 'Error while inserting default services'
+                                initEvents.emit('error', 'Error while inserting default services' )
                             }
                         })
                     }
-                }).catch(err => console.log(err))
+                }).catch(err => initEvents.emit('error',err.message) )
 
 
                 // end process
@@ -476,14 +495,16 @@ async function init (applicationName, databaseName, databaseUsername, tablePrefi
                     if(ready) {
                         initEvents.emit('progress',{
                             msg: `Dq Successfuly Initialized`,
-                            step: 16
+                            step: step++
                         })
                         initEvents.emit('done')
 
                         try{
                             /** for running on a child process */
                             process.send({msg: 'done'})
-                        }catch(err) {}
+                        }catch(err) {
+                            initEvents.emit('error', err.message)
+                        }
                     }
                 })
             }
