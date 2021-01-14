@@ -497,7 +497,7 @@ async function init (applicationName, databaseName, databaseUsername, tablePrefi
                             msg: `Dq Successfuly Initialized`,
                             step: step++
                         })
-                        initEvents.emit('done')
+                        initEvents.emit('done', true)
 
                         try{
                             /** for running on a child process */
