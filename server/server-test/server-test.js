@@ -55,7 +55,7 @@ const displayJSON = (title,val) => {
     displayJSON('Selected Test Data',promptResponse.value.data)
     displayJSON('Test Config', promptResponse.value.testConfig)
     
-    const { filepath_to_test, method_to_test  } =  promptResponse.value.testConfig
+    const { filepath_to_test, method_to_test, restart_test_on_file_change, dir_to_watch  } =  promptResponse.value.testConfig
     
     const getFileToTest = require(path.join(__dirname, `../../${filepath_to_test}`))
 
@@ -77,13 +77,13 @@ const displayJSON = (title,val) => {
 
     const execFunc = () => {
       if(method_to_test) {
-        /** when file exports an object */
-        promptResponse.value.middleware({
+        /** when test is file exports an object */
+        promptResponse.value.middleware.func({
           data: promptResponse.value.data,
           method: getFileToTest[method_to_test]
         })
       } else {
-        /** when file exports a function not an object */
+        /** when test file exports a function not an object */
   
         var originallog = console.log;
   
@@ -115,11 +115,12 @@ const displayJSON = (title,val) => {
 
     execFunc()
 
-    // const w = watcher(path.join(__dirname,'../'))
-    // w.on('fileChanged', () => {
-    //   process.kill()
-    //   console.clear()
-    //   execFunc()
-    // })
+    if(restart_test_on_file_change === true) {
+      const w = watcher(path.join(__dirname,`../${dir_to_watch}`))
+      w.on('fileChanged', () => {
+        execFunc()
+      })
+    }
+    
     
   })(getTestData,displayJSON)

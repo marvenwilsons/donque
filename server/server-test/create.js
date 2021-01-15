@@ -12,7 +12,9 @@ fs.mkdir(root, (err) => {
         fs.writeFileSync(`${root}/config.json`, `
 {
     "filepath_to_test": "server/app/",
-    "method_to_test": null
+    "method_to_test": null,
+    "restart_test_on_file_change": false,
+    "dir_to_watch": "server/app"
 }
         `)
 
