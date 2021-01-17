@@ -1,4 +1,6 @@
 {
     "filepath_to_test": "server/app/init/init.js",
-    "method_to_test": null
+    "method_to_test": null,
+    "restart_test_on_file_change": true,
+    "dir_to_watch": "app/init"
 }

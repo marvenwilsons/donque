@@ -1,6 +1,8 @@
 
 {
     "filepath_to_test": "server/app/admin/collection.js",
-    "method_to_test": "createCollection"
+    "method_to_test": "createCollection",
+    "restart_test_on_file_change": false,
+    "dir_to_watch": "server/app"
 }
         
