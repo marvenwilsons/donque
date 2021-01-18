@@ -38,7 +38,6 @@ const createItemCollection = require('./pg-dq-collection-item')
 /**
  * ADMIN METHODS
  */
-const encryptPassword = require('../admin/encypt-password');
 const adminMethods = require('../admin/index');
 
 /**
@@ -54,6 +53,18 @@ const pool = new Pool({
 })
 
 let step = 1
+
+const progress = (msg, r) => {
+    console.log('progress', msg)
+    initEvents.emit('progress', {
+        msg,
+        step: step++
+    })
+
+    return r
+}
+
+const i_err = errmsg => initEvents.emit('error', errmsg.message)
 
 async function init (applicationName, databaseName, databaseUsername, tablePrefix, databasePassword, user) {
     try {
@@ -73,38 +84,28 @@ async function init (applicationName, databaseName, databaseUsername, tablePrefi
          * we then create the essential tables on the user defined database
          */
 
+        const cl = await pool.connect()
+
          /**
           * Creating the user defined database
           */
-        const cl = await pool.connect()
         pool.query(`CREATE DATABASE ${databaseName}`)
-        .then(r => {
-            initEvents.emit('progress',{
-                msg: `Database ${databaseName} created`,
-                step: step++
-            })
-            return true
-        }).catch(err => {
-            initEvents.emit('error',err.message)
-        })
+        .then(_ => progress(`Database ${databaseName} created`, true))
+        .catch(i_err)
 
         /**
          * Creating the user defined enviroment variables
          */
-        .then(async (p) => {
-            return new Promise((resolve,reject) => {
-                if(p == true) {
-                    // console.log(`Creating Environment Variables`)
-    
+        .then(async p => {
+            return new Promise((resolve,_) => {
+                if(p) {
                     // 2. Create a .env file containing user defined database
-                    fs.writeFileSync(path.join(__dirname,'../../../.env'),envContent(databaseUsername,databasePassword,databaseName,tablePrefix,applicationName))
-                    resolve(true)
-                    initEvents.emit('progress',{
-                        msg: 'Creating Environment Variables',
-                        step: step++
-                    })
+                    fs.writeFileSync(path.join(__dirname,'../../../.env'),
+                        envContent(databaseUsername,databasePassword,databaseName,tablePrefix,applicationName)
+                    )
+                    resolve(progress('Creating Environment Variables', true))
                 } else {
-                    initEvents.emit('error','Fail Creating ENV')
+                    i_err('Fail Creating ENV')
                 }
             })
         })
@@ -114,71 +115,32 @@ async function init (applicationName, databaseName, databaseUsername, tablePrefi
          * this will create a postgres ROLE, the postgres ROLE is sthe
          * user defined database username
          */
-        .then(async (p) => {
-            // Create DB user
-            if(p) {
-                // console.log(`Creating DB User`)
-                initEvents.emit('progress',{
-                    msg: 'Creating DB User',
-                    step: step++
-                })
-                return await pool.query(`CREATE USER ${databaseUsername}`)
-            } else {
-                initEvents.emit('error','Failed Creating Database')
-            }
-        })
+        .then(async p => p ? 
+            progress('Creating DB User', await pool.query(`CREATE USER ${databaseUsername}`)) : 
+            i_err('error','Failed Creating Database'))
 
         /**
          * Altering newly create user to set the user database password
          */
-        .then(async (p) => {
-            if(p) {
-                initEvents.emit('progress',{
-                    msg: 'Altering Database User and user Setting Password',
-                    step: step++
-                })
-                return await pool.query(`ALTER USER ${databaseUsername} PASSWORD '${databasePassword}'`)
-            } else {
-                initEvents.emit('error','Failed setting database password')
-            }
-        })
+        .then(async p => p ? 
+            progress('Altering Database User and user Setting Password',
+                await pool.query(`ALTER USER ${databaseUsername} PASSWORD '${databasePassword}'`)) : 
+            i_err('Failed setting database password')) 
 
         /**
          * Assigning the newly created user to the user defined database
          * now the user can manage the user defined database
          */
-        .then(async (p) => {
-            // Grant user privileges
-            if(p) {
-                initEvents.emit('progress',{
-                    msg: `Assign user to "${databaseName}" database`,
-                    step: step++
-                })
-                const assignUserToDb = await pool.query(`GRANT ALL PRIVILEGES ON DATABASE ${databaseName} TO ${databaseUsername}`)
-                return assignUserToDb
-            } else {
-                initEvents.emit('error','Failed granting privileges to user')
-            }
-        })
+        .then(async p => p ? progress(`Assign user to "${databaseName}" database`, 
+            await pool.query(`GRANT ALL PRIVILEGES ON DATABASE ${databaseName} TO ${databaseUsername}`)) : 
+            i_err('Failed granting privileges to user')
+        )
+        
 
         /**
          * then we release and close the default postgres connection
          */
-        .then(async (p) => {
-            // Create app tables
-            if(p.command == 'GRANT') {
-                cl.release()
-                return pool.end().then(() => {
-                    initEvents.emit('progress',{
-                        msg: 'Default Postgres Pool Ended',
-                        step: step++
-                    })
-                    return true
-                })
-            } else {
-                initEvents.emit('error','Failed closing connection')
-            }
-        })
+        .then(async p => p.command == 'GRANT' ? (cl.release(), pool.end().then(() => progress('Default Postgres Pool Ended', true))) : i_err('Failed Closing Connection'))
 
         /**
          * Creating a new pool using the user defined credentials to
@@ -195,94 +157,31 @@ async function init (applicationName, databaseName, databaseUsername, tablePrefi
                 })
                 
                 // Create uuid-ossp extension to be used on table primary keys
-                initEvents.emit('progress',{
-                    msg: `Creating uuid-ossp`,
-                    step: step++
-                })
-
-                udb
-                .query(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`)
+                progress('Creating uuid-ossp', true)
+                udb.query(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`)
 
                 // create table users
-                .then(async (ready) => {
-                    if(ready) {
-                        initEvents.emit('progress',{
-                            msg: 'Creating Table dq_users',
-                            step: step++
-                        })
-                        return await udb.query(createPgUser)
-                    }
-                })
-                .catch(err => initEvents.emit('error',err.message) )
+                .then(async p => p && progress('Creating Table dq_users', await udb.query(createPgUser)))
 
                 // create table services
-                .then(async (ready) => {
-                    if(ready) {
-                        initEvents.emit('progress',{
-                            msg: 'Creating Table dq_services',
-                            step: step++
-                        })
-                        return await udb.query(createDqService)
-                    }
-                    
-                })
-                .catch(err => initEvents.emit('error',err.message) )
+                .then(async p => p && progress('Creating Table dq_services', await udb.query(createDqService)))
 
                 // create table collection
-                .then(async (ready) => {
-                    if(ready) {
-                        initEvents.emit('progress',{
-                            msg: 'Creating Table Collections',
-                            step: step++
-                        })
-                        return await udb.query(createDqCollections)
-                    }
-                })
-                .catch(err => initEvents.emit('error',err.message) )
+                .then(async p => p && progress('Creating Table Collections', await udb.query(createDqCollections)))
 
                 // create table pages
-                .then(async (ready) => {
-                    if(ready) {
-                        initEvents.emit('progress',{
-                            msg: 'Creating Table Pages',
-                            step: step++
-                        })
-                        return await udb.query(createDqPages)
-                    }
-                })
-                .catch(err => initEvents.emit('error',err.message) )
+                .then(async p => p && progress('Creating Table Pages',await udb.query(createDqPages)))
 
                 // create table titles
-                .then(async (ready) => {
-                    if(ready) {
-                        initEvents.emit('progress',{
-                            msg: 'Creating Table Titles',
-                            step: step++
-                        })
-                        return await udb.query(createTitles)
-                    }
-                })
-                .catch(err => initEvents.emit('error',err.message) )
+                .then(async p => p && progress('Creating Table Titles', udb.query(createTitles)))
 
                 // create table item collection
-                .then(async (ready) => {
-                    if(ready) {
-                        initEvents.emit('progress',{
-                            msg: 'Creating table item collection',
-                            step: step++
-                        })
-                        return await udb.query(createItemCollection)
-                    }
-                })
-                .catch(err => initEvents.emit('error',err.message) )
+                .then(async p => p && progress('Creating table item collection', udb.query(createItemCollection)))
 
                 // Add first admin to user table, add owner to users table on registration
-                .then(async (ready) => {
+                .then(async ready => {
                     if(ready) {
-                        initEvents.emit('progress',{
-                            msg: `Adding ${user.firstName} User To Users Table`,
-                            step: step++
-                        })
+                        
                         const u = {
                             admin_email: user.email,
                             admin_password: await adminMethods.encryptPassword(user.password), /** enrypt */
@@ -302,22 +201,18 @@ async function init (applicationName, databaseName, databaseUsername, tablePrefi
                                 console.log(confirm_insert.rows)
                             }
 
-                            return result
+                            return progress(`Adding ${user.firstName} User To Users Table`, result)
                         } catch(err) {
-                            initEvents.emit('error',err.message)
+                            i_err(err.message)
                         }
                     }
                 })
-                .catch(err => console.log(err))
 
                 // add services
                 .then(async (ready) => {
                     if(ready) {
                         const defaultServices = config.adminDefaults.defaultServices
-                        initEvents.emit('progress',{
-                            msg: `Adding User Default Services`,
-                            step: step++
-                        })
+                        progress('Adding User Default Services')
 
                         /**
                          * Add default admin services to dq_services table
@@ -330,7 +225,7 @@ async function init (applicationName, databaseName, databaseUsername, tablePrefi
                             const service_config = {}
                             const service_body = {}
 
-                            return new Promise(async (resolve,reject) => {
+                            return new Promise(async (resolve,_) => {
                                 try {
                                     const result = await adminMethods.addService(udb, {
                                         service_title: serviceName,
@@ -356,13 +251,13 @@ async function init (applicationName, databaseName, databaseUsername, tablePrefi
                                     /** return the row count */
                                     resolve (await result.rowCount == 1 ? true : false)
                                 } catch(err) {
-                                    initEvents.emit('error',err.message)
+                                    i_err(err.message)
                                 }
                             })
                         })
 
                         return await Promise.all(op)
-                        .then(async (values) => {
+                        .then(async values => {
 
                             /** Development terminal logs */
                             if(process.env.NODE_ENV == 'development') {
@@ -380,20 +275,14 @@ async function init (applicationName, databaseName, databaseUsername, tablePrefi
                             } else {
                                 throw 'Error while inserting default services'
                             }
-                        }).catch(err => {
-                            initEvents.emit('error',err.message)
-                        })
+                        }).catch(err => i_err(err.message))
                     }
                 })
-                .catch(err => initEvents.emit('error',err.message) )
 
                 /** Create Default collections */
-                .then(async (ready) => {
+                .then(async ready => {
                     if(ready) {
-                        initEvents.emit('progress',{
-                            msg: `Creating Default collections`,
-                            step: step++
-                        })
+                        progress('Creating Default Collections')
                         /** Get id of username */
                         const idOfUsername = await adminMethods.getAdminIdByUsername(udb, {
                             username: user.username
@@ -408,7 +297,7 @@ async function init (applicationName, databaseName, databaseUsername, tablePrefi
                          */
                         const defaultCollections = config.adminDefaults.defaultCollections
                         const op = defaultCollections.map(({name,schema}) => {
-                            return new Promise(async (resolve,reject) => {
+                            return new Promise(async (resolve,_) => {
                                 try {
                                     const result = await adminMethods.createCollection(udb, {
                                         collection_name: name,
@@ -417,7 +306,7 @@ async function init (applicationName, databaseName, databaseUsername, tablePrefi
                                     })
                                     resolve(result.rowCount == 1 ? true : false)
                                 } catch(err) {
-                                    initEvents.emit('error',err.message)
+                                    i_err(err.message)
                                 }
 
                             })
@@ -439,7 +328,7 @@ async function init (applicationName, databaseName, databaseUsername, tablePrefi
                             }
                         })
                     }
-                }).catch(err => initEvents.emit('error',err.message) )
+                }).catch(err => i_err(err.message))
 
                 /**
                  * Add default admin titles
@@ -453,7 +342,7 @@ async function init (applicationName, databaseName, databaseUsername, tablePrefi
 
                     if(ready) {
                         const op = config.adminDefaults.titles.map(({name, services}) => {
-                            return new Promise(async (resolve,reject) => {
+                            return new Promise(async (resolve,_) => {
                                 try {
                                     const pushCollectionResult = await adminMethods.pushNewCollection(udb,{
                                         collection_name: 'Admin Titles',
@@ -468,7 +357,7 @@ async function init (applicationName, databaseName, databaseUsername, tablePrefi
     
                                     resolve(pushCollectionResult.rowCount == 1 ? true : false)
                                 } catch(err) {
-                                    initEvents.emit('error',err.message)
+                                    i_err(err.message)
                                 }
                             })
                         })
@@ -482,22 +371,18 @@ async function init (applicationName, databaseName, databaseUsername, tablePrefi
                             if(isAllTrue) {
                                 return isAllTrue
                             } else {
-                                initEvents.emit('error', 'Error while inserting default services' )
+                                i_err('Error while inserting default services')
                             }
                         })
                     }
-                }).catch(err => initEvents.emit('error',err.message) )
+                }).catch(err => i_err(err.message))
 
 
                 // end process
                 .then(async (ready) => {
                     if(ready) {
-                        initEvents.emit('progress',{
-                            msg: `Dq Successfuly Initialized`,
-                            step: step++
-                        })
+                        progress('Dq Successfully Initialized')
                         initEvents.emit('done', true)
-
                         try{
                             /** for running on a child process */
                             process.send({msg: 'done'})
@@ -519,10 +404,10 @@ async function init (applicationName, databaseName, databaseUsername, tablePrefi
                 console.log("Default Postgres Pool Ended")
                 return true
             })
-            console.log(`ERROR: `,err)
+            console.log(err)
         })
     }catch(err) {
-        console.log(err.message)
+        i_err(err.message)
     }
 
     return initEvents
