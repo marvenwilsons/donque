@@ -23,6 +23,7 @@ const path = require('path')
 const config = require('../../../server/config/config')
 const events = require('events').EventEmitter
 const initEvents = new events()
+const util = require('../../helpers/utils')
 
 /**
  * SQL Table Creation Queries
@@ -67,33 +68,59 @@ const i_err = (errmsg) => {initEvents.emit('error', new Error(errmsg))}
 
 const validateAppName = applicationName => {
     if(!applicationName) {
-        i_err('Invalid Application Name')
+        i_err('Application name is required')
     } else {
+        const propName = 'Application Name'
+        util.stringValidator.hasSpecialCharacters(applicationName) && 
+        i_err(`${propName} cannot have special characters`)
 
+        util.stringValidator.hasWhiteSpace(applicationName) &&
+        i_err(`${propName} Name cannot have white spaces`)
     }
 }
 
 const validateDbName = databaseName => {
     if(!databaseName) {
-        i_err('Invalid Database Name')
+        i_err('Database Name is required')
     } else {
+        const propName = 'Database Name'
+        util.stringValidator.hasSpecialCharacters(databaseName) && 
+        i_err(`${propName} cannot have special characters`)
 
+        util.stringValidator.hasWhiteSpace(databaseName) &&
+        i_err(`${propName} cannot have white spaces`)
+
+        util.stringValidator.hasNumber(databaseName) &&
+        i_err(`${propName} cannot have numbers`)
     }
 }
 
 const validateDbUsername = databaseUsername => {
     if(!databaseUsername) {
-        i_err('Ivalid Database Username')
+        i_err('Database Username is required')
     } else {
+        const propName = 'Database Username'
+        util.stringValidator.hasSpecialCharacters(databaseUsername) && 
+        i_err(`${propName} cannot have special characters`)
 
+        util.stringValidator.hasWhiteSpace(databaseUsername) &&
+        i_err(`${propName} cannot have white spaces`)
     }
 }
 
 const validateTablePrefix = tablePrefix => {
     if(!tablePrefix) {
-        i_err('Invalid Table Prefix')
+        i_err('Table prefix is required')
     } else {
+        const propName = 'Table Prefix'
+        util.stringValidator.hasSpecialCharacters(tablePrefix) && 
+        i_err(`${propName} cannot have special characters`)
 
+        util.stringValidator.hasWhiteSpace(tablePrefix) &&
+        i_err(`${propName} cannot have white spaces`)
+
+        util.stringValidator.hasNumber(tablePrefix) &&
+        i_err(`${propName} cannot have numbers`)
     }
 }
 
@@ -101,7 +128,10 @@ const validateDbPassword = databasePassword => {
     if(!databasePassword) {
         i_err('Invalid Database Password')
     } else {
+        const propName = 'Database Password'
 
+        util.stringValidator.hasWhiteSpace(databasePassword) &&
+        i_err(`${propName} cannot have white spaces`)
     }
 }
 
@@ -110,6 +140,22 @@ const validateUserObject = user => {
         i_err('Invalid User Object')
     } else {
         const { email, username, firstName, lastName } = user
+
+        util.stringValidator.isUndef(email) && i_err('Email is required')
+        util.stringValidator.hasWhiteSpace(email) && i_err('Email should not have whiite spaces')
+        !util.stringValidator.isEmail(email) && i_err('Invalid email format')
+
+        util.stringValidator.isUndef(username) && i_err('Username is required')
+        util.stringValidator.hasWhiteSpace(username) && i_err('Username should not have whiite spaces')
+        util.stringValidator.hasSpecialCharacters(username) && i_err('Username should not have special characters')
+
+        util.stringValidator.isUndef(firstName) && i_err('First Name is required')
+        util.stringValidator.hasWhiteSpace(firstName) && i_err('First Name should not have whiite spaces')
+        util.stringValidator.hasSpecialCharacters(firstName) && i_err('First Name should not have special characters')
+
+        util.stringValidator.isUndef(lastName) && i_err('Last Name is required')
+        util.stringValidator.hasWhiteSpace(lastName) && i_err('Last Name should not have whiite spaces')
+        util.stringValidator.hasSpecialCharacters(lastName) && i_err('Last Name should not have special characters')
     }
 }
 
