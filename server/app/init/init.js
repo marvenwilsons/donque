@@ -55,7 +55,6 @@ const pool = new Pool({
 let step = 1
 
 const progress = (msg, r) => {
-    console.log('progress', msg)
     initEvents.emit('progress', {
         msg,
         step: step++
@@ -64,11 +63,65 @@ const progress = (msg, r) => {
     return r
 }
 
-const i_err = errmsg => initEvents.emit('error', errmsg.message)
+const i_err = (errmsg) => {initEvents.emit('error', new Error(errmsg))}
+
+const validateAppName = applicationName => {
+    if(!applicationName) {
+        i_err('Invalid Application Name')
+    } else {
+
+    }
+}
+
+const validateDbName = databaseName => {
+    if(!databaseName) {
+        i_err('Invalid Database Name')
+    } else {
+
+    }
+}
+
+const validateDbUsername = databaseUsername => {
+    if(!databaseUsername) {
+        i_err('Ivalid Database Username')
+    } else {
+
+    }
+}
+
+const validateTablePrefix = tablePrefix => {
+    if(!tablePrefix) {
+        i_err('Invalid Table Prefix')
+    } else {
+
+    }
+}
+
+const validateDbPassword = databasePassword => {
+    if(!databasePassword) {
+        i_err('Invalid Database Password')
+    } else {
+
+    }
+}
+
+const validateUserObject = user => {
+    if(!user) {
+        i_err('Invalid User Object')
+    } else {
+        const { email, username, firstName, lastName } = user
+    }
+}
 
 async function init (applicationName, databaseName, databaseUsername, tablePrefix, databasePassword, user) {
     try {
-        console.log('Initialize application!')
+        validateAppName(applicationName)
+        validateDbName(databaseName)
+        validateDbUsername(databaseUsername)
+        validateTablePrefix(tablePrefix)
+        validateDbPassword(databasePassword)
+        validateUserObject(user)
+
         /**
          * Creating a postgres pool using the default postgres credentials
          * which is user postgres and password postgres
@@ -83,7 +136,6 @@ async function init (applicationName, databaseName, databaseUsername, tablePrefi
          * 
          * we then create the essential tables on the user defined database
          */
-
         const cl = await pool.connect()
 
          /**
@@ -97,6 +149,7 @@ async function init (applicationName, databaseName, databaseUsername, tablePrefi
          * Creating the user defined enviroment variables
          */
         .then(async p => {
+
             return new Promise((resolve,_) => {
                 if(p) {
                     // 2. Create a .env file containing user defined database
@@ -404,10 +457,11 @@ async function init (applicationName, databaseName, databaseUsername, tablePrefi
                 console.log("Default Postgres Pool Ended")
                 return true
             })
-            console.log(err)
         })
     }catch(err) {
-        i_err(err.message)
+        console.log(err)
+        process.exit()
+        return false
     }
 
     return initEvents
