@@ -11,4 +11,4 @@ const utils = convertToNodeModuleString(
     fs.readFileSync(path.join(__dirname,'../../utils.js' /** refers to root dir */),'utf8')
   )
 
-module.exports = requireFromString(utils)
+module.exports = Object.seal(requireFromString(utils))

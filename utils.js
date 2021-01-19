@@ -1,50 +1,20 @@
+/** 
+ * this file should not have any dependencies it should remain vanilla
+ * this module is used booth in client an in server, so if you require something
+ * you will get an error in client, and if you import something you will get
+ * an error in node.
+ */
+
 const utils = {}
 
 utils.validateString = function({mode,value}) {
-    if(mode === 'has-special-character') {
-        const regex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/gim;
-        return regex.exec(value) != null;
-    }
-    
-    if(mode === 'is-required') {
-        if(value === '' || value === null || value === undefined) {
-            return true
-        } else {
-            const x = value.replace(' ','')
-            if(x === '') {
-                return true
-            } else {
-                return false
-            }
-        }
-    }
-    
-    if(mode === 'has-number') {
-        const regex = /[0-9]/gim;
-        return regex.exec(value) != null;
-    }
-    
-    if(mode === 'has-whitespace') {
-        return value ? value.indexOf(" ") != -1 : false
-    }
-
-    if(mode === 'has-uppercase') {
-        const regex = /.*[A-Z]/g;
-        return regex.exec(value) != null
-    }
-
-    if(mode === 'has-lowercase') {
-        const regex = /.*[a-z]/g;
-        return regex.exec(value) != null
-    }
-    
-    if(mode === 'is-email') {
-        const condition = ["@", ".com"];
-        const res = condition.map(charSet => {
-            return RegExp(`${charSet}`, "").exec(value) != null;
-        });
-        return res.join("/") == "true/true";
-    }
+    mode === 'has-special-character' && utils.stringValidator.hasSpecialCharacters(value)
+    mode === 'is-required' && utils.stringValidator.isUndef(value)
+    mode == 'has-number' && utils.stringValidator.hasNumber(value)
+    mode === 'has-whitespace' && utils.stringValidator.hasWhiteSpace(value)
+    mode === 'has-uppercase' && utils.stringValidator.hasUppperCase(value)
+    mode === 'has-lowercase' && utils.stringValidator.hasLowerCase(value)
+    mode === 'is-email' && utils.stringValidator.isEmail(value)
 
     if(mode === 'has-setof-chars') {
         const {ArrayOfCharacters, CharacterToCompare} = value
@@ -56,6 +26,18 @@ utils.validateString = function({mode,value}) {
     }
 }
 utils.stringValidator = {
+    isUndef(char) {
+        if(char === '' || char === null || char === undefined) {
+            return true
+        } else {
+            const x = char.replace(' ','')
+            if(x === '') {
+                return true
+            } else {
+                return false
+            }
+        }
+    },
     hasSpecialCharacters(char) {
         if(!char) return false
         if(typeof char == 'number') return false
@@ -187,20 +169,5 @@ utils.randId = function(length) {
           );
         }
     return result;
-}
-const crypto = require('crypto')
-utils.encrypt = (ValueToHash,Salt) => {
-    let cipher = crypto.createCipher('aes-128-cbc',`${ValueToHash,Salt}`)
-    let encrypted = cipher.update(ValueToHash,'utf8','hex')
-    encrypted += cipher.final('hex')
-    return encrypted
-}
-utils.decrypt = (ValueToReHash,Salt) => {
-    const encrypted = e.encrypt(ValueToReHash,Salt)
-
-    let decipher = crypto.createDecipher('aes-128-cbc', `${ValueToReHash, Salt}`)
-    let decrypted = decipher.update(encrypted,'hex','utf8')
-    decrypted += decipher.final('utf-8')
-    return decrypted 
 }
 export default utils
