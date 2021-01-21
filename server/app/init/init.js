@@ -150,7 +150,6 @@ const validateUserObject = user => {
         util.stringValidator.hasSpecialCharacters(username) && i_err('Username should not have special characters')
 
         util.stringValidator.isUndef(firstName) && i_err('First Name is required')
-        util.stringValidator.hasWhiteSpace(firstName) && i_err('First Name should not have whiite spaces')
         util.stringValidator.hasSpecialCharacters(firstName) && i_err('First Name should not have special characters')
 
         util.stringValidator.isUndef(lastName) && i_err('Last Name is required')
@@ -433,11 +432,8 @@ async function init (applicationName, databaseName, databaseUsername, tablePrefi
                  * Add default admin titles
                  * Push to existing collections 
                 */
-                .then(async (ready) => {
-                    initEvents.emit('progress',{
-                        msg: `Creating Default default titles`,
-                        step: step++
-                    })
+                .then(async ready => {
+                    progress('Creating Default Titles')
 
                     if(ready) {
                         const op = config.adminDefaults.titles.map(({name, services}) => {
@@ -460,9 +456,6 @@ async function init (applicationName, databaseName, databaseUsername, tablePrefi
                                 }
                             })
                         })
-
-                        
-
                         return await Promise.all(op).then(async (values) => {
                             /** if every value in the array is true return it else throw an error */
                             const isAllTrue = values.every((v) => v == true)
@@ -474,11 +467,59 @@ async function init (applicationName, databaseName, databaseUsername, tablePrefi
                             }
                         })
                     }
-                }).catch(err => i_err(err.message))
+                })
+
+                /**
+                 *  Todo: prefix tables
+                 *  rename tables apply user define table prefix
+                 */
+                .then(ready => {
+                    progress('Prefixing tables')
+                    /**
+                     * Rename Tables: 
+                     *  dq_collections
+                     *  dq_collection_item
+                     *  dq_pages
+                     *  dq_service
+                     *  dq_titles
+                     *  dq_admins
+                     */
+
+                    if(ready) {
+                        const defaultTables = ['dq_collections','dq_collection_item','dq_pages','dq_service','dq_titles', 'dq_admin']
+                    
+                        const op = defaultTables.map(async tableName => {
+                            const tableNameWithPrefix = tableName.replace('dq', tablePrefix)
+
+                            /** forced to use string this way, for some reason pg placeholders dont work */
+                            const query = await udb.query(`ALTER TABLE ${tableName} RENAME TO ${tableNameWithPrefix}`)
+                            return query
+                        })
+
+                        return await Promise.all(op).then(async values => {
+                            const isAllTrue = values.every((v) => v == true)
+
+                            if(isAllTrue) {
+                                return isAllTrue
+                            } else {
+                                i_err('Error while inserting default services')
+                            }
+                        })
+                    }
+                })
+
+                /**
+                 * Todo: Create Functions and Views
+                 */
+                .then(ready => {
+                    progress('Creating functions and views')
+                    
+
+                })
 
 
                 // end process
-                .then(async (ready) => {
+                .then(async ready => {
                     if(ready) {
                         progress('Dq Successfully Initialized')
                         initEvents.emit('done', true)
@@ -490,6 +531,7 @@ async function init (applicationName, databaseName, databaseUsername, tablePrefi
                         }
                     }
                 })
+                // end
             }
         })
 
