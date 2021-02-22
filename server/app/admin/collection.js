@@ -1,5 +1,10 @@
 module.exports = {
     async createCollection(db,{collection_name, collection_schema, created_by}) {
+        /** 
+         * at this moment createCollection function can be executed by anyone
+         * createCollection function should be aware of where the data came from
+         */
+
         return await db.query('INSERT INTO dq_collections (collection_name, collection_schema, created_by) values($1, $2, $3)',[
             collection_name,
             collection_schema,
@@ -8,7 +13,7 @@ module.exports = {
     },
     async getCollectionNames() {
         /** returns an array of collection names,
-         *  usefull for creating new collection to compare if the name alreday exist
+         *  useful for creating new collection to compare if the name already exists
          */
     },
     async pushNewCollection(db, {collection_name, body, created_by }) {

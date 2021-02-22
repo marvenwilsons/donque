@@ -1,7 +1,7 @@
 {
     "data_description": "Data is expected to be failure",
     "data": {
-        "applicationName": "sampleapp", 
+        "applicationName": null, 
         "databaseName": "asdfasdf", 
         "databaseUsername": "marven", 
         "tablePrefix":"asdf", 

@@ -58,3 +58,16 @@ CREATE TABLE dq_history (
 CREATE TABLE dq_installed_services (
     service_id NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
 )
+
+
+CREATE OR REPLACE FUNCTION myfunc()
+RETURN DATA_TYPE AS $$
+
+DECLARE
+-- GLOBAL VARIABLES HERE
+
+BEGIN
+-- FUNCTION BODY HERE
+END
+
+$$ LANGUAGE plpgsql

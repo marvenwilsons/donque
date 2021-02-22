@@ -473,7 +473,7 @@ async function init (applicationName, databaseName, databaseUsername, tablePrefi
                  *  Todo: prefix tables
                  *  rename tables apply user define table prefix
                  */
-                .then(ready => {
+                .then(async ready => {
                     progress('Prefixing tables')
                     /**
                      * Rename Tables: 
@@ -496,9 +496,10 @@ async function init (applicationName, databaseName, databaseUsername, tablePrefi
                             return query
                         })
 
-                        return await Promise.all(op).then(async values => {
-                            const isAllTrue = values.every((v) => v == true)
 
+                        return await Promise.all(op).then(async values => {
+                            /** the return of each query */
+                            const isAllTrue = values.every((v) => v.command == 'ALTER')
                             if(isAllTrue) {
                                 return isAllTrue
                             } else {
@@ -511,11 +512,11 @@ async function init (applicationName, databaseName, databaseUsername, tablePrefi
                 /**
                  * Todo: Create Functions and Views
                  */
-                .then(ready => {
-                    progress('Creating functions and views')
+                // .then(ready => {
+                //     progress('Creating functions and views')
                     
 
-                })
+                // })
 
 
                 // end process

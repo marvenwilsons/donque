@@ -20,13 +20,14 @@ module.exports = async ({data : {applicationName, databaseName, databaseUsername
                 const dropRole = await pool.query(`DROP ROLE IF EXISTS marven`)
 
                 if(dropRole && arg) {
+                    /** The init function */
                     const init = await arg(applicationName, databaseName, databaseUsername, tablePrefix, databasePassword, user)
                     init.on('progress', (data) => {
                         console.log(data)
                     })
                     init.on('error', (err) => {
                         if(err != 'process.send is not a function') {
-                            console.log(err)
+                            console.log('middleware: ',err)
                         }
                     })
                     init.on('done', (val) => {

@@ -46,6 +46,7 @@ const displayJSON = (title,val) => {
 
 /** Start The Test */
 (async (getTestData,displayJSON) => {
+    console.log('staring test')
     /** Prompt to select Data Set */
     const promptResponse = await prompts({
         type: 'select',
@@ -155,7 +156,7 @@ const displayJSON = (title,val) => {
     if(restart_test_on_file_change === true) {
       const w = watcher(path.join(__dirname,`../${dir_to_watch}`))
       w.on('fileChanged', () => {
-        execFunc()
+        // execFunc()
       })
     }
     
